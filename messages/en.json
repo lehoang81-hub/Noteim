@@ -485,7 +485,8 @@
       "architect": "Architect",
       "notary": "Notary",
       "other": "Other"
-    }
+    },
+    "recordSpeed30": "Speed up recording clock x30"
   },
   "library": {
     "greeting": "Hi {name}",
@@ -591,6 +592,20 @@
     "announcing": "Playing: This meeting is being recorded for minutes",
     "pause": "Pause",
     "resume": "Resume",
-    "end": "Finish recording"
+    "end": "Finish recording",
+    "bookmarkLabel": "Mark",
+    "bookmarkWord": "Hot spot",
+    "addBookmark": "Add a hot spot",
+    "bookmarkTagTitle": "Hot spot label",
+    "photoLabel": "Capture",
+    "addPhoto": "Take a photo",
+    "photoAlt": "Photo taken at {time}",
+    "notePlaceholder": "Type a note…",
+    "noteAria": "Type a note",
+    "feedLabel": "Notes, hot spots and photos",
+    "minimize": "Minimize the recording screen",
+    "miniRecording": "Recording",
+    "miniPaused": "Recording paused",
+    "silenceHint": "Silent for 1 minute. Pause?"
   }
 }

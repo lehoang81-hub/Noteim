@@ -1,20 +1,26 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Mic } from "lucide-react";
-import { motion } from "motion/react";
+import { Camera, ChevronDown, Mic } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { RibbonLive } from "@/components/ribbon/ribbon-live";
 import { formatClock } from "@/components/ribbon/draw";
+import { BookmarkButton } from "@/components/record/bookmark-button";
 import { HoldToEndButton } from "@/components/record/hold-to-end-button";
+import { RecordFeed } from "@/components/record/record-feed";
 import { ConsentSheet, MicPermissionSheet, TemplateSheet } from "@/components/record/sheets";
 import { RecordButton } from "@/components/ui/record-button";
 import { useMicLevel } from "@/lib/audio/use-mic-level";
 import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
 import { micGrantedOnce, markMicGranted } from "@/lib/record/mic-permission";
+import { fileToDataUrl } from "@/lib/record/photo";
 import {
+  addRecordingBookmark,
+  addRecordingNote,
+  addRecordingPhoto,
   endRecording,
   pauseRecording,
   pushRecordingLevel,
@@ -26,23 +32,26 @@ import {
 } from "@/lib/record/recording-store";
 import { keepScreenAwake, letScreenSleep } from "@/lib/record/wake-lock";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
+import type { SemanticTag } from "@/components/ui/chips";
 
 /*
- * Màn hình ghi âm /record (docs/03-screens.md mục 2, 3; issue M2-01).
- * - Luôn nền chàm đêm: bọc vùng bằng class .dark, không phụ thuộc giao diện
- *   đang mở. Khung ứng dụng ẩn trên đường dẫn này (components/shell/app-shell.tsx).
- * - Luồng bắt đầu: lần đầu xin quyền micro → hỏi đồng ý ghi âm (nếu bật nhắc)
- *   → khoảnh khắc "Bắt đầu ghi" → đang ghi. Từ lần thứ hai tối đa 2 lần chạm.
- * - Khoảnh khắc "Bắt đầu ghi": nút ghi âm nở thành dải giọng, --t-scene,
- *   giảm chuyển động thì mờ dần 220ms.
- * - Kết thúc: nhấn giữ 0,8 giây (HoldToEndButton). Ở issue này dừng và về
- *   thư viện; tạo buổi ghi và màn hình xử lý là M2-03.
+ * Màn hình ghi âm /record (docs/03-screens.md mục 2, 3; M2-01 + M2-02).
+ * - Luôn nền chàm đêm (class .dark), không có khung ứng dụng.
+ * - Dải giọng sống theo micro thật; dưới là ô ghi chú và danh sách ghi chú,
+ *   điểm nóng, ảnh gắn mốc thời gian (M2-02).
+ * - Đánh dấu: chạm tạo điểm nóng không nhãn (gợn sóng + rung nhẹ), nhấn giữ
+ *   chọn nhãn màu. Chụp: ảnh thu nhỏ 1280px lưu vào kho buổi ghi.
+ * - Gợi ý im lặng: dưới ngưỡng 60 giây thì gợi ý tạm dừng (cờ x30 để kiểm nhanh).
+ * - Nút thu nhỏ góc trên trái: về trang khác, thanh sen "Đang ghi" trên mọi
+ *   trang đưa quay lại đây.
  */
 
 const EASE = [0.2, 0.8, 0.2, 1] as const;
 const SCENE = { duration: 0.7, ease: EASE };
 const FADE = { duration: 0.22, ease: EASE };
 const MOMENT_MS = 700;
+const SILENCE_SEC = 60;
+const SILENCE_LEVEL = 0.07;
 
 type Gate = "boot" | "permission" | "consent";
 
@@ -67,6 +76,7 @@ function RecordClock({ paused }: { paused: boolean }) {
 
 export function RecordScreen() {
   const t = useTranslations("record");
+  const tl = useTranslations("styleguide.tags");
   const router = useRouter();
   const recording = useRecording();
   const mic = useMicLevel();
@@ -79,18 +89,29 @@ export function RecordScreen() {
   const [momentOn, setMomentOn] = useState(false);
   const [showAnnounce, setShowAnnounce] = useState(false);
   const [templateSheet, setTemplateSheet] = useState(false);
+  const [ripple, setRipple] = useState(0);
+  const [silence, setSilence] = useState(false);
   const momentTimer = useRef(0);
   const announceTimer = useRef(0);
   const decided = useRef(false);
   const startingMic = useRef(false);
   const levelRef = useRef(0);
   const beginRef = useRef<(announce: boolean) => void>(() => {});
+  const lastVoiceRef = useRef(0);
+  const photoInputRef = useRef<HTMLInputElement>(null);
 
   const active = recording.status !== "idle";
   const paused = recording.status === "paused";
   const templateName = templates.data?.find((tp) => tp.id === recording.templateId)?.name ?? "";
+  const tagLabels: Record<SemanticTag, string> = {
+    decided: tl("decided"),
+    pending: tl("pending"),
+    risk: tl("risk"),
+    idea: tl("idea"),
+    figure: tl("figure"),
+  };
 
-  /* ----- Luồng bắt đầu ghi ----- */
+  /* ----- Luồng bắt đầu ghi (M2-01) ----- */
 
   function beginRecording(announce: boolean) {
     if (recording.status !== "idle") return;
@@ -134,7 +155,6 @@ export function RecordScreen() {
     }
     const id = window.setTimeout(() => beginRef.current(false), 0);
     return () => window.clearTimeout(id);
-    // beginRecording luôn qua beginRef, không cần vào deps
   }, [me.data, recording.status]);
 
   // Được cấp quyền micro: ghi nhớ để lần sau bỏ qua bảng xin quyền, rồi hỏi
@@ -170,6 +190,24 @@ export function RecordScreen() {
     return () => window.clearInterval(id);
   }, []);
 
+  // Gợi ý im lặng: dưới ngưỡng liên tục 60 giây (đồng hồ ghi, cờ x30 kiểm nhanh)
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (recording.status !== "recording") {
+        setSilence(false);
+        lastVoiceRef.current = recordedSec();
+        return;
+      }
+      if (levelRef.current >= SILENCE_LEVEL) {
+        lastVoiceRef.current = recordedSec();
+        setSilence(false);
+      } else if (recordedSec() - lastVoiceRef.current >= SILENCE_SEC) {
+        setSilence(true);
+      }
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [recording.status]);
+
   useEffect(
     () => () => {
       window.clearTimeout(momentTimer.current);
@@ -193,14 +231,45 @@ export function RecordScreen() {
     router.push("/");
   }
 
+  function bookmarkFeedback() {
+    setRipple((n) => n + 1);
+    navigator.vibrate?.(10);
+  }
+
+  function onBookmark(tag: SemanticTag | null) {
+    addRecordingBookmark(tag);
+    bookmarkFeedback();
+  }
+
+  async function onPhotoPicked(file: File | undefined) {
+    if (!file) return;
+    try {
+      const url = await fileToDataUrl(file);
+      addRecordingPhoto(url);
+    } catch {
+      // Không đọc được ảnh: bỏ qua, buổi ghi vẫn chạy
+    }
+  }
+
   const showMoment = active && momentOn;
   const showControls = active && !momentOn;
 
   return (
     <div className="dark flex min-h-dvh flex-col bg-bg text-ink">
       <header className="flex min-h-14 items-center gap-2 px-page pt-2">
-        {/* M2-02: nút thu nhỏ màn hình ghi nằm ở đây */}
-        <span className="size-11 shrink-0" aria-hidden={true} />
+        <button
+          type="button"
+          onClick={() => router.push("/")}
+          disabled={!showControls}
+          aria-label={t("minimize")}
+          className={cn(
+            "flex size-11 shrink-0 items-center justify-center rounded-control text-ink-2",
+            "transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2 hover:text-ink",
+            !showControls && "pointer-events-none opacity-0",
+          )}
+        >
+          <ChevronDown aria-hidden={true} className="size-5" strokeWidth={1.75} />
+        </button>
         <button
           type="button"
           onClick={() => active && setTemplateSheet(true)}
@@ -231,7 +300,7 @@ export function RecordScreen() {
         </span>
       </header>
 
-      <main className="flex flex-1 flex-col items-center px-page">
+      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center px-page">
         <div className={cn("mt-6 flex min-h-[52px] items-start", !showControls && "invisible")}>
           {showControls ? <RecordClock paused={paused} /> : null}
         </div>
@@ -243,7 +312,7 @@ export function RecordScreen() {
         ) : null}
 
         {/* Dải giọng sống; khoảnh khắc bắt đầu ghi nở thành chính dải này */}
-        <div className="flex w-full flex-1 items-center justify-center py-6">
+        <div className="relative flex w-full flex-1 items-center justify-center py-6">
           {showMoment ? (
             <motion.div
               className="relative flex items-center justify-center overflow-hidden"
@@ -266,17 +335,70 @@ export function RecordScreen() {
               <RibbonLive level={mic.level} paused={paused} height={160} />
             </motion.div>
           )}
+          {/* Gợn sóng khi tạo điểm nóng: tại vị trí hiện tại của dải giọng */}
+          <AnimatePresence>
+            {ripple > 0 ? (
+              <motion.span
+                key={ripple}
+                aria-hidden={true}
+                className="pointer-events-none absolute right-3 top-1/2 size-10 -translate-y-1/2 rounded-pill border-2 border-on-dawn"
+                initial={{ scale: 0.3, opacity: 0.7 }}
+                animate={{ scale: 1.9, opacity: 0 }}
+                exit={{ opacity: 0 }}
+                transition={reduce ? FADE : { duration: 0.6, ease: EASE }}
+                onAnimationComplete={() => setRipple(0)}
+              />
+            ) : null}
+          </AnimatePresence>
         </div>
 
-        {/* Hàng điều khiển: M2-02 thêm Đánh dấu và Chụp hai bên nút giữa */}
-        <div className={cn("flex w-full items-center justify-center gap-6 pb-4", !showControls && "invisible")}>
+        {/* Gợi ý im lặng (M2-02) */}
+        <div className="flex min-h-10 w-full items-center justify-center">
+          {silence && showControls ? (
+            <p role="status" className="flex items-center gap-3 rounded-pill bg-surface-2 px-4 py-1.5 text-small text-ink-2">
+              {t("silenceHint")}
+              <button
+                type="button"
+                onClick={togglePause}
+                className="inline-flex h-8 items-center rounded-control px-2 font-semibold text-sen-text underline underline-offset-2"
+              >
+                {t("pause")}
+              </button>
+            </p>
+          ) : null}
+        </div>
+
+        {/* Ô ghi chú và danh sách ghi chú, điểm nóng, ảnh (M2-02) */}
+        {showControls ? (
+          <RecordFeed recording={recording} tagLabels={tagLabels} onAddNote={addRecordingNote} />
+        ) : (
+          <div className="h-10" aria-hidden={true} />
+        )}
+
+        {/* Hàng điều khiển: Đánh dấu — Tạm dừng/Ghi tiếp — Chụp */}
+        <div className={cn("flex w-full items-center justify-between gap-4 py-4", !showControls && "invisible")}>
           {showControls ? (
-            <RecordButton
-              state={paused ? "paused" : "recording"}
-              size={88}
-              label={paused ? t("resume") : t("pause")}
-              onClick={togglePause}
-            />
+            <>
+              <BookmarkButton
+                onBookmark={onBookmark}
+                className="flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-control px-3 text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2 hover:text-ink select-none [-webkit-touch-callout:none]"
+              />
+              <RecordButton
+                state={paused ? "paused" : "recording"}
+                size={88}
+                label={paused ? t("resume") : t("pause")}
+                onClick={togglePause}
+              />
+              <button
+                type="button"
+                onClick={() => photoInputRef.current?.click()}
+                aria-label={t("addPhoto")}
+                className="flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-control px-3 text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2 hover:text-ink"
+              >
+                <Camera aria-hidden={true} className="size-6" strokeWidth={1.75} />
+                <span className="text-caption font-medium">{t("photoLabel")}</span>
+              </button>
+            </>
           ) : null}
         </div>
 
@@ -284,6 +406,19 @@ export function RecordScreen() {
           {showControls ? <HoldToEndButton label={t("end")} onHold={handleEnd} className="w-full" /> : null}
         </div>
       </main>
+
+      {/* Chụp ảnh: mockup dùng input capture, ảnh gắn mốc thời gian (M2-02) */}
+      <input
+        ref={photoInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={(e) => {
+          void onPhotoPicked(e.target.files?.[0]);
+          e.target.value = "";
+        }}
+      />
 
       <MicPermissionSheet
         open={gate === "permission"}

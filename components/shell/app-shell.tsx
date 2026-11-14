@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useSyncExternalStore } from "react";
 import { Banner } from "@/components/ui/feedback";
 import { RecordButton } from "@/components/ui/record-button";
+import { RecordingBar } from "@/components/record/recording-bar";
 import { cn } from "@/lib/cn";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { DebugPanel } from "./debug-panel";
@@ -66,6 +67,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-dvh lg:pl-[88px]">
+      {/* Đang ghi ở nơi khác: thanh sen trên cùng, chạm để về màn hình ghi (M2-02) */}
+      <RecordingBar />
+
       {/* Cột trái trên máy tính */}
       <nav
         aria-label={t("nav")}

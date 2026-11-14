@@ -479,7 +479,21 @@
     "announcing": "Đang phát: Buổi làm việc này được ghi âm để lập biên bản",
     "pause": "Tạm dừng",
     "resume": "Ghi tiếp",
-    "end": "Kết thúc buổi ghi"
+    "end": "Kết thúc buổi ghi",
+    "bookmarkLabel": "Đánh dấu",
+    "bookmarkWord": "Điểm nóng",
+    "addBookmark": "Đánh dấu điểm nóng",
+    "bookmarkTagTitle": "Nhãn điểm nóng",
+    "photoLabel": "Chụp",
+    "addPhoto": "Chụp ảnh",
+    "photoAlt": "Ảnh chụp lúc {time}",
+    "notePlaceholder": "Gõ ghi chú…",
+    "noteAria": "Gõ ghi chú",
+    "feedLabel": "Ghi chú, điểm nóng và ảnh",
+    "minimize": "Thu nhỏ màn hình ghi",
+    "miniRecording": "Đang ghi",
+    "miniPaused": "Đang tạm dừng",
+    "silenceHint": "Im lặng đã 1 phút. Tạm dừng?"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -504,7 +518,8 @@
       "architect": "Kiến trúc sư",
       "notary": "Công chứng viên",
       "other": "Nghề khác"
-    }
+    },
+    "recordSpeed30": "Tua nhanh đồng hồ ghi x30"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",
