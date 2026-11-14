@@ -1,0 +1,113 @@
+# 05. Quy trình làm việc qua GitHub
+
+## Vòng lặp
+
+```
+Claude mở issue  →  Agent làm trên nhánh  →  Agent mở PR
+       ↑                                         ↓
+Claude mở issue kế  ←  Hoang merge  ←  Claude kiểm tra PR
+```
+
+1. **Giao việc.** Claude mở một issue theo mẫu bên dưới. Mỗi lúc chỉ có một issue ở trạng thái `dang-lam` cho mỗi agent.
+2. **Làm.** Agent tạo nhánh `m<mốc>/<số>-<tên-ngắn>` (ví dụ `m1/02-thu-vien`), commit nhỏ, thông điệp commit bằng tiếng Việt hoặc tiếng Anh đều được, bắt đầu bằng động từ.
+3. **Nộp.** Agent mở PR vào `main`, ghi `Closes #<số issue>`, điền đủ mẫu PR.
+4. **Kiểm tra.** Claude đọc code, mở link xem thử, đối chiếu tiêu chí nghiệm thu. Kết quả là một trong ba: Đạt, Cần sửa (liệt kê từng điểm, có đánh số), Cần Hoang quyết.
+5. **Duyệt cuối.** Hoang mở link xem thử trên điện thoại. Ưng thì merge.
+6. **Việc tiếp theo.** Sau khi merge, Claude mở issue kế tiếp theo `06-roadmap.md`.
+
+Claude chỉ thấy GitHub khi có một phiên làm việc đang mở. Sau khi agent mở PR, Hoang nhắn Claude "kiểm tra PR số N", hoặc đặt lịch để Claude tự kiểm tra hằng ngày.
+
+## Nhãn
+
+| Nhãn | Nghĩa |
+| --- | --- |
+| `m0` … `m5`, `spike` | Thuộc mốc nào |
+| `san-sang` | Issue đã đủ thông tin, agent nhận được |
+| `dang-lam` | Agent đang làm |
+| `can-hoi` | Agent đang chờ trả lời, không làm tiếp phần liên quan |
+| `can-sua` | PR đã kiểm tra, còn điểm phải sửa |
+| `cho-hoang` | Chờ Hoang quyết định hoặc duyệt cuối |
+
+## Mẫu issue giao việc
+
+```markdown
+## Mục tiêu
+Một hoặc hai câu: xong issue này thì người dùng làm được gì.
+
+## Phạm vi
+- Việc 1
+- Việc 2
+
+## Ngoài phạm vi
+- Thứ dễ bị làm lấn sang
+
+## Tài liệu phải đọc
+- docs/02-design-system.md, mục …
+- docs/03-screens.md, mục …
+
+## Tiêu chí nghiệm thu
+- [ ] Tiêu chí kiểm tra được bằng mắt hoặc bằng lệnh
+- [ ] …
+
+## Trạng thái phải có
+Đang tải, rỗng, lỗi, … (liệt kê cụ thể cho màn hình này)
+```
+
+## PR đạt chuẩn
+
+Mẫu mô tả PR:
+
+```markdown
+Closes #N
+
+## Đã làm
+- …
+
+## Xem thử
+Link Vercel: …
+Đường dẫn cần xem: /…, /…?debug=1
+
+## Ảnh chụp
+| | Sáng | Tối |
+| --- | --- | --- |
+| 390px | ảnh | ảnh |
+| 1280px | ảnh | ảnh |
+
+## Trạng thái đã kiểm
+- [ ] Bình thường  - [ ] Đang tải  - [ ] Rỗng  - [ ] Lỗi  - [ ] Mất mạng
+
+## Tự kiểm
+- [ ] `pnpm lint` và `pnpm typecheck` sạch
+- [ ] `pnpm build` thành công
+- [ ] Không có màu, cỡ chữ, bo góc, thời lượng viết cứng ngoài token
+- [ ] Không có chuỗi hiển thị viết cứng ngoài messages/
+- [ ] Không component nào import fixtures/ hoặc lib/data/mock
+- [ ] Dùng được bằng bàn phím, viền lấy nét nhìn rõ
+- [ ] Đã bật "giảm chuyển động" của máy và kiểm tra
+- [ ] Đã thêm mục vào docs/LOG.md
+
+## Lệch so với đặc tả
+Không có / liệt kê kèm lý do
+
+## Đề xuất
+Ý tưởng cải tiến nằm ngoài issue
+```
+
+## Claude kiểm tra những gì
+
+1. **Đúng phạm vi.** Không thiếu, không lấn sang issue khác.
+2. **Đúng thiết kế.** Token, bố cục, giọng văn, bốn điều cấm trong design system.
+3. **Đủ trạng thái.** Dùng `?debug=1` ép từng trạng thái.
+4. **Đúng ranh giới dữ liệu.** Mọi dữ liệu đi qua repository.
+5. **Chạy được.** Build sạch, không lỗi trong bảng điều khiển trình duyệt, không tràn bố cục ở 390px.
+6. **Tiếng Việt.** Dấu hiển thị đúng, không rớt dòng xấu ở tiêu đề, không lẫn tiếng Anh.
+
+## Sổ sách
+
+- **`docs/LOG.md`**: mỗi PR thêm một mục: ngày, issue, đã làm gì, còn dở gì, điều người sau cần biết. Đây là trí nhớ chung giữa các phiên và giữa các agent.
+- **`docs/DECISIONS.md`**: mỗi quyết định thay đổi đặc tả ghi một dòng: ngày, quyết định, lý do, ai quyết.
+- Đặc tả trong `docs/` là nguồn sự thật. Thay đổi đặc tả đi qua PR riêng, không sửa lẫn trong PR code.
+
+## Khi đặc tả và thực tế mâu thuẫn
+
+Agent không tự chọn. Comment vào issue, gắn `can-hoi`, nêu hai phương án và phương án mình nghiêng về. Trong lúc chờ, làm tiếp các phần không phụ thuộc.
