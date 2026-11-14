@@ -17,6 +17,7 @@ import {
 } from "./palette-data";
 import { ComponentsShowcase } from "./components-showcase";
 import { Preview } from "./preview";
+import { RibbonShowcase } from "./ribbon-showcase";
 import { SectionNavDesktop, SectionNavMobile } from "./section-nav";
 
 /* ---------- Khung ---------- */
@@ -141,6 +142,11 @@ export default function StyleguidePage() {
           {/* Component */}
           <Section id="components" title={t("components.title")} hint={t("components.hint")}>
             <ComponentsShowcase />
+          </Section>
+
+          {/* Dải giọng */}
+          <Section id="ribbon" title={t("ribbon.title")} hint={t("ribbon.hint")}>
+            <RibbonShowcase />
           </Section>
 
           {/* Màu */}

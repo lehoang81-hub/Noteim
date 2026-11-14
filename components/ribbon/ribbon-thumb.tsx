@@ -1,12 +1,19 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { cn } from "@/lib/cn";
+import { BAR_STEP, BAR_WIDTH, drawBar, prepareCanvas, speakerColor, tokenColor, useThemeKey } from "./draw";
 
 /*
  * Dải giọng thu nhỏ trên thẻ buổi ghi: 40 cột, cao 28, tô màu người nói.
- * Bản tĩnh bằng DOM. M0-04 sẽ thay bằng bản canvas theo đặc tả "Dải giọng".
+ * Vẽ bằng canvas. Không tương tác.
  * - peaks: 40 số từ 0 đến 1
  * - speakers: 40 chỉ số người nói (0 đến 5), cùng độ dài với peaks
- * - muted: buổi ghi đang xử lý hoặc chỉ còn tóm tắt, vẽ màu trung tính
+ * - muted: buổi ghi đang xử lý hoặc chỉ còn tóm tắt, vẽ màu trung tính, mờ 50%
  */
+
+const HEIGHT = 28;
+
 export function RibbonThumb({
   peaks,
   speakers,
@@ -18,18 +25,31 @@ export function RibbonThumb({
   muted?: boolean;
   className?: string;
 }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const theme = useThemeKey();
+  const width = peaks.length * BAR_STEP - (BAR_STEP - BAR_WIDTH);
+
+  useEffect(() => {
+    const canvas = ref.current;
+    if (!canvas) return;
+    const ctx = prepareCanvas(canvas, width, HEIGHT);
+    if (!ctx) return;
+    const neutral = tokenColor(canvas, "--ink-3");
+    ctx.globalAlpha = muted ? 0.5 : 1;
+    peaks.forEach((p, i) => {
+      ctx.fillStyle = muted ? neutral : speakerColor(canvas, speakers[i] ?? 0);
+      drawBar(ctx, i * BAR_STEP, HEIGHT / 2, p * HEIGHT);
+    });
+  }, [peaks, speakers, muted, width, theme]);
+
   return (
-    <span aria-hidden={true} className={cn("flex h-7 items-center gap-0.5", muted && "opacity-50", className)}>
-      {peaks.map((h, i) => (
-        <span
-          key={i}
-          className="w-[3px] shrink-0 rounded-pill"
-          style={{
-            height: `${Math.max(3, Math.round(h * 28))}px`,
-            backgroundColor: muted ? "var(--ink-3)" : `var(--speaker-${((speakers[i] ?? 0) % 6) + 1})`,
-          }}
-        />
-      ))}
-    </span>
+    <canvas
+      ref={ref}
+      aria-hidden={true}
+      width={width}
+      height={HEIGHT}
+      className={cn("block shrink-0", className)}
+      style={{ width, height: HEIGHT }}
+    />
   );
 }

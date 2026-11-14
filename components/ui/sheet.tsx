@@ -2,9 +2,10 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { AnimatePresence, motion, useDragControls, useReducedMotion, type DragControls, type PanInfo } from "motion/react";
+import { AnimatePresence, motion, useDragControls, type DragControls, type PanInfo } from "motion/react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 
 /*
  * Bảng trượt từ dưới lên (docs/02-design-system.md, bo góc --r-sheet hai góc trên).
@@ -33,7 +34,7 @@ export function Sheet({
   footer?: React.ReactNode;
 }) {
   const t = useTranslations("ui");
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const controls = useDragControls();
 
   function onDragEnd(_: unknown, info: PanInfo) {

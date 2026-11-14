@@ -27,7 +27,8 @@
       "type": "Chữ",
       "shape": "Hình khối",
       "motion": "Chuyển động",
-      "components": "Component"
+      "components": "Component",
+      "ribbon": "Dải giọng"
     },
     "preview": {
       "today": "Hôm nay",
@@ -381,12 +382,70 @@
         "pVisual": "Biểu đồ và sơ đồ, tạo khi mở tab lần đầu.",
         "pAi": "Hỏi bất kỳ điều gì về buổi ghi này."
       }
+    },
+    "ribbon": {
+      "title": "Dải giọng",
+      "hint": "Điểm nhấn duy nhất của Noteim. Ba dạng: thu nhỏ trên hàng buổi ghi, phát lại trong buổi ghi, và sống khi đang ghi.",
+      "thumb": "Thu nhỏ",
+      "thumbDesc": "40 cột, cao 28, tô màu người nói. Bản mờ dùng khi đang xử lý hoặc chỉ còn tóm tắt.",
+      "normal": "Bình thường",
+      "muted": "Trung tính",
+      "playback": "Phát lại",
+      "playbackDesc": "Chạm hoặc kéo ngang để tua. Dùng bàn phím: mũi tên trái phải tua 5 giây. Chấm phía trên là điểm nóng, dải mỏng phía dưới là nhãn của từng chủ đề.",
+      "live": "Sống",
+      "liveDesc": "Cột mới hiện ở mép phải rồi trôi sang trái. Quầng sáng mạnh lên theo âm lượng.",
+      "level": "Âm lượng giả lập",
+      "micOn": "Dùng micro thật",
+      "micOff": "Tắt micro",
+      "micAsking": "Đang xin quyền micro",
+      "micDenied": "Micro chưa được cho phép. Bật quyền micro trong cài đặt trình duyệt, hoặc dùng thanh trượt.",
+      "micUnsupported": "Trình duyệt này không đọc được micro. Dùng thanh trượt.",
+      "micPrivacy": "Chỉ đo âm lượng để vẽ. Không ghi, không lưu, không gửi đi.",
+      "pause": "Tạm dừng",
+      "resume": "Chạy tiếp",
+      "player": "Trình phát nổi",
+      "playerDesc": "Hai bản dưới đây dùng chung một trình phát, bấm phát ở bản nào cũng được.",
+      "collapsed": "Thu gọn",
+      "expanded": "Mở rộng",
+      "moments": "Ba khoảnh khắc đặc trưng",
+      "momentsDesc": "Toàn bộ ngân sách hiệu ứng của sản phẩm nằm ở ba chỗ này. Bật giảm chuyển động thì chỉ còn mờ dần.",
+      "run": "Chạy thử",
+      "again": "Chạy lại",
+      "m1": "Bắt đầu ghi",
+      "m1Desc": "Nút ghi âm nở ra thành dải giọng, phòng tối lại.",
+      "m2": "Kết thúc ghi",
+      "m2Desc": "Dải giọng co lại, gấp thành hàng buổi ghi và rơi vào đầu thư viện.",
+      "m3": "Xử lý xong",
+      "m3Desc": "Dải giọng được nhuộm màu từng người nói, rồi các ý tóm tắt hiện ra.",
+      "recording": "Đang ghi",
+      "newTitle": "Buổi ghi lúc 14:05",
+      "older": "Họp điều hành tháng 11",
+      "today": "Hôm nay",
+      "processing": "Đang tóm tắt",
+      "template": "Gặp khách",
+      "duration": "42 phút",
+      "olderDuration": "1 giờ 08",
+      "b1": "Cần 2 phòng ngủ, gần trường cấp 1",
+      "b2": "Ngân sách tối đa 4,2 tỷ, vay 50%",
+      "b3": "Muốn chồng xem nhà trước khi đặt cọc",
+      "seek": "Nghe từ",
+      "position": "Vị trí phát"
     }
   },
   "ui": {
     "close": "Đóng",
     "undo": "Hoàn tác",
     "retry": "Thử lại",
-    "clearSearch": "Xóa nội dung tìm"
+    "clearSearch": "Xóa nội dung tìm",
+    "player": {
+      "play": "Phát",
+      "pause": "Tạm dừng",
+      "expand": "Mở rộng trình phát",
+      "collapse": "Thu gọn trình phát",
+      "back10": "Lùi 10 giây",
+      "forward10": "Tới 10 giây",
+      "rate": "Tốc độ {rate}, bấm để đổi",
+      "position": "Vị trí phát"
+    }
   }
 }
