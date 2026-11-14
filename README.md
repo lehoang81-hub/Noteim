@@ -20,6 +20,6 @@ Giai đoạn hiện tại: **mockup tương tác đầy đủ** (chạy bằng d
 
 ## Vai trò
 
-- **Hoang**: chủ sản phẩm. Duyệt cuối trên điện thoại, bấm merge.
-- **Claude (reviewer)**: viết đặc tả, mở issue giao việc, kiểm tra PR, mở issue tiếp theo.
+- **Hoang**: chủ sản phẩm. Chuyển báo cáo của agent cho Claude, duyệt giao diện trên điện thoại ở cuối mỗi mốc.
+- **Claude (reviewer)**: viết đặc tả, mở issue giao việc, kiểm tra PR, merge khi đạt, mở issue tiếp theo.
 - **Coding agent**: nhận issue, làm trên nhánh riêng, mở PR kèm link xem thử và ảnh chụp.
