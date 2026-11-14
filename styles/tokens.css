@@ -58,9 +58,11 @@
 
   /* ============ Chữ ============ */
   /* Biến --font-bricolage và --font-bevietnam do next/font/google cung cấp
-     (subset vietnamese), gắn trên <body> trong app/layout.tsx. */
-  --font-display: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
-  --font-body: var(--font-bevietnam), "Be Vietnam Pro", sans-serif;
+     (subset vietnamese), gắn trên <html> trong app/layout.tsx.
+     Luôn kèm giá trị dự phòng trong var(): thiếu biến thì vẫn ra đúng phông,
+     không rơi về phông hệ thống. */
+  --font-display: var(--font-bricolage, "Bricolage Grotesque"), "Be Vietnam Pro", sans-serif;
+  --font-body: var(--font-bevietnam, "Be Vietnam Pro"), sans-serif;
 
   /* Thang cỡ chữ — điện thoại. Chiều cao dòng tối thiểu 1,3 lần cỡ chữ. */
   --text-display-size: 32px;
