@@ -460,7 +460,8 @@
     "soon": "This part comes in a later step of the mockup.",
     "soonTitle": "Coming soon",
     "toLibrary": "Back to library",
-    "brand": "Noteim"
+    "brand": "Noteim",
+    "upgrade": "Plans"
   },
   "debug": {
     "title": "Test panel",
@@ -486,7 +487,9 @@
       "notary": "Notary",
       "other": "Other"
     },
-    "recordSpeed30": "Speed up recording clock x30"
+    "recordSpeed30": "Speed up recording clock x30",
+    "micDenied": "Microphone denied",
+    "micTaken": "Micro taken after 10s"
   },
   "library": {
     "greeting": "Hi {name}",
@@ -617,7 +620,21 @@
     "silenceHint": "Silent for 1 minute. Pause?",
     "endError": "Could not save this recording. Try again.",
     "foldToday": "Today",
-    "foldProcessing": "Summarizing"
+    "foldProcessing": "Summarizing",
+    "offlineRecording": "You are offline. Recording continues and is saved on this device.",
+    "sessionQuotaLow": "{minutes} minutes left for this session ({plan} allows up to {limit}).",
+    "sessionQuotaOut": "This recording reached the {limit} limit of the {plan} plan. Summarizing now.",
+    "quotaOutTitle": "Monthly quota used up",
+    "quotaOutBody": "You have used all {limit} minutes this month. New quota starts on {date}.",
+    "viewPro": "See the Pro plan",
+    "deniedTitle": "Microphone is not allowed",
+    "deniedHint": "Turn on the microphone permission for your browser, then come back here. No reinstall needed.",
+    "deniedIphone": "On iPhone (Safari): tap the aA icon at the start of the address bar, choose Website Settings for Noteim, then turn on Microphone.",
+    "deniedAndroid": "On Android (Chrome): tap the lock icon next to the address, choose Permissions, turn on Microphone, then reload this page.",
+    "trySample": "Try with sample sound",
+    "sampleBadge": "Using sample sound",
+    "micTakenBanner": "Paused because the microphone is being used by another app.",
+    "backToLibrary": "Back to library"
   },
   "processing": {
     "step1": "Recording saved",
@@ -633,6 +650,7 @@
     "safeToLeave": "You can leave this screen. Noteim will notify you when it's done.",
     "doneToast": "Summary ready: {title}",
     "view": "View",
-    "ribbonLabel": "Voice ribbon of the recording being processed"
+    "ribbonLabel": "Voice ribbon of the recording being processed",
+    "backOnline": "Back online. Uploading {count} recording(s)."
   }
 }

@@ -460,7 +460,8 @@
     "soon": "Phần này có ở bước tiếp theo của bản mockup.",
     "soonTitle": "Sắp có",
     "toLibrary": "Về thư viện",
-    "brand": "Noteim"
+    "brand": "Noteim",
+    "upgrade": "Gói dịch vụ"
   },
   "record": {
     "statusRecording": "Ghi",
@@ -496,7 +497,21 @@
     "silenceHint": "Im lặng đã 1 phút. Tạm dừng?",
     "endError": "Chưa lưu được buổi ghi. Thử lại.",
     "foldToday": "Hôm nay",
-    "foldProcessing": "Đang tóm tắt"
+    "foldProcessing": "Đang tóm tắt",
+    "offlineRecording": "Mất mạng. Vẫn đang ghi và lưu trên máy này.",
+    "sessionQuotaLow": "Còn {minutes} phút cho buổi này (gói {plan} tối đa {limit}).",
+    "sessionQuotaOut": "Buổi ghi đã đủ {limit} tối đa của gói {plan}. Đang tóm tắt.",
+    "quotaOutTitle": "Hết hạn mức tháng này",
+    "quotaOutBody": "Bạn đã dùng hết {limit} phút tháng này. Hạn mức mới có từ ngày {date}.",
+    "viewPro": "Xem gói Pro",
+    "deniedTitle": "Micro chưa được cho phép",
+    "deniedHint": "Bật quyền micro cho trình duyệt rồi quay lại đây. Không cần cài lại ứng dụng.",
+    "deniedIphone": "Trên iPhone (Safari): chạm biểu tượng aA ở đầu thanh địa chỉ, chọn Cài đặt trang web cho Noteim, rồi bật Micro.",
+    "deniedAndroid": "Trên Android (Chrome): chạm biểu tượng ổ khóa cạnh địa chỉ trang, chọn Quyền, bật Micro, sau đó tải lại trang.",
+    "trySample": "Dùng thử với âm thanh mẫu",
+    "sampleBadge": "Đang dùng âm thanh mẫu",
+    "micTakenBanner": "Đã tạm dừng vì micro bị dùng ở nơi khác.",
+    "backToLibrary": "Về thư viện"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -522,7 +537,9 @@
       "notary": "Công chứng viên",
       "other": "Nghề khác"
     },
-    "recordSpeed30": "Tua nhanh đồng hồ ghi x30"
+    "recordSpeed30": "Tua nhanh đồng hồ ghi x30",
+    "micDenied": "Micro bị từ chối",
+    "micTaken": "Micro bị chiếm sau 10 giây"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",
@@ -633,6 +650,7 @@
     "safeToLeave": "Bạn có thể rời màn hình này. Noteim sẽ báo khi xong.",
     "doneToast": "Đã tóm tắt xong: {title}",
     "view": "Xem",
-    "ribbonLabel": "Dải giọng buổi ghi đang xử lý"
+    "ribbonLabel": "Dải giọng buổi ghi đang xử lý",
+    "backOnline": "Đã có mạng. Đang tải lên {count} buổi ghi."
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Camera, ChevronDown, Mic } from "lucide-react";
+import { Camera, ChevronDown, Mic, MicVocal } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -12,11 +12,16 @@ import { BookmarkButton } from "@/components/record/bookmark-button";
 import { HoldToEndButton } from "@/components/record/hold-to-end-button";
 import { RecordFeed } from "@/components/record/record-feed";
 import { ConsentSheet, MicPermissionSheet, TemplateSheet } from "@/components/record/sheets";
+import { Button } from "@/components/ui/button";
+import { Banner, MicDrawing } from "@/components/ui/feedback";
+import { Sheet } from "@/components/ui/sheet";
 import { RecordButton } from "@/components/ui/record-button";
 import { useToast } from "@/components/ui/toast";
 import { useMicLevel } from "@/lib/audio/use-mic-level";
 import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
+import { useDebugFlags } from "@/lib/debug/flags";
+import { shortDate } from "@/lib/format";
 import { micGrantedOnce, markMicGranted } from "@/lib/record/mic-permission";
 import { fileToDataUrl } from "@/lib/record/photo";
 import {
@@ -35,6 +40,7 @@ import {
 } from "@/lib/record/recording-store";
 import { keepScreenAwake, letScreenSleep } from "@/lib/record/wake-lock";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
+import { useOffline } from "@/components/shell/app-shell";
 import type { SemanticTag } from "@/components/ui/chips";
 
 /*
@@ -56,7 +62,7 @@ const MOMENT_MS = 700;
 const SILENCE_SEC = 60;
 const SILENCE_LEVEL = 0.07;
 
-type Gate = "boot" | "permission" | "consent";
+type Gate = "boot" | "permission" | "consent" | "quota" | "denied";
 
 /** "14:05" theo đồng hồ máy, để đặt tên "Buổi ghi lúc 14:05". */
 function clockTime(epochMs: number): string {
@@ -88,11 +94,15 @@ export function RecordScreen() {
   const tl = useTranslations("styleguide.tags");
   const router = useRouter();
   const toast = useToast();
+  const flags = useDebugFlags();
+  const offline = useOffline();
   const recording = useRecording();
-  const mic = useMicLevel();
   const me = useData(() => data.account.me(), []);
+  const quota = useData(() => data.account.quota(), []);
   const templates = useData(() => data.account.templates(), []);
   const reduce = useReducedMotionSafe();
+  const micTakenRef = useRef<() => void>(() => {});
+  const mic = useMicLevel({ onEnded: () => micTakenRef.current() });
 
   /** Bảng đang chờ trước khi ghi; null là không chờ gì (đang ghi hoặc đã xong luồng). */
   const [gate, setGate] = useState<Gate | null>("boot");
@@ -102,18 +112,29 @@ export function RecordScreen() {
   const [templateSheet, setTemplateSheet] = useState(false);
   const [ripple, setRipple] = useState(0);
   const [silence, setSilence] = useState(false);
+  const [sampleVoice, setSampleVoice] = useState(false);
+  const [fakeLevel, setFakeLevel] = useState(0);
+  const [micTaken, setMicTaken] = useState(false);
+  const [quotaSecondsLeft, setQuotaSecondsLeft] = useState<number | null>(null);
   const momentTimer = useRef(0);
   const announceTimer = useRef(0);
   const decided = useRef(false);
   const startingMic = useRef(false);
   const levelRef = useRef(0);
   const beginRef = useRef<(announce: boolean) => void>(() => {});
+  const finishRef = useRef<() => void>(() => {});
   const lastVoiceRef = useRef(0);
   const photoInputRef = useRef<HTMLInputElement>(null);
+  const autoEnded = useRef(false);
 
   const active = recording.status !== "idle";
   const paused = recording.status === "paused";
   const templateName = templates.data?.find((tp) => tp.id === recording.templateId)?.name ?? "";
+  const level = sampleVoice ? fakeLevel : mic.level;
+  const maxSessionMin = quota.data?.max_session_minutes ?? 45;
+  const planName = me.data?.plan === "pro" ? "Pro" : "Free";
+  const planLimitLabel =
+    maxSessionMin >= 60 && maxSessionMin % 60 === 0 ? `${Math.round(maxSessionMin / 60)} giờ` : `${maxSessionMin} phút`;
   const tagLabels: Record<SemanticTag, string> = {
     decided: tl("decided"),
     pending: tl("pending"),
@@ -143,10 +164,11 @@ export function RecordScreen() {
   // Cập nhật sau mỗi lần vẽ để effect và bảng đồng ý luôn gọi bản mới nhất
   useEffect(() => {
     beginRef.current = beginRecording;
+    finishRef.current = finishRecording;
   });
 
-  // Quyết định một lần duy nhất khi mở màn hình: đang ghi dở, cần xin quyền,
-  // cần hỏi đồng ý, hay ghi luôn
+  // Quyết định một lần duy nhất khi mở màn hình: đang ghi dở, hết hạn mức
+  // tháng, micro bị chối, cần xin quyền, cần hỏi đồng ý, hay ghi luôn
   useEffect(() => {
     if (decided.current) return;
     if (recording.status !== "idle") {
@@ -155,7 +177,18 @@ export function RecordScreen() {
       return () => window.clearTimeout(id);
     }
     if (!me.data) return; // chờ hồ sơ để biết có bật nhắc đồng ý hay không
+    if (!quota.data && !quota.error) return; // chờ hạn mức (lỗi thì bỏ qua kiểm)
     decided.current = true;
+    const quotaUsedOut = !!quota.data && quota.data.minutes_used >= quota.data.minutes_limit;
+    if (quotaUsedOut) {
+      // Nút ghi âm vẫn bấm được: mở bảng giải thích và mời xem gói Pro (M2-04)
+      const id = window.setTimeout(() => setGate("quota"), 0);
+      return () => window.clearTimeout(id);
+    }
+    if (flags.micDenied) {
+      const id = window.setTimeout(() => setGate("denied"), 0);
+      return () => window.clearTimeout(id);
+    }
     if (!micGrantedOnce()) {
       const id = window.setTimeout(() => setGate("permission"), 0);
       return () => window.clearTimeout(id);
@@ -166,12 +199,17 @@ export function RecordScreen() {
     }
     const id = window.setTimeout(() => beginRef.current(false), 0);
     return () => window.clearTimeout(id);
-  }, [me.data, recording.status]);
+  }, [me.data, quota.data, quota.error, recording.status, flags.micDenied]);
 
   // Được cấp quyền micro: ghi nhớ để lần sau bỏ qua bảng xin quyền, rồi hỏi
-  // đồng ý (nếu bật) hoặc ghi luôn
+  // đồng ý (nếu bật) hoặc ghi luôn. Bị từ chối thật thì sang trang giải thích.
   useEffect(() => {
-    if (gate !== "permission" || mic.status !== "on") return;
+    if (gate !== "permission") return;
+    if (mic.status === "denied" || mic.status === "unsupported") {
+      const id = window.setTimeout(() => setGate("denied"), 0);
+      return () => window.clearTimeout(id);
+    }
+    if (mic.status !== "on") return;
     markMicGranted();
     const remind = !!me.data?.consent_reminder;
     const id = window.setTimeout(() => {
@@ -194,12 +232,24 @@ export function RecordScreen() {
 
   // Lấy mẫu âm lượng mỗi 250ms; kho tự bỏ qua khi không ghi
   useEffect(() => {
-    levelRef.current = mic.level;
-  }, [mic.level]);
+    levelRef.current = level;
+  }, [level]);
   useEffect(() => {
     const id = window.setInterval(() => pushRecordingLevel(levelRef.current), 250);
     return () => window.clearInterval(id);
   }, []);
+
+  // Âm thanh mẫu (micro bị từ chối): dải giọng chạy bằng âm lượng giả
+  useEffect(() => {
+    if (!sampleVoice) return;
+    let phase = 0;
+    const id = window.setInterval(() => {
+      phase += 1;
+      const speaking = Math.sin(phase / 9) > -0.4;
+      setFakeLevel(speaking ? 0.35 + Math.random() * 0.55 : 0.05 + Math.random() * 0.08);
+    }, 120);
+    return () => window.clearInterval(id);
+  }, [sampleVoice]);
 
   // Gợi ý im lặng: dưới ngưỡng liên tục 60 giây (đồng hồ ghi, cờ x30 kiểm nhanh)
   useEffect(() => {
@@ -219,6 +269,40 @@ export function RecordScreen() {
     return () => window.clearInterval(id);
   }, [recording.status]);
 
+  // Hạn mức phiên: còn 5 phút thì cảnh báo hổ phách, hết là tự kết thúc (M2-04)
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (!active || folding || autoEnded.current) return;
+      const remaining = maxSessionMin * 60 - recordedSec();
+      setQuotaSecondsLeft(remaining);
+      if (remaining <= 0 && recording.status === "recording") {
+        autoEnded.current = true;
+        toast.show({
+          tone: "success",
+          message: t("sessionQuotaOut", { limit: planLimitLabel, plan: planName }),
+        });
+        void finishRef.current();
+      }
+    }, 1000);
+    return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, folding, recording.status, maxSessionMin, planName, planLimitLabel]);
+
+  // Micro bị nơi khác chiếm (M2-04): thật thì nghe sự kiện ended của track,
+  // thử nghiệm thì ép sau 10 giây. Tự tạm dừng, buổi ghi vẫn còn nguyên.
+  useEffect(() => {
+    micTakenRef.current = () => {
+      if (recording.status !== "recording") return;
+      pauseRecording();
+      setMicTaken(true);
+    };
+  });
+  useEffect(() => {
+    if (!active || paused || !flags.micTaken) return;
+    const id = window.setTimeout(() => micTakenRef.current(), 10_000);
+    return () => window.clearTimeout(id);
+  }, [active, paused, flags.micTaken]);
+
   useEffect(
     () => () => {
       window.clearTimeout(momentTimer.current);
@@ -231,7 +315,10 @@ export function RecordScreen() {
 
   function togglePause() {
     if (recording.status === "recording") pauseRecording();
-    else if (recording.status === "paused") resumeRecording();
+    else if (recording.status === "paused") {
+      resumeRecording();
+      setMicTaken(false); // ghi tiếp sau khi micro bị chiếm: xóa dải báo
+    }
   }
 
   /* Kết thúc ghi (M2-03): tạo buổi ghi, dải giọng gấp thành thẻ rồi sang màn
@@ -353,7 +440,57 @@ export function RecordScreen() {
         </span>
       </header>
 
-      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center px-page">
+      {sampleVoice && showControls ? (
+        <p role="status" className="px-page pb-1 text-center text-caption font-medium text-dien">
+          {t("sampleBadge")}
+        </p>
+      ) : null}
+
+      {/* Dải báo của màn hình ghi (M2-04): mất mạng, sắp hết hạn mức phiên,
+          micro bị nơi khác chiếm. Ghi vẫn chạy trong mọi trường hợp. */}
+      {showControls && (offline || micTaken || (quotaSecondsLeft !== null && quotaSecondsLeft > 0 && quotaSecondsLeft <= 300)) ? (
+        <div className="flex flex-col gap-px">
+          {offline ? <Banner kind="offline">{t("offlineRecording")}</Banner> : null}
+          {quotaSecondsLeft !== null && quotaSecondsLeft > 0 && quotaSecondsLeft <= 300 ? (
+            <Banner kind="quota">
+              {t("sessionQuotaLow", {
+                minutes: Math.max(1, Math.ceil(quotaSecondsLeft / 60)),
+                plan: planName,
+                limit: planLimitLabel,
+              })}
+            </Banner>
+          ) : null}
+          {micTaken ? <Banner kind="offline" icon={MicVocal}>{t("micTakenBanner")}</Banner> : null}
+        </div>
+      ) : null}
+
+      {gate === "denied" ? (
+        <main className="mx-auto flex w-full max-w-xl flex-1 flex-col items-center justify-center px-page pb-10">
+          <MicDrawing className="size-24 text-ink-3" />
+          <h1 className="mt-4 text-center font-display text-h1 font-semibold text-ink">{t("deniedTitle")}</h1>
+          <p className="mt-2 max-w-[40ch] text-center text-body text-ink-2">{t("deniedHint")}</p>
+          <div className="mt-5 w-full max-w-md rounded-block border border-line p-4">
+            <p className="text-small text-ink">{t("deniedIphone")}</p>
+            <p className="mt-3 text-small text-ink">{t("deniedAndroid")}</p>
+          </div>
+          <div className="mt-6 flex w-full max-w-md flex-col gap-2">
+            <Button
+              variant="primary"
+              block
+              onClick={() => {
+                setSampleVoice(true);
+                beginRef.current(false);
+              }}
+            >
+              {t("trySample")}
+            </Button>
+            <Button variant="secondary" block onClick={() => router.push("/")}>
+              {t("backToLibrary")}
+            </Button>
+          </div>
+        </main>
+      ) : (
+        <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center px-page">
         <div className={cn("mt-6 flex min-h-[52px] items-start", !showControls && "invisible")}>
           {showControls ? <RecordClock paused={paused} /> : null}
         </div>
@@ -412,7 +549,7 @@ export function RecordScreen() {
                 animate={{ opacity: 1 }}
                 style={{ borderRadius: 16 }}
               >
-                <RibbonLive level={mic.level} paused={paused} height={160} />
+                <RibbonLive level={level} paused={paused} height={160} />
               </motion.div>
             )}
             {/* Gợn sóng khi tạo điểm nóng: tại vị trí hiện tại của dải giọng */}
@@ -486,7 +623,8 @@ export function RecordScreen() {
         <div className={cn("w-full max-w-sm pb-[max(24px,env(safe-area-inset-bottom))] pt-2", !showControls && "invisible")}>
           {showControls ? <HoldToEndButton label={t("end")} onHold={finishRecording} className="w-full" /> : null}
         </div>
-      </main>
+        </main>
+      )}
 
       {/* Chụp ảnh: mockup dùng input capture, ảnh gắn mốc thời gian (M2-02) */}
       <input
@@ -512,6 +650,23 @@ export function RecordScreen() {
         onConfirm={(announced) => beginRecording(announced)}
         onCancel={() => router.push("/")}
       />
+      {/* Hết hạn mức tháng: nút ghi âm vẫn bấm được, bảng giải thích + gói Pro (M2-04) */}
+      <Sheet
+        open={gate === "quota"}
+        onOpenChange={(next) => !next && router.push("/")}
+        title={t("quotaOutTitle")}
+        size="half"
+      >
+        <p className="py-2 text-body text-ink-2">
+          {t("quotaOutBody", {
+            limit: quota.data?.minutes_limit ?? 180,
+            date: quota.data ? shortDate(new Date(Date.parse(quota.data.period_end) + 86400_000)) : "",
+          })}
+        </p>
+        <Button variant="primary" block onClick={() => router.push("/upgrade")} className="mt-3">
+          {t("viewPro")}
+        </Button>
+      </Sheet>
       <TemplateSheet
         open={templateSheet}
         onOpenChange={setTemplateSheet}

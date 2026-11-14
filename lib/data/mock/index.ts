@@ -218,8 +218,11 @@ export const mockSource: DataSource = {
         d.topics.forEach((t) => t.bullets.forEach((b) => b.speaker_id === fromId && (b.speaker_id = intoId)));
         findFixture(sessionId).transcript.forEach((g) => g.speaker_id === fromId && (g.speaker_id = intoId));
       }),
-    createFromRecording: (draft) =>
-      write(() => {
+    createFromRecording: (draft) => {
+      // Mất mạng: vẫn tạo buổi ghi trên máy, trạng thái chờ tải lên (M2-04);
+      // có mạng lại thì tự chuyển sang xử lý (xem ProcessingWatcher)
+      const offline = getFlags().offline;
+      const create = () => {
         const db = getDb();
         const id = `s-new-${Date.now()}`;
         const now = new Date().toISOString();
@@ -237,8 +240,8 @@ export const mockSource: DataSource = {
           template_id: draft.template_id,
           language: "vi",
           output_language: "vi",
-          status: "processing",
-          processing_step: 1,
+          status: offline ? "unsynced" : "processing",
+          processing_step: offline ? undefined : 1,
           storage_status: "full",
           duration_sec: draft.duration_sec,
           size_bytes: draft.duration_sec * 3000,
@@ -261,9 +264,19 @@ export const mockSource: DataSource = {
           send_history: [],
         };
         db.sessions.unshift({ detail, transcript: [], chat: [], draft });
-        scheduleProcessing(id);
+        if (!offline) scheduleProcessing(id);
         return { id };
-      }),
+      };
+      if (offline) {
+        // write() ném lỗi khi mất mạng; buổi ghi này thì vẫn phải lưu trên máy
+        return wait().then(() => {
+          const out = create();
+          commit();
+          return structuredClone(out);
+        });
+      }
+      return write(create);
+    },
     subscribeProcessing: (id, onStep) => {
       const fx = getDb().sessions.find((s) => s.detail.id === id);
       if (!fx) return () => undefined;
