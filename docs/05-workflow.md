@@ -21,7 +21,7 @@ Claude chỉ thấy GitHub khi có một phiên làm việc đang mở. Sau khi 
 
 Token GitHub cấp cho agent cần: Contents (đọc và ghi), Issues (đọc và ghi), Pull requests (đọc và ghi). Thiếu quyền mở PR thì agent đẩy nhánh, comment vào issue, gắn `can-hoi`; reviewer sẽ mở PR thay.
 
-Agent không cần tài khoản Vercel. Repo đã nối với dự án Vercel `noteim`: mỗi nhánh đẩy lên tự có link xem thử, bản `main` chạy tại https://noteim.vercel.app.
+Agent không cần tài khoản Vercel. Repo đã nối với dự án Vercel `noteim`: mỗi nhánh đẩy lên tự có link xem thử, bản `main` chạy tại https://noteim-seven.vercel.app.
 
 ## Nhãn
 

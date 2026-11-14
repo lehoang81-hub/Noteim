@@ -4,7 +4,7 @@ Trợ lý ghi âm, tóm tắt và giao việc cho người đi làm tại Việt
 
 Giai đoạn hiện tại: **mockup tương tác đầy đủ** (chạy bằng dữ liệu giả, chưa nối database, chưa gọi AI thật).
 
-- Bản đang chạy: https://noteim.vercel.app/styleguide
+- Bản đang chạy: https://noteim-seven.vercel.app/styleguide
 - Mỗi PR có link xem thử riêng do Vercel tạo, nằm trong phần bình luận của PR.
 
 ## Chạy trên máy
