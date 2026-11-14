@@ -5,11 +5,15 @@
  * ngoài file này. Component chỉ dùng token qua biến CSS hoặc tiện ích Tailwind
  * được ánh xạ trong app/globals.css.
  *
- * LƯU Ý KHI ĐỔI MÀU: mã màu cũng được liệt kê trong app/styleguide/palette-data.ts
- * để hiện tên và mã trên trang /styleguide. Sửa phải sửa cả hai nơi.
+ * Trang /styleguide đọc mã màu thẳng từ các biến dưới đây lúc chạy,
+ * nên đổi màu chỉ cần sửa file này.
+ *
+ * Class .light và .dark dùng được trên bất kỳ phần tử nào để ép một vùng
+ * về giao diện sáng hoặc tối (ví dụ khối "Xem nhanh" trên /styleguide).
  */
 
-:root {
+:root,
+.light {
   /* ============ Màu — nền và chữ (sáng) ============ */
   --bg: #f6f7fb; /* Sứ */
   --surface: #ffffff;
@@ -55,6 +59,7 @@
   --dawn-orange: #ff8a4c;
   --dawn-pink: #e6336e;
   --dawn-violet: #6b4eff;
+  --on-dawn: #ffffff; /* biểu tượng trên nút ghi âm, cả hai giao diện */
 
   /* ============ Chữ ============ */
   /* Biến --font-bricolage và --font-bevietnam do next/font/google cung cấp

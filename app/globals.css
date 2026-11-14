@@ -26,6 +26,7 @@
   --color-on-sen: var(--on-sen);
   --color-dien: var(--dien);
   --color-dien-tint: var(--dien-tint);
+  --color-on-dawn: var(--on-dawn);
 
   /* Nhãn ngữ nghĩa */
   --color-tag-decided: var(--tag-decided-text);
@@ -100,6 +101,13 @@ body {
 /* Nút khi nhấn thu nhỏ còn 97%. */
 button:active {
   scale: 0.97;
+}
+
+/* Cuộn mượt khi bấm mục lục, trừ khi người dùng bật giảm chuyển động. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

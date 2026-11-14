@@ -1,45 +1,25 @@
-import {
-  ChartColumn,
-  Check,
-  Hourglass,
-  Lightbulb,
-  TriangleAlert,
-  type LucideIcon,
-} from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { ChartColumn, Check, Hourglass, Lightbulb, TriangleAlert, type LucideIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { formatRatio } from "@/lib/contrast";
+import { Contrast, Duration, Hex, Raw, SizeLine } from "./live";
 import {
   actionColors,
   baseColors,
-  dawnStops,
-  pageMargins,
-  pairRatio,
+  dawnVars,
+  motionVars,
   radii,
-  spacingScale,
-  speakerColors,
-  tagColors,
-  tagDarkBg,
-  tagRatio,
-  type RatioPair,
+  spacingVars,
+  speakerVars,
+  tagIds,
+  typeScale,
+  type ColorRow,
+  type SectionId,
   type TagId,
 } from "./palette-data";
+import { Preview } from "./preview";
+import { SectionNavDesktop, SectionNavMobile } from "./section-nav";
 
-function formatVN(ratio: number): string {
-  return formatRatio(ratio).replace(".", ",");
-}
-
-type Translations = Awaited<ReturnType<typeof getTranslations>>;
-
-function RatioBadge({ ratio, t }: { ratio: RatioPair; t: Translations }) {
-  return (
-    <p className="text-caption text-ink-3 tabular-nums">
-      {t("contrastRatio", { ratio: formatVN(ratio.light) })} ({t("lightLabel")})
-      {" · "}
-      {t("contrastRatio", { ratio: formatVN(ratio.dark) })} ({t("darkLabel")})
-    </p>
-  );
-}
+/* ---------- Khung ---------- */
 
 function Section({
   id,
@@ -47,71 +27,72 @@ function Section({
   hint,
   children,
 }: {
-  id: string;
+  id: SectionId;
   title: string;
   hint?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section aria-labelledby={id} className="mt-12">
-      <h2 id={id} className="text-h2 font-semibold text-ink">
+    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-16 pt-9 lg:scroll-mt-8 lg:pt-12">
+      <h2 id={`${id}-title`} className="text-h2 font-semibold text-ink">
         {title}
       </h2>
-      {hint ? <p className="mt-1 max-w-[68ch] text-small text-ink-2">{hint}</p> : null}
-      <div className="mt-4">{children}</div>
+      {hint ? <p className="mt-1 max-w-[62ch] text-small text-ink-2">{hint}</p> : null}
+      <div className="mt-5">{children}</div>
     </section>
   );
 }
 
-function Row({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <li className="flex flex-wrap items-center gap-4 py-4">{children}</li>;
+function SubHeading({ children }: { children: React.ReactNode }) {
+  return <h3 className="mb-1 mt-8 text-small font-semibold text-ink first:mt-0">{children}</h3>;
 }
 
-function RowText({
-  cssVar,
-  name,
-  usage,
-  codes,
-  children,
-}: {
-  cssVar: string;
-  name?: string;
-  usage?: string;
-  codes?: string;
-  children?: React.ReactNode;
-}) {
+/* ---------- Màu ---------- */
+
+function Swatch({ row }: { row: ColorRow }) {
+  const base = "flex size-14 shrink-0 items-center justify-center rounded-control text-h2 font-semibold";
+  if (row.swatch === "fill") {
+    return <span aria-hidden={true} className={`${base} border border-line`} style={{ backgroundColor: `var(${row.cssVar})` }} />;
+  }
+  if (row.swatch === "onFill") {
+    return (
+      <span aria-hidden={true} className={base} style={{ backgroundColor: `var(${row.cssVar})`, color: "var(--on-sen)" }}>
+        Aa
+      </span>
+    );
+  }
   return (
-    <div className="min-w-0 flex-1">
-      <p className="text-body-strong tabular-nums">{cssVar}</p>
-      {name ? <p className="text-small text-ink-2">{name}</p> : null}
-      {usage ? <p className="text-caption text-ink-3">{usage}</p> : null}
-      {codes ? <p className="text-caption text-ink-3 tabular-nums">{codes}</p> : null}
-      {children}
-    </div>
+    <span aria-hidden={true} className={`${base} border border-line bg-surface`} style={{ color: `var(${row.cssVar})` }}>
+      Aa
+    </span>
   );
 }
 
-/* Thang chữ: cỡ/dòng ghi ở đây để in ra màn hình, nguồn sự thật vẫn là tokens.css. */
-const typeTokens = [
-  { id: "typeDisplay", textClass: "text-display", roleFont: "display", weight: 700, size: 32, line: 40 },
-  { id: "typeH1", textClass: "text-h1", roleFont: "display", weight: 600, size: 24, line: 32 },
-  { id: "typeH2", textClass: "text-h2", roleFont: "body", weight: 600, size: 19, line: 26 },
-  { id: "typeBody", textClass: "text-body", roleFont: "body", weight: 400, size: 16, line: 25 },
-  { id: "typeBodyStrong", textClass: "text-body-strong", roleFont: "body", weight: 600, size: 16, line: 25 },
-  { id: "typeSmall", textClass: "text-small", roleFont: "body", weight: 400, size: 14, line: 21 },
-  { id: "typeCaption", textClass: "text-caption", roleFont: "body", weight: 500, size: 12, line: 17 },
-] as const;
+function ColorList({ rows }: { rows: ColorRow[] }) {
+  const t = useTranslations("styleguide.tokens");
+  return (
+    <ul className="grid lg:grid-cols-2 lg:gap-x-8">
+      {rows.map((row) => (
+        <li key={row.key} className="flex items-center gap-4 border-b border-line py-3">
+          <Swatch row={row} />
+          <div className="min-w-0 flex-1">
+            <p className="flex flex-wrap items-baseline gap-x-2">
+              <span className="text-body-strong font-semibold text-ink">{t(`${row.key}.name`)}</span>
+              <span className="text-caption text-ink-3">{row.cssVar}</span>
+            </p>
+            <p className="text-small text-ink-2">{t(`${row.key}.usage`)}</p>
+            <p className="mt-0.5 flex flex-wrap gap-x-3 text-caption font-medium text-ink-3">
+              <Hex cssVar={row.cssVar} />
+              {row.contrast ? <Contrast fg={row.contrast.fg} bgs={row.contrast.bgs} /> : null}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
-const weightClasses: Record<number, string> = {
-  400: "font-normal",
-  500: "font-medium",
-  600: "font-semibold",
-  700: "font-bold",
-};
+/* ---------- Nhãn ---------- */
 
 const tagIcons: Record<TagId, LucideIcon> = {
   decided: Check,
@@ -121,7 +102,7 @@ const tagIcons: Record<TagId, LucideIcon> = {
   figure: ChartColumn,
 };
 
-const tagClassNames: Record<TagId, string> = {
+const tagClasses: Record<TagId, string> = {
   decided: "bg-tag-decided-bg text-tag-decided",
   pending: "bg-tag-pending-bg text-tag-pending",
   risk: "bg-tag-risk-bg text-tag-risk",
@@ -129,410 +110,209 @@ const tagClassNames: Record<TagId, string> = {
   figure: "bg-tag-figure-bg text-tag-figure",
 };
 
-const tagMessageKeys: Record<TagId, string> = {
-  decided: "tagDecided",
-  pending: "tagPending",
-  risk: "tagRisk",
-  idea: "tagIdea",
-  figure: "tagFigure",
-};
+/* ---------- Trang ---------- */
 
-function codesLine(t: Translations, light: string, dark: string): string {
-  return `${t("lightLabel")}: ${light.toUpperCase()} · ${t("darkLabel")}: ${dark.toUpperCase()}`;
-}
-
-export default async function StyleguidePage() {
-  const t = await getTranslations("styleguide");
-
-  const inkOnBg = pairRatio(baseColors.ink, baseColors.bg);
-  const inkOnSurface = pairRatio(baseColors.ink, baseColors.surface);
-  const inkOnSurface2 = pairRatio(baseColors.ink, baseColors.surface2);
-  const ink2OnBg = pairRatio(baseColors.ink2, baseColors.bg);
-  const ink2OnSurface = pairRatio(baseColors.ink2, baseColors.surface);
-  const ink3OnBg = pairRatio(baseColors.ink3, baseColors.bg);
-  const ink3OnSurface = pairRatio(baseColors.ink3, baseColors.surface);
-  const onSenOnSen = pairRatio(actionColors.onSen, actionColors.sen);
-  const senTextOnBg = pairRatio(actionColors.senText, baseColors.bg);
-  const senTextOnSurface = pairRatio(actionColors.senText, baseColors.surface);
-  const dienOnBg = pairRatio(actionColors.dien, baseColors.bg);
-  const dienOnSurface = pairRatio(actionColors.dien, baseColors.surface);
-  const dienOnTint = pairRatio(actionColors.dien, actionColors.dienTint);
+export default function StyleguidePage() {
+  const t = useTranslations("styleguide");
 
   return (
-    <main className="mx-auto min-h-screen w-full max-w-3xl px-page pb-16">
-      <header className="flex items-start justify-between gap-4 pt-8">
+    <div className="mx-auto w-full max-w-[1180px] px-page pb-24">
+      <header className="flex items-start justify-between gap-4 pb-4 pt-6 lg:pb-10 lg:pt-12">
         <div className="min-w-0">
-          <p className="text-caption font-medium text-ink-3">{t("brand")}</p>
-          <h1 className="text-display font-display font-bold text-ink">{t("title")}</h1>
+          <p className="flex items-center gap-2 text-small font-semibold text-ink">
+            <span aria-hidden={true} className="size-4 rounded-pill" style={{ background: "var(--gradient-dawn)" }} />
+            {t("brand")}
+          </p>
+          <h1 className="mt-3 font-display text-display font-bold text-ink">{t("title")}</h1>
+          <p className="mt-2 max-w-[56ch] text-body text-ink-2">{t("intro")}</p>
         </div>
         <ThemeToggle />
       </header>
-      <p className="mt-3 max-w-[68ch] text-body text-ink-2">{t("intro")}</p>
 
-      {/* ================= Màu nền và chữ ================= */}
-      <Section id="colors-base" title={t("colorsBaseSection")} hint={t("colorsBaseHint")}>
-        <ul className="divide-y divide-line">
-          <Row>
-            <span aria-hidden={true} className="size-12 shrink-0 rounded-control border border-line bg-bg" />
-            <RowText
-              cssVar="--bg"
-              name={t("tokenBg.name")}
-              usage={t("tokenBg.usage")}
-              codes={codesLine(t, baseColors.bg.light, baseColors.bg.dark)}
-            />
-          </Row>
-          <Row>
-            <span aria-hidden={true} className="size-12 shrink-0 rounded-control border border-line bg-surface" />
-            <RowText
-              cssVar="--surface"
-              name={t("tokenSurface.name")}
-              usage={t("tokenSurface.usage")}
-              codes={codesLine(t, baseColors.surface.light, baseColors.surface.dark)}
-            />
-          </Row>
-          <Row>
-            <span aria-hidden={true} className="size-12 shrink-0 rounded-control border border-line bg-surface-2" />
-            <RowText
-              cssVar="--surface-2"
-              name={t("tokenSurface2.name")}
-              usage={t("tokenSurface2.usage")}
-              codes={codesLine(t, baseColors.surface2.light, baseColors.surface2.dark)}
-            />
-          </Row>
-          <Row>
-            <span aria-hidden={true} className="size-12 shrink-0 rounded-control border border-line bg-line" />
-            <RowText
-              cssVar="--line"
-              name={t("tokenLine.name")}
-              usage={t("tokenLine.usage")}
-              codes={codesLine(t, baseColors.line.light, baseColors.line.dark)}
-            />
-          </Row>
-          <Row>
-            <span
-              aria-hidden={true}
-              className="flex size-12 shrink-0 items-center justify-center rounded-control border border-line bg-bg text-ink text-body-strong"
-            >
-              Aa
-            </span>
-            <RowText
-              cssVar="--ink"
-              name={t("tokenInk.name")}
-              usage={t("tokenInk.usage")}
-              codes={codesLine(t, baseColors.ink.light, baseColors.ink.dark)}
-            >
-              <RatioBadge ratio={inkOnBg} t={t} />
-              <RatioBadge ratio={inkOnSurface} t={t} />
-            </RowText>
-          </Row>
-          <Row>
-            <span
-              aria-hidden={true}
-              className="flex size-12 shrink-0 items-center justify-center rounded-control border border-line bg-bg text-ink-2 text-body-strong"
-            >
-              Aa
-            </span>
-            <RowText
-              cssVar="--ink-2"
-              name={t("tokenInk2.name")}
-              usage={t("tokenInk2.usage")}
-              codes={codesLine(t, baseColors.ink2.light, baseColors.ink2.dark)}
-            >
-              <RatioBadge ratio={ink2OnBg} t={t} />
-              <RatioBadge ratio={ink2OnSurface} t={t} />
-            </RowText>
-          </Row>
-          <Row>
-            <span
-              aria-hidden={true}
-              className="flex size-12 shrink-0 items-center justify-center rounded-control border border-line bg-bg text-ink-3 text-body-strong"
-            >
-              Aa
-            </span>
-            <RowText
-              cssVar="--ink-3"
-              name={t("tokenInk3.name")}
-              usage={t("tokenInk3.usage")}
-              codes={codesLine(t, baseColors.ink3.light, baseColors.ink3.dark)}
-            >
-              <RatioBadge ratio={ink3OnBg} t={t} />
-              <RatioBadge ratio={ink3OnSurface} t={t} />
-            </RowText>
-          </Row>
-          <Row>
-            <span
-              aria-hidden={true}
-              className="flex size-12 shrink-0 items-center justify-center rounded-control bg-surface-2 text-ink text-body-strong"
-            >
-              Aa
-            </span>
-            <RowText
-              cssVar={t("tokenPairInkSurface2")}
-              usage={t("tokenSurface2.usage")}
-            >
-              <RatioBadge ratio={inkOnSurface2} t={t} />
-            </RowText>
-          </Row>
-        </ul>
-      </Section>
+      <SectionNavMobile />
 
-      {/* ================= Màu hành động ================= */}
-      <Section id="colors-action" title={t("colorsActionSection")} hint={t("colorsActionConvention")}>
-        <ul className="divide-y divide-line">
-          <Row>
-            <span
-              aria-hidden={true}
-              className="flex size-12 shrink-0 items-center justify-center rounded-control bg-sen text-on-sen text-body-strong"
-            >
-              Aa
-            </span>
-            <RowText
-              cssVar="--sen / --on-sen"
-              name={t("tokenSen.name")}
-              usage={t("tokenSen.usage")}
-              codes={`${codesLine(t, actionColors.sen.light, actionColors.sen.dark)} · ${codesLine(t, actionColors.onSen.light, actionColors.onSen.dark)}`}
-            >
-              <RatioBadge ratio={onSenOnSen} t={t} />
-            </RowText>
-          </Row>
-          <Row>
-            <span
-              aria-hidden={true}
-              className="flex size-12 shrink-0 items-center justify-center rounded-control border border-line bg-bg text-sen-text text-body-strong"
-            >
-              Aa
-            </span>
-            <RowText
-              cssVar="--sen-text"
-              name={t("tokenSenText.name")}
-              usage={t("tokenSenText.usage")}
-              codes={codesLine(t, actionColors.senText.light, actionColors.senText.dark)}
-            >
-              <RatioBadge ratio={senTextOnBg} t={t} />
-              <RatioBadge ratio={senTextOnSurface} t={t} />
-            </RowText>
-          </Row>
-          <Row>
-            <span
-              aria-hidden={true}
-              className="flex size-12 shrink-0 items-center justify-center rounded-control border border-line bg-bg text-dien text-body-strong"
-            >
-              Aa
-            </span>
-            <RowText
-              cssVar="--dien"
-              name={t("tokenDien.name")}
-              usage={t("tokenDien.usage")}
-              codes={codesLine(t, actionColors.dien.light, actionColors.dien.dark)}
-            >
-              <RatioBadge ratio={dienOnBg} t={t} />
-              <RatioBadge ratio={dienOnSurface} t={t} />
-            </RowText>
-          </Row>
-          <Row>
-            <span
-              aria-hidden={true}
-              className="flex size-12 shrink-0 items-center justify-center rounded-control bg-dien-tint text-dien text-body-strong"
-            >
-              Aa
-            </span>
-            <RowText
-              cssVar="--dien-tint"
-              name={t("tokenDienTint.name")}
-              usage={t("tokenDienTint.usage")}
-              codes={codesLine(t, actionColors.dienTint.light, actionColors.dienTint.dark)}
-            >
-              <RatioBadge ratio={dienOnTint} t={t} />
-            </RowText>
-          </Row>
-        </ul>
-      </Section>
+      <div className="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-12">
+        <SectionNavDesktop />
 
-      {/* ================= Dải Hừng đông ================= */}
-      <Section id="dawn" title={t("dawnSection")} hint={t("dawnHint")}>
-        <div
-          aria-hidden={true}
-          className="h-12 w-full rounded-block"
-          style={{ background: "var(--gradient-dawn)" }}
-        />
-        <p className="mt-3 text-caption text-ink-3 tabular-nums">
-          {dawnStops
-            .map((stop, i) => `${i === 0 ? "0%" : i === 1 ? "45%" : "100%"} ${stop}`)
-            .join(" · ")}
-        </p>
-      </Section>
+        <main className="min-w-0 max-w-[880px]">
+          {/* Xem nhanh */}
+          <section id="preview" aria-labelledby="preview-title" className="scroll-mt-16 pt-4 lg:scroll-mt-8 lg:pt-0">
+            <h2 id="preview-title" className="sr-only">
+              {t("nav.preview")}
+            </h2>
+            <div className="lg:hidden">
+              <Preview />
+            </div>
+            <div className="hidden gap-6 lg:grid lg:grid-cols-2">
+              <figure>
+                <figcaption className="mb-2 text-caption font-medium text-ink-3">{t("previewLight")}</figcaption>
+                <Preview scheme="light" />
+              </figure>
+              <figure>
+                <figcaption className="mb-2 text-caption font-medium text-ink-3">{t("previewDark")}</figcaption>
+                <Preview scheme="dark" />
+              </figure>
+            </div>
+            <p className="mt-3 max-w-[62ch] text-small text-ink-2">{t("previewNote")}</p>
+          </section>
 
-      {/* ================= Nhãn ngữ nghĩa ================= */}
-      <Section id="tags" title={t("tagsSection")} hint={t("tagsHint")}>
-        <ul className="divide-y divide-line">
-          {(Object.keys(tagColors) as TagId[]).map((tag) => {
-            const Icon = tagIcons[tag];
-            return (
-              <Row key={tag}>
-                <span
-                  className={`inline-flex items-center gap-2 rounded-pill px-3 py-1 text-small font-medium ${tagClassNames[tag]}`}
-                >
-                  <Icon aria-hidden={true} className="size-5" />
-                  {t(tagMessageKeys[tag])}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-caption text-ink-3 tabular-nums">
-                    {t("lightLabel")}: {tagColors[tag].lightText.toUpperCase()} /{" "}
-                    {tagColors[tag].lightBg.toUpperCase()} · {t("darkLabel")}:{" "}
-                    {tagColors[tag].darkText.toUpperCase()} / {tagDarkBg(tag).toUpperCase()}
+          {/* Màu */}
+          <Section id="colors" title={t("colorsTitle")} hint={t("colorsHint")}>
+            <SubHeading>{t("colorsBase")}</SubHeading>
+            <ColorList rows={baseColors} />
+            <SubHeading>{t("colorsAction")}</SubHeading>
+            <ColorList rows={actionColors} />
+            <SubHeading>{t("dawnTitle")}</SubHeading>
+            <p className="max-w-[62ch] text-small text-ink-2">{t("dawnHint")}</p>
+            <div aria-hidden={true} className="mt-3 h-12 rounded-block" style={{ background: "var(--gradient-dawn)" }} />
+            <p className="mt-2 flex justify-between text-caption font-medium text-ink-3">
+              {dawnVars.map((v) => (
+                <Hex key={v} cssVar={v} />
+              ))}
+            </p>
+          </Section>
+
+          {/* Nhãn */}
+          <Section id="tags" title={t("tagsTitle")} hint={t("tagsHint")}>
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 lg:grid-cols-5">
+              {tagIds.map((tag) => {
+                const Icon = tagIcons[tag];
+                return (
+                  <li key={tag}>
+                    <span className={`inline-flex items-center gap-1.5 rounded-pill px-3 py-1 text-small font-medium ${tagClasses[tag]}`}>
+                      <Icon aria-hidden={true} className="size-4" strokeWidth={2} />
+                      {t(`tags.${tag}`)}
+                    </span>
+                    <p className="mt-1.5 text-caption font-medium text-ink-3">
+                      <Contrast fg={`--tag-${tag}-text`} bgs={[`--tag-${tag}-bg`]} />
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          </Section>
+
+          {/* Người nói */}
+          <Section id="speakers" title={t("speakersTitle")} hint={t("speakersHint")}>
+            <div aria-hidden={true} className="flex h-3 overflow-hidden rounded-pill">
+              {speakerVars.map((v) => (
+                <span key={v} className="flex-1" style={{ backgroundColor: `var(${v})` }} />
+              ))}
+            </div>
+            <ul className="mt-4 grid grid-cols-3 gap-x-4 gap-y-3">
+              {speakerVars.map((v, i) => (
+                <li key={v} className="flex items-start gap-2">
+                  <span aria-hidden={true} className="mt-1.5 size-3 shrink-0 rounded-pill" style={{ backgroundColor: `var(${v})` }} />
+                  <span className="min-w-0">
+                    <span className="block text-small text-ink">{t("speaker", { index: i + 1 })}</span>
+                    <span className="block text-caption font-medium text-ink-3">
+                      <Hex cssVar={v} />
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Section>
+
+          {/* Chữ */}
+          <Section id="type" title={t("typeTitle")} hint={t("typeHint")}>
+            <ul>
+              {typeScale.map((step) => (
+                <li key={step.key} className="border-b border-line py-4 first:pt-0">
+                  <p className="flex flex-wrap gap-x-3 text-caption font-medium text-ink-3">
+                    <span className="text-ink-2">{t(`typeScale.${step.key}.name`)}</span>
+                    <SizeLine sizeVar={step.sizeVar} lineVar={step.lineVar} />
+                    <span>{t(`typeScale.${step.key}.use`)}</span>
                   </p>
-                  <RatioBadge ratio={tagRatio(tag)} t={t} />
-                </div>
-              </Row>
-            );
-          })}
-        </ul>
-      </Section>
+                  {step.compareFonts ? (
+                    <div className="mt-3 grid gap-4 xl:grid-cols-2">
+                      <div>
+                        <p className={`font-display ${step.className} text-ink`}>{t("sample")}</p>
+                        <p className="mt-1 text-caption text-ink-3">{t("fontDisplay")}</p>
+                      </div>
+                      <div>
+                        <p className={`font-body ${step.className} text-ink`}>{t("sample")}</p>
+                        <p className="mt-1 text-caption text-ink-3">{t("fontBody")}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className={`mt-2 max-w-[62ch] font-body ${step.className} text-ink`}>{t("sample")}</p>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 hidden text-small text-ink-2 md:block">{t("typeDesktopNote")}</p>
+          </Section>
 
-      {/* ================= Màu người nói ================= */}
-      <Section id="speakers" title={t("speakersSection")} hint={t("speakersHint")}>
-        <ul className="divide-y divide-line">
-          {speakerColors.map((color, index) => (
-            <li key={color} className="flex items-center gap-4 py-4">
-              <span
-                aria-hidden={true}
-                className="size-6 shrink-0 rounded-full border border-line"
-                style={{ backgroundColor: `var(--speaker-${index + 1})` }}
-              />
-              <div className="min-w-0 flex-1">
-                <p className="text-body-strong">{t("speaker", { index: index + 1 })}</p>
-                <p className="text-caption text-ink-3 tabular-nums">
-                  --speaker-{index + 1}: {color.toUpperCase()}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </Section>
+          {/* Hình khối */}
+          <Section id="shape" title={t("shapeTitle")}>
+            <SubHeading>{t("spacingTitle")}</SubHeading>
+            <p className="max-w-[62ch] text-small text-ink-2">{t("spacingHint")}</p>
+            <ul className="mt-3 flex flex-col gap-2">
+              {spacingVars.map((v) => (
+                <li key={v} className="flex items-center gap-3">
+                  <span className="w-12 shrink-0 text-caption font-medium text-ink-3">
+                    <Raw cssVar={v} />
+                  </span>
+                  <span aria-hidden={true} className="h-2 rounded-pill bg-dien" style={{ width: `calc(var(${v}) * 3)` }} />
+                </li>
+              ))}
+            </ul>
 
-      {/* ================= Thang chữ ================= */}
-      <Section id="typography" title={t("typographySection")} hint={t("typographyHint")}>
-        <ul className="divide-y divide-line">
-          {typeTokens.map((token) => (
-            <li key={token.id} className="py-6">
-              <p className="text-caption font-medium text-ink-3 tabular-nums">
-                {token.id.replace("type", "")} · {token.size}/{token.line} · {t(`${token.id}.weight`)} ·{" "}
-                {t(`${token.id}.desc`)}
-              </p>
-              {/* Bricolage Grotesque chỉ tải 600 và 700, nên cỡ nào cũng tối thiểu 600. */}
-              <p
-                className={`${token.textClass} font-display ${weightClasses[Math.max(token.weight, 600)]} mt-3 max-w-[68ch] text-ink`}
-              >
-                {t("testString")}
-              </p>
-              <p className="text-caption text-ink-3">{t("inDisplayFont", { font: t("fontBricolage") })}</p>
-              <p className={`${token.textClass} font-body ${weightClasses[token.weight]} mt-4 max-w-[68ch] text-ink`}>
-                {t("testString")}
-              </p>
-              <p className="text-caption text-ink-3">{t("inDisplayFont", { font: t("fontBeVietnam") })}</p>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-4 text-small text-ink-2">{t("typographyDesktopNote")}</p>
-        <p className="mt-1 text-caption text-ink-3">{t("testStringLabel")}</p>
-      </Section>
+            <SubHeading>{t("radiusTitle")}</SubHeading>
+            <p className="max-w-[62ch] text-small text-ink-2">{t("radiusHint")}</p>
+            <ul className="mt-3 grid grid-cols-4 gap-3 sm:gap-4">
+              {radii.map((r) => (
+                <li key={r.key} className="min-w-0">
+                  <span aria-hidden={true} className={`block h-14 border border-line bg-surface-2 sm:h-16 ${r.className}`} />
+                  <p className="mt-2 text-caption font-medium text-ink sm:text-small">{t(`radius.${r.key}.name`)}</p>
+                  <p className="text-caption text-ink-3">
+                    <Raw cssVar={r.cssVar} />
+                  </p>
+                  <p className="hidden text-caption text-ink-2 sm:block">{t(`radius.${r.key}.use`)}</p>
+                </li>
+              ))}
+            </ul>
 
-      {/* ================= Khoảng cách ================= */}
-      <Section id="spacing" title={t("spacingSection")} hint={t("spacingHint")}>
-        <ul className="divide-y divide-line">
-          {spacingScale.map((value) => (
-            <li key={value} className="flex items-center gap-4 py-3">
-              <span className="w-14 shrink-0 text-caption text-ink-3 tabular-nums">
-                {t("spacingUnit", { value })}
-              </span>
-              <span
-                aria-hidden={true}
-                className="h-2 rounded-pill bg-surface-2"
-                style={{ width: value * 3 }}
-              />
-            </li>
-          ))}
-          <li className="flex items-center gap-4 py-3">
-            <span className="w-14 shrink-0 text-caption text-ink-3 tabular-nums">
-              {pageMargins.mobile}/{pageMargins.desktop}
-            </span>
-            <span
-              aria-hidden={true}
-              className="h-2 rounded-pill bg-sen"
-              style={{ width: pageMargins.mobile * 3 }}
-            />
-            <span
-              aria-hidden={true}
-              className="h-2 rounded-pill bg-sen"
-              style={{ width: pageMargins.desktop * 3 }}
-            />
-            <span className="text-caption text-ink-3">{t("spacingMargin")}</span>
-          </li>
-        </ul>
-      </Section>
+            <SubHeading>{t("shadowTitle")}</SubHeading>
+            <p className="max-w-[62ch] text-small text-ink-2">{t("shadowHint")}</p>
+            <ul className="mt-4 grid grid-cols-2 gap-4 sm:max-w-md">
+              <li>
+                <span aria-hidden={true} className="block h-16 rounded-block border border-line bg-surface shadow-float" />
+                <p className="mt-2 text-small font-medium text-ink">{t("shadow.float.name")}</p>
+                <p className="text-caption text-ink-2">{t("shadow.float.use")}</p>
+              </li>
+              <li>
+                <span aria-hidden={true} className="block h-16 rounded-pill shadow-record" style={{ background: "var(--gradient-dawn)" }} />
+                <p className="mt-2 text-small font-medium text-ink">{t("shadow.record.name")}</p>
+                <p className="text-caption text-ink-2">{t("shadow.record.use")}</p>
+              </li>
+            </ul>
+          </Section>
 
-      {/* ================= Bo góc ================= */}
-      <Section id="radius" title={t("radiusSection")} hint={t("radiusHint")}>
-        <ul className="flex flex-wrap gap-6">
-          {radii.map((radius) => (
-            <li key={radius.id} className="w-24">
-              <span
-                aria-hidden={true}
-                className={`flex size-20 items-center justify-center border border-line bg-surface-2 text-caption text-ink-3 ${radius.className}`}
-              >
-                {radius.px}
-              </span>
-              <p className="mt-2 text-caption font-medium text-ink-2">{t(`${radius.id}.name`)}</p>
-              <p className="text-caption text-ink-3">{t(`${radius.id}.usage`)}</p>
-            </li>
-          ))}
-        </ul>
-      </Section>
-
-      {/* ================= Bóng đổ ================= */}
-      <Section id="shadow" title={t("shadowSection")} hint={t("shadowHint")}>
-        <ul className="flex flex-wrap gap-6">
-          <li className="w-full max-w-60">
-            <span
-              aria-hidden={true}
-              className="flex size-20 items-center justify-center rounded-block border border-line bg-surface text-caption text-ink-3 shadow-float"
+          {/* Chuyển động */}
+          <Section id="motion" title={t("motionTitle")} hint={t("motionHint")}>
+            <ul>
+              {motionVars.map((m) => (
+                <li key={m.key} className="flex items-baseline gap-4 border-b border-line py-2.5">
+                  <span className="w-16 shrink-0 text-body-strong font-semibold tabular-nums text-ink">
+                    <Duration cssVar={m.cssVar} />
+                  </span>
+                  <span className="text-small text-ink-2">{t(`motion.${m.key}`)}</span>
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              className="mt-5 inline-flex h-11 items-center rounded-control bg-sen px-4 text-small font-semibold text-on-sen transition-transform ease-noteim"
+              style={{ transitionDuration: "var(--t-quick)" }}
             >
-              float
-            </span>
-            <p className="mt-2 text-caption font-medium text-ink-2">{t("shadowFloat.name")}</p>
-            <p className="text-caption text-ink-3">{t("shadowFloat.usage")}</p>
-          </li>
-          <li className="w-full max-w-60">
-            <span
-              aria-hidden={true}
-              className="flex size-20 items-center justify-center rounded-block bg-sen text-caption text-on-sen shadow-record"
-            >
-              record
-            </span>
-            <p className="mt-2 text-caption font-medium text-ink-2">{t("shadowRecord.name")}</p>
-            <p className="text-caption text-ink-3">{t("shadowRecord.usage")}</p>
-          </li>
-        </ul>
-        <p className="mt-4 text-small text-ink-2">{t("shadowDarkNote")}</p>
-      </Section>
-
-      {/* ================= Chuyển động ================= */}
-      <Section id="motion" title={t("motionSection")} hint={t("motionHint")}>
-        <ul className="divide-y divide-line">
-          {(["motionQuick", "motionBase", "motionSheet", "motionScene", "motionEase"] as const).map((key) => (
-            <li key={key} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3">
-              <span className="text-body-strong tabular-nums">{t(`${key}.name`)}</span>
-              <span className="text-small text-ink-2">{t(`${key}.usage`)}</span>
-            </li>
-          ))}
-        </ul>
-        <p
-          className="mt-4 inline-flex rounded-pill border border-line bg-surface px-4 py-2 text-small text-ink-2 transition-colors hover:bg-dien-tint hover:text-dien"
-          style={{ transitionDuration: "var(--t-quick)", transitionTimingFunction: "var(--ease)" }}
-        >
-          {t("motionQuick.name")}
-        </p>
-      </Section>
-    </main>
+              {t("motionTry")}
+            </button>
+            <p className="mt-2 text-caption text-ink-3">{t("motionTryHint")}</p>
+          </Section>
+        </main>
+      </div>
+    </div>
   );
 }

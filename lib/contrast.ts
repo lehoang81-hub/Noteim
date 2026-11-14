@@ -36,24 +36,3 @@ export function contrastRatio(foreground: string, background: string): number {
   const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
   return Math.round(ratio * 100) / 100;
 }
-
-/**
- * Trộn màu đầu vào lên màu nền với độ mờ cho trước, theo kênh sRGB
- * (cùng cách `color-mix(in srgb, ...)` hoạt động) — dùng cho nền nhạt
- * của nhãn ngữ nghĩa ở giao diện tối (16%).
- */
-export function blend(foreground: string, background: string, alpha: number): string {
-  const [fr, fg, fb] = hexToRgb(foreground);
-  const [br, bg, bb] = hexToRgb(background);
-  const mix = (f: number, b: number) => Math.round(f * alpha + b * (1 - alpha));
-  return (
-    "#" +
-    [mix(fr, br), mix(fg, bg), mix(fb, bb)]
-      .map((v) => v.toString(16).padStart(2, "0"))
-      .join("")
-  );
-}
-
-export function formatRatio(ratio: number): string {
-  return ratio.toFixed(2).replace(/\.?0+$/, "");
-}

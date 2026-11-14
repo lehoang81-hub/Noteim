@@ -1,101 +1,96 @@
-import { blend, contrastRatio } from "@/lib/contrast";
-
 /*
- * Giá trị mã màu để hiển thị tên và mã trên /styleguide.
- * Nguồn sự thật là styles/tokens.css; file này chỉ sao chép đúng mã đó
- * để in ra màn hình. Sửa mã màu phải sửa cả hai nơi.
+ * Danh sách token hiển thị trên /styleguide.
+ * File này KHÔNG chứa mã màu. Mã màu và tỷ lệ tương phản được đọc từ
+ * styles/tokens.css lúc chạy (xem use-token-colors.ts), nên đổi màu chỉ cần
+ * sửa một nơi.
  */
 
-export interface ThemeHex {
-  light: string;
-  dark: string;
-}
-
-export const SURFACE: ThemeHex = { light: "#FFFFFF", dark: "#171A40" };
-
-/** Màu nền và chữ. */
-export const baseColors = {
-  bg: { light: "#F6F7FB", dark: "#0D0F2B" },
-  surface: { light: "#FFFFFF", dark: "#171A40" },
-  surface2: { light: "#ECEEF6", dark: "#20244F" },
-  line: { light: "#DDE0EE", dark: "#2C3063" },
-  ink: { light: "#16193B", dark: "#F2F3FB" },
-  ink2: { light: "#4A4E72", dark: "#B5B8D6" },
-  ink3: { light: "#666A8E", dark: "#8E92B8" },
-} satisfies Record<string, ThemeHex>;
-
-/** Màu hành động. */
-export const actionColors = {
-  sen: { light: "#D81F5F", dark: "#FF6B97" },
-  senText: { light: "#C2185B", dark: "#FF6B97" },
-  onSen: { light: "#FFFFFF", dark: "#0D0F2B" },
-  dien: { light: "#5B3DF5", dark: "#A594FF" },
-  dienTint: { light: "#ECE8FF", dark: "#241F5C" },
-} satisfies Record<string, ThemeHex>;
-
-export type TagId = "decided" | "pending" | "risk" | "idea" | "figure";
-
-/** Nhãn ngữ nghĩa. Ở giao diện tối, nền nhạt là chính màu chữ với độ mờ 16%. */
-export const tagColors: Record<
-  TagId,
-  { lightText: string; lightBg: string; darkText: string }
-> = {
-  decided: { lightText: "#08715C", lightBg: "#E1F5F0", darkText: "#3FD9B8" },
-  pending: { lightText: "#9A6200", lightBg: "#FCF1DA", darkText: "#FFC457" },
-  risk: { lightText: "#C2371F", lightBg: "#FCE7E2", darkText: "#FF8A70" },
-  idea: { lightText: "#5B3DF5", lightBg: "#ECE8FF", darkText: "#A594FF" },
-  figure: { lightText: "#1F62D0", lightBg: "#E3EDFD", darkText: "#7FB0FF" },
+export type ColorRow = {
+  /** Khóa trong messages: styleguide.tokens.<key>.name / .usage */
+  key: string;
+  /** Biến CSS hiển thị và dùng làm ô màu */
+  cssVar: string;
+  /** Cách vẽ ô mẫu: "fill" là ô màu đặc, "text" là chữ Aa trên nền trang */
+  swatch: "fill" | "text" | "onFill";
+  /** Cặp để tính tương phản: [màu chữ, ...các nền]. Lấy giá trị thấp nhất. */
+  contrast?: { fg: string; bgs: string[] };
 };
 
-/** Màu người nói, gán theo thứ tự xuất hiện. */
-export const speakerColors = [
-  "#6B4EFF",
-  "#E6336E",
-  "#0FA98A",
-  "#F08A24",
-  "#2F7BF6",
-  "#B14FD8",
+export const baseColors: ColorRow[] = [
+  { key: "bg", cssVar: "--bg", swatch: "fill" },
+  { key: "surface", cssVar: "--surface", swatch: "fill" },
+  { key: "surface2", cssVar: "--surface-2", swatch: "fill", contrast: { fg: "--ink", bgs: ["--surface-2"] } },
+  { key: "line", cssVar: "--line", swatch: "fill" },
+  { key: "ink", cssVar: "--ink", swatch: "text", contrast: { fg: "--ink", bgs: ["--bg", "--surface"] } },
+  { key: "ink2", cssVar: "--ink-2", swatch: "text", contrast: { fg: "--ink-2", bgs: ["--bg", "--surface", "--surface-2"] } },
+  { key: "ink3", cssVar: "--ink-3", swatch: "text", contrast: { fg: "--ink-3", bgs: ["--bg", "--surface", "--surface-2"] } },
+];
+
+export const actionColors: ColorRow[] = [
+  { key: "sen", cssVar: "--sen", swatch: "onFill", contrast: { fg: "--on-sen", bgs: ["--sen"] } },
+  { key: "senText", cssVar: "--sen-text", swatch: "text", contrast: { fg: "--sen-text", bgs: ["--bg", "--surface"] } },
+  { key: "dien", cssVar: "--dien", swatch: "text", contrast: { fg: "--dien", bgs: ["--bg", "--surface", "--dien-tint"] } },
+  { key: "dienTint", cssVar: "--dien-tint", swatch: "fill" },
+];
+
+export const tagIds = ["decided", "pending", "risk", "idea", "figure"] as const;
+export type TagId = (typeof tagIds)[number];
+
+export const speakerVars = [
+  "--speaker-1",
+  "--speaker-2",
+  "--speaker-3",
+  "--speaker-4",
+  "--speaker-5",
+  "--speaker-6",
 ] as const;
 
-/** Ba màu đầu của dải Hừng đông. */
-export const dawnStops = ["#FF8A4C", "#E6336E", "#6B4EFF"] as const;
+export const dawnVars = ["--dawn-orange", "--dawn-pink", "--dawn-violet"] as const;
 
-/** Thang khoảng cách (px), bội số của 4. */
-export const spacingScale = [4, 8, 12, 16, 24, 32, 48, 64] as const;
+/** Mục lục trang, theo thứ tự xuất hiện. */
+export const sections = [
+  "preview",
+  "colors",
+  "tags",
+  "speakers",
+  "type",
+  "shape",
+  "motion",
+] as const;
+export type SectionId = (typeof sections)[number];
 
-export const pageMargins = { mobile: 20, desktop: 32 } as const;
+/** Thang chữ. Cỡ và dòng hiển thị được đọc từ token lúc chạy. */
+export const typeScale = [
+  { key: "display", className: "text-display font-bold", sizeVar: "--text-display-size", lineVar: "--text-display-line", compareFonts: true },
+  { key: "h1", className: "text-h1 font-semibold", sizeVar: "--text-h1-size", lineVar: "--text-h1-line", compareFonts: true },
+  { key: "h2", className: "text-h2 font-semibold", sizeVar: "--text-h2-size", lineVar: "--text-h2-line", compareFonts: false },
+  { key: "body", className: "text-body font-normal", sizeVar: "--text-body-size", lineVar: "--text-body-line", compareFonts: false },
+  { key: "bodyStrong", className: "text-body-strong font-semibold", sizeVar: "--text-body-strong-size", lineVar: "--text-body-strong-line", compareFonts: false },
+  { key: "small", className: "text-small font-normal", sizeVar: "--text-small-size", lineVar: "--text-small-line", compareFonts: false },
+  { key: "caption", className: "text-caption font-medium", sizeVar: "--text-caption-size", lineVar: "--text-caption-line", compareFonts: false },
+] as const;
+
+export const spacingVars = [
+  "--space-1",
+  "--space-2",
+  "--space-3",
+  "--space-4",
+  "--space-6",
+  "--space-8",
+  "--space-12",
+  "--space-16",
+] as const;
 
 export const radii = [
-  { id: "radiusControl", className: "rounded-control", px: 10 },
-  { id: "radiusBlock", className: "rounded-block", px: 16 },
-  { id: "radiusSheet", className: "rounded-sheet", px: 28 },
-  { id: "radiusPill", className: "rounded-pill", px: 999 },
+  { key: "control", className: "rounded-control", cssVar: "--r-control" },
+  { key: "block", className: "rounded-block", cssVar: "--r-block" },
+  { key: "sheet", className: "rounded-t-sheet", cssVar: "--r-sheet" },
+  { key: "pill", className: "rounded-pill", cssVar: "--r-pill" },
 ] as const;
 
-/** Tỷ lệ tương phản của một cặp chữ và nền, ở cả hai giao diện. */
-export interface RatioPair {
-  light: number;
-  dark: number;
-}
-
-export function pairRatio(text: ThemeHex, background: ThemeHex): RatioPair {
-  return {
-    light: contrastRatio(text.light, background.light),
-    dark: contrastRatio(text.dark, background.dark),
-  };
-}
-
-/** Nền nhạt của nhãn ở giao diện tối: màu chữ trộn 16% lên nền surface. */
-export function tagDarkBg(tag: TagId): string {
-  return blend(tagColors[tag].darkText, SURFACE.dark, 0.16);
-}
-
-export function tagRatio(tag: TagId): RatioPair {
-  return {
-    light: contrastRatio(tagColors[tag].lightText, tagColors[tag].lightBg),
-    dark: contrastRatio(
-      tagColors[tag].darkText,
-      tagDarkBg(tag),
-    ),
-  };
-}
+export const motionVars = [
+  { key: "quick", cssVar: "--t-quick" },
+  { key: "base", cssVar: "--t-base" },
+  { key: "sheet", cssVar: "--t-sheet" },
+  { key: "scene", cssVar: "--t-scene" },
+] as const;

@@ -10,93 +10,189 @@
     "switchToDark": "Switch to dark theme",
     "switchToLight": "Switch to light theme",
     "currentLight": "Light theme is on",
-    "currentDark": "Dark theme is on"
+    "currentDark": "Dark theme is on",
+    "toDarkShort": "Dark mode",
+    "toLightShort": "Light mode"
   },
   "styleguide": {
     "brand": "Noteim",
     "title": "Style guide",
-    "intro": "Every Noteim design token: palette A (Sen and Dien), type, spacing, radii, shadows and motion. Toggle light and dark with the button at the top.",
-    "themeSection": "Theme",
-    "themeHint": "Your choice is stored on this device and survives a page reload.",
-
-    "colorsBaseSection": "Background and text colors",
-    "colorsBaseHint": "The light background is a cool porcelain white, not cream. The dark background is deep indigo, not black.",
-    "colorsActionSection": "Action colors",
-    "colorsActionConvention": "Sen (pink) is what the user does, dien (violet) is what the AI does. Color alone tells you which content was written by the machine.",
-    "dawnSection": "Dawn gradient",
-    "dawnHint": "Only for the record button, the glow behind the voice ribbon while recording, and the logo. Never as a background or for heading text.",
-    "tagsSection": "Semantic tags",
-    "tagsHint": "Every tag always comes with an icon and text, never color alone. In dark theme the tag background is its text color at 16% opacity.",
-    "speakersSection": "Speaker colors",
-    "speakersHint": "Six colors, assigned in order of appearance. From the seventh speaker they cycle again with a hatched pattern. Only for the voice ribbon, the dot before a name, and the left bar of a transcript line, never as text color.",
+    "intro": "Noteim's colours, type and shapes. Every screen may only use what's on this page.",
+    "nav": {
+      "label": "Contents",
+      "preview": "Preview",
+      "colors": "Colour",
+      "tags": "Tags",
+      "speakers": "Speakers",
+      "type": "Type",
+      "shape": "Shape",
+      "motion": "Motion"
+    },
+    "preview": {
+      "today": "Today",
+      "sessionTitle": "Meeting Ms Lan, 2-bedroom at Vinhomes",
+      "duration": "42 min",
+      "tagPending": "Open",
+      "template": "Client meeting",
+      "bullet": "Budget up to 4.2 billion, 50% loan",
+      "bulletTime": "04:30",
+      "aiLabel": "Ask AI",
+      "aiAnswer": "Ms Lan plans a 50% loan and is worried about rates after the promo period.",
+      "cite1": "04:30",
+      "cite2": "15:12",
+      "primary": "Send minutes",
+      "secondary": "Ask AI",
+      "record": "Record"
+    },
+    "previewLight": "Light",
+    "previewDark": "Dark",
+    "previewNote": "Lotus pink is what you do, electric violet is what the AI does. The Dawn gradient is only for the record button.",
+    "colorsTitle": "Colour",
+    "colorsHint": "Codes and contrast are read from the tokens for the current theme.",
+    "colorsBase": "Surfaces and text",
+    "colorsAction": "Actions",
+    "dawnTitle": "Dawn gradient",
+    "dawnHint": "Only for the record button, the live ribbon glow, and the logo.",
+    "contrastPass": "Contrast {ratio}",
+    "contrastFail": "Contrast {ratio}, fails",
+    "tokens": {
+      "bg": {
+        "name": "Page",
+        "usage": "Porcelain in light, night indigo in dark"
+      },
+      "surface": {
+        "name": "Raised",
+        "usage": "Sheets, navigation, inputs"
+      },
+      "surface2": {
+        "name": "Sunken",
+        "usage": "Chip backgrounds, selected rows"
+      },
+      "line": {
+        "name": "Line",
+        "usage": "Dividers, borders"
+      },
+      "ink": {
+        "name": "Primary text",
+        "usage": "Content, headings"
+      },
+      "ink2": {
+        "name": "Secondary text",
+        "usage": "Descriptions, supporting info"
+      },
+      "ink3": {
+        "name": "Caption",
+        "usage": "Timestamps, small labels"
+      },
+      "sen": {
+        "name": "Lotus",
+        "usage": "Primary buttons, recording, user actions"
+      },
+      "senText": {
+        "name": "Lotus text",
+        "usage": "Pink text on surfaces, playing timestamp"
+      },
+      "dien": {
+        "name": "Electric",
+        "usage": "Everything the AI produces"
+      },
+      "dienTint": {
+        "name": "Electric tint",
+        "usage": "AI content background"
+      }
+    },
+    "tagsTitle": "Tags",
+    "tagsHint": "Always an icon and a word, never colour alone.",
+    "tags": {
+      "decided": "Decided",
+      "pending": "Open",
+      "risk": "Risk",
+      "idea": "Idea",
+      "figure": "Figure"
+    },
+    "speakersTitle": "Speakers",
+    "speakersHint": "Assigned in order of appearance. Only for the ribbon, name dots and transcript bars, never for text.",
     "speaker": "Speaker {index}",
-
-    "tokenBg": { "name": "Porcelain / Night indigo", "usage": "Page background" },
-    "tokenSurface": { "name": "White / Indigo", "usage": "Bottom sheets, navigation bar, inputs" },
-    "tokenSurface2": { "name": "Recessed", "usage": "Recessed areas, chip background, selected row" },
-    "tokenLine": { "name": "Hairline", "usage": "Dividers, borders" },
-    "tokenInk": { "name": "Indigo ink", "usage": "Primary text" },
-    "tokenInk2": { "name": "Secondary text", "usage": "Secondary text" },
-    "tokenInk3": { "name": "Caption", "usage": "Captions, timestamps" },
-    "tokenPairInkSurface2": "--ink on --surface-2",
-    "tokenSen": { "name": "Sen (lotus pink)", "usage": "Primary buttons, recording, key links" },
-    "tokenSenText": { "name": "Sen text", "usage": "Pink text on background" },
-    "tokenOnSen": { "name": "On sen", "usage": "Text on sen background" },
-    "tokenDien": { "name": "Dien (electric violet)", "usage": "Everything AI-made: answers, suggestions, Ask AI button" },
-    "tokenDienTint": { "name": "Dien tint", "usage": "AI content block background" },
-
-    "tagDecided": "Decided",
-    "tagPending": "Pending",
-    "tagRisk": "Risk",
-    "tagIdea": "Idea",
-    "tagFigure": "Figure",
-
-    "typographySection": "Type scale",
-    "typographyHint": "Headings and large numbers use Bricolage Grotesque, everything else uses Be Vietnam Pro. Line height never goes below 1.3x so Vietnamese diacritics have room.",
-    "typographyDesktopNote": "Desktop: display 44/52, h1 30/38, the rest unchanged.",
-    "fontBricolage": "Bricolage Grotesque",
-    "fontBeVietnam": "Be Vietnam Pro",
-    "inDisplayFont": "in {font}",
-    "testStringLabel": "Vietnamese diacritics test string",
-    "testString": "Đặng Thị Quỳnh Ngữ, Nguyễn Hữu Phước: thỏa thuận chuyển nhượng 12,5 tỷ",
-    "typeDisplay": { "desc": "Greeting, recording clock digits", "weight": "bold 700" },
-    "typeH1": { "desc": "Session title", "weight": "semibold 600" },
-    "typeH2": { "desc": "Topic title, sheet title", "weight": "semibold 600" },
-    "typeBody": { "desc": "Body content", "weight": "regular 400" },
-    "typeBodyStrong": { "desc": "Names, emphasis", "weight": "semibold 600" },
-    "typeSmall": { "desc": "Supporting info", "weight": "regular 400" },
-    "typeCaption": { "desc": "Timestamps, labels", "weight": "medium 500" },
-
-    "spacingSection": "Spacing",
-    "spacingHint": "Multiples of 4. Values below are in pixels.",
-    "spacingMargin": "Page margin: mobile 20, desktop 32",
-    "spacingUnit": "{value} px",
-
-    "radiusSection": "Radii",
-    "radiusHint": "Radii follow a hierarchy, never one value for everything.",
-    "radiusControl": { "name": "control — 10 px", "usage": "Buttons, inputs" },
-    "radiusBlock": { "name": "block — 16 px", "usage": "AI content blocks, images, quote cards" },
-    "radiusSheet": { "name": "sheet — 28 px", "usage": "Bottom sheets, top corners only" },
-    "radiusPill": { "name": "pill — 999 px", "usage": "Chips, tags, record button" },
-
-    "shadowSection": "Shadows",
-    "shadowHint": "Prefer layering with background color and hairlines. Shadows are tinted indigo, never gray. Dark theme uses no shadows, only borders.",
-    "shadowFloat": { "name": "float", "usage": "Floating player and bottom sheets" },
-    "shadowRecord": { "name": "record", "usage": "Record button only" },
-    "shadowDarkNote": "In dark theme both shadows are off and replaced by borders.",
-
-    "motionSection": "Motion",
-    "motionHint": "Motion only ever answers one interaction: press, open, close, drag.",
-    "motionQuick": { "name": "quick — 120 ms", "usage": "Color change on press, toggles" },
-    "motionBase": { "name": "base — 220 ms", "usage": "Chip opening, tab switching, toasts" },
-    "motionSheet": { "name": "sheet — 340 ms", "usage": "Bottom sheets, page transitions" },
-    "motionScene": { "name": "scene — 700 ms", "usage": "The three signature moments" },
-    "motionEase": { "name": "default easing", "usage": "cubic-bezier(0.2, 0.8, 0.2, 1)" },
-
-    "contrastRatio": "Contrast {ratio} : 1",
-    "tokenLabel": "Token",
-    "lightLabel": "Light",
-    "darkLabel": "Dark",
-    "codeLabel": "Color code"
+    "typeTitle": "Type",
+    "typeHint": "Large headings use Bricolage Grotesque, everything else uses Be Vietnam Pro.",
+    "sample": "Đặng Thị Quỳnh Ngữ, Nguyễn Hữu Phước: thỏa thuận chuyển nhượng 12,5 tỷ",
+    "fontDisplay": "Bricolage Grotesque",
+    "fontBody": "Be Vietnam Pro",
+    "typeScale": {
+      "display": {
+        "name": "Display",
+        "use": "Greeting, recording clock"
+      },
+      "h1": {
+        "name": "H1",
+        "use": "Session title"
+      },
+      "h2": {
+        "name": "H2",
+        "use": "Topic and sheet titles"
+      },
+      "body": {
+        "name": "Body",
+        "use": "Content"
+      },
+      "bodyStrong": {
+        "name": "Body strong",
+        "use": "Names, emphasis"
+      },
+      "small": {
+        "name": "Small",
+        "use": "Supporting info"
+      },
+      "caption": {
+        "name": "Caption",
+        "use": "Timestamps, labels"
+      }
+    },
+    "typeDesktopNote": "From 768px, Display is 44/52 and H1 is 30/38. Other steps stay the same.",
+    "shapeTitle": "Shape",
+    "spacingTitle": "Spacing",
+    "spacingHint": "Multiples of 4. Page margin is 20px on phones and 32px on desktop.",
+    "radiusTitle": "Corners",
+    "radiusHint": "Corners follow hierarchy: the larger the thing, the rounder.",
+    "radius": {
+      "control": {
+        "name": "Control",
+        "use": "Anything you tap or type in"
+      },
+      "block": {
+        "name": "Block",
+        "use": "AI blocks, photos, quote cards"
+      },
+      "sheet": {
+        "name": "Sheet",
+        "use": "Top two corners only"
+      },
+      "pill": {
+        "name": "Pill",
+        "use": "Chips, tags, record button"
+      }
+    },
+    "shadowTitle": "Shadow",
+    "shadowHint": "Only two shadows. Dark mode uses borders instead.",
+    "shadow": {
+      "float": {
+        "name": "Float",
+        "use": "Floating player, sheets"
+      },
+      "record": {
+        "name": "Record",
+        "use": "Record button only"
+      }
+    },
+    "motionTitle": "Motion",
+    "motionHint": "Four durations, one curve. Reduced motion turns effects almost off.",
+    "motion": {
+      "quick": "Press, toggle",
+      "base": "Chips, tabs, toasts",
+      "sheet": "Sheets, page transitions",
+      "scene": "The three signature moments"
+    },
+    "motionTry": "Press me",
+    "motionTryHint": "Pressed buttons scale to 97%."
   }
 }

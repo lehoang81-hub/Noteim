@@ -11,7 +11,9 @@ const THEME_CHANGE_EVENT = "noteim-theme-change";
  * Một nút duy nhất đổi giao diện sáng và tối.
  * - Áp dụng bằng cách thêm/bỏ class .dark trên <html>.
  * - Lưu lựa chọn vào localStorage để còn nguyên khi tải lại trang.
- * - Biểu tượng vẽ hai bản, hiện/ẩn bằng CSS nên không lệch khi hydrate.
+ * - Biểu tượng và chữ cho biết giao diện SẼ chuyển sang (đang sáng thì hiện
+ *   mặt trăng). Vẽ hai bản, hiện/ẩn bằng CSS nên không lệch khi hydrate.
+ * - Máy tính (từ 1024px) có thêm chữ cạnh biểu tượng.
  * - Trạng thái đọc trực tiếp từ DOM qua useSyncExternalStore, sự kiện
  *   báo cho React biết khi nào cần vẽ lại.
  */
@@ -48,11 +50,17 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={dark ? t("switchToLight") : t("switchToDark")}
       title={dark ? t("switchToLight") : t("switchToDark")}
-      className="flex size-11 shrink-0 items-center justify-center rounded-control border border-line bg-surface text-ink transition-colors ease-noteim hover:bg-surface-2"
+      className="flex h-11 min-w-11 shrink-0 items-center justify-center gap-2 rounded-control border border-line bg-surface text-small font-medium text-ink transition-colors ease-noteim hover:bg-surface-2 lg:px-3.5"
       style={{ transitionDuration: "var(--t-quick)" }}
     >
-      <Sun aria-hidden={true} className="size-5 dark:hidden" />
-      <Moon aria-hidden={true} className="hidden size-5 dark:block" />
+      <Moon aria-hidden={true} className="size-5 dark:hidden" strokeWidth={1.75} />
+      <Sun aria-hidden={true} className="hidden size-5 dark:block" strokeWidth={1.75} />
+      <span aria-hidden={true} className="hidden lg:inline dark:lg:hidden">
+        {t("toDarkShort")}
+      </span>
+      <span aria-hidden={true} className="hidden dark:lg:inline">
+        {t("toLightShort")}
+      </span>
     </button>
   );
 }
