@@ -81,3 +81,10 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 - **Chi tiết buổi ghi** `components/session/detail/`: sửa tên tại chỗ, người nói, dải báo người nói chưa đặt tên, bản gốc sắp xóa, chỉ còn tóm tắt; tab qua `?tab=`; Tóm tắt theo mẫu của nghề, ghi chú tay, biểu đồ số liệu nhỏ; Việc cần làm với hoàn tác; trình phát nổi; chạm ý để tua và ý đang phát được tô.
 - Đã kiểm: 390px và 1280px, sáng và tối, không tràn ngang, không lỗi console. Chạm ý "Ngân sách tối đa 4,2 tỷ" thì trình phát nhảy tới 07:30 và ý được tô. Đánh dấu việc xong rồi tải lại vẫn còn. Mọi trạng thái trong bảng thử nghiệm hiện đúng. Mất mạng thì ghi lỗi có thông báo và trả lại trạng thái cũ.
 - Lưu ý cho người sau: `next.config.ts` đã tắt `cacheComponents` (xem DECISIONS). Ngày "bây giờ" của mockup lấy từ `dataNow()`, đừng dùng `new Date()` để nhóm hay so hạn.
+
+## 2026-11-14, Claude, bàn giao M2 cho agent
+
+- M1 đã merge (PR #16, Hoang duyệt). Mở 4 issue M2: #17, #18, #19, #20.
+- `AGENTS.md` có thêm mục "Bài học đã rút ra": `useData`, `dataNow`, `useReducedMotionSafe`, không `dark:`, màu canvas, hiệu năng, bảng thử nghiệm, chữ hai ngôn ngữ.
+- `docs/05-workflow.md` có thêm mục "Giao cả một mốc": một nhánh, commit theo issue, một PR cuối mốc.
+- Việc tiếp theo: agent làm M2 trên nhánh `m2/ghi-am`, báo cáo để Claude kiểm thử.
