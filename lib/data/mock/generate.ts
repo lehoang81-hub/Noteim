@@ -181,7 +181,7 @@ export function buildSessionContent(opts: {
     timestamp_sec: b.timestamp_sec,
     tag: (b.tag as SemanticTag | null) ?? null,
   }));
-  const photos: Photo[] = draft.photos.map((p, i) => ({ id: `ph-${i}`, timestamp_sec: p.timestamp_sec, url: p.url }));
+  const photos: Photo[] = draft.photos.map((p) => ({ id: p.id, timestamp_sec: p.timestamp_sec, url: p.url }));
 
   /* Một đến hai việc cần làm, một việc "Chưa giao" */
   const actionItems: ActionItem[] = generated.tasks.slice(0, 2).map((task, i) => {

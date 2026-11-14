@@ -1,7 +1,7 @@
 "use client";
 
 import { getFlags } from "@/lib/debug/flags";
-import type { DataSource, EmailDraft, SessionFilter } from "../repository";
+import type { DataSource, EmailDraft, RecordingDraft, SessionFilter } from "../repository";
 import { DataError, Session as SessionSchema, type ActionItem, type Session, type SessionDetail, type SessionFixture } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
 import { buildSessionContent } from "./generate";
@@ -226,6 +226,10 @@ export const mockSource: DataSource = {
         const db = getDb();
         const id = `s-new-${Date.now()}`;
         const now = new Date().toISOString();
+        // Ảnh chỉ lưu id trong kho mẫu: pixel nằm ở IndexedDB theo id ảnh
+        // (lib/record/photo-store.ts), localStorage không giữ data URL
+        // cỡ trăm KB — nguyên nhân mất buổi ghi khi bộ nhớ đầy (PR #22, lỗi 3)
+        const storedDraft: RecordingDraft = { ...draft, photos: draft.photos.map(({ id: photoId, timestamp_sec }) => ({ id: photoId, timestamp_sec, url: "" })) };
         // Dải giọng hàng thư viện hình thành theo âm lượng đã ghi ngay từ lúc
         // tạo, không đợi xử lý xong
         const thumb =
@@ -258,12 +262,12 @@ export const mockSource: DataSource = {
           action_items: [],
           notes: draft.notes.map((n, i) => ({ id: `n-${i}`, timestamp_sec: n.timestamp_sec, text: n.text })),
           bookmarks: draft.bookmarks.map((b, i) => ({ id: `m-${i}`, timestamp_sec: b.timestamp_sec, tag: (b.tag as SessionDetail["bookmarks"][number]["tag"]) ?? null })),
-          photos: draft.photos.map((p, i) => ({ id: `ph-${i}`, timestamp_sec: p.timestamp_sec, url: p.url })),
+          photos: draft.photos.map((p) => ({ id: p.id, timestamp_sec: p.timestamp_sec, url: "" })),
           peaks: [],
           speaker_spans: [],
           send_history: [],
         };
-        db.sessions.unshift({ detail, transcript: [], chat: [], draft });
+        db.sessions.unshift({ detail, transcript: [], chat: [], draft: storedDraft });
         if (!offline) scheduleProcessing(id);
         return { id };
       };

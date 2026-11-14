@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { FileClock } from "lucide-react";
+import { FileClock, HardDrive } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
@@ -14,6 +14,7 @@ import { Banner, EmptyState, SkeletonRow } from "@/components/ui/feedback";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/data";
+import { useDebugFlags } from "@/lib/debug/flags";
 import { dayDiff, durationParts, weekdayDate } from "@/lib/format";
 import {
   discardRecording,
@@ -21,6 +22,7 @@ import {
   restoreRecording,
   useRecording,
 } from "@/lib/record/recording-store";
+import { useStorageFull } from "@/lib/storage-full";
 
 /*
  * Thư viện (docs/03-screens.md mục 1).
@@ -53,6 +55,8 @@ export function LibraryPane({ className }: { className?: string }) {
   const [filter, setFilter] = useState<FilterId>("all");
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const recording = useRecording();
+  const flags = useDebugFlags();
+  const storageAlert = useStorageFull() || flags.storageFull;
 
   const me = useData(() => data.account.me(), []);
   const quota = useData(() => data.account.quota(), []);
@@ -168,6 +172,15 @@ export function LibraryPane({ className }: { className?: string }) {
           }
         >
           {t("unfinished", { time: unfinishedTime, duration: durationLabel(recordedSec()) })}
+        </Banner>
+      ) : null}
+
+      {/* Bộ nhớ trình duyệt đầy: dữ liệu chỉ còn trong bộ nhớ của phiên.
+          Cảnh báo thật từ lần ghi localStorage thất bại, hoặc ép bằng cờ
+          "Bộ nhớ đầy" của bảng thử nghiệm (PR #22, lỗi 3). */}
+      {storageAlert ? (
+        <Banner kind="expiring" icon={HardDrive} className="mt-3">
+          {t("storageFull")}
         </Banner>
       ) : null}
 

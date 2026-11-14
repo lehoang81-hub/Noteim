@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { formatClock } from "@/components/ribbon/draw";
 import { TagChip, type SemanticTag } from "@/components/ui/chips";
 import { cn } from "@/lib/cn";
+import { loadPhoto } from "@/lib/record/photo-store";
 import type { RecordingPhoto, RecordingSnapshot } from "@/lib/record/recording-store";
 
 /*
@@ -26,6 +27,30 @@ function mergeFeed(recording: RecordingSnapshot): FeedItem[] {
     ...recording.photos.map((p: RecordingPhoto) => ({ kind: "photo" as const, id: p.id, time: p.timestamp_sec, url: p.url })),
   ];
   return items.sort((a, b) => a.time - b.time);
+}
+
+/* Ảnh trong danh sách: vừa chụp thì có url sẵn; buổi ghi khôi phục sau khi
+ * tải lại thì url rỗng (localStorage chỉ giữ id), đọc pixel từ IndexedDB. */
+function FeedPhoto({ id, url, alt }: { id: string; url: string; alt: string }) {
+  const [fromIdb, setFromIdb] = useState<string | null>(null);
+  useEffect(() => {
+    if (url) return;
+    let alive = true;
+    void loadPhoto(id).then((found) => {
+      if (alive && found) setFromIdb(found);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [id, url]);
+  const src = url || fromIdb;
+  if (!src) {
+    return <span aria-hidden={true} className="h-14 w-14 shrink-0 rounded-block bg-surface-2" />;
+  }
+  return (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img src={src} alt={alt} className="h-14 rounded-block object-cover" />
+  );
 }
 
 export function RecordFeed({
@@ -75,9 +100,9 @@ export function RecordFeed({
             ) : (
               <span className="flex min-w-0 flex-1 items-center gap-2">
                 <Camera aria-hidden={true} className="size-4 shrink-0 text-ink-2" strokeWidth={1.75} />
-                {/* Ảnh người dùng vừa chụp, đã thu nhỏ còn cạnh dài 1280px */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={item.url} alt={t("photoAlt", { time: formatClock(item.time) })} className="h-14 rounded-block object-cover" />
+                {/* Ảnh người dùng vừa chụp, đã thu nhỏ còn cạnh dài 640px,
+                    pixel nằm ở IndexedDB (PR #22, lỗi 3) */}
+                <FeedPhoto id={item.id} url={item.url} alt={t("photoAlt", { time: formatClock(item.time) })} />
               </span>
             )}
           </li>

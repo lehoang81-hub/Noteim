@@ -2,10 +2,13 @@
 
 /*
  * Ảnh chụp trong lúc ghi (docs/03-screens.md mục 3): thu nhỏ còn cạnh dài
- * tối đa 1280px rồi lưu dạng data URL vào kho buổi ghi.
+ * tối đa 640px, chất lượng 0,7 rồi lưu dạng data URL vào kho buổi ghi.
+ * Pixel nằm ở IndexedDB theo id ảnh (lib/record/photo-store.ts), nên kích
+ * thước nhỏ giúp hiển thị nhanh và không làm đầy localStorage (PR #22, lỗi 3).
  */
 
-const MAX_EDGE = 1280;
+const MAX_EDGE = 640;
+const QUALITY = 0.7;
 
 export async function fileToDataUrl(file: File): Promise<string> {
   const bitmap = await createImageBitmap(file);
@@ -19,7 +22,7 @@ export async function fileToDataUrl(file: File): Promise<string> {
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("canvas không dùng được");
     ctx.drawImage(bitmap, 0, 0, width, height);
-    return canvas.toDataURL("image/jpeg", 0.85);
+    return canvas.toDataURL("image/jpeg", QUALITY);
   } finally {
     bitmap.close();
   }

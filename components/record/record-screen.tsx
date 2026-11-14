@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Camera, ChevronDown, Mic, MicVocal } from "lucide-react";
+import { Camera, ChevronDown, HardDrive, Mic, MicVocal } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ import { useDebugFlags } from "@/lib/debug/flags";
 import { shortDate } from "@/lib/format";
 import { micGrantedOnce, markMicGranted } from "@/lib/record/mic-permission";
 import { fileToDataUrl } from "@/lib/record/photo";
+import { useStorageFull } from "@/lib/storage-full";
 import {
   addRecordingBookmark,
   addRecordingNote,
@@ -101,6 +102,8 @@ export function RecordScreen() {
   const quota = useData(() => data.account.quota(), []);
   const templates = useData(() => data.account.templates(), []);
   const reduce = useReducedMotionSafe();
+  const storageReallyFull = useStorageFull();
+  const storageAlert = storageReallyFull || flags.storageFull;
   const micTakenRef = useRef<() => void>(() => {});
   const mic = useMicLevel({ onEnded: () => micTakenRef.current() });
   /* Ba nhánh dải giọng (khoảnh khắc bắt đầu, thẻ gấp, dải sống) cùng là
@@ -357,7 +360,7 @@ export function RecordScreen() {
           duration_sec: snapshot.duration_sec,
           notes: snapshot.notes.map(({ timestamp_sec, text }) => ({ timestamp_sec, text })),
           bookmarks: snapshot.bookmarks.map(({ timestamp_sec, tag }) => ({ timestamp_sec, tag })),
-          photos: snapshot.photos.map(({ timestamp_sec, url }) => ({ timestamp_sec, url })),
+          photos: snapshot.photos.map(({ id, timestamp_sec, url }) => ({ id, timestamp_sec, url })),
           levels: snapshot.levels,
           consent: snapshot.consent,
         }),
@@ -455,10 +458,12 @@ export function RecordScreen() {
       ) : null}
 
       {/* Dải báo của màn hình ghi (M2-04): mất mạng, sắp hết hạn mức phiên,
-          micro bị nơi khác chiếm. Ghi vẫn chạy trong mọi trường hợp. */}
-      {showControls && (offline || micTaken || (quotaSecondsLeft !== null && quotaSecondsLeft > 0 && quotaSecondsLeft <= 300)) ? (
+          micro bị nơi khác chiếm, bộ nhớ trình duyệt đầy (PR #22, lỗi 3).
+          Ghi vẫn chạy trong mọi trường hợp. */}
+      {showControls && (offline || micTaken || storageAlert || (quotaSecondsLeft !== null && quotaSecondsLeft > 0 && quotaSecondsLeft <= 300)) ? (
         <div className="flex flex-col gap-px">
           {offline ? <Banner kind="offline">{t("offlineRecording")}</Banner> : null}
+          {storageAlert ? <Banner kind="expiring" icon={HardDrive}>{t("storageFull")}</Banner> : null}
           {quotaSecondsLeft !== null && quotaSecondsLeft > 0 && quotaSecondsLeft <= 300 ? (
             <Banner kind="quota">
               {t("sessionQuotaLow", {

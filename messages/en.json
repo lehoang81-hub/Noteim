@@ -489,7 +489,8 @@
     },
     "recordSpeed30": "Speed up recording clock x30",
     "micDenied": "Microphone denied",
-    "micTaken": "Micro taken after 10s"
+    "micTaken": "Micro taken after 10s",
+    "storageFull": "Storage full"
   },
   "library": {
     "greeting": "Hi {name}",
@@ -523,6 +524,7 @@
     "minutes": "{m} min",
     "hours": "{h} h {m}",
     "unfinished": "Recording from {time} was not finished ({duration}).",
+    "storageFull": "Browser storage is full. New recordings may not be saved. Delete some sessions or reset the sample data.",
     "restore": "Resume",
     "discard": "Discard",
     "discardTitle": "Discard the unfinished recording?",
@@ -634,6 +636,7 @@
     "trySample": "Try with sample sound",
     "sampleBadge": "Using sample sound",
     "micTakenBanner": "Paused because the microphone is being used by another app.",
+    "storageFull": "Browser storage is full. New recordings may not be saved. Delete some sessions or reset the sample data.",
     "backToLibrary": "Back to library"
   },
   "processing": {

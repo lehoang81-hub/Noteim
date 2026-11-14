@@ -26,6 +26,8 @@ export type DebugFlags = {
   micDenied: boolean;
   /** Ép trạng thái micro bị chiếm sau 10 giây */
   micTaken: boolean;
+  /** Ép cảnh báo bộ nhớ trình duyệt đã đầy */
+  storageFull: boolean;
   profession: Profession | null;
   plan: "free" | "pro" | null;
 };
@@ -41,6 +43,7 @@ const DEFAULTS: DebugFlags = {
   recordSpeed30: false,
   micDenied: false,
   micTaken: false,
+  storageFull: false,
   profession: null,
   plan: null,
 };

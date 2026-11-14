@@ -511,6 +511,7 @@
     "trySample": "Dùng thử với âm thanh mẫu",
     "sampleBadge": "Đang dùng âm thanh mẫu",
     "micTakenBanner": "Đã tạm dừng vì micro bị dùng ở nơi khác.",
+    "storageFull": "Bộ nhớ của trình duyệt đã đầy. Buổi ghi mới có thể không được lưu. Xóa bớt buổi ghi hoặc đặt lại dữ liệu mẫu.",
     "backToLibrary": "Về thư viện"
   },
   "debug": {
@@ -539,7 +540,8 @@
     },
     "recordSpeed30": "Tua nhanh đồng hồ ghi x30",
     "micDenied": "Micro bị từ chối",
-    "micTaken": "Micro bị chiếm sau 10 giây"
+    "micTaken": "Micro bị chiếm sau 10 giây",
+    "storageFull": "Bộ nhớ đầy"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",
@@ -573,6 +575,7 @@
     "minutes": "{m} phút",
     "hours": "{h} giờ {m}",
     "unfinished": "Buổi ghi lúc {time} chưa lưu xong ({duration}).",
+    "storageFull": "Bộ nhớ của trình duyệt đã đầy. Buổi ghi mới có thể không được lưu. Xóa bớt buổi ghi hoặc đặt lại dữ liệu mẫu.",
     "restore": "Khôi phục",
     "discard": "Bỏ",
     "discardTitle": "Bỏ buổi ghi dang dở?",

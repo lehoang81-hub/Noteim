@@ -3,6 +3,8 @@
 import { useSyncExternalStore } from "react";
 import { getFlags } from "@/lib/debug/flags";
 import type { SemanticTag } from "@/lib/data/types";
+import { savePhoto } from "@/lib/record/photo-store";
+import { markStorageFull } from "@/lib/storage-full";
 
 /*
  * Kho buổi ghi đang diễn ra (docs/03-screens.md mục 2, 3; issue M2-01).
@@ -118,12 +120,21 @@ function load(): void {
 function persist(): void {
   if (typeof window === "undefined" || state.status === "idle") return;
   try {
-    // Gồm cả đoạn đang ghi, để tải lại trang không mất thời gian đã ghi
-    const payload: Persisted = { ...state, elapsed_ms: Math.round(recordedMs()) };
+    // Gồm cả đoạn đang ghi, để tải lại trang không mất thời gian đã ghi.
+    // Ảnh chỉ giữ id: pixel nằm ở IndexedDB (lib/record/photo-store.ts),
+    // data URL cỡ trăm KB đưa vào localStorage là làm đầy bộ nhớ và mất
+    // buổi ghi âm thầm (PR #22, lỗi 3).
+    const payload: Persisted = {
+      ...state,
+      photos: state.photos.map(({ id, timestamp_sec }) => ({ id, timestamp_sec, url: "" })),
+      elapsed_ms: Math.round(recordedMs()),
+    };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     levelsDirty = false;
   } catch {
-    // localStorage đầy hoặc bị chặn: thay đổi chỉ còn trong bộ nhớ
+    // localStorage đầy hoặc bị chặn: thay đổi chỉ còn trong bộ nhớ, báo dải
+    // "Bộ nhớ đầy" thay vì mất dữ liệu im lặng (PR #22, lỗi 3)
+    markStorageFull();
   }
 }
 
@@ -223,6 +234,9 @@ export function addRecordingPhoto(url: string) {
     url,
   };
   setState({ photos: [...state.photos, photo] });
+  // Pixel của ảnh nằm ở IndexedDB theo id; localStorage chỉ giữ id
+  // (PR #22, lỗi 3). Lưu xong hay lỗi đều không cản buổi ghi.
+  void savePhoto(photo.id, url);
   persist();
 }
 

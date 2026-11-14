@@ -32,7 +32,9 @@ export type RecordingDraft = {
   duration_sec: number;
   notes: { timestamp_sec: number; text: string }[];
   bookmarks: { timestamp_sec: number; tag: string | null }[];
-  photos: { timestamp_sec: number; url: string }[];
+  /** Ảnh giữ id để tìm pixel trong IndexedDB (lib/record/photo-store.ts);
+   * url chỉ có giá trị trong bộ nhớ của phiên ghi, localStorage giữ rỗng. */
+  photos: { id: string; timestamp_sec: number; url: string }[];
   /** Âm lượng lấy mẫu 4 giá trị mỗi giây, để dựng lại dải giọng */
   levels: number[];
   consent?: { confirmed: boolean; announced: boolean };
