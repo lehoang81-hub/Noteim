@@ -436,7 +436,7 @@ export function RecordScreen() {
           <ChevronDown aria-hidden={true} className="size-4 shrink-0 text-ink-3" strokeWidth={2} />
         </button>
         <span
-          className="flex size-11 shrink-0 items-center justify-end gap-1.5 text-caption font-medium text-ink-2"
+          className="flex size-11 shrink-0 items-center justify-end gap-1.5 whitespace-nowrap text-caption font-medium text-ink-2"
           aria-live="polite"
         >
           {showControls ? (
