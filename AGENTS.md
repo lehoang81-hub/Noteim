@@ -18,6 +18,8 @@ Bạn đang xây **mockup tương tác** của Noteim. Mục tiêu của giai đ
 - **Mỗi màn hình phải có đủ trạng thái**: đang tải, rỗng, lỗi, và trạng thái bình thường. Thiếu một trạng thái là chưa xong.
 - **Không thêm thư viện** ngoài danh sách ở `docs/04-data-contract.md` mục "Công nghệ" khi chưa được duyệt trong issue.
 - **Không commit thẳng vào `main`.** Mỗi issue một nhánh, một PR.
+- **Không xóa hay viết lại tài liệu sẵn có** (`README.md`, `docs/`) ngoài phạm vi issue. Được thêm mục mới, không được thay nội dung cũ.
+- **Không commit ảnh chụp vào repo.** Link xem thử của Vercel thay cho ảnh.
 
 ## Khi không chắc
 
