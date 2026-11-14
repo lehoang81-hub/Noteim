@@ -50,6 +50,7 @@ export const dawnVars = ["--dawn-orange", "--dawn-pink", "--dawn-violet"] as con
 /** Mục lục trang, theo thứ tự xuất hiện. */
 export const sections = [
   "preview",
+  "components",
   "colors",
   "tags",
   "speakers",

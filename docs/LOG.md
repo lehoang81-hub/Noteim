@@ -43,3 +43,16 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 - Nút đổi giao diện hiện giao diện sẽ chuyển sang; máy tính có thêm chữ.
 - Đã kiểm: 390px và 1280px, sáng và tối, không tràn ngang; trang dài 5.498px ở 390px; khối "Xem nhanh" nằm trọn màn hình đầu; 12 cặp tương phản đều từ 4,5:1 ở cả hai giao diện; giảm chuyển động thì cuộn không mượt; viền lấy nét màu Điện.
 - Lưu ý cho người sau: khối "Xem nhanh" không dùng tiện ích `dark:` vì có thể bị ép sáng hoặc tối độc lập với trang. Component chính thức ở M0-03 nên tránh `dark:` vì lý do tương tự; dùng token là đủ.
+
+## 2026-11-14, Claude, M0-03 bộ component
+
+- Hoang giao Claude tự làm M0-03.
+- Thư viện mới: `@radix-ui/react-dialog`, `react-alert-dialog`, `react-switch`, `react-tabs` (nền của shadcn/ui), `motion`.
+- `components/ui`: `Button`, `RecordButton`, `TagChip`, `FilterChip`, `SpeakerName`, `Sheet`, `ToastProvider` + `useToast`, `ConfirmDialog`, `Banner`, `EmptyState`, `SkeletonRow`, `SkeletonParagraph`, `TextField`, `SearchField`, `Switch`, `Tabs`.
+- `components/session`: `SessionRow`, `SummaryBullet`, `UserNote`, `TaskRow`, `AiBlock`. `components/ribbon/ribbon-thumb.tsx`: dải giọng thu nhỏ bản tĩnh, M0-04 thay bằng canvas.
+- `ToastProvider` bọc toàn ứng dụng trong `app/layout.tsx`. Chữ dùng chung (Đóng, Hoàn tác, Thử lại) ở `messages/*.json` mục `ui`.
+- `/styleguide` có mục "Component", mọi biến thể bấm thử được. Khối "Xem nhanh" dựng lại bằng component.
+- Thêm `app/icon.svg` (biểu tượng Hừng đông), hết lỗi 404 favicon.
+- Đã kiểm: 390px và 1280px, sáng và tối, không tràn ngang, không lỗi console. Bảng trượt giữ tiêu điểm, đóng bằng Esc và kéo tay nắm. Hộp xác nhận, thông báo nhanh, công tắc, tab, nút ghi âm, đánh dấu việc đều chạy.
+- Giảm chuyển động: bảng trượt và thông báo hiện bằng mờ dần; tắt kéo tay nắm (vẫn đóng bằng nút, nền mờ, Esc); khối AI hiện đủ chữ ngay.
+- Lưu ý cho người sau: `useReducedMotion` trả giá trị khác nhau giữa máy chủ và trình duyệt. Đừng dùng nó để quyết định nội dung ở lần vẽ đầu, chỉ dùng cho chuyển động hoặc trong `useEffect` (xem `ai-block.tsx`), nếu không sẽ lỗi hydrate.

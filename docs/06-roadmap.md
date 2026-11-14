@@ -10,7 +10,7 @@ Mục tiêu: chốt màu, chữ, chuyển động trước khi dựng bất kỳ
 | --- | --- | --- |
 | M0-01 | Khởi tạo dự án, lint, typecheck, luật chặn import, Vercel. `styles/tokens.css` đủ token sáng và tối. Trang `/styleguide` bản đầu. | Xong (#1, PR #3) |
 | M0-02 | Hoàn thiện `/styleguide` theo kết quả review: khối "Xem nhanh", điều hướng mục, bố cục máy tính, một nguồn mã màu. | Xong (#5, Claude làm) |
-| M0-03 | Toàn bộ component trong bảng "Component" của design system, hiện trên `/styleguide` với đủ trạng thái. | |
+| M0-03 | Toàn bộ component trong bảng "Component" của design system, hiện trên `/styleguide` với đủ trạng thái. | Xong (#8, Claude làm) |
 | M0-04 | Dải giọng ba dạng (sống, phát lại, thu nhỏ) và ba khoảnh khắc đặc trưng, có nút bấm chạy thử trên `/styleguide`. | |
 
 Nghiệm thu:

@@ -1,5 +1,5 @@
-import { ChartColumn, Check, Hourglass, Lightbulb, TriangleAlert, type LucideIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { TagChip } from "@/components/ui/chips";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Contrast, Duration, Hex, Raw, SizeLine } from "./live";
 import {
@@ -14,8 +14,8 @@ import {
   typeScale,
   type ColorRow,
   type SectionId,
-  type TagId,
 } from "./palette-data";
+import { ComponentsShowcase } from "./components-showcase";
 import { Preview } from "./preview";
 import { SectionNavDesktop, SectionNavMobile } from "./section-nav";
 
@@ -92,24 +92,6 @@ function ColorList({ rows }: { rows: ColorRow[] }) {
   );
 }
 
-/* ---------- Nhãn ---------- */
-
-const tagIcons: Record<TagId, LucideIcon> = {
-  decided: Check,
-  pending: Hourglass,
-  risk: TriangleAlert,
-  idea: Lightbulb,
-  figure: ChartColumn,
-};
-
-const tagClasses: Record<TagId, string> = {
-  decided: "bg-tag-decided-bg text-tag-decided",
-  pending: "bg-tag-pending-bg text-tag-pending",
-  risk: "bg-tag-risk-bg text-tag-risk",
-  idea: "bg-tag-idea-bg text-tag-idea",
-  figure: "bg-tag-figure-bg text-tag-figure",
-};
-
 /* ---------- Trang ---------- */
 
 export default function StyleguidePage() {
@@ -156,6 +138,11 @@ export default function StyleguidePage() {
             <p className="mt-3 max-w-[62ch] text-small text-ink-2">{t("previewNote")}</p>
           </section>
 
+          {/* Component */}
+          <Section id="components" title={t("components.title")} hint={t("components.hint")}>
+            <ComponentsShowcase />
+          </Section>
+
           {/* Màu */}
           <Section id="colors" title={t("colorsTitle")} hint={t("colorsHint")}>
             <SubHeading>{t("colorsBase")}</SubHeading>
@@ -176,13 +163,9 @@ export default function StyleguidePage() {
           <Section id="tags" title={t("tagsTitle")} hint={t("tagsHint")}>
             <ul className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 lg:grid-cols-5">
               {tagIds.map((tag) => {
-                const Icon = tagIcons[tag];
                 return (
                   <li key={tag}>
-                    <span className={`inline-flex items-center gap-1.5 rounded-pill px-3 py-1 text-small font-medium ${tagClasses[tag]}`}>
-                      <Icon aria-hidden={true} className="size-4" strokeWidth={2} />
-                      {t(`tags.${tag}`)}
-                    </span>
+                    <TagChip tag={tag} label={t(`tags.${tag}`)} />
                     <p className="mt-1.5 text-caption font-medium text-ink-3">
                       <Contrast fg={`--tag-${tag}-text`} bgs={[`--tag-${tag}-bg`]} />
                     </p>
