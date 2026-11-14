@@ -137,11 +137,14 @@ export function LibraryPane({ className }: { className?: string }) {
         </p>
       </div>
 
-      {recording.status !== "idle" ? (
+      {/* Chỉ hiện khi buổi ghi bị gián đoạn (tải lại/đóng trang), không hiện
+          khi buổi ghi đang chạy trong tab hiện tại — khi đó chỉ có thanh sen
+          "Đang ghi" (PR #22, lỗi 2). Không nhận className của cột thư viện. */}
+      {recording.interrupted ? (
         <Banner
           kind="offline"
           icon={FileClock}
-          className={cn("mt-3", className)}
+          className="mt-3"
           action={
             <span className="flex shrink-0 items-center gap-1">
               <button

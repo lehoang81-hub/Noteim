@@ -27,6 +27,10 @@ export type RecordingConsent = { confirmed: boolean; announced: boolean };
 
 export type RecordingSnapshot = {
   status: RecordingStatus;
+  /** Buổi ghi bị gián đoạn (tải lại hoặc đóng trang). Chỉ hiện dải báo
+   * "chưa lưu xong" ở thư viện khi đúng đang bị gián đoạn, không hiện khi
+   * buổi ghi đang chạy trong tab hiện tại (PR #22, lỗi 2). */
+  interrupted: boolean;
   templateId: string | null;
   consent: RecordingConsent;
   /** Epoch ms lúc bắt đầu ghi, để đặt tên "Buổi ghi lúc 14:05". */
@@ -43,6 +47,7 @@ const LEVEL_CAP = 60_000; // khoảng 4 giờ 10 phút ở 4 mẫu/giây
 
 const INITIAL: RecordingSnapshot = {
   status: "idle",
+  interrupted: false,
   templateId: null,
   consent: { confirmed: false, announced: false },
   startedAtClock: null,
@@ -92,8 +97,11 @@ function load(): void {
     if (!parsed || typeof parsed !== "object" || !parsed.status) return;
     elapsedMs = Math.max(0, Number(parsed.elapsed_ms) || 0);
     segmentStart = null; // tải lại trang: đoạn đang ghi bị ngắt, sang trạng thái tạm dừng
+    const wasActive = parsed.status === "recording" || parsed.status === "paused";
     state = {
-      status: parsed.status === "recording" || parsed.status === "paused" ? "paused" : "idle",
+      status: wasActive ? "paused" : "idle",
+      // Nạp lại từ localStorage nghĩa là buổi ghi đã bị gián đoạn (PR #22, lỗi 2)
+      interrupted: wasActive,
       templateId: parsed.templateId ?? null,
       consent: parsed.consent ?? INITIAL.consent,
       startedAtClock: parsed.startedAtClock ?? null,
@@ -139,6 +147,7 @@ export function startRecording(opts: { templateId: string | null; consent: Recor
   segmentStart = now;
   state = {
     status: "recording",
+    interrupted: false,
     templateId: opts.templateId,
     consent: opts.consent,
     startedAtClock: now,
@@ -267,12 +276,14 @@ export function discardRecording() {
   emit();
 }
 
-/** Mở lại buổi ghi dang dở ở trạng thái tạm dừng, dữ liệu còn nguyên. */
+/** Mở lại buổi ghi dang dở ở trạng thái tạm dừng, dữ liệu còn nguyên.
+ * Sau khi khôi phục, buổi ghi chạy lại trong tab hiện tại nên không còn
+ * coi là bị gián đoạn (PR #22, lỗi 2). */
 export function restoreRecording() {
   load();
   if (state.status === "idle") return;
   segmentStart = null;
-  setState({ status: "paused" });
+  setState({ status: "paused", interrupted: false });
   persist();
 }
 
