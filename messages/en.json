@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "title": "Noteim",
+    "description": "Meeting minutes from voice recordings, built for Vietnamese professionals."
+  },
+  "app": {
+    "redirecting": "Taking you to the style guide"
+  },
+  "theme": {
+    "switchToDark": "Switch to dark theme",
+    "switchToLight": "Switch to light theme",
+    "currentLight": "Light theme is on",
+    "currentDark": "Dark theme is on"
+  },
+  "styleguide": {
+    "brand": "Noteim",
+    "title": "Style guide",
+    "intro": "Every Noteim design token: palette A (Sen and Dien), type, spacing, radii, shadows and motion. Toggle light and dark with the button at the top.",
+    "themeSection": "Theme",
+    "themeHint": "Your choice is stored on this device and survives a page reload.",
+
+    "colorsBaseSection": "Background and text colors",
+    "colorsBaseHint": "The light background is a cool porcelain white, not cream. The dark background is deep indigo, not black.",
+    "colorsActionSection": "Action colors",
+    "colorsActionConvention": "Sen (pink) is what the user does, dien (violet) is what the AI does. Color alone tells you which content was written by the machine.",
+    "dawnSection": "Dawn gradient",
+    "dawnHint": "Only for the record button, the glow behind the voice ribbon while recording, and the logo. Never as a background or for heading text.",
+    "tagsSection": "Semantic tags",
+    "tagsHint": "Every tag always comes with an icon and text, never color alone. In dark theme the tag background is its text color at 16% opacity.",
+    "speakersSection": "Speaker colors",
+    "speakersHint": "Six colors, assigned in order of appearance. From the seventh speaker they cycle again with a hatched pattern. Only for the voice ribbon, the dot before a name, and the left bar of a transcript line, never as text color.",
+    "speaker": "Speaker {index}",
+
+    "tokenBg": { "name": "Porcelain / Night indigo", "usage": "Page background" },
+    "tokenSurface": { "name": "White / Indigo", "usage": "Bottom sheets, navigation bar, inputs" },
+    "tokenSurface2": { "name": "Recessed", "usage": "Recessed areas, chip background, selected row" },
+    "tokenLine": { "name": "Hairline", "usage": "Dividers, borders" },
+    "tokenInk": { "name": "Indigo ink", "usage": "Primary text" },
+    "tokenInk2": { "name": "Secondary text", "usage": "Secondary text" },
+    "tokenInk3": { "name": "Caption", "usage": "Captions, timestamps" },
+    "tokenPairInkSurface2": "--ink on --surface-2",
+    "tokenSen": { "name": "Sen (lotus pink)", "usage": "Primary buttons, recording, key links" },
+    "tokenSenText": { "name": "Sen text", "usage": "Pink text on background" },
+    "tokenOnSen": { "name": "On sen", "usage": "Text on sen background" },
+    "tokenDien": { "name": "Dien (electric violet)", "usage": "Everything AI-made: answers, suggestions, Ask AI button" },
+    "tokenDienTint": { "name": "Dien tint", "usage": "AI content block background" },
+
+    "tagDecided": "Decided",
+    "tagPending": "Pending",
+    "tagRisk": "Risk",
+    "tagIdea": "Idea",
+    "tagFigure": "Figure",
+
+    "typographySection": "Type scale",
+    "typographyHint": "Headings and large numbers use Bricolage Grotesque, everything else uses Be Vietnam Pro. Line height never goes below 1.3x so Vietnamese diacritics have room.",
+    "typographyDesktopNote": "Desktop: display 44/52, h1 30/38, the rest unchanged.",
+    "fontBricolage": "Bricolage Grotesque",
+    "fontBeVietnam": "Be Vietnam Pro",
+    "inDisplayFont": "in {font}",
+    "testStringLabel": "Vietnamese diacritics test string",
+    "testString": "Đặng Thị Quỳnh Ngữ, Nguyễn Hữu Phước: thỏa thuận chuyển nhượng 12,5 tỷ",
+    "typeDisplay": { "desc": "Greeting, recording clock digits", "weight": "bold 700" },
+    "typeH1": { "desc": "Session title", "weight": "semibold 600" },
+    "typeH2": { "desc": "Topic title, sheet title", "weight": "semibold 600" },
+    "typeBody": { "desc": "Body content", "weight": "regular 400" },
+    "typeBodyStrong": { "desc": "Names, emphasis", "weight": "semibold 600" },
+    "typeSmall": { "desc": "Supporting info", "weight": "regular 400" },
+    "typeCaption": { "desc": "Timestamps, labels", "weight": "medium 500" },
+
+    "spacingSection": "Spacing",
+    "spacingHint": "Multiples of 4. Values below are in pixels.",
+    "spacingMargin": "Page margin: mobile 20, desktop 32",
+    "spacingUnit": "{value} px",
+
+    "radiusSection": "Radii",
+    "radiusHint": "Radii follow a hierarchy, never one value for everything.",
+    "radiusControl": { "name": "control — 10 px", "usage": "Buttons, inputs" },
+    "radiusBlock": { "name": "block — 16 px", "usage": "AI content blocks, images, quote cards" },
+    "radiusSheet": { "name": "sheet — 28 px", "usage": "Bottom sheets, top corners only" },
+    "radiusPill": { "name": "pill — 999 px", "usage": "Chips, tags, record button" },
+
+    "shadowSection": "Shadows",
+    "shadowHint": "Prefer layering with background color and hairlines. Shadows are tinted indigo, never gray. Dark theme uses no shadows, only borders.",
+    "shadowFloat": { "name": "float", "usage": "Floating player and bottom sheets" },
+    "shadowRecord": { "name": "record", "usage": "Record button only" },
+    "shadowDarkNote": "In dark theme both shadows are off and replaced by borders.",
+
+    "motionSection": "Motion",
+    "motionHint": "Motion only ever answers one interaction: press, open, close, drag.",
+    "motionQuick": { "name": "quick — 120 ms", "usage": "Color change on press, toggles" },
+    "motionBase": { "name": "base — 220 ms", "usage": "Chip opening, tab switching, toasts" },
+    "motionSheet": { "name": "sheet — 340 ms", "usage": "Bottom sheets, page transitions" },
+    "motionScene": { "name": "scene — 700 ms", "usage": "The three signature moments" },
+    "motionEase": { "name": "default easing", "usage": "cubic-bezier(0.2, 0.8, 0.2, 1)" },
+
+    "contrastRatio": "Contrast {ratio} : 1",
+    "tokenLabel": "Token",
+    "lightLabel": "Light",
+    "darkLabel": "Dark",
+    "codeLabel": "Color code"
+  }
+}

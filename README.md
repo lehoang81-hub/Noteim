@@ -4,6 +4,23 @@ Trợ lý ghi âm, tóm tắt và giao việc cho người đi làm tại Việt
 
 Giai đoạn hiện tại: **mockup tương tác đầy đủ** (chạy bằng dữ liệu giả, chưa nối database, chưa gọi AI thật).
 
+- Bản đang chạy: https://noteim.vercel.app/styleguide
+- Mỗi PR có link xem thử riêng do Vercel tạo, nằm trong phần bình luận của PR.
+
+## Chạy trên máy
+
+Cần Node 20 trở lên và pnpm.
+
+```bash
+pnpm install
+pnpm dev        # mở http://localhost:3000/styleguide
+pnpm lint
+pnpm typecheck
+pnpm build
+```
+
+Lưu ý: nếu `pnpm build` báo lỗi tải phông Google, kiểm tra mạng hoặc proxy. Không tắt phông để build cho qua.
+
 ## Đọc theo thứ tự này
 
 | Tài liệu | Nội dung |

@@ -1,0 +1,164 @@
+/*
+ * Noteim — token thiết kế.
+ * Nguồn sự thật: docs/02-design-system.md (bảng màu A "Sen và Điện", đã chốt).
+ * Quy tắc: không viết cứng mã màu, cỡ chữ, bo góc, thời lượng ở bất kỳ đâu
+ * ngoài file này. Component chỉ dùng token qua biến CSS hoặc tiện ích Tailwind
+ * được ánh xạ trong app/globals.css.
+ *
+ * LƯU Ý KHI ĐỔI MÀU: mã màu cũng được liệt kê trong app/styleguide/palette-data.ts
+ * để hiện tên và mã trên trang /styleguide. Sửa phải sửa cả hai nơi.
+ */
+
+:root {
+  /* ============ Màu — nền và chữ (sáng) ============ */
+  --bg: #f6f7fb; /* Sứ */
+  --surface: #ffffff;
+  --surface-2: #eceef6;
+  --line: #dde0ee;
+  --ink: #16193b; /* Chàm */
+  --ink-2: #4a4e72;
+  --ink-3: #666a8e;
+
+  /* ============ Màu hành động (sáng) ============ */
+  /* Sen là việc người dùng làm, điện là việc AI làm. */
+  --sen: #d81f5f; /* Sen */
+  --sen-text: #c2185b;
+  --on-sen: #ffffff;
+  --dien: #5b3df5; /* Điện */
+  --dien-tint: #ece8ff;
+
+  /* ============ Nhãn ngữ nghĩa (sáng) ============ */
+  /* Nhãn luôn đi kèm biểu tượng và chữ, không chỉ dựa vào màu. */
+  --tag-decided-text: #08715c; /* Ngọc */
+  --tag-decided-bg: #e1f5f0;
+  --tag-pending-text: #9a6200; /* Hổ phách */
+  --tag-pending-bg: #fcf1da;
+  --tag-risk-text: #c2371f; /* Son */
+  --tag-risk-bg: #fce7e2;
+  --tag-idea-text: #5b3df5; /* Điện */
+  --tag-idea-bg: #ece8ff;
+  --tag-figure-text: #1f62d0; /* Lam */
+  --tag-figure-bg: #e3edfd;
+
+  /* ============ Màu người nói (cả hai giao diện) ============ */
+  /* Chỉ dùng cho dải giọng, chấm tròn trước tên, vạch dọc đoạn lời. */
+  --speaker-1: #6b4eff;
+  --speaker-2: #e6336e;
+  --speaker-3: #0fa98a;
+  --speaker-4: #f08a24;
+  --speaker-5: #2f7bf6;
+  --speaker-6: #b14fd8;
+
+  /* ============ Dải màu "Hừng đông" ============ */
+  /* Chỉ dùng cho nút ghi âm, quầng sáng dải giọng khi đang ghi, logo. */
+  --gradient-dawn: linear-gradient(100deg, #ff8a4c 0%, #e6336e 45%, #6b4eff 100%);
+  --dawn-orange: #ff8a4c;
+  --dawn-pink: #e6336e;
+  --dawn-violet: #6b4eff;
+
+  /* ============ Chữ ============ */
+  /* Biến --font-bricolage và --font-bevietnam do next/font/google cung cấp
+     (subset vietnamese), gắn trên <html> trong app/layout.tsx.
+     Luôn kèm giá trị dự phòng trong var(): thiếu biến thì vẫn ra đúng phông,
+     không rơi về phông hệ thống. */
+  --font-display: var(--font-bricolage, "Bricolage Grotesque"), "Be Vietnam Pro", sans-serif;
+  --font-body: var(--font-bevietnam, "Be Vietnam Pro"), sans-serif;
+
+  /* Thang cỡ chữ — điện thoại. Chiều cao dòng tối thiểu 1,3 lần cỡ chữ. */
+  --text-display-size: 32px;
+  --text-display-line: 40px;
+  --text-display-weight: 700;
+  --text-h1-size: 24px;
+  --text-h1-line: 32px;
+  --text-h1-weight: 600;
+  --text-h2-size: 19px;
+  --text-h2-line: 26px;
+  --text-h2-weight: 600;
+  --text-body-size: 16px;
+  --text-body-line: 25px;
+  --text-body-weight: 400;
+  --text-body-strong-size: 16px;
+  --text-body-strong-line: 25px;
+  --text-body-strong-weight: 600;
+  --text-small-size: 14px;
+  --text-small-line: 21px;
+  --text-small-weight: 400;
+  --text-caption-size: 12px;
+  --text-caption-line: 17px;
+  --text-caption-weight: 500;
+
+  /* ============ Khoảng cách — bội số của 4 ============ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --margin-page: 20px; /* lề trang điện thoại, máy tính là 32 */
+
+  /* ============ Bo góc theo cấp bậc ============ */
+  --r-control: 10px; /* nút, ô nhập */
+  --r-block: 16px; /* khối nội dung AI, ảnh, thẻ trích dẫn */
+  --r-sheet: 28px; /* bảng trượt từ dưới lên, chỉ hai góc trên */
+  --r-pill: 999px; /* chip, nhãn, nút ghi âm */
+
+  /* ============ Độ nổi ============ */
+  /* Bóng pha màu chàm chứ không xám. Giao diện tối không dùng bóng. */
+  --shadow-float: 0 8px 24px rgba(22, 25, 59, 0.1);
+  --shadow-record: 0 10px 30px rgba(230, 51, 110, 0.35);
+
+  /* ============ Chuyển động ============ */
+  --t-quick: 120ms; /* đổi màu khi nhấn, bật tắt */
+  --t-base: 220ms; /* mở chip, đổi tab, hiện thông báo */
+  --t-sheet: 340ms; /* bảng trượt, chuyển trang */
+  --t-scene: 700ms; /* ba khoảnh khắc đặc trưng */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.dark {
+  /* ============ Màu — nền và chữ (tối) ============ */
+  --bg: #0d0f2b; /* Chàm đêm */
+  --surface: #171a40;
+  --surface-2: #20244f;
+  --line: #2c3063;
+  --ink: #f2f3fb;
+  --ink-2: #b5b8d6;
+  --ink-3: #8e92b8;
+
+  /* ============ Màu hành động (tối) ============ */
+  --sen: #ff6b97;
+  --sen-text: #ff6b97;
+  --on-sen: #0d0f2b;
+  --dien: #a594ff;
+  --dien-tint: #241f5c;
+
+  /* ============ Nhãn ngữ nghĩa (tối) ============ */
+  /* Nền nhạt của nhãn là chính màu chữ với độ mờ 16%. */
+  --tag-decided-text: #3fd9b8;
+  --tag-decided-bg: color-mix(in srgb, #3fd9b8 16%, transparent);
+  --tag-pending-text: #ffc457;
+  --tag-pending-bg: color-mix(in srgb, #ffc457 16%, transparent);
+  --tag-risk-text: #ff8a70;
+  --tag-risk-bg: color-mix(in srgb, #ff8a70 16%, transparent);
+  --tag-idea-text: #a594ff;
+  --tag-idea-bg: color-mix(in srgb, #a594ff 16%, transparent);
+  --tag-figure-text: #7fb0ff;
+  --tag-figure-bg: color-mix(in srgb, #7fb0ff 16%, transparent);
+
+  /* Giao diện tối không dùng bóng, dùng viền --line. */
+  --shadow-float: none;
+  --shadow-record: none;
+}
+
+/* Thang cỡ chữ — máy tính: chỉ display và h1 đổi, còn lại giữ nguyên. */
+@media (min-width: 768px) {
+  :root {
+    --text-display-size: 44px;
+    --text-display-line: 52px;
+    --text-h1-size: 30px;
+    --text-h1-line: 38px;
+    --margin-page: 32px;
+  }
+}
