@@ -55,6 +55,8 @@ Quy ước: **sen là việc người dùng làm, điện là việc AI làm.** 
 
 Chỉ dùng cho: nút ghi âm, quầng sáng dải giọng khi đang ghi, logo. Không dùng làm nền, không dùng cho chữ tiêu đề.
 
+Biểu tượng đặt trên dải Hừng đông dùng `--on-dawn` (`#FFFFFF` ở cả hai giao diện).
+
 ### Nhãn ngữ nghĩa
 
 Mỗi nhãn luôn đi kèm biểu tượng và chữ, không bao giờ chỉ dựa vào màu.

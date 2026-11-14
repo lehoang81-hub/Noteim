@@ -10,93 +10,189 @@
     "switchToDark": "Chuyển sang giao diện tối",
     "switchToLight": "Chuyển sang giao diện sáng",
     "currentLight": "Đang mở giao diện sáng",
-    "currentDark": "Đang mở giao diện tối"
+    "currentDark": "Đang mở giao diện tối",
+    "toDarkShort": "Giao diện tối",
+    "toLightShort": "Giao diện sáng"
   },
   "styleguide": {
     "brand": "Noteim",
     "title": "Bảng mẫu kiểu dáng",
-    "intro": "Toàn bộ token thiết kế của Noteim: bảng màu A (Sen và Điện), chữ, khoảng cách, bo góc, bóng và chuyển động. Đổi giao diện sáng và tối bằng nút ở đầu trang.",
-    "themeSection": "Giao diện",
-    "themeHint": "Lựa chọn được lưu trên máy, còn nguyên khi tải lại trang.",
-
-    "colorsBaseSection": "Màu nền và chữ",
-    "colorsBaseHint": "Nền sáng là trắng sứ ngả lạnh, không phải màu kem. Nền tối là chàm đậm, không phải đen.",
-    "colorsActionSection": "Màu hành động",
-    "colorsActionConvention": "Sen là việc người dùng làm, điện là việc AI làm. Người dùng nhìn màu là biết nội dung nào do máy viết.",
-    "dawnSection": "Dải màu Hừng đông",
-    "dawnHint": "Chỉ dùng cho nút ghi âm, quầng sáng dải giọng khi đang ghi, logo. Không dùng làm nền, không dùng cho chữ tiêu đề.",
-    "tagsSection": "Nhãn ngữ nghĩa",
-    "tagsHint": "Mỗi nhãn luôn đi kèm biểu tượng và chữ, không bao giờ chỉ dựa vào màu. Ở giao diện tối, nền nhạt của nhãn là chính màu chữ với độ mờ 16%.",
-    "speakersSection": "Màu người nói",
-    "speakersHint": "Sáu màu, gán theo thứ tự xuất hiện. Từ người thứ bảy quay vòng lại, thêm họa tiết gạch chéo. Chỉ dùng cho dải giọng, chấm tròn trước tên, vạch dọc bên trái đoạn lời, không dùng làm màu chữ.",
+    "intro": "Màu, chữ và hình khối của Noteim. Mọi màn hình sau này chỉ được dùng những gì có trên trang này.",
+    "nav": {
+      "label": "Mục lục",
+      "preview": "Xem nhanh",
+      "colors": "Màu",
+      "tags": "Nhãn",
+      "speakers": "Người nói",
+      "type": "Chữ",
+      "shape": "Hình khối",
+      "motion": "Chuyển động"
+    },
+    "preview": {
+      "today": "Hôm nay",
+      "sessionTitle": "Gặp chị Lan, căn 2PN Vinhomes",
+      "duration": "42 phút",
+      "tagPending": "Còn treo",
+      "template": "Gặp khách",
+      "bullet": "Ngân sách tối đa 4,2 tỷ, vay 50%",
+      "bulletTime": "04:30",
+      "aiLabel": "Hỏi AI",
+      "aiAnswer": "Chị Lan định vay 50%, lo lãi suất sau thời gian ưu đãi.",
+      "cite1": "04:30",
+      "cite2": "15:12",
+      "primary": "Gửi biên bản",
+      "secondary": "Hỏi AI",
+      "record": "Ghi âm"
+    },
+    "previewLight": "Giao diện sáng",
+    "previewDark": "Giao diện tối",
+    "previewNote": "Hồng sen là việc bạn làm, tím điện là việc AI làm. Dải Hừng đông chỉ dành cho nút ghi âm.",
+    "colorsTitle": "Màu",
+    "colorsHint": "Mã màu và tỷ lệ tương phản đọc thẳng từ token, theo giao diện đang mở.",
+    "colorsBase": "Nền và chữ",
+    "colorsAction": "Hành động",
+    "dawnTitle": "Dải Hừng đông",
+    "dawnHint": "Chỉ dùng cho nút ghi âm, quầng sáng của dải giọng khi đang ghi, và logo.",
+    "contrastPass": "Tương phản {ratio}",
+    "contrastFail": "Tương phản {ratio}, chưa đạt",
+    "tokens": {
+      "bg": {
+        "name": "Nền trang",
+        "usage": "Sứ ở giao diện sáng, chàm đêm ở giao diện tối"
+      },
+      "surface": {
+        "name": "Mặt nổi",
+        "usage": "Bảng trượt, thanh điều hướng, ô nhập"
+      },
+      "surface2": {
+        "name": "Vùng chìm",
+        "usage": "Nền chip, hàng đang chọn"
+      },
+      "line": {
+        "name": "Đường kẻ",
+        "usage": "Đường kẻ, viền"
+      },
+      "ink": {
+        "name": "Chữ chính",
+        "usage": "Nội dung, tiêu đề"
+      },
+      "ink2": {
+        "name": "Chữ phụ",
+        "usage": "Mô tả, thông tin phụ"
+      },
+      "ink3": {
+        "name": "Chú thích",
+        "usage": "Mốc thời gian, nhãn nhỏ"
+      },
+      "sen": {
+        "name": "Sen",
+        "usage": "Nút chính, ghi âm, việc người dùng làm"
+      },
+      "senText": {
+        "name": "Chữ sen",
+        "usage": "Chữ màu sen trên nền, mốc đang phát"
+      },
+      "dien": {
+        "name": "Điện",
+        "usage": "Mọi thứ do AI tạo ra"
+      },
+      "dienTint": {
+        "name": "Điện nhạt",
+        "usage": "Nền khối nội dung AI"
+      }
+    },
+    "tagsTitle": "Nhãn",
+    "tagsHint": "Luôn có biểu tượng và chữ, không bao giờ chỉ dựa vào màu.",
+    "tags": {
+      "decided": "Đã chốt",
+      "pending": "Còn treo",
+      "risk": "Rủi ro",
+      "idea": "Ý hay",
+      "figure": "Số liệu"
+    },
+    "speakersTitle": "Người nói",
+    "speakersHint": "Gán theo thứ tự xuất hiện. Chỉ dùng cho dải giọng, chấm trước tên và vạch bên trái đoạn lời, không dùng làm màu chữ.",
     "speaker": "Người nói {index}",
-
-    "tokenBg": { "name": "Sứ / Chàm đêm", "usage": "Nền trang" },
-    "tokenSurface": { "name": "Trắng / Chàm", "usage": "Bảng trượt, thanh điều hướng, ô nhập" },
-    "tokenSurface2": { "name": "Vùng chìm", "usage": "Vùng chìm, nền chip, hàng đang chọn" },
-    "tokenLine": { "name": "Đường kẻ", "usage": "Đường kẻ, viền" },
-    "tokenInk": { "name": "Chàm", "usage": "Chữ chính" },
-    "tokenInk2": { "name": "Chữ phụ", "usage": "Chữ phụ" },
-    "tokenInk3": { "name": "Chú thích", "usage": "Chú thích, mốc thời gian" },
-    "tokenPairInkSurface2": "--ink trên --surface-2",
-    "tokenSen": { "name": "Sen", "usage": "Nút chính, ghi âm, liên kết quan trọng" },
-    "tokenSenText": { "name": "Sen chữ", "usage": "Chữ màu sen trên nền" },
-    "tokenOnSen": { "name": "Trên sen", "usage": "Chữ trên nền sen" },
-    "tokenDien": { "name": "Điện", "usage": "Mọi thứ do AI tạo ra: câu trả lời, gợi ý, nút Hỏi AI" },
-    "tokenDienTint": { "name": "Điện nhạt", "usage": "Nền khối nội dung AI" },
-
-    "tagDecided": "Đã chốt",
-    "tagPending": "Còn treo",
-    "tagRisk": "Rủi ro",
-    "tagIdea": "Ý hay",
-    "tagFigure": "Số liệu",
-
-    "typographySection": "Thang chữ",
-    "typographyHint": "Tiêu đề và con số lớn dùng Bricolage Grotesque, mọi thứ còn lại dùng Be Vietnam Pro. Chiều cao dòng không dưới 1,3 lần cỡ chữ để dấu tiếng Việt có chỗ.",
-    "typographyDesktopNote": "Máy tính: display 44/52, h1 30/38, còn lại giữ nguyên.",
-    "fontBricolage": "Bricolage Grotesque",
-    "fontBeVietnam": "Be Vietnam Pro",
-    "inDisplayFont": "bằng {font}",
-    "testStringLabel": "Chuỗi thử dấu tiếng Việt",
-    "testString": "Đặng Thị Quỳnh Ngữ, Nguyễn Hữu Phước: thỏa thuận chuyển nhượng 12,5 tỷ",
-    "typeDisplay": { "desc": "Lời chào, số đồng hồ ghi âm", "weight": "đậm 700" },
-    "typeH1": { "desc": "Tiêu đề buổi ghi", "weight": "đậm 600" },
-    "typeH2": { "desc": "Tiêu đề chủ đề, tiêu đề bảng trượt", "weight": "đậm 600" },
-    "typeBody": { "desc": "Nội dung", "weight": "thường 400" },
-    "typeBodyStrong": { "desc": "Tên người, nhấn mạnh", "weight": "đậm 600" },
-    "typeSmall": { "desc": "Thông tin phụ", "weight": "thường 400" },
-    "typeCaption": { "desc": "Mốc thời gian, nhãn", "weight": "vừa 500" },
-
-    "spacingSection": "Khoảng cách",
-    "spacingHint": "Bội số của 4. Số liệu dưới đây theo pixel.",
-    "spacingMargin": "Lề trang: điện thoại 20, máy tính 32",
-    "spacingUnit": "{value} px",
-
-    "radiusSection": "Bo góc",
-    "radiusHint": "Bo góc theo cấp bậc, không dùng một giá trị cho mọi thứ.",
-    "radiusControl": { "name": "control — 10 px", "usage": "Nút, ô nhập" },
-    "radiusBlock": { "name": "block — 16 px", "usage": "Khối nội dung AI, ảnh, thẻ trích dẫn" },
-    "radiusSheet": { "name": "sheet — 28 px", "usage": "Bảng trượt từ dưới lên, chỉ hai góc trên" },
-    "radiusPill": { "name": "pill — 999 px", "usage": "Chip, nhãn, nút ghi âm" },
-
-    "shadowSection": "Bóng đổ",
-    "shadowHint": "Ưu tiên phân lớp bằng màu nền và đường kẻ. Bóng pha màu chàm chứ không xám. Giao diện tối không dùng bóng, dùng viền.",
-    "shadowFloat": { "name": "float", "usage": "Trình phát nổi và bảng trượt" },
-    "shadowRecord": { "name": "record", "usage": "Chỉ cho nút ghi âm" },
-    "shadowDarkNote": "Ở giao diện tối, hai bóng này tắt đi và thay bằng viền.",
-
-    "motionSection": "Chuyển động",
-    "motionHint": "Chuyển động chỉ để trả lời một thao tác: nhấn, mở, đóng, kéo.",
-    "motionQuick": { "name": "quick — 120 ms", "usage": "Đổi màu khi nhấn, bật tắt" },
-    "motionBase": { "name": "base — 220 ms", "usage": "Mở chip, đổi tab, hiện thông báo" },
-    "motionSheet": { "name": "sheet — 340 ms", "usage": "Bảng trượt, chuyển trang" },
-    "motionScene": { "name": "scene — 700 ms", "usage": "Ba khoảnh khắc đặc trưng" },
-    "motionEase": { "name": "mượt mặc định", "usage": "cubic-bezier(0.2, 0.8, 0.2, 1)" },
-
-    "contrastRatio": "Tương phản {ratio} : 1",
-    "tokenLabel": "Token",
-    "lightLabel": "Sáng",
-    "darkLabel": "Tối",
-    "codeLabel": "Mã màu"
+    "typeTitle": "Chữ",
+    "typeHint": "Tiêu đề lớn dùng Bricolage Grotesque, còn lại dùng Be Vietnam Pro.",
+    "sample": "Đặng Thị Quỳnh Ngữ, Nguyễn Hữu Phước: thỏa thuận chuyển nhượng 12,5 tỷ",
+    "fontDisplay": "Bricolage Grotesque",
+    "fontBody": "Be Vietnam Pro",
+    "typeScale": {
+      "display": {
+        "name": "Display",
+        "use": "Lời chào, đồng hồ ghi âm"
+      },
+      "h1": {
+        "name": "H1",
+        "use": "Tiêu đề buổi ghi"
+      },
+      "h2": {
+        "name": "H2",
+        "use": "Tiêu đề chủ đề, bảng trượt"
+      },
+      "body": {
+        "name": "Body",
+        "use": "Nội dung"
+      },
+      "bodyStrong": {
+        "name": "Body đậm",
+        "use": "Tên người, nhấn mạnh"
+      },
+      "small": {
+        "name": "Small",
+        "use": "Thông tin phụ"
+      },
+      "caption": {
+        "name": "Caption",
+        "use": "Mốc thời gian, nhãn"
+      }
+    },
+    "typeDesktopNote": "Từ 768px trở lên, Display là 44/52 và H1 là 30/38. Các bậc khác giữ nguyên.",
+    "shapeTitle": "Hình khối",
+    "spacingTitle": "Khoảng cách",
+    "spacingHint": "Bội số của 4. Lề trang 20px trên điện thoại, 32px trên máy tính.",
+    "radiusTitle": "Bo góc",
+    "radiusHint": "Bo góc theo cấp bậc: thứ càng lớn, góc càng tròn.",
+    "radius": {
+      "control": {
+        "name": "Nút",
+        "use": "Mọi thứ bấm hoặc gõ được"
+      },
+      "block": {
+        "name": "Khối",
+        "use": "Khối AI, ảnh, thẻ trích dẫn"
+      },
+      "sheet": {
+        "name": "Bảng trượt",
+        "use": "Chỉ bo hai góc trên"
+      },
+      "pill": {
+        "name": "Viên",
+        "use": "Chip, nhãn, nút ghi âm"
+      }
+    },
+    "shadowTitle": "Bóng",
+    "shadowHint": "Chỉ có hai kiểu bóng. Giao diện tối không dùng bóng, dùng viền.",
+    "shadow": {
+      "float": {
+        "name": "Nổi",
+        "use": "Trình phát nổi, bảng trượt"
+      },
+      "record": {
+        "name": "Ghi âm",
+        "use": "Chỉ cho nút ghi âm"
+      }
+    },
+    "motionTitle": "Chuyển động",
+    "motionHint": "Bốn thời lượng, một đường cong. Bật giảm chuyển động thì mọi hiệu ứng gần như tắt.",
+    "motion": {
+      "quick": "Nhấn nút, bật tắt",
+      "base": "Mở chip, đổi tab, hiện thông báo",
+      "sheet": "Bảng trượt, chuyển trang",
+      "scene": "Ba khoảnh khắc đặc trưng"
+    },
+    "motionTry": "Nhấn thử",
+    "motionTryHint": "Khi nhấn, nút thu nhỏ còn 97%."
   }
 }
