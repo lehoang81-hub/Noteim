@@ -14,16 +14,20 @@ const bannerStyle: Record<BannerKind, { icon: LucideIcon; className: string }> =
 /** Dải báo mỏng dưới thanh tiêu đề: mất mạng, sắp hết hạn mức, bản ghi sắp bị xóa. */
 export function Banner({
   kind,
+  icon,
   children,
   action,
   className,
 }: {
   kind: BannerKind;
+  /** Đổi biểu tượng mặc định của loại dải báo */
+  icon?: LucideIcon;
   children: React.ReactNode;
   action?: React.ReactNode;
   className?: string;
 }) {
-  const { icon: Icon, className: tone } = bannerStyle[kind];
+  const { icon: DefaultIcon, className: tone } = bannerStyle[kind];
+  const Icon = icon ?? DefaultIcon;
   return (
     <div role="status" className={cn("flex items-center gap-2.5 px-page py-2.5 text-small", tone, className)}>
       <Icon aria-hidden={true} className="size-4 shrink-0" strokeWidth={2} />

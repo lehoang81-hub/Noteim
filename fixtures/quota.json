@@ -1,0 +1,7 @@
+{
+  "period_end": "2026-11-30T23:59:59+07:00",
+  "minutes_used": 124,
+  "minutes_limit": 180,
+  "max_session_minutes": 45,
+  "chat_questions_per_session": 10
+}

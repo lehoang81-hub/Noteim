@@ -1,0 +1,105 @@
+"use client";
+
+import { Mail, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { TaskRow } from "@/components/session/task-row";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/feedback";
+import { formatClock } from "@/components/ribbon/draw";
+import type { ActionItem, Contact } from "@/lib/data";
+import { endOfDay, shortDate } from "@/lib/format";
+
+/*
+ * Tab Việc cần làm (docs/03-screens.md mục 5b).
+ * Chạm ô tròn để đánh dấu xong, có thông báo kèm "Hoàn tác".
+ * Việc chưa có người phụ trách hiện "Chưa giao", không tự đoán.
+ */
+export function TasksTab({
+  items,
+  contacts,
+  now,
+  canSeek,
+  onSeek,
+  onToggle,
+  onAdd,
+  onEmail,
+}: {
+  items: ActionItem[];
+  contacts: Contact[];
+  now: Date;
+  canSeek: boolean;
+  onSeek: (time: number) => void;
+  onToggle: (item: ActionItem) => void;
+  onAdd: () => void;
+  onEmail: () => void;
+}) {
+  const t = useTranslations("session");
+  const nameOf = Object.fromEntries(contacts.map((c) => [c.id, c.id === "c-me" ? c.role ?? c.name : c.name]));
+  const isOverdue = (a: ActionItem) => !a.done && !!a.due_date && endOfDay(a.due_date) < now;
+  const overdue = items.filter(isOverdue).length;
+
+  // Chưa xong lên trước, quá hạn lên đầu
+  const sorted = [...items].sort((a, b) => Number(a.done) - Number(b.done) || Number(isOverdue(b)) - Number(isOverdue(a)));
+
+  return (
+    <div className="max-w-[68ch]">
+      {items.length === 0 ? (
+        <EmptyState
+          drawing={<span />}
+          message={t("noTasks")}
+          action={
+            <Button icon={Plus} onClick={onAdd}>
+              {t("addTask")}
+            </Button>
+          }
+        />
+      ) : (
+        <>
+          <p className="text-small font-medium text-ink-2">
+            {t("tasksSummary", { total: items.length })}
+            {overdue ? t("tasksOverdue", { count: overdue }) : ""}
+          </p>
+          <div className="mt-1">
+            {sorted.map((a) => {
+              const od = isOverdue(a);
+              return (
+                <TaskRow
+                  key={a.id}
+                  task={a.task}
+                  done={a.done}
+                  onToggle={() => onToggle(a)}
+                  toggleLabel={t("toggle")}
+                  assignee={a.assignee_contact_id ? nameOf[a.assignee_contact_id] : undefined}
+                  unassignedLabel={t("unassigned")}
+                  due={
+                    a.done && a.done_at
+                      ? t("doneOn", { date: shortDate(a.done_at) })
+                      : a.due_date
+                        ? od
+                          ? t("overdueOn", { date: shortDate(endOfDay(a.due_date)) })
+                          : t("due", { date: shortDate(endOfDay(a.due_date)) })
+                        : undefined
+                  }
+                  overdue={od}
+                  priority={!a.done && a.priority !== "medium" ? t(`pr.${a.priority}`) : undefined}
+                  quote={a.source_quote ? `"${a.source_quote}"` : undefined}
+                  time={a.timestamp_sec !== null ? formatClock(a.timestamp_sec) : undefined}
+                  seekLabel={t("seek")}
+                  onSeek={canSeek && a.timestamp_sec !== null ? () => onSeek(a.timestamp_sec!) : undefined}
+                />
+              );
+            })}
+          </div>
+          <div className="mt-5 flex flex-wrap gap-2">
+            <Button icon={Plus} onClick={onAdd}>
+              {t("addTask")}
+            </Button>
+            <Button icon={Mail} onClick={onEmail}>
+              {t("emailTasks")}
+            </Button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

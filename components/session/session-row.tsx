@@ -1,6 +1,7 @@
 "use client";
 
 import { CloudOff, LoaderCircle, TriangleAlert } from "lucide-react";
+import Link from "next/link";
 import { RibbonThumb } from "@/components/ribbon/ribbon-thumb";
 import { TagChip, type SemanticTag } from "@/components/ui/chips";
 import { cn } from "@/lib/cn";
@@ -28,6 +29,8 @@ export interface SessionRowProps {
   tag?: { tag: SemanticTag; label: string };
   /** Nút hành động khi lỗi, ví dụ "Thử lại" */
   action?: React.ReactNode;
+  /** Đang mở ở cột bên phải (máy tính) */
+  selected?: boolean;
   className?: string;
 }
 
@@ -42,18 +45,20 @@ export function SessionRow({
   statusText,
   tag,
   action,
+  selected,
   className,
 }: SessionRowProps) {
   const muted = status === "processing" || status === "essence" || status === "unsynced";
 
   return (
-    <div className={cn("relative border-b border-line py-3.5", className)}>
-      <a
+    <div className={cn("relative border-b border-line py-3.5", selected && "bg-surface-2", className)}>
+      <Link
         href={href}
+        aria-current={selected ? "page" : undefined}
         className="block rounded-control text-body-strong font-semibold text-ink after:absolute after:inset-0 after:content-['']"
       >
         {title}
-      </a>
+      </Link>
       <div className="mt-1.5 flex items-center gap-3">
         <RibbonThumb peaks={peaks} speakers={speakers} muted={muted} />
         <span className="text-small tabular-nums text-ink-3">{duration}</span>

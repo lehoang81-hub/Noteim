@@ -69,3 +69,15 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 - Hiệu năng: đo 180 khung hình ở 390px, mật độ 3x, CPU giả lập chậm gấp 4: trung vị 16,7ms, không khung nào quá 33ms. Bài học: quầng sáng dùng `blur`, nếu đổi độ mờ mỗi khung hình sẽ tụt khung; giờ chỉ đổi khi âm lượng chênh đáng kể, có CSS transition.
 - Đã kiểm: 390px và 1280px, sáng và tối, không tràn ngang, không lỗi console; tua bằng kéo, chạm, mũi tên; phát, tốc độ; micro thật (trình duyệt giả lập thiết bị); giảm chuyển động không lỗi hydrate.
 - Lưu ý kiểm thử tự động: trang bật cuộn mượt, `scrollIntoView` cần `behavior: "instant"` trước khi đo vị trí.
+
+## 2026-11-14, Claude, M1 thư viện và đọc buổi ghi
+
+- Hoang duyệt M0 và giao Claude làm tiếp M1. Bốn issue #12 đến #15, một PR chung, chờ Hoang duyệt vì là cuối mốc.
+- **Lớp dữ liệu** `lib/data/`: `types.ts` (Zod), `repository.ts`, `mock/` (kho trong bộ nhớ, lưu localStorage khóa `noteim-mock-db-v1`, trễ 300 đến 800ms), `index.ts` (nơi duy nhất chọn nguồn, hook `useData`, `dataNow`, `resetData`). Màn hình tự tải lại khi dữ liệu hoặc cờ thử nghiệm đổi.
+- **Fixture** `fixtures/`: 8 buổi ghi tiếng Việt (2 đầy đủ: gặp khách BĐS, họp điều hành; còn lại đủ các trạng thái: đang xử lý, lỗi, chưa tải lên, chỉ còn tóm tắt), 6 mẫu theo nghề, 10 liên hệ, 12 thuật ngữ. `node scripts/gen-peaks.mjs` sinh lại dải giọng và nhãn nổi bật.
+- **Bảng thử nghiệm** `?debug=1`: mất mạng, tải chậm 3 giây, lỗi khi tải, hết hạn mức, thư viện rỗng, đổi nghề, đổi gói, đặt lại dữ liệu mẫu. `?debug=0` để tắt.
+- **Khung ứng dụng** `components/shell/`: thanh dưới (Thư viện, nút ghi âm, Việc) trên điện thoại, cột trái 88px trên máy tính, dải báo mất mạng. `/record`, `/tasks`, `/search`, `/settings` đang là trang giữ chỗ.
+- **Thư viện** `components/library/`: lời chào, số liệu tuần, dải hạn mức, chip lọc (tất cả, tuần này, có việc treo, theo mẫu), nhóm theo ngày, đủ trạng thái hàng; máy tính chia hai cột, hàng đang mở được tô.
+- **Chi tiết buổi ghi** `components/session/detail/`: sửa tên tại chỗ, người nói, dải báo người nói chưa đặt tên, bản gốc sắp xóa, chỉ còn tóm tắt; tab qua `?tab=`; Tóm tắt theo mẫu của nghề, ghi chú tay, biểu đồ số liệu nhỏ; Việc cần làm với hoàn tác; trình phát nổi; chạm ý để tua và ý đang phát được tô.
+- Đã kiểm: 390px và 1280px, sáng và tối, không tràn ngang, không lỗi console. Chạm ý "Ngân sách tối đa 4,2 tỷ" thì trình phát nhảy tới 07:30 và ý được tô. Đánh dấu việc xong rồi tải lại vẫn còn. Mọi trạng thái trong bảng thử nghiệm hiện đúng. Mất mạng thì ghi lỗi có thông báo và trả lại trạng thái cũ.
+- Lưu ý cho người sau: `next.config.ts` đã tắt `cacheComponents` (xem DECISIONS). Ngày "bây giờ" của mockup lấy từ `dataNow()`, đừng dùng `new Date()` để nhóm hay so hạn.

@@ -244,6 +244,7 @@ interface SessionRepository {
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
   subscribeProcessing(id: string, onStep: (step: number) => void): () => void;
+  retryProcessing(id: string): Promise<void>;                 // thêm ở M1: nút "Thử lại" khi xử lý lỗi
   purgeRaw(ids: string[]): Promise<{ freed_bytes: number }>;
   remove(id: string): Promise<void>;
 }
