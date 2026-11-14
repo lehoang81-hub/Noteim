@@ -15,7 +15,7 @@ import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
-import { dayDiff, durationParts, weekdayDate } from "@/lib/format";
+import { dayDiff, durationParts, shortDate, weekdayDate } from "@/lib/format";
 import {
   discardRecording,
   recordedSec,
@@ -185,7 +185,13 @@ export function LibraryPane({ className }: { className?: string }) {
       ) : null}
 
       {q && quotaLeft <= 0 ? (
-        <Banner kind="quota">{t("quotaOut", { limit: q.minutes_limit, date: "1/12" })}</Banner>
+        <Banner kind="quota">
+          {/* Ngày hạn mức mới tính từ period_end như màn hình ghi, không viết cứng (PR #22, lỗi 4) */}
+          {t("quotaOut", {
+            limit: q.minutes_limit,
+            date: shortDate(new Date(Date.parse(q.period_end) + 86400_000)),
+          })}
+        </Banner>
       ) : q && q.minutes_used / q.minutes_limit >= 0.8 ? (
         <Banner kind="quota">{t("quotaLow", { minutes: quotaLeft })}</Banner>
       ) : null}
