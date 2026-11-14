@@ -1,0 +1,47 @@
+{
+  "executive_summary": "Họp hiện trường thống nhất phương án điều chỉnh cầu thang và vật liệu hoàn thiện, ghi nhận các hạng mục tồn và phân việc rõ cho bên thiết kế với bên thi công.",
+  "sections": {
+    "tpl-architect-s1": {
+      "tag": "decided",
+      "title": "Yêu cầu thay đổi",
+      "bullets": [
+        "Đổi cầu thang sang 17 cấp, mở rộng bậc đón",
+        "Dịch tường bếp 20cm để chừa chỗ tủ lạnh hai cánh"
+      ]
+    },
+    "tpl-architect-s2": {
+      "tag": "figure",
+      "title": "Số đo và vật liệu",
+      "bullets": [
+        "Chiều cao thông tầng 3,9m, đáy sàn tầng 2 là 3,45m",
+        "Đá bàn bếp chọn humano trắng, gạch 60x120 cho hai phòng ngủ"
+      ]
+    },
+    "tpl-architect-s3": {
+      "tag": "risk",
+      "title": "Hạng mục tồn",
+      "bullets": [
+        "Chống thấm ban công chưa nghiệm thu lần hai",
+        "Điện âm phòng ngủ tầng 2 còn thiếu 4 điểm"
+      ]
+    },
+    "tpl-architect-s4": {
+      "tag": "pending",
+      "title": "Việc theo từng bên",
+      "bullets": [
+        "Thiết kế xuất lại bản vẽ cầu thang trong 3 ngày",
+        "Thi công chốt nhân lực hoàn thiện tuần tới"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task": "Xuất bản vẽ điều chỉnh cầu thang cho bên thi công",
+      "priority": "high"
+    },
+    {
+      "task": "Kiểm tra lại hạng mục chống thấm ban công",
+      "priority": "medium"
+    }
+  ]
+}

@@ -228,6 +228,12 @@ export function pushRecordingLevel(level: number) {
   emit();
 }
 
+/** Đọc dữ liệu buổi ghi đang diễn ra mà không kết thúc (dùng khi kết thúc ghi). */
+export function snapshotRecording(): RecordingSnapshot & { duration_sec: number } {
+  load();
+  return { ...state, duration_sec: Math.round(recordedSec()) };
+}
+
 /** Dữ liệu đưa vào data.sessions.createFromRecording khi kết thúc (M2-03). */
 export function endRecording(): RecordingSnapshot & { duration_sec: number } {
   load();

@@ -1,0 +1,63 @@
+{
+  "executive_summary": "Khách cần căn 2 phòng ngủ cho gia đình bốn người, ngân sách quanh 4 tỷ, quan tâm hai căn tại dự án đang mở bán; thống nhất lịch xem nhà cuối tuần và việc chuẩn bị bảng tính vay.",
+  "sections": {
+    "tpl-realestate-s1": {
+      "tag": "decided",
+      "title": "Nhu cầu của khách",
+      "bullets": [
+        "Cần căn 2 phòng ngủ, ưu tiên gần trường cấp 1",
+        "Thích tầng trung, view không bị che"
+      ]
+    },
+    "tpl-realestate-s2": {
+      "tag": "figure",
+      "title": "Ngân sách và vay",
+      "bullets": [
+        "Ngân sách tối đa 4 tỷ, dự kiến vay 50%",
+        "Lãi suất ưu đãi 2 năm đầu là yếu tố quyết định"
+      ]
+    },
+    "tpl-realestate-s3": {
+      "tag": "risk",
+      "title": "Băn khoăn của khách",
+      "bullets": [
+        "Lo phí quản lý tăng sau 2 năm",
+        "So với dự án bên cạnh, giá vẫn chênh khoảng 200 triệu"
+      ]
+    },
+    "tpl-realestate-s4": {
+      "tag": "decided",
+      "title": "Căn đang quan tâm",
+      "bullets": [
+        "Căn 08.05 hướng Đông Nam, giá 3,9 tỷ",
+        "Căn 10.02 góc hai mặt tiền, giá 4,2 tỷ"
+      ]
+    },
+    "tpl-realestate-s5": {
+      "tag": "pending",
+      "title": "Cam kết hai bên",
+      "bullets": [
+        "Bên bán giữ căn đến hết tuần",
+        "Khách phản hồi lựa chọn sau khi xem nhà mẫu"
+      ]
+    },
+    "tpl-realestate-s6": {
+      "tag": "pending",
+      "title": "Bước tiếp theo",
+      "bullets": [
+        "Hẹn khách xem nhà mẫu 9 giờ sáng thứ Bảy",
+        "Gửi bảng tính vay cho hai phương án trước tối thứ Sáu"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task": "Gửi bảng tính vay hai phương án cho khách",
+      "priority": "high"
+    },
+    {
+      "task": "Xác nhận lịch xem nhà mẫu thứ Bảy",
+      "priority": "medium"
+    }
+  ]
+}

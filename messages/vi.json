@@ -493,7 +493,10 @@
     "minimize": "Thu nhỏ màn hình ghi",
     "miniRecording": "Đang ghi",
     "miniPaused": "Đang tạm dừng",
-    "silenceHint": "Im lặng đã 1 phút. Tạm dừng?"
+    "silenceHint": "Im lặng đã 1 phút. Tạm dừng?",
+    "endError": "Chưa lưu được buổi ghi. Thử lại.",
+    "foldToday": "Hôm nay",
+    "foldProcessing": "Đang tóm tắt"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -551,7 +554,15 @@
     "retrying": "Đang tóm tắt lại",
     "pickOne": "Chọn một buổi ghi để xem tóm tắt.",
     "minutes": "{m} phút",
-    "hours": "{h} giờ {m}"
+    "hours": "{h} giờ {m}",
+    "unfinished": "Buổi ghi lúc {time} chưa lưu xong ({duration}).",
+    "restore": "Khôi phục",
+    "discard": "Bỏ",
+    "discardTitle": "Bỏ buổi ghi dang dở?",
+    "discardBody": "Sẽ xóa ghi chú, điểm nóng, ảnh và thời gian đã ghi của buổi này. Không khôi phục được.",
+    "discardConfirm": "Bỏ buổi ghi",
+    "discardDone": "Đã bỏ buổi ghi dang dở",
+    "cancel": "Hủy"
   },
   "session": {
     "back": "Về thư viện",
@@ -607,5 +618,21 @@
     "failedReason": "Lý do: {reason}",
     "unsynced": "Buổi ghi đang chờ mạng để tải lên. Bản ghi âm vẫn nằm an toàn trên máy này.",
     "soonTab": "Tab này có ở bước tiếp theo của bản mockup."
+  },
+  "processing": {
+    "step1": "Đã lưu bản ghi âm",
+    "step2": "Đã lọc khoảng lặng",
+    "step3": "Đang nhận ra người nói",
+    "step4": "Tóm tắt theo mẫu",
+    "step5": "Tìm việc cần làm",
+    "whileWaiting": "Trong lúc chờ",
+    "participants": "Ai đã tham gia?",
+    "addParticipant": "Thêm",
+    "pickParticipants": "Chọn người tham gia",
+    "pickHint": "Chọn từ danh bạ của Noteim.",
+    "safeToLeave": "Bạn có thể rời màn hình này. Noteim sẽ báo khi xong.",
+    "doneToast": "Đã tóm tắt xong: {title}",
+    "view": "Xem",
+    "ribbonLabel": "Dải giọng buổi ghi đang xử lý"
   }
 }

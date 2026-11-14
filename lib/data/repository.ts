@@ -32,6 +32,10 @@ export type RecordingDraft = {
   duration_sec: number;
   notes: { timestamp_sec: number; text: string }[];
   bookmarks: { timestamp_sec: number; tag: string | null }[];
+  photos: { timestamp_sec: number; url: string }[];
+  /** Âm lượng lấy mẫu 4 giá trị mỗi giây, để dựng lại dải giọng */
+  levels: number[];
+  consent?: { confirmed: boolean; announced: boolean };
 };
 
 export interface SessionRepository {
@@ -39,7 +43,10 @@ export interface SessionRepository {
   get(id: string): Promise<SessionDetail>;
   getTranscript(id: string): Promise<TranscriptSegment[]>;
   getVisuals(id: string): Promise<VisualArtifacts>;
-  update(id: string, patch: Partial<Pick<Session, "title" | "template_id">>): Promise<void>;
+  update(
+    id: string,
+    patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids">>,
+  ): Promise<void>;
   updateBullet(sessionId: string, bulletId: string, text: string): Promise<void>;
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;

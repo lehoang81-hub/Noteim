@@ -2,16 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Camera, ChevronDown, Mic } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { RibbonLive } from "@/components/ribbon/ribbon-live";
-import { formatClock } from "@/components/ribbon/draw";
+import { RibbonThumb } from "@/components/ribbon/ribbon-thumb";
+import { formatClock, resample } from "@/components/ribbon/draw";
 import { BookmarkButton } from "@/components/record/bookmark-button";
 import { HoldToEndButton } from "@/components/record/hold-to-end-button";
 import { RecordFeed } from "@/components/record/record-feed";
 import { ConsentSheet, MicPermissionSheet, TemplateSheet } from "@/components/record/sheets";
 import { RecordButton } from "@/components/ui/record-button";
+import { useToast } from "@/components/ui/toast";
 import { useMicLevel } from "@/lib/audio/use-mic-level";
 import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
@@ -27,6 +29,7 @@ import {
   recordedSec,
   resumeRecording,
   setRecordingTemplate,
+  snapshotRecording,
   startRecording,
   useRecording,
 } from "@/lib/record/recording-store";
@@ -55,6 +58,12 @@ const SILENCE_LEVEL = 0.07;
 
 type Gate = "boot" | "permission" | "consent";
 
+/** "14:05" theo đồng hồ máy, để đặt tên "Buổi ghi lúc 14:05". */
+function clockTime(epochMs: number): string {
+  const d = new Date(epochMs);
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
 /** Đồng hồ ghi âm, tự chạy mỗi 250ms. Tạm dừng thì nhấp nháy chậm. */
 function RecordClock({ paused }: { paused: boolean }) {
   const [sec, setSec] = useState(0);
@@ -78,6 +87,7 @@ export function RecordScreen() {
   const t = useTranslations("record");
   const tl = useTranslations("styleguide.tags");
   const router = useRouter();
+  const toast = useToast();
   const recording = useRecording();
   const mic = useMicLevel();
   const me = useData(() => data.account.me(), []);
@@ -87,6 +97,7 @@ export function RecordScreen() {
   /** Bảng đang chờ trước khi ghi; null là không chờ gì (đang ghi hoặc đã xong luồng). */
   const [gate, setGate] = useState<Gate | null>("boot");
   const [momentOn, setMomentOn] = useState(false);
+  const [folding, setFolding] = useState(false);
   const [showAnnounce, setShowAnnounce] = useState(false);
   const [templateSheet, setTemplateSheet] = useState(false);
   const [ripple, setRipple] = useState(0);
@@ -223,12 +234,49 @@ export function RecordScreen() {
     else if (recording.status === "paused") resumeRecording();
   }
 
-  // Ở issue này kết thúc chỉ cần dừng và về thư viện (M2-03 tạo buổi ghi)
-  function handleEnd() {
-    mic.stop();
-    letScreenSleep();
-    endRecording();
-    router.push("/");
+  /* Kết thúc ghi (M2-03): tạo buổi ghi, dải giọng gấp thành thẻ rồi sang màn
+   * hình xử lý. Tạo thất bại thì giữ nguyên buổi ghi để không mất dữ liệu. */
+  const ending = useRef(false);
+
+  async function finishRecording() {
+    if (ending.current || folding) return;
+    ending.current = true;
+    const snapshot = snapshotRecording();
+    if (snapshot.status === "idle") {
+      ending.current = false;
+      return;
+    }
+    const templateId = snapshot.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id;
+    if (!templateId) {
+      ending.current = false;
+      toast.show({ tone: "error", message: t("endError") });
+      return;
+    }
+    const title = `Buổi ghi lúc ${clockTime(snapshot.startedAtClock ?? Date.now())}`;
+    setFolding(true); // khoảnh khắc "Kết thúc ghi": dải giọng gấp thành thẻ
+    try {
+      const [created] = await Promise.all([
+        data.sessions.createFromRecording({
+          title,
+          template_id: templateId,
+          duration_sec: snapshot.duration_sec,
+          notes: snapshot.notes.map(({ timestamp_sec, text }) => ({ timestamp_sec, text })),
+          bookmarks: snapshot.bookmarks.map(({ timestamp_sec, tag }) => ({ timestamp_sec, tag })),
+          photos: snapshot.photos.map(({ timestamp_sec, url }) => ({ timestamp_sec, url })),
+          levels: snapshot.levels,
+          consent: snapshot.consent,
+        }),
+        new Promise((r) => window.setTimeout(r, reduce ? 220 : 900)),
+      ]);
+      mic.stop();
+      letScreenSleep();
+      endRecording();
+      router.push(`/s/${created.id}/processing`);
+    } catch {
+      setFolding(false);
+      ending.current = false;
+      toast.show({ tone: "error", message: t("endError") });
+    }
   }
 
   function bookmarkFeedback() {
@@ -252,7 +300,12 @@ export function RecordScreen() {
   }
 
   const showMoment = active && momentOn;
-  const showControls = active && !momentOn;
+  const showControls = active && !momentOn && !folding;
+
+  /* Thẻ buổi ghi trong khoảnh khắc "Kết thúc ghi" */
+  const foldPeaks = resample(recording.levels.length ? recording.levels : [0.4], 40);
+  const foldSpeakers = Array.from({ length: 40 }, () => 0);
+  const foldTitle = recording.startedAtClock ? `Buổi ghi lúc ${clockTime(recording.startedAtClock)}` : "";
 
   return (
     <div className="dark flex min-h-dvh flex-col bg-bg text-ink">
@@ -311,46 +364,74 @@ export function RecordScreen() {
           </p>
         ) : null}
 
-        {/* Dải giọng sống; khoảnh khắc bắt đầu ghi nở thành chính dải này */}
-        <div className="relative flex w-full flex-1 items-center justify-center py-6">
-          {showMoment ? (
-            <motion.div
-              className="relative flex items-center justify-center overflow-hidden"
-              style={{ background: "var(--gradient-dawn)" }}
-              initial={{ width: 72, height: 72, borderRadius: 999, opacity: 1 }}
-              animate={{ width: "100%", height: 160, borderRadius: 16, opacity: reduce ? 0 : 1 }}
-              transition={reduce ? FADE : SCENE}
-            >
-              <motion.span
-                initial={{ opacity: 1 }}
-                animate={{ opacity: 0 }}
-                transition={{ duration: 0.25 }}
-                className="text-on-dawn"
+        {/* Dải giọng sống; khoảnh khắc bắt đầu ghi nở thành chính dải này;
+            kết thúc ghi thì gấp lại thành thẻ buổi ghi (M2-03) */}
+        <LayoutGroup id="record-ribbon">
+          <div className="relative flex w-full flex-1 items-center justify-center py-6">
+            {showMoment ? (
+              <motion.div
+                className="relative flex items-center justify-center overflow-hidden"
+                style={{ background: "var(--gradient-dawn)" }}
+                initial={{ width: 72, height: 72, borderRadius: 999, opacity: 1 }}
+                animate={{ width: "100%", height: 160, borderRadius: 16, opacity: reduce ? 0 : 1 }}
+                transition={reduce ? FADE : SCENE}
               >
-                <Mic aria-hidden={true} className="size-8" strokeWidth={1.75} />
-              </motion.span>
-            </motion.div>
-          ) : (
-            <motion.div className="w-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={FADE}>
-              <RibbonLive level={mic.level} paused={paused} height={160} />
-            </motion.div>
-          )}
-          {/* Gợn sóng khi tạo điểm nóng: tại vị trí hiện tại của dải giọng */}
-          <AnimatePresence>
-            {ripple > 0 ? (
-              <motion.span
-                key={ripple}
-                aria-hidden={true}
-                className="pointer-events-none absolute right-3 top-1/2 size-10 -translate-y-1/2 rounded-pill border-2 border-on-dawn"
-                initial={{ scale: 0.3, opacity: 0.7 }}
-                animate={{ scale: 1.9, opacity: 0 }}
-                exit={{ opacity: 0 }}
-                transition={reduce ? FADE : { duration: 0.6, ease: EASE }}
-                onAnimationComplete={() => setRipple(0)}
-              />
-            ) : null}
-          </AnimatePresence>
-        </div>
+                <motion.span
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="text-on-dawn"
+                >
+                  <Mic aria-hidden={true} className="size-8" strokeWidth={1.75} />
+                </motion.span>
+              </motion.div>
+            ) : folding ? (
+              <motion.div
+                className="w-full"
+                initial={reduce ? { opacity: 0 } : false}
+                animate={{ opacity: 1 }}
+                transition={FADE}
+              >
+                <div className="mx-auto w-full max-w-sm">
+                  <p className="text-caption font-medium text-ink-3">{t("foldToday")}</p>
+                  <motion.div layoutId="record-ribbon-box" transition={reduce ? FADE : SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
+                    <RibbonThumb peaks={foldPeaks} speakers={foldSpeakers} muted />
+                  </motion.div>
+                  <div className="mt-1.5 flex items-baseline justify-between gap-3">
+                    <p className="min-w-0 truncate text-body-strong font-semibold text-ink">{foldTitle}</p>
+                    <span className="shrink-0 text-small tabular-nums text-ink-3">{t("foldProcessing")}</span>
+                  </div>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                layoutId="record-ribbon-box"
+                transition={reduce ? FADE : SCENE}
+                className="w-full overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                style={{ borderRadius: 16 }}
+              >
+                <RibbonLive level={mic.level} paused={paused} height={160} />
+              </motion.div>
+            )}
+            {/* Gợn sóng khi tạo điểm nóng: tại vị trí hiện tại của dải giọng */}
+            <AnimatePresence>
+              {ripple > 0 ? (
+                <motion.span
+                  key={ripple}
+                  aria-hidden={true}
+                  className="pointer-events-none absolute right-3 top-1/2 size-10 -translate-y-1/2 rounded-pill border-2 border-on-dawn"
+                  initial={{ scale: 0.3, opacity: 0.7 }}
+                  animate={{ scale: 1.9, opacity: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={reduce ? FADE : { duration: 0.6, ease: EASE }}
+                  onAnimationComplete={() => setRipple(0)}
+                />
+              ) : null}
+            </AnimatePresence>
+          </div>
+        </LayoutGroup>
 
         {/* Gợi ý im lặng (M2-02) */}
         <div className="flex min-h-10 w-full items-center justify-center">
@@ -403,7 +484,7 @@ export function RecordScreen() {
         </div>
 
         <div className={cn("w-full max-w-sm pb-[max(24px,env(safe-area-inset-bottom))] pt-2", !showControls && "invisible")}>
-          {showControls ? <HoldToEndButton label={t("end")} onHold={handleEnd} className="w-full" /> : null}
+          {showControls ? <HoldToEndButton label={t("end")} onHold={finishRecording} className="w-full" /> : null}
         </div>
       </main>
 

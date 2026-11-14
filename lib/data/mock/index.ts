@@ -4,6 +4,7 @@ import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, SessionFilter } from "../repository";
 import { DataError, Session as SessionSchema, type ActionItem, type Session, type SessionDetail, type SessionFixture } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
+import { buildSessionContent } from "./generate";
 
 /*
  * Bản giả của lớp dữ liệu (docs/04-data-contract.md).
@@ -70,7 +71,97 @@ function matches(d: SessionDetail, f: SessionFilter | undefined): boolean {
   return true;
 }
 
+/*
+ * Xử lý buổi ghi: bộ đếm chạy độc lập với người nghe, nên rời màn hình giữa
+ * chừng xử lý vẫn chạy; tải lại trang thì chạy tiếp từ bước đang dở (resume).
+ * subscribeProcessing chỉ để màn hình xử lý nghe bước hiện tại.
+ */
+
 const processingTimers = new Map<string, number>();
+const processingListeners = new Map<string, Set<(step: number) => void>>();
+const PROCESS_STEP_MS = 1600;
+
+function notifyProcessing(id: string, step: number) {
+  processingListeners.get(id)?.forEach((fn) => fn(step));
+}
+
+function completeProcessing(id: string) {
+  const db = getDb();
+  const fx = db.sessions.find((s) => s.detail.id === id);
+  processingTimers.delete(id);
+  if (!fx || fx.detail.status !== "processing") return;
+  const draft = fx.draft;
+  if (draft) {
+    const template = db.templates.find((t) => t.id === draft.template_id);
+    const content = buildSessionContent({ sessionId: id, draft, template, createdAt: fx.detail.created_at });
+    Object.assign(fx.detail, content);
+    fx.detail.status = "ready";
+    delete fx.detail.processing_step;
+    delete fx.detail.failure_reason;
+    delete fx.draft;
+    // Gói Free: bản gốc tự xóa sau 7 ngày; Pro giữ đến khi tự dọn
+    const plan = getFlags().plan ?? db.user.plan;
+    fx.detail.audio_expires_at =
+      plan === "free" ? new Date(Date.parse(fx.detail.created_at) + 7 * 86400_000).toISOString() : null;
+    refreshCounts(fx.detail);
+  } else {
+    // Không có bản nháp (buổi ghi mẫu): chỉ đánh dấu đã xử lý xong
+    fx.detail.status = "ready";
+    delete fx.detail.processing_step;
+    refreshCounts(fx.detail);
+  }
+  commit();
+  notifyProcessing(id, 6);
+}
+
+function advanceProcessing(id: string) {
+  const fx = getDb().sessions.find((s) => s.detail.id === id);
+  if (!fx || fx.detail.status !== "processing") {
+    processingTimers.delete(id);
+    return;
+  }
+  const step = (fx.detail.processing_step ?? 1) + 1;
+  if (step > 5) {
+    completeProcessing(id);
+    return;
+  }
+  fx.detail.processing_step = step as 1 | 2 | 3 | 4 | 5;
+  commit();
+  notifyProcessing(id, step);
+  processingTimers.set(id, window.setTimeout(() => advanceProcessing(id), PROCESS_STEP_MS));
+}
+
+/** Chạy xử lý từ trạng thái hiện tại; gọi khi tạo buổi ghi và khi tải lại trang. */
+function scheduleProcessing(id: string) {
+  window.clearTimeout(processingTimers.get(id));
+  processingTimers.set(id, window.setTimeout(() => advanceProcessing(id), PROCESS_STEP_MS));
+}
+
+/** Gom mảng âm lượng về 40 cột cho hàng thư viện (giống resample trong draw.ts). */
+function resampleThumb(levels: number[]): number[] {
+  const out: number[] = [];
+  for (let i = 0; i < 40; i++) {
+    const from = Math.floor((i * levels.length) / 40);
+    const to = Math.max(from + 1, Math.floor(((i + 1) * levels.length) / 40));
+    let max = 0;
+    for (let j = from; j < to; j++) max = Math.max(max, levels[j] ?? 0);
+    out.push(Math.round(max * 100) / 100);
+  }
+  return out;
+}
+
+/** Buổi ghi mới đang xử lý dở: chạy tiếp sau khi tải lại trang. */
+if (typeof window !== "undefined") {
+  const resume = () => {
+    for (const s of getDb().sessions) {
+      if (s.detail.status === "processing" && s.detail.id.startsWith("s-new-") && !processingTimers.has(s.detail.id)) {
+        scheduleProcessing(s.detail.id);
+      }
+    }
+  };
+  // Chạy sau khung vẽ đầu để localStorage đã sẵn sàng
+  window.setTimeout(resume, 0);
+}
 
 export const mockSource: DataSource = {
   sessions: {
@@ -132,6 +223,12 @@ export const mockSource: DataSource = {
         const db = getDb();
         const id = `s-new-${Date.now()}`;
         const now = new Date().toISOString();
+        // Dải giọng hàng thư viện hình thành theo âm lượng đã ghi ngay từ lúc
+        // tạo, không đợi xử lý xong
+        const thumb =
+          draft.levels.length >= 6
+            ? resampleThumb(draft.levels)
+            : Array.from({ length: 40 }, (_, i) => 0.3 + 0.5 * Math.abs(Math.sin(i / 5)));
         const detail: SessionDetail = {
           id,
           user_id: db.user.id,
@@ -147,45 +244,41 @@ export const mockSource: DataSource = {
           size_bytes: draft.duration_sec * 3000,
           created_at: now,
           audio_expires_at: null,
-          consent: { confirmed: true, announced: false },
+          consent: draft.consent ?? { confirmed: true, announced: false },
           participant_contact_ids: [],
-          peaks_thumb: Array.from({ length: 40 }, () => 0.3 + Math.random() * 0.6),
+          peaks_thumb: thumb,
           speaker_colors_thumb: Array.from({ length: 40 }, () => 0),
           open_task_count: 0,
           executive_summary: "",
           speakers: [],
           topics: [],
           action_items: [],
-          notes: draft.notes.map((n, i) => ({ id: `n${i}`, ...n })),
-          bookmarks: [],
-          photos: [],
+          notes: draft.notes.map((n, i) => ({ id: `n-${i}`, timestamp_sec: n.timestamp_sec, text: n.text })),
+          bookmarks: draft.bookmarks.map((b, i) => ({ id: `m-${i}`, timestamp_sec: b.timestamp_sec, tag: (b.tag as SessionDetail["bookmarks"][number]["tag"]) ?? null })),
+          photos: draft.photos.map((p, i) => ({ id: `ph-${i}`, timestamp_sec: p.timestamp_sec, url: p.url })),
           peaks: [],
           speaker_spans: [],
           send_history: [],
         };
-        db.sessions.unshift({ detail, transcript: [], chat: [] });
+        db.sessions.unshift({ detail, transcript: [], chat: [], draft });
+        scheduleProcessing(id);
         return { id };
       }),
     subscribeProcessing: (id, onStep) => {
-      const tick = () => {
-        const fx = getDb().sessions.find((s) => s.detail.id === id);
-        if (!fx || fx.detail.status !== "processing") return;
-        const step = (fx.detail.processing_step ?? 1) + 1;
-        if (step > 5) {
-          fx.detail.status = "ready";
-          delete fx.detail.processing_step;
-          refreshCounts(fx.detail);
-          commit();
-          onStep(6);
-          return;
-        }
-        fx.detail.processing_step = step as 1 | 2 | 3 | 4 | 5;
-        commit();
-        onStep(step);
-        processingTimers.set(id, window.setTimeout(tick, 1600));
+      const fx = getDb().sessions.find((s) => s.detail.id === id);
+      if (!fx) return () => undefined;
+      // Nghe ngay từ bước hiện tại; xử lý xong là bước 6
+      if (fx.detail.status === "processing") onStep(fx.detail.processing_step ?? 1);
+      else onStep(6);
+      let set = processingListeners.get(id);
+      if (!set) {
+        set = new Set();
+        processingListeners.set(id, set);
+      }
+      set.add(onStep);
+      return () => {
+        set?.delete(onStep);
       };
-      processingTimers.set(id, window.setTimeout(tick, 1600));
-      return () => window.clearTimeout(processingTimers.get(id));
     },
     retryProcessing: (id) =>
       write(() => {
@@ -193,6 +286,7 @@ export const mockSource: DataSource = {
         d.status = "processing";
         d.processing_step = 1;
         delete d.failure_reason;
+        scheduleProcessing(id);
       }),
     purgeRaw: (ids) =>
       write(() => {

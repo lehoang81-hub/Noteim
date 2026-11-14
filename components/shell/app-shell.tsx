@@ -8,6 +8,7 @@ import { useSyncExternalStore } from "react";
 import { Banner } from "@/components/ui/feedback";
 import { RecordButton } from "@/components/ui/record-button";
 import { RecordingBar } from "@/components/record/recording-bar";
+import { ProcessingWatcher } from "./processing-watcher";
 import { cn } from "@/lib/cn";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { DebugPanel } from "./debug-panel";
@@ -49,12 +50,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const offline = useOffline();
 
-  // Màn hình ghi âm không có khung ứng dụng (docs/03-screens.md mục 3):
-  // tự lo nền tối, trạng thái và dải báo của riêng nó. Bảng thử nghiệm vẫn sẵn.
-  if (pathname === "/record") {
+  // Màn hình ghi âm và màn hình xử lý không có khung ứng dụng
+  // (docs/03-screens.md mục 3, 4): tự lo nền, trạng thái và dải báo của riêng
+  // chúng. Bảng thử nghiệm và trình theo dõi xử lý vẫn sẵn.
+  if (pathname === "/record" || pathname.endsWith("/processing")) {
     return (
       <div className="min-h-dvh">
         {children}
+        <ProcessingWatcher />
         <DebugPanel />
       </div>
     );
@@ -111,6 +114,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       ) : null}
 
       <div className="pb-[calc(88px+env(safe-area-inset-bottom))] lg:pb-0">{children}</div>
+
+      <ProcessingWatcher />
 
       {/* Thanh điều hướng dưới trên điện thoại */}
       <nav

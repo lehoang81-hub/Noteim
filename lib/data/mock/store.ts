@@ -14,6 +14,7 @@ import s8 from "@/fixtures/sessions/chua-tai-len.json";
 import templatesJson from "@/fixtures/templates.json";
 import userJson from "@/fixtures/user.json";
 import { z } from "zod";
+import type { RecordingDraft } from "../repository";
 import { Contact, GlossaryTerm, Quota, SessionFixture, Template, User } from "../types";
 
 /*
@@ -30,7 +31,7 @@ export type MockDb = {
   contacts: Contact[];
   templates: Template[];
   glossary: GlossaryTerm[];
-  sessions: SessionFixture[];
+  sessions: Array<SessionFixture & { /** Bản nháp của buổi ghi vừa ghi, dùng để sinh nội dung khi xử lý xong */ draft?: RecordingDraft }>;
 };
 
 function seed(): MockDb {

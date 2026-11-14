@@ -1,0 +1,47 @@
+{
+  "executive_summary": "Buổi họp chốt được ba quyết định về kế hoạch tháng tới, thống nhất chỉ số doanh thu cần đạt và phân công cụ thể cho từng bộ phận.",
+  "sections": {
+    "tpl-business-s1": {
+      "tag": "decided",
+      "title": "Kế hoạch tháng 12",
+      "bullets": [
+        "Chốt dồn ngân sách quảng cáo về hai kênh đang hiệu quả nhất",
+        "Dừng dòng sản phẩm biên lợi nhuận dưới 15% từ đầu tháng"
+      ]
+    },
+    "tpl-business-s2": {
+      "tag": "figure",
+      "title": "Số liệu tháng 11",
+      "bullets": [
+        "Doanh thu 11,4 tỷ, đạt 92% kế hoạch, thiếu chủ yếu ở mảng B2B",
+        "Chi phí vận hành giảm 6% so với tháng trước nhờ gom chuyến giao"
+      ]
+    },
+    "tpl-business-s3": {
+      "tag": "risk",
+      "title": "Vướng mắc cần xử lý",
+      "bullets": [
+        "Hai khách hàng lớn chưa ký phụ lục giá cho năm sau",
+        "Bộ phận kho thiếu người vào ca tối, dễ trễ đơn cuối năm"
+      ]
+    },
+    "tpl-business-s4": {
+      "tag": "pending",
+      "title": "Việc giao theo người",
+      "bullets": [
+        "Phòng kinh doanh gửi đề xuất chính sách giá mới trong tuần này",
+        "Phòng kho lên phương án tăng ca và báo lại kinh phí"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task": "Gửi đề xuất chính sách giá mới cho ban giám đốc",
+      "priority": "high"
+    },
+    {
+      "task": "Lên phương án tăng ca kho cho tháng 12",
+      "priority": "medium"
+    }
+  ]
+}

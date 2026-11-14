@@ -518,7 +518,15 @@
     "retrying": "Summarising again",
     "pickOne": "Pick a session to see its summary.",
     "minutes": "{m} min",
-    "hours": "{h} h {m}"
+    "hours": "{h} h {m}",
+    "unfinished": "Recording from {time} was not finished ({duration}).",
+    "restore": "Resume",
+    "discard": "Discard",
+    "discardTitle": "Discard the unfinished recording?",
+    "discardBody": "This deletes the notes, hot spots, photos and recorded time of this session. This cannot be undone.",
+    "discardConfirm": "Discard recording",
+    "discardDone": "Unfinished recording discarded",
+    "cancel": "Cancel"
   },
   "session": {
     "back": "Back to library",
@@ -606,6 +614,25 @@
     "minimize": "Minimize the recording screen",
     "miniRecording": "Recording",
     "miniPaused": "Recording paused",
-    "silenceHint": "Silent for 1 minute. Pause?"
+    "silenceHint": "Silent for 1 minute. Pause?",
+    "endError": "Could not save this recording. Try again.",
+    "foldToday": "Today",
+    "foldProcessing": "Summarizing"
+  },
+  "processing": {
+    "step1": "Recording saved",
+    "step2": "Silence trimmed",
+    "step3": "Detecting speakers",
+    "step4": "Summarizing with your template",
+    "step5": "Finding action items",
+    "whileWaiting": "While waiting",
+    "participants": "Who joined?",
+    "addParticipant": "Add",
+    "pickParticipants": "Pick participants",
+    "pickHint": "Choose from your Noteim contacts.",
+    "safeToLeave": "You can leave this screen. Noteim will notify you when it's done.",
+    "doneToast": "Summary ready: {title}",
+    "view": "View",
+    "ribbonLabel": "Voice ribbon of the recording being processed"
   }
 }

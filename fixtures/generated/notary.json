@@ -1,0 +1,62 @@
+{
+  "executive_summary": "Phiên công chứng hợp đồng chuyển nhượng quyền sử dụng đất giữa hai cá nhân, hai bên đã xuất trình đủ giấy tờ chính và thống nhất lịch ký sau khi bổ sung giấy tờ còn thiếu.",
+  "sections": {
+    "tpl-notary-s1": {
+      "tag": "decided",
+      "title": "Các bên tham gia",
+      "bullets": [
+        "Bên chuyển nhượng: ông Nguyễn Hữu Phước",
+        "Bên nhận chuyển nhượng: chị Trần Thị Lan"
+      ]
+    },
+    "tpl-notary-s2": {
+      "tag": "decided",
+      "title": "Loại giao dịch",
+      "bullets": [
+        "Chuyển nhượng quyền sử dụng đất và tài sản gắn liền với đất",
+        "Giá thỏa thuận 12,5 tỷ, hai bên đã thống nhất phương thức thanh toán"
+      ]
+    },
+    "tpl-notary-s3": {
+      "tag": "figure",
+      "title": "Giấy tờ đã xuất trình",
+      "bullets": [
+        "Giấy chứng nhận quyền sử dụng đất bản gốc",
+        "CCCD và sổ hộ khẩu của hai bên"
+      ]
+    },
+    "tpl-notary-s4": {
+      "tag": "pending",
+      "title": "Giấy tờ còn thiếu",
+      "bullets": [
+        "Giấy đăng ký kết hôn của bên chuyển nhượng",
+        "Giấy xác nhận nghĩa vụ thuế tại chi cục thuế"
+      ]
+    },
+    "tpl-notary-s5": {
+      "tag": "decided",
+      "title": "Nội dung đã giải thích",
+      "bullets": [
+        "Quyền và nghĩa vụ của hai bên theo điều khoản hợp đồng",
+        "Hậu quả pháp lý nếu khai không đúng sự thật"
+      ]
+    },
+    "tpl-notary-s6": {
+      "tag": "pending",
+      "title": "Lịch hẹn",
+      "bullets": [
+        "Hẹn ký hợp đồng 9 giờ sáng thứ Hai tuần sau"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task": "Nhắc bên chuyển nhượng bổ sung giấy đăng ký kết hôn",
+      "priority": "high"
+    },
+    {
+      "task": "Tra soát xác nhận nghĩa vụ thuế trước buổi ký",
+      "priority": "medium"
+    }
+  ]
+}
