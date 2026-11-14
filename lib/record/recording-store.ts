@@ -91,9 +91,9 @@ function load(): void {
     const parsed = JSON.parse(saved) as Persisted;
     if (!parsed || typeof parsed !== "object" || !parsed.status) return;
     elapsedMs = Math.max(0, Number(parsed.elapsed_ms) || 0);
-    segmentStart = null; // tải lại trang: đồng hồ dừng cho đến khi ghi tiếp
+    segmentStart = null; // tải lại trang: đoạn đang ghi bị ngắt, sang trạng thái tạm dừng
     state = {
-      status: parsed.status === "recording" || parsed.status === "paused" ? parsed.status : "idle",
+      status: parsed.status === "recording" || parsed.status === "paused" ? "paused" : "idle",
       templateId: parsed.templateId ?? null,
       consent: parsed.consent ?? INITIAL.consent,
       startedAtClock: parsed.startedAtClock ?? null,
@@ -110,7 +110,8 @@ function load(): void {
 function persist(): void {
   if (typeof window === "undefined" || state.status === "idle") return;
   try {
-    const payload: Persisted = { ...state, elapsed_ms: Math.round(elapsedMs) };
+    // Gồm cả đoạn đang ghi, để tải lại trang không mất thời gian đã ghi
+    const payload: Persisted = { ...state, elapsed_ms: Math.round(recordedMs()) };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     levelsDirty = false;
   } catch {
@@ -118,10 +119,15 @@ function persist(): void {
   }
 }
 
+/** Tổng thời lượng đã ghi tới thời điểm hiện tại (ms), không tính tạm dừng. */
+function recordedMs(): number {
+  const extra = segmentStart ? (nowMs() - segmentStart) * speed() : 0;
+  return Math.max(0, elapsedMs + extra);
+}
+
 /** Tổng thời lượng đã ghi tới thời điểm hiện tại (giây), không tính tạm dừng. */
 export function recordedSec(): number {
-  const extra = segmentStart ? (nowMs() - segmentStart) * speed() : 0;
-  return Math.max(0, (elapsedMs + extra) / 1000);
+  return recordedMs() / 1000;
 }
 
 /* ---------- Hành động ---------- */
