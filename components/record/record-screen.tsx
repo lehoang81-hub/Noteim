@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Camera, ChevronDown, Mic, MicVocal } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { useTranslations } from "next-intl";
@@ -103,6 +103,14 @@ export function RecordScreen() {
   const reduce = useReducedMotionSafe();
   const micTakenRef = useRef<() => void>(() => {});
   const mic = useMicLevel({ onEnded: () => micTakenRef.current() });
+  /* Ba nhánh dải giọng (khoảnh khắc bắt đầu, thẻ gấp, dải sống) cùng là
+   * motion.div ở cùng một vị trí: nếu không có key, React giữ nguyên instance
+   * khi đổi nhánh và hộp dải sống thừa hưởng trạng thái width/height đang dở
+   * của khoảnh khắc trước, kẹt ở width: 32px (PR #22, lỗi 1). Key khác nhau
+   * buộc React gắn phần tử mới cho từng nhánh. layoutId dùng useId để hai nhánh
+   * "thẻ gấp" và "dải sống" trong cùng lần mở vẫn ghép cặp cho khoảnh khắc
+   * gấp, mà không ghép nhầm với lần mở trước. */
+  const ribbonBoxId = useId();
 
   /** Bảng đang chờ trước khi ghi; null là không chờ gì (đang ghi hoặc đã xong luồng). */
   const [gate, setGate] = useState<Gate | null>("boot");
@@ -507,6 +515,7 @@ export function RecordScreen() {
           <div className="relative flex w-full flex-1 items-center justify-center py-6">
             {showMoment ? (
               <motion.div
+                key="moment"
                 className="relative flex items-center justify-center overflow-hidden"
                 style={{ background: "var(--gradient-dawn)" }}
                 initial={{ width: 72, height: 72, borderRadius: 999, opacity: 1 }}
@@ -524,6 +533,7 @@ export function RecordScreen() {
               </motion.div>
             ) : folding ? (
               <motion.div
+                key="fold"
                 className="w-full"
                 initial={reduce ? { opacity: 0 } : false}
                 animate={{ opacity: 1 }}
@@ -531,7 +541,7 @@ export function RecordScreen() {
               >
                 <div className="mx-auto w-full max-w-sm">
                   <p className="text-caption font-medium text-ink-3">{t("foldToday")}</p>
-                  <motion.div layoutId="record-ribbon-box" transition={reduce ? FADE : SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
+                  <motion.div layoutId={ribbonBoxId} transition={reduce ? FADE : SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
                     <RibbonThumb peaks={foldPeaks} speakers={foldSpeakers} muted />
                   </motion.div>
                   <div className="mt-1.5 flex items-baseline justify-between gap-3">
@@ -542,7 +552,11 @@ export function RecordScreen() {
               </motion.div>
             ) : (
               <motion.div
-                layoutId="record-ribbon-box"
+                key="live"
+                /* Chỉ ghép cặp layoutId khi buổi ghi đang chạy: hộp dải sống
+                 * trong lúc chờ bảng (chưa ghi) không cần tham gia khoảnh khắc
+                 * gấp, tránh morph thừa khi hộp gắn lại sau khoảnh khắc bắt đầu. */
+                layoutId={active ? ribbonBoxId : undefined}
                 transition={reduce ? FADE : SCENE}
                 className="w-full overflow-hidden"
                 initial={{ opacity: 0 }}
