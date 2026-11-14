@@ -2,8 +2,8 @@
 
 import { Play, Sparkles, TriangleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 
 /*
  * Khối nội dung do AI tạo (nền điện nhạt, biểu tượng tia sáng).
@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 export type AiBlockState = "writing" | "done" | "error";
 
 function useTypewriter(text: string, active: boolean) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const words = text.split(" ");
   const [count, setCount] = useState(active ? 0 : words.length);
 

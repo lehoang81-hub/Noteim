@@ -51,6 +51,7 @@ export const dawnVars = ["--dawn-orange", "--dawn-pink", "--dawn-violet"] as con
 export const sections = [
   "preview",
   "components",
+  "ribbon",
   "colors",
   "tags",
   "speakers",

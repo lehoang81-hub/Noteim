@@ -56,3 +56,16 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 - Đã kiểm: 390px và 1280px, sáng và tối, không tràn ngang, không lỗi console. Bảng trượt giữ tiêu điểm, đóng bằng Esc và kéo tay nắm. Hộp xác nhận, thông báo nhanh, công tắc, tab, nút ghi âm, đánh dấu việc đều chạy.
 - Giảm chuyển động: bảng trượt và thông báo hiện bằng mờ dần; tắt kéo tay nắm (vẫn đóng bằng nút, nền mờ, Esc); khối AI hiện đủ chữ ngay.
 - Lưu ý cho người sau: `useReducedMotion` trả giá trị khác nhau giữa máy chủ và trình duyệt. Đừng dùng nó để quyết định nội dung ở lần vẽ đầu, chỉ dùng cho chuyển động hoặc trong `useEffect` (xem `ai-block.tsx`), nếu không sẽ lỗi hydrate.
+
+## 2026-11-14, Claude, M0-04 dải giọng, trình phát, ba khoảnh khắc
+
+- Hoang giao Claude tự làm M0-04. Đây là PR cuối mốc M0, chờ Hoang duyệt trên điện thoại rồi mới merge.
+- `components/ribbon/`: `draw.ts` (công cụ vẽ chung), `RibbonThumb` (canvas, giữ nguyên props cũ), `RibbonPlayback` (tua bằng chạm, kéo, bàn phím; điểm nóng; dải nhiệt; `dye` cho khoảnh khắc "Xử lý xong"), `RibbonLive` (rAF, dừng khi tab ẩn hoặc ra khỏi màn hình).
+- `lib/player/mock-player.ts`: đồng hồ phát giả lập, interface play, pause, seek, skip, setRate, getState, subscribe. `usePlayerState` để đọc trong component.
+- `components/session/floating-player.tsx`: thu gọn và mở rộng, tốc độ 1x, 1,25x, 1,5x, 2x.
+- `lib/audio/use-mic-level.ts`: đọc âm lượng micro, không ghi, không lưu. Dùng lại ở M2.
+- `lib/use-reduced-motion.ts`: `useReducedMotionSafe`, thay `useReducedMotion` của Motion ở mọi nơi. Lần vẽ đầu luôn là false giống máy chủ, nên không lỗi hydrate. **Từ giờ dùng hook này, không dùng `useReducedMotion` của Motion.**
+- `/styleguide`: mục "Dải giọng" gồm ba dạng, thanh trượt âm lượng, nút micro thật, trình phát nổi (hai bản dùng chung một trình phát), ba khoảnh khắc có nút "Chạy thử".
+- Hiệu năng: đo 180 khung hình ở 390px, mật độ 3x, CPU giả lập chậm gấp 4: trung vị 16,7ms, không khung nào quá 33ms. Bài học: quầng sáng dùng `blur`, nếu đổi độ mờ mỗi khung hình sẽ tụt khung; giờ chỉ đổi khi âm lượng chênh đáng kể, có CSS transition.
+- Đã kiểm: 390px và 1280px, sáng và tối, không tràn ngang, không lỗi console; tua bằng kéo, chạm, mũi tên; phát, tốc độ; micro thật (trình duyệt giả lập thiết bị); giảm chuyển động không lỗi hydrate.
+- Lưu ý kiểm thử tự động: trang bật cuộn mượt, `scrollIntoView` cần `behavior: "instant"` trước khi đo vị trí.

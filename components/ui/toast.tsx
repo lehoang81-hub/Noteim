@@ -1,8 +1,9 @@
 "use client";
 
 import { Check, TriangleAlert } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 
 /*
  * Thông báo nhanh, hiện ở đáy màn hình rồi tự tắt sau 4 giây
@@ -36,7 +37,7 @@ export function useToast() {
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<ToastItem[]>([]);
   const nextId = useRef(1);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
 
   const dismiss = useCallback((id: number) => {
     setItems((list) => list.filter((t) => t.id !== id));

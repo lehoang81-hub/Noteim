@@ -27,7 +27,8 @@
       "type": "Type",
       "shape": "Shape",
       "motion": "Motion",
-      "components": "Components"
+      "components": "Components",
+      "ribbon": "Ribbon"
     },
     "preview": {
       "today": "Today",
@@ -381,12 +382,70 @@
         "pVisual": "Charts and diagrams, created when you first open the tab.",
         "pAi": "Ask anything about this session."
       }
+    },
+    "ribbon": {
+      "title": "Ribbon",
+      "hint": "Noteim's one signature element. Three forms: thumbnail on session rows, playback inside a session, and live while recording.",
+      "thumb": "Thumbnail",
+      "thumbDesc": "40 bars, 28 high, coloured by speaker. The muted version is for processing or summary-only sessions.",
+      "normal": "Normal",
+      "muted": "Muted",
+      "playback": "Playback",
+      "playbackDesc": "Tap or drag to seek. Keyboard: left and right arrows skip 5 seconds. Dots above are bookmarks, the thin strip below shows each topic's tag.",
+      "live": "Live",
+      "liveDesc": "New bars appear on the right and drift left. The glow follows the volume.",
+      "level": "Simulated volume",
+      "micOn": "Use my microphone",
+      "micOff": "Turn microphone off",
+      "micAsking": "Asking for microphone access",
+      "micDenied": "Microphone access is blocked. Allow it in your browser settings, or use the slider.",
+      "micUnsupported": "This browser can't read the microphone. Use the slider.",
+      "micPrivacy": "Only measures volume to draw. Nothing is recorded, stored, or sent.",
+      "pause": "Pause",
+      "resume": "Resume",
+      "player": "Floating player",
+      "playerDesc": "Both versions below share one player, press play on either.",
+      "collapsed": "Collapsed",
+      "expanded": "Expanded",
+      "moments": "Three signature moments",
+      "momentsDesc": "The product's whole motion budget lives here. Reduced motion turns them into fades.",
+      "run": "Play",
+      "again": "Play again",
+      "m1": "Start recording",
+      "m1Desc": "The record button blooms into the ribbon and the room goes dark.",
+      "m2": "Stop recording",
+      "m2Desc": "The ribbon folds into a session row and drops into the library.",
+      "m3": "Processing done",
+      "m3Desc": "The ribbon is dyed in each speaker's colour, then the summary points appear.",
+      "recording": "Recording",
+      "newTitle": "Session at 14:05",
+      "older": "November leadership meeting",
+      "today": "Today",
+      "processing": "Summarising",
+      "template": "Client meeting",
+      "duration": "42 min",
+      "olderDuration": "1 h 08",
+      "b1": "Needs 2 bedrooms near a primary school",
+      "b2": "Budget up to 4.2 billion, 50% loan",
+      "b3": "Wants her husband to see it before the deposit",
+      "seek": "Play from",
+      "position": "Playback position"
     }
   },
   "ui": {
     "close": "Close",
     "undo": "Undo",
     "retry": "Try again",
-    "clearSearch": "Clear search"
+    "clearSearch": "Clear search",
+    "player": {
+      "play": "Play",
+      "pause": "Pause",
+      "expand": "Expand player",
+      "collapse": "Collapse player",
+      "back10": "Back 10 seconds",
+      "forward10": "Forward 10 seconds",
+      "rate": "Speed {rate}, press to change",
+      "position": "Playback position"
+    }
   }
 }
