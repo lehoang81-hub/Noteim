@@ -1,9 +1,6 @@
-"use client";
+import { RecordScreen } from "@/components/record/record-screen";
 
-import { useTranslations } from "next-intl";
-import { ComingSoon } from "@/components/shell/coming-soon";
-
-export default function Page() {
-  const t = useTranslations("shell");
-  return <ComingSoon title={t("record")} />;
+/* Màn hình ghi âm, nền chàm đêm, không có khung ứng dụng (docs/03-screens.md mục 3). */
+export default function RecordPage() {
+  return <RecordScreen />;
 }

@@ -17,6 +17,8 @@ import { DebugPanel } from "./debug-panel";
  *   (nhô lên), Việc. Tìm kiếm và Cài đặt ở góc trên phải của từng trang (TopBar).
  * - Máy tính (từ 1024px): cột trái 88px gồm logo, Thư viện, Việc, Cài đặt, nút ghi âm.
  * - Dải báo mất mạng nằm trên cùng.
+ * - /record không có khung ứng dụng; nút ghi âm ở mọi trang đi tới /record và
+ *   bắt đầu ghi luôn (luồng start nằm ở màn hình ghi).
  */
 
 function subscribeOnline(cb: () => void) {
@@ -45,6 +47,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const offline = useOffline();
+
+  // Màn hình ghi âm không có khung ứng dụng (docs/03-screens.md mục 3):
+  // tự lo nền tối, trạng thái và dải báo của riêng nó. Bảng thử nghiệm vẫn sẵn.
+  if (pathname === "/record") {
+    return (
+      <div className="min-h-dvh">
+        {children}
+        <DebugPanel />
+      </div>
+    );
+  }
 
   const items = [
     { href: "/", label: t("library"), icon: Library },

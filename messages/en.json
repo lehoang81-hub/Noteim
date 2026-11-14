@@ -573,5 +573,24 @@
     "failedReason": "Reason: {reason}",
     "unsynced": "This session is waiting for a network connection to upload. The recording is safe on this device.",
     "soonTab": "This tab comes in a later step of the mockup."
+  },
+  "record": {
+    "statusRecording": "Rec",
+    "statusPaused": "Paused",
+    "changeTemplate": "Change template",
+    "pickTemplate": "Pick a template",
+    "permissionTitle": "Let Noteim use your microphone",
+    "permissionBody": "Noteim only measures loudness to draw the voice ribbon while you record. No audio is stored or sent anywhere.",
+    "allowMic": "Allow microphone",
+    "micDeniedHint": "The microphone is not allowed. Turn on mic permission in your browser settings and try again.",
+    "micUnsupportedHint": "This browser cannot read the microphone.",
+    "consentTitle": "Has everyone agreed to be recorded?",
+    "consentConfirm": "Yes, start recording",
+    "consentCancel": "Cancel",
+    "announce": "Play the recording notice",
+    "announcing": "Playing: This meeting is being recorded for minutes",
+    "pause": "Pause",
+    "resume": "Resume",
+    "end": "Finish recording"
   }
 }

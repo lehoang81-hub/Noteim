@@ -462,6 +462,25 @@
     "toLibrary": "Về thư viện",
     "brand": "Noteim"
   },
+  "record": {
+    "statusRecording": "Ghi",
+    "statusPaused": "Tạm dừng",
+    "changeTemplate": "Đổi mẫu ghi âm",
+    "pickTemplate": "Chọn mẫu",
+    "permissionTitle": "Cho phép Noteim dùng micro",
+    "permissionBody": "Noteim chỉ đo âm lượng để vẽ dải giọng trong lúc bạn ghi. Không lưu âm thanh, không gửi đi đâu.",
+    "allowMic": "Cho phép micro",
+    "micDeniedHint": "Micro chưa được cho phép. Mở quyền micro trong cài đặt trình duyệt rồi bấm lại.",
+    "micUnsupportedHint": "Trình duyệt này không đọc được micro.",
+    "consentTitle": "Mọi người đã đồng ý ghi âm?",
+    "consentConfirm": "Đã đồng ý, ghi",
+    "consentCancel": "Hủy",
+    "announce": "Phát câu thông báo ghi âm",
+    "announcing": "Đang phát: Buổi làm việc này được ghi âm để lập biên bản",
+    "pause": "Tạm dừng",
+    "resume": "Ghi tiếp",
+    "end": "Kết thúc buổi ghi"
+  },
   "debug": {
     "title": "Bảng thử nghiệm",
     "open": "Mở bảng thử nghiệm",

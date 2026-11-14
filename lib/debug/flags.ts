@@ -20,6 +20,8 @@ export type DebugFlags = {
   quotaOut: boolean;
   /** Thư viện rỗng */
   emptyLibrary: boolean;
+  /** Tua nhanh đồng hồ ghi x30 (kiểm gợi ý im lặng, hạn mức phiên) */
+  recordSpeed30: boolean;
   profession: Profession | null;
   plan: "free" | "pro" | null;
 };
@@ -32,6 +34,7 @@ const DEFAULTS: DebugFlags = {
   failLoad: false,
   quotaOut: false,
   emptyLibrary: false,
+  recordSpeed30: false,
   profession: null,
   plan: null,
 };
