@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/* Chế độ tối điều khiển bằng class .dark trên <html>, không theo hệ điều hành. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Ánh xạ token trong styles/tokens.css thành tiện ích Tailwind.
+ * Ví dụ: bg-bg, bg-surface, text-ink, border-line, text-sen, rounded-control,
+ * text-display, font-display, shadow-float...
+ * @theme inline giữ nguyên tham chiếu var() nên đổi .dark là đổi cả tiện ích.
+ */
+@theme inline {
+  /* Màu nền và chữ */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+
+  /* Màu hành động */
+  --color-sen: var(--sen);
+  --color-sen-text: var(--sen-text);
+  --color-on-sen: var(--on-sen);
+  --color-dien: var(--dien);
+  --color-dien-tint: var(--dien-tint);
+
+  /* Nhãn ngữ nghĩa */
+  --color-tag-decided: var(--tag-decided-text);
+  --color-tag-decided-bg: var(--tag-decided-bg);
+  --color-tag-pending: var(--tag-pending-text);
+  --color-tag-pending-bg: var(--tag-pending-bg);
+  --color-tag-risk: var(--tag-risk-text);
+  --color-tag-risk-bg: var(--tag-risk-bg);
+  --color-tag-idea: var(--tag-idea-text);
+  --color-tag-idea-bg: var(--tag-idea-bg);
+  --color-tag-figure: var(--tag-figure-text);
+  --color-tag-figure-bg: var(--tag-figure-bg);
+
+  /* Màu người nói */
+  --color-speaker-1: var(--speaker-1);
+  --color-speaker-2: var(--speaker-2);
+  --color-speaker-3: var(--speaker-3);
+  --color-speaker-4: var(--speaker-4);
+  --color-speaker-5: var(--speaker-5);
+  --color-speaker-6: var(--speaker-6);
+
+  /* Phông và thang cỡ chữ */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  --text-display: var(--text-display-size);
+  --text-display--line-height: var(--text-display-line);
+  --text-h1: var(--text-h1-size);
+  --text-h1--line-height: var(--text-h1-line);
+  --text-h2: var(--text-h2-size);
+  --text-h2--line-height: var(--text-h2-line);
+  --text-body: var(--text-body-size);
+  --text-body--line-height: var(--text-body-line);
+  --text-body-strong: var(--text-body-strong-size);
+  --text-body-strong--line-height: var(--text-body-strong-line);
+  --text-small: var(--text-small-size);
+  --text-small--line-height: var(--text-small-line);
+  --text-caption: var(--text-caption-size);
+  --text-caption--line-height: var(--text-caption-line);
+
+  /* Khoảng cách và lề trang */
+  --spacing-page: var(--margin-page);
+
+  /* Bo góc */
+  --radius-control: var(--r-control);
+  --radius-block: var(--r-block);
+  --radius-sheet: var(--r-sheet);
+  --radius-pill: var(--r-pill);
+
+  /* Bóng */
+  --shadow-float: var(--shadow-float);
+  --shadow-record: var(--shadow-record);
+
+  /* Chuyển động */
+  --ease-noteim: var(--ease);
+}
+
+/* Nền tĩnh, chữ chính, phông thân mặc định cho toàn ứng dụng. */
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  transition: background-color var(--t-base) var(--ease), color var(--t-base) var(--ease);
+}
+
+/* Mọi phần tử tương tác có viền lấy nét nhìn rõ khi dùng bàn phím. */
+:focus-visible {
+  outline: 2px solid var(--dien);
+  outline-offset: 2px;
+}
+
+/* Nút khi nhấn thu nhỏ còn 97%. */
+button:active {
+  scale: 0.97;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
