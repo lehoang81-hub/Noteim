@@ -163,7 +163,9 @@ Giao diện tối không dùng bóng, dùng viền `--line`.
 
 ## Component
 
-Xây trên shadcn/ui, đổi kiểu theo token ở trên. Danh sách bắt buộc, mỗi cái phải có mặt trên trang `/styleguide` với đủ trạng thái:
+Xây trên Radix (nền của shadcn/ui), đổi kiểu theo token ở trên. Mã nằm trong `components/ui`, `components/session`, `components/ribbon`.
+
+Component không dùng tiện ích `dark:`; mọi khác biệt sáng tối nằm trong token. Ngoại lệ duy nhất là nút đổi giao diện, vì nó cần biết giao diện của cả trang. Danh sách bắt buộc, mỗi cái phải có mặt trên trang `/styleguide` với đủ trạng thái:
 
 | Component | Biến thể và trạng thái |
 | --- | --- |
