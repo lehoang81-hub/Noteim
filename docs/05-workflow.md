@@ -5,17 +5,17 @@
 ```
 Claude mở issue  →  Agent làm trên nhánh  →  Agent mở PR
        ↑                                         ↓
-Claude mở issue kế  ←  Hoang merge  ←  Claude kiểm tra PR
+Claude mở issue kế  ←  Claude merge  ←  Claude kiểm tra PR
 ```
 
 1. **Giao việc.** Claude mở một issue theo mẫu bên dưới. Mỗi lúc chỉ có một issue ở trạng thái `dang-lam` cho mỗi agent.
 2. **Làm.** Agent tạo nhánh `m<mốc>/<số>-<tên-ngắn>` (ví dụ `m1/02-thu-vien`), commit nhỏ, thông điệp commit bằng tiếng Việt hoặc tiếng Anh đều được, bắt đầu bằng động từ.
 3. **Nộp.** Agent mở PR vào `main`, ghi `Closes #<số issue>`, điền đủ mẫu PR.
 4. **Kiểm tra.** Claude đọc code, mở link xem thử, đối chiếu tiêu chí nghiệm thu. Kết quả là một trong ba: Đạt, Cần sửa (liệt kê từng điểm, có đánh số), Cần Hoang quyết.
-5. **Duyệt cuối.** Hoang mở link xem thử trên điện thoại. Ưng thì merge.
+5. **Merge.** PR đạt thì Claude merge (squash). Hoang xem link xem thử trên điện thoại bất cứ lúc nào; chỗ nào chưa ưng thì nhắn Claude để mở issue sửa. Riêng PR cuối của mỗi mốc (M0 đến M5), Claude gửi Hoang link xem thử và chờ Hoang đồng ý rồi mới merge.
 6. **Việc tiếp theo.** Sau khi merge, Claude mở issue kế tiếp theo `06-roadmap.md`.
 
-Claude chỉ thấy GitHub khi có một phiên làm việc đang mở. Sau khi agent mở PR, Hoang nhắn Claude "kiểm tra PR số N", hoặc đặt lịch để Claude tự kiểm tra hằng ngày.
+Claude chỉ thấy GitHub khi có một phiên làm việc đang mở. Sau khi agent mở PR, Hoang gửi báo cáo của agent hoặc nhắn Claude "kiểm tra PR số N".
 
 ## Nhãn
 
