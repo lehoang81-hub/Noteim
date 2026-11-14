@@ -28,7 +28,7 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 ## 2026-11-14, Claude, review và merge M0-01
 
 - PR #3 đã merge, issue #1 đóng. Agent không mở được PR vì token chỉ có quyền đọc PR; reviewer mở thay.
-- Repo đã nối Vercel (dự án `noteim`, đội HLRace16St). Mỗi nhánh tự có link xem thử. Bản `main`: https://noteim.vercel.app
+- Repo đã nối Vercel (dự án `noteim`, đội HLRace16St). Mỗi nhánh tự có link xem thử. Bản `main`: https://noteim-seven.vercel.app
 - Reviewer sửa thêm: khôi phục README, thêm giá trị dự phòng cho `var(--font-*)`, xóa SVG mẫu.
 - Môi trường kiểm tra của reviewer không tải được Google Fonts; build cục bộ dùng phông từ npm thay thế. Vercel build bình thường.
 - Việc tiếp theo: M0-02, hoàn thiện `/styleguide` theo kết quả review.
