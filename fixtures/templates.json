@@ -1,0 +1,225 @@
+[
+  {
+    "id": "tpl-business",
+    "profession": "business_owner",
+    "name": "Họp điều hành",
+    "sections": [
+      {
+        "id": "tpl-business-s1",
+        "title": "Quyết định",
+        "enabled": true
+      },
+      {
+        "id": "tpl-business-s2",
+        "title": "Số liệu được nhắc",
+        "enabled": true
+      },
+      {
+        "id": "tpl-business-s3",
+        "title": "Rủi ro và vướng mắc",
+        "enabled": true
+      },
+      {
+        "id": "tpl-business-s4",
+        "title": "Việc giao theo người",
+        "enabled": true
+      }
+    ],
+    "suggested_questions": [
+      "Ai đang quá tải?",
+      "Điều gì chưa có người nhận?",
+      "Soạn thông báo cho toàn công ty"
+    ]
+  },
+  {
+    "id": "tpl-doctor",
+    "profession": "doctor",
+    "name": "Buổi khám",
+    "sections": [
+      {
+        "id": "tpl-doctor-s1",
+        "title": "Lý do đến khám",
+        "enabled": true
+      },
+      {
+        "id": "tpl-doctor-s2",
+        "title": "Lời bệnh nhân kể",
+        "enabled": true
+      },
+      {
+        "id": "tpl-doctor-s3",
+        "title": "Chỉ định và đơn thuốc đã dặn",
+        "enabled": true
+      },
+      {
+        "id": "tpl-doctor-s4",
+        "title": "Dặn dò",
+        "enabled": true
+      },
+      {
+        "id": "tpl-doctor-s5",
+        "title": "Hẹn tái khám",
+        "enabled": true
+      }
+    ],
+    "suggested_questions": [
+      "Bệnh nhân kể triệu chứng từ khi nào?",
+      "Soạn tờ dặn dò cho bệnh nhân",
+      "Tôi đã dặn kiêng gì?"
+    ],
+    "footer_note": "Noteim chỉ ghi lại lời đã nói. Không phải chẩn đoán hay tư vấn y khoa."
+  },
+  {
+    "id": "tpl-lawyer",
+    "profession": "lawyer",
+    "name": "Tư vấn pháp lý",
+    "sections": [
+      {
+        "id": "tpl-lawyer-s1",
+        "title": "Sự việc theo trình tự thời gian",
+        "enabled": true
+      },
+      {
+        "id": "tpl-lawyer-s2",
+        "title": "Yêu cầu của khách hàng",
+        "enabled": true
+      },
+      {
+        "id": "tpl-lawyer-s3",
+        "title": "Vấn đề pháp lý cần xem",
+        "enabled": true
+      },
+      {
+        "id": "tpl-lawyer-s4",
+        "title": "Tài liệu cần bổ sung",
+        "enabled": true
+      },
+      {
+        "id": "tpl-lawyer-s5",
+        "title": "Mốc thời hạn",
+        "enabled": true
+      }
+    ],
+    "suggested_questions": [
+      "Liệt kê các mốc ngày tháng khách nhắc",
+      "Khách còn thiếu giấy tờ gì?",
+      "Soạn thư xác nhận nội dung tư vấn"
+    ]
+  },
+  {
+    "id": "tpl-realestate",
+    "profession": "realestate_sales",
+    "name": "Gặp khách",
+    "sections": [
+      {
+        "id": "tpl-realestate-s1",
+        "title": "Nhu cầu",
+        "enabled": true
+      },
+      {
+        "id": "tpl-realestate-s2",
+        "title": "Ngân sách và phương án vay",
+        "enabled": true
+      },
+      {
+        "id": "tpl-realestate-s3",
+        "title": "Băn khoăn của khách",
+        "enabled": true
+      },
+      {
+        "id": "tpl-realestate-s4",
+        "title": "Căn đang quan tâm",
+        "enabled": true
+      },
+      {
+        "id": "tpl-realestate-s5",
+        "title": "Cam kết hai bên",
+        "enabled": true
+      },
+      {
+        "id": "tpl-realestate-s6",
+        "title": "Bước tiếp theo",
+        "enabled": true
+      }
+    ],
+    "suggested_questions": [
+      "Khách còn băn khoăn gì?",
+      "Soạn tin nhắn Zalo cảm ơn",
+      "Lần gặp tới cần chuẩn bị gì?"
+    ]
+  },
+  {
+    "id": "tpl-architect",
+    "profession": "architect",
+    "name": "Họp thiết kế và công trường",
+    "sections": [
+      {
+        "id": "tpl-architect-s1",
+        "title": "Yêu cầu thay đổi",
+        "enabled": true
+      },
+      {
+        "id": "tpl-architect-s2",
+        "title": "Số đo và vật liệu được nhắc",
+        "enabled": true
+      },
+      {
+        "id": "tpl-architect-s3",
+        "title": "Hạng mục tồn tại",
+        "enabled": true
+      },
+      {
+        "id": "tpl-architect-s4",
+        "title": "Việc theo từng bên",
+        "enabled": true
+      }
+    ],
+    "suggested_questions": [
+      "Chủ nhà đổi ý những gì so với lần trước?",
+      "Liệt kê số đo",
+      "Soạn biên bản hiện trường"
+    ]
+  },
+  {
+    "id": "tpl-notary",
+    "profession": "notary",
+    "name": "Phiên công chứng",
+    "sections": [
+      {
+        "id": "tpl-notary-s1",
+        "title": "Các bên tham gia",
+        "enabled": true
+      },
+      {
+        "id": "tpl-notary-s2",
+        "title": "Loại giao dịch",
+        "enabled": true
+      },
+      {
+        "id": "tpl-notary-s3",
+        "title": "Giấy tờ đã xuất trình",
+        "enabled": true
+      },
+      {
+        "id": "tpl-notary-s4",
+        "title": "Giấy tờ còn thiếu",
+        "enabled": true
+      },
+      {
+        "id": "tpl-notary-s5",
+        "title": "Nội dung đã giải thích cho các bên",
+        "enabled": true
+      },
+      {
+        "id": "tpl-notary-s6",
+        "title": "Lịch hẹn",
+        "enabled": true
+      }
+    ],
+    "suggested_questions": [
+      "Còn thiếu giấy tờ gì?",
+      "Tôi đã giải thích những quyền và nghĩa vụ nào?",
+      "Soạn tin nhắc lịch hẹn"
+    ]
+  }
+]

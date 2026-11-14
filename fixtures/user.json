@@ -1,0 +1,12 @@
+{
+  "id": "u-hoang",
+  "display_name": "Hoàng",
+  "honorific": "anh",
+  "email": "hoang@example.vn",
+  "profession": "realestate_sales",
+  "default_template_id": "tpl-realestate",
+  "plan": "free",
+  "ui_language": "vi",
+  "theme": "system",
+  "consent_reminder": true
+}

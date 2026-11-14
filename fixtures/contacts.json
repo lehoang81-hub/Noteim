@@ -1,0 +1,60 @@
+[
+  {
+    "id": "c-me",
+    "name": "Hoàng",
+    "role": "Bạn",
+    "email": "hoang@example.vn"
+  },
+  {
+    "id": "c-lan",
+    "name": "Chị Lan",
+    "role": "Khách mua căn hộ",
+    "email": "lan.nguyen@example.vn"
+  },
+  {
+    "id": "c-tuan",
+    "name": "Anh Tuấn",
+    "role": "Trưởng nhóm kinh doanh",
+    "email": "tuan@example.vn"
+  },
+  {
+    "id": "c-minh",
+    "name": "Anh Minh",
+    "role": "Giám đốc",
+    "email": "minh@noithatviet.example.vn"
+  },
+  {
+    "id": "c-thao",
+    "name": "Chị Thảo",
+    "role": "Kế toán trưởng",
+    "email": "thao@noithatviet.example.vn"
+  },
+  {
+    "id": "c-duc",
+    "name": "Anh Đức",
+    "role": "Trưởng xưởng",
+    "email": "duc@noithatviet.example.vn"
+  },
+  {
+    "id": "c-ha",
+    "name": "Chị Hà",
+    "role": "Phụ trách marketing"
+  },
+  {
+    "id": "c-phuoc",
+    "name": "Ông Phước",
+    "role": "Khách hàng tư vấn pháp lý",
+    "email": "phuoc@example.vn"
+  },
+  {
+    "id": "c-hung",
+    "name": "Anh Hùng",
+    "role": "Chủ nhà phố Lạch Tray",
+    "email": "hung@example.vn"
+  },
+  {
+    "id": "c-nam",
+    "name": "Anh Nam",
+    "role": "Chỉ huy công trường"
+  }
+]

@@ -11,7 +11,7 @@ Mục tiêu: chốt màu, chữ, chuyển động trước khi dựng bất kỳ
 | M0-01 | Khởi tạo dự án, lint, typecheck, luật chặn import, Vercel. `styles/tokens.css` đủ token sáng và tối. Trang `/styleguide` bản đầu. | Xong (#1, PR #3) |
 | M0-02 | Hoàn thiện `/styleguide` theo kết quả review: khối "Xem nhanh", điều hướng mục, bố cục máy tính, một nguồn mã màu. | Xong (#5, Claude làm) |
 | M0-03 | Toàn bộ component trong bảng "Component" của design system, hiện trên `/styleguide` với đủ trạng thái. | Xong (#8, Claude làm) |
-| M0-04 | Dải giọng ba dạng (sống, phát lại, thu nhỏ) và ba khoảnh khắc đặc trưng, có nút bấm chạy thử trên `/styleguide`. | Chờ Hoang duyệt (#9, Claude làm) |
+| M0-04 | Dải giọng ba dạng (sống, phát lại, thu nhỏ) và ba khoảnh khắc đặc trưng, có nút bấm chạy thử trên `/styleguide`. | Xong (#9, Hoang duyệt 14/11) |
 
 Nghiệm thu:
 
@@ -24,10 +24,10 @@ Nghiệm thu:
 
 | Issue | Việc |
 | --- | --- |
-| M1-01 | Lớp dữ liệu: `types.ts`, `repository.ts`, bản giả, bảng thử nghiệm `?debug=1`, hai fixture đầy đủ. |
-| M1-02 | Khung ứng dụng: thanh điều hướng, trình phát nổi, dải báo, bố cục ba cột trên máy tính. |
-| M1-03 | Thư viện `/` với mọi trạng thái trong `03-screens.md` mục 1. |
-| M1-04 | Chi tiết buổi ghi: phần đầu, tab Tóm tắt, tab Việc cần làm, trình phát giả lập, bấm ý để tua. |
+| M1-01 | Lớp dữ liệu: `types.ts`, `repository.ts`, bản giả, bảng thử nghiệm `?debug=1`, hai fixture đầy đủ. Chờ Hoang duyệt (#12) |
+| M1-02 | Khung ứng dụng: thanh điều hướng, trình phát nổi, dải báo, bố cục ba cột trên máy tính. Chờ Hoang duyệt (#13) |
+| M1-03 | Thư viện `/` với mọi trạng thái trong `03-screens.md` mục 1. Chờ Hoang duyệt (#14). Vuốt hàng và chọn nhiều chuyển sang M4. |
+| M1-04 | Chi tiết buổi ghi: phần đầu, tab Tóm tắt, tab Việc cần làm, trình phát giả lập, bấm ý để tua. Chờ Hoang duyệt (#15) |
 
 Nghiệm thu:
 
