@@ -17,6 +17,10 @@ Claude mở issue kế  ←  Claude merge  ←  Claude kiểm tra PR
 
 Claude chỉ thấy GitHub khi có một phiên làm việc đang mở. Sau khi agent mở PR, Hoang gửi báo cáo của agent hoặc nhắn Claude "kiểm tra PR số N".
 
+## Giao cả một mốc
+
+Khi được giao cả mốc (ví dụ M2 gồm 4 issue), agent làm theo thứ tự issue trên **một nhánh** `m<số>/<tên>`. Mỗi issue xong thì commit (thông điệp ghi số issue), đẩy nhánh, kiểm tra bản dựng Vercel thành công, rồi mới sang issue sau. Hết mốc thì mở **một PR** ghi `Closes #a, closes #b, ...` và báo cáo theo mẫu PR. Gặp chỗ phải hỏi ở một issue thì comment vào issue đó, làm tiếp các issue không phụ thuộc.
+
 ## Quyền của agent
 
 Token GitHub cấp cho agent cần: Contents (đọc và ghi), Issues (đọc và ghi), Pull requests (đọc và ghi). Thiếu quyền mở PR thì agent đẩy nhánh, comment vào issue, gắn `can-hoi`; reviewer sẽ mở PR thay.

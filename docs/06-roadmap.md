@@ -24,10 +24,10 @@ Nghiệm thu:
 
 | Issue | Việc |
 | --- | --- |
-| M1-01 | Lớp dữ liệu: `types.ts`, `repository.ts`, bản giả, bảng thử nghiệm `?debug=1`, hai fixture đầy đủ. Chờ Hoang duyệt (#12) |
-| M1-02 | Khung ứng dụng: thanh điều hướng, trình phát nổi, dải báo, bố cục ba cột trên máy tính. Chờ Hoang duyệt (#13) |
-| M1-03 | Thư viện `/` với mọi trạng thái trong `03-screens.md` mục 1. Chờ Hoang duyệt (#14). Vuốt hàng và chọn nhiều chuyển sang M4. |
-| M1-04 | Chi tiết buổi ghi: phần đầu, tab Tóm tắt, tab Việc cần làm, trình phát giả lập, bấm ý để tua. Chờ Hoang duyệt (#15) |
+| M1-01 | Lớp dữ liệu: `types.ts`, `repository.ts`, bản giả, bảng thử nghiệm `?debug=1`, hai fixture đầy đủ. Xong (#12, Hoang duyệt 14/11) |
+| M1-02 | Khung ứng dụng: thanh điều hướng, trình phát nổi, dải báo, bố cục ba cột trên máy tính. Xong (#13, Hoang duyệt 14/11) |
+| M1-03 | Thư viện `/` với mọi trạng thái trong `03-screens.md` mục 1. Xong (#14, Hoang duyệt 14/11). Vuốt hàng và chọn nhiều chuyển sang M4. |
+| M1-04 | Chi tiết buổi ghi: phần đầu, tab Tóm tắt, tab Việc cần làm, trình phát giả lập, bấm ý để tua. Xong (#15, Hoang duyệt 14/11) |
 
 Nghiệm thu:
 
@@ -39,10 +39,10 @@ Nghiệm thu:
 
 | Issue | Việc |
 | --- | --- |
-| M2-01 | Bắt đầu ghi: quyền micro, nhắc xin đồng ý. Màn hình ghi với dải giọng sống theo micro thật, đồng hồ, tạm dừng, kết thúc bằng nhấn giữ. |
-| M2-02 | Ghi chú, đánh dấu điểm nóng, chụp ảnh. Thu nhỏ màn hình ghi thành thanh trên cùng. |
-| M2-03 | Màn hình xử lý, khoảnh khắc kết thúc ghi và xử lý xong, buổi ghi mới xuất hiện trong thư viện. Khôi phục buổi ghi dang dở. |
-| M2-04 | Các trạng thái của màn hình ghi: mất mạng, sắp hết hạn mức, micro bị từ chối, micro bị chiếm. |
+| M2-01 (#17) | Bắt đầu ghi: quyền micro, nhắc xin đồng ý. Màn hình ghi với dải giọng sống theo micro thật, đồng hồ, tạm dừng, kết thúc bằng nhấn giữ. |
+| M2-02 (#18) | Ghi chú, đánh dấu điểm nóng, chụp ảnh. Thu nhỏ màn hình ghi thành thanh trên cùng. |
+| M2-03 (#19) | Màn hình xử lý, khoảnh khắc kết thúc ghi và xử lý xong, buổi ghi mới xuất hiện trong thư viện. Khôi phục buổi ghi dang dở. |
+| M2-04 (#20) | Các trạng thái của màn hình ghi: mất mạng, sắp hết hạn mức, micro bị từ chối, micro bị chiếm. |
 
 Nghiệm thu:
 

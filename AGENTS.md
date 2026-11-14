@@ -21,13 +21,24 @@ Bạn đang xây **mockup tương tác** của Noteim. Mục tiêu của giai đ
 - **Không xóa hay viết lại tài liệu sẵn có** (`README.md`, `docs/`) ngoài phạm vi issue. Được thêm mục mới, không được thay nội dung cũ.
 - **Không commit ảnh chụp vào repo.** Link xem thử của Vercel thay cho ảnh.
 
+## Bài học đã rút ra (đọc kỹ, đều là lỗi đã gặp)
+
+- **Dữ liệu:** màn hình đọc qua `useData(() => data.xxx(), [deps])` từ `@/lib/data`. Ghi qua `data.xxx` rồi để màn hình tự tải lại (lớp dữ liệu phát sự kiện khi đổi). Ngày "bây giờ" lấy từ `dataNow()`, không dùng `new Date()` để nhóm ngày hay so hạn.
+- **Giảm chuyển động:** dùng `useReducedMotionSafe()` từ `@/lib/use-reduced-motion`. Không dùng `useReducedMotion` của Motion, nó gây lỗi hydrate (React #418).
+- **Sáng tối:** không dùng tiện ích `dark:` trong `components/`. Mọi khác biệt nằm trong token. Muốn ép một vùng luôn tối (ví dụ màn hình ghi âm), thêm class `dark` cho vùng đó.
+- **Canvas:** đọc màu bằng `tokenColor(el, "--ten-token")` trong `components/ribbon/draw.ts`, đọc một lần mỗi khi đổi giao diện, không đọc trong từng khung hình.
+- **Hiệu năng:** không đổi `opacity` hay `transform` của phần tử có `blur` trong từng khung hình. Đo bằng Chrome giả lập CPU chậm gấp 4 trước khi báo xong.
+- **Bảng thử nghiệm:** mỗi trạng thái mới (lỗi, rỗng, giới hạn) phải ép được bằng `?debug=1`. Thêm cờ vào `lib/debug/flags.ts` và nút vào `components/shell/debug-panel.tsx`.
+- **Kiểm thử tự động:** trang bật cuộn mượt; trước khi đo vị trí, cuộn bằng `behavior: "instant"`.
+- **Chữ:** mọi chuỗi hiển thị nằm trong `messages/vi.json` và `messages/en.json`, hai file phải có cùng khóa.
+
 ## Khi không chắc
 
 Dừng lại và hỏi bằng một comment trong issue, gắn nhãn `can-hoi`. Nêu rõ: bạn đang phân vân giữa những phương án nào và bạn nghiêng về phương án nào. Đừng đoán rồi làm tiếp phần phụ thuộc vào câu trả lời.
 
 ## Khi xong
 
-Làm theo danh sách kiểm trong `docs/05-workflow.md` mục "PR đạt chuẩn". Tóm tắt: PR có link xem thử, ảnh chụp 390px và 1280px ở cả giao diện sáng và tối, danh sách trạng thái đã kiểm, và một mục mới trong `docs/LOG.md`.
+Làm theo danh sách kiểm trong `docs/05-workflow.md` mục "PR đạt chuẩn". Tóm tắt: PR có link xem thử Vercel, danh sách trạng thái đã kiểm, và một mục mới trong `docs/LOG.md`. Không commit ảnh chụp vào repo.
 
 ## Quyền đề xuất
 
