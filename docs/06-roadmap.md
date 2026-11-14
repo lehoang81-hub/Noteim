@@ -6,12 +6,12 @@ Sáu mốc. Mỗi mốc kết thúc bằng một lần Hoang duyệt trên đi�
 
 Mục tiêu: chốt màu, chữ, chuyển động trước khi dựng bất kỳ màn hình nào. Đây là mốc duyệt thẩm mỹ quan trọng nhất.
 
-| Issue | Việc |
-| --- | --- |
-| M0-01 | Khởi tạo dự án theo `04-data-contract.md` mục "Công nghệ" và "Cấu trúc thư mục". Cài lint, typecheck, luật chặn import. Triển khai Vercel. |
-| M0-02 | `styles/tokens.css` đủ token sáng và tối. Trang `/styleguide`: bảng màu, thang chữ kèm chuỗi thử tiếng Việt, khoảng cách, bo góc, bóng. |
-| M0-03 | Toàn bộ component trong bảng "Component" của design system, hiện trên `/styleguide` với đủ trạng thái. |
-| M0-04 | Dải giọng ba dạng (sống, phát lại, thu nhỏ) và ba khoảnh khắc đặc trưng, có nút bấm chạy thử trên `/styleguide`. |
+| Issue | Việc | Trạng thái |
+| --- | --- | --- |
+| M0-01 | Khởi tạo dự án, lint, typecheck, luật chặn import, Vercel. `styles/tokens.css` đủ token sáng và tối. Trang `/styleguide` bản đầu. | Xong (#1, PR #3) |
+| M0-02 | Hoàn thiện `/styleguide` theo kết quả review: khối "Xem nhanh", điều hướng mục, bố cục máy tính, một nguồn mã màu. | |
+| M0-03 | Toàn bộ component trong bảng "Component" của design system, hiện trên `/styleguide` với đủ trạng thái. | |
+| M0-04 | Dải giọng ba dạng (sống, phát lại, thu nhỏ) và ba khoảnh khắc đặc trưng, có nút bấm chạy thử trên `/styleguide`. | |
 
 Nghiệm thu:
 

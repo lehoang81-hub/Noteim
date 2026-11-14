@@ -17,6 +17,12 @@ Claude mở issue kế  ←  Claude merge  ←  Claude kiểm tra PR
 
 Claude chỉ thấy GitHub khi có một phiên làm việc đang mở. Sau khi agent mở PR, Hoang gửi báo cáo của agent hoặc nhắn Claude "kiểm tra PR số N".
 
+## Quyền của agent
+
+Token GitHub cấp cho agent cần: Contents (đọc và ghi), Issues (đọc và ghi), Pull requests (đọc và ghi). Thiếu quyền mở PR thì agent đẩy nhánh, comment vào issue, gắn `can-hoi`; reviewer sẽ mở PR thay.
+
+Agent không cần tài khoản Vercel. Repo đã nối với dự án Vercel `noteim`: mỗi nhánh đẩy lên tự có link xem thử, bản `main` chạy tại https://noteim.vercel.app.
+
 ## Nhãn
 
 | Nhãn | Nghĩa |
@@ -68,10 +74,8 @@ Link Vercel: …
 Đường dẫn cần xem: /…, /…?debug=1
 
 ## Ảnh chụp
-| | Sáng | Tối |
-| --- | --- | --- |
-| 390px | ảnh | ảnh |
-| 1280px | ảnh | ảnh |
+Không commit ảnh vào repo. Vercel tự tạo link xem thử cho mỗi lần đẩy nhánh, reviewer tự chụp khi kiểm tra.
+Nếu công cụ của bạn đính kèm được ảnh vào comment của PR thì đính kèm ảnh 390px và 1280px, sáng và tối.
 
 ## Trạng thái đã kiểm
 - [ ] Bình thường  - [ ] Đang tải  - [ ] Rỗng  - [ ] Lỗi  - [ ] Mất mạng
@@ -99,7 +103,7 @@ Không có / liệt kê kèm lý do
 2. **Đúng thiết kế.** Token, bố cục, giọng văn, bốn điều cấm trong design system.
 3. **Đủ trạng thái.** Dùng `?debug=1` ép từng trạng thái.
 4. **Đúng ranh giới dữ liệu.** Mọi dữ liệu đi qua repository.
-5. **Chạy được.** Build sạch, không lỗi trong bảng điều khiển trình duyệt, không tràn bố cục ở 390px.
+5. **Chạy được.** Bản dựng trên Vercel thành công, build sạch, không lỗi trong bảng điều khiển trình duyệt, không tràn bố cục ở 390px.
 6. **Tiếng Việt.** Dấu hiển thị đúng, không rớt dòng xấu ở tiêu đề, không lẫn tiếng Anh.
 
 ## Sổ sách
