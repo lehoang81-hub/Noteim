@@ -174,6 +174,8 @@ export const SessionDetail = Session.extend({
   peaks: z.array(z.number()),
   speaker_spans: z.array(SpeakerSpanData),
   send_history: z.array(z.object({ sent_at: z.string(), recipient_count: z.number() })),
+  /** Buổi ghi mẫu theo nghề (M4-04), không hiện trong thư viện chính */
+  is_sample: z.boolean().optional().catch(undefined),
 });
 export type SessionDetail = z.infer<typeof SessionDetail>;
 

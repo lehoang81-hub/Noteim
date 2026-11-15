@@ -493,7 +493,9 @@
     "micTaken": "Micro taken after 10s",
     "storageFull": "Storage full",
     "mailFailOne": "One recipient fails to receive email",
-    "shareExpired": "Share link expired"
+    "shareExpired": "Share link expired",
+    "replayOnboarding": "Replay onboarding",
+    "replayOnboardingDone": "Reset, opening onboarding"
   },
   "library": {
     "greeting": "Hi {name}",
@@ -1089,7 +1091,8 @@
     "planQuota": "Recording minutes this month",
     "planMinutes": "min",
     "planReset": "New quota from {date}.",
-    "planSeePro": "See Pro"
+    "planSeePro": "See Pro",
+    "profileSample": "View the sample session"
   },
   "upgrade": {
     "title": "Plans",
@@ -1138,5 +1141,35 @@
     "payNote": "The mockup is not connected to payments.",
     "notConnectedTitle": "The mockup is not connected to payments",
     "notConnectedBody": "In the real product you would continue to the VietQR page or the card gateway."
+  },
+  "welcome": {
+    "brandLine": "Noteim",
+    "momentHint": "Record the conversation; Noteim summarizes it into tasks for your profession.",
+    "start": "Start",
+    "skip": "Skip",
+    "back": "Back",
+    "continue": "Continue",
+    "finish": "Finish",
+    "stepOf": "Step {step}/{total}",
+    "step1Title": "What do you do?",
+    "step1Hint": "Pick your profession so Noteim chooses the right template and sample session.",
+    "step2Title": "What should Noteim call you?",
+    "step2Name": "Your name",
+    "step2NamePlaceholder": "e.g. Hoang",
+    "step2Honorific": "Honorific",
+    "honorificNone": "No honorific",
+    "step2Preview": "Your greeting will look like this:",
+    "step2PreviewEmpty": "Hi there",
+    "step3Title": "Try a sample session",
+    "step3Hint": "This is a sample session for your profession, summarized with its template.",
+    "step3Loading": "Finding a sample session",
+    "step3Open": "Open the sample session",
+    "step3TourHint": "Opening the sample shows 3 floating tips: a summary point, tasks, and the record button.",
+    "tourTitle": "Get started ({step}/{total})",
+    "tourBullet": "This is a summary point. Tap it to replay that exact moment of the recording.",
+    "tourTasks": "Open the Tasks tab to see action items pulled from the session, with owners and due dates.",
+    "tourRecord": "The record button is always here. Tap to start recording, no forms.",
+    "tourNext": "Next",
+    "tourDone": "Done"
   }
 }

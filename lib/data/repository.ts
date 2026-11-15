@@ -3,6 +3,7 @@ import type {
   ChatMessage,
   Contact,
   GlossaryTerm,
+  Profession,
   Quota,
   Session,
   SessionDetail,
@@ -78,6 +79,8 @@ export interface SessionRepository {
   search(query: string): Promise<SearchResult>;
   /** Tạo buổi ghi từ file có sẵn (M4-02): không lưu file, chỉ đọc thông tin */
   createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: string }): Promise<{ id: string }>;
+  /** Buổi ghi mẫu theo nghề (M4-04): dùng ở màn làm quen và Cài đặt > Hồ sơ */
+  getSample(profession: Profession): Promise<SessionDetail>;
 }
 
 export interface TaskRepository {

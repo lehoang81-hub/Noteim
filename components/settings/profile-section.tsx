@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/form";
@@ -18,6 +19,7 @@ export function ProfileSection() {
   const t = useTranslations("settings");
   const tp = useTranslations("debug");
   const toast = useToast();
+  const router = useRouter();
   const me = useData(() => data.account.me(), []);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -135,6 +137,21 @@ export function ProfileSection() {
         className="self-start"
       >
         {t("save")}
+      </Button>
+
+      {/* Xem lại buổi ghi mẫu của nghề hiện tại (M4-04) */}
+      <Button
+        variant="secondary"
+        className="self-start"
+        disabled={!me.data}
+        onClick={() => {
+          void data.sessions
+            .getSample(me.data?.profession ?? profession)
+            .then((s) => router.push(`/s/${s.id}?tour=0`))
+            .catch(() => toast.show({ tone: "error", message: t("saveError") }));
+        }}
+      >
+        {t("profileSample")}
       </Button>
     </div>
   );

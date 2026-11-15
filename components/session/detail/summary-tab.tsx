@@ -219,6 +219,7 @@ export function SummaryTab({
                     <BulletRow
                       key={b.id}
                       bullet={b}
+                      tourAnchor={b.id === allBullets[0]?.id}
                       speakerColorIndex={colorOf[b.speaker_id] ?? 0}
                       speakerName={speakerName}
                       playing={playingBulletId === b.id}
@@ -333,6 +334,7 @@ function BulletRow({
   editedLabel,
   seekLabel,
   menuLabel,
+  tourAnchor,
   onOpenMenu,
   children,
 }: {
@@ -345,6 +347,8 @@ function BulletRow({
   editedLabel?: string;
   seekLabel: string;
   menuLabel: string;
+  /** Mốc cho chú thích nổi đầu tiên của tour làm quen (M4-04) */
+  tourAnchor?: boolean;
   onOpenMenu: () => void;
   children?: React.ReactNode;
 }) {
@@ -376,6 +380,7 @@ function BulletRow({
   return (
     <div
       className="group/bullet relative"
+      data-tour={tourAnchor ? "first-bullet" : undefined}
       onPointerDown={holdStart}
       onPointerMove={holdMove}
       onPointerUp={holdEnd}

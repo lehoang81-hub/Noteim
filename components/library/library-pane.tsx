@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
 import { SwipeRow } from "@/components/library/swipe-row";
@@ -84,6 +84,14 @@ export function LibraryPane({ className }: { className?: string }) {
   const all = useData(() => data.sessions.list(), []);
   const list = useData(() => data.sessions.list(toFilter(filter)), [filter]);
   const shareDetail = useData(() => (shareTargetId ? data.sessions.get(shareTargetId) : Promise.resolve(null)), [shareTargetId]);
+
+  // Chưa làm quen (M4-04): mở / chuyển tới /welcome, làm xong hoặc bỏ qua thì không hiện lại
+  const redirectChecked = useRef(false);
+  useEffect(() => {
+    if (redirectChecked.current || !me.data) return;
+    redirectChecked.current = true;
+    if (!me.data.onboarded_at) router.replace("/welcome");
+  }, [me.data, router]);
 
   const now = dataNow();
   const tplName = useMemo(

@@ -1,12 +1,13 @@
 "use client";
 
-import { FlaskConical, RotateCcw, X } from "lucide-react";
+import { FlaskConical, Play, RotateCcw, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/form";
 import { useToast } from "@/components/ui/toast";
-import { resetData, type Profession } from "@/lib/data";
+import { resetData, data, type Profession } from "@/lib/data";
 import { resetFlags, setFlags, useDebugFlags, type DebugFlags } from "@/lib/debug/flags";
 
 /*
@@ -24,6 +25,7 @@ export function DebugPanel() {
   const t = useTranslations("debug");
   const flags = useDebugFlags();
   const toast = useToast();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   if (!flags.panel) return null;
@@ -114,6 +116,24 @@ export function DebugPanel() {
           {t("hide")}
         </Button>
       </div>
+
+      {/* Xem lại màn làm quen (M4-04): xóa cờ đã làm quen rồi tới /welcome */}
+      <Button
+        icon={Play}
+        className="mt-2"
+        block
+        onClick={() => {
+          void data.account
+            .updateMe({ onboarded_at: null })
+            .catch(() => undefined)
+            .finally(() => {
+              toast.show({ tone: "success", message: t("replayOnboardingDone") });
+              router.push("/welcome");
+            });
+        }}
+      >
+        {t("replayOnboarding")}
+      </Button>
     </section>
   );
 }

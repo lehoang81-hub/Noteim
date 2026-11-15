@@ -546,7 +546,9 @@
     "micTaken": "Micro bị chiếm sau 10 giây",
     "storageFull": "Bộ nhớ đầy",
     "mailFailOne": "Gửi email lỗi một người",
-    "shareExpired": "Link chia sẻ hết hạn"
+    "shareExpired": "Link chia sẻ hết hạn",
+    "replayOnboarding": "Xem lại làm quen",
+    "replayOnboardingDone": "Đã đặt lại, đang mở màn làm quen"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",
@@ -1089,7 +1091,8 @@
     "planQuota": "Thời lượng ghi tháng này",
     "planMinutes": "phút",
     "planReset": "Hạn mức mới có từ ngày {date}.",
-    "planSeePro": "Xem gói Pro"
+    "planSeePro": "Xem gói Pro",
+    "profileSample": "Xem buổi ghi mẫu"
   },
   "upgrade": {
     "title": "Gói dịch vụ",
@@ -1138,5 +1141,35 @@
     "payNote": "Bản mockup chưa nối thanh toán.",
     "notConnectedTitle": "Bản mockup chưa nối thanh toán",
     "notConnectedBody": "Khi ra bản thật, bạn sẽ chuyển đến trang thanh toán của VietQR hoặc cổng thẻ quốc tế."
+  },
+  "welcome": {
+    "brandLine": "Noteim",
+    "momentHint": "Ghi lại cuộc nói chuyện, Noteim tóm tắt thành việc cần làm cho nghề của bạn.",
+    "start": "Bắt đầu",
+    "skip": "Bỏ qua",
+    "back": "Quay lại",
+    "continue": "Tiếp tục",
+    "finish": "Hoàn tất",
+    "stepOf": "Bước {step}/{total}",
+    "step1Title": "Bạn làm nghề gì?",
+    "step1Hint": "Chọn nghề để Noteim chọn đúng mẫu tóm tắt và buổi ghi mẫu cho bạn.",
+    "step2Title": "Noteim nên gọi bạn là gì?",
+    "step2Name": "Tên của bạn",
+    "step2NamePlaceholder": "Ví dụ: Hoàng",
+    "step2Honorific": "Cách xưng hô",
+    "honorificNone": "Không xưng hô",
+    "step2Preview": "Lời chào sẽ như thế này:",
+    "step2PreviewEmpty": "Chào bạn",
+    "step3Title": "Nghe thử một buổi ghi mẫu",
+    "step3Hint": "Đây là buổi ghi mẫu của nghề bạn vừa chọn, tóm tắt theo đúng mẫu đó.",
+    "step3Loading": "Đang tìm buổi ghi mẫu",
+    "step3Open": "Mở buổi ghi mẫu",
+    "step3TourHint": "Mở buổi mẫu sẽ có 3 chú thích nổi chỉ từng chỗ: ý tóm tắt, việc cần làm và nút ghi âm.",
+    "tourTitle": "Làm quen ({step}/{total})",
+    "tourBullet": "Đây là một ý tóm tắt. Chạm vào ý để nghe lại đúng đoạn đó trong buổi ghi.",
+    "tourTasks": "Mở tab Việc để xem việc cần làm được rút ra từ buổi ghi, kèm người phụ trách và hạn.",
+    "tourRecord": "Nút ghi âm luôn ở đây. Bấm là ghi ngay, không cần điền biểu mẫu.",
+    "tourNext": "Tiếp",
+    "tourDone": "Xong"
   }
 }

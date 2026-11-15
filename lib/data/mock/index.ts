@@ -42,7 +42,9 @@ function foldVi(s: string): string {
 }
 
 function findFixture(id: string): SessionFixture & { draft?: RecordingDraft; chat_log?: ChatMessage[] } {
-  const fx = getDb().sessions.find((s) => s.detail.id === id);
+  const db = getDb();
+  // Buổi ghi mẫu (M4-04) nằm ngoài danh sách chính nhưng vẫn mở được chi tiết
+  const fx = db.sessions.find((s) => s.detail.id === id) ?? db.samples.find((s) => s.detail.id === id);
   if (!fx) throw new DataError("not_found");
   return fx;
 }
@@ -482,6 +484,14 @@ export const mockSource: DataSource = {
         db.sessions.unshift({ detail, transcript: [], chat: [], draft });
         scheduleProcessing(id);
         return { id };
+      }),
+    getSample: (profession) =>
+      read(() => {
+        const db = getDb();
+        const tpl = db.templates.find((t) => t.profession === profession);
+        const sample = db.samples.find((s) => s.detail.template_id === tpl?.id) ?? db.samples[0];
+        if (!sample) throw new DataError("not_found");
+        return sample.detail;
       }),
   },
 

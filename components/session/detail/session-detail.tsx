@@ -25,6 +25,7 @@ import { TasksTab } from "./tasks-tab";
 import { TranscriptTab } from "./transcript-tab";
 import { VisualTab } from "./visual-tab";
 import { AiTab } from "./ai-tab";
+import { SessionTour } from "@/components/welcome/session-tour";
 
 /*
  * Chi tiết buổi ghi (docs/03-screens.md mục 5).
@@ -155,6 +156,9 @@ function Loaded({
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [confirmPurge, setConfirmPurge] = useState(false);
   const [keepOpen, setKeepOpen] = useState(false);
+  // Tour làm quen (?tour=1): 3 chú thích nổi, hiện khi buổi ghi tải xong (M4-04)
+  const tourParam = search.get("tour") === "1";
+  const [tourDone, setTourDone] = useState(false);
   const touched = useRef(false);
 
   const canPlay = detail.storage_status === "full" && detail.status === "ready";
@@ -522,6 +526,17 @@ function Loaded({
       >
         {t("deleteBody", { title: detail.title })}
       </ConfirmDialog>
+
+      {/* Tour làm quen: 3 chú thích nổi (M4-04) */}
+      {tourParam && !tourDone && detail.status === "ready" ? (
+        <SessionTour
+          onDone={() => {
+            setTourDone(true);
+            void data.account.updateMe({ onboarded_at: dataNow().toISOString() }).catch(() => undefined);
+            router.replace(`/s/${detail.id}`, { scroll: false });
+          }}
+        />
+      ) : null}
     </div>
   );
 }

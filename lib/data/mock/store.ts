@@ -11,6 +11,12 @@ import s5 from "@/fixtures/sessions/bac-si-buoi-kham.json";
 import s6 from "@/fixtures/sessions/cong-chung-chuyen-nhuong.json";
 import s7 from "@/fixtures/sessions/loi-xu-ly.json";
 import s8 from "@/fixtures/sessions/chua-tai-len.json";
+import sampleBusiness from "@/fixtures/samples/business_owner.json";
+import sampleDoctor from "@/fixtures/samples/doctor.json";
+import sampleLawyer from "@/fixtures/samples/lawyer.json";
+import sampleNotary from "@/fixtures/samples/notary.json";
+import sampleArchitect from "@/fixtures/samples/architect.json";
+import sampleRealestate from "@/fixtures/samples/realestate_sales.json";
 import templatesJson from "@/fixtures/templates.json";
 import userJson from "@/fixtures/user.json";
 import { z } from "zod";
@@ -44,6 +50,8 @@ export type MockDb = {
   shares: Array<ShareLink & { password?: string }>;
   /** Buổi ghi vừa xóa, giữ để "Hoàn tác" (M4-01); dọn khi tải lại trang */
   removed: Array<SessionFixture & { chat_log?: ChatMessage[] }>;
+  /** Buổi ghi mẫu theo nghề (M4-04), tách khỏi danh sách thư viện chính */
+  samples: SessionFixture[];
 };
 
 function seed(): MockDb {
@@ -54,6 +62,9 @@ function seed(): MockDb {
     templates: z.array(Template).parse(templatesJson),
     glossary: z.array(GlossaryTerm).parse(glossaryJson),
     sessions: [s1, s2, s3, s4, s5, s6, s7, s8].map((s) => SessionFixture.parse(s)),
+    samples: [sampleRealestate, sampleBusiness, sampleDoctor, sampleLawyer, sampleArchitect, sampleNotary].map((s) =>
+      SessionFixture.parse(s),
+    ),
     shares: [],
     removed: [],
   };

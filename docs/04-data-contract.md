@@ -239,7 +239,7 @@ interface SessionRepository {
   get(id: string): Promise<SessionDetail>;
   getTranscript(id: string): Promise<TranscriptSegment[]>;   // tải riêng vì nặng
   getVisuals(id: string): Promise<VisualArtifacts>;          // chỉ gọi khi mở tab
-  update(id: string, patch: Partial<Pick<Session, "title" | "template_id">>): Promise<void>;
+  update(id: string, patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids" | "audio_expires_at">>): Promise<void>;   // M4: audio_expires_at null là "Giữ lại bản gốc"
   updateBullet(sessionId: string, bulletId: string, text: string): Promise<void>;
   updateSegment(sessionId: string, segmentId: string, text: string): Promise<void>;   // M3: sửa lời, đánh dấu edited
   reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>; // M3: đổi người nói của đoạn
@@ -251,7 +251,12 @@ interface SessionRepository {
   subscribeProcessing(id: string, onStep: (step: number) => void): () => void;
   retryProcessing(id: string): Promise<void>;                 // thêm ở M1: nút "Thử lại" khi xử lý lỗi
   purgeRaw(ids: string[]): Promise<{ freed_bytes: number }>;
-  remove(id: string): Promise<void>;
+  remove(id: string): Promise<void>;                          // xóa, giữ trong removed để Hoàn tác (M4)
+  restore(id: string): Promise<void>;                         // M4: Hoàn tác xóa, trả về đúng chỗ cũ
+  reprocess(id: string, templateId: string): Promise<void>;   // M4: đổi mẫu và tóm tắt lại, chạy lại 5 bước
+  search(query: string): Promise<{ sessions: Session[]; segments: Array<{ session_id: string; segment: TranscriptSegment }>; tasks: ActionItem[] }>;   // M4: so khớp bỏ dấu, không phân biệt hoa thường
+  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: string }): Promise<{ id: string }>;   // M4: file không được lưu
+  getSample(profession: Profession): Promise<SessionDetail>;  // M4: buổi ghi mẫu theo nghề, không nằm trong list()
 }
 
 interface TaskRepository {
@@ -268,7 +273,10 @@ interface ChatRepository {
 interface ShareRepository {
   create(sessionId: string, opts: Pick<ShareLink, "scope" | "expires_at"> & { password?: string }): Promise<ShareLink>;
   revoke(id: string): Promise<void>;
-  getPublic(shareId: string): Promise<PublicSessionView | "expired" | "revoked" | "needs_password">;
+  getForSession(sessionId: string): Promise<ShareLink | null>;   // M4: link đang sống của một buổi
+  listAll(): Promise<ShareLink[]>;                               // M4: mọi link, mục Quyền riêng tư
+  recordView(shareId: string): Promise<void>;                    // M4: mỗi lần mở trang công khai tăng lượt xem
+  getPublic(shareId: string, password?: string): Promise<PublicSessionView | "expired" | "revoked" | "needs_password" | "not_found">;   // M4: kiểm mật khẩu thật trên bản giả
 }
 
 interface MailRepository {
@@ -278,12 +286,20 @@ interface MailRepository {
 
 interface AccountRepository {
   me(): Promise<User>;
-  updateMe(patch: Partial<User>): Promise<void>;
+  updateMe(patch: Partial<User>): Promise<void>;                 // M4: thêm consent_announcement, auto_filter_silence, onboarded_at
   quota(): Promise<Quota>;
   templates(): Promise<Template[]>;
   contacts(): Promise<Contact[]>;
   glossary(): Promise<GlossaryTerm[]>;
   addGlossaryTerm(term: string): Promise<GlossaryTerm>;   // M3: trùng thì trả từ cũ
+  updateGlossaryTerm(id: string, term: string): Promise<void>;   // M4: sửa từ
+  removeGlossaryTerm(id: string): Promise<void>;                 // M4: xóa từ
+  addContact(input: { name: string; email?: string }): Promise<Contact>;
+  updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email">>): Promise<void>;
+  contactUsage(id: string): Promise<string[]>;                   // M4: các buổi ghi đang dùng liên hệ làm người nói
+  removeContact(id: string): Promise<void>;                      // M4: xóa liên hệ, người nói về lại "Người nói N"
+  updateTemplate(id: string, patch: Pick<Template, "sections">): Promise<void>;   // M4: bật/tắt và đổi thứ tự phần
+  exportAll(): Promise<Record<string, unknown>>;                 // M4: tải toàn bộ dữ liệu JSON
 }
 ```
 
