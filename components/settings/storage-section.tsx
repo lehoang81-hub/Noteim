@@ -92,7 +92,7 @@ export function StorageSection() {
                 </span>
                 <Button
                   variant="ghost"
-                  className="-my-1 h-9 shrink-0 text-tag-risk hover:text-tag-risk"
+                  className="-my-1 min-h-11 shrink-0 text-tag-risk hover:text-tag-risk"
                   onClick={() => {
                     setSelected([s.id]);
                     setConfirmPurge(true);

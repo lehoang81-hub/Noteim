@@ -71,7 +71,7 @@ export function TemplatesSection() {
                       aria-label={t("moveUp", { title: sectionTitle(s, locale) })}
                       disabled={i === 0}
                       onClick={() => move(tpl, i, -1)}
-                      className="size-9"
+                      className="size-11"
                     />
                     <Button
                       variant="ghost"
@@ -80,7 +80,7 @@ export function TemplatesSection() {
                       aria-label={t("moveDown", { title: sectionTitle(s, locale) })}
                       disabled={i === tpl.sections.length - 1}
                       onClick={() => move(tpl, i, 1)}
-                      className="size-9"
+                      className="size-11"
                     />
                     <SwitchPrimitive.Root
                       checked={s.enabled}
@@ -88,7 +88,7 @@ export function TemplatesSection() {
                         void saveSections(tpl, tpl.sections.map((x) => (x.id === s.id ? { ...x, enabled: v } : x)))
                       }
                       aria-label={t("sectionEnabled", { title: sectionTitle(s, locale) })}
-                      className="relative inline-flex h-7 w-12 shrink-0 items-center rounded-pill bg-ink-3 transition-colors ease-noteim duration-(--t-quick) data-[state=checked]:bg-sen"
+                      className="relative inline-flex h-7 w-12 shrink-0 items-center rounded-pill bg-ink-3 transition-colors ease-noteim duration-(--t-quick) after:absolute after:-inset-2.5 after:content-[''] data-[state=checked]:bg-sen"
                     >
                       <SwitchPrimitive.Thumb className="block size-5 translate-x-1 rounded-pill bg-surface transition-transform ease-noteim duration-(--t-quick) data-[state=checked]:translate-x-6" />
                     </SwitchPrimitive.Root>
@@ -105,7 +105,7 @@ export function TemplatesSection() {
         <Lock aria-hidden={true} className="size-5 shrink-0 text-ink-3" strokeWidth={1.75} />
         <span className="min-w-0 flex-1 text-small text-ink-2">{plan === "free" ? t("customTemplatePro") : t("customTemplateSoon")}</span>
         {plan === "free" ? (
-          <Link href="/upgrade" className="inline-flex h-9 items-center rounded-control border border-line bg-surface px-3 text-small font-semibold text-ink hover:bg-surface-2">
+          <Link href="/upgrade" className="inline-flex min-h-11 items-center rounded-control border border-line bg-surface px-3 text-small font-semibold text-ink hover:bg-surface-2">
             {t("seePro")}
           </Link>
         ) : null}

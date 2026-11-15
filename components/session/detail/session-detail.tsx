@@ -321,7 +321,7 @@ function Loaded({
           icon={UserRoundPen}
           className="mt-3 lg:px-8"
           action={
-            <button type="button" onClick={() => setNaming(true)} className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2">
+            <button type="button" onClick={() => setNaming(true)} className="-my-2 inline-flex h-11 items-center px-1 font-semibold underline underline-offset-2">
               {t("nameThem")}
             </button>
           }
@@ -334,7 +334,7 @@ function Loaded({
           kind="expiring"
           className="mt-2 lg:px-8"
           action={
-            <button type="button" onClick={() => setKeepOpen(true)} className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2">
+            <button type="button" onClick={() => setKeepOpen(true)} className="-my-2 inline-flex h-11 items-center px-1 font-semibold underline underline-offset-2">
               {t("keep")}
             </button>
           }

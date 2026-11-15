@@ -604,7 +604,7 @@ export function RecordScreen() {
               <button
                 type="button"
                 onClick={togglePause}
-                className="inline-flex h-8 items-center rounded-control px-2 font-semibold text-sen-text underline underline-offset-2"
+                className="inline-flex min-h-11 items-center rounded-control px-2 font-semibold text-sen-text underline underline-offset-2"
               >
                 {t("pause")}
               </button>

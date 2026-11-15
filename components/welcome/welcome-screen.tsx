@@ -84,7 +84,7 @@ export function WelcomeScreen() {
           <ArrowLeft aria-hidden={true} className="size-5" strokeWidth={1.75} />
         </button>
         <span className="flex-1" />
-        <Button variant="ghost" className="h-9" disabled={saving} onClick={skip}>
+        <Button variant="ghost" className="h-11" disabled={saving} onClick={skip}>
           {t("skip")}
         </Button>
       </header>

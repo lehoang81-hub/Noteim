@@ -219,7 +219,7 @@ export function AiTab({
       {quotaLocked ? (
         <div className="mt-1 rounded-block border border-line bg-surface p-3">
           <p className="text-small text-ink-2">{t("quotaOut")}</p>
-          <Link href="/upgrade" className="mt-2 inline-flex h-10 items-center rounded-control bg-ink px-3 text-small font-semibold text-bg">
+          <Link href="/upgrade" className="mt-2 inline-flex min-h-11 items-center rounded-control bg-ink px-3 text-small font-semibold text-bg">
             {t("seePro")}
           </Link>
         </div>

@@ -173,7 +173,7 @@ export function SummaryTab({
                     type="button"
                     onClick={() => onSeek(topic.start_sec)}
                     aria-label={`${t("seek")} ${formatClock(topic.start_sec)}`}
-                    className="inline-flex min-h-8 items-center rounded-control text-caption font-medium tabular-nums text-ink-3 hover:underline"
+                    className="relative inline-flex min-h-8 items-center rounded-control text-caption font-medium tabular-nums text-ink-3 hover:underline after:absolute after:-inset-1.5 after:content-['']"
                   >
                     {formatClock(topic.start_sec)}
                   </button>

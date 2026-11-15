@@ -56,7 +56,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   if (pathname === "/record" || pathname.endsWith("/processing")) {
     return (
       <div className="min-h-dvh">
-        {children}
+        {/* main riêng: màn không khung ứng dụng cũng cần một mốc chính (M5-03) */}
+        <main>{children}</main>
         <ProcessingWatcher />
         <DebugPanel />
       </div>
@@ -113,7 +114,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       ) : null}
 
-      <div className="pb-[calc(88px+env(safe-area-inset-bottom))] lg:pb-0">{children}</div>
+      {/* main: mốc nội dung chính cho trình đọc màn hình (M5-03) */}
+      <main className="pb-[calc(88px+env(safe-area-inset-bottom))] lg:pb-0">{children}</main>
 
       <ProcessingWatcher />
 

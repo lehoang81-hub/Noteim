@@ -343,7 +343,7 @@ export function SendMinutesSheet({
                           onBlur={() => void saveEmail(id)}
                           placeholder={t("emailMissing")}
                           aria-invalid={!!emailErrors[id] || undefined}
-                          className="h-10 w-full max-w-xs rounded-control border border-line bg-surface px-3 text-small text-ink placeholder:text-ink-3 aria-[invalid=true]:border-tag-risk focus:border-dien focus-visible:outline-none"
+                          className="min-h-11 w-full max-w-xs rounded-control border border-line bg-surface px-3 text-small text-ink placeholder:text-ink-3 aria-[invalid=true]:border-tag-risk focus:border-dien focus-visible:outline-none"
                         />
                         {emailErrors[id] ? (
                           <p role="alert" className="mt-1 text-small font-medium text-tag-risk">
@@ -441,7 +441,7 @@ export function SendMinutesSheet({
                         value={e.subject}
                         onChange={(ev) => setEdits((m) => ({ ...m, [key]: { ...e, subject: ev.target.value } }))}
                         aria-label={ts("edit")}
-                        className="mt-2 h-10 w-full rounded-control border border-line bg-surface px-2 text-small font-semibold text-ink focus:border-dien focus-visible:outline-none"
+                        className="mt-2 min-h-11 w-full rounded-control border border-line bg-surface px-2 text-small font-semibold text-ink focus:border-dien focus-visible:outline-none"
                       />
                       {/* Phần do AI soạn: viền điện */}
                       <div className="mt-2 rounded-control border border-dien p-2">

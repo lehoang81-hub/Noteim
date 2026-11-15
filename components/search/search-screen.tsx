@@ -230,7 +230,7 @@ export function SearchScreen() {
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {people.map((c) => (
                     <li key={c.id}>
-                      <Button variant="secondary" className="h-9" onClick={() => setRaw(c.name)}>
+                      <Button variant="secondary" className="h-11" onClick={() => setRaw(c.name)}>
                         {c.name}
                       </Button>
                     </li>
@@ -248,7 +248,7 @@ export function SearchScreen() {
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {usedTemplates.map((tp) => (
                     <li key={tp.id}>
-                      <Button variant="secondary" className="h-9" onClick={() => setRaw(templateName(tp, locale))}>
+                      <Button variant="secondary" className="h-11" onClick={() => setRaw(templateName(tp, locale))}>
                         {templateName(tp, locale)}
                       </Button>
                     </li>

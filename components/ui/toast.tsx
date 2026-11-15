@@ -84,7 +84,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                       item.action?.onClick();
                       dismiss(item.id);
                     }}
-                    className="-my-2 -mr-2 inline-flex h-10 items-center rounded-control px-2 font-semibold underline underline-offset-2"
+                    className="-my-2 -mr-2 inline-flex h-11 items-center rounded-control px-2 font-semibold underline underline-offset-2"
                   >
                     {item.action.label}
                   </button>

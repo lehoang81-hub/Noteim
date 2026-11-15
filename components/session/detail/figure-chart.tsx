@@ -65,6 +65,26 @@ export default function FigureChart({
           </BarChart>
         )}
       </ResponsiveContainer>
+      {/* Bảng số liệu thay thế cho trình đọc màn hình: cùng dữ liệu với biểu đồ (M5-03) */}
+      <table className="sr-only">
+        <caption>
+          {figure.title} ({figure.unit})
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">{figure.title}</th>
+            <th scope="col">{figure.unit}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.label}>
+              <th scope="row">{r.label}</th>
+              <td>{r.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

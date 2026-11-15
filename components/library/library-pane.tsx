@@ -307,7 +307,7 @@ export function LibraryPane({ className }: { className?: string }) {
             disabled={!selectedIds.length}
             onClick={() => setPurgeIds(selectedIds)}
           />
-          <Button variant="secondary" className="h-9" onClick={exitSelect}>
+          <Button variant="secondary" className="h-11" onClick={exitSelect}>
             {t("doneAction")}
           </Button>
         </header>
@@ -344,14 +344,14 @@ export function LibraryPane({ className }: { className?: string }) {
                   restoreRecording();
                   router.push("/record");
                 }}
-                className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2"
+                className="-my-2 inline-flex h-11 items-center px-1 font-semibold underline underline-offset-2"
               >
                 {t("restore")}
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmDiscard(true)}
-                className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2"
+                className="-my-2 inline-flex h-11 items-center px-1 font-semibold underline underline-offset-2"
               >
                 {t("discard")}
               </button>
@@ -473,13 +473,15 @@ export function LibraryPane({ className }: { className?: string }) {
                     }
                     action={
                       s.status === "failed" ? (
-                        <Button variant="ghost" className="-my-2 h-9" onClick={() => retry(s.id)}>
+                        <Button variant="ghost" className="-my-2 min-h-11" onClick={() => retry(s.id)}>
                           {t("retry")}
                         </Button>
                       ) : undefined
                     }
                     trailing={
-                      <span className="hidden lg:block">
+                      /* Ẩn trên điện thoại nhưng vẫn bấm được bằng bàn phím:
+                         nhận tiêu điểm thì hiện — thao tác hàng thay cho vuốt (M5-03) */
+                      <span className="opacity-0 transition-opacity has-[:focus-visible]:opacity-100 lg:opacity-100">
                         <Button
                           variant="ghost"
                           icon={Ellipsis}
