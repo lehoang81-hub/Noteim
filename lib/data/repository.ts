@@ -141,10 +141,23 @@ export interface AccountRepository {
   glossary(): Promise<GlossaryTerm[]>;
   /** Thêm từ vào từ điển tên riêng; trùng (không phân biệt hoa thường) thì trả từ cũ (M3-01) */
   addGlossaryTerm(term: string): Promise<GlossaryTerm>;
+  /** Sửa một từ trong từ điển (M4-03) */
+  updateGlossaryTerm(id: string, term: string): Promise<void>;
+  /** Xóa một từ khỏi từ điển (M4-03) */
+  removeGlossaryTerm(id: string): Promise<void>;
   /** Tạo liên hệ mới ngay trong ô chọn tên (M3-02) */
   addContact(input: { name: string; email?: string }): Promise<Contact>;
   /** Sửa liên hệ, ví dụ thêm email ngay tại hàng người nhận (M3-02, M3-04) */
   updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email">>): Promise<void>;
+  /** Xóa liên hệ: trả về các buổi ghi đang dùng người này làm người nói,
+   * để giao diện cảnh báo trước khi xóa (M4-03) */
+  contactUsage(id: string): Promise<string[]>;
+  /** Xóa liên hệ; người nói đang gán liên hệ này về lại "Người nói N" (M4-03) */
+  removeContact(id: string): Promise<void>;
+  /** Bật/tắt và đổi thứ tự các phần của một mẫu (M4-03) */
+  updateTemplate(id: string, patch: Pick<Template, "sections">): Promise<void>;
+  /** Xuất toàn bộ dữ liệu mẫu ra JSON để tải về (M4-03) */
+  exportAll(): Promise<Record<string, unknown>>;
 }
 
 export interface DataSource {

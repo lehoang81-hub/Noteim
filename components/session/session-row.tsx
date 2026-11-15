@@ -38,6 +38,9 @@ export interface SessionRowProps {
   selecting?: boolean;
   checked?: boolean;
   onToggleCheck?: () => void;
+  /** Nhãn ô tích cho trình đọc màn hình, theo ngôn ngữ giao diện */
+  checkOnLabel?: string;
+  checkOffLabel?: string;
   /** Nhấn giữ để vào chế độ chọn nhiều (điện thoại) */
   onLongPress?: () => void;
   /** Nút ⋯ hiện khi rê chuột trên máy tính (M4-01) */
@@ -60,6 +63,8 @@ export function SessionRow({
   selecting,
   checked,
   onToggleCheck,
+  checkOnLabel,
+  checkOffLabel,
   onLongPress,
   trailing,
   className,
@@ -81,7 +86,7 @@ export function SessionRow({
         type="checkbox"
         checked={!!checked}
         onChange={onToggleCheck}
-        aria-label={`${checked ? "Bỏ chọn" : "Chọn"}: ${title}`}
+        aria-label={`${checked ? checkOffLabel : checkOnLabel}: ${title}`}
         className="size-5 accent-[var(--sen)]"
       />
     </span>

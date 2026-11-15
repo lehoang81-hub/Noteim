@@ -145,7 +145,9 @@ export function RecordScreen() {
   const maxSessionMin = quota.data?.max_session_minutes ?? 45;
   const planName = me.data?.plan === "pro" ? "Pro" : "Free";
   const planLimitLabel =
-    maxSessionMin >= 60 && maxSessionMin % 60 === 0 ? `${Math.round(maxSessionMin / 60)} giờ` : `${maxSessionMin} phút`;
+    maxSessionMin >= 60 && maxSessionMin % 60 === 0
+      ? t("hours", { h: Math.round(maxSessionMin / 60) })
+      : t("minutes", { m: maxSessionMin });
   const tagLabels: Record<SemanticTag, string> = {
     decided: tl("decided"),
     pending: tl("pending"),
@@ -350,7 +352,7 @@ export function RecordScreen() {
       toast.show({ tone: "error", message: t("endError") });
       return;
     }
-    const title = `Buổi ghi lúc ${clockTime(snapshot.startedAtClock ?? Date.now())}`;
+    const title = t("sessionAt", { time: clockTime(snapshot.startedAtClock ?? Date.now()) });
     setFolding(true); // khoảnh khắc "Kết thúc ghi": dải giọng gấp thành thẻ
     try {
       const [created] = await Promise.all([
@@ -403,7 +405,7 @@ export function RecordScreen() {
   /* Thẻ buổi ghi trong khoảnh khắc "Kết thúc ghi" */
   const foldPeaks = resample(recording.levels.length ? recording.levels : [0.4], 40);
   const foldSpeakers = Array.from({ length: 40 }, () => 0);
-  const foldTitle = recording.startedAtClock ? `Buổi ghi lúc ${clockTime(recording.startedAtClock)}` : "";
+  const foldTitle = recording.startedAtClock ? t("sessionAt", { time: clockTime(recording.startedAtClock) }) : "";
 
   return (
     <div className="dark flex min-h-dvh flex-col bg-bg text-ink">

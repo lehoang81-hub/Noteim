@@ -36,6 +36,12 @@ export const User = z.object({
   ui_language: z.enum(["vi", "en"]),
   theme: z.enum(["light", "dark", "system"]),
   consent_reminder: z.boolean(),
+  /** Câu thông báo ghi âm người dùng tự sửa (M4-03); rỗng thì dùng câu mặc định */
+  consent_announcement: z.string().optional().catch(undefined),
+  /** Tự lọc khoảng lặng khi ghi (M4-03) */
+  auto_filter_silence: z.boolean().optional().catch(undefined),
+  /** Đã làm quen xong (M4-04); null/undefined là chưa, /welcome hiện lại */
+  onboarded_at: z.string().nullable().optional().catch(undefined),
 });
 export type User = z.infer<typeof User>;
 

@@ -129,6 +129,7 @@ function Loaded({
 }) {
   const t = useTranslations("session");
   const tl = useTranslations("styleguide.tags");
+  const tlLib = useTranslations("library");
   const toast = useToast();
   const router = useRouter();
   const search = useSearchParams();
@@ -153,6 +154,7 @@ function Loaded({
   const [reprocessOpen, setReprocessOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [confirmPurge, setConfirmPurge] = useState(false);
+  const [keepOpen, setKeepOpen] = useState(false);
   const touched = useRef(false);
 
   const canPlay = detail.storage_status === "full" && detail.status === "ready";
@@ -213,9 +215,8 @@ function Loaded({
     }
   }
 
-  const soon = () => toast.show({ tone: "success", message: t("soonTab") });
   const { h, m } = durationParts(detail.duration_sec);
-  const durationLabel = h > 0 ? `${h} giờ ${String(m).padStart(2, "0")}` : `${m} phút`;
+  const durationLabel = h > 0 ? tlLib("hours", { h, m: String(m).padStart(2, "0") }) : tlLib("minutes", { m });
   const unnamed = detail.speakers.filter((s) => !s.contact_id && !s.is_me).length;
   const expiresSoon =
     detail.storage_status === "full" &&
@@ -326,7 +327,7 @@ function Loaded({
           kind="expiring"
           className="mt-2 lg:px-8"
           action={
-            <button type="button" onClick={soon} className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2">
+            <button type="button" onClick={() => setKeepOpen(true)} className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2">
               {t("keep")}
             </button>
           }
@@ -485,6 +486,29 @@ function Loaded({
         <span className="block">{t("purgeBodyRemove", { mb: Math.max(1, Math.round(detail.size_bytes / 1_000_000)) })}</span>
         <span className="block">{t("purgeBodyKeep")}</span>
         <span className="mt-2 block font-medium text-ink">{t("purgeBodyIrreversible")}</span>
+      </ConfirmDialog>
+
+      {/* Giữ lại bản gốc (M4-03): Pro bỏ ngày tự xóa; Free mở giải thích + gói Pro */}
+      <ConfirmDialog
+        open={keepOpen}
+        onOpenChange={setKeepOpen}
+        title={planFlag === "pro" ? t("keepProTitle") : t("keepFreeTitle")}
+        cancelLabel={t("cancel")}
+        confirmLabel={planFlag === "pro" ? t("keepProConfirm") : t("keepFreeConfirm")}
+        confirmVariant={planFlag === "pro" ? "primary" : "secondary"}
+        onConfirm={() => {
+          setKeepOpen(false);
+          if (planFlag === "pro") {
+            void data.sessions
+              .update(detail.id, { audio_expires_at: null })
+              .then(() => toast.show({ tone: "success", message: t("keptPro") }))
+              .catch(() => toast.show({ tone: "error", message: t("saveError") }));
+          } else {
+            router.push("/upgrade");
+          }
+        }}
+      >
+        {planFlag === "pro" ? t("keepProBody") : t("keepFreeBody")}
       </ConfirmDialog>
 
       {/* Xóa buổi ghi: hộp xác nhận, xong thì về thư viện, thông báo có Hoàn tác */}

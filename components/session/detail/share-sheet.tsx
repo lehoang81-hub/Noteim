@@ -655,7 +655,14 @@ function ExportPanel({
   const toast = useToast();
   const [busy, setBusy] = useState(false);
 
-  const text = useMemo(() => buildPlainText(detail, template), [detail, template]);
+  const text = useMemo(
+    () =>
+      buildPlainText(detail, template, {
+        tasksHeading: t("exportTasksHeading"),
+        due: t("exportDue"),
+      }),
+    [detail, template, t],
+  );
 
   async function copyText() {
     setBusy(true);
@@ -710,7 +717,7 @@ function ExportPanel({
 }
 
 /** Văn bản xuất thật: tiêu đề, điểm chính, các phần và ý, việc cần làm. */
-function buildPlainText(detail: SessionDetail, template?: Template): string {
+function buildPlainText(detail: SessionDetail, template: Template | undefined, labels: { tasksHeading: string; due: string }): string {
   const lines: string[] = [];
   lines.push(detail.title);
   lines.push("");
@@ -735,9 +742,9 @@ function buildPlainText(detail: SessionDetail, template?: Template): string {
   }
   if (detail.action_items.length) {
     lines.push("");
-    lines.push("=== Việc cần làm ===");
+    lines.push(`=== ${labels.tasksHeading} ===`);
     for (const a of detail.action_items) {
-      lines.push(`  ${a.done ? "[x]" : "[ ]"} ${a.task}${a.due_date ? ` (hạn ${a.due_date})` : ""}`);
+      lines.push(`  ${a.done ? "[x]" : "[ ]"} ${a.task}${a.due_date ? ` ${labels.due.replace("{date}", a.due_date)}` : ""}`);
     }
   }
   return lines.filter((l) => l !== "").join("\n");

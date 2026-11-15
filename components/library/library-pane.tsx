@@ -255,7 +255,7 @@ export function LibraryPane({ className }: { className?: string }) {
         <h1 className="font-display text-h1 font-semibold text-ink">
           {u
             ? u.honorific
-              ? t("greeting", { honorific: u.honorific, name: u.display_name })
+              ? t("greeting", { honorific: u.honorific === "chị" ? t("honorificChi") : t("honorificAnh"), name: u.display_name })
               : t("greetingPlain", { name: u.display_name })
             : " "}
         </h1>
@@ -386,6 +386,8 @@ export function LibraryPane({ className }: { className?: string }) {
                     selecting={selecting}
                     checked={selectedIds.includes(s.id)}
                     onToggleCheck={() => toggleSelect(s.id)}
+                    checkOnLabel={t("pickRowOff")}
+                    checkOffLabel={t("pickRowOn")}
                     onLongPress={() => enterSelect(s.id)}
                     title={s.title || t("untitled")}
                     duration={durationLabel(s.duration_sec)}

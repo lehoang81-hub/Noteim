@@ -720,6 +720,62 @@ export const mockSource: DataSource = {
         db.glossary.push(item);
         return item;
       }),
+    updateGlossaryTerm: (id, term) =>
+      write(() => {
+        const item = getDb().glossary.find((g) => g.id === id);
+        if (!item) throw new DataError("not_found");
+        item.term = term.trim();
+      }),
+    removeGlossaryTerm: (id) =>
+      write(() => {
+        const db = getDb();
+        db.glossary = db.glossary.filter((g) => g.id !== id);
+      }),
+    contactUsage: (id) =>
+      read(() => {
+        const out: string[] = [];
+        for (const fx of getDb().sessions) {
+          const used = fx.detail.speakers.some((s) => s.contact_id === id);
+          if (used) out.push(fx.detail.title);
+        }
+        return out;
+      }),
+    removeContact: (id) =>
+      write(() => {
+        const db = getDb();
+        db.contacts = db.contacts.filter((c) => c.id !== id);
+        // Người nói đang gán liên hệ này về lại chưa đặt tên, ở mọi buổi ghi
+        db.sessions.forEach((fx, i) => {
+          fx.detail.speakers.forEach((s) => {
+            if (s.contact_id === id) {
+              s.contact_id = null;
+              s.display_name = `Người nói ${i + 1}`;
+            }
+          });
+        });
+      }),
+    updateTemplate: (id, patch) =>
+      write(() => {
+        const tpl = getDb().templates.find((t) => t.id === id);
+        if (!tpl) throw new DataError("not_found");
+        tpl.sections = patch.sections;
+      }),
+    exportAll: () =>
+      read(() => {
+        const db = getDb();
+        // Mật khẩu link chia sẻ không xuất ra file
+        const shares = db.shares.map((s) => toShareLink(s));
+        return {
+          exported_at: MOCK_NOW.toISOString(),
+          user: db.user,
+          quota: db.quota,
+          contacts: db.contacts,
+          templates: db.templates,
+          glossary: db.glossary,
+          sessions: db.sessions.map((s) => ({ detail: s.detail, transcript: s.transcript })),
+          shares,
+        };
+      }),
   },
 };
 
