@@ -130,3 +130,10 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 - **Đo dung lượng JS của `/`**: 1047,2 KB (main trước M3) → 1069,2 KB (sau M3), tăng 22 KB do dữ liệu mock phình (fixture lời nói, chat, sơ đồ) và component dùng chung — không phải do thư viện vẽ; tổng static chunk tăng 1237 KB → 6983 KB, phần dư là Recharts và Mermaid chỉ tải khi mở tab Hình.
 - Điều người sau cần biết: (1) tab Lời và tab Hình tải dữ liệu riêng khi mở tab (`getTranscript`, `getVisuals`) — đừng nạp sẵn trong session-detail; (2) thêm khối vẽ mới phải đi qua `next/dynamic ssr:false`, kiểm bằng cách quét chuỗi trong chunk khởi tạo của `/`; (3) lịch sử hỏi đáp nằm trong mock store theo id buổi, thêm câu mới phải ghi cả chat_log; (4) `mail.send` ghi send_history và hỗ trợ cờ ép lỗi một người; (5) xuất PNG dùng chung `export-image.ts` (vẽ lại theo token, đúng sáng/tối).
 - Đã kiểm: 390px và 1280px không tràn ngang (tab Lời, tab Hình, /tasks); sáng và tối — biểu đồ vẽ lại theo token; giảm chuyển động được tôn trọng ở các khối có animation (`useReducedMotion`); Free và Pro qua bảng thử nghiệm — khóa biểu đồ/sơ đồ, đếm 10 câu, bước gửi là "Sao chép nội dung", Pro mở hết; sửa lời và đổi người nói còn nguyên sau khi tải lại; lịch sử hỏi đáp còn sau khi tải lại; không lỗi console; `pnpm lint`, `pnpm typecheck`, `pnpm build` sạch.
+
+## 2026-11-15, Claude, merge M3 và bàn giao M4
+
+- M3 đã merge (PR #29, Hoang đồng ý). Lần kiểm thử đầu, 9 mục báo cáo ghi "Đạt (commit)" mà chưa thử; reviewer thử và tìm ra 3 lỗi chặn: gửi email cho người không có email, dòng thời gian cắt chữ, gộp người nói không xác nhận. Agent đã sửa và tự thử lại đầy đủ.
+- Quy định mới trong `docs/05-workflow.md`: báo cáo không được ghi "Đạt (commit)" cho mục chưa tự thử.
+- Mở 4 issue M4: #30, #31, #32, #33. Vuốt hàng và chọn nhiều trong thư viện nằm trong #30.
+- Việc tiếp theo: agent làm M4 trên nhánh `m4/chia-se`.

@@ -82,6 +82,7 @@ Không commit ảnh vào repo. Vercel tự tạo link xem thử cho mỗi lần 
 Nếu công cụ của bạn đính kèm được ảnh vào comment của PR thì đính kèm ảnh 390px và 1280px, sáng và tối.
 
 ## Trạng thái đã kiểm
+Mỗi mục phải ghi đã bấm gì và thấy gì. Không được ghi "Đạt (commit)" hay "Đạt (code)" cho mục chưa tự thử.
 - [ ] Bình thường  - [ ] Đang tải  - [ ] Rỗng  - [ ] Lỗi  - [ ] Mất mạng
 
 ## Tự kiểm

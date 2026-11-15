@@ -54,10 +54,10 @@ Nghiệm thu:
 
 | Issue | Việc |
 | --- | --- |
-| M3-01 (#23) | Tab Bản ghi lời: tự cuộn, tìm trong lời, sửa lời, thêm vào từ điển. |
-| M3-02 (#24) | Đặt tên và gộp người nói. |
-| M3-03 (#25) | Tab Hình ảnh hóa (tải khi mở), tab Hỏi AI (chữ chạy, dẫn chứng bấm được). |
-| M3-04 (#26) | Sửa và thêm việc. Gửi biên bản và giao việc: ba bước. Trang `/tasks`. |
+| M3-01 (#23, xong) | Tab Bản ghi lời: tự cuộn, tìm trong lời, sửa lời, thêm vào từ điển. |
+| M3-02 (#24, xong) | Đặt tên và gộp người nói. |
+| M3-03 (#25, xong) | Tab Hình ảnh hóa (tải khi mở), tab Hỏi AI (chữ chạy, dẫn chứng bấm được). |
+| M3-04 (#26, xong) | Sửa và thêm việc. Gửi biên bản và giao việc: ba bước. Trang `/tasks`. |
 
 Nghiệm thu:
 
@@ -69,10 +69,10 @@ Nghiệm thu:
 
 | Issue | Việc |
 | --- | --- |
-| M4-01 | Bảng chia sẻ, trang công khai `/p/[shareId]`, thẻ trích dẫn (xuất ảnh thật), đoạn tinh túy. |
-| M4-02 | Tìm kiếm, nhập file. |
-| M4-03 | Cài đặt đủ các mục, gồm dọn bản gốc và từ điển tên riêng. Trang gói dịch vụ. |
-| M4-04 | Làm quen lần đầu, sáu mẫu theo nghề, bốn fixture còn lại. |
+| M4-01 (#30) | Bảng chia sẻ, trang công khai `/p/[shareId]`, thẻ trích dẫn (xuất ảnh thật), đoạn tinh túy. Vuốt hàng và chọn nhiều trong thư viện (chuyển từ M1). |
+| M4-02 (#31) | Tìm kiếm, nhập file. |
+| M4-03 (#32) | Cài đặt đủ các mục, gồm dọn bản gốc và từ điển tên riêng. Trang gói dịch vụ. |
+| M4-04 (#33) | Làm quen lần đầu, sáu buổi ghi mẫu theo nghề. |
 
 Nghiệm thu:
 
