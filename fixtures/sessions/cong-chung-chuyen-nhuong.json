@@ -842,5 +842,6 @@
     }
   },
   "transcript": [],
-  "chat": []
+  "chat": [],
+  "flow_mermaid": "flowchart TD\n    A[\"Tiếp nhận hồ sơ hai bên\"] --> B[\"Kiểm tra giấy tờ nhân thân\"]\n    B --> C[\"Soạn hợp đồng theo thỏa thuận\"]\n    C --> D[\"Thẩm định quyền sử dụng đất\"]\n    D --> E[\"Nộp phí và lệ phí công chứng\"]\n    E --> F[\"Ký hợp đồng trước công chứng viên\"]\n    F --> G[\"Chờ chứng nhận và sao y\"]\n    G --> H[\"Nộp thuế và đăng ký sang tên\"]"
 }

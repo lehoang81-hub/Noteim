@@ -15,7 +15,7 @@ import templatesJson from "@/fixtures/templates.json";
 import userJson from "@/fixtures/user.json";
 import { z } from "zod";
 import type { RecordingDraft } from "../repository";
-import { Contact, GlossaryTerm, Quota, SessionFixture, Template, User } from "../types";
+import { ChatMessage, Contact, GlossaryTerm, Quota, SessionFixture, Template, User } from "../types";
 import { clearStorageFull, markStorageFull } from "@/lib/storage-full";
 
 /*
@@ -32,7 +32,14 @@ export type MockDb = {
   contacts: Contact[];
   templates: Template[];
   glossary: GlossaryTerm[];
-  sessions: Array<SessionFixture & { /** Bản nháp của buổi ghi vừa ghi, dùng để sinh nội dung khi xử lý xong */ draft?: RecordingDraft }>;
+  sessions: Array<
+    SessionFixture & {
+      /** Bản nháp của buổi ghi vừa ghi, dùng để sinh nội dung khi xử lý xong */
+      draft?: RecordingDraft;
+      /** Lịch sử hỏi đáp của tab Hỏi AI (M3-03), lưu theo buổi ghi */
+      chat_log?: ChatMessage[];
+    }
+  >;
 };
 
 function seed(): MockDb {

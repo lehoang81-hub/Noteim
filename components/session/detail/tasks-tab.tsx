@@ -21,6 +21,7 @@ export function TasksTab({
   canSeek,
   onSeek,
   onToggle,
+  onOpen,
   onAdd,
   onEmail,
 }: {
@@ -30,6 +31,8 @@ export function TasksTab({
   canSeek: boolean;
   onSeek: (time: number) => void;
   onToggle: (item: ActionItem) => void;
+  /** Chạm một hàng việc để mở bảng sửa (M3-04) */
+  onOpen: (item: ActionItem) => void;
   onAdd: () => void;
   onEmail: () => void;
 }) {
@@ -69,6 +72,8 @@ export function TasksTab({
                   done={a.done}
                   onToggle={() => onToggle(a)}
                   toggleLabel={t("toggle")}
+                  onOpen={() => onOpen(a)}
+                  openLabel={`${t("editTask")}: ${a.task}`}
                   assignee={a.assignee_contact_id ? nameOf[a.assignee_contact_id] : undefined}
                   unassignedLabel={t("unassigned")}
                   due={

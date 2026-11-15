@@ -177,6 +177,9 @@ export const TranscriptSegment = z.object({
   start_sec: z.number(),
   end_sec: z.number(),
   text: z.string(),
+  // Người dùng sửa tay chỗ AI nghe sai (M3-01). Fixture cũ không có trường
+  // này nên để default; bản lưu trong localStorage trước M3 cũng có thể thiếu.
+  edited: z.boolean().default(false).catch(false),
 });
 export type TranscriptSegment = z.infer<typeof TranscriptSegment>;
 
@@ -214,6 +217,8 @@ export const SessionFixture = z.object({
   detail: SessionDetail,
   transcript: z.array(TranscriptSegment),
   chat: z.array(z.object({ question: z.string(), answer: z.string(), citations: z.array(z.number()) })).default([]),
+  // Sơ đồ quy trình dựng bằng Mermaid ở tab Hình (M3-03); sinh từ dữ liệu buổi ghi
+  flow_mermaid: z.string().optional(),
 });
 export type SessionFixture = z.infer<typeof SessionFixture>;
 

@@ -2,7 +2,7 @@
 
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter } from "../repository";
-import { DataError, Session as SessionSchema, type ActionItem, type Session, type SessionDetail, type SessionFixture } from "../types";
+import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
 import { buildSessionContent } from "./generate";
 
@@ -32,7 +32,7 @@ async function write<T>(fn: () => T): Promise<T> {
   return structuredClone(out);
 }
 
-function findFixture(id: string): SessionFixture {
+function findFixture(id: string): SessionFixture & { draft?: RecordingDraft; chat_log?: ChatMessage[] } {
   const fx = getDb().sessions.find((s) => s.detail.id === id);
   if (!fx) throw new DataError("not_found");
   return fx;
@@ -80,6 +80,9 @@ function matches(d: SessionDetail, f: SessionFilter | undefined): boolean {
 const processingTimers = new Map<string, number>();
 const processingListeners = new Map<string, Set<(step: number) => void>>();
 const PROCESS_STEP_MS = 1600;
+
+/** Người nhận đã từng gửi lỗi (cờ "Gửi email lỗi một người"): gửi lại thì thành công. */
+const mailFailedOnce = new Set<string>();
 
 function notifyProcessing(id: string, step: number) {
   processingListeners.get(id)?.forEach((fn) => fn(step));
@@ -178,10 +181,12 @@ export const mockSource: DataSource = {
     getTranscript: (id) => read(() => findFixture(id).transcript),
     getVisuals: (id) =>
       read(() => {
-        const d = findFixture(id).detail;
+        const fx = findFixture(id);
+        const d = fx.detail;
         return {
           timeline: d.topics.map((t) => ({ topic_id: t.id, start_sec: t.start_sec, end_sec: t.end_sec, tag: t.tag })),
           talk_share: d.speakers.map((s) => ({ speaker_id: s.id, percent: s.talk_ratio_percent })),
+          flow_mermaid: fx.flow_mermaid,
         };
       }),
     update: (id, patch) =>
@@ -197,12 +202,35 @@ export const mockSource: DataSource = {
               b.edited = true;
             }
       }),
+    updateSegment: (sessionId, segmentId, text) =>
+      write(() => {
+        const seg = findFixture(sessionId).transcript.find((s) => s.id === segmentId);
+        if (!seg) throw new DataError("not_found");
+        seg.text = text;
+        seg.edited = true;
+      }),
+    reassignSegment: (sessionId, segmentId, speakerId) =>
+      write(() => {
+        const fx = findFixture(sessionId);
+        const seg = fx.transcript.find((s) => s.id === segmentId);
+        const sp = fx.detail.speakers.find((s) => s.id === speakerId);
+        if (!seg || !sp) throw new DataError("not_found");
+        seg.speaker_id = speakerId;
+      }),
     nameSpeaker: (sessionId, speakerId, contactId) =>
       write(() => {
         const d = findFixture(sessionId).detail;
         const contact = getDb().contacts.find((c) => c.id === contactId);
         const sp = d.speakers.find((s) => s.id === speakerId);
         if (!sp || !contact) throw new DataError("not_found");
+        // Một liên hệ chỉ gán cho một người nói trong cùng buổi (M3-02):
+        // người nói nào đang giữ liên hệ này thì trả về chưa đặt tên
+        d.speakers.forEach((other, i) => {
+          if (other.id !== speakerId && other.contact_id === contact.id) {
+            other.contact_id = null;
+            other.display_name = `Người nói ${i + 1}`;
+          }
+        });
         sp.contact_id = contact.id;
         sp.display_name = contact.name;
       }),
@@ -214,6 +242,8 @@ export const mockSource: DataSource = {
         if (!from || !into) throw new DataError("not_found");
         into.talk_ratio_percent += from.talk_ratio_percent;
         d.speakers = d.speakers.filter((s) => s.id !== fromId);
+        // Gộp chuyển cả dải giọng (speaker_spans), ý tóm tắt, bản ghi lời —
+        // nhờ đó mọi nơi đổi màu theo người giữ lại
         d.speaker_spans.forEach((s) => s.speaker_id === fromId && (s.speaker_id = intoId));
         d.topics.forEach((t) => t.bullets.forEach((b) => b.speaker_id === fromId && (b.speaker_id = intoId)));
         findFixture(sessionId).transcript.forEach((g) => g.speaker_id === fromId && (g.speaker_id = intoId));
@@ -356,24 +386,35 @@ export const mockSource: DataSource = {
   },
 
   chat: {
-    history: () => read(() => []),
+    history: (sessionId) =>
+      read(() => {
+        const fx = findFixture(sessionId);
+        return fx.chat_log ?? [];
+      }),
     ask: async (sessionId, question, onToken) => {
       await wait();
       if (getFlags().failLoad) throw new DataError("server");
       const fx = findFixture(sessionId);
       const hit = fx.chat.find((c) => c.question.trim().toLowerCase() === question.trim().toLowerCase());
       const answer = hit?.answer ?? "Bản mockup chỉ trả lời được các câu gợi ý.";
+      // Lịch sử hỏi đáp lưu theo buổi ghi (M3-03): cả câu không có trong fixture
+      const log = (fx.chat_log ?? []);
+      log.push({ id: `q-${Date.now().toString(36)}`, role: "user", text: question, citations: [] });
+      const aiMessage: ChatMessage = {
+        id: `a-${Date.now().toString(36)}`,
+        role: "ai",
+        text: answer,
+        citations: (hit?.citations ?? []).map((t) => ({ timestamp_sec: t })),
+      };
+      log.push(aiMessage);
+      fx.chat_log = log;
+      commit();
       const words = answer.split(" ");
       for (let i = 1; i <= words.length; i++) {
         onToken(words.slice(0, i).join(" "));
         await new Promise((r) => setTimeout(r, 40));
       }
-      return {
-        id: `m-${Date.now()}`,
-        role: "ai",
-        text: answer,
-        citations: (hit?.citations ?? []).map((t) => ({ timestamp_sec: t })),
-      };
+      return aiMessage;
     },
   },
 
@@ -411,7 +452,29 @@ export const mockSource: DataSource = {
         }
         return drafts;
       }),
-    send: (drafts) => write(() => drafts.map((d) => ({ contact_id: d.to_contact_id, ok: true }))),
+    send: (drafts) =>
+      write(() => {
+        // Cờ "Gửi email lỗi một người" (M3-04): đúng một người thất bại,
+        // những người khác vẫn tính là đã gửi. Mỗi người chỉ lỗi một lần
+        // để nút "Gửi lại" gửi được (giống thật: lỗi rồi thì gửi lại được).
+        const failOne = getFlags().mailFailOne;
+        const results = drafts.map((d, i) => {
+          const ok = !(failOne && i === 0 && !mailFailedOnce.has(d.to_contact_id));
+          if (!ok) mailFailedOnce.add(d.to_contact_id);
+          return { contact_id: d.to_contact_id, ok };
+        });
+        // Ghi lịch sử gửi vào buổi ghi (M3-04): số người gửi thành công
+        const sessionId = drafts.find((d) => d.session_id)?.session_id;
+        const okCount = results.filter((r) => r.ok).length;
+        if (sessionId && okCount > 0) {
+          // Dùng ngày của mockup (dataNow) để khớp với các ngày khác trong dữ liệu mẫu
+          findFixture(sessionId).detail.send_history.push({
+            sent_at: MOCK_NOW.toISOString(),
+            recipient_count: okCount,
+          });
+        }
+        return results;
+      }),
   },
 
   account: {
@@ -440,6 +503,37 @@ export const mockSource: DataSource = {
     templates: () => read(() => getDb().templates),
     contacts: () => read(() => getDb().contacts),
     glossary: () => read(() => getDb().glossary),
+    addContact: (input) =>
+      write(() => {
+        const db = getDb();
+        const contact: Contact = {
+          id: `c-new-${Date.now().toString(36)}`,
+          name: input.name.trim(),
+          ...(input.email?.trim() ? { email: input.email.trim() } : {}),
+        };
+        db.contacts.push(contact);
+        return contact;
+      }),
+    updateContact: (id, patch) =>
+      write(() => {
+        const c = getDb().contacts.find((x) => x.id === id);
+        if (!c) throw new DataError("not_found");
+        if (patch.name !== undefined) c.name = patch.name.trim();
+        if (patch.role !== undefined) c.role = patch.role.trim() || undefined;
+        if (patch.email !== undefined) c.email = patch.email.trim() || undefined;
+      }),
+    addGlossaryTerm: (term) =>
+      write(() => {
+        const clean = term.trim();
+        const db = getDb();
+        const existing = db.glossary.find(
+          (g) => g.term.toLocaleLowerCase("vi") === clean.toLocaleLowerCase("vi"),
+        );
+        if (existing) return existing;
+        const item: GlossaryTerm = { id: `gl-${Date.now().toString(36)}`, term: clean };
+        db.glossary.push(item);
+        return item;
+      }),
   },
 };
 

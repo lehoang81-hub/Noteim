@@ -50,6 +50,10 @@ export interface SessionRepository {
     patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids">>,
   ): Promise<void>;
   updateBullet(sessionId: string, bulletId: string, text: string): Promise<void>;
+  /** Sửa lời một đoạn bản ghi: lưu và đánh dấu edited (M3-01) */
+  updateSegment(sessionId: string, segmentId: string, text: string): Promise<void>;
+  /** Đổi người nói của một đoạn bản ghi (M3-01) */
+  reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>;
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
@@ -83,6 +87,8 @@ export interface ShareRepository {
 }
 
 export type EmailDraft = {
+  /** Buổi ghi gốc — bản giả dùng để ghi send_history khi gửi (M3-04) */
+  session_id?: string;
   to_contact_id: string;
   subject: string;
   body: string;
@@ -101,6 +107,12 @@ export interface AccountRepository {
   templates(): Promise<Template[]>;
   contacts(): Promise<Contact[]>;
   glossary(): Promise<GlossaryTerm[]>;
+  /** Thêm từ vào từ điển tên riêng; trùng (không phân biệt hoa thường) thì trả từ cũ (M3-01) */
+  addGlossaryTerm(term: string): Promise<GlossaryTerm>;
+  /** Tạo liên hệ mới ngay trong ô chọn tên (M3-02) */
+  addContact(input: { name: string; email?: string }): Promise<Contact>;
+  /** Sửa liên hệ, ví dụ thêm email ngay tại hàng người nhận (M3-02, M3-04) */
+  updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email">>): Promise<void>;
 }
 
 export interface DataSource {
