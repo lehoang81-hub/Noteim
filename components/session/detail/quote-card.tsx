@@ -13,8 +13,8 @@ import type { SessionDetail } from "@/lib/data";
  * Thẻ trích dẫn (docs/03-screens.md mục 9, issue M4-01):
  * ảnh dọc 1080 x 1350 vẽ bằng canvas: câu nói, tên người nói, dải giọng của
  * đúng đoạn đó, logo nhỏ. Ba kiểu nền: sứ, chàm đêm, Hừng đông.
- * Màu đọc từ token, không viết cứng: kiểu "chàm đêm" đọc token từ một phần tử
- * ẩn mang class .dark để đúng bộ màu ban đêm.
+ * Màu đọc từ token, không viết cứng: mỗi kiểu đọc từ một phần tử ẩn mang class
+ * tương ứng (sứ -> .light, chàm đêm -> .dark) để không đổi màu theo sáng/tối của ứng dụng.
  */
 
 export type QuoteCardStyle = "porcelain" | "midnight" | "dawn";
@@ -30,10 +30,10 @@ export type QuoteContent = {
 const CARD_W = 1080;
 const CARD_H = 1350;
 
-/** Phần tử ẩn ép .dark để đọc token ban đêm cho kiểu "chàm đêm". */
-function probeEl(dark: boolean): HTMLElement {
+/** Phần tử ẩn ép class để đọc token đúng bộ màu: .light cho kiểu sứ, .dark cho chàm đêm. */
+function probeEl(mode: "light" | "dark"): HTMLElement {
   const el = document.createElement("div");
-  if (dark) el.className = "dark";
+  el.className = mode;
   el.style.position = "absolute";
   el.style.visibility = "hidden";
   document.body.appendChild(el);
@@ -71,7 +71,7 @@ function paletteFor(style: QuoteCardStyle, host: Element): Palette {
     return { bg, ink: onDawn, sub: onDawn, accent: onDawn, bar: () => onDawn };
   }
   if (style === "midnight") {
-    const el = probeEl(true);
+    const el = probeEl("dark");
     try {
       return {
         bg: tokenColor(el, "--bg"),
@@ -84,13 +84,20 @@ function paletteFor(style: QuoteCardStyle, host: Element): Palette {
       el.remove();
     }
   }
-  return {
-    bg: tokenColor(host, "--bg"),
-    ink: tokenColor(host, "--ink"),
-    sub: tokenColor(host, "--ink-2"),
-    accent: tokenColor(host, "--sen"),
-    bar: (i) => tokenColor(host, `--speaker-${(i % 6) + 1}`),
-  };
+  // Kiểu "sứ" luôn nền sáng: đọc token qua phần tử ẩn class .light, không đọc
+  // từ host — host mang class .dark khi ứng dụng đang tối thì thẻ thành nền tối (review PR #35)
+  const el = probeEl("light");
+  try {
+    return {
+      bg: tokenColor(el, "--bg"),
+      ink: tokenColor(el, "--ink"),
+      sub: tokenColor(el, "--ink-2"),
+      accent: tokenColor(el, "--sen"),
+      bar: (i) => tokenColor(el, `--speaker-${(i % 6) + 1}`),
+    };
+  } finally {
+    el.remove();
+  }
 }
 
 /** Gói văn bản thành các dòng theo bề ngang cho trước. */
