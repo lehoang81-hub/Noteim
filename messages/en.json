@@ -713,6 +713,7 @@
     "modeTasks": "Send each person their tasks",
     "emailMissing": "No email yet — type it here",
     "emailInvalid": "That email doesn't look right.",
+    "emailRequiredRow": "Enter {name}'s email to send.",
     "nextPreview": "Preview emails",
     "nextConfirm": "Go to confirmation",
     "back": "Back",

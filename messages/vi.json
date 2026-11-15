@@ -764,6 +764,7 @@
     "modeTasks": "Gửi việc riêng cho từng người",
     "emailMissing": "Chưa có email — nhập tại đây",
     "emailInvalid": "Email chưa đúng.",
+    "emailRequiredRow": "Nhập email của {name} để gửi.",
     "nextPreview": "Xem trước email",
     "nextConfirm": "Sang bước xác nhận",
     "back": "Quay lại",

@@ -50,7 +50,8 @@ export function SendMinutesSheet({
   const [mode, setMode] = useState<"minutes" | "tasks">("minutes");
   const [selected, setSelected] = useState<string[]>([]);
   const [emailDraft, setEmailDraft] = useState<Record<string, string>>({});
-  const [emailErrors, setEmailErrors] = useState<Record<string, boolean>>({});
+  // Lỗi email từng hàng: thiếu email (bắt buộc nhập) hoặc sai định dạng
+  const [emailErrors, setEmailErrors] = useState<Record<string, "missing" | "invalid">>({});
   const [previews, setPreviews] = useState<EmailDraft[] | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [edits, setEdits] = useState<Record<string, { subject: string; body: string }>>({});
@@ -80,14 +81,15 @@ export function SendMinutesSheet({
     return ids;
   }, [session, contactById]);
 
-  // Mỗi lần mở bảng: đặt lại về bước 1 và tích chọn tất cả người nhận
+  // Mỗi lần mở bảng: đặt lại về bước 1 và chỉ tích sẵn người CÓ email
+  // — người chưa có email phải được tích chủ động kèm nhập email
   // (làm lúc vẽ thay vì trong effect — bảng mở từ prop bên ngoài)
   const [prevOpen, setPrevOpen] = useState(false);
   if (open && !prevOpen) {
     setPrevOpen(true);
     setStep(1);
     setMode("minutes");
-    setSelected(recipientIds);
+    setSelected(recipientIds.filter((id) => contactById[id]?.email));
     setEmailDraft({});
     setEmailErrors({});
     setPreviews(null);
@@ -117,31 +119,41 @@ export function SendMinutesSheet({
     if (!next) onOpenChange(next);
   }
 
+  function emailOf(id: string) {
+    return contactById[id]?.email ?? emailDraft[id]?.trim() ?? "";
+  }
+
   function missingEmailIds() {
-    return selected.filter((id) => {
-      const email = contactById[id]?.email ?? emailDraft[id];
-      return !email;
-    });
+    return selected.filter((id) => !emailOf(id));
   }
 
   function invalidEmailIds() {
     return selected.filter((id) => {
-      const email = contactById[id]?.email ?? emailDraft[id];
-      return !!email && !EMAIL_RE.test(email.trim());
+      const email = emailOf(id);
+      return !!email && !EMAIL_RE.test(email);
+    });
+  }
+
+  function clearEmailError(id: string) {
+    setEmailErrors((e) => {
+      if (!(id in e)) return e;
+      const next = { ...e };
+      delete next[id];
+      return next;
     });
   }
 
   async function saveEmail(id: string) {
     const value = (emailDraft[id] ?? "").trim();
     if (!value) {
-      setEmailErrors((e) => ({ ...e, [id]: false }));
+      clearEmailError(id);
       return;
     }
     if (!EMAIL_RE.test(value)) {
-      setEmailErrors((e) => ({ ...e, [id]: true }));
+      setEmailErrors((e) => ({ ...e, [id]: "invalid" }));
       return;
     }
-    setEmailErrors((e) => ({ ...e, [id]: false }));
+    clearEmailError(id);
     try {
       await data.account.updateContact(id, { email: value });
       toast.show({ tone: "success", message: t("emailSaved") });
@@ -155,15 +167,22 @@ export function SendMinutesSheet({
       toast.show({ tone: "error", message: t("noRecipients") });
       return;
     }
+    // Người được tích phải có email hợp lệ: thiếu thì báo ngay tại hàng và không sang bước 2
+    const missing = missingEmailIds();
     const invalid = invalidEmailIds();
-    if (invalid.length) {
-      setEmailErrors(Object.fromEntries(invalid.map((id) => [id, true])));
+    if (missing.length || invalid.length) {
+      setEmailErrors(
+        Object.fromEntries([
+          ...missing.map((id) => [id, "missing" as const]),
+          ...invalid.map((id) => [id, "invalid" as const]),
+        ]),
+      );
       return;
     }
     // Email vừa nhập: lưu vào liên hệ trước khi xem trước
-    for (const id of missingEmailIds()) {
+    for (const id of selected) {
       const value = (emailDraft[id] ?? "").trim();
-      if (value && EMAIL_RE.test(value)) {
+      if (value && EMAIL_RE.test(value) && contactById[id]?.email !== value) {
         try {
           await data.account.updateContact(id, { email: value });
         } catch {
@@ -294,7 +313,10 @@ export function SendMinutesSheet({
                     role="checkbox"
                     aria-checked={checked}
                     aria-label={c?.name}
-                    onClick={() => setSelected((list) => (checked ? list.filter((x) => x !== id) : [...list, id]))}
+                    onClick={() => {
+                      setSelected((list) => (checked ? list.filter((x) => x !== id) : [...list, id]));
+                      if (checked) clearEmailError(id);
+                    }}
                     className="-m-2 flex size-11 shrink-0 items-center justify-center rounded-pill"
                   >
                     <span
@@ -313,13 +335,20 @@ export function SendMinutesSheet({
                         <input
                           type="email"
                           value={emailDraft[id] ?? ""}
-                          onChange={(e) => setEmailDraft((d) => ({ ...d, [id]: e.target.value }))}
+                          onChange={(e) => {
+                            setEmailDraft((d) => ({ ...d, [id]: e.target.value }));
+                            clearEmailError(id);
+                          }}
                           onBlur={() => void saveEmail(id)}
                           placeholder={t("emailMissing")}
-                          aria-invalid={emailErrors[id] || undefined}
+                          aria-invalid={!!emailErrors[id] || undefined}
                           className="h-10 w-full max-w-xs rounded-control border border-line bg-surface px-3 text-small text-ink placeholder:text-ink-3 aria-[invalid=true]:border-tag-risk focus:border-dien focus-visible:outline-none"
                         />
-                        {emailErrors[id] ? <p className="mt-1 text-small font-medium text-tag-risk">{t("emailInvalid")}</p> : null}
+                        {emailErrors[id] ? (
+                          <p role="alert" className="mt-1 text-small font-medium text-tag-risk">
+                            {emailErrors[id] === "missing" ? t("emailRequiredRow", { name: c?.name ?? "" }) : t("emailInvalid")}
+                          </p>
+                        ) : null}
                       </div>
                     ) : (
                       <p className="text-small text-ink-3">{email}</p>
