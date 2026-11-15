@@ -12,3 +12,4 @@
 | 2026-11-14 | Thêm `retryProcessing` vào `SessionRepository`. | Nút "Thử lại" khi xử lý lỗi cần một thao tác riêng. | Claude |
 | 2026-11-14 | Vuốt hàng để chia sẻ hoặc xóa, nhấn giữ để chọn nhiều trong thư viện: chuyển từ M1 sang M4. | Đi cùng tính năng chia sẻ và xóa ở M4. | Claude |
 | 2026-11-14 | Mockup dùng ngày cố định 14/11/2026 19:00 làm "bây giờ" (`dataNow()`). | Nhóm Hôm nay, Hôm qua và việc quá hạn luôn khớp dữ liệu mẫu, xem lúc nào cũng giống nhau. | Claude |
+| 2026-11-15 | Buổi ghi mẫu theo nghề (6 buổi) tách khỏi thư viện chính, chỉ mở từ làm quen và Cài đặt. | Thư viện giữ các buổi ghi minh họa trạng thái; người dùng mới không bị lẫn dữ liệu mẫu. | Claude |
