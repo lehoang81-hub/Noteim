@@ -245,6 +245,8 @@ interface SessionRepository {
   reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>; // M3: đổi người nói của đoạn
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
+  addContact(input: { name: string; email?: string }): Promise<Contact>;   // M3: tạo liên hệ ngay trong ô chọn tên
+  updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email">>): Promise<void>;  // M3: thêm email tại hàng người nhận
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
   subscribeProcessing(id: string, onStep: (step: number) => void): () => void;
   retryProcessing(id: string): Promise<void>;                 // thêm ở M1: nút "Thử lại" khi xử lý lỗi

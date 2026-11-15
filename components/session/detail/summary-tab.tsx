@@ -63,6 +63,7 @@ export function SummaryTab({
 }) {
   const t = useTranslations("session");
   const colorOf = Object.fromEntries(detail.speakers.map((s) => [s.id, s.color_index]));
+  const speakerNameOf = Object.fromEntries(detail.speakers.map((s) => [s.id, s.display_name]));
   const noteById = Object.fromEntries(detail.notes.map((n) => [n.id, n]));
 
   const sections = (template?.sections ?? []).filter((s) => s.enabled);
@@ -104,30 +105,35 @@ export function SummaryTab({
                 )}
               </div>
               <div className="mt-1">
-                {topic.bullets.map((b) => (
-                  <SummaryBullet
-                    key={b.id}
-                    text={b.text}
-                    time={formatClock(b.timestamp_sec)}
-                    speakerColorIndex={colorOf[b.speaker_id] ?? 0}
-                    playing={playingBulletId === b.id}
-                    editedLabel={b.edited ? t("edited") : undefined}
-                    seekLabel={t("seek")}
-                    onSeek={canSeek ? () => onSeek(b.timestamp_sec) : undefined}
-                  >
-                    {b.note_ids.length ? (
-                      <div className="flex flex-col gap-1.5">
-                        {b.note_ids.map((id) =>
-                          noteById[id] ? (
-                            <UserNote key={id} label={t("yourNote")}>
-                              {noteById[id].text}
-                            </UserNote>
-                          ) : null,
-                        )}
-                      </div>
-                    ) : null}
-                  </SummaryBullet>
-                ))}
+                {topic.bullets.map((b) => {
+                  const speakerName = speakerNameOf[b.speaker_id];
+                  return (
+                    <SummaryBullet
+                      key={b.id}
+                      text={b.text}
+                      time={formatClock(b.timestamp_sec)}
+                      speakerColorIndex={colorOf[b.speaker_id] ?? 0}
+                      speakerLabel={speakerName}
+                      quoteLabel={b.is_quote && speakerName ? speakerName : undefined}
+                      playing={playingBulletId === b.id}
+                      editedLabel={b.edited ? t("edited") : undefined}
+                      seekLabel={t("seek")}
+                      onSeek={canSeek ? () => onSeek(b.timestamp_sec) : undefined}
+                    >
+                      {b.note_ids.length ? (
+                        <div className="flex flex-col gap-1.5">
+                          {b.note_ids.map((id) =>
+                            noteById[id] ? (
+                              <UserNote key={id} label={t("yourNote")}>
+                                {noteById[id].text}
+                              </UserNote>
+                            ) : null,
+                          )}
+                        </div>
+                      ) : null}
+                    </SummaryBullet>
+                  );
+                })}
               </div>
               {topic.figure ? <FigureBars figure={topic.figure} /> : null}
             </article>

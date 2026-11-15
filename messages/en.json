@@ -586,7 +586,8 @@
     "failed": "Couldn't summarise this session. The recording is safe.",
     "failedReason": "Reason: {reason}",
     "unsynced": "This session is waiting for a network connection to upload. The recording is safe on this device.",
-    "soonTab": "This tab comes in a later step of the mockup."
+    "soonTab": "This tab comes in a later step of the mockup.",
+    "nameSpeakers": "Rename speakers"
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -617,6 +618,31 @@
     "glossaryAdd": "Add to glossary",
     "glossaryAdded": "“{term}” added to the glossary",
     "essenceEmpty": "This session keeps only the summary. The transcript was purged along with the original audio."
+  },
+  "speakers": {
+    "title": "Who is who?",
+    "description": "Name each speaker. New names appear everywhere in the session.",
+    "talkShare": "talks {percent}%",
+    "preview": "Sample voice",
+    "previewing": "Playing 5 seconds…",
+    "pickLabel": "Name of this speaker",
+    "pickPlaceholder": "Pick or type a name…",
+    "pickHint": "Suggested from session participants, then your contacts.",
+    "addNew": "Add “{name}”",
+    "newName": "Name",
+    "newEmail": "Email (optional)",
+    "emailInvalid": "That email doesn't look right.",
+    "createAssign": "Create contact and assign",
+    "noEmail": "No email yet",
+    "mergeTitle": "Merge two speakers into one",
+    "mergeFrom": "Speaker to merge away",
+    "mergeInto": "Speaker to keep",
+    "mergeConfirm": "{from} will be merged into {into}. {percent}% of talk time moves to {into}.",
+    "mergeSame": "Pick two different speakers.",
+    "mergeButton": "Merge speakers",
+    "saved": "Speaker name saved",
+    "merged": "Speakers merged",
+    "usedByOther": "Already assigned to another speaker in this session"
   },
   "record": {
     "statusRecording": "Rec",

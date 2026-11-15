@@ -637,7 +637,8 @@
     "failed": "Chưa tóm tắt được buổi ghi này. Bản ghi âm vẫn an toàn.",
     "failedReason": "Lý do: {reason}",
     "unsynced": "Buổi ghi đang chờ mạng để tải lên. Bản ghi âm vẫn nằm an toàn trên máy này.",
-    "soonTab": "Tab này có ở bước tiếp theo của bản mockup."
+    "soonTab": "Tab này có ở bước tiếp theo của bản mockup.",
+    "nameSpeakers": "Đổi tên người nói"
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",
@@ -668,6 +669,31 @@
     "glossaryAdd": "Thêm vào từ điển",
     "glossaryAdded": "Đã thêm “{term}” vào từ điển",
     "essenceEmpty": "Buổi ghi này chỉ còn tóm tắt. Bản ghi lời đã được dọn cùng bản gốc, không nghe lại được từng đoạn."
+  },
+  "speakers": {
+    "title": "Ai là ai?",
+    "description": "Đặt tên cho từng người nói. Tên mới hiện ở mọi nơi trong buổi ghi.",
+    "talkShare": "nói {percent}%",
+    "preview": "Nghe thử",
+    "previewing": "Đang phát 5 giây…",
+    "pickLabel": "Tên của người nói này",
+    "pickPlaceholder": "Chọn hoặc gõ tên…",
+    "pickHint": "Gợi ý theo người tham gia buổi ghi, rồi danh bạ.",
+    "addNew": "Thêm “{name}”",
+    "newName": "Tên",
+    "newEmail": "Email (không bắt buộc)",
+    "emailInvalid": "Email chưa đúng.",
+    "createAssign": "Tạo liên hệ và gán",
+    "noEmail": "Chưa có email",
+    "mergeTitle": "Gộp hai người nói thành một",
+    "mergeFrom": "Người bị gộp",
+    "mergeInto": "Người giữ lại",
+    "mergeConfirm": "{from} sẽ được gộp vào {into}. {percent}% thời lượng nói chuyển sang {into}.",
+    "mergeSame": "Hai ô phải là hai người nói khác nhau.",
+    "mergeButton": "Gộp người nói",
+    "saved": "Đã lưu tên người nói",
+    "merged": "Đã gộp người nói",
+    "usedByOther": "Đã gán cho người nói khác trong buổi này"
   },
   "processing": {
     "step1": "Đã lưu bản ghi âm",

@@ -107,6 +107,10 @@ export interface AccountRepository {
   glossary(): Promise<GlossaryTerm[]>;
   /** Thêm từ vào từ điển tên riêng; trùng (không phân biệt hoa thường) thì trả từ cũ (M3-01) */
   addGlossaryTerm(term: string): Promise<GlossaryTerm>;
+  /** Tạo liên hệ mới ngay trong ô chọn tên (M3-02) */
+  addContact(input: { name: string; email?: string }): Promise<Contact>;
+  /** Sửa liên hệ, ví dụ thêm email ngay tại hàng người nhận (M3-02, M3-04) */
+  updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email">>): Promise<void>;
 }
 
 export interface DataSource {

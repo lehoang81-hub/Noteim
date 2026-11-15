@@ -15,6 +15,7 @@ import { data, dataNow, DataError, useData, type ActionItem, type SessionDetail 
 import { durationParts, shortDate } from "@/lib/format";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
+import { SpeakerSheet } from "./speaker-sheet";
 import { TasksTab } from "./tasks-tab";
 import { TranscriptTab } from "./transcript-tab";
 
@@ -128,6 +129,7 @@ function Loaded({
   useEffect(() => () => player.pause(), [player]);
   const ps = usePlayerState(player);
   const [expanded, setExpanded] = useState(false);
+  const [naming, setNaming] = useState(false);
   const touched = useRef(false);
 
   const canPlay = detail.storage_status === "full" && detail.status === "ready";
@@ -193,7 +195,15 @@ function Loaded({
         {detail.speakers.length ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
             {detail.speakers.map((s) => (
-              <SpeakerName key={s.id} colorIndex={s.color_index} name={s.display_name} named={!!s.contact_id || s.is_me} />
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setNaming(true)}
+                aria-label={`${t("nameSpeakers")}: ${s.display_name}`}
+                className="-mx-1 rounded-control px-1 py-0.5 text-left"
+              >
+                <SpeakerName colorIndex={s.color_index} name={s.display_name} named={!!s.contact_id || s.is_me} />
+              </button>
             ))}
           </div>
         ) : null}
@@ -205,7 +215,7 @@ function Loaded({
           icon={UserRoundPen}
           className="mt-3 lg:px-8"
           action={
-            <button type="button" onClick={soon} className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2">
+            <button type="button" onClick={() => setNaming(true)} className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2">
               {t("nameThem")}
             </button>
           }
@@ -307,6 +317,9 @@ function Loaded({
           />
         </div>
       ) : null}
+
+      {/* Ai là ai? (M3-02): đặt tên, nghe thử, gộp người nói */}
+      <SpeakerSheet detail={detail} player={player} canPlay={canPlay} open={naming} onOpenChange={setNaming} />
     </div>
   );
 }

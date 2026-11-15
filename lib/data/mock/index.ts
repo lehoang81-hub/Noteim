@@ -2,7 +2,7 @@
 
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter } from "../repository";
-import { DataError, Session as SessionSchema, type ActionItem, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture } from "../types";
+import { DataError, Session as SessionSchema, type ActionItem, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
 import { buildSessionContent } from "./generate";
 
@@ -218,6 +218,14 @@ export const mockSource: DataSource = {
         const contact = getDb().contacts.find((c) => c.id === contactId);
         const sp = d.speakers.find((s) => s.id === speakerId);
         if (!sp || !contact) throw new DataError("not_found");
+        // Một liên hệ chỉ gán cho một người nói trong cùng buổi (M3-02):
+        // người nói nào đang giữ liên hệ này thì trả về chưa đặt tên
+        d.speakers.forEach((other, i) => {
+          if (other.id !== speakerId && other.contact_id === contact.id) {
+            other.contact_id = null;
+            other.display_name = `Người nói ${i + 1}`;
+          }
+        });
         sp.contact_id = contact.id;
         sp.display_name = contact.name;
       }),
@@ -229,6 +237,8 @@ export const mockSource: DataSource = {
         if (!from || !into) throw new DataError("not_found");
         into.talk_ratio_percent += from.talk_ratio_percent;
         d.speakers = d.speakers.filter((s) => s.id !== fromId);
+        // Gộp chuyển cả dải giọng (speaker_spans), ý tóm tắt, bản ghi lời —
+        // nhờ đó mọi nơi đổi màu theo người giữ lại
         d.speaker_spans.forEach((s) => s.speaker_id === fromId && (s.speaker_id = intoId));
         d.topics.forEach((t) => t.bullets.forEach((b) => b.speaker_id === fromId && (b.speaker_id = intoId)));
         findFixture(sessionId).transcript.forEach((g) => g.speaker_id === fromId && (g.speaker_id = intoId));
@@ -455,6 +465,25 @@ export const mockSource: DataSource = {
     templates: () => read(() => getDb().templates),
     contacts: () => read(() => getDb().contacts),
     glossary: () => read(() => getDb().glossary),
+    addContact: (input) =>
+      write(() => {
+        const db = getDb();
+        const contact: Contact = {
+          id: `c-new-${Date.now().toString(36)}`,
+          name: input.name.trim(),
+          ...(input.email?.trim() ? { email: input.email.trim() } : {}),
+        };
+        db.contacts.push(contact);
+        return contact;
+      }),
+    updateContact: (id, patch) =>
+      write(() => {
+        const c = getDb().contacts.find((x) => x.id === id);
+        if (!c) throw new DataError("not_found");
+        if (patch.name !== undefined) c.name = patch.name.trim();
+        if (patch.role !== undefined) c.role = patch.role.trim() || undefined;
+        if (patch.email !== undefined) c.email = patch.email.trim() || undefined;
+      }),
     addGlossaryTerm: (term) =>
       write(() => {
         const clean = term.trim();

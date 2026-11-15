@@ -10,6 +10,8 @@ export function SummaryBullet({
   text,
   time,
   speakerColorIndex,
+  speakerLabel,
+  quoteLabel,
   playing,
   editedLabel,
   seekLabel,
@@ -20,6 +22,10 @@ export function SummaryBullet({
   /** "04:30" */
   time: string;
   speakerColorIndex: number;
+  /** Tên người nói cho trình đọc màn hình, ví dụ "Chị Lan" — gắn vào mọi ý */
+  speakerLabel?: string;
+  /** Tên hiện nhỏ phía dưới, chỉ dùng cho câu trích nguyên văn (is_quote) */
+  quoteLabel?: string;
   playing?: boolean;
   /** Có giá trị thì hiện dấu "đã sửa" */
   editedLabel?: string;
@@ -39,7 +45,7 @@ export function SummaryBullet({
       <button
         type="button"
         onClick={onSeek}
-        aria-label={`${seekLabel}: ${text}`}
+        aria-label={`${seekLabel}: ${speakerLabel ? `${speakerLabel}: ` : ""}${text}`}
         aria-current={playing ? "true" : undefined}
         className="group flex w-full items-start gap-3 rounded-control py-1.5 text-left"
       >
@@ -55,6 +61,10 @@ export function SummaryBullet({
               <span aria-hidden={true} className="size-1.5 rounded-pill bg-ink-3" />
               {editedLabel}
             </span>
+          ) : null}
+          {/* Câu trích nguyên văn: tên người nói nhỏ phía dưới (M3-02) */}
+          {quoteLabel ? (
+            <span className="mt-0.5 block text-caption text-ink-3">{quoteLabel}</span>
           ) : null}
         </span>
         <span
