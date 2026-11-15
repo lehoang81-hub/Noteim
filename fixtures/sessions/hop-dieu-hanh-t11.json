@@ -1693,5 +1693,6 @@
         1990
       ]
     }
-  ]
+  ],
+  "flow_mermaid": "flowchart TD\n    A[\"Nhận đơn từ khách\"] --> B[\"Thiết kế và duyệt bản vẽ\"]\n    B --> C[\"Kê xuất vật tư\"]\n    C --> D[\"Sản xuất tại xưởng\"]\n    D --> E[\"Kiểm tra chất lượng\"]\n    E --> F[\"Đóng gói và vận chuyển\"]\n    F --> G[\"Lắp đặt tại công trình\"]\n    G --> H[\"Nghiệm thu và bảo hành\"]"
 }

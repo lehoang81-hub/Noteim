@@ -18,11 +18,14 @@ import { SummaryTab } from "./summary-tab";
 import { SpeakerSheet } from "./speaker-sheet";
 import { TasksTab } from "./tasks-tab";
 import { TranscriptTab } from "./transcript-tab";
+import { VisualTab } from "./visual-tab";
+import { AiTab } from "./ai-tab";
 
 /*
  * Chi tiết buổi ghi (docs/03-screens.md mục 5).
  * M1: phần đầu, tab Tóm tắt, tab Việc cần làm, trình phát giả lập, chạm ý để tua.
- * M3-01: tab Lời. Tab Hình và Hỏi AI thuộc M3-03; Chia sẻ, Thêm thuộc M4.
+ * M3-01: tab Lời. M3-02: đặt tên người nói. M3-03: tab Hình, Hỏi AI.
+ * Chia sẻ, Thêm thuộc M4.
  */
 
 const TABS = ["summary", "tasks", "transcript", "visual", "ai"] as const;
@@ -291,11 +294,12 @@ function Loaded({
                 />
               </TabsContent>
             ))}
-            {(["visual", "ai"] as const).map((id) => (
-              <TabsContent key={id} value={id}>
-                <EmptyState drawing={<span />} message={t("soonTab")} />
-              </TabsContent>
-            ))}
+            <TabsContent value="visual">
+              <VisualTab detail={detail} canPlay={canPlay} onSeek={seek} />
+            </TabsContent>
+            <TabsContent value="ai">
+              <AiTab detail={detail} template={template} canPlay={canPlay} onSeek={seek} />
+            </TabsContent>
           </div>
         </Tabs>
       )}

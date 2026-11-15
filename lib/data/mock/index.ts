@@ -2,7 +2,7 @@
 
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter } from "../repository";
-import { DataError, Session as SessionSchema, type ActionItem, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture } from "../types";
+import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
 import { buildSessionContent } from "./generate";
 
@@ -32,7 +32,7 @@ async function write<T>(fn: () => T): Promise<T> {
   return structuredClone(out);
 }
 
-function findFixture(id: string): SessionFixture {
+function findFixture(id: string): SessionFixture & { draft?: RecordingDraft; chat_log?: ChatMessage[] } {
   const fx = getDb().sessions.find((s) => s.detail.id === id);
   if (!fx) throw new DataError("not_found");
   return fx;
@@ -178,10 +178,12 @@ export const mockSource: DataSource = {
     getTranscript: (id) => read(() => findFixture(id).transcript),
     getVisuals: (id) =>
       read(() => {
-        const d = findFixture(id).detail;
+        const fx = findFixture(id);
+        const d = fx.detail;
         return {
           timeline: d.topics.map((t) => ({ topic_id: t.id, start_sec: t.start_sec, end_sec: t.end_sec, tag: t.tag })),
           talk_share: d.speakers.map((s) => ({ speaker_id: s.id, percent: s.talk_ratio_percent })),
+          flow_mermaid: fx.flow_mermaid,
         };
       }),
     update: (id, patch) =>
@@ -381,24 +383,35 @@ export const mockSource: DataSource = {
   },
 
   chat: {
-    history: () => read(() => []),
+    history: (sessionId) =>
+      read(() => {
+        const fx = findFixture(sessionId);
+        return fx.chat_log ?? [];
+      }),
     ask: async (sessionId, question, onToken) => {
       await wait();
       if (getFlags().failLoad) throw new DataError("server");
       const fx = findFixture(sessionId);
       const hit = fx.chat.find((c) => c.question.trim().toLowerCase() === question.trim().toLowerCase());
       const answer = hit?.answer ?? "Bản mockup chỉ trả lời được các câu gợi ý.";
+      // Lịch sử hỏi đáp lưu theo buổi ghi (M3-03): cả câu không có trong fixture
+      const log = (fx.chat_log ?? []);
+      log.push({ id: `q-${Date.now().toString(36)}`, role: "user", text: question, citations: [] });
+      const aiMessage: ChatMessage = {
+        id: `a-${Date.now().toString(36)}`,
+        role: "ai",
+        text: answer,
+        citations: (hit?.citations ?? []).map((t) => ({ timestamp_sec: t })),
+      };
+      log.push(aiMessage);
+      fx.chat_log = log;
+      commit();
       const words = answer.split(" ");
       for (let i = 1; i <= words.length; i++) {
         onToken(words.slice(0, i).join(" "));
         await new Promise((r) => setTimeout(r, 40));
       }
-      return {
-        id: `m-${Date.now()}`,
-        role: "ai",
-        text: answer,
-        citations: (hit?.citations ?? []).map((t) => ({ timestamp_sec: t })),
-      };
+      return aiMessage;
     },
   },
 
