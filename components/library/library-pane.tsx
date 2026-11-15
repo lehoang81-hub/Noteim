@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
@@ -20,6 +20,7 @@ import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/
 import { useDebugFlags } from "@/lib/debug/flags";
 import { holdImportFile } from "@/lib/import-file";
 import { dayDiff, durationParts, shortDate, weekdayDate } from "@/lib/format";
+import { templateName } from "@/lib/data/localize";
 import {
   discardRecording,
   recordedSec,
@@ -58,6 +59,7 @@ const statusMap: Record<Session["status"], SessionRowStatus> = {
 export function LibraryPane({ className }: { className?: string }) {
   const t = useTranslations("library");
   const ts = useTranslations("session");
+  const locale = useLocale();
   const toast = useToast();
   const router = useRouter();
   const params = useParams<{ id?: string }>();
@@ -112,8 +114,8 @@ export function LibraryPane({ className }: { className?: string }) {
 
   const now = dataNow();
   const tplName = useMemo(
-    () => Object.fromEntries((templates.data ?? []).map((tp) => [tp.id, tp.name])),
-    [templates.data],
+    () => Object.fromEntries((templates.data ?? []).map((tp) => [tp.id, templateName(tp, locale)])),
+    [templates.data, locale],
   );
 
   const week = useMemo(() => {
@@ -130,13 +132,13 @@ export function LibraryPane({ className }: { className?: string }) {
     const out: { label: string; items: Session[] }[] = [];
     for (const s of list.data ?? []) {
       const diff = dayDiff(new Date(s.created_at), now);
-      const label = diff <= 0 ? t("today") : diff === 1 ? t("yesterday") : weekdayDate(s.created_at);
+      const label = diff <= 0 ? t("today") : diff === 1 ? t("yesterday") : weekdayDate(s.created_at, locale);
       const g = out.find((x) => x.label === label);
       if (g) g.items.push(s);
       else out.push({ label, items: [s] });
     }
     return out;
-  }, [list.data, now, t]);
+  }, [list.data, now, t, locale]);
 
   const u = me.data;
   const q = quota.data;
@@ -148,9 +150,11 @@ export function LibraryPane({ className }: { className?: string }) {
   }
 
   const unfinishedTime = recording.startedAtClock
-    ? new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false }).format(
-        new Date(recording.startedAtClock),
-      )
+    ? new Intl.DateTimeFormat(locale === "en" ? "en-US" : "vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).format(new Date(recording.startedAtClock))
     : "";
 
   function rowStatusText(s: Session) {
@@ -372,7 +376,7 @@ export function LibraryPane({ className }: { className?: string }) {
           {/* Ngày hạn mức mới tính từ period_end như màn hình ghi, không viết cứng (PR #22, lỗi 4) */}
           {t("quotaOut", {
             limit: q.minutes_limit,
-            date: shortDate(new Date(Date.parse(q.period_end) + 86400_000)),
+            date: shortDate(new Date(Date.parse(q.period_end) + 86400_000), locale),
           })}
         </Banner>
       ) : q && q.minutes_used / q.minutes_limit >= 0.8 ? (

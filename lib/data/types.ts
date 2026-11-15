@@ -58,9 +58,23 @@ export const Template = z.object({
   id: z.string(),
   profession: Profession,
   name: z.string(),
-  sections: z.array(z.object({ id: z.string(), title: z.string(), enabled: z.boolean() })),
+  /** Tên mẫu bằng tiếng Anh (M5-02); thiếu thì dùng trường tiếng Việt */
+  name_en: z.string().optional().catch(undefined),
+  sections: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      /** Tên phần bằng tiếng Anh (M5-02) */
+      title_en: z.string().optional().catch(undefined),
+      enabled: z.boolean(),
+    }),
+  ),
   suggested_questions: z.array(z.string()),
+  /** Gợi ý câu hỏi bằng tiếng Anh (M5-02) */
+  suggested_questions_en: z.array(z.string()).optional().catch(undefined),
   footer_note: z.string().optional(),
+  /** Dòng lưu ý bằng tiếng Anh (M5-02), ví dụ mẫu Buổi khám */
+  footer_note_en: z.string().optional().catch(undefined),
 });
 export type Template = z.infer<typeof Template>;
 

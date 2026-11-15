@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Camera, ChevronDown, HardDrive, Mic, MicVocal } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { RibbonLive } from "@/components/ribbon/ribbon-live";
 import { RibbonThumb } from "@/components/ribbon/ribbon-thumb";
@@ -22,6 +22,7 @@ import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { shortDate } from "@/lib/format";
+import { templateName } from "@/lib/data/localize";
 import { micGrantedOnce, markMicGranted } from "@/lib/record/mic-permission";
 import { fileToDataUrl } from "@/lib/record/photo";
 import { useStorageFull } from "@/lib/storage-full";
@@ -92,6 +93,7 @@ function RecordClock({ paused }: { paused: boolean }) {
 
 export function RecordScreen() {
   const t = useTranslations("record");
+  const locale = useLocale();
   const tl = useTranslations("styleguide.tags");
   const router = useRouter();
   const toast = useToast();
@@ -140,7 +142,10 @@ export function RecordScreen() {
 
   const active = recording.status !== "idle";
   const paused = recording.status === "paused";
-  const templateName = templates.data?.find((tp) => tp.id === recording.templateId)?.name ?? "";
+  const templateLabel =
+    templates.data?.find((tp) => tp.id === recording.templateId) === undefined
+      ? ""
+      : templateName(templates.data!.find((tp) => tp.id === recording.templateId)!, locale);
   const level = sampleVoice ? fakeLevel : mic.level;
   const maxSessionMin = quota.data?.max_session_minutes ?? 45;
   const planName = me.data?.plan === "pro" ? "Pro" : "Free";
@@ -434,7 +439,7 @@ export function RecordScreen() {
             !showControls && "pointer-events-none opacity-0",
           )}
         >
-          <span className="max-w-[38vw] truncate sm:max-w-64">{templateName || " "}</span>
+          <span className="max-w-[38vw] truncate sm:max-w-64">{templateLabel || " "}</span>
           <ChevronDown aria-hidden={true} className="size-4 shrink-0 text-ink-3" strokeWidth={2} />
         </button>
         <span
@@ -681,7 +686,7 @@ export function RecordScreen() {
         <p className="py-2 text-body text-ink-2">
           {t("quotaOutBody", {
             limit: quota.data?.minutes_limit ?? 180,
-            date: quota.data ? shortDate(new Date(Date.parse(quota.data.period_end) + 86400_000)) : "",
+            date: quota.data ? shortDate(new Date(Date.parse(quota.data.period_end) + 86400_000), locale) : "",
           })}
         </p>
         <Button variant="primary" block onClick={() => router.push("/upgrade")} className="mt-3">

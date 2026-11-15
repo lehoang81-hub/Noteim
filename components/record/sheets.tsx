@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Mic } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { MicDrawing } from "@/components/ui/feedback";
 import { Switch } from "@/components/ui/form";
 import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
+import { templateName } from "@/lib/data/localize";
 
 /*
  * Các bảng trượt của màn hình ghi (docs/03-screens.md mục 2):
@@ -111,6 +112,7 @@ export function TemplateSheet({
   onSelect: (templateId: string) => void;
 }) {
   const t = useTranslations("record");
+  const locale = useLocale();
   const templates = useData(() => data.account.templates(), []);
   return (
     <Sheet open={open} onOpenChange={onOpenChange} title={t("pickTemplate")} size="half">
@@ -129,7 +131,7 @@ export function TemplateSheet({
                   active && "bg-surface-2 font-semibold text-ink",
                 )}
               >
-                <span className="min-w-0 truncate">{tp.name}</span>
+                <span className="min-w-0 truncate">{templateName(tp, locale)}</span>
                 {active ? <ChevronDown aria-hidden={true} className="size-4 shrink-0 text-ink-3" /> : null}
               </button>
             </li>

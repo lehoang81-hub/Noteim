@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
+import { shortDate } from "@/lib/format";
 import { data, useData } from "@/lib/data";
 
 /*
@@ -37,7 +38,7 @@ export function PlanSection() {
         <div className="mt-2 h-2.5 rounded-pill bg-surface-2" role="img" aria-label={`${used}/${limit}`}>
           <div className={percent >= 100 ? "h-2.5 rounded-pill bg-tag-risk" : "h-2.5 rounded-pill bg-sen"} style={{ width: `${Math.max(2, percent)}%` }} />
         </div>
-        {q ? <p className="mt-2 text-caption text-ink-3">{t("planReset", { date: new Date(q.period_end).toLocaleDateString(locale === "en" ? "en-US" : "vi-VN") })}</p> : null}
+        {q ? <p className="mt-2 text-caption text-ink-3">{t("planReset", { date: shortDate(q.period_end, locale) })}</p> : null}
       </div>
 
       {plan === "free" ? (

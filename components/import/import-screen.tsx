@@ -3,11 +3,12 @@
 import { ArrowLeft, FileAudio, FileVideo, TriangleAlert, UploadCloud } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { data, useData } from "@/lib/data";
+import { templateName } from "@/lib/data/localize";
 import { durationParts } from "@/lib/format";
 import { takeImportFile } from "@/lib/import-file";
 import { cn } from "@/lib/cn";
@@ -50,6 +51,7 @@ function readDuration(file: File, kind: "audio" | "video"): Promise<number> {
 
 export function ImportScreen() {
   const t = useTranslations("import");
+  const locale = useLocale();
   const tl = useTranslations("library");
   const ts = useTranslations("session");
   const toast = useToast();
@@ -203,7 +205,7 @@ export function ImportScreen() {
                 <p aria-live="polite" className="mt-0.5 text-small text-ink-2">
                   {picked.durationSec === null
                     ? t("readingDuration")
-                    : `${durationLabel(picked.durationSec)}, ${(picked.sizeBytes / 1_000_000).toLocaleString("vi-VN", { maximumFractionDigits: 1 })} MB`}
+                    : `${durationLabel(picked.durationSec)}, ${new Intl.NumberFormat(locale === "en" ? "en-US" : "vi-VN", { maximumFractionDigits: 1 }).format(picked.sizeBytes / 1_000_000)} MB`}
                 </p>
               </div>
               <Button
@@ -233,7 +235,7 @@ export function ImportScreen() {
                 >
                   {(templates.data ?? []).map((tp) => (
                     <option key={tp.id} value={tp.id}>
-                      {tp.name}
+                      {templateName(tp, locale)}
                     </option>
                   ))}
                 </select>

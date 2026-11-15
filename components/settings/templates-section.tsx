@@ -3,10 +3,11 @@
 import { ArrowDown, ArrowUp, Lock } from "lucide-react";
 import Link from "next/link";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
+import { templateName, sectionTitle } from "@/lib/data/localize";
 import { data, useData, type Template } from "@/lib/data";
 
 /*
@@ -16,6 +17,7 @@ import { data, useData, type Template } from "@/lib/data";
 
 export function TemplatesSection() {
   const t = useTranslations("settings");
+  const locale = useLocale();
   const toast = useToast();
   const me = useData(() => data.account.me(), []);
   const templates = useData(() => data.account.templates(), []);
@@ -51,7 +53,7 @@ export function TemplatesSection() {
               className="flex min-h-12 w-full items-center gap-3 px-4 py-2 text-left"
             >
               <span className="min-w-0 flex-1">
-                <span className="block text-body font-semibold text-ink">{tpl.name}</span>
+                <span className="block text-body font-semibold text-ink">{templateName(tpl, locale)}</span>
                 <span className="block text-caption text-ink-3">
                   {t("sectionsCount", { count: tpl.sections.filter((s) => s.enabled).length, total: tpl.sections.length })}
                 </span>
@@ -61,12 +63,12 @@ export function TemplatesSection() {
               <ul className="border-t border-line px-4 py-2">
                 {tpl.sections.map((s, i) => (
                   <li key={s.id} className="flex items-center gap-2 border-b border-line py-1 last:border-b-0">
-                    <span className="min-w-0 flex-1 text-small text-ink">{s.title}</span>
+                    <span className="min-w-0 flex-1 text-small text-ink">{sectionTitle(s, locale)}</span>
                     <Button
                       variant="ghost"
                       icon={ArrowUp}
                       iconOnly
-                      aria-label={t("moveUp", { title: s.title })}
+                      aria-label={t("moveUp", { title: sectionTitle(s, locale) })}
                       disabled={i === 0}
                       onClick={() => move(tpl, i, -1)}
                       className="size-9"
@@ -75,7 +77,7 @@ export function TemplatesSection() {
                       variant="ghost"
                       icon={ArrowDown}
                       iconOnly
-                      aria-label={t("moveDown", { title: s.title })}
+                      aria-label={t("moveDown", { title: sectionTitle(s, locale) })}
                       disabled={i === tpl.sections.length - 1}
                       onClick={() => move(tpl, i, 1)}
                       className="size-9"
@@ -85,7 +87,7 @@ export function TemplatesSection() {
                       onCheckedChange={(v) =>
                         void saveSections(tpl, tpl.sections.map((x) => (x.id === s.id ? { ...x, enabled: v } : x)))
                       }
-                      aria-label={t("sectionEnabled", { title: s.title })}
+                      aria-label={t("sectionEnabled", { title: sectionTitle(s, locale) })}
                       className="relative inline-flex h-7 w-12 shrink-0 items-center rounded-pill bg-ink-3 transition-colors ease-noteim duration-(--t-quick) data-[state=checked]:bg-sen"
                     >
                       <SwitchPrimitive.Thumb className="block size-5 translate-x-1 rounded-pill bg-surface transition-transform ease-noteim duration-(--t-quick) data-[state=checked]:translate-x-6" />

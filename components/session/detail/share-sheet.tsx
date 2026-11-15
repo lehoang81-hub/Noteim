@@ -12,7 +12,7 @@ import {
   Scissors,
   Trash2,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatClock, resample, tokenColor, useThemeKey } from "@/components/ribbon/draw";
 import { QuoteCardPanel, type QuoteContent } from "./quote-card";
@@ -24,6 +24,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { data, dataNow, useData, DataError, type Bullet, type SessionDetail, type Template } from "@/lib/data";
 import { cn } from "@/lib/cn";
+import { sectionTitle as sectionTitleOf } from "@/lib/data/localize";
 
 /*
  * Bảng chia sẻ (docs/03-screens.md mục 9, issue M4-01). Bốn lựa chọn:
@@ -694,16 +695,17 @@ function ExportPanel({
   onBack: () => void;
 }) {
   const t = useTranslations("share");
+  const locale = useLocale();
   const toast = useToast();
   const [busy, setBusy] = useState(false);
 
   const text = useMemo(
     () =>
-      buildPlainText(detail, template, {
+      buildPlainText(detail, template, locale, {
         tasksHeading: t("exportTasksHeading"),
         due: t("exportDue"),
       }),
-    [detail, template, t],
+    [detail, template, locale, t],
   );
 
   async function copyText() {
@@ -759,12 +761,12 @@ function ExportPanel({
 }
 
 /** Văn bản xuất thật: tiêu đề, điểm chính, các phần và ý, việc cần làm. */
-function buildPlainText(detail: SessionDetail, template: Template | undefined, labels: { tasksHeading: string; due: string }): string {
+function buildPlainText(detail: SessionDetail, template: Template | undefined, locale: string, labels: { tasksHeading: string; due: string }): string {
   const lines: string[] = [];
   lines.push(detail.title);
   lines.push("");
   lines.push(detail.executive_summary);
-  const sectionTitle = new Map((template?.sections ?? []).map((s) => [s.id, s.title]));
+  const sectionTitle = new Map((template?.sections ?? []).map((s) => [s.id, sectionTitleOf(s, locale)]));
   const bySection = new Map<string, typeof detail.topics>();
   for (const topic of detail.topics) {
     const list = bySection.get(topic.section_id) ?? [];

@@ -1,6 +1,8 @@
 /*
- * Định dạng ngày giờ, thời lượng theo kiểu Việt Nam. Không phụ thuộc giờ máy:
- * luôn tính theo múi giờ Việt Nam để máy chủ và trình duyệt ra cùng kết quả.
+ * Định dạng ngày giờ, thời lượng. Không phụ thuộc giờ máy: luôn tính theo
+ * múi giờ Việt Nam để máy chủ và trình duyệt ra cùng kết quả.
+ * Ngôn ngữ hiển thị do người gọi truyền vào ("vi" | "en") — M5-02: ngày, số,
+ * dung lượng hiển thị theo ngôn ngữ giao diện.
  */
 
 const TZ = "Asia/Ho_Chi_Minh";
@@ -17,18 +19,30 @@ export function dayDiff(a: Date, b: Date): number {
   return Math.round((db - da) / 86400_000);
 }
 
-/** "12/11" */
-export function shortDate(date: Date | string): string {
+/** "14/11" (vi) hoặc "Nov 14" (en) */
+export function shortDate(date: Date | string, locale = "vi"): string {
   const d = typeof date === "string" ? new Date(date) : date;
+  if (locale === "en") {
+    return new Intl.DateTimeFormat("en-US", { timeZone: TZ, month: "short", day: "numeric" }).format(d);
+  }
   const [, m, day] = parts(d).split("-");
   return `${day}/${m}`;
 }
 
-/** "Thứ Tư, 12/11" */
-export function weekdayDate(date: Date | string, locale = "vi-VN"): string {
+/** "Thứ Tư, 12/11" (vi) hoặc "Sat, Nov 14" (en) */
+export function weekdayDate(date: Date | string, locale = "vi"): string {
   const d = typeof date === "string" ? new Date(date) : date;
-  const wd = new Intl.DateTimeFormat(locale, { timeZone: TZ, weekday: "long" }).format(d);
-  return `${wd.charAt(0).toUpperCase()}${wd.slice(1)}, ${shortDate(d)}`;
+  if (locale === "en") {
+    const wd = new Intl.DateTimeFormat("en-US", { timeZone: TZ, weekday: "short" }).format(d);
+    return `${wd}, ${shortDate(d, "en")}`;
+  }
+  const wd = new Intl.DateTimeFormat("vi-VN", { timeZone: TZ, weekday: "long" }).format(d);
+  return `${wd.charAt(0).toUpperCase()}${wd.slice(1)}, ${shortDate(d, "vi")}`;
+}
+
+/** Định dạng số theo ngôn ngữ: 7,6 (vi) / 7.6 (en) */
+export function decimal(value: number, locale = "vi", maxFrac = 1): string {
+  return new Intl.NumberFormat(locale === "en" ? "en-US" : "vi-VN", { maximumFractionDigits: maxFrac }).format(value);
 }
 
 /** Giờ phút và giây: { h, m } để ghép vào chuỗi dịch. */

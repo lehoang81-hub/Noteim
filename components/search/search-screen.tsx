@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Clock, Search as SearchIcon, Users, X } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatClock } from "@/components/ribbon/draw";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { EmptyState, SkeletonRow } from "@/components/ui/feedback";
 import { SearchField } from "@/components/ui/form";
 import { data, useData, type SearchResult as SearchResultData, type Session } from "@/lib/data";
 import { durationParts, weekdayDate } from "@/lib/format";
+import { templateName } from "@/lib/data/localize";
 
 /*
  * Tìm kiếm (docs/03-screens.md mục 11, issue M4-02).
@@ -86,6 +87,7 @@ function durationLabel(sec: number, fmt: (h: number, m: string) => string): stri
 
 export function SearchScreen() {
   const t = useTranslations("search");
+  const locale = useLocale();
   const tl = useTranslations("library");
   const me = useData(() => data.account.me(), []);
   const templates = useData(() => data.account.templates(), []);
@@ -246,8 +248,8 @@ export function SearchScreen() {
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {usedTemplates.map((tp) => (
                     <li key={tp.id}>
-                      <Button variant="secondary" className="h-9" onClick={() => setRaw(tp.name)}>
-                        {tp.name}
+                      <Button variant="secondary" className="h-9" onClick={() => setRaw(templateName(tp, locale))}>
+                        {templateName(tp, locale)}
                       </Button>
                     </li>
                   ))}
@@ -275,7 +277,7 @@ export function SearchScreen() {
                   <Link href={`/s/${s.id}`} className="flex min-h-12 flex-col justify-center gap-0.5 py-2 hover:opacity-80">
                     <span className="text-body-strong font-semibold text-ink">{s.title}</span>
                     <span className="text-small text-ink-3">
-                      {weekdayDate(s.created_at)}, {durationLabel(s.duration_sec, (h, m) => (h > 0 ? tl("hours", { h, m }) : tl("minutes", { m: Number(m) })))}
+                      {weekdayDate(s.created_at, locale)}, {durationLabel(s.duration_sec, (h, m) => (h > 0 ? tl("hours", { h, m }) : tl("minutes", { m: Number(m) })))}
                     </span>
                   </Link>
                 </li>

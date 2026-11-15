@@ -70,6 +70,26 @@ function seed(): MockDb {
   };
 }
 
+/**
+ * Bổ sung trường tiếng Anh cho mẫu đã lưu trước M5-02 (M5-02, issue #37):
+ * kho localStorage cũ không có name_en/title_en, lấy từ fixture. Người dùng
+ * vẫn giữ phần sửa tay (thứ tự phần, bật/tắt); phần thiếu mới lấy từ fixture.
+ */
+function backfillTemplateEn(saved: Template[]) {
+  const fresh = new Map(seed().templates.map((tp) => [tp.id, tp]));
+  for (const tp of saved) {
+    const f = fresh.get(tp.id);
+    if (!f) continue;
+    if (!tp.name_en && f.name_en) tp.name_en = f.name_en;
+    if (!tp.suggested_questions_en && f.suggested_questions_en) tp.suggested_questions_en = f.suggested_questions_en;
+    if (!tp.footer_note_en && f.footer_note_en) tp.footer_note_en = f.footer_note_en;
+    for (const sec of tp.sections) {
+      const fs = f.sections.find((x) => x.id === sec.id);
+      if (fs && !sec.title_en && fs.title_en) sec.title_en = fs.title_en;
+    }
+  }
+}
+
 let db: MockDb | null = null;
 const listeners = new Set<() => void>();
 
@@ -79,6 +99,7 @@ export function getDb(): MockDb {
     const saved = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
     // Kho lưu trước bản có shares/removed thì lấy giá trị mặc định cho phần thiếu
     db = saved ? { ...seed(), ...(JSON.parse(saved) as MockDb) } : seed();
+    if (saved) backfillTemplateEn(db.templates);
   } catch {
     db = seed();
   }

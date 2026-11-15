@@ -3,7 +3,7 @@
 import { Archive, ArrowLeft, Check, Ellipsis, Pencil, Share2, Trash2, UserRoundPen, X } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FloatingPlayer } from "@/components/session/floating-player";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { data, dataNow, DataError, useData, type ActionItem, type SessionDetail } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
+import { templateName as localizedTemplateName } from "@/lib/data/localize";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
 import { SendMinutesSheet } from "./send-minutes";
@@ -48,6 +49,7 @@ const TAB_LABEL: Record<TabId, string> = {
 export function SessionDetailScreen() {
   const { id } = useParams<{ id: string }>();
   const t = useTranslations("session");
+  const locale = useLocale();
   const detail = useData(() => data.sessions.get(id), [id]);
   const templates = useData(() => data.account.templates(), []);
   const contacts = useData(() => data.account.contacts(), []);
@@ -104,7 +106,7 @@ export function SessionDetailScreen() {
     <Loaded
       key={detail.data.id}
       detail={detail.data}
-      templateName={template?.name ?? ""}
+      templateName={template ? localizedTemplateName(template, locale) : ""}
       template={template}
       templates={templates.data ?? []}
       contacts={contacts.data ?? []}
@@ -131,6 +133,7 @@ function Loaded({
   const t = useTranslations("session");
   const tl = useTranslations("styleguide.tags");
   const tlLib = useTranslations("library");
+  const locale = useLocale();
   const toast = useToast();
   const router = useRouter();
   const search = useSearchParams();
@@ -292,8 +295,8 @@ function Loaded({
         </div>
         <TitleEditor id={detail.id} title={detail.title} />
         <p className="mt-1 text-small text-ink-2">
-          {t("meta", { date: shortDate(detail.created_at), duration: durationLabel, template: templateName })}
-          {lastSent ? `, ${t("sentAt", { date: shortDate(lastSent.sent_at) })}` : ""}
+          {t("meta", { date: shortDate(detail.created_at, locale), duration: durationLabel, template: templateName })}
+          {lastSent ? `, ${t("sentAt", { date: shortDate(lastSent.sent_at, locale) })}` : ""}
         </p>
         {detail.speakers.length ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
@@ -336,7 +339,7 @@ function Loaded({
             </button>
           }
         >
-          {t("expiring", { date: shortDate(detail.audio_expires_at!) })}
+          {t("expiring", { date: shortDate(detail.audio_expires_at!, locale) })}
         </Banner>
       ) : null}
       {detail.storage_status === "essence_only" ? (
@@ -468,7 +471,7 @@ function Loaded({
             <li key={tp.id}>
               <button type="button" onClick={() => void reprocess(tp.id)} className="flex min-h-12 w-full items-center gap-3 py-2 text-left">
                 <span className="min-w-0 flex-1">
-                  <span className="block text-body text-ink">{tp.name}</span>
+                  <span className="block text-body text-ink">{localizedTemplateName(tp, locale)}</span>
                   {tp.id === detail.template_id ? <span className="block text-caption text-ink-3">{t("currentTemplate")}</span> : null}
                 </span>
                 {tp.id === detail.template_id ? <Check aria-hidden={true} className="size-5 shrink-0 text-sen" strokeWidth={2} /> : null}

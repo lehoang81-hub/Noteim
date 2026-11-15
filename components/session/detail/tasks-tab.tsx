@@ -1,7 +1,7 @@
 "use client";
 
 import { Mail, Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { TaskRow } from "@/components/session/task-row";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/feedback";
@@ -37,6 +37,7 @@ export function TasksTab({
   onEmail: () => void;
 }) {
   const t = useTranslations("session");
+  const locale = useLocale();
   const nameOf = Object.fromEntries(contacts.map((c) => [c.id, c.id === "c-me" ? c.role ?? c.name : c.name]));
   const isOverdue = (a: ActionItem) => !a.done && !!a.due_date && endOfDay(a.due_date) < now;
   const overdue = items.filter(isOverdue).length;
@@ -78,11 +79,11 @@ export function TasksTab({
                   unassignedLabel={t("unassigned")}
                   due={
                     a.done && a.done_at
-                      ? t("doneOn", { date: shortDate(a.done_at) })
+                      ? t("doneOn", { date: shortDate(a.done_at, locale) })
                       : a.due_date
                         ? od
-                          ? t("overdueOn", { date: shortDate(endOfDay(a.due_date)) })
-                          : t("due", { date: shortDate(endOfDay(a.due_date)) })
+                          ? t("overdueOn", { date: shortDate(endOfDay(a.due_date), locale) })
+                          : t("due", { date: shortDate(endOfDay(a.due_date), locale) })
                         : undefined
                   }
                   overdue={od}
