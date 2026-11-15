@@ -2,19 +2,23 @@
 
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { FileClock, HardDrive } from "lucide-react";
+import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
+import { SwipeRow } from "@/components/library/swipe-row";
+import { ShareSheet } from "@/components/session/detail/share-sheet";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chips";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Banner, EmptyState, SkeletonRow } from "@/components/ui/feedback";
+import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
+import { holdImportFile } from "@/lib/import-file";
 import { dayDiff, durationParts, shortDate, weekdayDate } from "@/lib/format";
 import {
   discardRecording,
@@ -27,7 +31,9 @@ import { useStorageFull } from "@/lib/storage-full";
 /*
  * Thư viện (docs/03-screens.md mục 1).
  * Điện thoại: cả màn hình. Máy tính: cột giữa 360px, buổi ghi đang mở được tô.
- * Chưa có ở bước này (để M4): vuốt hàng để chia sẻ hoặc xóa, nhấn giữ để chọn nhiều.
+ * M4-01: vuốt hàng sang trái để Chia sẻ / Xóa; nhấn giữ để chọn nhiều
+ * (thanh trên cùng đổi thành "Đã chọn N" với Xóa, Dọn bản gốc, Xong);
+ * máy tính: nút ⋯ khi rê chuột. Xóa luôn có hộp xác nhận và thông báo Hoàn tác.
  */
 
 type FilterId = "all" | "week" | "open" | `tpl:${string}`;
@@ -49,6 +55,7 @@ const statusMap: Record<Session["status"], SessionRowStatus> = {
 
 export function LibraryPane({ className }: { className?: string }) {
   const t = useTranslations("library");
+  const ts = useTranslations("session");
   const toast = useToast();
   const router = useRouter();
   const params = useParams<{ id?: string }>();
@@ -58,11 +65,33 @@ export function LibraryPane({ className }: { className?: string }) {
   const flags = useDebugFlags();
   const storageAlert = useStorageFull() || flags.storageFull;
 
+  // Chọn nhiều (M4-01)
+  const [selecting, setSelecting] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  // Vuốt hàng (M4-01): chỉ một hàng mở
+  const [swipeOpenId, setSwipeOpenId] = useState<string | null>(null);
+  // Menu ⋯ của một hàng trên máy tính
+  const [menuRowId, setMenuRowId] = useState<string | null>(null);
+  // Bảng chia sẻ mở từ thư viện: cần chi tiết buổi ghi
+  const [shareTargetId, setShareTargetId] = useState<string | null>(null);
+  // Xóa (một hoặc nhiều) và dọn bản gốc
+  const [deleteIds, setDeleteIds] = useState<string[] | null>(null);
+  const [purgeIds, setPurgeIds] = useState<string[] | null>(null);
+
   const me = useData(() => data.account.me(), []);
   const quota = useData(() => data.account.quota(), []);
   const templates = useData(() => data.account.templates(), []);
   const all = useData(() => data.sessions.list(), []);
   const list = useData(() => data.sessions.list(toFilter(filter)), [filter]);
+  const shareDetail = useData(() => (shareTargetId ? data.sessions.get(shareTargetId) : Promise.resolve(null)), [shareTargetId]);
+
+  // Chưa làm quen (M4-04): mở / chuyển tới /welcome, làm xong hoặc bỏ qua thì không hiện lại
+  const redirectChecked = useRef(false);
+  useEffect(() => {
+    if (redirectChecked.current || !me.data) return;
+    redirectChecked.current = true;
+    if (!me.data.onboarded_at) router.replace("/welcome");
+  }, [me.data, router]);
 
   const now = dataNow();
   const tplName = useMemo(
@@ -125,16 +154,118 @@ export function LibraryPane({ className }: { className?: string }) {
     }
   }
 
+  /* ---------- Chọn nhiều (M4-01) ---------- */
+
+  function enterSelect(firstId: string) {
+    setSelecting(true);
+    setSelectedIds([firstId]);
+    setSwipeOpenId(null);
+  }
+
+  function toggleSelect(id: string) {
+    setSelectedIds((list) => (list.includes(id) ? list.filter((x) => x !== id) : [...list, id]));
+  }
+
+  function exitSelect() {
+    setSelecting(false);
+    setSelectedIds([]);
+  }
+
+  async function confirmDelete() {
+    const ids = deleteIds ?? [];
+    setDeleteIds(null);
+    exitSelect();
+    try {
+      for (const id of ids) await data.sessions.remove(id);
+      toast.show({
+        tone: "success",
+        message: t("deletedToast", { count: ids.length }),
+        action: {
+          label: ts("undo"),
+          onClick: () => {
+            void Promise.all(ids.map((id) => data.sessions.restore(id))).catch(() =>
+              toast.show({ tone: "error", message: ts("saveError") }),
+            );
+          },
+        },
+      });
+    } catch {
+      toast.show({ tone: "error", message: ts("saveError") });
+    }
+  }
+
+  async function confirmPurge() {
+    const ids = purgeIds ?? [];
+    setPurgeIds(null);
+    exitSelect();
+    try {
+      const { freed_bytes } = await data.sessions.purgeRaw(ids);
+      toast.show({ tone: "success", message: t("purgedToast", { count: ids.length, mb: Math.max(1, Math.round(freed_bytes / 1_000_000)) }) });
+    } catch {
+      toast.show({ tone: "error", message: ts("saveError") });
+    }
+  }
+
+  const deleteTargets = (deleteIds ?? []).map((id) => (all.data ?? []).find((s) => s.id === id)).filter(Boolean) as Session[];
+  const purgeTargets = (purgeIds ?? []).map((id) => (all.data ?? []).find((s) => s.id === id)).filter(Boolean) as Session[];
+  const purgeMb = Math.max(1, Math.round(purgeTargets.reduce((n, s) => n + s.size_bytes, 0) / 1_000_000));
+
   return (
-    <section aria-label={t("list")} className={cn("flex min-w-0 flex-col [&>*]:shrink-0", className)}>
-      <TopBar />
+    <section
+      aria-label={t("list")}
+      className={cn("flex min-w-0 flex-col [&>*]:shrink-0", className)}
+      // Chạm ra ngoài hàng đang vuốt thì đóng hàng đó (M4-01)
+      onPointerDownCapture={(e) => {
+        if (swipeOpenId && !(e.target as Element).closest("[data-swipe-open]")) setSwipeOpenId(null);
+      }}
+      // Máy tính kéo thả file vào thư viện để nhập (M4-02)
+      onDragOver={(e) => {
+        if (e.dataTransfer.types.includes("Files")) e.preventDefault();
+      }}
+      onDrop={(e) => {
+        const f = e.dataTransfer.files?.[0];
+        if (!f) return;
+        e.preventDefault();
+        holdImportFile(f);
+        router.push("/import");
+      }}
+    >
+      {selecting ? (
+        <header className="flex min-h-14 items-center gap-1 px-page pt-2 lg:px-8 lg:pt-4">
+          <p aria-live="polite" className="min-w-0 flex-1 truncate text-body-strong font-semibold text-ink">
+            {t("selectedCount", { count: selectedIds.length })}
+          </p>
+          <Button
+            variant="ghost"
+            icon={Trash2}
+            iconOnly
+            aria-label={t("deleteAction")}
+            disabled={!selectedIds.length}
+            onClick={() => setDeleteIds(selectedIds)}
+          />
+          <Button
+            variant="ghost"
+            icon={Archive}
+            iconOnly
+            aria-label={t("purgeAction")}
+            disabled={!selectedIds.length}
+            onClick={() => setPurgeIds(selectedIds)}
+          />
+          <Button variant="secondary" className="h-9" onClick={exitSelect}>
+            {t("doneAction")}
+          </Button>
+        </header>
+      ) : (
+        <TopBar importHref={true} />
+      )}
+
       <div className="px-page pb-4">
         <h1 className="font-display text-h1 font-semibold text-ink">
           {u
             ? u.honorific
-              ? t("greeting", { honorific: u.honorific, name: u.display_name })
+              ? t("greeting", { honorific: u.honorific === "chị" ? t("honorificChi") : t("honorificAnh"), name: u.display_name })
               : t("greetingPlain", { name: u.display_name })
-            : " "}
+            : " "}
         </h1>
         <p className="mt-0.5 min-h-6 text-small text-ink-2">
           {all.data ? (week.sessions ? t("week", week) : t("weekNone")) : null}
@@ -254,12 +385,18 @@ export function LibraryPane({ className }: { className?: string }) {
               {g.items.map((s) => {
                 const status = statusMap[s.status];
                 const essence = s.storage_status === "essence_only" && s.status === "ready";
-                return (
+                const row = (
                   <SessionRow
                     key={s.id}
                     href={`/s/${s.id}`}
                     className="px-page"
-                    selected={params?.id === s.id}
+                    selected={!selecting && params?.id === s.id}
+                    selecting={selecting}
+                    checked={selectedIds.includes(s.id)}
+                    onToggleCheck={() => toggleSelect(s.id)}
+                    checkOnLabel={t("pickRowOff")}
+                    checkOffLabel={t("pickRowOn")}
+                    onLongPress={() => enterSelect(s.id)}
                     title={s.title || t("untitled")}
                     duration={durationLabel(s.duration_sec)}
                     template={tplName[s.template_id] ?? ""}
@@ -285,13 +422,111 @@ export function LibraryPane({ className }: { className?: string }) {
                         </Button>
                       ) : undefined
                     }
+                    trailing={
+                      <span className="hidden lg:block">
+                        <Button
+                          variant="ghost"
+                          icon={Ellipsis}
+                          iconOnly
+                          aria-label={t("rowMenu")}
+                          onClick={() => setMenuRowId(s.id)}
+                        />
+                      </span>
+                    }
                   />
+                );
+                return selecting ? (
+                  <div key={s.id}>{row}</div>
+                ) : (
+                  <SwipeRow
+                    key={s.id}
+                    open={swipeOpenId === s.id}
+                    onOpenChange={(open) => setSwipeOpenId(open ? s.id : null)}
+                    shareLabel={t("swipeShare")}
+                    deleteLabel={t("swipeDelete")}
+                    onShare={() => (setSwipeOpenId(null), setShareTargetId(s.id))}
+                    onDelete={() => (setSwipeOpenId(null), setDeleteIds([s.id]))}
+                  >
+                    {row}
+                  </SwipeRow>
                 );
               })}
             </div>
           ))
         )}
       </div>
+
+      {/* Menu ⋯ của một hàng trên máy tính: Chia sẻ, Xóa */}
+      <Sheet
+        open={!!menuRowId}
+        onOpenChange={(open) => !open && setMenuRowId(null)}
+        title={t("rowMenu")}
+        description={(all.data ?? []).find((s) => s.id === menuRowId)?.title}
+        size="half"
+      >
+        <ul className="divide-y divide-line">
+          <li>
+            <button
+              type="button"
+              onClick={() => {
+                const id = menuRowId;
+                setMenuRowId(null);
+                if (id) setShareTargetId(id);
+              }}
+              className="flex min-h-12 w-full items-center gap-3 py-2 text-left text-body text-ink"
+            >
+              <Share2 aria-hidden={true} className="size-5 shrink-0 text-ink-2" strokeWidth={1.75} />
+              {t("swipeShare")}
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              onClick={() => {
+                const id = menuRowId;
+                setMenuRowId(null);
+                if (id) setDeleteIds([id]);
+              }}
+              className="flex min-h-12 w-full items-center gap-3 py-2 text-left text-body text-ink"
+            >
+              <Trash2 aria-hidden={true} className="size-5 shrink-0 text-tag-risk" strokeWidth={1.75} />
+              <span className="text-tag-risk">{t("swipeDelete")}</span>
+            </button>
+          </li>
+        </ul>
+      </Sheet>
+
+      {/* Bảng chia sẻ cần chi tiết buổi ghi: tải xong mới mở */}
+      {shareTargetId && shareDetail.data ? (
+        <ShareSheet detail={shareDetail.data} open={true} onOpenChange={(open) => !open && setShareTargetId(null)} />
+      ) : null}
+
+      {/* Xóa một hoặc nhiều buổi ghi: xác nhận ghi đúng số lượng, có Hoàn tác */}
+      <ConfirmDialog
+        open={!!deleteIds}
+        onOpenChange={(open) => !open && setDeleteIds(null)}
+        title={t("deleteTitle", { count: deleteIds?.length ?? 0 })}
+        cancelLabel={ts("cancel")}
+        confirmLabel={t("deleteAction")}
+        onConfirm={() => void confirmDelete()}
+      >
+        {deleteIds?.length === 1 ? t("deleteBodyOne", { title: deleteTargets[0]?.title ?? "" }) : t("deleteBodyMany", { count: deleteIds?.length ?? 0 })}
+      </ConfirmDialog>
+
+      {/* Dọn bản gốc nhiều buổi: nói rõ thứ gì mất và thứ gì giữ (docs mục 12) */}
+      <ConfirmDialog
+        open={!!purgeIds}
+        onOpenChange={(open) => !open && setPurgeIds(null)}
+        title={t("purgeTitle", { count: purgeIds?.length ?? 0 })}
+        cancelLabel={ts("cancel")}
+        confirmLabel={t("purgeAction")}
+        onConfirm={() => void confirmPurge()}
+      >
+        <span className="block">{ts("purgeBodyRemove", { mb: purgeMb })}</span>
+        <span className="block">{ts("purgeBodyKeep")}</span>
+        <span className="mt-2 block font-medium text-ink">{ts("purgeBodyIrreversible")}</span>
+      </ConfirmDialog>
+
       <ConfirmDialog
         open={confirmDiscard}
         onOpenChange={setConfirmDiscard}

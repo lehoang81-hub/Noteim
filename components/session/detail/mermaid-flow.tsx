@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useId, useState } from "react";
 
 /*
@@ -29,6 +30,7 @@ export default function MermaidFlow({
   code: string;
   colors: { background: string; primary: string; text: string; border: string; line: string };
 }) {
+  const t = useTranslations("visual");
   const reactId = useId().replace(/[^a-zA-Z0-9]/g, "");
   const [svg, setSvg] = useState<string | null>(null);
   const [failed, setFailed] = useState(false);
@@ -67,7 +69,7 @@ export default function MermaidFlow({
   }, [code, reactId, colors]);
 
   if (failed) {
-    return <p className="text-small text-ink-2">Mermaid không dựng được sơ đồ này.</p>;
+    return <p className="text-small text-ink-2">{t("mermaidError")}</p>;
   }
   if (!svg) {
     return <div className="h-40 w-full animate-pulse rounded-block bg-surface-2 motion-reduce:animate-none" aria-hidden={true} />;

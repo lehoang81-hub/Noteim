@@ -1,17 +1,23 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
+import { Check, ClipboardCopy, Ellipsis, Pencil, Quote, Scissors, ListPlus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRef, useState } from "react";
 import { SummaryBullet, UserNote } from "@/components/session/summary-bullet";
 import { Button } from "@/components/ui/button";
 import { TagChip } from "@/components/ui/chips";
+import { Sheet } from "@/components/ui/sheet";
+import { useToast } from "@/components/ui/toast";
 import { formatClock } from "@/components/ribbon/draw";
-import type { SessionDetail, Template, Topic } from "@/lib/data";
+import { data, type Bullet, type SessionDetail, type Template, type Topic } from "@/lib/data";
+import type { ShareIntent } from "./share-sheet";
 
 /*
  * Tab Tóm tắt (docs/03-screens.md mục 5a).
  * Điểm chính, rồi các phần theo mẫu của nghề, mỗi phần gồm các chủ đề.
  * Chạm một ý để phát từ mốc đó. Ghi chú tay hiện dưới ý liên quan.
+ * M4-01: nhấn giữ một ý (hoặc nút ⋯ trên máy tính): sao chép, sửa, tạo thẻ
+ * trích dẫn, thêm vào đoạn tinh túy, chuyển thành việc cần làm.
  */
 
 function FigureBars({ figure }: { figure: NonNullable<Topic["figure"]> }) {
@@ -29,10 +35,7 @@ function FigureBars({ figure }: { figure: NonNullable<Topic["figure"]> }) {
               {fmt(figure.values[i])} {figure.unit}
             </span>
             <span className="col-span-2 h-2 rounded-pill bg-surface-2">
-              <span
-                className="block h-2 rounded-pill bg-tag-figure"
-                style={{ width: `${Math.max(4, (figure.values[i] / max) * 100)}%` }}
-              />
+              <span className="block h-2 rounded-pill bg-tag-figure" style={{ width: `${Math.max(4, (figure.values[i] / max) * 100)}%` }} />
             </span>
           </li>
         ))}
@@ -51,6 +54,7 @@ export function SummaryTab({
   onSeek,
   onAskAi,
   onSendMinutes,
+  onShareIntent,
 }: {
   detail: SessionDetail;
   template?: Template;
@@ -60,11 +64,81 @@ export function SummaryTab({
   onSeek: (time: number) => void;
   onAskAi: () => void;
   onSendMinutes: () => void;
+  /** Mở bảng chia sẻ với lựa chọn chỉ định: thẻ trích dẫn, đoạn tinh túy (M4-01) */
+  onShareIntent?: (intent: ShareIntent) => void;
 }) {
   const t = useTranslations("session");
+  const ts = useTranslations("transcript");
+  const toast = useToast();
   const colorOf = Object.fromEntries(detail.speakers.map((s) => [s.id, s.color_index]));
   const speakerNameOf = Object.fromEntries(detail.speakers.map((s) => [s.id, s.display_name]));
   const noteById = Object.fromEntries(detail.notes.map((n) => [n.id, n]));
+
+  const allBullets = detail.topics.flatMap((tp) => tp.bullets).sort((a, b) => a.timestamp_sec - b.timestamp_sec);
+  const [menuBullet, setMenuBullet] = useState<Bullet | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
+
+  async function saveEdit() {
+    const b = editingId ? allBullets.find((x) => x.id === editingId) : null;
+    const next = editValue.trim();
+    if (!b || !next || next === b.text) {
+      setEditingId(null);
+      return;
+    }
+    try {
+      await data.sessions.updateBullet(detail.id, b.id, next);
+      setEditingId(null);
+      toast.show({ tone: "success", message: t("bulletSaved") });
+    } catch {
+      toast.show({ tone: "error", message: t("saveError") });
+    }
+  }
+
+  async function copyBullet(b: Bullet) {
+    try {
+      await navigator.clipboard.writeText(b.text);
+      toast.show({ tone: "success", message: ts("copied") });
+    } catch {
+      toast.show({ tone: "error", message: t("saveError") });
+    }
+  }
+
+  async function bulletToTask(b: Bullet) {
+    try {
+      await data.tasks.upsert({
+        id: `a-user-${Date.now().toString(36)}`,
+        session_id: detail.id,
+        task: b.text,
+        assignee_contact_id: null,
+        due_date: null,
+        priority: "medium",
+        done: false,
+        done_at: null,
+        source_quote: b.is_quote ? b.text : null,
+        timestamp_sec: b.timestamp_sec,
+      });
+      toast.show({ tone: "success", message: t("bulletToTask") });
+    } catch {
+      toast.show({ tone: "error", message: t("saveError") });
+    }
+  }
+
+  /** Thẻ trích dẫn từ một ý: đến đầu ý kế tiếp, tối đa 20 giây. */
+  function quoteFromBullet(b: Bullet): ShareIntent {
+    const next = allBullets[allBullets.findIndex((x) => x.id === b.id) + 1];
+    const end = Math.min(Math.max(b.timestamp_sec + 1, next ? next.timestamp_sec : detail.duration_sec), b.timestamp_sec + 20);
+    return {
+      kind: "card",
+      quote: {
+        text: b.text,
+        speakerName: speakerNameOf[b.speaker_id] ?? "",
+        speakerColorIndex: colorOf[b.speaker_id] ?? 0,
+        startSec: b.timestamp_sec,
+        endSec: end,
+      },
+    };
+  }
 
   const sections = (template?.sections ?? []).filter((s) => s.enabled);
   const ordered = [
@@ -107,18 +181,54 @@ export function SummaryTab({
               <div className="mt-1">
                 {topic.bullets.map((b) => {
                   const speakerName = speakerNameOf[b.speaker_id];
-                  return (
-                    <SummaryBullet
+                  const editing = editingId === b.id;
+                  return editing ? (
+                    <form
                       key={b.id}
-                      text={b.text}
-                      time={formatClock(b.timestamp_sec)}
+                      className="mb-2 ml-5"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        void saveEdit();
+                      }}
+                    >
+                      <textarea
+                        autoFocus
+                        rows={2}
+                        aria-label={t("edit")}
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Escape") setEditingId(null);
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            void saveEdit();
+                          }
+                        }}
+                        className="w-full rounded-control border border-dien bg-surface px-3 py-2 text-body text-ink focus-visible:outline-none"
+                      />
+                      <div className="mt-2 flex gap-2">
+                        <Button type="submit" variant="primary" icon={Check} className="h-9">
+                          {t("save")}
+                        </Button>
+                        <Button variant="ghost" icon={X} className="h-9" onClick={() => setEditingId(null)}>
+                          {t("cancel")}
+                        </Button>
+                      </div>
+                    </form>
+                  ) : (
+                    <BulletRow
+                      key={b.id}
+                      bullet={b}
+                      tourAnchor={b.id === allBullets[0]?.id}
                       speakerColorIndex={colorOf[b.speaker_id] ?? 0}
-                      speakerLabel={speakerName}
-                      quoteLabel={b.is_quote && speakerName ? speakerName : undefined}
+                      speakerName={speakerName}
                       playing={playingBulletId === b.id}
+                      canSeek={canSeek}
+                      onSeek={onSeek}
                       editedLabel={b.edited ? t("edited") : undefined}
                       seekLabel={t("seek")}
-                      onSeek={canSeek ? () => onSeek(b.timestamp_sec) : undefined}
+                      menuLabel={t("bulletActions")}
+                      onOpenMenu={() => setMenuBullet(b)}
                     >
                       {b.note_ids.length ? (
                         <div className="flex flex-col gap-1.5">
@@ -131,7 +241,7 @@ export function SummaryTab({
                           )}
                         </div>
                       ) : null}
-                    </SummaryBullet>
+                    </BulletRow>
                   );
                 })}
               </div>
@@ -147,10 +257,178 @@ export function SummaryTab({
         <Button variant="primary" onClick={onSendMinutes}>
           {t("sendMinutes")}
         </Button>
-        <Button variant="ai" icon={Sparkles} onClick={onAskAi}>
+        <Button variant="ai" onClick={onAskAi}>
           {t("askAi")}
         </Button>
       </div>
+
+      {/* Bảng thao tác với một ý: nhấn giữ trên điện thoại, nút ⋯ trên máy tính */}
+      <Sheet
+        open={!!menuBullet}
+        onOpenChange={(open) => !open && setMenuBullet(null)}
+        title={t("bulletActions")}
+        description={menuBullet?.text}
+        size="half"
+      >
+        {menuBullet ? (
+          <ul className="divide-y divide-line">
+            <ActionRow
+              icon={ClipboardCopy}
+              label={ts("copy")}
+              onClick={() => {
+                setMenuBullet(null);
+                void copyBullet(menuBullet);
+              }}
+            />
+            <ActionRow
+              icon={Pencil}
+              label={t("edit")}
+              onClick={() => {
+                setEditingId(menuBullet.id);
+                setEditValue(menuBullet.text);
+                setMenuBullet(null);
+              }}
+            />
+            <ActionRow
+              icon={Quote}
+              label={t("bulletQuoteCard")}
+              onClick={() => {
+                const intent = quoteFromBullet(menuBullet);
+                setMenuBullet(null);
+                onShareIntent?.(intent);
+              }}
+            />
+            <ActionRow
+              icon={Scissors}
+              label={t("bulletToHighlights")}
+              onClick={() => {
+                const id = menuBullet.id;
+                setMenuBullet(null);
+                onShareIntent?.({ kind: "highlights", bulletId: id });
+              }}
+            />
+            <ActionRow
+              icon={ListPlus}
+              label={t("bulletMakeTask")}
+              onClick={() => {
+                const b = menuBullet;
+                setMenuBullet(null);
+                void bulletToTask(b);
+              }}
+            />
+          </ul>
+        ) : null}
+      </Sheet>
     </div>
+  );
+}
+
+/** Một ý tóm tắt: chạm để phát, nhấn giữ (hoặc ⋯) để mở bảng thao tác. */
+function BulletRow({
+  bullet,
+  speakerColorIndex,
+  speakerName,
+  playing,
+  canSeek,
+  onSeek,
+  editedLabel,
+  seekLabel,
+  menuLabel,
+  tourAnchor,
+  onOpenMenu,
+  children,
+}: {
+  bullet: Bullet;
+  speakerColorIndex: number;
+  speakerName?: string;
+  playing?: boolean;
+  canSeek: boolean;
+  onSeek: (time: number) => void;
+  editedLabel?: string;
+  seekLabel: string;
+  menuLabel: string;
+  /** Mốc cho chú thích nổi đầu tiên của tour làm quen (M4-04) */
+  tourAnchor?: boolean;
+  onOpenMenu: () => void;
+  children?: React.ReactNode;
+}) {
+  const holdTimer = useRef(0);
+  const holdMoved = useRef(false);
+  const holdFired = useRef(false);
+  const holdPos = useRef({ x: 0, y: 0 });
+
+  function holdStart(e: React.PointerEvent) {
+    holdMoved.current = false;
+    holdFired.current = false;
+    holdPos.current = { x: e.clientX, y: e.clientY };
+    holdTimer.current = window.setTimeout(() => {
+      if (!holdMoved.current) {
+        holdFired.current = true;
+        onOpenMenu();
+      }
+    }, 500);
+  }
+  function holdMove(e: React.PointerEvent) {
+    const dx = e.clientX - holdPos.current.x;
+    const dy = e.clientY - holdPos.current.y;
+    if (dx * dx + dy * dy > 144) holdMoved.current = true;
+  }
+  function holdEnd() {
+    window.clearTimeout(holdTimer.current);
+  }
+
+  return (
+    <div
+      className="group/bullet relative"
+      data-tour={tourAnchor ? "first-bullet" : undefined}
+      onPointerDown={holdStart}
+      onPointerMove={holdMove}
+      onPointerUp={holdEnd}
+      onPointerCancel={holdEnd}
+    >
+      <SummaryBullet
+        text={bullet.text}
+        time={formatClock(bullet.timestamp_sec)}
+        speakerColorIndex={speakerColorIndex}
+        speakerLabel={speakerName}
+        quoteLabel={bullet.is_quote && speakerName ? speakerName : undefined}
+        playing={playing}
+        editedLabel={editedLabel}
+        seekLabel={seekLabel}
+        onSeek={
+          canSeek
+            ? () => {
+                // Nhấn giữ vừa mở bảng thao tác thì không phát luôn
+                if (holdFired.current) {
+                  holdFired.current = false;
+                  return;
+                }
+                onSeek(bullet.timestamp_sec);
+              }
+            : undefined
+        }
+      >
+        {children}
+      </SummaryBullet>
+      <button
+        type="button"
+        onClick={onOpenMenu}
+        aria-label={menuLabel}
+        className="absolute right-0 top-1 hidden h-9 w-9 items-center justify-center rounded-control text-ink-3 opacity-0 hover:bg-surface-2 hover:text-ink focus-visible:opacity-100 group-hover/bullet:opacity-100 lg:flex"
+      >
+        <Ellipsis aria-hidden={true} className="size-4" strokeWidth={2} />
+      </button>
+    </div>
+  );
+}
+
+function ActionRow({ icon: Icon, label, onClick }: { icon: typeof Pencil; label: string; onClick: () => void }) {
+  return (
+    <li>
+      <button type="button" onClick={onClick} className="flex min-h-12 w-full items-center gap-3 py-2 text-left text-body text-ink">
+        <Icon aria-hidden={true} className="size-5 shrink-0 text-ink-2" strokeWidth={1.75} />
+        {label}
+      </button>
+    </li>
   );
 }

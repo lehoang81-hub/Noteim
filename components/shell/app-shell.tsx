@@ -1,6 +1,6 @@
 "use client";
 
-import { Library, ListChecks, Search, Settings } from "lucide-react";
+import { FileUp, Library, ListChecks, Search, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -158,7 +158,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 
 /** Thanh tiêu đề trên điện thoại: tiêu đề trang bên trái, Tìm kiếm và Cài đặt bên phải. */
-export function TopBar({ title, leading, actions }: { title?: string; leading?: React.ReactNode; actions?: React.ReactNode }) {
+export function TopBar({ title, leading, actions, importHref }: { title?: string; leading?: React.ReactNode; actions?: React.ReactNode; importHref?: boolean }) {
   const t = useTranslations("shell");
   return (
     <header className="flex min-h-14 items-center gap-1 px-page pt-2 lg:pt-4">
@@ -166,6 +166,15 @@ export function TopBar({ title, leading, actions }: { title?: string; leading?: 
       {title ? <p className="min-w-0 flex-1 truncate text-body-strong font-semibold text-ink">{title}</p> : <span className="flex-1" />}
       {actions ?? (
         <>
+          {importHref ? (
+            <Link
+              href={importHref === true ? "/import" : importHref}
+              aria-label={t("import")}
+              className="flex size-11 items-center justify-center rounded-control text-ink-2 hover:bg-surface-2 hover:text-ink"
+            >
+              <FileUp aria-hidden={true} className="size-5" strokeWidth={1.75} />
+            </Link>
+          ) : null}
           <Link
             href="/search"
             aria-label={t("search")}

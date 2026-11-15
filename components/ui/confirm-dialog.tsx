@@ -16,6 +16,7 @@ export function ConfirmDialog({
   cancelLabel,
   confirmLabel,
   confirmVariant = "danger",
+  confirmDisabled,
   onConfirm,
 }: {
   open: boolean;
@@ -25,6 +26,8 @@ export function ConfirmDialog({
   cancelLabel: string;
   confirmLabel: string;
   confirmVariant?: ButtonVariant;
+  /** Chặn nút xác nhận cho tới khi người dùng làm đủ điều kiện (ví dụ gõ "XÓA") */
+  confirmDisabled?: boolean;
   onConfirm: () => void;
 }) {
   return (
@@ -41,7 +44,7 @@ export function ConfirmDialog({
               <Button variant="secondary">{cancelLabel}</Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
-              <Button variant={confirmVariant} onClick={onConfirm}>
+              <Button variant={confirmVariant} disabled={confirmDisabled} onClick={onConfirm}>
                 {confirmLabel}
               </Button>
             </AlertDialog.Action>

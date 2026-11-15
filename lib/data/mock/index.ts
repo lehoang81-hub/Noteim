@@ -1,8 +1,8 @@
 "use client";
 
 import { getFlags } from "@/lib/debug/flags";
-import type { DataSource, EmailDraft, RecordingDraft, SessionFilter } from "../repository";
-import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture } from "../types";
+import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
+import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture, type ShareLink } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
 import { buildSessionContent } from "./generate";
 
@@ -32,8 +32,19 @@ async function write<T>(fn: () => T): Promise<T> {
   return structuredClone(out);
 }
 
+/** So khớp không phân biệt hoa thường, bỏ dấu tiếng Việt (M4-02). */
+function foldVi(s: string): string {
+  return s
+    .toLocaleLowerCase("vi")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d");
+}
+
 function findFixture(id: string): SessionFixture & { draft?: RecordingDraft; chat_log?: ChatMessage[] } {
-  const fx = getDb().sessions.find((s) => s.detail.id === id);
+  const db = getDb();
+  // Buổi ghi mẫu (M4-04) nằm ngoài danh sách chính nhưng vẫn mở được chi tiết
+  const fx = db.sessions.find((s) => s.detail.id === id) ?? db.samples.find((s) => s.detail.id === id);
   if (!fx) throw new DataError("not_found");
   return fx;
 }
@@ -42,6 +53,19 @@ function findFixture(id: string): SessionFixture & { draft?: RecordingDraft; cha
 function toSession(d: SessionDetail): Session {
   // Zod bỏ các trường không thuộc Session
   return SessionSchema.parse(d);
+}
+
+/** Bản sao ShareLink không kèm mật khẩu (mật khẩu chỉ dùng nội bộ bản giả). */
+function toShareLink(s: { id: string; session_id: string; scope: ShareLink["scope"]; has_password: boolean; expires_at: string | null; revoked: boolean; view_count: number }): ShareLink {
+  return {
+    id: s.id,
+    session_id: s.session_id,
+    scope: s.scope,
+    has_password: s.has_password,
+    expires_at: s.expires_at,
+    revoked: s.revoked,
+    view_count: s.view_count,
+  };
 }
 
 function refreshCounts(d: SessionDetail) {
@@ -351,8 +375,137 @@ export const mockSource: DataSource = {
     remove: (id) =>
       write(() => {
         const db = getDb();
-        findFixture(id);
-        db.sessions = db.sessions.filter((s) => s.detail.id !== id);
+        // Giữ buổi ghi trong removed để "Hoàn tác" đưa về đúng chỗ cũ (M4-01)
+        const i = db.sessions.findIndex((s) => s.detail.id === id);
+        if (i < 0) throw new DataError("not_found");
+        const [fx] = db.sessions.splice(i, 1);
+        db.removed.push(fx);
+      }),
+    restore: (id) =>
+      write(() => {
+        const db = getDb();
+        const i = db.removed.findIndex((s) => s.detail.id === id);
+        if (i < 0) throw new DataError("not_found");
+        const [fx] = db.removed.splice(i, 1);
+        // Trả về đúng chỗ cũ theo ngày tạo (mới nhất trên cùng)
+        const at = db.sessions.findIndex((s) => s.detail.created_at <= fx.detail.created_at);
+        if (at < 0) db.sessions.push(fx);
+        else db.sessions.splice(at, 0, fx);
+      }),
+    reprocess: (id, templateId) =>
+      write(() => {
+        const fx = findFixture(id);
+        const d = fx.detail;
+        // Chuyển các chủ đề sang phần tương ứng của mẫu mới theo thứ tự,
+        // nhờ đó tóm tắt hiện đủ các phần của mẫu mới (bản giả)
+        const template = getDb().templates.find((t) => t.id === templateId);
+        if (template) {
+          const sections = template.sections;
+          for (const topic of d.topics) {
+            const at = sections.findIndex((s) => s.id === topic.section_id);
+            if (at >= 0) continue;
+            const oldIndex = d.topics.indexOf(topic);
+            topic.section_id = sections[Math.min(oldIndex, sections.length - 1)].id;
+          }
+          d.template_id = templateId;
+        }
+        d.status = "processing";
+        d.processing_step = 1;
+        delete d.failure_reason;
+        scheduleProcessing(id);
+      }),
+    search: (query) =>
+      read(() => {
+        const q = foldVi(query.trim());
+        const out: SearchResult = { sessions: [], segments: [], tasks: [] };
+        if (!q) return out;
+        for (const fx of getDb().sessions) {
+          const d = fx.detail;
+          // Tìm trong tiêu đề, tóm tắt chung, tên các phần tóm tắt, tên chủ đề
+          // và từng điểm chính (review PR #35: thiếu điểm chính nên "lai suat"
+          // không ra ý "Lo lãi suất tăng mạnh sau thời gian ưu đãi")
+          const template = getDb().templates.find((t) => t.id === d.template_id);
+          const sectionTitles = template
+            ? template.sections.filter((s) => d.topics.some((tp) => tp.section_id === s.id)).map((s) => s.title)
+            : [];
+          const hayTitle = foldVi(
+            [
+              d.title,
+              d.executive_summary,
+              ...sectionTitles,
+              ...d.topics.flatMap((t) => [t.title, ...t.bullets.map((b) => b.text)]),
+            ].join(" "),
+          );
+          if (hayTitle.includes(q)) out.sessions.push(toSession(d));
+          for (const seg of fx.transcript) {
+            if (foldVi(seg.text).includes(q)) out.segments.push({ session_id: d.id, segment: seg });
+          }
+          for (const task of d.action_items) {
+            if (foldVi(`${task.task} ${task.source_quote ?? ""}`).includes(q)) out.tasks.push(task);
+          }
+        }
+        out.sessions.sort((a, b) => b.created_at.localeCompare(a.created_at));
+        out.segments.sort((a, b) => a.segment.start_sec - b.segment.start_sec);
+        return out;
+      }),
+    createFromImport: (input) =>
+      write(() => {
+        const db = getDb();
+        const id = `s-new-${Date.now()}`;
+        const now = new Date().toISOString();
+        // Bản nháp không có âm lượng: xử lý xong sẽ sinh nội dung theo mẫu và
+        // dải giọng dự phòng (buildSessionContent), file gốc không được lưu
+        const draft: RecordingDraft = {
+          title: input.file_name.replace(/\.[^.]+$/, ""),
+          template_id: input.template_id,
+          duration_sec: input.duration_sec,
+          notes: [],
+          bookmarks: [],
+          photos: [],
+          levels: [],
+        };
+        const detail: SessionDetail = {
+          id,
+          user_id: db.user.id,
+          workspace_id: null,
+          title: draft.title ?? "",
+          template_id: input.template_id,
+          language: input.language,
+          output_language: db.user.ui_language,
+          status: "processing",
+          processing_step: 1,
+          storage_status: "full",
+          duration_sec: input.duration_sec,
+          size_bytes: Math.round(input.duration_sec * 16_000),
+          created_at: now,
+          audio_expires_at: null,
+          consent: { confirmed: true, announced: false },
+          participant_contact_ids: [],
+          peaks_thumb: Array.from({ length: 40 }, (_, i) => 0.3 + 0.5 * Math.abs(Math.sin(i / 5))),
+          speaker_colors_thumb: Array.from({ length: 40 }, () => 0),
+          open_task_count: 0,
+          executive_summary: "",
+          speakers: [],
+          topics: [],
+          action_items: [],
+          notes: [],
+          bookmarks: [],
+          photos: [],
+          peaks: [],
+          speaker_spans: [],
+          send_history: [],
+        };
+        db.sessions.unshift({ detail, transcript: [], chat: [], draft });
+        scheduleProcessing(id);
+        return { id };
+      }),
+    getSample: (profession) =>
+      read(() => {
+        const db = getDb();
+        const tpl = db.templates.find((t) => t.profession === profession);
+        const sample = db.samples.find((s) => s.detail.template_id === tpl?.id) ?? db.samples[0];
+        if (!sample) throw new DataError("not_found");
+        return sample.detail;
       }),
   },
 
@@ -420,17 +573,74 @@ export const mockSource: DataSource = {
 
   share: {
     create: (sessionId, opts) =>
-      write(() => ({
-        id: `sh-${Date.now().toString(36)}`,
-        session_id: sessionId,
-        scope: opts.scope,
-        has_password: !!opts.password,
-        expires_at: opts.expires_at,
-        revoked: false,
-        view_count: 0,
-      })),
-    revoke: () => write(() => undefined),
-    getPublic: () => read(() => "expired" as const),
+      write(() => {
+        const db = getDb();
+        // Mỗi buổi ghi chỉ giữ một link sống: tạo mới thì thu hồi link cũ
+        for (const s of db.shares) if (s.session_id === sessionId && !s.revoked) s.revoked = true;
+        const link: ShareLink & { password?: string } = {
+          id: `sh-${Date.now().toString(36)}`,
+          session_id: sessionId,
+          scope: opts.scope,
+          has_password: !!opts.password,
+          expires_at: opts.expires_at,
+          revoked: false,
+          view_count: 0,
+        };
+        if (opts.password) link.password = opts.password;
+        db.shares.push(link);
+        return link;
+      }),
+    revoke: (id) =>
+      write(() => {
+        const link = getDb().shares.find((s) => s.id === id);
+        if (!link) throw new DataError("not_found");
+        link.revoked = true;
+      }),
+    getForSession: (sessionId) =>
+      read(() => {
+        const live = getDb()
+          .shares.filter((s) => s.session_id === sessionId && !s.revoked)
+          .at(-1);
+        return live ? toShareLink(live) : null;
+      }),
+    listAll: () =>
+      read(() =>
+        getDb()
+          .shares.map(toShareLink)
+          .reverse(),
+      ),
+    recordView: (shareId) =>
+      write(() => {
+        const link = getDb().shares.find((s) => s.id === shareId);
+        if (link) link.view_count += 1;
+      }),
+    getPublic: (shareId, password) =>
+      read(() => {
+        const db = getDb();
+        const link = db.shares.find((s) => s.id === shareId);
+        if (!link) return "not_found" as const;
+        if (link.revoked) return "revoked" as const;
+        // Cờ "Link chia sẻ hết hạn" của bảng thử nghiệm: ép trạng thái hết hạn
+        const expiredByFlag = getFlags().shareExpired;
+        if (expiredByFlag || (link.expires_at && new Date(link.expires_at).getTime() < MOCK_NOW.getTime()))
+          return "expired" as const;
+        if (link.has_password) {
+          if (!password || password !== link.password) return "needs_password" as const;
+        }
+        const fx = db.sessions.find((s) => s.detail.id === link.session_id);
+        if (!fx) return "not_found" as const;
+        const d = fx.detail;
+        return {
+          title: d.title,
+          executive_summary: d.executive_summary,
+          topics: d.topics,
+          duration_sec: d.duration_sec,
+          created_at: d.created_at,
+          speakers: d.speakers,
+          sharer_name: db.user.display_name,
+          scope: link.scope,
+        };
+      }),
   },
 
   mail: {
@@ -533,6 +743,62 @@ export const mockSource: DataSource = {
         const item: GlossaryTerm = { id: `gl-${Date.now().toString(36)}`, term: clean };
         db.glossary.push(item);
         return item;
+      }),
+    updateGlossaryTerm: (id, term) =>
+      write(() => {
+        const item = getDb().glossary.find((g) => g.id === id);
+        if (!item) throw new DataError("not_found");
+        item.term = term.trim();
+      }),
+    removeGlossaryTerm: (id) =>
+      write(() => {
+        const db = getDb();
+        db.glossary = db.glossary.filter((g) => g.id !== id);
+      }),
+    contactUsage: (id) =>
+      read(() => {
+        const out: string[] = [];
+        for (const fx of getDb().sessions) {
+          const used = fx.detail.speakers.some((s) => s.contact_id === id);
+          if (used) out.push(fx.detail.title);
+        }
+        return out;
+      }),
+    removeContact: (id) =>
+      write(() => {
+        const db = getDb();
+        db.contacts = db.contacts.filter((c) => c.id !== id);
+        // Người nói đang gán liên hệ này về lại chưa đặt tên, ở mọi buổi ghi
+        db.sessions.forEach((fx, i) => {
+          fx.detail.speakers.forEach((s) => {
+            if (s.contact_id === id) {
+              s.contact_id = null;
+              s.display_name = `Người nói ${i + 1}`;
+            }
+          });
+        });
+      }),
+    updateTemplate: (id, patch) =>
+      write(() => {
+        const tpl = getDb().templates.find((t) => t.id === id);
+        if (!tpl) throw new DataError("not_found");
+        tpl.sections = patch.sections;
+      }),
+    exportAll: () =>
+      read(() => {
+        const db = getDb();
+        // Mật khẩu link chia sẻ không xuất ra file
+        const shares = db.shares.map((s) => toShareLink(s));
+        return {
+          exported_at: MOCK_NOW.toISOString(),
+          user: db.user,
+          quota: db.quota,
+          contacts: db.contacts,
+          templates: db.templates,
+          glossary: db.glossary,
+          sessions: db.sessions.map((s) => ({ detail: s.detail, transcript: s.transcript })),
+          shares,
+        };
       }),
   },
 };

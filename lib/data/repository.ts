@@ -3,6 +3,7 @@ import type {
   ChatMessage,
   Contact,
   GlossaryTerm,
+  Profession,
   Quota,
   Session,
   SessionDetail,
@@ -26,6 +27,13 @@ export type SessionFilter = {
   has_open_tasks?: boolean;
 };
 
+/** Kết quả tìm kiếm (M4-02), nhóm theo Buổi ghi / Trong lời nói / Việc cần làm. */
+export type SearchResult = {
+  sessions: Session[];
+  segments: Array<{ session_id: string; segment: TranscriptSegment }>;
+  tasks: ActionItem[];
+};
+
 export type RecordingDraft = {
   title?: string;
   template_id: string;
@@ -47,7 +55,7 @@ export interface SessionRepository {
   getVisuals(id: string): Promise<VisualArtifacts>;
   update(
     id: string,
-    patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids">>,
+    patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids" | "audio_expires_at">>,
   ): Promise<void>;
   updateBullet(sessionId: string, bulletId: string, text: string): Promise<void>;
   /** Sửa lời một đoạn bản ghi: lưu và đánh dấu edited (M3-01) */
@@ -62,6 +70,17 @@ export interface SessionRepository {
   retryProcessing(id: string): Promise<void>;
   purgeRaw(ids: string[]): Promise<{ freed_bytes: number }>;
   remove(id: string): Promise<void>;
+  /** Hoàn tác xóa: trả buổi ghi về thư viện đúng chỗ cũ (M4-01) */
+  restore(id: string): Promise<void>;
+  /** Đổi mẫu và tóm tắt lại: chạy lại 5 bước xử lý theo mẫu mới (M4-01) */
+  reprocess(id: string, templateId: string): Promise<void>;
+  /** Tìm kiếm xuyên buổi: tiêu đề, tóm tắt, bản ghi lời, việc cần làm (M4-02).
+   * Bản giả so khớp không phân biệt hoa thường và cả dấu tiếng Việt. */
+  search(query: string): Promise<SearchResult>;
+  /** Tạo buổi ghi từ file có sẵn (M4-02): không lưu file, chỉ đọc thông tin */
+  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: string }): Promise<{ id: string }>;
+  /** Buổi ghi mẫu theo nghề (M4-04): dùng ở màn làm quen và Cài đặt > Hồ sơ */
+  getSample(profession: Profession): Promise<SessionDetail>;
 }
 
 export interface TaskRepository {
@@ -75,7 +94,14 @@ export interface ChatRepository {
   ask(sessionId: string, question: string, onToken: (text: string) => void): Promise<ChatMessage>;
 }
 
-export type PublicSessionView = Pick<SessionDetail, "title" | "executive_summary" | "topics" | "duration_sec" | "created_at">;
+export type PublicSessionView = Pick<
+  SessionDetail,
+  "title" | "executive_summary" | "topics" | "duration_sec" | "created_at" | "speakers"
+> & {
+  /** Tên người chia sẻ, hiện đầu trang công khai (M4-01) */
+  sharer_name: string;
+  scope: ShareLink["scope"];
+};
 
 export interface ShareRepository {
   create(
@@ -83,7 +109,16 @@ export interface ShareRepository {
     opts: Pick<ShareLink, "scope" | "expires_at"> & { password?: string },
   ): Promise<ShareLink>;
   revoke(id: string): Promise<void>;
-  getPublic(shareId: string): Promise<PublicSessionView | "expired" | "revoked" | "needs_password">;
+  /** Link đang sống của một buổi ghi (M4-01): null là chưa có */
+  getForSession(sessionId: string): Promise<ShareLink | null>;
+  /** Mọi link đã tạo, cho mục Quyền riêng tư (M4-01) */
+  listAll(): Promise<ShareLink[]>;
+  /** Mỗi lần mở trang công khai tăng lượt xem (M4-01) */
+  recordView(shareId: string): Promise<void>;
+  getPublic(
+    shareId: string,
+    password?: string,
+  ): Promise<PublicSessionView | "expired" | "revoked" | "needs_password" | "not_found">;
 }
 
 export type EmailDraft = {
@@ -109,10 +144,23 @@ export interface AccountRepository {
   glossary(): Promise<GlossaryTerm[]>;
   /** Thêm từ vào từ điển tên riêng; trùng (không phân biệt hoa thường) thì trả từ cũ (M3-01) */
   addGlossaryTerm(term: string): Promise<GlossaryTerm>;
+  /** Sửa một từ trong từ điển (M4-03) */
+  updateGlossaryTerm(id: string, term: string): Promise<void>;
+  /** Xóa một từ khỏi từ điển (M4-03) */
+  removeGlossaryTerm(id: string): Promise<void>;
   /** Tạo liên hệ mới ngay trong ô chọn tên (M3-02) */
   addContact(input: { name: string; email?: string }): Promise<Contact>;
   /** Sửa liên hệ, ví dụ thêm email ngay tại hàng người nhận (M3-02, M3-04) */
   updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email">>): Promise<void>;
+  /** Xóa liên hệ: trả về các buổi ghi đang dùng người này làm người nói,
+   * để giao diện cảnh báo trước khi xóa (M4-03) */
+  contactUsage(id: string): Promise<string[]>;
+  /** Xóa liên hệ; người nói đang gán liên hệ này về lại "Người nói N" (M4-03) */
+  removeContact(id: string): Promise<void>;
+  /** Bật/tắt và đổi thứ tự các phần của một mẫu (M4-03) */
+  updateTemplate(id: string, patch: Pick<Template, "sections">): Promise<void>;
+  /** Xuất toàn bộ dữ liệu mẫu ra JSON để tải về (M4-03) */
+  exportAll(): Promise<Record<string, unknown>>;
 }
 
 export interface DataSource {

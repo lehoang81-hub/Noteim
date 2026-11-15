@@ -1,9 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { SettingsScreen } from "@/components/settings/settings-screen";
 
+/* Cài đặt (docs/03-screens.md mục 12, issue M4-03). */
 export default function Page() {
-  const t = useTranslations("shell");
-  return <ComingSoon title={t("settings")} />;
+  return <SettingsScreen />;
 }
