@@ -75,11 +75,13 @@ export function ImportScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Mặc định chọn mẫu theo nghề của người dùng
-  useEffect(() => {
-    if (!mounted.current || templateId || !templates.data) return;
-    setTemplateId(me.data?.default_template_id || templates.data[0]?.id || "");
-  }, [templates.data, me.data, templateId]);
+  // Mặc định chọn mẫu theo nghề của người dùng. Chờ cả templates và me về rồi
+  // mới đặt — nếu templates về trước mà đặt ngay sẽ chọn mẫu đầu tiên rồi giữ
+  // nguyên mãi, bỏ qua default_template_id đã lưu theo nghề (review PR #35).
+  // Đặt lúc vẽ theo khuyến nghị của React, không dùng effect.
+  if (mounted.current && !templateId && templates.data && me.data) {
+    setTemplateId(me.data.default_template_id || templates.data[0]?.id || "");
+  }
 
   function durationLabel(sec: number): string {
     if (sec < 60) return tl("seconds", { s: Math.round(sec) });
