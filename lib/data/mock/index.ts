@@ -421,7 +421,21 @@ export const mockSource: DataSource = {
         if (!q) return out;
         for (const fx of getDb().sessions) {
           const d = fx.detail;
-          const hayTitle = foldVi([d.title, d.executive_summary, ...d.topics.map((t) => t.title)].join(" "));
+          // Tìm trong tiêu đề, tóm tắt chung, tên các phần tóm tắt, tên chủ đề
+          // và từng điểm chính (review PR #35: thiếu điểm chính nên "lai suat"
+          // không ra ý "Lo lãi suất tăng mạnh sau thời gian ưu đãi")
+          const template = getDb().templates.find((t) => t.id === d.template_id);
+          const sectionTitles = template
+            ? template.sections.filter((s) => d.topics.some((tp) => tp.section_id === s.id)).map((s) => s.title)
+            : [];
+          const hayTitle = foldVi(
+            [
+              d.title,
+              d.executive_summary,
+              ...sectionTitles,
+              ...d.topics.flatMap((t) => [t.title, ...t.bullets.map((b) => b.text)]),
+            ].join(" "),
+          );
           if (hayTitle.includes(q)) out.sessions.push(toSession(d));
           for (const seg of fx.transcript) {
             if (foldVi(seg.text).includes(q)) out.segments.push({ session_id: d.id, segment: seg });
