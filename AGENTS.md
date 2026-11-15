@@ -29,6 +29,8 @@ Bạn đang xây **mockup tương tác** của Noteim. Mục tiêu của giai đ
 - **Canvas:** đọc màu bằng `tokenColor(el, "--ten-token")` trong `components/ribbon/draw.ts`, đọc một lần mỗi khi đổi giao diện, không đọc trong từng khung hình.
 - **Hiệu năng:** không đổi `opacity` hay `transform` của phần tử có `blur` trong từng khung hình. Đo bằng Chrome giả lập CPU chậm gấp 4 trước khi báo xong.
 - **Bảng thử nghiệm:** mỗi trạng thái mới (lỗi, rỗng, giới hạn) phải ép được bằng `?debug=1`. Thêm cờ vào `lib/debug/flags.ts` và nút vào `components/shell/debug-panel.tsx`.
+- **Bộ nhớ trình duyệt:** ảnh và dữ liệu lớn để trong IndexedDB, không để trong localStorage (giới hạn khoảng 5 MB). Mọi lần ghi bộ nhớ phải bắt lỗi và báo người dùng, không được im lặng.
+- **Motion:** các nhánh điều kiện (`a ? <motion.div/> : <motion.div/>`) phải có `key` riêng, nếu không React dùng lại một instance và phần tử thừa hưởng kích thước đang dở của nhánh trước.
 - **Kiểm thử tự động:** trang bật cuộn mượt; trước khi đo vị trí, cuộn bằng `behavior: "instant"`.
 - **Chữ:** mọi chuỗi hiển thị nằm trong `messages/vi.json` và `messages/en.json`, hai file phải có cùng khóa.
 

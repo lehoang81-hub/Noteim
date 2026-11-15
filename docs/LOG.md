@@ -111,3 +111,10 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 - **Lỗi 5:** nhãn trạng thái góc trên phải của màn hình ghi thêm `whitespace-nowrap`.
 - Bài học cho người sau: khi hai nhánh của một toán tử ba ngôi render cùng một loại component `motion`, phải đặt `key` khác nhau — nếu không React tái dùng instance và Motion giữ lại giá trị đang dở của nhánh trước; kiểm lại bằng cách đo `document.querySelector('canvas').width` sau luồng kết thúc ghi rồi quay lại `/record` bằng điều hướng trong SPA (tải lại trang đầy đủ không tái hiện được lỗi).
 - Đã kiểm lại theo mục "Cách kiểm lại trước khi báo xong": mở `/record` 10 lần và 10 vòng "kết thúc ghi → thư viện → ghi âm" trên máy tính, canvas luôn bằng bề ngang vùng chứa (608/608 ở 1280px, 350/350 ở 390px); thu nhỏ về thư viện chỉ còn thanh sen, tải lại giữa lúc ghi mới có dải; 5 buổi × 6 ảnh tải lại đủ 5 buổi, bật cờ "Bộ nhớ đầy" có dải báo; 1280px thư viện hiện đủ danh sách khi đang ghi; sáng/tối, 390px, giảm chuyển động, không lỗi console.
+
+## 2026-11-15, Claude, merge M2 và bàn giao M3
+
+- M2 đã merge (PR #22, Hoang duyệt). Agent sửa đủ 3 lỗi chặn do reviewer phát hiện: dải giọng kẹt 32px (nguyên nhân: ba nhánh cùng là `motion.div` nên React dùng lại một instance; sửa bằng `key`), dải "chưa lưu xong" hiện sai, ảnh làm đầy localStorage (chuyển ảnh sang IndexedDB, có cảnh báo bộ nhớ đầy).
+- Bài học thêm: **ảnh và dữ liệu lớn không để trong localStorage**; mọi lần ghi bộ nhớ phải báo khi thất bại. **Các nhánh điều kiện cùng loại phần tử Motion phải có `key` riêng.**
+- Mở 4 issue M3: #23, #24, #25, #26. Mở #27 gom việc hoàn thiện cho M5.
+- Việc tiếp theo: agent làm M3 trên nhánh `m3/dao-sau`.
