@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SpeakerName } from "@/components/ui/chips";
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Sheet } from "@/components/ui/sheet";
 import { TextField } from "@/components/ui/form";
 import { useToast } from "@/components/ui/toast";
@@ -293,6 +294,8 @@ function MergeSpeakers({ detail, onDone }: { detail: SessionDetail; onDone: () =
   const toast = useToast();
   const [fromId, setFromId] = useState("");
   const [intoId, setIntoId] = useState("");
+  // Gộp là thao tác không hoàn tác được: luôn qua hộp xác nhận trước khi thực hiện
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const select =
     "h-11 w-full rounded-control border border-line bg-surface px-2 text-small text-ink";
 
@@ -339,19 +342,32 @@ function MergeSpeakers({ detail, onDone }: { detail: SessionDetail; onDone: () =
         icon={Check}
         className="mt-3"
         disabled={!ready}
-        onClick={async () => {
-          try {
-            await data.sessions.mergeSpeakers(detail.id, fromId, intoId);
-            setFromId("");
-            setIntoId("");
-            onDone();
-          } catch {
-            toast.show({ tone: "error", message: ts("saveError") });
-          }
-        }}
+        onClick={() => setConfirmOpen(true)}
       >
         {t("mergeButton")}
       </Button>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={t("mergeTitle")}
+        cancelLabel={ts("cancel")}
+        confirmLabel={t("mergeButton")}
+        onConfirm={() => {
+          void (async () => {
+            try {
+              await data.sessions.mergeSpeakers(detail.id, fromId, intoId);
+              setFromId("");
+              setIntoId("");
+              onDone();
+            } catch {
+              toast.show({ tone: "error", message: ts("saveError") });
+            }
+          })();
+        }}
+      >
+        {ready ? t("mergeConfirm", { from: from!.display_name, into: into!.display_name, percent: from!.talk_ratio_percent }) : null}
+      </ConfirmDialog>
     </section>
   );
 }
