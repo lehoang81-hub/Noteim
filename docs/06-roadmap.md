@@ -39,10 +39,10 @@ Nghiệm thu:
 
 | Issue | Việc |
 | --- | --- |
-| M2-01 (#17) | Bắt đầu ghi: quyền micro, nhắc xin đồng ý. Màn hình ghi với dải giọng sống theo micro thật, đồng hồ, tạm dừng, kết thúc bằng nhấn giữ. |
-| M2-02 (#18) | Ghi chú, đánh dấu điểm nóng, chụp ảnh. Thu nhỏ màn hình ghi thành thanh trên cùng. |
-| M2-03 (#19) | Màn hình xử lý, khoảnh khắc kết thúc ghi và xử lý xong, buổi ghi mới xuất hiện trong thư viện. Khôi phục buổi ghi dang dở. |
-| M2-04 (#20) | Các trạng thái của màn hình ghi: mất mạng, sắp hết hạn mức, micro bị từ chối, micro bị chiếm. |
+| M2-01 (#17, xong) | Bắt đầu ghi: quyền micro, nhắc xin đồng ý. Màn hình ghi với dải giọng sống theo micro thật, đồng hồ, tạm dừng, kết thúc bằng nhấn giữ. |
+| M2-02 (#18, xong) | Ghi chú, đánh dấu điểm nóng, chụp ảnh. Thu nhỏ màn hình ghi thành thanh trên cùng. |
+| M2-03 (#19, xong) | Màn hình xử lý, khoảnh khắc kết thúc ghi và xử lý xong, buổi ghi mới xuất hiện trong thư viện. Khôi phục buổi ghi dang dở. |
+| M2-04 (#20, xong) | Các trạng thái của màn hình ghi: mất mạng, sắp hết hạn mức, micro bị từ chối, micro bị chiếm. |
 
 Nghiệm thu:
 
@@ -54,10 +54,10 @@ Nghiệm thu:
 
 | Issue | Việc |
 | --- | --- |
-| M3-01 | Tab Bản ghi lời: tự cuộn, tìm trong lời, sửa lời, thêm vào từ điển. |
-| M3-02 | Đặt tên và gộp người nói. |
-| M3-03 | Tab Hình ảnh hóa (tải khi mở), tab Hỏi AI (chữ chạy, dẫn chứng bấm được). |
-| M3-04 | Gửi biên bản và giao việc: ba bước. Trang `/tasks`. |
+| M3-01 (#23) | Tab Bản ghi lời: tự cuộn, tìm trong lời, sửa lời, thêm vào từ điển. |
+| M3-02 (#24) | Đặt tên và gộp người nói. |
+| M3-03 (#25) | Tab Hình ảnh hóa (tải khi mở), tab Hỏi AI (chữ chạy, dẫn chứng bấm được). |
+| M3-04 (#26) | Sửa và thêm việc. Gửi biên bản và giao việc: ba bước. Trang `/tasks`. |
 
 Nghiệm thu:
 
@@ -81,6 +81,8 @@ Nghiệm thu:
 - [ ] Đổi nghề trong làm quen thì mẫu mặc định và buổi ghi mẫu đổi theo
 
 ## M5. Hoàn thiện
+
+Các điểm nhỏ phát hiện trong lúc kiểm thử được gom ở issue #27.
 
 | Issue | Việc |
 | --- | --- |
