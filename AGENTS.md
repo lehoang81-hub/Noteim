@@ -33,6 +33,8 @@ Bạn đang xây **mockup tương tác** của Noteim. Mục tiêu của giai đ
 - **Motion:** các nhánh điều kiện (`a ? <motion.div/> : <motion.div/>`) phải có `key` riêng, nếu không React dùng lại một instance và phần tử thừa hưởng kích thước đang dở của nhánh trước.
 - **Kiểm thử tự động:** trang bật cuộn mượt; trước khi đo vị trí, cuộn bằng `behavior: "instant"`.
 - **Chữ:** mọi chuỗi hiển thị nằm trong `messages/vi.json` và `messages/en.json`, hai file phải có cùng khóa.
+- Thao tác vuốt và nhấn giữ trên điện thoại: khung nhận cử chỉ cần `touch-action: pan-y` (hoặc phù hợp), gọi `setPointerCapture`, và phải thử bằng sự kiện chạm thật (Playwright `has_touch` + CDP `Input.dispatchTouchEvent`), không thử bằng chuột.
+- Giá trị mặc định phụ thuộc nhiều lần `useData` thì chờ đủ tất cả rồi mới đặt; độ trễ giả 300 đến 800ms làm thứ tự về không cố định.
 
 ## Khi không chắc
 

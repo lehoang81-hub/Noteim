@@ -69,10 +69,10 @@ Nghiệm thu:
 
 | Issue | Việc |
 | --- | --- |
-| M4-01 (#30) | Bảng chia sẻ, trang công khai `/p/[shareId]`, thẻ trích dẫn (xuất ảnh thật), đoạn tinh túy. Vuốt hàng và chọn nhiều trong thư viện (chuyển từ M1). |
-| M4-02 (#31) | Tìm kiếm, nhập file. |
-| M4-03 (#32) | Cài đặt đủ các mục, gồm dọn bản gốc và từ điển tên riêng. Trang gói dịch vụ. |
-| M4-04 (#33) | Làm quen lần đầu, sáu buổi ghi mẫu theo nghề. |
+| M4-01 (#30, xong) | Bảng chia sẻ, trang công khai `/p/[shareId]`, thẻ trích dẫn (xuất ảnh thật), đoạn tinh túy. Vuốt hàng trong thư viện (chuyển từ M1). Chọn nhiều bị sót, chuyển sang M5-01. |
+| M4-02 (#31, xong) | Tìm kiếm, nhập file. |
+| M4-03 (#32, xong) | Cài đặt đủ các mục, gồm dọn bản gốc và từ điển tên riêng. Trang gói dịch vụ. |
+| M4-04 (#33, xong) | Làm quen lần đầu, sáu buổi ghi mẫu theo nghề. |
 
 Nghiệm thu:
 
@@ -86,10 +86,10 @@ Các điểm nhỏ phát hiện trong lúc kiểm thử được gom ở issue #
 
 | Issue | Việc |
 | --- | --- |
-| M5-01 | Rà giao diện tối và bố cục máy tính cho mọi màn hình. |
-| M5-02 | Tiếng Anh đầy đủ. Rà chuỗi tiếng Việt theo mục "Giọng văn". |
-| M5-03 | Rà khả năng tiếp cận: bàn phím, trình đọc màn hình, tương phản, vùng chạm. |
-| M5-04 | Rà hiệu năng trên điện thoại tầm trung. Viết `docs/07-handover.md`: danh sách việc để nối database theo `04-data-contract.md`. |
+| M5-01 (#36) | Rà giao diện tối và bố cục máy tính cho mọi màn hình. Dọn #27, gồm nhấn giữ để chọn nhiều trong thư viện. |
+| M5-02 (#37) | Tiếng Anh đầy đủ. Rà chuỗi tiếng Việt theo mục "Giọng văn". |
+| M5-03 (#38) | Rà khả năng tiếp cận: bàn phím, trình đọc màn hình, tương phản, vùng chạm. |
+| M5-04 (#39) | Rà hiệu năng trên điện thoại tầm trung. Viết `docs/07-handover.md`: danh sách việc để nối database theo `04-data-contract.md`. |
 
 Nghiệm thu:
 
