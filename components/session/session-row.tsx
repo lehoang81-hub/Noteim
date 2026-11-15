@@ -2,7 +2,6 @@
 
 import { CloudOff, LoaderCircle, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
 import { RibbonThumb } from "@/components/ribbon/ribbon-thumb";
 import { TagChip, type SemanticTag } from "@/components/ui/chips";
 import { cn } from "@/lib/cn";
@@ -10,8 +9,11 @@ import { cn } from "@/lib/cn";
 /*
  * Một hàng trong thư viện (docs/03-screens.md mục 1).
  * Danh sách có đường kẻ mảnh, không phải chồng thẻ.
- * M4-01: chọn nhiều (nhấn giữ để vào chế độ chọn), nút ⋯ cho máy tính.
- * Vuốt hàng sang trái nằm ở SwipeRow (components/library/swipe-row.tsx).
+ * M4-01: chọn nhiều, nút ⋯ cho máy tính. Vuốt sang trái và nhấn giữ để vào
+ * chế độ chọn nằm ở SwipeRow (components/library/swipe-row.tsx) — khung đó
+ * giữ con trỏ khi chạm nên phải do nó nhận biết nhấn giữ (M5-01).
+ * M5-01: máy tính ô chọn hiện khi rê chuột; Shift+bấm chọn liền dải
+ * (onToggleCheck nhận phím Shift để thư viện tính dải).
  */
 
 export type SessionRowStatus = "ready" | "processing" | "failed" | "essence" | "unsynced";
@@ -37,12 +39,13 @@ export interface SessionRowProps {
   /** Chế độ chọn nhiều: ô tích thay cho mở buổi ghi (M4-01) */
   selecting?: boolean;
   checked?: boolean;
-  onToggleCheck?: () => void;
+  /** Nhận phím Shift để chọn liền dải trên máy tính (M5-01) */
+  onToggleCheck?: (shiftKey: boolean) => void;
   /** Nhãn ô tích cho trình đọc màn hình, theo ngôn ngữ giao diện */
   checkOnLabel?: string;
   checkOffLabel?: string;
-  /** Nhấn giữ để vào chế độ chọn nhiều (điện thoại) */
-  onLongPress?: () => void;
+  /** Máy tính: hiện ô chọn khi rê chuột để vào chế độ chọn nhiều (M5-01) */
+  hoverCheck?: boolean;
   /** Nút ⋯ hiện khi rê chuột trên máy tính (M4-01) */
   trailing?: React.ReactNode;
   className?: string;
@@ -65,32 +68,42 @@ export function SessionRow({
   onToggleCheck,
   checkOnLabel,
   checkOffLabel,
-  onLongPress,
+  hoverCheck,
   trailing,
   className,
 }: SessionRowProps) {
   const muted = status === "processing" || status === "essence" || status === "unsynced";
 
-  const holdRef = useRef(0);
-  function holdStart() {
-    if (!onLongPress || selecting) return;
-    holdRef.current = window.setTimeout(() => onLongPress(), 500);
-  }
-  function holdEnd() {
-    window.clearTimeout(holdRef.current);
-  }
-
-  const checkbox = selecting ? (
-    <span className="mt-1 flex shrink-0 items-start">
+  const checkbox = (
+    <span
+      className={cn(
+        "relative z-[1] mt-1 shrink-0 items-start",
+        // Chỉ hiện ô chọn khi đang chọn; ngoài chế độ chọn, máy tính hiện khi
+        // rê chuột hoặc ô đã nhận tiêu điểm (M5-01). Bề ngang giữ nguyên khi
+        // hiện ô để không đẩy chữ.
+        selecting
+          ? "flex"
+          : hoverCheck
+            ? "hidden w-5 lg:flex lg:opacity-0 group-hover/row:lg:opacity-100 focus-within:lg:opacity-100"
+            : "hidden",
+      )}
+    >
       <input
         type="checkbox"
         checked={!!checked}
-        onChange={onToggleCheck}
+        onClick={(e) => {
+          // Dùng click thay vì change: change không mang phím Shift
+          // (nhấn giữ Shift+bấm để chọn liền dải, M5-01). Ngăn lan lên nút
+          // hàng để không kích đúp.
+          e.stopPropagation();
+          onToggleCheck?.(e.shiftKey);
+        }}
+        onChange={() => {}} // React cần onChange cho ô tích có kiểm soát
         aria-label={`${checked ? checkOffLabel : checkOnLabel}: ${title}`}
         className="size-5 accent-[var(--sen)]"
       />
     </span>
-  ) : null;
+  );
 
   const content = (
     <>
@@ -137,7 +150,7 @@ export function SessionRow({
       <div className={rowClass}>
         <button
           type="button"
-          onClick={onToggleCheck}
+          onClick={(e) => onToggleCheck?.(e.shiftKey)}
           aria-pressed={!!checked}
           className="flex w-full items-start gap-3 text-left"
         >
@@ -149,7 +162,7 @@ export function SessionRow({
   }
 
   return (
-    <div className={rowClass} onPointerDown={holdStart} onPointerUp={holdEnd} onPointerCancel={holdEnd} onPointerLeave={holdEnd}>
+    <div className={cn(rowClass, "group/row")}>
       <div className="flex items-start gap-3">
         {checkbox}
         <Link

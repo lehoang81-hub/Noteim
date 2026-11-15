@@ -9,7 +9,9 @@ import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 
 /*
  * Bảng trượt từ dưới lên (docs/02-design-system.md, bo góc --r-sheet hai góc trên).
- * - size "half": cao tối đa nửa màn hình; "full": gần hết màn hình
+ * - size "half": cao tối đa nửa màn hình; "full": gần hết màn hình;
+ *   "auto": cao theo nội dung, tối đa gần hết màn hình (M5-01 — bảng có
+ *   nội dung ngắn không còn kéo hết màn hình)
  * - Đóng bằng nút X, chạm nền mờ, phím Esc, hoặc vuốt tay nắm xuống
  * - Giữ tiêu điểm bên trong khi mở (Radix Dialog)
  * - Bật giảm chuyển động: hiện bằng mờ dần, không trượt
@@ -29,7 +31,7 @@ export function Sheet({
   onOpenChange: (open: boolean) => void;
   title: string;
   description?: string;
-  size?: "half" | "full";
+  size?: "half" | "full" | "auto";
   children: React.ReactNode;
   footer?: React.ReactNode;
 }) {
@@ -59,7 +61,7 @@ export function Sheet({
               <motion.div
                 className={cn(
                   "fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-w-[560px] flex-col rounded-t-sheet border border-b-0 border-line bg-surface text-ink shadow-float focus:outline-none",
-                  size === "half" ? "max-h-[55dvh]" : "h-[calc(100dvh-24px)]",
+                  size === "half" ? "max-h-[55dvh]" : size === "auto" ? "max-h-[calc(100dvh-24px)]" : "h-[calc(100dvh-24px)]",
                 )}
                 initial={reduce ? { opacity: 0 } : { y: "100%" }}
                 animate={reduce ? { opacity: 1 } : { y: 0 }}

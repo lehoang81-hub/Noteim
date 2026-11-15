@@ -1,7 +1,7 @@
 "use client";
 
 import { Share2, Trash2 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
 /*
@@ -19,7 +19,17 @@ import { cn } from "@/lib/cn";
  *    kể cả khi ngón tay trượt ra ngoài.
  * 3. up() đọc vị trí kéo từ ref thay vì state — state có thể là giá trị cũ của
  *    lần dựng trước khi vòng lặp sự kiện kịp dựng lại.
+ *
+ * Nhấn giữ để chọn nhiều (M5-01, dọn #27): giữ ngón tay 0,5 giây trên hàng
+ * thì gọi onLongPress. Nhấn giữ ở đây thay vì trong SessionRow vì khung này
+ * giữ con trỏ (setPointerCapture) — pointerup được gửi về khung, SessionRow
+ * không nhận được nên không biết người dùng đã nhả tay. Di chuyển quá 10px
+ * (cuộn danh sách) là hủy giữ; sau khi giữ ăn thì chặn lần click kế tiếp để
+ * không mở nhầm buổi ghi.
  */
+
+const LONG_PRESS_MS = 500;
+const MOVE_CANCEL_PX = 10;
 
 const ACTION_W = 76;
 const OPEN_X = -(ACTION_W * 2);
@@ -31,6 +41,7 @@ export function SwipeRow({
   deleteLabel,
   onShare,
   onDelete,
+  onLongPress,
   children,
 }: {
   open: boolean;
@@ -39,6 +50,8 @@ export function SwipeRow({
   deleteLabel: string;
   onShare: () => void;
   onDelete: () => void;
+  /** Nhấn giữ ngón tay đủ lâu để vào chế độ chọn nhiều (M5-01) */
+  onLongPress?: () => void;
   children: React.ReactNode;
 }) {
   const [dragX, setDragX] = useState(0);
@@ -48,6 +61,12 @@ export function SwipeRow({
   const horizontal = useRef(false);
   // Vị trí kéo mới nhất theo ref để up() luôn đọc đúng giá trị
   const dragXRef = useRef(0);
+  // Nhấn giữ để chọn nhiều
+  const holdTimer = useRef(0);
+  const suppressClick = useRef(false);
+
+  // Dọn hẹn giờ giữ khi khung bị tháo khỏi trang (chuyển sang chế độ chọn)
+  useEffect(() => () => window.clearTimeout(holdTimer.current), []);
 
   const x = open ? OPEN_X : dragX;
 
@@ -57,6 +76,17 @@ export function SwipeRow({
     startX.current = e.clientX;
     startY.current = e.clientY;
     horizontal.current = false;
+    suppressClick.current = false;
+    if (onLongPress) {
+      window.clearTimeout(holdTimer.current);
+      holdTimer.current = window.setTimeout(() => {
+        suppressClick.current = true;
+        setDragging(false);
+        dragXRef.current = 0;
+        setDragX(0);
+        onLongPress();
+      }, LONG_PRESS_MS);
+    }
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {
@@ -65,9 +95,13 @@ export function SwipeRow({
   }
 
   function move(e: React.PointerEvent) {
-    if (!dragging) return;
     const dx = e.clientX - startX.current;
     const dy = e.clientY - startY.current;
+    if (Math.abs(dx) > MOVE_CANCEL_PX || Math.abs(dy) > MOVE_CANCEL_PX) {
+      // Cuộn danh sách hoặc kéo: hủy nhấn giữ
+      window.clearTimeout(holdTimer.current);
+    }
+    if (!dragging) return;
     if (!horizontal.current && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) horizontal.current = true;
     if (horizontal.current) {
       // Chỉ vuốt sang trái, khép khi quá nửa bề ngang nút
@@ -78,6 +112,7 @@ export function SwipeRow({
   }
 
   function up() {
+    window.clearTimeout(holdTimer.current);
     if (!dragging) return;
     setDragging(false);
     // Đọc từ ref: state dragX có thể chưa kịp cập nhật vào lần dựng này
@@ -87,14 +122,24 @@ export function SwipeRow({
     onOpenChange(target !== 0);
   }
 
+  // Nhấn giữ đã ăn: chặn lần click kế tiếp (mở buổi ghi) để không nhầm lẫn
+  function clickCapture(e: React.MouseEvent) {
+    if (!suppressClick.current) return;
+    suppressClick.current = false;
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   return (
     <div
-      className="relative touch-pan-y overflow-hidden" // pan-y: trình duyệt không giành cử chỉ ngang
+      className="relative touch-pan-y overflow-hidden [-webkit-touch-callout:none]" // pan-y: trình duyệt không giành cử chỉ ngang
       data-swipe-open={open ? "true" : undefined}
       onPointerDown={down}
       onPointerMove={move}
       onPointerUp={up}
       onPointerCancel={up}
+      onContextMenu={(e) => onLongPress && e.preventDefault()}
+      onClickCapture={clickCapture}
     >
       {/* Hai nút phía sau hàng, bên phải: Chia sẻ, Xóa */}
       <div className="absolute inset-y-0 right-0 flex" aria-hidden={!open}>

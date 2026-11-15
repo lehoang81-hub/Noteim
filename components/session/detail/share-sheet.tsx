@@ -125,7 +125,8 @@ export function ShareSheet({
       onOpenChange={onOpenChange}
       title={option === "menu" ? t("title") : t(titleKey[option])}
       description={option === "menu" ? detail.title : undefined}
-      size="full"
+      // auto: cao theo nội dung (M5-01) — menu chỉ bốn dòng không còn chiếm cả màn hình
+      size="auto"
     >
       {option === "menu" ? (
         <ul className="divide-y divide-line">
