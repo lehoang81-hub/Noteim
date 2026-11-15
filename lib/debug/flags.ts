@@ -30,6 +30,8 @@ export type DebugFlags = {
   storageFull: boolean;
   /** Ép gửi email lỗi đúng một người (M3-04) */
   mailFailOne: boolean;
+  /** Ép trang công khai báo link hết hạn (M4-01) */
+  shareExpired: boolean;
   profession: Profession | null;
   plan: "free" | "pro" | null;
 };
@@ -47,6 +49,7 @@ const DEFAULTS: DebugFlags = {
   micTaken: false,
   storageFull: false,
   mailFailOne: false,
+  shareExpired: false,
   profession: null,
   plan: null,
 };

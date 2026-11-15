@@ -15,7 +15,7 @@ import templatesJson from "@/fixtures/templates.json";
 import userJson from "@/fixtures/user.json";
 import { z } from "zod";
 import type { RecordingDraft } from "../repository";
-import { ChatMessage, Contact, GlossaryTerm, Quota, SessionFixture, Template, User } from "../types";
+import { ChatMessage, Contact, GlossaryTerm, Quota, SessionFixture, ShareLink, Template, User } from "../types";
 import { clearStorageFull, markStorageFull } from "@/lib/storage-full";
 
 /*
@@ -40,6 +40,10 @@ export type MockDb = {
       chat_log?: ChatMessage[];
     }
   >;
+  /** Link chia sẻ đã tạo (M4-01). Mật khẩu lưu trong bản giả để trang công khai kiểm lại. */
+  shares: Array<ShareLink & { password?: string }>;
+  /** Buổi ghi vừa xóa, giữ để "Hoàn tác" (M4-01); dọn khi tải lại trang */
+  removed: Array<SessionFixture & { chat_log?: ChatMessage[] }>;
 };
 
 function seed(): MockDb {
@@ -50,6 +54,8 @@ function seed(): MockDb {
     templates: z.array(Template).parse(templatesJson),
     glossary: z.array(GlossaryTerm).parse(glossaryJson),
     sessions: [s1, s2, s3, s4, s5, s6, s7, s8].map((s) => SessionFixture.parse(s)),
+    shares: [],
+    removed: [],
   };
 }
 
@@ -60,7 +66,8 @@ export function getDb(): MockDb {
   if (db) return db;
   try {
     const saved = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
-    db = saved ? (JSON.parse(saved) as MockDb) : seed();
+    // Kho lưu trước bản có shares/removed thì lấy giá trị mặc định cho phần thiếu
+    db = saved ? { ...seed(), ...(JSON.parse(saved) as MockDb) } : seed();
   } catch {
     db = seed();
   }

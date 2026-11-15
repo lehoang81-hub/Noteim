@@ -2,7 +2,7 @@
 
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter } from "../repository";
-import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture } from "../types";
+import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture, type ShareLink } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
 import { buildSessionContent } from "./generate";
 
@@ -42,6 +42,19 @@ function findFixture(id: string): SessionFixture & { draft?: RecordingDraft; cha
 function toSession(d: SessionDetail): Session {
   // Zod bỏ các trường không thuộc Session
   return SessionSchema.parse(d);
+}
+
+/** Bản sao ShareLink không kèm mật khẩu (mật khẩu chỉ dùng nội bộ bản giả). */
+function toShareLink(s: { id: string; session_id: string; scope: ShareLink["scope"]; has_password: boolean; expires_at: string | null; revoked: boolean; view_count: number }): ShareLink {
+  return {
+    id: s.id,
+    session_id: s.session_id,
+    scope: s.scope,
+    has_password: s.has_password,
+    expires_at: s.expires_at,
+    revoked: s.revoked,
+    view_count: s.view_count,
+  };
 }
 
 function refreshCounts(d: SessionDetail) {
@@ -351,8 +364,44 @@ export const mockSource: DataSource = {
     remove: (id) =>
       write(() => {
         const db = getDb();
-        findFixture(id);
-        db.sessions = db.sessions.filter((s) => s.detail.id !== id);
+        // Giữ buổi ghi trong removed để "Hoàn tác" đưa về đúng chỗ cũ (M4-01)
+        const i = db.sessions.findIndex((s) => s.detail.id === id);
+        if (i < 0) throw new DataError("not_found");
+        const [fx] = db.sessions.splice(i, 1);
+        db.removed.push(fx);
+      }),
+    restore: (id) =>
+      write(() => {
+        const db = getDb();
+        const i = db.removed.findIndex((s) => s.detail.id === id);
+        if (i < 0) throw new DataError("not_found");
+        const [fx] = db.removed.splice(i, 1);
+        // Trả về đúng chỗ cũ theo ngày tạo (mới nhất trên cùng)
+        const at = db.sessions.findIndex((s) => s.detail.created_at <= fx.detail.created_at);
+        if (at < 0) db.sessions.push(fx);
+        else db.sessions.splice(at, 0, fx);
+      }),
+    reprocess: (id, templateId) =>
+      write(() => {
+        const fx = findFixture(id);
+        const d = fx.detail;
+        // Chuyển các chủ đề sang phần tương ứng của mẫu mới theo thứ tự,
+        // nhờ đó tóm tắt hiện đủ các phần của mẫu mới (bản giả)
+        const template = getDb().templates.find((t) => t.id === templateId);
+        if (template) {
+          const sections = template.sections;
+          for (const topic of d.topics) {
+            const at = sections.findIndex((s) => s.id === topic.section_id);
+            if (at >= 0) continue;
+            const oldIndex = d.topics.indexOf(topic);
+            topic.section_id = sections[Math.min(oldIndex, sections.length - 1)].id;
+          }
+          d.template_id = templateId;
+        }
+        d.status = "processing";
+        d.processing_step = 1;
+        delete d.failure_reason;
+        scheduleProcessing(id);
       }),
   },
 
@@ -420,17 +469,74 @@ export const mockSource: DataSource = {
 
   share: {
     create: (sessionId, opts) =>
-      write(() => ({
-        id: `sh-${Date.now().toString(36)}`,
-        session_id: sessionId,
-        scope: opts.scope,
-        has_password: !!opts.password,
-        expires_at: opts.expires_at,
-        revoked: false,
-        view_count: 0,
-      })),
-    revoke: () => write(() => undefined),
-    getPublic: () => read(() => "expired" as const),
+      write(() => {
+        const db = getDb();
+        // Mỗi buổi ghi chỉ giữ một link sống: tạo mới thì thu hồi link cũ
+        for (const s of db.shares) if (s.session_id === sessionId && !s.revoked) s.revoked = true;
+        const link: ShareLink & { password?: string } = {
+          id: `sh-${Date.now().toString(36)}`,
+          session_id: sessionId,
+          scope: opts.scope,
+          has_password: !!opts.password,
+          expires_at: opts.expires_at,
+          revoked: false,
+          view_count: 0,
+        };
+        if (opts.password) link.password = opts.password;
+        db.shares.push(link);
+        return link;
+      }),
+    revoke: (id) =>
+      write(() => {
+        const link = getDb().shares.find((s) => s.id === id);
+        if (!link) throw new DataError("not_found");
+        link.revoked = true;
+      }),
+    getForSession: (sessionId) =>
+      read(() => {
+        const live = getDb()
+          .shares.filter((s) => s.session_id === sessionId && !s.revoked)
+          .at(-1);
+        return live ? toShareLink(live) : null;
+      }),
+    listAll: () =>
+      read(() =>
+        getDb()
+          .shares.map(toShareLink)
+          .reverse(),
+      ),
+    recordView: (shareId) =>
+      write(() => {
+        const link = getDb().shares.find((s) => s.id === shareId);
+        if (link) link.view_count += 1;
+      }),
+    getPublic: (shareId, password) =>
+      read(() => {
+        const db = getDb();
+        const link = db.shares.find((s) => s.id === shareId);
+        if (!link) return "not_found" as const;
+        if (link.revoked) return "revoked" as const;
+        // Cờ "Link chia sẻ hết hạn" của bảng thử nghiệm: ép trạng thái hết hạn
+        const expiredByFlag = getFlags().shareExpired;
+        if (expiredByFlag || (link.expires_at && new Date(link.expires_at).getTime() < MOCK_NOW.getTime()))
+          return "expired" as const;
+        if (link.has_password) {
+          if (!password || password !== link.password) return "needs_password" as const;
+        }
+        const fx = db.sessions.find((s) => s.detail.id === link.session_id);
+        if (!fx) return "not_found" as const;
+        const d = fx.detail;
+        return {
+          title: d.title,
+          executive_summary: d.executive_summary,
+          topics: d.topics,
+          duration_sec: d.duration_sec,
+          created_at: d.created_at,
+          speakers: d.speakers,
+          sharer_name: db.user.display_name,
+          scope: link.scope,
+        };
+      }),
   },
 
   mail: {

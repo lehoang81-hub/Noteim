@@ -47,7 +47,7 @@ export interface SessionRepository {
   getVisuals(id: string): Promise<VisualArtifacts>;
   update(
     id: string,
-    patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids">>,
+    patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids" | "audio_expires_at">>,
   ): Promise<void>;
   updateBullet(sessionId: string, bulletId: string, text: string): Promise<void>;
   /** Sửa lời một đoạn bản ghi: lưu và đánh dấu edited (M3-01) */
@@ -62,6 +62,10 @@ export interface SessionRepository {
   retryProcessing(id: string): Promise<void>;
   purgeRaw(ids: string[]): Promise<{ freed_bytes: number }>;
   remove(id: string): Promise<void>;
+  /** Hoàn tác xóa: trả buổi ghi về thư viện đúng chỗ cũ (M4-01) */
+  restore(id: string): Promise<void>;
+  /** Đổi mẫu và tóm tắt lại: chạy lại 5 bước xử lý theo mẫu mới (M4-01) */
+  reprocess(id: string, templateId: string): Promise<void>;
 }
 
 export interface TaskRepository {
@@ -75,7 +79,14 @@ export interface ChatRepository {
   ask(sessionId: string, question: string, onToken: (text: string) => void): Promise<ChatMessage>;
 }
 
-export type PublicSessionView = Pick<SessionDetail, "title" | "executive_summary" | "topics" | "duration_sec" | "created_at">;
+export type PublicSessionView = Pick<
+  SessionDetail,
+  "title" | "executive_summary" | "topics" | "duration_sec" | "created_at" | "speakers"
+> & {
+  /** Tên người chia sẻ, hiện đầu trang công khai (M4-01) */
+  sharer_name: string;
+  scope: ShareLink["scope"];
+};
 
 export interface ShareRepository {
   create(
@@ -83,7 +94,16 @@ export interface ShareRepository {
     opts: Pick<ShareLink, "scope" | "expires_at"> & { password?: string },
   ): Promise<ShareLink>;
   revoke(id: string): Promise<void>;
-  getPublic(shareId: string): Promise<PublicSessionView | "expired" | "revoked" | "needs_password">;
+  /** Link đang sống của một buổi ghi (M4-01): null là chưa có */
+  getForSession(sessionId: string): Promise<ShareLink | null>;
+  /** Mọi link đã tạo, cho mục Quyền riêng tư (M4-01) */
+  listAll(): Promise<ShareLink[]>;
+  /** Mỗi lần mở trang công khai tăng lượt xem (M4-01) */
+  recordView(shareId: string): Promise<void>;
+  getPublic(
+    shareId: string,
+    password?: string,
+  ): Promise<PublicSessionView | "expired" | "revoked" | "needs_password" | "not_found">;
 }
 
 export type EmailDraft = {

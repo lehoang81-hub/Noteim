@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, ArrowLeft, Check, Ellipsis, Pencil, Share2, UserRoundPen, X } from "lucide-react";
+import { Archive, ArrowLeft, Check, Ellipsis, Pencil, Share2, Trash2, UserRoundPen, X } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -8,14 +8,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { FloatingPlayer } from "@/components/session/floating-player";
 import { Button } from "@/components/ui/button";
 import { SpeakerName } from "@/components/ui/chips";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Banner, EmptyState, SkeletonParagraph } from "@/components/ui/feedback";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/form";
+import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { data, dataNow, DataError, useData, type ActionItem, type SessionDetail } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
 import { SendMinutesSheet } from "./send-minutes";
+import { ShareSheet, type ShareIntent } from "./share-sheet";
 import { SpeakerSheet } from "./speaker-sheet";
 import { TaskSheet } from "./task-sheet";
 import { TasksTab } from "./tasks-tab";
@@ -27,7 +30,8 @@ import { AiTab } from "./ai-tab";
  * Chi tiết buổi ghi (docs/03-screens.md mục 5).
  * M1: phần đầu, tab Tóm tắt, tab Việc cần làm, trình phát giả lập, chạm ý để tua.
  * M3-01: tab Lời. M3-02: đặt tên người nói. M3-03: tab Hình, Hỏi AI.
- * Chia sẻ, Thêm thuộc M4.
+ * M4-01: bảng chia sẻ (nút chia sẻ + menu nhấn giữ ý), menu ⋯: đổi mẫu và
+ * tóm tắt lại, gửi biên bản, xuất file, dọn bản gốc, xóa (có Hoàn tác).
  */
 
 const TABS = ["summary", "tasks", "transcript", "visual", "ai"] as const;
@@ -101,6 +105,7 @@ export function SessionDetailScreen() {
       detail={detail.data}
       templateName={template?.name ?? ""}
       template={template}
+      templates={templates.data ?? []}
       contacts={contacts.data ?? []}
       back={back}
     />
@@ -111,12 +116,14 @@ function Loaded({
   detail,
   template,
   templateName,
+  templates,
   contacts,
   back,
 }: {
   detail: SessionDetail;
   template: Parameters<typeof SummaryTab>[0]["template"];
   templateName: string;
+  templates: Awaited<ReturnType<typeof data.account.templates>>;
   contacts: NonNullable<ReturnType<typeof useData<Awaited<ReturnType<typeof data.account.contacts>>>>["data"]>;
   back: React.ReactNode;
 }) {
@@ -140,6 +147,12 @@ function Loaded({
   const [editingTask, setEditingTask] = useState<ActionItem | null>(null);
   const [taskSheet, setTaskSheet] = useState(false);
   const [sending, setSending] = useState(false);
+  const [sharing, setSharing] = useState(false);
+  const [shareIntent, setShareIntent] = useState<ShareIntent>(null);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [reprocessOpen, setReprocessOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [confirmPurge, setConfirmPurge] = useState(false);
   const touched = useRef(false);
 
   const canPlay = detail.storage_status === "full" && detail.status === "ready";
@@ -210,14 +223,65 @@ function Loaded({
 
   const tagLabels = { decided: tl("decided"), pending: tl("pending"), risk: tl("risk"), idea: tl("idea"), figure: tl("figure") };
 
+  /** Mở bảng chia sẻ với một lựa chọn chỉ định (thẻ trích dẫn, đoạn tinh túy, xuất file). */
+  function openShare(intent: ShareIntent) {
+    setShareIntent(intent);
+    setSharing(true);
+  }
+
+  async function deleteSession() {
+    try {
+      await data.sessions.remove(detail.id);
+      setConfirmDelete(false);
+      toast.show({
+        tone: "success",
+        message: t("deletedToast"),
+        action: {
+          label: t("undo"),
+          onClick: () => {
+            void data.sessions
+              .restore(detail.id)
+              .catch(() => toast.show({ tone: "error", message: t("saveError") }));
+          },
+        },
+      });
+      router.push("/");
+    } catch {
+      toast.show({ tone: "error", message: t("saveError") });
+      setConfirmDelete(false);
+    }
+  }
+
+  async function purge() {
+    try {
+      const { freed_bytes } = await data.sessions.purgeRaw([detail.id]);
+      setConfirmPurge(false);
+      toast.show({ tone: "success", message: t("purgedToast", { mb: Math.max(1, Math.round(freed_bytes / 1_000_000)) }) });
+    } catch {
+      toast.show({ tone: "error", message: t("saveError") });
+      setConfirmPurge(false);
+    }
+  }
+
+  async function reprocess(templateId: string) {
+    try {
+      await data.sessions.reprocess(detail.id, templateId);
+      setReprocessOpen(false);
+      setMoreOpen(false);
+      router.push(`/s/${detail.id}/processing`);
+    } catch {
+      toast.show({ tone: "error", message: t("saveError") });
+    }
+  }
+
   return (
     <div className="flex min-h-dvh flex-col">
       <div className="px-page pt-2 lg:px-8 lg:pt-4">
         <div className="flex min-h-14 items-center gap-1">
           {back}
           <span className="flex-1" />
-          <Button variant="ghost" icon={Share2} iconOnly aria-label={t("share")} onClick={soon} />
-          <Button variant="ghost" icon={Ellipsis} iconOnly aria-label={t("more")} onClick={soon} />
+          <Button variant="ghost" icon={Share2} iconOnly aria-label={t("share")} onClick={() => openShare(null)} />
+          <Button variant="ghost" icon={Ellipsis} iconOnly aria-label={t("more")} onClick={() => setMoreOpen(true)} />
         </div>
         <TitleEditor id={detail.id} title={detail.title} />
         <p className="mt-1 text-small text-ink-2">
@@ -298,6 +362,7 @@ function Loaded({
                 onSeek={seek}
                 onAskAi={() => setTab("ai")}
                 onSendMinutes={() => setSending(true)}
+                onShareIntent={openShare}
               />
             </TabsContent>
             <TabsContent value="tasks">
@@ -321,6 +386,18 @@ function Loaded({
                   currentTime={ps.currentTime}
                   playing={ps.playing}
                   onSeek={seek}
+                  onQuoteCard={(seg) =>
+                    openShare({
+                      kind: "card",
+                      quote: {
+                        text: seg.text,
+                        speakerName: detail.speakers.find((s) => s.id === seg.speaker_id)?.display_name ?? "",
+                        speakerColorIndex: detail.speakers.find((s) => s.id === seg.speaker_id)?.color_index ?? 0,
+                        startSec: seg.start_sec,
+                        endSec: seg.end_sec,
+                      },
+                    })
+                  }
                 />
               </TabsContent>
             ))}
@@ -360,7 +437,77 @@ function Loaded({
 
       {/* Gửi biên bản và giao việc, ba bước (M3-04) */}
       <SendMinutesSheet session={detail} contacts={contacts} plan={planFlag} canPlay={canPlay} onSeek={seek} open={sending} onOpenChange={setSending} />
+
+      {/* Bảng chia sẻ: link xem, thẻ trích dẫn, đoạn tinh túy, xuất file (M4-01) */}
+      <ShareSheet detail={detail} template={template} open={sharing} onOpenChange={setSharing} intent={shareIntent} />
+
+      {/* Menu ⋯: đổi mẫu và tóm tắt lại, gửi biên bản, xuất file, dọn bản gốc, xóa */}
+      <Sheet open={moreOpen} onOpenChange={setMoreOpen} title={t("moreTitle")} description={detail.title} size="half">
+        <ul className="divide-y divide-line">
+          <MenuRow icon={Pencil} label={t("moreReprocess")} onClick={() => (setMoreOpen(false), setReprocessOpen(true))} />
+          <MenuRow icon={Share2} label={t("sendMinutes")} onClick={() => (setMoreOpen(false), setSending(true))} />
+          <MenuRow icon={Archive} label={t("moreExport")} onClick={() => (setMoreOpen(false), openShare({ kind: "export" }))} />
+          {detail.storage_status === "full" && detail.status === "ready" ? (
+            <MenuRow icon={Archive} label={t("purge")} onClick={() => (setMoreOpen(false), setConfirmPurge(true))} />
+          ) : null}
+          <MenuRow icon={Trash2} label={t("delete")} danger={true} onClick={() => (setMoreOpen(false), setConfirmDelete(true))} />
+        </ul>
+      </Sheet>
+
+      {/* Đổi mẫu và tóm tắt lại: chọn mẫu, xử lý lại như ghi mới */}
+      <Sheet open={reprocessOpen} onOpenChange={setReprocessOpen} title={t("reprocessTitle")} description={t("reprocessHint")} size="half">
+        <ul className="divide-y divide-line">
+          {templates.map((tp) => (
+            <li key={tp.id}>
+              <button type="button" onClick={() => void reprocess(tp.id)} className="flex min-h-12 w-full items-center gap-3 py-2 text-left">
+                <span className="min-w-0 flex-1">
+                  <span className="block text-body text-ink">{tp.name}</span>
+                  {tp.id === detail.template_id ? <span className="block text-caption text-ink-3">{t("currentTemplate")}</span> : null}
+                </span>
+                {tp.id === detail.template_id ? <Check aria-hidden={true} className="size-5 shrink-0 text-sen" strokeWidth={2} /> : null}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </Sheet>
+
+      {/* Dọn bản gốc: nói rõ thứ gì mất và thứ gì giữ (docs mục 12) */}
+      <ConfirmDialog
+        open={confirmPurge}
+        onOpenChange={setConfirmPurge}
+        title={t("purgeTitle")}
+        cancelLabel={t("cancel")}
+        confirmLabel={t("purgeConfirm")}
+        onConfirm={() => void purge()}
+      >
+        <span className="block">{t("purgeBodyRemove", { mb: Math.max(1, Math.round(detail.size_bytes / 1_000_000)) })}</span>
+        <span className="block">{t("purgeBodyKeep")}</span>
+        <span className="mt-2 block font-medium text-ink">{t("purgeBodyIrreversible")}</span>
+      </ConfirmDialog>
+
+      {/* Xóa buổi ghi: hộp xác nhận, xong thì về thư viện, thông báo có Hoàn tác */}
+      <ConfirmDialog
+        open={confirmDelete}
+        onOpenChange={setConfirmDelete}
+        title={t("deleteTitle")}
+        cancelLabel={t("cancel")}
+        confirmLabel={t("deleteConfirm")}
+        onConfirm={() => void deleteSession()}
+      >
+        {t("deleteBody", { title: detail.title })}
+      </ConfirmDialog>
     </div>
+  );
+}
+
+function MenuRow({ icon: Icon, label, danger, onClick }: { icon: typeof Pencil; label: string; danger?: boolean; onClick: () => void }) {
+  return (
+    <li>
+      <button type="button" onClick={onClick} className="flex min-h-12 w-full items-center gap-3 py-2 text-left text-body text-ink">
+        <Icon aria-hidden={true} className={danger ? "size-5 shrink-0 text-tag-risk" : "size-5 shrink-0 text-ink-2"} strokeWidth={1.75} />
+        <span className={danger ? "text-tag-risk" : undefined}>{label}</span>
+      </button>
+    </li>
   );
 }
 

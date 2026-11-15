@@ -76,12 +76,15 @@ export function TranscriptTab({
   currentTime,
   playing,
   onSeek,
+  onQuoteCard,
 }: {
   detail: SessionDetail;
   canPlay: boolean;
   currentTime: number;
   playing: boolean;
   onSeek: (time: number) => void;
+  /** Tạo thẻ trích dẫn từ đoạn lời này (M4-01) */
+  onQuoteCard?: (seg: TranscriptSegment) => void;
 }) {
   const t = useTranslations("transcript");
   const ts = useTranslations("session");
@@ -315,8 +318,9 @@ export function TranscriptTab({
               icon={Quote}
               label={t("quoteCard")}
               onClick={() => {
+                const seg = menuSeg;
                 setMenuSegId(null);
-                toast.show({ tone: "success", message: t("quoteCardNext") });
+                onQuoteCard?.(seg);
               }}
             />
           </ul>
