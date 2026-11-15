@@ -207,8 +207,16 @@ function NamePicker({
         className="flex h-11 w-full items-center gap-2 rounded-control border border-line bg-surface px-3 text-left text-body text-ink transition-colors ease-noteim duration-(--t-quick) hover:border-dien"
       >
         <UserRoundPen aria-hidden={true} className="size-4 shrink-0 text-ink-3" strokeWidth={1.75} />
-        <span className={cn("min-w-0 flex-1 truncate", current ? "text-ink" : "text-ink-3")}>
-          {current ? (current.email ? `${current.name} — ${current.email}` : current.name) : t("pickPlaceholder")}
+        <span className={cn("min-w-0 flex-1 text-left", current ? "text-ink" : "text-ink-3")}>
+          {current ? (
+            <>
+              {/* Tên và email ở hai dòng, không ghép bằng gạch ngang dài */}
+              <span className="block truncate text-body">{current.name}</span>
+              {current.email ? <span className="block truncate text-caption text-ink-3">{current.email}</span> : null}
+            </>
+          ) : (
+            t("pickPlaceholder")
+          )}
         </span>
       </button>
 

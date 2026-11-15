@@ -762,7 +762,7 @@
     "step3": "3. Xác nhận",
     "modeMinutes": "Gửi biên bản chung",
     "modeTasks": "Gửi việc riêng cho từng người",
-    "emailMissing": "Chưa có email — nhập tại đây",
+    "emailMissing": "Chưa có email, nhập tại đây",
     "emailInvalid": "Email chưa đúng.",
     "emailRequiredRow": "Nhập email của {name} để gửi.",
     "nextPreview": "Xem trước email",

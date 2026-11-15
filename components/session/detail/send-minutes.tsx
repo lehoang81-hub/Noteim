@@ -431,9 +431,11 @@ export function SendMinutesSheet({
                       className="w-[86%] max-w-[420px] shrink-0 snap-center rounded-block border border-line bg-bg p-3"
                       aria-label={`${contactById[d.to_contact_id]?.name}: ${t(d.kind === "minutes" ? "minutesKind" : "tasksKind")}`}
                     >
-                      <p className="text-caption font-medium text-ink-3">
-                        {contactById[d.to_contact_id]?.name} — {t(d.kind === "minutes" ? "minutesKind" : "tasksKind")}
-                      </p>
+                      <div className="text-caption text-ink-3">
+                        {/* Tên trên, loại email dưới — không ghép bằng gạch ngang dài */}
+                        <p className="font-medium text-ink-2">{contactById[d.to_contact_id]?.name}</p>
+                        <p>{t(d.kind === "minutes" ? "minutesKind" : "tasksKind")}</p>
+                      </div>
                       <input
                         value={e.subject}
                         onChange={(ev) => setEdits((m) => ({ ...m, [key]: { ...e, subject: ev.target.value } }))}
@@ -459,7 +461,7 @@ export function SendMinutesSheet({
                           {items.map((a) => (
                             <li key={a.id} className="text-small text-ink-2">
                               <span className="font-medium text-ink">{a.task}</span>
-                              {a.due_date ? ` — ${shortDate(a.due_date)}` : ""}
+                              {a.due_date ? `, ${shortDate(a.due_date)}` : ""}
                               {a.source_quote ? (
                                 <span className="mt-0.5 block border-l-2 border-line pl-2 text-caption text-ink-3">
                                   “{a.source_quote}”

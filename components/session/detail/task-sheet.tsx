@@ -131,7 +131,7 @@ export function TaskSheet({
                 {otherContacts.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
-                    {c.email ? ` — ${c.email}` : ""}
+                    {c.email ? `, ${c.email}` : ""}
                   </option>
                 ))}
               </optgroup>
