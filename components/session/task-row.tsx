@@ -21,6 +21,9 @@ export function TaskRow({
   time,
   seekLabel,
   onSeek,
+  sessionLabel,
+  onOpen,
+  openLabel,
 }: {
   task: string;
   done: boolean;
@@ -40,6 +43,12 @@ export function TaskRow({
   time?: string;
   seekLabel?: string;
   onSeek?: () => void;
+  /** Tên buổi ghi gốc (trang /tasks, M3-04) */
+  sessionLabel?: string;
+  /** Chạm vào nội dung hàng để mở (bảng sửa việc / buổi ghi) */
+  onOpen?: () => void;
+  /** Nhãn cho trình đọc màn hình của nút mở */
+  openLabel?: string;
 }) {
   return (
     <div className="flex gap-3 border-b border-line py-3.5">
@@ -62,7 +71,19 @@ export function TaskRow({
       </button>
 
       <div className="min-w-0 flex-1">
-        <p className={cn("text-body", done ? "text-ink-3 line-through" : "text-ink")}>{task}</p>
+        {onOpen ? (
+          <button
+            type="button"
+            onClick={onOpen}
+            aria-label={openLabel ?? task}
+            className="-mx-1 block w-full rounded-control px-1 text-left"
+          >
+            <p className={cn("text-body", done ? "text-ink-3 line-through" : "text-ink")}>{task}</p>
+          </button>
+        ) : (
+          <p className={cn("text-body", done ? "text-ink-3 line-through" : "text-ink")}>{task}</p>
+        )}
+        {sessionLabel ? <p className="mt-0.5 text-caption text-ink-3">{sessionLabel}</p> : null}
         <p className="mt-0.5 flex flex-wrap items-center gap-x-3 text-small">
           {assignee ? (
             <span className="text-ink-2">{assignee}</span>

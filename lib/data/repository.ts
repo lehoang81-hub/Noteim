@@ -87,6 +87,8 @@ export interface ShareRepository {
 }
 
 export type EmailDraft = {
+  /** Buổi ghi gốc — bản giả dùng để ghi send_history khi gửi (M3-04) */
+  session_id?: string;
   to_contact_id: string;
   subject: string;
   body: string;

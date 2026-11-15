@@ -15,7 +15,9 @@ import { data, dataNow, DataError, useData, type ActionItem, type SessionDetail 
 import { durationParts, shortDate } from "@/lib/format";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
+import { SendMinutesSheet } from "./send-minutes";
 import { SpeakerSheet } from "./speaker-sheet";
+import { TaskSheet } from "./task-sheet";
 import { TasksTab } from "./tasks-tab";
 import { TranscriptTab } from "./transcript-tab";
 import { VisualTab } from "./visual-tab";
@@ -124,6 +126,8 @@ function Loaded({
   const router = useRouter();
   const search = useSearchParams();
   const now = dataNow();
+  const me = useData(() => data.account.me(), []);
+  const planFlag: "free" | "pro" = me.data?.plan ?? "free";
 
   const tab: TabId = (TABS as readonly string[]).includes(search.get("tab") ?? "") ? (search.get("tab") as TabId) : "summary";
   const setTab = (v: string) => router.replace(`/s/${detail.id}?tab=${v}`, { scroll: false });
@@ -133,6 +137,9 @@ function Loaded({
   const ps = usePlayerState(player);
   const [expanded, setExpanded] = useState(false);
   const [naming, setNaming] = useState(false);
+  const [editingTask, setEditingTask] = useState<ActionItem | null>(null);
+  const [taskSheet, setTaskSheet] = useState(false);
+  const [sending, setSending] = useState(false);
   const touched = useRef(false);
 
   const canPlay = detail.storage_status === "full" && detail.status === "ready";
@@ -141,6 +148,19 @@ function Loaded({
     player.seek(time);
     player.play();
   }
+
+  // /tasks dẫn tới đây kèm mốc thời gian (?t=giây): tua tới đúng đoạn rồi dọn URL
+  const didSeekParam = useRef(false);
+  useEffect(() => {
+    if (didSeekParam.current || !canPlay) return;
+    const tParam = Number(search.get("t"));
+    if (search.get("t") && !Number.isNaN(tParam) && tParam > 0) {
+      didSeekParam.current = true;
+      seek(tParam);
+      router.replace(`/s/${detail.id}?tab=tasks`, { scroll: false });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canPlay, search]);
 
   const bullets = useMemo(
     () => detail.topics.flatMap((tp) => tp.bullets).sort((a, b) => a.timestamp_sec - b.timestamp_sec),
@@ -154,6 +174,13 @@ function Loaded({
   }, [bullets, ps.currentTime, ps.playing]);
 
   const [items, setItems] = useState(detail.action_items);
+  // Dữ liệu tải lại (sửa việc ở nơi khác, thêm việc...) thì đồng bộ lại danh sách;
+  // làm lúc vẽ thay vì trong effect
+  const [prevItems, setPrevItems] = useState(detail.action_items);
+  if (detail.action_items !== prevItems) {
+    setPrevItems(detail.action_items);
+    setItems(detail.action_items);
+  }
   async function toggle(item: ActionItem, isUndo = false) {
     setItems((list) => list.map((a) => (a.id === item.id ? { ...a, done: !a.done, done_at: a.done ? null : new Date().toISOString() } : a)));
     try {
@@ -179,6 +206,7 @@ function Loaded({
     detail.storage_status === "full" &&
     detail.audio_expires_at &&
     new Date(detail.audio_expires_at).getTime() - now.getTime() < 48 * 3600_000;
+  const lastSent = detail.send_history.length ? detail.send_history[detail.send_history.length - 1] : null;
 
   const tagLabels = { decided: tl("decided"), pending: tl("pending"), risk: tl("risk"), idea: tl("idea"), figure: tl("figure") };
 
@@ -194,6 +222,7 @@ function Loaded({
         <TitleEditor id={detail.id} title={detail.title} />
         <p className="mt-1 text-small text-ink-2">
           {t("meta", { date: shortDate(detail.created_at), duration: durationLabel, template: templateName })}
+          {lastSent ? ` · ${t("sentAt", { date: shortDate(lastSent.sent_at) })}` : ""}
         </p>
         {detail.speakers.length ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
@@ -268,7 +297,7 @@ function Loaded({
                 canSeek={canPlay}
                 onSeek={seek}
                 onAskAi={() => setTab("ai")}
-                onSendMinutes={soon}
+                onSendMinutes={() => setSending(true)}
               />
             </TabsContent>
             <TabsContent value="tasks">
@@ -279,8 +308,9 @@ function Loaded({
                 canSeek={canPlay}
                 onSeek={seek}
                 onToggle={(a) => toggle(a)}
-                onAdd={soon}
-                onEmail={soon}
+                onOpen={(a) => (setEditingTask(a), setTaskSheet(true))}
+                onAdd={() => (setEditingTask(null), setTaskSheet(true))}
+                onEmail={() => setSending(true)}
               />
             </TabsContent>
             {(["transcript"] as const).map((id) => (
@@ -324,6 +354,12 @@ function Loaded({
 
       {/* Ai là ai? (M3-02): đặt tên, nghe thử, gộp người nói */}
       <SpeakerSheet detail={detail} player={player} canPlay={canPlay} open={naming} onOpenChange={setNaming} />
+
+      {/* Sửa / thêm việc (M3-04) */}
+      <TaskSheet session={detail} contacts={contacts} item={editingTask} open={taskSheet} onOpenChange={setTaskSheet} />
+
+      {/* Gửi biên bản và giao việc, ba bước (M3-04) */}
+      <SendMinutesSheet session={detail} contacts={contacts} plan={planFlag} canPlay={canPlay} onSeek={seek} open={sending} onOpenChange={setSending} />
     </div>
   );
 }

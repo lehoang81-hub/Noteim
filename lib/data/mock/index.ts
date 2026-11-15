@@ -81,6 +81,9 @@ const processingTimers = new Map<string, number>();
 const processingListeners = new Map<string, Set<(step: number) => void>>();
 const PROCESS_STEP_MS = 1600;
 
+/** Người nhận đã từng gửi lỗi (cờ "Gửi email lỗi một người"): gửi lại thì thành công. */
+const mailFailedOnce = new Set<string>();
+
 function notifyProcessing(id: string, step: number) {
   processingListeners.get(id)?.forEach((fn) => fn(step));
 }
@@ -449,7 +452,29 @@ export const mockSource: DataSource = {
         }
         return drafts;
       }),
-    send: (drafts) => write(() => drafts.map((d) => ({ contact_id: d.to_contact_id, ok: true }))),
+    send: (drafts) =>
+      write(() => {
+        // Cờ "Gửi email lỗi một người" (M3-04): đúng một người thất bại,
+        // những người khác vẫn tính là đã gửi. Mỗi người chỉ lỗi một lần
+        // để nút "Gửi lại" gửi được (giống thật: lỗi rồi thì gửi lại được).
+        const failOne = getFlags().mailFailOne;
+        const results = drafts.map((d, i) => {
+          const ok = !(failOne && i === 0 && !mailFailedOnce.has(d.to_contact_id));
+          if (!ok) mailFailedOnce.add(d.to_contact_id);
+          return { contact_id: d.to_contact_id, ok };
+        });
+        // Ghi lịch sử gửi vào buổi ghi (M3-04): số người gửi thành công
+        const sessionId = drafts.find((d) => d.session_id)?.session_id;
+        const okCount = results.filter((r) => r.ok).length;
+        if (sessionId && okCount > 0) {
+          // Dùng ngày của mockup (dataNow) để khớp với các ngày khác trong dữ liệu mẫu
+          findFixture(sessionId).detail.send_history.push({
+            sent_at: MOCK_NOW.toISOString(),
+            recipient_count: okCount,
+          });
+        }
+        return results;
+      }),
   },
 
   account: {

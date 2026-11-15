@@ -273,7 +273,7 @@ interface ShareRepository {
 
 interface MailRepository {
   preview(sessionId: string, recipientContactIds: string[], mode: "minutes" | "tasks" | "both"): Promise<EmailDraft[]>;
-  send(drafts: EmailDraft[]): Promise<Array<{ contact_id: string; ok: boolean }>>;
+  send(drafts: EmailDraft[]): Promise<Array<{ contact_id: string; ok: boolean }>>;   // M3: ghi send_history, cờ ép lỗi một người
 }
 
 interface AccountRepository {

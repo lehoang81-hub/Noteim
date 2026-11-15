@@ -28,6 +28,8 @@ export type DebugFlags = {
   micTaken: boolean;
   /** Ép cảnh báo bộ nhớ trình duyệt đã đầy */
   storageFull: boolean;
+  /** Ép gửi email lỗi đúng một người (M3-04) */
+  mailFailOne: boolean;
   profession: Profession | null;
   plan: "free" | "pro" | null;
 };
@@ -44,6 +46,7 @@ const DEFAULTS: DebugFlags = {
   micDenied: false,
   micTaken: false,
   storageFull: false,
+  mailFailOne: false,
   profession: null,
   plan: null,
 };
