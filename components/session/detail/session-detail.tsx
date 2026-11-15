@@ -162,7 +162,8 @@ function Loaded({
     player.play();
   }
 
-  // /tasks dẫn tới đây kèm mốc thời gian (?t=giây): tua tới đúng đoạn rồi dọn URL
+  // /tasks và /search dẫn tới đây kèm mốc thời gian (?t=giây): tua tới đúng
+  // đoạn rồi dọn URL, giữ nguyên tab đang mở (M4-02: vào từ tab Lời)
   const didSeekParam = useRef(false);
   useEffect(() => {
     if (didSeekParam.current || !canPlay) return;
@@ -170,7 +171,8 @@ function Loaded({
     if (search.get("t") && !Number.isNaN(tParam) && tParam > 0) {
       didSeekParam.current = true;
       seek(tParam);
-      router.replace(`/s/${detail.id}?tab=tasks`, { scroll: false });
+      const tab = search.get("tab") ?? "summary";
+      router.replace(`/s/${detail.id}?tab=${tab}`, { scroll: false });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canPlay, search]);

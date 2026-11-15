@@ -1,7 +1,7 @@
 "use client";
 
 import { getFlags } from "@/lib/debug/flags";
-import type { DataSource, EmailDraft, RecordingDraft, SessionFilter } from "../repository";
+import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
 import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture, type ShareLink } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
 import { buildSessionContent } from "./generate";
@@ -30,6 +30,15 @@ async function write<T>(fn: () => T): Promise<T> {
   const out = fn();
   commit();
   return structuredClone(out);
+}
+
+/** So khớp không phân biệt hoa thường, bỏ dấu tiếng Việt (M4-02). */
+function foldVi(s: string): string {
+  return s
+    .toLocaleLowerCase("vi")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d");
 }
 
 function findFixture(id: string): SessionFixture & { draft?: RecordingDraft; chat_log?: ChatMessage[] } {
@@ -402,6 +411,77 @@ export const mockSource: DataSource = {
         d.processing_step = 1;
         delete d.failure_reason;
         scheduleProcessing(id);
+      }),
+    search: (query) =>
+      read(() => {
+        const q = foldVi(query.trim());
+        const out: SearchResult = { sessions: [], segments: [], tasks: [] };
+        if (!q) return out;
+        for (const fx of getDb().sessions) {
+          const d = fx.detail;
+          const hayTitle = foldVi([d.title, d.executive_summary, ...d.topics.map((t) => t.title)].join(" "));
+          if (hayTitle.includes(q)) out.sessions.push(toSession(d));
+          for (const seg of fx.transcript) {
+            if (foldVi(seg.text).includes(q)) out.segments.push({ session_id: d.id, segment: seg });
+          }
+          for (const task of d.action_items) {
+            if (foldVi(`${task.task} ${task.source_quote ?? ""}`).includes(q)) out.tasks.push(task);
+          }
+        }
+        out.sessions.sort((a, b) => b.created_at.localeCompare(a.created_at));
+        out.segments.sort((a, b) => a.segment.start_sec - b.segment.start_sec);
+        return out;
+      }),
+    createFromImport: (input) =>
+      write(() => {
+        const db = getDb();
+        const id = `s-new-${Date.now()}`;
+        const now = new Date().toISOString();
+        // Bản nháp không có âm lượng: xử lý xong sẽ sinh nội dung theo mẫu và
+        // dải giọng dự phòng (buildSessionContent), file gốc không được lưu
+        const draft: RecordingDraft = {
+          title: input.file_name.replace(/\.[^.]+$/, ""),
+          template_id: input.template_id,
+          duration_sec: input.duration_sec,
+          notes: [],
+          bookmarks: [],
+          photos: [],
+          levels: [],
+        };
+        const detail: SessionDetail = {
+          id,
+          user_id: db.user.id,
+          workspace_id: null,
+          title: draft.title ?? "",
+          template_id: input.template_id,
+          language: input.language,
+          output_language: db.user.ui_language,
+          status: "processing",
+          processing_step: 1,
+          storage_status: "full",
+          duration_sec: input.duration_sec,
+          size_bytes: Math.round(input.duration_sec * 16_000),
+          created_at: now,
+          audio_expires_at: null,
+          consent: { confirmed: true, announced: false },
+          participant_contact_ids: [],
+          peaks_thumb: Array.from({ length: 40 }, (_, i) => 0.3 + 0.5 * Math.abs(Math.sin(i / 5))),
+          speaker_colors_thumb: Array.from({ length: 40 }, () => 0),
+          open_task_count: 0,
+          executive_summary: "",
+          speakers: [],
+          topics: [],
+          action_items: [],
+          notes: [],
+          bookmarks: [],
+          photos: [],
+          peaks: [],
+          speaker_spans: [],
+          send_history: [],
+        };
+        db.sessions.unshift({ detail, transcript: [], chat: [], draft });
+        scheduleProcessing(id);
+        return { id };
       }),
   },
 

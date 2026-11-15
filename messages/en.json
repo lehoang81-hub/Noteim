@@ -461,7 +461,8 @@
     "soonTitle": "Coming soon",
     "toLibrary": "Back to library",
     "brand": "Noteim",
-    "upgrade": "Plans"
+    "upgrade": "Plans",
+    "import": "Import file"
   },
   "debug": {
     "title": "Test panel",
@@ -546,7 +547,8 @@
     "deleteBodyMany": "{count} sessions will be deleted and cannot be restored.",
     "deletedToast": "Deleted {count} sessions",
     "purgeTitle": "Free up the originals of {count} sessions?",
-    "purgedToast": "Freed {count} sessions, {mb} MB back"
+    "purgedToast": "Freed {count} sessions, {mb} MB back",
+    "seconds": "{s} sec"
   },
   "session": {
     "back": "Back to library",
@@ -940,5 +942,38 @@
     "pause": "Pause",
     "madeWith": "Recorded and summarized with Noteim",
     "wrongPassword": "Wrong password. Try again."
+  },
+  "search": {
+    "label": "Search all sessions",
+    "clear": "Clear search",
+    "placeholder": "Search spoken words, people, tasks",
+    "recent": "Recent searches",
+    "clearAll": "Clear all",
+    "removeOne": "Remove \"{term}\" from recent searches",
+    "byPeople": "People",
+    "byTemplate": "By template",
+    "emptyHint": "Type to search across all your sessions.",
+    "noResult": "No results for \"{query}\". Try a person's name or a date.",
+    "groupSessions": "Sessions",
+    "groupTranscript": "In spoken words",
+    "groupTasks": "Tasks",
+    "transcriptPro": "Search spoken words with Pro"
+  },
+  "import": {
+    "title": "Import a recording file",
+    "dropTitle": "Drop a file here, or click to browse",
+    "dropHint": "Supports audio and video files: mp3, m4a, wav, mp4, mov and other common formats.",
+    "badFormat": "\"{name}\" is not a supported format. Pick an audio or video file.",
+    "readingDuration": "Reading the file duration",
+    "tooLong": "The file is {duration} long. The Free plan summarizes up to {limit} minutes per session.",
+    "overMonth": "The file is longer than your remaining monthly quota ({minutes} minutes). Upgrade to Pro for 1,200 minutes a month.",
+    "templateLabel": "Summary template",
+    "languageLabel": "Spoken language",
+    "langVi": "Tiếng Việt",
+    "langEn": "English",
+    "start": "Summarize this file",
+    "imported": "File received, summarizing",
+    "cannotReadDuration": "Could not read the duration of this file.",
+    "notStored": "The mockup only reads file info; nothing is stored or uploaded."
   }
 }

@@ -461,7 +461,8 @@
     "soonTitle": "Sắp có",
     "toLibrary": "Về thư viện",
     "brand": "Noteim",
-    "upgrade": "Gói dịch vụ"
+    "upgrade": "Gói dịch vụ",
+    "import": "Nhập file"
   },
   "record": {
     "statusRecording": "Ghi",
@@ -597,7 +598,8 @@
     "deleteBodyMany": "{count} buổi ghi sẽ bị xóa, không khôi phục được.",
     "deletedToast": "Đã xóa {count} buổi ghi",
     "purgeTitle": "Dọn bản gốc của {count} buổi ghi?",
-    "purgedToast": "Đã dọn {count} buổi, giải phóng {mb} MB"
+    "purgedToast": "Đã dọn {count} buổi, giải phóng {mb} MB",
+    "seconds": "{s} giây"
   },
   "session": {
     "back": "Về thư viện",
@@ -940,5 +942,38 @@
     "pause": "Tạm dừng",
     "madeWith": "Ghi và tóm tắt bằng Noteim",
     "wrongPassword": "Mật khẩu chưa đúng. Thử lại."
+  },
+  "search": {
+    "label": "Tìm trong mọi buổi ghi",
+    "clear": "Xóa nội dung tìm",
+    "placeholder": "Tìm ý đã nói, tên người, việc cần làm",
+    "recent": "Tìm gần đây",
+    "clearAll": "Xóa hết",
+    "removeOne": "Xóa \"{term}\" khỏi tìm gần đây",
+    "byPeople": "Người hay gặp",
+    "byTemplate": "Theo mẫu",
+    "emptyHint": "Gõ để tìm trong mọi buổi ghi của bạn.",
+    "noResult": "Không tìm thấy \"{query}\". Thử tên người hoặc ngày.",
+    "groupSessions": "Buổi ghi",
+    "groupTranscript": "Trong lời nói",
+    "groupTasks": "Việc cần làm",
+    "transcriptPro": "Tìm trong lời nói với gói Pro"
+  },
+  "import": {
+    "title": "Nhập file ghi âm",
+    "dropTitle": "Kéo thả file vào đây, hoặc bấm để chọn",
+    "dropHint": "Hỗ trợ file ghi âm và video: mp3, m4a, wav, mp4, mov và các định dạng phổ biến.",
+    "badFormat": "Định dạng của \"{name}\" chưa hỗ trợ. Chọn file ghi âm hoặc video.",
+    "readingDuration": "Đang đọc thời lượng của file",
+    "tooLong": "File dài {duration}. Gói Free tóm tắt tối đa {limit} phút mỗi buổi.",
+    "overMonth": "File dài hơn hạn mức tháng còn lại ({minutes} phút). Nâng cấp gói Pro để có 1.200 phút mỗi tháng.",
+    "templateLabel": "Mẫu tóm tắt",
+    "languageLabel": "Ngôn ngữ nói trong file",
+    "langVi": "Tiếng Việt",
+    "langEn": "English",
+    "start": "Tóm tắt file này",
+    "imported": "Đã nhận file, đang tóm tắt",
+    "cannotReadDuration": "Không đọc được thời lượng file này.",
+    "notStored": "Bản mockup chỉ đọc thông tin file, không lưu hay tải file lên."
   }
 }

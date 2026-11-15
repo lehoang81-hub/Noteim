@@ -26,6 +26,13 @@ export type SessionFilter = {
   has_open_tasks?: boolean;
 };
 
+/** Kết quả tìm kiếm (M4-02), nhóm theo Buổi ghi / Trong lời nói / Việc cần làm. */
+export type SearchResult = {
+  sessions: Session[];
+  segments: Array<{ session_id: string; segment: TranscriptSegment }>;
+  tasks: ActionItem[];
+};
+
 export type RecordingDraft = {
   title?: string;
   template_id: string;
@@ -66,6 +73,11 @@ export interface SessionRepository {
   restore(id: string): Promise<void>;
   /** Đổi mẫu và tóm tắt lại: chạy lại 5 bước xử lý theo mẫu mới (M4-01) */
   reprocess(id: string, templateId: string): Promise<void>;
+  /** Tìm kiếm xuyên buổi: tiêu đề, tóm tắt, bản ghi lời, việc cần làm (M4-02).
+   * Bản giả so khớp không phân biệt hoa thường và cả dấu tiếng Việt. */
+  search(query: string): Promise<SearchResult>;
+  /** Tạo buổi ghi từ file có sẵn (M4-02): không lưu file, chỉ đọc thông tin */
+  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: string }): Promise<{ id: string }>;
 }
 
 export interface TaskRepository {

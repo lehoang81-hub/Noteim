@@ -18,6 +18,7 @@ import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
+import { holdImportFile } from "@/lib/import-file";
 import { dayDiff, durationParts, shortDate, weekdayDate } from "@/lib/format";
 import {
   discardRecording,
@@ -209,6 +210,17 @@ export function LibraryPane({ className }: { className?: string }) {
       onPointerDownCapture={(e) => {
         if (swipeOpenId && !(e.target as Element).closest("[data-swipe-open]")) setSwipeOpenId(null);
       }}
+      // Máy tính kéo thả file vào thư viện để nhập (M4-02)
+      onDragOver={(e) => {
+        if (e.dataTransfer.types.includes("Files")) e.preventDefault();
+      }}
+      onDrop={(e) => {
+        const f = e.dataTransfer.files?.[0];
+        if (!f) return;
+        e.preventDefault();
+        holdImportFile(f);
+        router.push("/import");
+      }}
     >
       {selecting ? (
         <header className="flex min-h-14 items-center gap-1 px-page pt-2 lg:px-8 lg:pt-4">
@@ -236,7 +248,7 @@ export function LibraryPane({ className }: { className?: string }) {
           </Button>
         </header>
       ) : (
-        <TopBar />
+        <TopBar importHref={true} />
       )}
 
       <div className="px-page pb-4">
