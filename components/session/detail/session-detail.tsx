@@ -16,11 +16,12 @@ import { durationParts, shortDate } from "@/lib/format";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
 import { TasksTab } from "./tasks-tab";
+import { TranscriptTab } from "./transcript-tab";
 
 /*
  * Chi tiết buổi ghi (docs/03-screens.md mục 5).
  * M1: phần đầu, tab Tóm tắt, tab Việc cần làm, trình phát giả lập, chạm ý để tua.
- * Tab Lời, Hình, Hỏi AI và các nút Chia sẻ, Thêm thuộc M3 và M4.
+ * M3-01: tab Lời. Tab Hình và Hỏi AI thuộc M3-03; Chia sẻ, Thêm thuộc M4.
  */
 
 const TABS = ["summary", "tasks", "transcript", "visual", "ai"] as const;
@@ -269,7 +270,18 @@ function Loaded({
                 onEmail={soon}
               />
             </TabsContent>
-            {(["transcript", "visual", "ai"] as const).map((id) => (
+            {(["transcript"] as const).map((id) => (
+              <TabsContent key={id} value={id}>
+                <TranscriptTab
+                  detail={detail}
+                  canPlay={canPlay}
+                  currentTime={ps.currentTime}
+                  playing={ps.playing}
+                  onSeek={seek}
+                />
+              </TabsContent>
+            ))}
+            {(["visual", "ai"] as const).map((id) => (
               <TabsContent key={id} value={id}>
                 <EmptyState drawing={<span />} message={t("soonTab")} />
               </TabsContent>

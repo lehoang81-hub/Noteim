@@ -1144,11 +1144,46 @@
       "text": "Dạ em chào chị Lan, cảm ơn chị đã qua văn phòng sáng nay. Hôm nay em muốn hiểu kỹ nhu cầu của gia đình mình trước rồi mới giới thiệu căn."
     },
     {
+      "id": "g17",
+      "speaker_id": "SPK_01",
+      "start_sec": 45,
+      "end_sec": 75,
+      "text": "Buổi trao đổi hôm nay chị cứ nói thật nhu cầu và ngân sách, căn nào hợp em gửi thông tin sau, chị không bị ép mua đâu ạ."
+    },
+    {
       "id": "g2",
       "speaker_id": "SPK_02",
       "start_sec": 80,
       "end_sec": 130,
       "text": "Ừ em, nhà chị bốn người, hai bé đang học cấp 1. Chị cần hai phòng ngủ là đủ, quan trọng là gần trường Lê Văn Tám cho bọn trẻ đi bộ được."
+    },
+    {
+      "id": "g18",
+      "speaker_id": "SPK_02",
+      "start_sec": 135,
+      "end_sec": 168,
+      "text": "Nhà chị giờ ở Lê Chân, sáng đưa đón hai bé sang Lê Văn Tám chạy xe máy gần hai mươi phút."
+    },
+    {
+      "id": "g19",
+      "speaker_id": "SPK_02",
+      "start_sec": 175,
+      "end_sec": 205,
+      "text": "Bé lớn học lớp ba, bé nhỏ mới mẫu giáo bốn tuổi. Sáng bà nội đưa, chiều chị đón, nên chỗ nào cũng phải gần mới được."
+    },
+    {
+      "id": "g20",
+      "speaker_id": "SPK_02",
+      "start_sec": 212,
+      "end_sec": 245,
+      "text": "Chị nghe chị hàng xóm giới thiệu khu Marina, bảo trường liên cấp nằm ngay trong dự án, học xong chạy xuống nhà là được."
+    },
+    {
+      "id": "g21",
+      "speaker_id": "SPK_02",
+      "start_sec": 252,
+      "end_sec": 283,
+      "text": "Cuối tuần chị cũng muốn có chỗ cho hai bé chạy nhảy, có công viên nước, có chợ đi bộ mười phút tới nơi."
     },
     {
       "id": "g3",
@@ -1158,11 +1193,39 @@
       "text": "Chị thích tầng trung thôi, khoảng tầng 12 đến 20, ban công hướng Đông Nam cho mát."
     },
     {
+      "id": "g22",
+      "speaker_id": "SPK_01",
+      "start_sec": 336,
+      "end_sec": 368,
+      "text": "Dạ để em ghi lại cho đúng: hai phòng ngủ, gần trường, tầng trung, ban công hướng Đông Nam. Chị xem có thiếu gì không ạ."
+    },
+    {
+      "id": "g23",
+      "speaker_id": "SPK_01",
+      "start_sec": 375,
+      "end_sec": 408,
+      "text": "Khu Marina đang mở bán tháp B, đúng tầm tiêu chí của mình. Chiều nay em gửi chị mặt bằng và giá từng căn."
+    },
+    {
+      "id": "g57",
+      "speaker_id": "SPK_01",
+      "start_sec": 422,
+      "end_sec": 438,
+      "text": "Mùa này người đi xem đông lắm, căn nào vừa ra là có người giữ ngay."
+    },
+    {
       "id": "g4",
       "speaker_id": "SPK_02",
       "start_sec": 440,
       "end_sec": 470,
       "text": "Ngân sách thì tối đa 4,2 tỷ em ạ. Chị có sẵn khoảng 2,1 tỷ."
+    },
+    {
+      "id": "g24",
+      "speaker_id": "SPK_02",
+      "start_sec": 475,
+      "end_sec": 515,
+      "text": "Hai phẩy một tỷ đó là chị để dành ba năm nay đấy em, phần còn lại là đất vay, nên chị tính rất kỹ."
     },
     {
       "id": "g5",
@@ -1172,11 +1235,25 @@
       "text": "Còn lại chị định vay một nửa, nhưng cần ân hạn nợ gốc ít nhất 12 tháng."
     },
     {
+      "id": "g25",
+      "speaker_id": "SPK_01",
+      "start_sec": 572,
+      "end_sec": 612,
+      "text": "Vay một nửa giá trị căn thì tháng đầu chị trả khoảng hai mươi bốn triệu, em tính theo lãi suất ưu đãi đang có."
+    },
+    {
       "id": "g6",
       "speaker_id": "SPK_01",
       "start_sec": 620,
       "end_sec": 660,
       "text": "Dạ hiện ngân hàng đối tác đang ưu đãi 6,5% trong 18 tháng đầu, sau đó thả nổi theo lãi cơ sở cộng biên độ."
+    },
+    {
+      "id": "g26",
+      "speaker_id": "SPK_03",
+      "start_sec": 665,
+      "end_sec": 692,
+      "text": "Tôi với chị Lan đi xem ba dự án rồi, bên nào người bán cũng nói dự án mình là nhất. Hôm nay tôi đi cùng để nghe cho khách quan."
     },
     {
       "id": "g7",
@@ -1186,11 +1263,32 @@
       "text": "Em nghe bên đồng nghiệp nói phí quản lý chỗ này hơi cao so với mặt bằng chung."
     },
     {
+      "id": "g27",
+      "speaker_id": "SPK_03",
+      "start_sec": 752,
+      "end_sec": 786,
+      "text": "Bên dự án khác người ta thu mười hai nghìn một mét, chỗ này nghe nói mười lăm nghìn, chênh nhau cả chục triệu một năm đấy."
+    },
+    {
+      "id": "g28",
+      "speaker_id": "SPK_01",
+      "start_sec": 790,
+      "end_sec": 808,
+      "text": "Chuyện phí quản lý em ghi nhận ạ, để em kiểm lại hợp đồng dịch vụ cho chính xác."
+    },
+    {
       "id": "g8",
       "speaker_id": "SPK_02",
       "start_sec": 810,
       "end_sec": 850,
       "text": "Nói thật là giá này cao hơn bên Imperia khoảng 300 triệu em ạ."
+    },
+    {
+      "id": "g29",
+      "speaker_id": "SPK_02",
+      "start_sec": 855,
+      "end_sec": 895,
+      "text": "Căn mười hai ơi ba tỷ chín trăm năm mươi, rẻ hơn nhưng nhìn ra đường. Chị thấy căn mười tám ơi đáng tiền hơn."
     },
     {
       "id": "g9",
@@ -1200,11 +1298,67 @@
       "text": "Chị lo nhất là sau 18 tháng lãi suất tăng lên thì áp lực trả nợ lớn."
     },
     {
+      "id": "g30",
+      "speaker_id": "SPK_01",
+      "start_sec": 945,
+      "end_sec": 978,
+      "text": "Về lãi suất, em sẽ nhờ anh Tuấn bên ngân hàng đối tác tính giúp chị kịch bản xấu nhất, tức sau khi hết ưu đãi."
+    },
+    {
+      "id": "g31",
+      "speaker_id": "SPK_02",
+      "start_sec": 985,
+      "end_sec": 1022,
+      "text": "Chị giữ tiền không phải để ăn lãi đâu em, chị giữ để có nhà cho con cháu sau này, nên lần này chị chọn rất kỹ."
+    },
+    {
+      "id": "g32",
+      "speaker_id": "SPK_02",
+      "start_sec": 1030,
+      "end_sec": 1072,
+      "text": "Nhà chị mua lần trước năm mười hai, lúc đó giấy tờ gì chị cũng đi kiểm tra hết, mất cả tháng mới xong."
+    },
+    {
+      "id": "g33",
+      "speaker_id": "SPK_02",
+      "start_sec": 1080,
+      "end_sec": 1125,
+      "text": "Lần này chị có người bạn làm ngành pháp lý nhờ xem giúp, sổ hồng, hợp đồng đặt cọc, phạt vi phạm gì cũng phải rõ ràng."
+    },
+    {
       "id": "g10",
       "speaker_id": "SPK_01",
       "start_sec": 1140,
       "end_sec": 1190,
       "text": "Em giới thiệu chị căn 18.06, hai phòng ngủ, 72 mét vuông, ban công đúng hướng Đông Nam chị muốn."
+    },
+    {
+      "id": "g34",
+      "speaker_id": "SPK_01",
+      "start_sec": 1198,
+      "end_sec": 1238,
+      "text": "Giá căn mười tám ơ sáu là bốn phẩy mười lăm tỷ, đã gồm thuế và nội thất cơ bản, chốt được em làm thủ tục ngay."
+    },
+    {
+      "id": "g35",
+      "speaker_id": "SPK_01",
+      "start_sec": 1245,
+      "end_sec": 1285,
+      "text": "Tháp B bàn giao quý hai năm sau, chủ đầu tư bên này giao đúng hạn ba năm nay rồi, chị cứ yên tâm."
+    },
+    {
+      "id": "g36",
+      "speaker_id": "SPK_01",
+      "start_sec": 1295,
+      "end_sec": 1330,
+      "text": "Nhà bếp tách riêng, phòng ngủ master có nhà vệ sinh riêng, phòng khách cửa kính trọn, chị thích kiểu đó không ạ."
+    },
+    {
+      "id": "g37",
+      "speaker_id": "SPK_01",
+      "start_sec": 1340,
+      "end_sec": 1365,
+      "text": "Anh chị mai thu xếp qua xem nhà mẫu với em nhé, đứng trong căn mới cảm nhận hết được."
     },
     {
       "id": "g11",
@@ -1214,11 +1368,67 @@
       "text": "Bếp tách riêng chị thích. Có điều phòng ngủ phụ hơi nhỏ."
     },
     {
+      "id": "g58",
+      "speaker_id": "SPK_01",
+      "start_sec": 1462,
+      "end_sec": 1478,
+      "text": "Chị để ý giúp em chỗ để xe với trạm sạc xe điện nhé."
+    },
+    {
+      "id": "g38",
+      "speaker_id": "SPK_02",
+      "start_sec": 1485,
+      "end_sec": 1525,
+      "text": "Phòng khách kính trọn thì sáng quá, chị chỉ sợ nắng trưa. Để mai chị xem tận nơi rồi tính."
+    },
+    {
+      "id": "g39",
+      "speaker_id": "SPK_02",
+      "start_sec": 1530,
+      "end_sec": 1565,
+      "text": "Chị sợ nhất là cọc xong chủ đầu tư làm lỡ hẹn, mấy vụ trên báo chí chị đọc thấy lo lắm."
+    },
+    {
+      "id": "g40",
+      "speaker_id": "SPK_02",
+      "start_sec": 1570,
+      "end_sec": 1585,
+      "text": "Em cho chị xin chính sách bảo hành chi tiết được không?"
+    },
+    {
       "id": "g12",
       "speaker_id": "SPK_01",
       "start_sec": 1590,
       "end_sec": 1630,
       "text": "Bên em giữ căn 18.06 cho chị đến hết thứ Bảy 16/11 nhé."
+    },
+    {
+      "id": "g59",
+      "speaker_id": "SPK_02",
+      "start_sec": 1632,
+      "end_sec": 1658,
+      "text": "Em cứ tính giúp chị tổng tiền phải đóng trước khi nhận nhà, đừng để phát sinh."
+    },
+    {
+      "id": "g41",
+      "speaker_id": "SPK_01",
+      "start_sec": 1665,
+      "end_sec": 1700,
+      "text": "Giữ căn mình làm giấy đặt cọc năm mươi triệu, tiền này sau đó trừ vào đợt thanh toán đầu tiên, không mất đi đâu cả."
+    },
+    {
+      "id": "g42",
+      "speaker_id": "SPK_01",
+      "start_sec": 1710,
+      "end_sec": 1745,
+      "text": "Nếu đổi ý, mình hoàn lại chín mươi phần trăm trong vòng mười lăm ngày, điều khoản ghi thẳng vào phụ lục."
+    },
+    {
+      "id": "g43",
+      "speaker_id": "SPK_01",
+      "start_sec": 1750,
+      "end_sec": 1775,
+      "text": "Tới hết thứ Bảy là hết hạn giữ căn, em phải báo bên dự án để họ mở bán lại."
     },
     {
       "id": "g13",
@@ -1228,11 +1438,74 @@
       "text": "Chị phải để anh nhà xem đã rồi mới quyết được."
     },
     {
+      "id": "g60",
+      "speaker_id": "SPK_01",
+      "start_sec": 1830,
+      "end_sec": 1865,
+      "text": "Em ghi lại đây: giữ căn đến hết ngày mười sáu tháng mười một, chị trả lời trước thứ Bảy."
+    },
+    {
+      "id": "g44",
+      "speaker_id": "SPK_03",
+      "start_sec": 1875,
+      "end_sec": 1910,
+      "text": "Theo tôi thì căn này hợp với chị đó, tiện cho hai cháu đi học hết, đi làm về cũng tiện."
+    },
+    {
+      "id": "g45",
+      "speaker_id": "SPK_03",
+      "start_sec": 1915,
+      "end_sec": 1938,
+      "text": "Mà lỡ căn này thì tiếc lắm đấy, tôi thấy giá khu này đầu năm tới còn tăng."
+    },
+    {
+      "id": "g46",
+      "speaker_id": "SPK_02",
+      "start_sec": 1945,
+      "end_sec": 1968,
+      "text": "Chị phải về bàn với anh nhà đã, chuyện tiền tỷ đâu có quyết trong một buổi được."
+    },
+    {
       "id": "g14",
       "speaker_id": "SPK_01",
       "start_sec": 1970,
       "end_sec": 2000,
       "text": "Em gửi chị bảng tính trước tối mai nhé, có cả phương án vay 50%."
+    },
+    {
+      "id": "g47",
+      "speaker_id": "SPK_02",
+      "start_sec": 2005,
+      "end_sec": 2040,
+      "text": "Cuối tuần cho chị xin lịch xem nhà mẫu với, hai bé đi cùng cho chúng nó chạy chơi."
+    },
+    {
+      "id": "g48",
+      "speaker_id": "SPK_02",
+      "start_sec": 2048,
+      "end_sec": 2082,
+      "text": "Nếu căn này không lấy được thì bên em còn căn nào tương tự không em?"
+    },
+    {
+      "id": "g49",
+      "speaker_id": "SPK_01",
+      "start_sec": 2092,
+      "end_sec": 2128,
+      "text": "Chị cứ thoải mái, căn hợp thì mình tiến, không hợp em tìm căn khác cho. Khách mua nhà mà bị giục là khó chịu lắm."
+    },
+    {
+      "id": "g50",
+      "speaker_id": "SPK_01",
+      "start_sec": 2135,
+      "end_sec": 2175,
+      "text": "Bảng tính em làm hai kịch bản: một là trả đều từ đầu, hai là ân hạn gốc mười hai tháng rồi trả sau."
+    },
+    {
+      "id": "g51",
+      "speaker_id": "SPK_01",
+      "start_sec": 2182,
+      "end_sec": 2198,
+      "text": "Chị xem xong góp ý, em sửa ngay trong hôm đó luôn."
     },
     {
       "id": "g15",
@@ -1242,11 +1515,46 @@
       "text": "Để chị hỏi anh nhà xem hôm nào rảnh rồi chị báo em."
     },
     {
+      "id": "g52",
+      "speaker_id": "SPK_01",
+      "start_sec": 2245,
+      "end_sec": 2280,
+      "text": "Chiết khấu thanh toán nhanh thì em phải hỏi anh Tuấn, anh ấy phụ trách chính sách bán hàng của dự án."
+    },
+    {
+      "id": "g53",
+      "speaker_id": "SPK_01",
+      "start_sec": 2288,
+      "end_sec": 2320,
+      "text": "Trước chiều thứ Sáu em có câu trả lời cho chị, kể cả phần quà gửi đỡng khai trương nếu còn."
+    },
+    {
+      "id": "g54",
+      "speaker_id": "SPK_02",
+      "start_sec": 2345,
+      "end_sec": 2380,
+      "text": "Chị cảm ơn em, hôm nay chị nắm rõ hơn nhiều so với lần trước đi xem một mình."
+    },
+    {
       "id": "g16",
       "speaker_id": "SPK_01",
       "start_sec": 2390,
       "end_sec": 2430,
       "text": "Em xin anh Tuấn chính sách chiết khấu cho chị nếu mình thanh toán nhanh."
+    },
+    {
+      "id": "g55",
+      "speaker_id": "SPK_02",
+      "start_sec": 2440,
+      "end_sec": 2472,
+      "text": "Đầu tuần sau nếu mọi thứ ổn thì chị với anh nhà qua làm hợp đồng đặt cọc luôn."
+    },
+    {
+      "id": "g56",
+      "speaker_id": "SPK_02",
+      "start_sec": 2480,
+      "end_sec": 2515,
+      "text": "Có gì chị gọi em số cũ nhé. Cảm ơn hai em nhiều, hôm nay mệt mấy cũng đáng."
     }
   ],
   "chat": [

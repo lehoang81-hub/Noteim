@@ -202,6 +202,7 @@ interface TranscriptSegment {
   start_sec: number;
   end_sec: number;
   text: string;
+  edited: boolean;              // người dùng đã sửa tay, mặc định false
 }
 
 interface VisualArtifacts {
@@ -240,6 +241,8 @@ interface SessionRepository {
   getVisuals(id: string): Promise<VisualArtifacts>;          // chỉ gọi khi mở tab
   update(id: string, patch: Partial<Pick<Session, "title" | "template_id">>): Promise<void>;
   updateBullet(sessionId: string, bulletId: string, text: string): Promise<void>;
+  updateSegment(sessionId: string, segmentId: string, text: string): Promise<void>;   // M3: sửa lời, đánh dấu edited
+  reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>; // M3: đổi người nói của đoạn
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
@@ -278,6 +281,7 @@ interface AccountRepository {
   templates(): Promise<Template[]>;
   contacts(): Promise<Contact[]>;
   glossary(): Promise<GlossaryTerm[]>;
+  addGlossaryTerm(term: string): Promise<GlossaryTerm>;   // M3: trùng thì trả từ cũ
 }
 ```
 

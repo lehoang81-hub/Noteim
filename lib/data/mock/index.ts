@@ -2,7 +2,7 @@
 
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter } from "../repository";
-import { DataError, Session as SessionSchema, type ActionItem, type Session, type SessionDetail, type SessionFixture } from "../types";
+import { DataError, Session as SessionSchema, type ActionItem, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture } from "../types";
 import { MOCK_NOW, commit, getDb } from "./store";
 import { buildSessionContent } from "./generate";
 
@@ -196,6 +196,21 @@ export const mockSource: DataSource = {
               b.text = text;
               b.edited = true;
             }
+      }),
+    updateSegment: (sessionId, segmentId, text) =>
+      write(() => {
+        const seg = findFixture(sessionId).transcript.find((s) => s.id === segmentId);
+        if (!seg) throw new DataError("not_found");
+        seg.text = text;
+        seg.edited = true;
+      }),
+    reassignSegment: (sessionId, segmentId, speakerId) =>
+      write(() => {
+        const fx = findFixture(sessionId);
+        const seg = fx.transcript.find((s) => s.id === segmentId);
+        const sp = fx.detail.speakers.find((s) => s.id === speakerId);
+        if (!seg || !sp) throw new DataError("not_found");
+        seg.speaker_id = speakerId;
       }),
     nameSpeaker: (sessionId, speakerId, contactId) =>
       write(() => {
@@ -440,6 +455,18 @@ export const mockSource: DataSource = {
     templates: () => read(() => getDb().templates),
     contacts: () => read(() => getDb().contacts),
     glossary: () => read(() => getDb().glossary),
+    addGlossaryTerm: (term) =>
+      write(() => {
+        const clean = term.trim();
+        const db = getDb();
+        const existing = db.glossary.find(
+          (g) => g.term.toLocaleLowerCase("vi") === clean.toLocaleLowerCase("vi"),
+        );
+        if (existing) return existing;
+        const item: GlossaryTerm = { id: `gl-${Date.now().toString(36)}`, term: clean };
+        db.glossary.push(item);
+        return item;
+      }),
   },
 };
 

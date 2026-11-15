@@ -177,6 +177,9 @@ export const TranscriptSegment = z.object({
   start_sec: z.number(),
   end_sec: z.number(),
   text: z.string(),
+  // Người dùng sửa tay chỗ AI nghe sai (M3-01). Fixture cũ không có trường
+  // này nên để default; bản lưu trong localStorage trước M3 cũng có thể thiếu.
+  edited: z.boolean().default(false).catch(false),
 });
 export type TranscriptSegment = z.infer<typeof TranscriptSegment>;
 

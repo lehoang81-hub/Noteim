@@ -50,6 +50,10 @@ export interface SessionRepository {
     patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids">>,
   ): Promise<void>;
   updateBullet(sessionId: string, bulletId: string, text: string): Promise<void>;
+  /** Sửa lời một đoạn bản ghi: lưu và đánh dấu edited (M3-01) */
+  updateSegment(sessionId: string, segmentId: string, text: string): Promise<void>;
+  /** Đổi người nói của một đoạn bản ghi (M3-01) */
+  reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>;
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
@@ -101,6 +105,8 @@ export interface AccountRepository {
   templates(): Promise<Template[]>;
   contacts(): Promise<Contact[]>;
   glossary(): Promise<GlossaryTerm[]>;
+  /** Thêm từ vào từ điển tên riêng; trùng (không phân biệt hoa thường) thì trả từ cũ (M3-01) */
+  addGlossaryTerm(term: string): Promise<GlossaryTerm>;
 }
 
 export interface DataSource {
