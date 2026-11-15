@@ -232,7 +232,30 @@ export function QuoteCardPanel({
   const toast = useToast();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [style, setStyle] = useState<QuoteCardStyle>("porcelain");
+  // Ý đang dùng trên thẻ: mở từ menu thì là ý mặc định, đổi được trong bảng (review PR #35)
+  const [current, setCurrent] = useState<QuoteContent>(quote);
   const themeKey = useThemeKey(); // đổi giao diện thì vẽ lại theo token
+
+  // Danh sách ý để đổi: theo mốc thời gian
+  const bullets = useMemo(
+    () => detail.topics.flatMap((tp) => tp.bullets).sort((a, b) => a.timestamp_sec - b.timestamp_sec),
+    [detail.topics],
+  );
+
+  function pickBullet(id: string) {
+    const b = bullets.find((x) => x.id === id);
+    if (!b) return;
+    const next = bullets[bullets.findIndex((x) => x.id === id) + 1];
+    const end = Math.min(Math.max(b.timestamp_sec + 1, next ? next.timestamp_sec : detail.duration_sec), b.timestamp_sec + 20);
+    const speaker = detail.speakers.find((s) => s.id === b.speaker_id);
+    setCurrent({
+      text: b.text,
+      speakerName: speaker?.display_name ?? "",
+      speakerColorIndex: speaker?.color_index ?? 0,
+      startSec: b.timestamp_sec,
+      endSec: end,
+    });
+  }
 
   const styles: Array<{ id: QuoteCardStyle; label: string }> = [
     { id: "porcelain", label: t("stylePorcelain") },
@@ -245,7 +268,7 @@ export function QuoteCardPanel({
       const canvas = canvasRef.current;
       if (!canvas) return;
       drawQuoteCard(canvas, {
-        quote,
+        quote: current,
         peaks: detail.peaks,
         speakerSpans: detail.speaker_spans,
         speakers: detail.speakers,
@@ -256,7 +279,7 @@ export function QuoteCardPanel({
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [detail, quote, style, t, themeKey],
+    [detail, current, style, t, themeKey],
   );
 
   useEffect(() => {
@@ -288,7 +311,7 @@ export function QuoteCardPanel({
     const file = new File([blob], "the-trich-dan.png", { type: "image/png" });
     if (navigator.canShare?.({ files: [file] })) {
       try {
-        await navigator.share({ files: [file], title: quote.text.slice(0, 60) });
+        await navigator.share({ files: [file], title: current.text.slice(0, 60) });
       } catch {
         // Người dùng bấm hủy bảng chia sẻ của máy: không phải lỗi
       }
@@ -296,10 +319,30 @@ export function QuoteCardPanel({
   }
 
   const canShareFile = typeof navigator !== "undefined" && typeof navigator.canShare === "function";
+  // Ý hiện tại có nằm trong danh sách ý không (tóm tắt chung thì không có)
+  const currentId = bullets.find((b) => b.timestamp_sec === current.startSec)?.id ?? "";
 
   return (
     <div>
-      <div role="radiogroup" aria-label={t("styleLabel")} className="flex flex-wrap gap-2">
+      {bullets.length ? (
+        <label className="block text-small font-medium text-ink">
+          {t("pickQuoteLabel")}
+          <select
+            value={currentId}
+            onChange={(e) => pickBullet(e.target.value)}
+            className="mt-1.5 h-11 w-full rounded-control border border-line bg-surface px-2 text-small text-ink"
+          >
+            {!currentId ? <option value="">{current.text}</option> : null}
+            {bullets.map((b) => (
+              <option key={b.id} value={b.id}>
+                {formatClock(b.timestamp_sec)}, {b.text}
+              </option>
+            ))}
+          </select>
+        </label>
+      ) : null}
+
+      <div role="radiogroup" aria-label={t("styleLabel")} className="mt-4 flex flex-wrap gap-2">
         {styles.map((s) => (
           <button
             key={s.id}

@@ -40,6 +40,38 @@ export type ShareIntent =
   | { kind: "export" }
   | null;
 
+/**
+ * Ý mặc định cho thẻ trích dẫn (review PR #35): ý trích dẫn đầu tiên,
+ * hoặc điểm chính đầu tiên. Buổi không có ý thì dùng tóm tắt chung.
+ */
+function defaultQuote(detail: SessionDetail): QuoteContent | null {
+  const bullets = detail.topics
+    .flatMap((tp) => tp.bullets)
+    .sort((a, b) => a.timestamp_sec - b.timestamp_sec);
+  const b = bullets.find((x) => x.is_quote) ?? bullets[0];
+  if (b) {
+    const next = bullets[bullets.findIndex((x) => x.id === b.id) + 1];
+    const end = Math.min(Math.max(b.timestamp_sec + 1, next ? next.timestamp_sec : detail.duration_sec), b.timestamp_sec + 20);
+    const speaker = detail.speakers.find((s) => s.id === b.speaker_id);
+    return {
+      text: b.text,
+      speakerName: speaker?.display_name ?? "",
+      speakerColorIndex: speaker?.color_index ?? 0,
+      startSec: b.timestamp_sec,
+      endSec: end,
+    };
+  }
+  if (!detail.executive_summary) return null;
+  const speaker = detail.speakers[0];
+  return {
+    text: detail.executive_summary,
+    speakerName: speaker?.display_name ?? "",
+    speakerColorIndex: speaker?.color_index ?? 0,
+    startSec: 0,
+    endSec: Math.min(20, Math.max(1, detail.duration_sec)),
+  };
+}
+
 export function ShareSheet({
   detail,
   template,
@@ -98,7 +130,16 @@ export function ShareSheet({
       {option === "menu" ? (
         <ul className="divide-y divide-line">
           <OptionRow icon={Link2} label={t("optLink")} hint={t("optLinkHint")} onClick={() => setOption("link")} />
-          <OptionRow icon={Quote} label={t("optCard")} hint={t("optCardHint")} onClick={() => setOption("card")} />
+          <OptionRow
+            icon={Quote}
+            label={t("optCard")}
+            hint={t("optCardHint")}
+            onClick={() => {
+              // Vào từ menu chưa có ý nào: lấy ý mặc định thay vì để bảng trắng
+              setQuote((q) => q ?? defaultQuote(detail));
+              setOption("card");
+            }}
+          />
           <OptionRow
             icon={Scissors}
             label={t("optHighlights")}

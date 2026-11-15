@@ -916,6 +916,7 @@
     "revokeBody": "People with the link will no longer be able to open it.",
     "linkRevoked": "Link revoked",
     "cancel": "Cancel",
+    "pickQuoteLabel": "Line on the card",
     "styleLabel": "Card background",
     "stylePorcelain": "Porcelain",
     "styleMidnight": "Midnight navy",
