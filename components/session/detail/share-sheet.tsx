@@ -584,7 +584,7 @@ function HighlightsListen({
               progress={s === cur ? progress : i < slots.indexOf(cur) || finished ? 1 : 0}
             />
             <p className="mt-2 text-small text-ink-2">
-              <span className="font-medium tabular-nums text-ink-3">{formatClock(s.chunk.start)}</span> · {s.chunk.bullet.text}
+              <span className="font-medium tabular-nums text-ink-3">{formatClock(s.chunk.start)}</span>, {s.chunk.bullet.text}
             </p>
           </li>
         ))}

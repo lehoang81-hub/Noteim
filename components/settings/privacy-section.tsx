@@ -79,8 +79,8 @@ export function PrivacySection() {
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-body text-ink">{titleById[link.session_id] ?? link.session_id}</span>
                   <span className="block text-small text-ink-3">
-                    /p/{link.id} · {t("viewCountShort", { count: link.view_count })}
-                    {link.revoked ? ` · ${t("linkRevokedLabel")}` : ""}
+                    /p/{link.id}, {t("viewCountShort", { count: link.view_count })}
+                    {link.revoked ? `, ${t("linkRevokedLabel")}` : ""}
                   </span>
                 </span>
                 {!link.revoked ? (

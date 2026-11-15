@@ -146,7 +146,7 @@ export function ContactsSection() {
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-body text-ink">{c.name}</span>
                 <span className="block truncate text-small text-ink-3">
-                  {[c.role, c.email].filter(Boolean).join(" · ") || " "}
+                  {[c.role, c.email].filter(Boolean).join(", ") || " "}
                 </span>
               </span>
               <Button

@@ -203,7 +203,7 @@ export function ImportScreen() {
                 <p aria-live="polite" className="mt-0.5 text-small text-ink-2">
                   {picked.durationSec === null
                     ? t("readingDuration")
-                    : `${durationLabel(picked.durationSec)} · ${(picked.sizeBytes / 1_000_000).toLocaleString("vi-VN", { maximumFractionDigits: 1 })} MB`}
+                    : `${durationLabel(picked.durationSec)}, ${(picked.sizeBytes / 1_000_000).toLocaleString("vi-VN", { maximumFractionDigits: 1 })} MB`}
                 </p>
               </div>
               <Button

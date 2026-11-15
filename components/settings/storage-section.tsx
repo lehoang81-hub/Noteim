@@ -85,7 +85,7 @@ export function StorageSection() {
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-body text-ink">{s.title}</span>
                   <span className="block text-small text-ink-3">
-                    {durationLabel(s.duration_sec)} · {rowSize(s)} MB
+                    {durationLabel(s.duration_sec)}, {rowSize(s)} MB
                   </span>
                 </span>
                 <Button

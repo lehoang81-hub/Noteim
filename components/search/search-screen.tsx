@@ -275,7 +275,7 @@ export function SearchScreen() {
                   <Link href={`/s/${s.id}`} className="flex min-h-12 flex-col justify-center gap-0.5 py-2 hover:opacity-80">
                     <span className="text-body-strong font-semibold text-ink">{s.title}</span>
                     <span className="text-small text-ink-3">
-                      {weekdayDate(s.created_at)} · {durationLabel(s.duration_sec, (h, m) => (h > 0 ? tl("hours", { h, m }) : tl("minutes", { m: Number(m) })))}
+                      {weekdayDate(s.created_at)}, {durationLabel(s.duration_sec, (h, m) => (h > 0 ? tl("hours", { h, m }) : tl("minutes", { m: Number(m) })))}
                     </span>
                   </Link>
                 </li>
@@ -295,7 +295,7 @@ export function SearchScreen() {
                           <Highlighted text={segment.text} query={query} />
                         </span>
                         <span className="mt-0.5 block text-small text-ink-3">
-                          {titleById[session_id] ?? ""} · {formatClock(segment.start_sec)}
+                          {titleById[session_id] ?? ""}, {formatClock(segment.start_sec)}
                         </span>
                       </Link>
                     </li>

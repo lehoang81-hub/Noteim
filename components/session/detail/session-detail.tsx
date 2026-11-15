@@ -293,7 +293,7 @@ function Loaded({
         <TitleEditor id={detail.id} title={detail.title} />
         <p className="mt-1 text-small text-ink-2">
           {t("meta", { date: shortDate(detail.created_at), duration: durationLabel, template: templateName })}
-          {lastSent ? ` · ${t("sentAt", { date: shortDate(lastSent.sent_at) })}` : ""}
+          {lastSent ? `, ${t("sentAt", { date: shortDate(lastSent.sent_at) })}` : ""}
         </p>
         {detail.speakers.length ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
