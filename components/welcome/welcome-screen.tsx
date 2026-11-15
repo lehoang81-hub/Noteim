@@ -199,13 +199,14 @@ export function WelcomeScreen() {
         </section>
       ) : null}
 
-      {step === 3 ? <SampleStep profession={profession} onDone={() => void finish()} saving={saving} /> : null}
+      {step === 3 ? (
+        <SampleStep profession={profession} onDone={() => void finish()} onOpenSample={() => saveAndOpenSample()} saving={saving} />
+      ) : null}
     </main>
   );
 
-  async function finish() {
-    setSaving(true);
-    // Lưu tên và cách xưng hô người dùng vừa nhập
+  /** Lưu tên và cách xưng hô người dùng vừa nhập (dùng cho cả Hoàn tất lẫn mở buổi mẫu). */
+  async function saveProfile() {
     const patch: Parameters<typeof data.account.updateMe>[0] = {};
     if (name.trim()) patch.display_name = name.trim();
     patch.honorific = honorific === "" ? null : honorific;
@@ -214,13 +215,34 @@ export function WelcomeScreen() {
     } catch {
       // bỏ qua: bản mẫu vẫn chạy tiếp
     }
+  }
+
+  async function finish() {
+    setSaving(true);
+    await saveProfile();
     await markOnboarded();
     router.push("/");
+  }
+
+  /** Mở buổi mẫu cũng phải lưu hồ sơ trước (review PR #35: trước đây chỉ ghi onboarded_at). */
+  async function saveAndOpenSample() {
+    await saveProfile();
+    await markOnboarded();
   }
 }
 
 /** Bước 3: nghe thử buổi ghi mẫu của nghề đã chọn. */
-function SampleStep({ profession, onDone, saving }: { profession: Profession | null; onDone: () => void; saving: boolean }) {
+function SampleStep({
+  profession,
+  onDone,
+  onOpenSample,
+  saving,
+}: {
+  profession: Profession | null;
+  onDone: () => void;
+  onOpenSample: () => Promise<void>;
+  saving: boolean;
+}) {
   const t = useTranslations("welcome");
   const tp = useTranslations("debug");
   const router = useRouter();
@@ -228,9 +250,9 @@ function SampleStep({ profession, onDone, saving }: { profession: Profession | n
 
   function openSample() {
     if (!sample.data) return;
-    // Đã làm quen xong trước khi mở buổi mẫu: quay lại thư viện không hiện lại /welcome
-    void data.account.updateMe({ onboarded_at: dataNow().toISOString() }).catch(() => undefined);
-    router.push(`/s/${sample.data.id}?tour=1`);
+    const sid = sample.data.id;
+    // Lưu tên + xưng hô + cờ làm quen như bấm "Hoàn tất", xong mới mở buổi mẫu
+    void onOpenSample().then(() => router.push(`/s/${sid}?tour=1`));
   }
 
   return (
