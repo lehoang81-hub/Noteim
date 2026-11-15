@@ -133,19 +133,22 @@ export function SettingsScreen() {
         <Link href="/settings" className="inline-flex min-h-11 items-center text-small font-medium text-ink-2 underline underline-offset-2 hover:text-ink">
           {t("backToList")}
         </Link>
-        <h1 className="mt-2 font-display text-h1 font-semibold text-ink">{t(`sections.${section}`)}</h1>
       </div>
+
+      {/* Trang chỉ có một thẻ h1: tên mục đang mở, dùng chung cho mọi bề ngang (review PR #35) */}
+      <div className="px-page pt-2 lg:px-8 lg:pt-6">
+        <h1 className="mt-2 font-display text-h1 font-semibold text-ink lg:mt-0">{t(`sections.${section}`)}</h1>
+      </div>
+
       <div className="px-page pb-40 pt-4 lg:hidden">
         <SectionBody id={section} />
       </div>
 
       {/* Máy tính: giữ cột mục bên trái để đổi mục nhanh */}
       <div className="hidden px-page pt-6 lg:block lg:px-8">
-        <h1 className="sr-only">{t("title")}</h1>
         <div className="grid grid-cols-[240px_minmax(0,1fr)] gap-8 pb-16">
           <SectionMenu active={section} />
           <div className="max-w-[60ch]">
-            <h2 className="sr-only">{t(`sections.${section}`)}</h2>
             <SectionBody id={section} />
           </div>
         </div>
