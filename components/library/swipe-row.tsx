@@ -9,6 +9,16 @@ import { cn } from "@/lib/cn";
  * hiện hai nút Chia sẻ và Xóa. Chỉ kéo bằng ngón tay (pointer touch/pen),
  * máy tính dùng nút ⋯ trên hàng. Vuốt hàng khác hoặc chạm ra ngoài thì đóng
  * (người dùng điều khiển qua open/onOpenChange).
+ *
+ * Bài học chạm thật (review PR #35): trình duyệt di động coi chuyển động ngang
+ * là cử chỉ cuộn và bắn pointercancel ngay sau lần di chuyển đầu, nên hàng
+ * không bao giờ mở. Xử lý bằng ba việc cùng lúc:
+ * 1. touch-action: pan-y cho khung hàng — trình duyệt chỉ giữ quyền cuộn dọc,
+ *    chuyển động ngang thuộc về hàng.
+ * 2. setPointerCapture lúc chạm — mọi pointermove/up tiếp theo vẫn gửi về hàng
+ *    kể cả khi ngón tay trượt ra ngoài.
+ * 3. up() đọc vị trí kéo từ ref thay vì state — state có thể là giá trị cũ của
+ *    lần dựng trước khi vòng lặp sự kiện kịp dựng lại.
  */
 
 const ACTION_W = 76;
@@ -36,6 +46,8 @@ export function SwipeRow({
   const startX = useRef(0);
   const startY = useRef(0);
   const horizontal = useRef(false);
+  // Vị trí kéo mới nhất theo ref để up() luôn đọc đúng giá trị
+  const dragXRef = useRef(0);
 
   const x = open ? OPEN_X : dragX;
 
@@ -45,6 +57,11 @@ export function SwipeRow({
     startX.current = e.clientX;
     startY.current = e.clientY;
     horizontal.current = false;
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // Con trỏ đã nhấc lên trước khi kịp giữ: bỏ qua
+    }
   }
 
   function move(e: React.PointerEvent) {
@@ -54,21 +71,25 @@ export function SwipeRow({
     if (!horizontal.current && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) horizontal.current = true;
     if (horizontal.current) {
       // Chỉ vuốt sang trái, khép khi quá nửa bề ngang nút
-      setDragX(Math.min(0, Math.max(OPEN_X - 24, dx + (open ? OPEN_X : 0))));
+      const next = Math.min(0, Math.max(OPEN_X - 24, dx + (open ? OPEN_X : 0)));
+      dragXRef.current = next;
+      setDragX(next);
     }
   }
 
   function up() {
     if (!dragging) return;
     setDragging(false);
-    const target = dragX < OPEN_X / 2 ? OPEN_X : 0;
+    // Đọc từ ref: state dragX có thể chưa kịp cập nhật vào lần dựng này
+    const target = dragXRef.current < OPEN_X / 2 ? OPEN_X : 0;
+    dragXRef.current = 0;
     setDragX(0);
     onOpenChange(target !== 0);
   }
 
   return (
     <div
-      className="relative overflow-hidden"
+      className="relative touch-pan-y overflow-hidden" // pan-y: trình duyệt không giành cử chỉ ngang
       data-swipe-open={open ? "true" : undefined}
       onPointerDown={down}
       onPointerMove={move}
