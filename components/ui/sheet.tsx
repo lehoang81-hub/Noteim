@@ -2,6 +2,7 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion, useDragControls, type DragControls, type PanInfo } from "motion/react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
@@ -38,6 +39,20 @@ export function Sheet({
   const t = useTranslations("ui");
   const reduce = useReducedMotionSafe();
   const controls = useDragControls();
+  // Trả tiêu điểm về nút đã mở bảng khi đóng (M5-03): bảng mở bằng lệnh,
+  // không qua Dialog.Trigger nên Radix không biết trả về đâu.
+  const openerRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (open) {
+      openerRef.current = document.activeElement as HTMLElement | null;
+      return;
+    }
+    const el = openerRef.current;
+    openerRef.current = null;
+    if (el && document.contains(el)) {
+      window.setTimeout(() => el.focus(), 0);
+    }
+  }, [open]);
 
   function onDragEnd(_: unknown, info: PanInfo) {
     if (info.offset.y > 120 || info.velocity.y > 600) onOpenChange(false);
