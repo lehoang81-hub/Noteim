@@ -186,25 +186,13 @@ export function VisualTab({
       >
         <svg
           ref={timelineRef}
-          viewBox={`0 0 ${SVG_W} ${topics.length * 38 + 8}`}
+          viewBox={`0 0 ${SVG_W} ${topics.length * 44 + 8}`}
           className="w-full max-w-[560px]"
           role="img"
           aria-label={t("timeline")}
         >
-          <defs>
-            {topics.map((tp) => {
-              const i = topics.indexOf(tp);
-              const x = 46 + (tp.start_sec / detail.duration_sec) * (SVG_W - 52);
-              const w = Math.max(4, ((tp.end_sec - tp.start_sec) / detail.duration_sec) * (SVG_W - 52));
-              return (
-                <clipPath key={tp.id} id={`tlc-${detail.id}-${i}`}>
-                  <rect x={x} y={i * 38 + 10} width={w} height={16} rx={8} />
-                </clipPath>
-              );
-            })}
-          </defs>
           {topics.map((tp, i) => {
-            const y = i * 38;
+            const y = i * 44;
             const x = 46 + (tp.start_sec / detail.duration_sec) * (SVG_W - 52);
             const w = Math.max(4, ((tp.end_sec - tp.start_sec) / detail.duration_sec) * (SVG_W - 52));
             const c = colors.tags[tp.tag];
@@ -215,13 +203,16 @@ export function VisualTab({
                 className={canPlay ? "cursor-pointer" : undefined}
               >
                 {/* Vùng chạm cả hàng cho dễ bấm trên điện thoại */}
-                <rect x={0} y={y} width={SVG_W} height={36} fill="transparent" />
-                <text x={0} y={y + 24} fontSize={11} fill={colors.ink3}>
-                  {formatClock(tp.start_sec)}
-                </text>
-                <rect x={x} y={y + 10} width={w} height={16} rx={8} fill={c.bg} stroke={c.text} strokeWidth={1} />
-                <text x={x + 8} y={y + 22} fontSize={11} fill={c.text} clipPath={`url(#tlc-${detail.id}-${i})`}>
+                <rect x={0} y={y} width={SVG_W} height={42} fill="transparent" />
+                {/* Tên chủ đề nằm ngoài thanh, đọc trọn ở mọi bề ngang */}
+                <text x={0} y={y + 13} fontSize={11.5} fill={colors.ink}>
                   {tp.title}
+                </text>
+                {/* Thanh: chỉ thể hiện vị trí và độ dài theo thời lượng, màu theo nhãn */}
+                <rect x={46} y={y + 21} width={SVG_W - 52} height={10} rx={5} fill={colors.surface2} />
+                <rect x={x} y={y + 21} width={w} height={10} rx={5} fill={c.bg} stroke={c.text} strokeWidth={1} />
+                <text x={0} y={y + 37} fontSize={10.5} fill={colors.ink3}>
+                  {formatClock(tp.start_sec)}
                 </text>
               </g>
             );
