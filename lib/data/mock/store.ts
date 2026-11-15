@@ -14,7 +14,9 @@ import s8 from "@/fixtures/sessions/chua-tai-len.json";
 import templatesJson from "@/fixtures/templates.json";
 import userJson from "@/fixtures/user.json";
 import { z } from "zod";
+import type { RecordingDraft } from "../repository";
 import { Contact, GlossaryTerm, Quota, SessionFixture, Template, User } from "../types";
+import { clearStorageFull, markStorageFull } from "@/lib/storage-full";
 
 /*
  * Kho dữ liệu của bản giả: nạp fixture (kiểm tra bằng Zod), giữ trong bộ nhớ,
@@ -30,7 +32,7 @@ export type MockDb = {
   contacts: Contact[];
   templates: Template[];
   glossary: GlossaryTerm[];
-  sessions: SessionFixture[];
+  sessions: Array<SessionFixture & { /** Bản nháp của buổi ghi vừa ghi, dùng để sinh nội dung khi xử lý xong */ draft?: RecordingDraft }>;
 };
 
 function seed(): MockDb {
@@ -63,7 +65,9 @@ export function commit() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
   } catch {
-    // localStorage đầy hoặc bị chặn: thay đổi chỉ còn đến khi tải lại
+    // localStorage đầy hoặc bị chặn: thay đổi chỉ còn đến khi tải lại.
+    // Không im lặng nữa: báo dải "Bộ nhớ đầy" (PR #22, lỗi 3).
+    markStorageFull();
   }
   listeners.forEach((l) => l());
 }
@@ -76,6 +80,8 @@ export function resetDb() {
   } catch {
     // bỏ qua
   }
+  // Bộ nhớ trống trở lại: gở dải báo "Bộ nhớ đầy"
+  clearStorageFull();
   listeners.forEach((l) => l());
 }
 

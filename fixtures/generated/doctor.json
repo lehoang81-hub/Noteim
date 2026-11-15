@@ -1,0 +1,50 @@
+{
+  "executive_summary": "Bệnh nhân đến khám vì ho kéo dài hai tuần kèm đau họng, đã được chỉ định thêm cận lâm sàng và dặn dò rõ cách dùng thuốc cùng dấu hiệu cần tái khám sớm.",
+  "sections": {
+    "tpl-doctor-s1": {
+      "tag": "decided",
+      "title": "Lý do đến khám",
+      "bullets": [
+        "Ho kèm đờm kéo dài 2 tuần, nặng hơn về đêm",
+        "Đã uống thuốc mua ngoài 4 ngày nhưng không bớt"
+      ]
+    },
+    "tpl-doctor-s2": {
+      "tag": "pending",
+      "title": "Lời bệnh nhân kể",
+      "bullets": [
+        "Sáng nghẹt mũi, chiều hay đau đầu nhẹ vùng trán",
+        "Không sốt, ăn ngủ khá được, chưa mắc bệnh mãn tính"
+      ]
+    },
+    "tpl-doctor-s3": {
+      "tag": "figure",
+      "title": "Chỉ định đã thực hiện",
+      "bullets": [
+        "Chụp X-quang ngực thẳng tại cơ sở y tế gần nhà",
+        "Xét nghiệm công thức máu và CRP"
+      ]
+    },
+    "tpl-doctor-s4": {
+      "tag": "decided",
+      "title": "Dặn dò",
+      "bullets": [
+        "Uống thuốc đủ liệu trình 5 ngày, không tự tăng liều",
+        "Súc miệng nước muối, uống nước ấm, hạn chế đồ lạnh"
+      ]
+    },
+    "tpl-doctor-s5": {
+      "tag": "pending",
+      "title": "Hẹn tái khám",
+      "bullets": [
+        "Tái khám sau 5 ngày, mang theo kết quả X-quang"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task": "Nhắc bệnh nhân tái khám sau 5 ngày kèm kết quả X-quang",
+      "priority": "high"
+    }
+  ]
+}

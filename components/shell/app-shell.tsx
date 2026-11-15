@@ -7,6 +7,8 @@ import { useTranslations } from "next-intl";
 import { useSyncExternalStore } from "react";
 import { Banner } from "@/components/ui/feedback";
 import { RecordButton } from "@/components/ui/record-button";
+import { RecordingBar } from "@/components/record/recording-bar";
+import { ProcessingWatcher } from "./processing-watcher";
 import { cn } from "@/lib/cn";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { DebugPanel } from "./debug-panel";
@@ -17,6 +19,8 @@ import { DebugPanel } from "./debug-panel";
  *   (nhô lên), Việc. Tìm kiếm và Cài đặt ở góc trên phải của từng trang (TopBar).
  * - Máy tính (từ 1024px): cột trái 88px gồm logo, Thư viện, Việc, Cài đặt, nút ghi âm.
  * - Dải báo mất mạng nằm trên cùng.
+ * - /record không có khung ứng dụng; nút ghi âm ở mọi trang đi tới /record và
+ *   bắt đầu ghi luôn (luồng start nằm ở màn hình ghi).
  */
 
 function subscribeOnline(cb: () => void) {
@@ -46,6 +50,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const offline = useOffline();
 
+  // Màn hình ghi âm và màn hình xử lý không có khung ứng dụng
+  // (docs/03-screens.md mục 3, 4): tự lo nền, trạng thái và dải báo của riêng
+  // chúng. Bảng thử nghiệm và trình theo dõi xử lý vẫn sẵn.
+  if (pathname === "/record" || pathname.endsWith("/processing")) {
+    return (
+      <div className="min-h-dvh">
+        {children}
+        <ProcessingWatcher />
+        <DebugPanel />
+      </div>
+    );
+  }
+
   const items = [
     { href: "/", label: t("library"), icon: Library },
     { href: "/tasks", label: t("tasks"), icon: ListChecks },
@@ -53,6 +70,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-dvh lg:pl-[88px]">
+      {/* Đang ghi ở nơi khác: thanh sen trên cùng, chạm để về màn hình ghi (M2-02) */}
+      <RecordingBar />
+
       {/* Cột trái trên máy tính */}
       <nav
         aria-label={t("nav")}
@@ -94,6 +114,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       ) : null}
 
       <div className="pb-[calc(88px+env(safe-area-inset-bottom))] lg:pb-0">{children}</div>
+
+      <ProcessingWatcher />
 
       {/* Thanh điều hướng dưới trên điện thoại */}
       <nav

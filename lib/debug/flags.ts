@@ -20,6 +20,14 @@ export type DebugFlags = {
   quotaOut: boolean;
   /** Thư viện rỗng */
   emptyLibrary: boolean;
+  /** Tua nhanh đồng hồ ghi x30 (kiểm gợi ý im lặng, hạn mức phiên) */
+  recordSpeed30: boolean;
+  /** Ép trạng thái micro bị từ chối */
+  micDenied: boolean;
+  /** Ép trạng thái micro bị chiếm sau 10 giây */
+  micTaken: boolean;
+  /** Ép cảnh báo bộ nhớ trình duyệt đã đầy */
+  storageFull: boolean;
   profession: Profession | null;
   plan: "free" | "pro" | null;
 };
@@ -32,6 +40,10 @@ const DEFAULTS: DebugFlags = {
   failLoad: false,
   quotaOut: false,
   emptyLibrary: false,
+  recordSpeed30: false,
+  micDenied: false,
+  micTaken: false,
+  storageFull: false,
   profession: null,
   plan: null,
 };

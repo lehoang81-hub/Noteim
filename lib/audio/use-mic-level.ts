@@ -6,14 +6,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * Đọc âm lượng micro (0 đến 1) để vẽ dải giọng sống.
  * Chỉ đo âm lượng: không ghi, không lưu, không gửi đi đâu.
  * status: "idle" | "asking" | "on" | "denied" | "unsupported"
+ * onEnded: micro bị nơi khác chiếm hoặc ngắt đột ngột (sự kiện ended của track).
  */
 
 export type MicStatus = "idle" | "asking" | "on" | "denied" | "unsupported";
 
-export function useMicLevel() {
+export function useMicLevel(opts?: { onEnded?: () => void }) {
   const [status, setStatus] = useState<MicStatus>("idle");
   const [level, setLevel] = useState(0);
   const cleanup = useRef<() => void>(() => {});
+  const onEndedRef = useRef(opts?.onEnded);
+
+  useEffect(() => {
+    onEndedRef.current = opts?.onEnded;
+  }, [opts?.onEnded]);
 
   const stop = useCallback(() => {
     cleanup.current();
@@ -51,6 +57,9 @@ export function useMicLevel() {
         raf = requestAnimationFrame(loop);
       };
       raf = requestAnimationFrame(loop);
+      stream.getTracks().forEach((t) =>
+        t.addEventListener("ended", () => onEndedRef.current?.()),
+      );
       cleanup.current = () => {
         cancelAnimationFrame(raf);
         stream.getTracks().forEach((t) => t.stop());

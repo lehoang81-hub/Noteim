@@ -1,0 +1,55 @@
+{
+  "executive_summary": "Buổi tư vấn làm rõ trình tự sự việc tranh chấp hợp đồng thuê, xác định các yêu cầu có cơ sở pháp lý và liệt kê giấy tờ khách cần bổ sung trước khi gửi thư yêu cầu.",
+  "sections": {
+    "tpl-lawyer-s1": {
+      "tag": "decided",
+      "title": "Diễn biến sự việc",
+      "bullets": [
+        "Bên thuê chậm trả tiền thuê 3 kỳ liên tiếp từ tháng 8",
+        "Đã gửi thư nhắc hai lần, bên thuê hẹn nhưng chưa trả lời bằng văn bản"
+      ]
+    },
+    "tpl-lawyer-s2": {
+      "tag": "pending",
+      "title": "Yêu cầu của khách hàng",
+      "bullets": [
+        "Muốn đòi tiền thuê và tiền lãi chậm trả theo hợp đồng",
+        "Cân nhắc đơn phương chấm dứt hợp đồng nếu không thanh toán"
+      ]
+    },
+    "tpl-lawyer-s3": {
+      "tag": "idea",
+      "title": "Cơ sở pháp lý cần xem",
+      "bullets": [
+        "Điều khoản chấm dứt hợp đồng và phạt vi phạm tại mục 9",
+        "Quy định về lãi chậm trả trong nghị định liên quan"
+      ]
+    },
+    "tpl-lawyer-s4": {
+      "tag": "pending",
+      "title": "Tài liệu cần bổ sung",
+      "bullets": [
+        "Bản gốc hợp đồng và các biên bản bàn giao mặt bằng",
+        "Ủy nhiệm chi hoặc sao kê chuyển khoản 3 kỳ gần nhất"
+      ]
+    },
+    "tpl-lawyer-s5": {
+      "tag": "decided",
+      "title": "Mốc thời hạn",
+      "bullets": [
+        "Gửi thư yêu cầu thanh toán trước ngày 25/11",
+        "Nếu không có phản hồi, nộp đơn khởi kiện đầu tuần sau"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task": "Soạn thư yêu cầu thanh toán gửi bên thuê",
+      "priority": "high"
+    },
+    {
+      "task": "Lập danh mục giấy tờ khách cần bổ sung",
+      "priority": "medium"
+    }
+  ]
+}
