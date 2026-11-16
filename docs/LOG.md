@@ -173,3 +173,12 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 - **Mục 6 (nên sửa)**: ô tích máy tính đè lên lề (absolute left-0, lề 32px) thay vì chiếm chỗ — tiêu đề hàng thẳng hàng với "Hôm nay"/"Chào chị Mai" (đo lệch 0px).
 - Điều người sau cần biết: (1) seed-data.ts chỉ được nạp bằng import() động — đừng import tĩnh vào store.ts nếu không muốn fixture quay lại chunk khởi tạo; (2) người nói chưa đặt tên: `display_name === null`, hiển thị qua `speakerLabel(sp, speakers, t)` với `t = useTranslations()` cấp gốc; (3) `normalizeSpeakerNames` chạy ở hai chỗ: kho từ localStorage (store.ts) và parse fixture (seed-data.ts); (4) Motion: thêm component động mới phải dùng `m.*` (LazyMotion `strict` sẽ báo lỗi nếu dùng `motion.*`); (5) đo Lighthouse route có trạng thái theo localStorage phải dùng hồ sơ đã làm quen + `--disable-storage-reset` + xóa cache HTTP mỗi lần, luôn đọc `finalDisplayedUrl`.
 - Đã kiểm bằng trình duyệt: ghi âm bằng "Am thanh mẫu" → giữ Kết thúc 0,95s → xử lý 5 bước → tóm tắt mới sinh qua module động; đặt tên/xóa liên hệ không lỗi; trang công khai không tồn tại báo đúng; `pnpm lint`, `pnpm typecheck`, `pnpm build` sạch.
+
+## 2026-11-16, Claude, merge M5, xong bản mockup
+
+- M5 đã merge (PR #41, Hoang đồng ý). Đóng #36 đến #39 và danh sách hoàn thiện #27.
+- Lần kiểm thử đầu: số Lighthouse của `/` và `/s` đo nhầm màn `/welcome` (trình duyệt chưa làm quen), nguyên nhân "độ trễ giả" không đúng (đặt độ trễ về 0 điểm không đổi), CLS `/search` 0,163, ô tích lồng trong nút, nhãn người nói chưa dịch. Agent sửa đủ, reviewer thử lại đạt.
+- Claude sửa thêm trên nhánh: số ít số nhiều cho 12 chuỗi tiếng Anh, nguyên nhân chậm trong `07-handover.md`.
+- Bài học: đo Lighthouse phải dùng người dùng đã làm quen, cùng origin, xóa cache HTTP mỗi lần, kiểm `finalDisplayedUrl`. Chuỗi tiếng Anh có số đếm phải dùng ICU plural.
+- Còn dưới 85 điểm hiệu năng: `/` 73, `/s/[id]` 70, `/record` 82, `/p/[id]` 79. Cách xử lý khi nối backend ở `07-handover.md` mục 6.
+- Việc tiếp theo: nối database thật theo `docs/07-handover.md`.

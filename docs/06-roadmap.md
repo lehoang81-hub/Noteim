@@ -80,16 +80,18 @@ Nghiệm thu:
 - [ ] Dọn bản gốc một buổi ghi: hộp xác nhận đúng nội dung, sau đó buổi ghi hiển thị đúng dạng "chỉ còn tóm tắt"
 - [ ] Đổi nghề trong làm quen thì mẫu mặc định và buổi ghi mẫu đổi theo
 
-## M5. Hoàn thiện
+## M5. Hoàn thiện (xong 16/11/2026, PR #41)
+
+Bản mockup hoàn chỉnh M0 đến M5. Bước tiếp theo là nối database thật theo `docs/07-handover.md`.
 
 Các điểm nhỏ phát hiện trong lúc kiểm thử được gom ở issue #27.
 
 | Issue | Việc |
 | --- | --- |
-| M5-01 (#36) | Rà giao diện tối và bố cục máy tính cho mọi màn hình. Dọn #27, gồm nhấn giữ để chọn nhiều trong thư viện. |
-| M5-02 (#37) | Tiếng Anh đầy đủ. Rà chuỗi tiếng Việt theo mục "Giọng văn". |
-| M5-03 (#38) | Rà khả năng tiếp cận: bàn phím, trình đọc màn hình, tương phản, vùng chạm. |
-| M5-04 (#39) | Rà hiệu năng trên điện thoại tầm trung. Viết `docs/07-handover.md`: danh sách việc để nối database theo `04-data-contract.md`. |
+| M5-01 (#36, xong) | Rà giao diện tối và bố cục máy tính cho mọi màn hình. Dọn #27, gồm nhấn giữ để chọn nhiều trong thư viện. |
+| M5-02 (#37, xong) | Tiếng Anh đầy đủ. Rà chuỗi tiếng Việt theo mục "Giọng văn". |
+| M5-03 (#38, xong) | Rà khả năng tiếp cận: bàn phím, trình đọc màn hình, tương phản, vùng chạm. |
+| M5-04 (#39, xong) | Rà hiệu năng trên điện thoại tầm trung. Viết `docs/07-handover.md`: danh sách việc để nối database theo `04-data-contract.md`. |
 
 Nghiệm thu:
 
