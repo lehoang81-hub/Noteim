@@ -8,7 +8,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
 import { SwipeRow } from "@/components/library/swipe-row";
-import { ShareSheet } from "@/components/session/detail/share-sheet";
+import dynamic from "next/dynamic";
+
+// Bảng chia sẻ chứa canvas thẻ trích dẫn: nạp chậm khi mở (M5-04)
+const ShareSheet = dynamic(() => import("@/components/session/detail/share-sheet").then((m) => m.ShareSheet), { ssr: false });
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chips";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";

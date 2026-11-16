@@ -14,7 +14,8 @@ const bricolage = Bricolage_Grotesque({
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["vietnamese", "latin"],
-  weight: ["400", "500", "600", "700"],
+  // 400-600 là những trọng lượng chữ thân dùng thật; 700 chỉ có trên font-display
+  weight: ["400", "500", "600"],
   variable: "--font-bevietnam",
   display: "swap",
 });

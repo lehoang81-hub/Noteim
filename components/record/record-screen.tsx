@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState } from "react";
 import { Camera, ChevronDown, HardDrive, Mic, MicVocal } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
@@ -8,10 +9,12 @@ import { useRouter } from "next/navigation";
 import { RibbonLive } from "@/components/ribbon/ribbon-live";
 import { RibbonThumb } from "@/components/ribbon/ribbon-thumb";
 import { formatClock, resample } from "@/components/ribbon/draw";
-import { BookmarkButton } from "@/components/record/bookmark-button";
-import { HoldToEndButton } from "@/components/record/hold-to-end-button";
-import { RecordFeed } from "@/components/record/record-feed";
-import { ConsentSheet, MicPermissionSheet, TemplateSheet } from "@/components/record/sheets";
+// Phần chỉ hiện khi đang ghi: nạp chậm để màn chuẩn bị nhẹ hơn (M5-04)
+const BookmarkButton = dynamic(() => import("@/components/record/bookmark-button").then((m) => m.BookmarkButton), { ssr: false });
+const RecordFeed = dynamic(() => import("@/components/record/record-feed").then((m) => m.RecordFeed), { ssr: false });
+const HoldToEndButton = dynamic(() => import("@/components/record/hold-to-end-button").then((m) => m.HoldToEndButton), { ssr: false });
+const TemplateSheet = dynamic(() => import("@/components/record/sheets").then((m) => m.TemplateSheet), { ssr: false });
+import { ConsentSheet, MicPermissionSheet } from "@/components/record/sheets";
 import { Button } from "@/components/ui/button";
 import { Banner, MicDrawing } from "@/components/ui/feedback";
 import { Sheet } from "@/components/ui/sheet";
@@ -23,7 +26,7 @@ import { data, useData } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { shortDate } from "@/lib/format";
 import { templateName } from "@/lib/data/localize";
-import { micGrantedOnce, markMicGranted } from "@/lib/record/mic-permission";
+import { markMicGranted, useMicGateSeed } from "@/lib/record/mic-permission";
 import { fileToDataUrl } from "@/lib/record/photo";
 import { useStorageFull } from "@/lib/storage-full";
 import {
@@ -118,7 +121,13 @@ export function RecordScreen() {
   const ribbonBoxId = useId();
 
   /** Bảng đang chờ trước khi ghi; null là không chờ gì (đang ghi hoặc đã xong luồng). */
-  const [gate, setGate] = useState<Gate | null>("boot");
+  // Màn chủ dựng sẵn bảng xin quyền (M5-04); máy đã cấp quyền thì đổi về
+  // "boot" sau khi hydrate, không gây lệch khớp.
+  const seed = useMicGateSeed();
+  const [gate, setGate] = useState<Gate | null>(seed);
+  useEffect(() => {
+    if (!decided.current) setGate(seed);
+  }, [seed]);
   const [momentOn, setMomentOn] = useState(false);
   const [folding, setFolding] = useState(false);
   const [showAnnounce, setShowAnnounce] = useState(false);
@@ -194,6 +203,12 @@ export function RecordScreen() {
       const id = window.setTimeout(() => setGate(null), 0);
       return () => window.clearTimeout(id);
     }
+    if (flags.micDenied) {
+      decided.current = true;
+      const id = window.setTimeout(() => setGate("denied"), 0);
+      return () => window.clearTimeout(id);
+    }
+    if (seed === "permission") return; // lần đầu: bảng xin quyền đang hiện
     if (!me.data) return; // chờ hồ sơ để biết có bật nhắc đồng ý hay không
     if (!quota.data && !quota.error) return; // chờ hạn mức (lỗi thì bỏ qua kiểm)
     decided.current = true;
@@ -203,21 +218,13 @@ export function RecordScreen() {
       const id = window.setTimeout(() => setGate("quota"), 0);
       return () => window.clearTimeout(id);
     }
-    if (flags.micDenied) {
-      const id = window.setTimeout(() => setGate("denied"), 0);
-      return () => window.clearTimeout(id);
-    }
-    if (!micGrantedOnce()) {
-      const id = window.setTimeout(() => setGate("permission"), 0);
-      return () => window.clearTimeout(id);
-    }
     if (me.data.consent_reminder) {
       const id = window.setTimeout(() => setGate("consent"), 0);
       return () => window.clearTimeout(id);
     }
     const id = window.setTimeout(() => beginRef.current(false), 0);
     return () => window.clearTimeout(id);
-  }, [me.data, quota.data, quota.error, recording.status, flags.micDenied]);
+  }, [seed, me.data, quota.data, quota.error, recording.status, flags.micDenied]);
 
   // Được cấp quyền micro: ghi nhớ để lần sau bỏ qua bảng xin quyền, rồi hỏi
   // đồng ý (nếu bật) hoặc ghi luôn. Bị từ chối thật thì sang trang giải thích.
@@ -658,6 +665,8 @@ export function RecordScreen() {
         type="file"
         accept="image/*"
         capture="environment"
+        aria-label={t("addPhoto")}
+        tabIndex={-1}
         className="hidden"
         onChange={(e) => {
           void onPhotoPicked(e.target.files?.[0]);

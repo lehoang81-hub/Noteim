@@ -15,13 +15,24 @@ import { useOffline } from "@/components/shell/app-shell";
  * - Có mạng lại (hoặc tắt "Mất mạng" trong bảng thử nghiệm): buổi ghi đang
  *   chờ tải lên tự chuyển sang xử lý, kèm thông báo "Đã có mạng. Đang tải lên…".
  */
+let watcherWarmed = false;
+
 export function ProcessingWatcher() {
   const t = useTranslations("processing");
   const toast = useToast();
   const router = useRouter();
   const pathname = usePathname();
   const offline = useOffline();
-  const list = useData(() => data.sessions.list(), []);
+  // Lần đọc đầu chờ 4 giây (M5-04): người theo dõi không cần dữ liệu buổi ghi
+  // ngay khi mở màn hình, trì hoãn để không giành băng thông/CPU với lần vẽ đầu.
+  // Các lần đọc sau (dữ liệu đổi) chạy ngay nên thông báo không trễ.
+  const list = useData(() => {
+    if (watcherWarmed) return data.sessions.list();
+    watcherWarmed = true;
+    return new Promise<Awaited<ReturnType<typeof data.sessions.list>>>((resolve) => setTimeout(resolve, 4000)).then(
+      () => data.sessions.list(),
+    );
+  }, []);
   const prev = useRef<Map<string, string>>(new Map());
 
   /* Xử lý xong khi đã rời màn hình xử lý */

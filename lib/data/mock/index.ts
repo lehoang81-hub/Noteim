@@ -3,7 +3,7 @@
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
 import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture, type ShareLink } from "../types";
-import { MOCK_NOW, commit, getDb } from "./store";
+import { MOCK_NOW, commit, getDb, samplesReady, sessionsReady, type StoredSession } from "./store";
 import { buildSessionContent } from "./generate";
 
 /*
@@ -18,16 +18,16 @@ function wait(): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function read<T>(fn: () => T): Promise<T> {
+async function read<T>(fn: () => T | Promise<T>): Promise<T> {
   await wait();
   if (getFlags().failLoad) throw new DataError("server");
-  return structuredClone(fn());
+  return structuredClone(await fn());
 }
 
-async function write<T>(fn: () => T): Promise<T> {
+async function write<T>(fn: () => T | Promise<T>): Promise<T> {
   await wait();
   if (getFlags().offline) throw new DataError("offline");
-  const out = fn();
+  const out = await fn();
   commit();
   return structuredClone(out);
 }
@@ -41,16 +41,21 @@ function foldVi(s: string): string {
     .replace(/đ/g, "d");
 }
 
-function findFixture(id: string): SessionFixture & { draft?: RecordingDraft; chat_log?: ChatMessage[] } {
-  const db = getDb();
-  // Buổi ghi mẫu (M4-04) nằm ngoài danh sách chính nhưng vẫn mở được chi tiết
-  const fx = db.sessions.find((s) => s.detail.id === id) ?? db.samples.find((s) => s.detail.id === id);
+async function findFixture(id: string): Promise<StoredSession & { draft?: RecordingDraft; chat_log?: ChatMessage[] }> {
+  const db = await sessionsReady();
+  // Buổi ghi mẫu (M4-04) nằm ngoài danh sách chính nhưng vẫn mở được chi tiết;
+  // chỉ đợi nạp mẫu khi id là buổi mẫu (M5-04 — thư viện không trả giá này)
+  let fx = db.sessions.find((s) => (s.listDetail ?? s.detail).id === id);
+  if (!fx && id.startsWith("s-sample-")) {
+    await samplesReady();
+    fx = db.samples.find((s) => (s.listDetail ?? s.detail).id === id);
+  }
   if (!fx) throw new DataError("not_found");
   return fx;
 }
 
 /** Tách phần nhẹ của buổi ghi (dùng cho thư viện). */
-function toSession(d: SessionDetail): Session {
+function toSession(d: Session | SessionDetail): Session {
   // Zod bỏ các trường không thuộc Session
   return SessionSchema.parse(d);
 }
@@ -80,12 +85,15 @@ function refreshCounts(d: SessionDetail) {
   }
 }
 
-function matches(d: SessionDetail, f: SessionFilter | undefined): boolean {
+function matches(d: Session | SessionDetail, f: SessionFilter | undefined): boolean {
   if (!f) return true;
   if (f.template_id && d.template_id !== f.template_id) return false;
   if (f.has_open_tasks && d.open_task_count === 0) return false;
   if (f.range === "week" && MOCK_NOW.getTime() - new Date(d.created_at).getTime() > 7 * 86400_000) return false;
   if (f.query) {
+    // Tìm theo query chỉ dùng cho danh sách có tóm tắt (SessionDetail);
+    // danh sách thư viện (Session) không lọc theo từ.
+    if (!("topics" in d)) return false;
     const q = f.query.toLocaleLowerCase("vi");
     const hay = [d.title, d.executive_summary, ...d.topics.flatMap((t) => [t.title, ...t.bullets.map((b) => b.text)])]
       .join(" ")
@@ -186,26 +194,33 @@ if (typeof window !== "undefined") {
       }
     }
   };
-  // Chạy sau khung vẽ đầu để localStorage đã sẵn sàng
+  // Chạy sau khung vẽ đầu để localStorage đã sẵn sàng. Kho khôi phục từ
+  // localStorage đã có buổi ghi; kho mới tạo rỗng thì không chủ động kéo
+  // fixture về chỉ để kiểm resume (M5-04) — nơi đọc buổi ghi đầu tiên sẽ nạp.
   window.setTimeout(resume, 0);
+  window.setTimeout(() => {
+    if (getDb().sessions.length > 0) resume();
+  }, 3000);
 }
 
 export const mockSource: DataSource = {
   sessions: {
     list: (filter) =>
-      read(() => {
+      read(async () => {
+        await sessionsReady();
         if (getFlags().emptyLibrary) return [];
         return getDb()
-          .sessions.map((s) => s.detail)
+          .sessions.map((s) => s.listDetail ?? s.detail)
           .filter((d) => matches(d, filter))
           .sort((a, b) => b.created_at.localeCompare(a.created_at))
           .map(toSession);
       }),
-    get: (id) => read(() => findFixture(id).detail),
-    getTranscript: (id) => read(() => findFixture(id).transcript),
+    get: (id) => read(async () => (await findFixture(id)).detail),
+    getTranscript: (id) => read(async () => (await findFixture(id)).transcript),
     getVisuals: (id) =>
-      read(() => {
-        const fx = findFixture(id);
+      read(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
         const d = fx.detail;
         return {
           timeline: d.topics.map((t) => ({ topic_id: t.id, start_sec: t.start_sec, end_sec: t.end_sec, tag: t.tag })),
@@ -214,12 +229,14 @@ export const mockSource: DataSource = {
         };
       }),
     update: (id, patch) =>
-      write(() => {
-        Object.assign(findFixture(id).detail, patch);
+      write(async () => {
+        await sessionsReady();
+        Object.assign((await findFixture(id)).detail, patch);
       }),
     updateBullet: (sessionId, bulletId, text) =>
-      write(() => {
-        for (const t of findFixture(sessionId).detail.topics)
+      write(async () => {
+        await sessionsReady();
+        for (const t of (await findFixture(sessionId)).detail.topics)
           for (const b of t.bullets)
             if (b.id === bulletId) {
               b.text = text;
@@ -227,23 +244,26 @@ export const mockSource: DataSource = {
             }
       }),
     updateSegment: (sessionId, segmentId, text) =>
-      write(() => {
-        const seg = findFixture(sessionId).transcript.find((s) => s.id === segmentId);
+      write(async () => {
+        await sessionsReady();
+        const seg = (await findFixture(sessionId)).transcript.find((s) => s.id === segmentId);
         if (!seg) throw new DataError("not_found");
         seg.text = text;
         seg.edited = true;
       }),
     reassignSegment: (sessionId, segmentId, speakerId) =>
-      write(() => {
-        const fx = findFixture(sessionId);
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
         const seg = fx.transcript.find((s) => s.id === segmentId);
         const sp = fx.detail.speakers.find((s) => s.id === speakerId);
         if (!seg || !sp) throw new DataError("not_found");
         seg.speaker_id = speakerId;
       }),
     nameSpeaker: (sessionId, speakerId, contactId) =>
-      write(() => {
-        const d = findFixture(sessionId).detail;
+      write(async () => {
+        await sessionsReady();
+        const d = (await findFixture(sessionId)).detail;
         const contact = getDb().contacts.find((c) => c.id === contactId);
         const sp = d.speakers.find((s) => s.id === speakerId);
         if (!sp || !contact) throw new DataError("not_found");
@@ -259,8 +279,9 @@ export const mockSource: DataSource = {
         sp.display_name = contact.name;
       }),
     mergeSpeakers: (sessionId, fromId, intoId) =>
-      write(() => {
-        const d = findFixture(sessionId).detail;
+      write(async () => {
+        await sessionsReady();
+        const d = (await findFixture(sessionId)).detail;
         const from = d.speakers.find((s) => s.id === fromId);
         const into = d.speakers.find((s) => s.id === intoId);
         if (!from || !into) throw new DataError("not_found");
@@ -270,7 +291,7 @@ export const mockSource: DataSource = {
         // nhờ đó mọi nơi đổi màu theo người giữ lại
         d.speaker_spans.forEach((s) => s.speaker_id === fromId && (s.speaker_id = intoId));
         d.topics.forEach((t) => t.bullets.forEach((b) => b.speaker_id === fromId && (b.speaker_id = intoId)));
-        findFixture(sessionId).transcript.forEach((g) => g.speaker_id === fromId && (g.speaker_id = intoId));
+        (await findFixture(sessionId)).transcript.forEach((g) => g.speaker_id === fromId && (g.speaker_id = intoId));
       }),
     createFromRecording: (draft) => {
       // Mất mạng: vẫn tạo buổi ghi trên máy, trạng thái chờ tải lên (M2-04);
@@ -352,18 +373,20 @@ export const mockSource: DataSource = {
       };
     },
     retryProcessing: (id) =>
-      write(() => {
-        const d = findFixture(id).detail;
+      write(async () => {
+        await sessionsReady();
+        const d = (await findFixture(id)).detail;
         d.status = "processing";
         d.processing_step = 1;
         delete d.failure_reason;
         scheduleProcessing(id);
       }),
     purgeRaw: (ids) =>
-      write(() => {
+      write(async () => {
+        await sessionsReady();
         let freed = 0;
         for (const id of ids) {
-          const fx = findFixture(id);
+          const fx = await findFixture(id);
           freed += fx.detail.size_bytes;
           fx.detail.storage_status = "essence_only";
           fx.detail.size_bytes = 0;
@@ -373,7 +396,8 @@ export const mockSource: DataSource = {
         return { freed_bytes: freed };
       }),
     remove: (id) =>
-      write(() => {
+      write(async () => {
+        await sessionsReady();
         const db = getDb();
         // Giữ buổi ghi trong removed để "Hoàn tác" đưa về đúng chỗ cũ (M4-01)
         const i = db.sessions.findIndex((s) => s.detail.id === id);
@@ -382,7 +406,8 @@ export const mockSource: DataSource = {
         db.removed.push(fx);
       }),
     restore: (id) =>
-      write(() => {
+      write(async () => {
+        await sessionsReady();
         const db = getDb();
         const i = db.removed.findIndex((s) => s.detail.id === id);
         if (i < 0) throw new DataError("not_found");
@@ -393,8 +418,9 @@ export const mockSource: DataSource = {
         else db.sessions.splice(at, 0, fx);
       }),
     reprocess: (id, templateId) =>
-      write(() => {
-        const fx = findFixture(id);
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
         const d = fx.detail;
         // Chuyển các chủ đề sang phần tương ứng của mẫu mới theo thứ tự,
         // nhờ đó tóm tắt hiện đủ các phần của mẫu mới (bản giả)
@@ -415,7 +441,8 @@ export const mockSource: DataSource = {
         scheduleProcessing(id);
       }),
     search: (query) =>
-      read(() => {
+      read(async () => {
+        await sessionsReady();
         const q = foldVi(query.trim());
         const out: SearchResult = { sessions: [], segments: [], tasks: [] };
         if (!q) return out;
@@ -449,7 +476,8 @@ export const mockSource: DataSource = {
         return out;
       }),
     createFromImport: (input) =>
-      write(() => {
+      write(async () => {
+        await sessionsReady();
         const db = getDb();
         const id = `s-new-${Date.now()}`;
         const now = new Date().toISOString();
@@ -500,7 +528,8 @@ export const mockSource: DataSource = {
         return { id };
       }),
     getSample: (profession) =>
-      read(() => {
+      read(async () => {
+        await samplesReady();
         const db = getDb();
         const tpl = db.templates.find((t) => t.profession === profession);
         const sample = db.samples.find((s) => s.detail.template_id === tpl?.id) ?? db.samples[0];
@@ -511,20 +540,23 @@ export const mockSource: DataSource = {
 
   tasks: {
     listAll: (filter) =>
-      read(() => {
+      read(async () => {
+        await sessionsReady();
         const items = getDb().sessions.flatMap((s) => s.detail.action_items);
         return filter?.mine ? items.filter((a) => a.assignee_contact_id === "c-me") : items;
       }),
     upsert: (item) =>
-      write(() => {
-        const d = findFixture(item.session_id).detail;
+      write(async () => {
+        await sessionsReady();
+        const d = (await findFixture(item.session_id)).detail;
         const i = d.action_items.findIndex((a) => a.id === item.id);
         if (i >= 0) d.action_items[i] = item;
         else d.action_items.push(item);
         refreshCounts(d);
       }),
     toggleDone: (id) =>
-      write(() => {
+      write(async () => {
+        await sessionsReady();
         for (const fx of getDb().sessions) {
           const item = fx.detail.action_items.find((a) => a.id === id);
           if (item) {
@@ -540,14 +572,15 @@ export const mockSource: DataSource = {
 
   chat: {
     history: (sessionId) =>
-      read(() => {
-        const fx = findFixture(sessionId);
+      read(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
         return fx.chat_log ?? [];
       }),
     ask: async (sessionId, question, onToken) => {
       await wait();
       if (getFlags().failLoad) throw new DataError("server");
-      const fx = findFixture(sessionId);
+      const fx = await findFixture(sessionId);
       const hit = fx.chat.find((c) => c.question.trim().toLowerCase() === question.trim().toLowerCase());
       const answer = hit?.answer ?? "Bản mockup chỉ trả lời được các câu gợi ý.";
       // Lịch sử hỏi đáp lưu theo buổi ghi (M3-03): cả câu không có trong fixture
@@ -615,7 +648,8 @@ export const mockSource: DataSource = {
         if (link) link.view_count += 1;
       }),
     getPublic: (shareId, password) =>
-      read(() => {
+      read(async () => {
+        await sessionsReady();
         const db = getDb();
         const link = db.shares.find((s) => s.id === shareId);
         if (!link) return "not_found" as const;
@@ -645,8 +679,9 @@ export const mockSource: DataSource = {
 
   mail: {
     preview: (sessionId, recipientContactIds, mode) =>
-      read(() => {
-        const d = findFixture(sessionId).detail;
+      read(async () => {
+        await sessionsReady();
+        const d = (await findFixture(sessionId)).detail;
         const drafts: EmailDraft[] = [];
         for (const cid of recipientContactIds) {
           if (mode !== "tasks")
@@ -663,7 +698,8 @@ export const mockSource: DataSource = {
         return drafts;
       }),
     send: (drafts) =>
-      write(() => {
+      write(async () => {
+        await sessionsReady();
         // Cờ "Gửi email lỗi một người" (M3-04): đúng một người thất bại,
         // những người khác vẫn tính là đã gửi. Mỗi người chỉ lỗi một lần
         // để nút "Gửi lại" gửi được (giống thật: lỗi rồi thì gửi lại được).
@@ -678,7 +714,7 @@ export const mockSource: DataSource = {
         const okCount = results.filter((r) => r.ok).length;
         if (sessionId && okCount > 0) {
           // Dùng ngày của mockup (dataNow) để khớp với các ngày khác trong dữ liệu mẫu
-          findFixture(sessionId).detail.send_history.push({
+          (await findFixture(sessionId)).detail.send_history.push({
             sent_at: MOCK_NOW.toISOString(),
             recipient_count: okCount,
           });
@@ -756,7 +792,8 @@ export const mockSource: DataSource = {
         db.glossary = db.glossary.filter((g) => g.id !== id);
       }),
     contactUsage: (id) =>
-      read(() => {
+      read(async () => {
+        await sessionsReady();
         const out: string[] = [];
         for (const fx of getDb().sessions) {
           const used = fx.detail.speakers.some((s) => s.contact_id === id);
@@ -765,7 +802,8 @@ export const mockSource: DataSource = {
         return out;
       }),
     removeContact: (id) =>
-      write(() => {
+      write(async () => {
+        await sessionsReady();
         const db = getDb();
         db.contacts = db.contacts.filter((c) => c.id !== id);
         // Người nói đang gán liên hệ này về lại chưa đặt tên, ở mọi buổi ghi
@@ -785,7 +823,8 @@ export const mockSource: DataSource = {
         tpl.sections = patch.sections;
       }),
     exportAll: () =>
-      read(() => {
+      read(async () => {
+        await sessionsReady();
         const db = getDb();
         // Mật khẩu link chia sẻ không xuất ra file
         const shares = db.shares.map((s) => toShareLink(s));

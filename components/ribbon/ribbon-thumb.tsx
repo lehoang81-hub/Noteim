@@ -32,14 +32,27 @@ export function RibbonThumb({
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
-    const ctx = prepareCanvas(canvas, width, HEIGHT);
-    if (!ctx) return;
-    const neutral = tokenColor(canvas, "--ink-3");
-    ctx.globalAlpha = muted ? 0.5 : 1;
-    peaks.forEach((p, i) => {
-      ctx.fillStyle = muted ? neutral : speakerColor(canvas, speakers[i] ?? 0);
-      drawBar(ctx, i * BAR_STEP, HEIGHT / 2, p * HEIGHT);
-    });
+    // Vẽ khi luồng chính rảnh (M5-04): thư viện có nhiều dải, vẽ ngay khi dựng
+    // sẽ chen vào lúc nội dung quan trọng nhất đang hiện.
+    let raf = 0;
+    const idle =
+      typeof window.requestIdleCallback === "function"
+        ? window.requestIdleCallback(() => raf = window.requestAnimationFrame(draw), { timeout: 500 })
+        : window.requestAnimationFrame(draw);
+    function draw() {
+      const ctx = prepareCanvas(canvas!, width, HEIGHT);
+      if (!ctx) return;
+      const neutral = tokenColor(canvas!, "--ink-3");
+      ctx.globalAlpha = muted ? 0.5 : 1;
+      peaks.forEach((p, i) => {
+        ctx.fillStyle = muted ? neutral : speakerColor(canvas!, speakers[i] ?? 0);
+        drawBar(ctx, i * BAR_STEP, HEIGHT / 2, p * HEIGHT);
+      });
+    }
+    return () => {
+      if (typeof window.cancelIdleCallback === "function" && typeof idle === "number") window.cancelIdleCallback(idle);
+      cancelAnimationFrame(raf);
+    };
   }, [peaks, speakers, muted, width, theme]);
 
   return (
