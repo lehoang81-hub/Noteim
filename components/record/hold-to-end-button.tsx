@@ -77,6 +77,9 @@ export function HoldToEndButton({
         viewBox="0 0 200 44"
         preserveAspectRatio="none"
       >
+        {/* Chỉ hiện vòng sen khi đang giữ (M5-01, dọn #27): không giữ thì không
+            vẽ nét — nét ẩn bằng dashoffset vẫn để lại một chấm ở góc do
+            strokeLinecap tròn, nên thêm stroke=none khi chưa giữ. */}
         <rect
           x="1.5"
           y="1.5"
@@ -85,7 +88,7 @@ export function HoldToEndButton({
           rx="20.5"
           pathLength={100}
           fill="none"
-          stroke="var(--sen)"
+          stroke={holding ? "var(--sen)" : "none"}
           strokeWidth="2.5"
           strokeLinecap="round"
           vectorEffect="non-scaling-stroke"

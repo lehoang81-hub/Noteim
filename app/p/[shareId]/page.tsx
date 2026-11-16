@@ -3,7 +3,7 @@
 import { Lock, Pause, Play, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatClock } from "@/components/ribbon/draw";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { TextField } from "@/components/ui/form";
 import { data, useData, type PublicSessionView } from "@/lib/data";
 import { createMockPlayer, usePlayerState } from "@/lib/player/mock-player";
 import { shortDate } from "@/lib/format";
+import { speakerLabel } from "@/lib/data/localize";
 
 /*
  * Trang chia sẻ công khai /p/[shareId] (docs/03-screens.md mục 9, issue M4-01).
@@ -159,6 +160,8 @@ function StateScreen({
 
 function PublicSummary({ view }: { view: Exclude<PublicSessionView, string> }) {
   const t = useTranslations("public");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
+  const locale = useLocale();
   const allowAudio = view.scope === "summary_audio";
   const [player] = useState(() => createMockPlayer(view.duration_sec));
   const ps = usePlayerState(player);
@@ -189,10 +192,10 @@ function PublicSummary({ view }: { view: Exclude<PublicSessionView, string> }) {
     <main className="mx-auto min-h-dvh w-full max-w-2xl px-5 pb-28 pt-8">
       <header>
         <h1 className="font-display text-h1 font-semibold text-ink">{view.title}</h1>
-        <p className="mt-1 text-small text-ink-2">{t("sharedBy", { name: view.sharer_name, date: shortDate(view.created_at) })}</p>
+        <p className="mt-1 text-small text-ink-2">{t("sharedBy", { name: view.sharer_name, date: shortDate(view.created_at, locale) })}</p>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
           {view.speakers.map((s) => (
-            <SpeakerName key={s.id} colorIndex={s.color_index} name={s.display_name} named={!!s.contact_id || s.is_me} />
+            <SpeakerName key={s.id} colorIndex={s.color_index} name={speakerLabel(s, view.speakers, tr)} named={!!s.contact_id || s.is_me} />
           ))}
         </div>
       </header>

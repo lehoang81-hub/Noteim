@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { Building2, Briefcase, Gavel, HeartPulse, PenTool, Scale, UserRound, ArrowLeft, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -84,7 +84,7 @@ export function WelcomeScreen() {
           <ArrowLeft aria-hidden={true} className="size-5" strokeWidth={1.75} />
         </button>
         <span className="flex-1" />
-        <Button variant="ghost" className="h-9" disabled={saving} onClick={skip}>
+        <Button variant="ghost" className="h-11" disabled={saving} onClick={skip}>
           {t("skip")}
         </Button>
       </header>
@@ -174,7 +174,7 @@ export function WelcomeScreen() {
                       honorific === h ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
                     )}
                   >
-                    {h === "" ? t("honorificNone") : h}
+                    {h === "" ? t("honorificNone") : h === "chị" ? tl("honorificChi") : tl("honorificAnh")}
                   </button>
                 ))}
               </div>
@@ -290,7 +290,7 @@ function DawnMoment() {
       {Array.from({ length: BARS }, (_, i) => {
         const h = 10 + 38 * Math.abs(Math.sin(i / 2.4));
         return (
-          <motion.span
+          <m.span
             key={i}
             className="w-2 rounded-pill"
             style={{ background: "var(--gradient-dawn)" }}

@@ -1,7 +1,8 @@
 "use client";
 
 import { Archive } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { decimal } from "@/lib/format";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -19,6 +20,7 @@ export function StorageSection() {
   const t = useTranslations("settings");
   const tl = useTranslations("library");
   const ts = useTranslations("session");
+  const locale = useLocale();
   const toast = useToast();
   const sessions = useData(() => data.sessions.list(), []);
   const [selected, setSelected] = useState<string[]>([]);
@@ -31,7 +33,7 @@ export function StorageSection() {
   const totalBytes = stored.reduce((n, s) => n + s.size_bytes, 0);
   const targets = stored.filter((s) => selected.includes(s.id));
   const targetMb = Math.max(1, Math.round(targets.reduce((n, s) => n + s.size_bytes, 0) / 1_000_000));
-  const totalMb = (totalBytes / 1_000_000).toLocaleString("vi-VN", { maximumFractionDigits: 1 });
+  const totalMb = decimal(totalBytes / 1_000_000, locale);
 
   function toggle(id: string) {
     setSelected((list) => (list.includes(id) ? list.filter((x) => x !== id) : [...list, id]));
@@ -55,7 +57,7 @@ export function StorageSection() {
   }
 
   function rowSize(s: Session) {
-    return (s.size_bytes / 1_000_000).toLocaleString("vi-VN", { maximumFractionDigits: 1 });
+    return decimal(s.size_bytes / 1_000_000, locale);
   }
 
   return (
@@ -90,7 +92,7 @@ export function StorageSection() {
                 </span>
                 <Button
                   variant="ghost"
-                  className="-my-1 h-9 shrink-0 text-tag-risk hover:text-tag-risk"
+                  className="-my-1 min-h-11 shrink-0 text-tag-risk hover:text-tag-risk"
                   onClick={() => {
                     setSelected([s.id]);
                     setConfirmPurge(true);

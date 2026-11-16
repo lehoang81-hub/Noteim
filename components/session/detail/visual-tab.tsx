@@ -10,6 +10,7 @@ import { EmptyState, SkeletonParagraph } from "@/components/ui/feedback";
 import { formatClock, tokenColor, useThemeKey } from "@/components/ribbon/draw";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
+import { speakerLabel } from "@/lib/data/localize";
 import { data, useData, type Photo, type SessionDetail, type SemanticTag } from "@/lib/data";
 import { downloadPhotosGrid, downloadSvgAsPng } from "./export-image";
 /*
@@ -62,6 +63,7 @@ export function VisualTab({
   onSeek: (time: number) => void;
 }) {
   const t = useTranslations("visual");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const ts = useTranslations("session");
   const tl = useTranslations("styleguide.tags");
   const ui = useTranslations("ui");
@@ -226,7 +228,14 @@ export function VisualTab({
         title={t("talkShare")}
         onDownload={() => void saveSvg(talkRef.current, `noteim-talk-${detail.id}.png`)}
         onCopy={() =>
-          copyText(v.talk_share.map((s) => `${speakerOf[s.speaker_id]?.display_name ?? s.speaker_id}: ${s.percent}%`).join("\n"))
+          copyText(
+            v.talk_share
+              .map((s) => {
+                const sp = speakerOf[s.speaker_id];
+                return `${sp ? speakerLabel(sp, detail.speakers, tr) : s.speaker_id}: ${s.percent}%`;
+              })
+              .join("\n"),
+          )
         }
       >
         <svg
@@ -243,7 +252,7 @@ export function VisualTab({
             return (
               <g key={share.speaker_id}>
                 <text x={0} y={y + 20} fontSize={12} fill={colors.ink2}>
-                  {truncate(sp?.display_name ?? share.speaker_id, 13)}
+                  {truncate(sp ? speakerLabel(sp, detail.speakers, tr) : share.speaker_id, 13)}
                 </text>
                 <rect x={100} y={y + 8} width={Math.max(w, 4)} height={14} rx={7} fill={colors.speakers[(sp?.color_index ?? 0) % 6]} />
                 <text x={SVG_W - 36} y={y + 20} fontSize={12} fill={colors.ink}>

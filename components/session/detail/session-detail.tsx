@@ -3,8 +3,9 @@
 import { Archive, ArrowLeft, Check, Ellipsis, Pencil, Share2, Trash2, UserRoundPen, X } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { FloatingPlayer } from "@/components/session/floating-player";
 import { Button } from "@/components/ui/button";
 import { SpeakerName } from "@/components/ui/chips";
@@ -15,17 +16,22 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { data, dataNow, DataError, useData, type ActionItem, type SessionDetail } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
+import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
-import { SendMinutesSheet } from "./send-minutes";
-import { ShareSheet, type ShareIntent } from "./share-sheet";
-import { SpeakerSheet } from "./speaker-sheet";
-import { TaskSheet } from "./task-sheet";
-import { TasksTab } from "./tasks-tab";
-import { TranscriptTab } from "./transcript-tab";
-import { VisualTab } from "./visual-tab";
-import { AiTab } from "./ai-tab";
-import { SessionTour } from "@/components/welcome/session-tour";
+import type { ShareIntent } from "./share-sheet";
+
+/* Tab và bảng ít dùng nạp chậm để giảm JS khởi tạo (M5-04):
+ * tab Tóm tắt là mặc định nên giữ nạp sẵn, phần còn lại tải khi mở. */
+const SendMinutesSheet = dynamic(() => import("./send-minutes").then((m) => m.SendMinutesSheet), { ssr: false });
+const ShareSheet = dynamic(() => import("./share-sheet").then((m) => m.ShareSheet), { ssr: false });
+const SpeakerSheet = dynamic(() => import("./speaker-sheet").then((m) => m.SpeakerSheet), { ssr: false });
+const TaskSheet = dynamic(() => import("./task-sheet").then((m) => m.TaskSheet), { ssr: false });
+const TasksTab = dynamic(() => import("./tasks-tab").then((m) => m.TasksTab), { ssr: false });
+const TranscriptTab = dynamic(() => import("./transcript-tab").then((m) => m.TranscriptTab), { ssr: false });
+const VisualTab = dynamic(() => import("./visual-tab").then((m) => m.VisualTab), { ssr: false });
+const AiTab = dynamic(() => import("./ai-tab").then((m) => m.AiTab), { ssr: false });
+const SessionTour = dynamic(() => import("@/components/welcome/session-tour").then((m) => m.SessionTour), { ssr: false });
 
 /*
  * Chi tiết buổi ghi (docs/03-screens.md mục 5).
@@ -48,6 +54,7 @@ const TAB_LABEL: Record<TabId, string> = {
 export function SessionDetailScreen() {
   const { id } = useParams<{ id: string }>();
   const t = useTranslations("session");
+  const locale = useLocale();
   const detail = useData(() => data.sessions.get(id), [id]);
   const templates = useData(() => data.account.templates(), []);
   const contacts = useData(() => data.account.contacts(), []);
@@ -104,7 +111,7 @@ export function SessionDetailScreen() {
     <Loaded
       key={detail.data.id}
       detail={detail.data}
-      templateName={template?.name ?? ""}
+      templateName={template ? localizedTemplateName(template, locale) : ""}
       template={template}
       templates={templates.data ?? []}
       contacts={contacts.data ?? []}
@@ -129,8 +136,11 @@ function Loaded({
   back: React.ReactNode;
 }) {
   const t = useTranslations("session");
+  // Bộ dịch cấp gốc cho nhãn hệ thống của người nói chưa đặt tên (review #41 mục 5)
+  const tr = useTranslations();
   const tl = useTranslations("styleguide.tags");
   const tlLib = useTranslations("library");
+  const locale = useLocale();
   const toast = useToast();
   const router = useRouter();
   const search = useSearchParams();
@@ -146,10 +156,20 @@ function Loaded({
   const ps = usePlayerState(player);
   const [expanded, setExpanded] = useState(false);
   const [naming, setNaming] = useState(false);
+  // Các bảng nạp chậm chỉ dựng sau lần mở đầu tiên (M5-04): tránh tải chunk
+  // ngay khi vào trang dù chưa bấm gì.
+  const [namingOnce, setNamingOnce] = useState(false);
+  if (naming && !namingOnce) setNamingOnce(true);
   const [editingTask, setEditingTask] = useState<ActionItem | null>(null);
   const [taskSheet, setTaskSheet] = useState(false);
+  const [taskSheetOnce, setTaskSheetOnce] = useState(false);
+  if (taskSheet && !taskSheetOnce) setTaskSheetOnce(true);
   const [sending, setSending] = useState(false);
+  const [sendingOnce, setSendingOnce] = useState(false);
+  if (sending && !sendingOnce) setSendingOnce(true);
   const [sharing, setSharing] = useState(false);
+  const [sharingOnce, setSharingOnce] = useState(false);
+  if (sharing && !sharingOnce) setSharingOnce(true);
   const [shareIntent, setShareIntent] = useState<ShareIntent>(null);
   const [moreOpen, setMoreOpen] = useState(false);
   const [reprocessOpen, setReprocessOpen] = useState(false);
@@ -292,8 +312,8 @@ function Loaded({
         </div>
         <TitleEditor id={detail.id} title={detail.title} />
         <p className="mt-1 text-small text-ink-2">
-          {t("meta", { date: shortDate(detail.created_at), duration: durationLabel, template: templateName })}
-          {lastSent ? `, ${t("sentAt", { date: shortDate(lastSent.sent_at) })}` : ""}
+          {t("meta", { date: shortDate(detail.created_at, locale), duration: durationLabel, template: templateName })}
+          {lastSent ? `, ${t("sentAt", { date: shortDate(lastSent.sent_at, locale) })}` : ""}
         </p>
         {detail.speakers.length ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
@@ -302,10 +322,10 @@ function Loaded({
                 key={s.id}
                 type="button"
                 onClick={() => setNaming(true)}
-                aria-label={`${t("nameSpeakers")}: ${s.display_name}`}
+                aria-label={`${t("nameSpeakers")}: ${speakerLabel(s, detail.speakers, tr)}`}
                 className="-mx-1 rounded-control px-1 py-0.5 text-left"
               >
-                <SpeakerName colorIndex={s.color_index} name={s.display_name} named={!!s.contact_id || s.is_me} />
+                <SpeakerName colorIndex={s.color_index} name={speakerLabel(s, detail.speakers, tr)} named={!!s.contact_id || s.is_me} />
               </button>
             ))}
           </div>
@@ -318,7 +338,7 @@ function Loaded({
           icon={UserRoundPen}
           className="mt-3 lg:px-8"
           action={
-            <button type="button" onClick={() => setNaming(true)} className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2">
+            <button type="button" onClick={() => setNaming(true)} className="-my-2 inline-flex h-11 items-center px-1 font-semibold underline underline-offset-2">
               {t("nameThem")}
             </button>
           }
@@ -331,12 +351,12 @@ function Loaded({
           kind="expiring"
           className="mt-2 lg:px-8"
           action={
-            <button type="button" onClick={() => setKeepOpen(true)} className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2">
+            <button type="button" onClick={() => setKeepOpen(true)} className="-my-2 inline-flex h-11 items-center px-1 font-semibold underline underline-offset-2">
               {t("keep")}
             </button>
           }
         >
-          {t("expiring", { date: shortDate(detail.audio_expires_at!) })}
+          {t("expiring", { date: shortDate(detail.audio_expires_at!, locale) })}
         </Banner>
       ) : null}
       {detail.storage_status === "essence_only" ? (
@@ -393,18 +413,19 @@ function Loaded({
                   currentTime={ps.currentTime}
                   playing={ps.playing}
                   onSeek={seek}
-                  onQuoteCard={(seg) =>
+                  onQuoteCard={(seg) => {
+                    const sp = detail.speakers.find((s) => s.id === seg.speaker_id);
                     openShare({
                       kind: "card",
                       quote: {
                         text: seg.text,
-                        speakerName: detail.speakers.find((s) => s.id === seg.speaker_id)?.display_name ?? "",
-                        speakerColorIndex: detail.speakers.find((s) => s.id === seg.speaker_id)?.color_index ?? 0,
+                        speakerName: sp ? speakerLabel(sp, detail.speakers, tr) : "",
+                        speakerColorIndex: sp?.color_index ?? 0,
                         startSec: seg.start_sec,
                         endSec: seg.end_sec,
                       },
-                    })
-                  }
+                    });
+                  }}
                 />
               </TabsContent>
             ))}
@@ -437,16 +458,24 @@ function Loaded({
       ) : null}
 
       {/* Ai là ai? (M3-02): đặt tên, nghe thử, gộp người nói */}
-      <SpeakerSheet detail={detail} player={player} canPlay={canPlay} open={naming} onOpenChange={setNaming} />
+      {namingOnce ? (
+        <SpeakerSheet detail={detail} player={player} canPlay={canPlay} open={naming} onOpenChange={setNaming} />
+      ) : null}
 
       {/* Sửa / thêm việc (M3-04) */}
-      <TaskSheet session={detail} contacts={contacts} item={editingTask} open={taskSheet} onOpenChange={setTaskSheet} />
+      {taskSheetOnce ? (
+        <TaskSheet session={detail} contacts={contacts} item={editingTask} open={taskSheet} onOpenChange={setTaskSheet} />
+      ) : null}
 
       {/* Gửi biên bản và giao việc, ba bước (M3-04) */}
-      <SendMinutesSheet session={detail} contacts={contacts} plan={planFlag} canPlay={canPlay} onSeek={seek} open={sending} onOpenChange={setSending} />
+      {sendingOnce ? (
+        <SendMinutesSheet session={detail} contacts={contacts} plan={planFlag} canPlay={canPlay} onSeek={seek} open={sending} onOpenChange={setSending} />
+      ) : null}
 
       {/* Bảng chia sẻ: link xem, thẻ trích dẫn, đoạn tinh túy, xuất file (M4-01) */}
-      <ShareSheet detail={detail} template={template} open={sharing} onOpenChange={setSharing} intent={shareIntent} />
+      {sharingOnce ? (
+        <ShareSheet detail={detail} template={template} open={sharing} onOpenChange={setSharing} intent={shareIntent} />
+      ) : null}
 
       {/* Menu ⋯: đổi mẫu và tóm tắt lại, gửi biên bản, xuất file, dọn bản gốc, xóa */}
       <Sheet open={moreOpen} onOpenChange={setMoreOpen} title={t("moreTitle")} description={detail.title} size="half">
@@ -468,7 +497,7 @@ function Loaded({
             <li key={tp.id}>
               <button type="button" onClick={() => void reprocess(tp.id)} className="flex min-h-12 w-full items-center gap-3 py-2 text-left">
                 <span className="min-w-0 flex-1">
-                  <span className="block text-body text-ink">{tp.name}</span>
+                  <span className="block text-body text-ink">{localizedTemplateName(tp, locale)}</span>
                   {tp.id === detail.template_id ? <span className="block text-caption text-ink-3">{t("currentTemplate")}</span> : null}
                 </span>
                 {tp.id === detail.template_id ? <Check aria-hidden={true} className="size-5 shrink-0 text-sen" strokeWidth={2} /> : null}

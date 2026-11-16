@@ -1,17 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState } from "react";
 import { Camera, ChevronDown, HardDrive, Mic, MicVocal } from "lucide-react";
-import { AnimatePresence, LayoutGroup, motion } from "motion/react";
-import { useTranslations } from "next-intl";
+import { AnimatePresence, LayoutGroup, m } from "motion/react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { RibbonLive } from "@/components/ribbon/ribbon-live";
 import { RibbonThumb } from "@/components/ribbon/ribbon-thumb";
 import { formatClock, resample } from "@/components/ribbon/draw";
-import { BookmarkButton } from "@/components/record/bookmark-button";
-import { HoldToEndButton } from "@/components/record/hold-to-end-button";
-import { RecordFeed } from "@/components/record/record-feed";
-import { ConsentSheet, MicPermissionSheet, TemplateSheet } from "@/components/record/sheets";
+// Phần chỉ hiện khi đang ghi: nạp chậm để màn chuẩn bị nhẹ hơn (M5-04)
+const BookmarkButton = dynamic(() => import("@/components/record/bookmark-button").then((m) => m.BookmarkButton), { ssr: false });
+const RecordFeed = dynamic(() => import("@/components/record/record-feed").then((m) => m.RecordFeed), { ssr: false });
+const HoldToEndButton = dynamic(() => import("@/components/record/hold-to-end-button").then((m) => m.HoldToEndButton), { ssr: false });
+const TemplateSheet = dynamic(() => import("@/components/record/sheets").then((m) => m.TemplateSheet), { ssr: false });
+import { ConsentSheet, MicPermissionSheet } from "@/components/record/sheets";
 import { Button } from "@/components/ui/button";
 import { Banner, MicDrawing } from "@/components/ui/feedback";
 import { Sheet } from "@/components/ui/sheet";
@@ -22,7 +25,8 @@ import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { shortDate } from "@/lib/format";
-import { micGrantedOnce, markMicGranted } from "@/lib/record/mic-permission";
+import { templateName } from "@/lib/data/localize";
+import { markMicGranted, useMicGateSeed } from "@/lib/record/mic-permission";
 import { fileToDataUrl } from "@/lib/record/photo";
 import { useStorageFull } from "@/lib/storage-full";
 import {
@@ -92,6 +96,11 @@ function RecordClock({ paused }: { paused: boolean }) {
 
 export function RecordScreen() {
   const t = useTranslations("record");
+  const locale = useLocale();
+  // Tiêu đề buổi ghi tự sinh nằm ở namespace library (sessionAt) — dùng bộ
+  // dịch đúng namespace, không thì English hiện nguyên chữ "record.sessionAt"
+  // (review PR #41 mục 5: nhãn hệ thống sinh lúc chạy phải theo ngôn ngữ)
+  const tLib = useTranslations("library");
   const tl = useTranslations("styleguide.tags");
   const router = useRouter();
   const toast = useToast();
@@ -107,7 +116,7 @@ export function RecordScreen() {
   const micTakenRef = useRef<() => void>(() => {});
   const mic = useMicLevel({ onEnded: () => micTakenRef.current() });
   /* Ba nhánh dải giọng (khoảnh khắc bắt đầu, thẻ gấp, dải sống) cùng là
-   * motion.div ở cùng một vị trí: nếu không có key, React giữ nguyên instance
+   * m.div ở cùng một vị trí: nếu không có key, React giữ nguyên instance
    * khi đổi nhánh và hộp dải sống thừa hưởng trạng thái width/height đang dở
    * của khoảnh khắc trước, kẹt ở width: 32px (PR #22, lỗi 1). Key khác nhau
    * buộc React gắn phần tử mới cho từng nhánh. layoutId dùng useId để hai nhánh
@@ -116,7 +125,13 @@ export function RecordScreen() {
   const ribbonBoxId = useId();
 
   /** Bảng đang chờ trước khi ghi; null là không chờ gì (đang ghi hoặc đã xong luồng). */
-  const [gate, setGate] = useState<Gate | null>("boot");
+  // Màn chủ dựng sẵn bảng xin quyền (M5-04); máy đã cấp quyền thì đổi về
+  // "boot" sau khi hydrate, không gây lệch khớp.
+  const seed = useMicGateSeed();
+  const [gate, setGate] = useState<Gate | null>(seed);
+  useEffect(() => {
+    if (!decided.current) setGate(seed);
+  }, [seed]);
   const [momentOn, setMomentOn] = useState(false);
   const [folding, setFolding] = useState(false);
   const [showAnnounce, setShowAnnounce] = useState(false);
@@ -140,7 +155,10 @@ export function RecordScreen() {
 
   const active = recording.status !== "idle";
   const paused = recording.status === "paused";
-  const templateName = templates.data?.find((tp) => tp.id === recording.templateId)?.name ?? "";
+  const templateLabel =
+    templates.data?.find((tp) => tp.id === recording.templateId) === undefined
+      ? ""
+      : templateName(templates.data!.find((tp) => tp.id === recording.templateId)!, locale);
   const level = sampleVoice ? fakeLevel : mic.level;
   const maxSessionMin = quota.data?.max_session_minutes ?? 45;
   const planName = me.data?.plan === "pro" ? "Pro" : "Free";
@@ -189,6 +207,12 @@ export function RecordScreen() {
       const id = window.setTimeout(() => setGate(null), 0);
       return () => window.clearTimeout(id);
     }
+    if (flags.micDenied) {
+      decided.current = true;
+      const id = window.setTimeout(() => setGate("denied"), 0);
+      return () => window.clearTimeout(id);
+    }
+    if (seed === "permission") return; // lần đầu: bảng xin quyền đang hiện
     if (!me.data) return; // chờ hồ sơ để biết có bật nhắc đồng ý hay không
     if (!quota.data && !quota.error) return; // chờ hạn mức (lỗi thì bỏ qua kiểm)
     decided.current = true;
@@ -198,21 +222,13 @@ export function RecordScreen() {
       const id = window.setTimeout(() => setGate("quota"), 0);
       return () => window.clearTimeout(id);
     }
-    if (flags.micDenied) {
-      const id = window.setTimeout(() => setGate("denied"), 0);
-      return () => window.clearTimeout(id);
-    }
-    if (!micGrantedOnce()) {
-      const id = window.setTimeout(() => setGate("permission"), 0);
-      return () => window.clearTimeout(id);
-    }
     if (me.data.consent_reminder) {
       const id = window.setTimeout(() => setGate("consent"), 0);
       return () => window.clearTimeout(id);
     }
     const id = window.setTimeout(() => beginRef.current(false), 0);
     return () => window.clearTimeout(id);
-  }, [me.data, quota.data, quota.error, recording.status, flags.micDenied]);
+  }, [seed, me.data, quota.data, quota.error, recording.status, flags.micDenied]);
 
   // Được cấp quyền micro: ghi nhớ để lần sau bỏ qua bảng xin quyền, rồi hỏi
   // đồng ý (nếu bật) hoặc ghi luôn. Bị từ chối thật thì sang trang giải thích.
@@ -352,7 +368,7 @@ export function RecordScreen() {
       toast.show({ tone: "error", message: t("endError") });
       return;
     }
-    const title = t("sessionAt", { time: clockTime(snapshot.startedAtClock ?? Date.now()) });
+    const title = tLib("sessionAt", { time: clockTime(snapshot.startedAtClock ?? Date.now()) });
     setFolding(true); // khoảnh khắc "Kết thúc ghi": dải giọng gấp thành thẻ
     try {
       const [created] = await Promise.all([
@@ -405,7 +421,7 @@ export function RecordScreen() {
   /* Thẻ buổi ghi trong khoảnh khắc "Kết thúc ghi" */
   const foldPeaks = resample(recording.levels.length ? recording.levels : [0.4], 40);
   const foldSpeakers = Array.from({ length: 40 }, () => 0);
-  const foldTitle = recording.startedAtClock ? t("sessionAt", { time: clockTime(recording.startedAtClock) }) : "";
+  const foldTitle = recording.startedAtClock ? tLib("sessionAt", { time: clockTime(recording.startedAtClock) }) : "";
 
   return (
     <div className="dark flex min-h-dvh flex-col bg-bg text-ink">
@@ -434,7 +450,7 @@ export function RecordScreen() {
             !showControls && "pointer-events-none opacity-0",
           )}
         >
-          <span className="max-w-[38vw] truncate sm:max-w-64">{templateName || " "}</span>
+          <span className="max-w-[38vw] truncate sm:max-w-64">{templateLabel || " "}</span>
           <ChevronDown aria-hidden={true} className="size-4 shrink-0 text-ink-3" strokeWidth={2} />
         </button>
         <span
@@ -521,7 +537,7 @@ export function RecordScreen() {
         <LayoutGroup id="record-ribbon">
           <div className="relative flex w-full flex-1 items-center justify-center py-6">
             {showMoment ? (
-              <motion.div
+              <m.div
                 key="moment"
                 className="relative flex items-center justify-center overflow-hidden"
                 style={{ background: "var(--gradient-dawn)" }}
@@ -529,17 +545,17 @@ export function RecordScreen() {
                 animate={{ width: "100%", height: 160, borderRadius: 16, opacity: reduce ? 0 : 1 }}
                 transition={reduce ? FADE : SCENE}
               >
-                <motion.span
+                <m.span
                   initial={{ opacity: 1 }}
                   animate={{ opacity: 0 }}
                   transition={{ duration: 0.25 }}
                   className="text-on-dawn"
                 >
                   <Mic aria-hidden={true} className="size-8" strokeWidth={1.75} />
-                </motion.span>
-              </motion.div>
+                </m.span>
+              </m.div>
             ) : folding ? (
-              <motion.div
+              <m.div
                 key="fold"
                 className="w-full"
                 initial={reduce ? { opacity: 0 } : false}
@@ -548,17 +564,17 @@ export function RecordScreen() {
               >
                 <div className="mx-auto w-full max-w-sm">
                   <p className="text-caption font-medium text-ink-3">{t("foldToday")}</p>
-                  <motion.div layoutId={ribbonBoxId} transition={reduce ? FADE : SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
+                  <m.div layoutId={ribbonBoxId} transition={reduce ? FADE : SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
                     <RibbonThumb peaks={foldPeaks} speakers={foldSpeakers} muted />
-                  </motion.div>
+                  </m.div>
                   <div className="mt-1.5 flex items-baseline justify-between gap-3">
                     <p className="min-w-0 truncate text-body-strong font-semibold text-ink">{foldTitle}</p>
                     <span className="shrink-0 text-small tabular-nums text-ink-3">{t("foldProcessing")}</span>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="live"
                 /* Chỉ ghép cặp layoutId khi buổi ghi đang chạy: hộp dải sống
                  * trong lúc chờ bảng (chưa ghi) không cần tham gia khoảnh khắc
@@ -571,12 +587,12 @@ export function RecordScreen() {
                 style={{ borderRadius: 16 }}
               >
                 <RibbonLive level={level} paused={paused} height={160} />
-              </motion.div>
+              </m.div>
             )}
             {/* Gợn sóng khi tạo điểm nóng: tại vị trí hiện tại của dải giọng */}
             <AnimatePresence>
               {ripple > 0 ? (
-                <motion.span
+                <m.span
                   key={ripple}
                   aria-hidden={true}
                   className="pointer-events-none absolute right-3 top-1/2 size-10 -translate-y-1/2 rounded-pill border-2 border-on-dawn"
@@ -599,7 +615,7 @@ export function RecordScreen() {
               <button
                 type="button"
                 onClick={togglePause}
-                className="inline-flex h-8 items-center rounded-control px-2 font-semibold text-sen-text underline underline-offset-2"
+                className="inline-flex min-h-11 items-center rounded-control px-2 font-semibold text-sen-text underline underline-offset-2"
               >
                 {t("pause")}
               </button>
@@ -653,6 +669,8 @@ export function RecordScreen() {
         type="file"
         accept="image/*"
         capture="environment"
+        aria-label={t("addPhoto")}
+        tabIndex={-1}
         className="hidden"
         onChange={(e) => {
           void onPhotoPicked(e.target.files?.[0]);
@@ -681,7 +699,7 @@ export function RecordScreen() {
         <p className="py-2 text-body text-ink-2">
           {t("quotaOutBody", {
             limit: quota.data?.minutes_limit ?? 180,
-            date: quota.data ? shortDate(new Date(Date.parse(quota.data.period_end) + 86400_000)) : "",
+            date: quota.data ? shortDate(new Date(Date.parse(quota.data.period_end) + 86400_000), locale) : "",
           })}
         </p>
         <Button variant="primary" block onClick={() => router.push("/upgrade")} className="mt-3">

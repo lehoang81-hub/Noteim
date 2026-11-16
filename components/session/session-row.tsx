@@ -2,7 +2,6 @@
 
 import { CloudOff, LoaderCircle, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
 import { RibbonThumb } from "@/components/ribbon/ribbon-thumb";
 import { TagChip, type SemanticTag } from "@/components/ui/chips";
 import { cn } from "@/lib/cn";
@@ -10,8 +9,11 @@ import { cn } from "@/lib/cn";
 /*
  * Một hàng trong thư viện (docs/03-screens.md mục 1).
  * Danh sách có đường kẻ mảnh, không phải chồng thẻ.
- * M4-01: chọn nhiều (nhấn giữ để vào chế độ chọn), nút ⋯ cho máy tính.
- * Vuốt hàng sang trái nằm ở SwipeRow (components/library/swipe-row.tsx).
+ * M4-01: chọn nhiều, nút ⋯ cho máy tính. Vuốt sang trái và nhấn giữ để vào
+ * chế độ chọn nằm ở SwipeRow (components/library/swipe-row.tsx) — khung đó
+ * giữ con trỏ khi chạm nên phải do nó nhận biết nhấn giữ (M5-01).
+ * M5-01: máy tính ô chọn hiện khi rê chuột; Shift+bấm chọn liền dải
+ * (onToggleCheck nhận phím Shift để thư viện tính dải).
  */
 
 export type SessionRowStatus = "ready" | "processing" | "failed" | "essence" | "unsynced";
@@ -37,12 +39,13 @@ export interface SessionRowProps {
   /** Chế độ chọn nhiều: ô tích thay cho mở buổi ghi (M4-01) */
   selecting?: boolean;
   checked?: boolean;
-  onToggleCheck?: () => void;
+  /** Nhận phím Shift để chọn liền dải trên máy tính (M5-01) */
+  onToggleCheck?: (shiftKey: boolean) => void;
   /** Nhãn ô tích cho trình đọc màn hình, theo ngôn ngữ giao diện */
   checkOnLabel?: string;
   checkOffLabel?: string;
-  /** Nhấn giữ để vào chế độ chọn nhiều (điện thoại) */
-  onLongPress?: () => void;
+  /** Máy tính: hiện ô chọn khi rê chuột để vào chế độ chọn nhiều (M5-01) */
+  hoverCheck?: boolean;
   /** Nút ⋯ hiện khi rê chuột trên máy tính (M4-01) */
   trailing?: React.ReactNode;
   className?: string;
@@ -65,32 +68,50 @@ export function SessionRow({
   onToggleCheck,
   checkOnLabel,
   checkOffLabel,
-  onLongPress,
+  hoverCheck,
   trailing,
   className,
 }: SessionRowProps) {
   const muted = status === "processing" || status === "essence" || status === "unsynced";
 
-  const holdRef = useRef(0);
-  function holdStart() {
-    if (!onLongPress || selecting) return;
-    holdRef.current = window.setTimeout(() => onLongPress(), 500);
-  }
-  function holdEnd() {
-    window.clearTimeout(holdRef.current);
-  }
+  // Ô tích dùng chung: trong chế độ chọn là phần tử duy nhất của label hàng;
+  // ngoài chế độ chọn đứng cạnh liên kết mở buổi ghi (không lồng nhau).
+  const checkboxInput = (
+    <input
+      type="checkbox"
+      checked={!!checked}
+      onClick={(e) => {
+        // Dùng click thay vì change: change không mang phím Shift
+        // (nhấn giữ Shift+bấm để chọn liền dải, M5-01).
+        e.stopPropagation();
+        onToggleCheck?.(e.shiftKey);
+      }}
+      onChange={() => {}} // React cần onChange cho ô tích có kiểm soát
+      aria-label={`${checked ? checkOffLabel : checkOnLabel}: ${title}`}
+      className="size-5 accent-[var(--sen)]"
+    />
+  );
 
-  const checkbox = selecting ? (
-    <span className="mt-1 flex shrink-0 items-start">
-      <input
-        type="checkbox"
-        checked={!!checked}
-        onChange={onToggleCheck}
-        aria-label={`${checked ? checkOffLabel : checkOnLabel}: ${title}`}
-        className="size-5 accent-[var(--sen)]"
-      />
+  const checkbox = (
+    <span
+      className={cn(
+        "relative z-[1] mt-1 shrink-0 items-start",
+        // Chỉ hiện ô chọn khi đang chọn; ngoài chế độ chọn, máy tính hiện khi
+        // rê chuột hoặc ô đã nhận tiêu điểm (M5-01).
+        // Nên sửa review PR #41 mục 6: khi CHƯA chọn, ô tích đè lên lề trang
+        // (absolute left-0, lề máy tính 32px chứa vừa ô 20px) thay vì chiếm
+        // chỗ w-5 đẩy tiêu đề lệch với "Hôm nay"/"Chào chị Mai". Khi đang
+        // chọn thì vẫn chiếm chỗ như thường.
+        selecting
+          ? "flex"
+          : hoverCheck
+            ? "hidden lg:absolute lg:left-0 lg:top-4 lg:mt-0 lg:flex lg:opacity-0 group-hover/row:lg:opacity-100 focus-within:lg:opacity-100"
+            : "hidden",
+      )}
+    >
+      {checkboxInput}
     </span>
-  ) : null;
+  );
 
   const content = (
     <>
@@ -123,33 +144,33 @@ export function SessionRow({
               {statusText}
             </span>
           )}
-          {action ? <span className="relative z-[1] ml-auto">{action}</span> : null}
+          {action && !selecting ? <span className="relative z-[1] ml-auto">{action}</span> : null}
         </span>
       </span>
-      {trailing ? <span className="relative z-[1] self-center">{trailing}</span> : null}
+      {trailing && !selecting ? <span className="relative z-[1] self-center">{trailing}</span> : null}
     </>
   );
 
   const rowClass = cn("relative border-b border-line py-3.5", selected && "bg-surface-2", className);
 
   if (selecting) {
+    // Ô tích là phần tử tương tác DUY NHẤT của hàng, cả hàng là label của nó
+    // (review PR #41 mục 4: trước đây nút aria-pressed bọc ô tích — hai phần
+    // tử tương tác lồng nhau, trình đọc màn hình đọc hai lần). Nút ⋯ và
+    // "Thử lại" ẩn trong chế độ chọn vì thanh chọn đã đủ thao tác; bấm vào
+    // bất kỳ đâu trên hàng vẫn tích nhờ hành vi label gốc.
     return (
       <div className={rowClass}>
-        <button
-          type="button"
-          onClick={onToggleCheck}
-          aria-pressed={!!checked}
-          className="flex w-full items-start gap-3 text-left"
-        >
-          {checkbox}
+        <label className="flex w-full cursor-pointer items-start gap-3 text-left">
+          {checkboxInput}
           {content}
-        </button>
+        </label>
       </div>
     );
   }
 
   return (
-    <div className={rowClass} onPointerDown={holdStart} onPointerUp={holdEnd} onPointerCancel={holdEnd} onPointerLeave={holdEnd}>
+    <div className={cn(rowClass, "group/row")}>
       <div className="flex items-start gap-3">
         {checkbox}
         <Link

@@ -10,6 +10,7 @@ import { EmptyState, SkeletonParagraph } from "@/components/ui/feedback";
 import { SearchField } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
+import { speakerLabel } from "@/lib/data/localize";
 import { data, useData, type SessionDetail, type Speaker, type TranscriptSegment } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
@@ -87,6 +88,7 @@ export function TranscriptTab({
   onQuoteCard?: (seg: TranscriptSegment) => void;
 }) {
   const t = useTranslations("transcript");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const ts = useTranslations("session");
   const toast = useToast();
 
@@ -352,7 +354,7 @@ export function TranscriptTab({
                   }}
                   className="flex w-full items-center gap-3 py-3 text-left"
                 >
-                  <SpeakerName colorIndex={sp.color_index} name={sp.display_name} named={true} className="flex-1" />
+                  <SpeakerName colorIndex={sp.color_index} name={speakerLabel(sp, detail.speakers, tr)} named={true} className="flex-1" />
                   {reassignSeg.speaker_id === sp.id ? (
                     <Check aria-hidden={true} className="size-5 shrink-0 text-sen" strokeWidth={2} />
                   ) : null}
@@ -406,6 +408,7 @@ type ListProps = {
 
 function TranscriptList(props: ListProps) {
   const t = useTranslations("transcript");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const ts = useTranslations("session");
   const {
     listRef,
@@ -537,7 +540,9 @@ function TranscriptList(props: ListProps) {
                   onPointerCancel={holdEnd}
                 >
                   <div className="flex items-baseline gap-2">
-                    <span className="min-w-0 truncate text-small font-medium text-ink-2">{sp?.display_name ?? "—"}</span>
+                    <span className="min-w-0 truncate text-small font-medium text-ink-2">
+                      {sp ? speakerLabel(sp, Object.values(speakerOf), tr) : "—"}
+                    </span>
                     <span className="ml-auto shrink-0 text-caption tabular-nums text-ink-3">{formatClock(seg.start_sec)}</span>
                   </div>
                   <button

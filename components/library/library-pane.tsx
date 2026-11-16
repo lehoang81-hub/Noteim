@@ -3,12 +3,15 @@
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
 import { SwipeRow } from "@/components/library/swipe-row";
-import { ShareSheet } from "@/components/session/detail/share-sheet";
+import dynamic from "next/dynamic";
+
+// Bảng chia sẻ chứa canvas thẻ trích dẫn: nạp chậm khi mở (M5-04)
+const ShareSheet = dynamic(() => import("@/components/session/detail/share-sheet").then((m) => m.ShareSheet), { ssr: false });
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chips";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
@@ -20,6 +23,7 @@ import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/
 import { useDebugFlags } from "@/lib/debug/flags";
 import { holdImportFile } from "@/lib/import-file";
 import { dayDiff, durationParts, shortDate, weekdayDate } from "@/lib/format";
+import { templateName } from "@/lib/data/localize";
 import {
   discardRecording,
   recordedSec,
@@ -31,9 +35,11 @@ import { useStorageFull } from "@/lib/storage-full";
 /*
  * Thư viện (docs/03-screens.md mục 1).
  * Điện thoại: cả màn hình. Máy tính: cột giữa 360px, buổi ghi đang mở được tô.
- * M4-01: vuốt hàng sang trái để Chia sẻ / Xóa; nhấn giữ để chọn nhiều
- * (thanh trên cùng đổi thành "Đã chọn N" với Xóa, Dọn bản gốc, Xong);
- * máy tính: nút ⋯ khi rê chuột. Xóa luôn có hộp xác nhận và thông báo Hoàn tác.
+ * Vuốt hàng sang trái để Chia sẻ / Xóa (SwipeRow); nhấn giữ hàng (chạm thật,
+ * xử lý ở SwipeRow) để vào chế độ chọn nhiều. Máy tính: ô chọn hiện khi rê
+ * chuột, Shift+bấm chọn liền dải, Esc thoát chế độ chọn.
+ * Thanh chọn: "Đã chọn N", Chia sẻ (khi chọn 1 buổi), Xóa, Dọn bản gốc, Xong.
+ * Xóa luôn có hộp xác nhận đúng số lượng và thông báo Hoàn tác.
  */
 
 type FilterId = "all" | "week" | "open" | `tpl:${string}`;
@@ -56,6 +62,7 @@ const statusMap: Record<Session["status"], SessionRowStatus> = {
 export function LibraryPane({ className }: { className?: string }) {
   const t = useTranslations("library");
   const ts = useTranslations("session");
+  const locale = useLocale();
   const toast = useToast();
   const router = useRouter();
   const params = useParams<{ id?: string }>();
@@ -65,9 +72,24 @@ export function LibraryPane({ className }: { className?: string }) {
   const flags = useDebugFlags();
   const storageAlert = useStorageFull() || flags.storageFull;
 
-  // Chọn nhiều (M4-01)
+  // Chọn nhiều (M4-01); hàng mốc cho Shift+bấm (M5-01)
   const [selecting, setSelecting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const anchorRef = useRef<string | null>(null);
+  // Sau khi nhấn giữ ăn, lần click kế tiếp (nhả tay) phải bỏ qua để không
+  // hủy chọn hàng vừa chọn — đây là lần click sinh ra từ chính cử chỉ giữ.
+  const suppressToggleRef = useRef(false);
+  // Esc thoát chế độ chọn (máy tính, M5-01); không chạy khi hộp thoại khác đang mở
+  useEffect(() => {
+    if (!selecting) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Esc" && e.key !== "Escape") return;
+      if (document.querySelector('[role="dialog"][data-state="open"]')) return;
+      exitSelect();
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [selecting]);
   // Vuốt hàng (M4-01): chỉ một hàng mở
   const [swipeOpenId, setSwipeOpenId] = useState<string | null>(null);
   // Menu ⋯ của một hàng trên máy tính
@@ -95,8 +117,8 @@ export function LibraryPane({ className }: { className?: string }) {
 
   const now = dataNow();
   const tplName = useMemo(
-    () => Object.fromEntries((templates.data ?? []).map((tp) => [tp.id, tp.name])),
-    [templates.data],
+    () => Object.fromEntries((templates.data ?? []).map((tp) => [tp.id, templateName(tp, locale)])),
+    [templates.data, locale],
   );
 
   const week = useMemo(() => {
@@ -113,13 +135,13 @@ export function LibraryPane({ className }: { className?: string }) {
     const out: { label: string; items: Session[] }[] = [];
     for (const s of list.data ?? []) {
       const diff = dayDiff(new Date(s.created_at), now);
-      const label = diff <= 0 ? t("today") : diff === 1 ? t("yesterday") : weekdayDate(s.created_at);
+      const label = diff <= 0 ? t("today") : diff === 1 ? t("yesterday") : weekdayDate(s.created_at, locale);
       const g = out.find((x) => x.label === label);
       if (g) g.items.push(s);
       else out.push({ label, items: [s] });
     }
     return out;
-  }, [list.data, now, t]);
+  }, [list.data, now, t, locale]);
 
   const u = me.data;
   const q = quota.data;
@@ -131,9 +153,11 @@ export function LibraryPane({ className }: { className?: string }) {
   }
 
   const unfinishedTime = recording.startedAtClock
-    ? new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false }).format(
-        new Date(recording.startedAtClock),
-      )
+    ? new Intl.DateTimeFormat(locale === "en" ? "en-US" : "vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).format(new Date(recording.startedAtClock))
     : "";
 
   function rowStatusText(s: Session) {
@@ -154,21 +178,48 @@ export function LibraryPane({ className }: { className?: string }) {
     }
   }
 
-  /* ---------- Chọn nhiều (M4-01) ---------- */
+  /* ---------- Chọn nhiều (M4-01, máy tính Shift/Esc: M5-01) ---------- */
 
-  function enterSelect(firstId: string) {
+  function enterSelect(firstId: string, suppressNextToggle = false) {
     setSelecting(true);
     setSelectedIds([firstId]);
     setSwipeOpenId(null);
+    anchorRef.current = firstId;
+    // Nhấn giữ ăn: lần click kế tiếp là nhả tay của chính cử chỉ giữ, bỏ qua
+    // để không hủy chọn hàng vừa chọn. Bấm ô chọn thì không cần chặn.
+    suppressToggleRef.current = suppressNextToggle;
+    if (suppressNextToggle) window.setTimeout(() => (suppressToggleRef.current = false), 600);
   }
 
-  function toggleSelect(id: string) {
+  function toggleSelect(id: string, shift = false) {
+    if (suppressToggleRef.current) {
+      suppressToggleRef.current = false;
+      return;
+    }
+    // Bấm ô chọn khi chưa ở chế độ chọn (máy tính rê chuột): vào chế độ chọn
+    if (!selecting) {
+      enterSelect(id);
+      return;
+    }
+    // Shift+bấm: chọn liền dải từ hàng mốc tới hàng vừa bấm (máy tính, M5-01)
+    if (shift && anchorRef.current) {
+      const order = (list.data ?? []).map((s) => s.id);
+      const a = order.indexOf(anchorRef.current);
+      const b = order.indexOf(id);
+      if (a !== -1 && b !== -1) {
+        const [lo, hi] = a < b ? [a, b] : [b, a];
+        setSelectedIds(order.slice(lo, hi + 1));
+        return;
+      }
+    }
+    anchorRef.current = id;
     setSelectedIds((list) => (list.includes(id) ? list.filter((x) => x !== id) : [...list, id]));
   }
 
   function exitSelect() {
     setSelecting(false);
     setSelectedIds([]);
+    anchorRef.current = null;
   }
 
   async function confirmDelete() {
@@ -237,6 +288,14 @@ export function LibraryPane({ className }: { className?: string }) {
           </p>
           <Button
             variant="ghost"
+            icon={Share2}
+            iconOnly
+            aria-label={t("swipeShare")}
+            disabled={selectedIds.length !== 1}
+            onClick={() => selectedIds.length === 1 && setShareTargetId(selectedIds[0])}
+          />
+          <Button
+            variant="ghost"
             icon={Trash2}
             iconOnly
             aria-label={t("deleteAction")}
@@ -251,7 +310,7 @@ export function LibraryPane({ className }: { className?: string }) {
             disabled={!selectedIds.length}
             onClick={() => setPurgeIds(selectedIds)}
           />
-          <Button variant="secondary" className="h-9" onClick={exitSelect}>
+          <Button variant="secondary" className="h-11" onClick={exitSelect}>
             {t("doneAction")}
           </Button>
         </header>
@@ -288,14 +347,14 @@ export function LibraryPane({ className }: { className?: string }) {
                   restoreRecording();
                   router.push("/record");
                 }}
-                className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2"
+                className="-my-2 inline-flex h-11 items-center px-1 font-semibold underline underline-offset-2"
               >
                 {t("restore")}
               </button>
               <button
                 type="button"
                 onClick={() => setConfirmDiscard(true)}
-                className="-my-2 inline-flex h-10 items-center px-1 font-semibold underline underline-offset-2"
+                className="-my-2 inline-flex h-11 items-center px-1 font-semibold underline underline-offset-2"
               >
                 {t("discard")}
               </button>
@@ -320,7 +379,7 @@ export function LibraryPane({ className }: { className?: string }) {
           {/* Ngày hạn mức mới tính từ period_end như màn hình ghi, không viết cứng (PR #22, lỗi 4) */}
           {t("quotaOut", {
             limit: q.minutes_limit,
-            date: shortDate(new Date(Date.parse(q.period_end) + 86400_000)),
+            date: shortDate(new Date(Date.parse(q.period_end) + 86400_000), locale),
           })}
         </Banner>
       ) : q && q.minutes_used / q.minutes_limit >= 0.8 ? (
@@ -393,10 +452,10 @@ export function LibraryPane({ className }: { className?: string }) {
                     selected={!selecting && params?.id === s.id}
                     selecting={selecting}
                     checked={selectedIds.includes(s.id)}
-                    onToggleCheck={() => toggleSelect(s.id)}
+                    onToggleCheck={(shift) => toggleSelect(s.id, shift)}
                     checkOnLabel={t("pickRowOff")}
                     checkOffLabel={t("pickRowOn")}
-                    onLongPress={() => enterSelect(s.id)}
+                    hoverCheck={true}
                     title={s.title || t("untitled")}
                     duration={durationLabel(s.duration_sec)}
                     template={tplName[s.template_id] ?? ""}
@@ -417,13 +476,15 @@ export function LibraryPane({ className }: { className?: string }) {
                     }
                     action={
                       s.status === "failed" ? (
-                        <Button variant="ghost" className="-my-2 h-9" onClick={() => retry(s.id)}>
+                        <Button variant="ghost" className="-my-2 min-h-11" onClick={() => retry(s.id)}>
                           {t("retry")}
                         </Button>
                       ) : undefined
                     }
                     trailing={
-                      <span className="hidden lg:block">
+                      /* Ẩn trên điện thoại nhưng vẫn bấm được bằng bàn phím:
+                         nhận tiêu điểm thì hiện — thao tác hàng thay cho vuốt (M5-03) */
+                      <span className="opacity-0 transition-opacity has-[:focus-visible]:opacity-100 lg:opacity-100">
                         <Button
                           variant="ghost"
                           icon={Ellipsis}
@@ -446,6 +507,7 @@ export function LibraryPane({ className }: { className?: string }) {
                     deleteLabel={t("swipeDelete")}
                     onShare={() => (setSwipeOpenId(null), setShareTargetId(s.id))}
                     onDelete={() => (setSwipeOpenId(null), setDeleteIds([s.id]))}
+                    onLongPress={() => enterSelect(s.id, true)}
                   >
                     {row}
                   </SwipeRow>

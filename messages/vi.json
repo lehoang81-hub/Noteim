@@ -1,4 +1,6 @@
 {
+  "speakerYou": "Bạn",
+  "speakerN": "Người nói {n}",
   "metadata": {
     "title": "Noteim",
     "description": "Biên bản họp từ ghi âm, dành cho dân chuyên nghiệp Việt Nam."
@@ -501,7 +503,7 @@
     "foldProcessing": "Đang tóm tắt",
     "offlineRecording": "Mất mạng. Vẫn đang ghi và lưu trên máy này.",
     "sessionQuotaLow": "Còn {minutes} phút cho buổi này (gói {plan} tối đa {limit}).",
-    "sessionQuotaOut": "Buổi ghi đã đủ {limit} tối đa của gói {plan}. Đang tóm tắt.",
+    "sessionQuotaOut": "Buổi ghi đã đạt {limit} tối đa của gói {plan}. Đang tóm tắt.",
     "quotaOutTitle": "Hết hạn mức tháng này",
     "quotaOutBody": "Bạn đã dùng hết {limit} phút tháng này. Hạn mức mới có từ ngày {date}.",
     "viewPro": "Xem gói Pro",
@@ -512,7 +514,7 @@
     "trySample": "Dùng thử với âm thanh mẫu",
     "sampleBadge": "Đang dùng âm thanh mẫu",
     "micTakenBanner": "Đã tạm dừng vì micro bị dùng ở nơi khác.",
-    "storageFull": "Bộ nhớ của trình duyệt đã đầy. Buổi ghi mới có thể không được lưu. Xóa bớt buổi ghi hoặc đặt lại dữ liệu mẫu.",
+    "storageFull": "Bộ nhớ của trình duyệt đã đầy. Buổi ghi mới có thể không lưu được. Xóa bớt buổi ghi hoặc đặt lại dữ liệu mẫu.",
     "backToLibrary": "Về thư viện",
     "hours": "{h} giờ",
     "minutes": "{m} phút"
@@ -582,7 +584,7 @@
     "minutes": "{m} phút",
     "hours": "{h} giờ {m}",
     "unfinished": "Buổi ghi lúc {time} chưa lưu xong ({duration}).",
-    "storageFull": "Bộ nhớ của trình duyệt đã đầy. Buổi ghi mới có thể không được lưu. Xóa bớt buổi ghi hoặc đặt lại dữ liệu mẫu.",
+    "storageFull": "Bộ nhớ của trình duyệt đã đầy. Buổi ghi mới có thể không lưu được. Xóa bớt buổi ghi hoặc đặt lại dữ liệu mẫu.",
     "restore": "Khôi phục",
     "discard": "Bỏ",
     "discardTitle": "Bỏ buổi ghi dang dở?",
@@ -662,7 +664,7 @@
     "processing": "Đang tóm tắt buổi ghi này, bước {step}/5. Bạn có thể rời màn hình này.",
     "failed": "Chưa tóm tắt được buổi ghi này. Bản ghi âm vẫn an toàn.",
     "failedReason": "Lý do: {reason}",
-    "unsynced": "Buổi ghi đang chờ mạng để tải lên. Bản ghi âm vẫn nằm an toàn trên máy này.",
+    "unsynced": "Buổi ghi đang chờ mạng để tải lên. Bản ghi âm vẫn an toàn trên máy này.",
     "soonTab": "Tab này có ở bước tiếp theo của bản mockup.",
     "nameSpeakers": "Đổi tên người nói",
     "sentAt": "Đã gửi {date}",
@@ -727,7 +729,7 @@
     "quoteCardNext": "Thẻ trích dẫn có ở bước tiếp theo.",
     "glossaryAdd": "Thêm vào từ điển",
     "glossaryAdded": "Đã thêm “{term}” vào từ điển",
-    "essenceEmpty": "Buổi ghi này chỉ còn tóm tắt. Bản ghi lời đã được dọn cùng bản gốc, không nghe lại được từng đoạn."
+    "essenceEmpty": "Buổi ghi này chỉ còn tóm tắt. Bản ghi lời đã dọn cùng bản gốc, không nghe lại được từng đoạn."
   },
   "speakers": {
     "title": "Ai là ai?",
@@ -983,7 +985,7 @@
     "title": "Nhập file ghi âm",
     "dropTitle": "Kéo thả file vào đây, hoặc bấm để chọn",
     "dropHint": "Hỗ trợ file ghi âm và video: mp3, m4a, wav, mp4, mov và các định dạng phổ biến.",
-    "badFormat": "Định dạng của \"{name}\" chưa hỗ trợ. Chọn file ghi âm hoặc video.",
+    "badFormat": "Chưa hỗ trợ định dạng của \"{name}\". Chọn file ghi âm hoặc video.",
     "readingDuration": "Đang đọc thời lượng của file",
     "tooLong": "File dài {duration}. Gói Free tóm tắt tối đa {limit} phút mỗi buổi.",
     "overMonth": "File dài hơn hạn mức tháng còn lại ({minutes} phút). Nâng cấp gói Pro để có 1.200 phút mỗi tháng.",

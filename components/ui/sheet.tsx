@@ -2,14 +2,17 @@
 
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { AnimatePresence, motion, useDragControls, type DragControls, type PanInfo } from "motion/react";
+import { useEffect, useRef } from "react";
+import { AnimatePresence, m, useDragControls, type DragControls, type PanInfo } from "motion/react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 
 /*
  * Bảng trượt từ dưới lên (docs/02-design-system.md, bo góc --r-sheet hai góc trên).
- * - size "half": cao tối đa nửa màn hình; "full": gần hết màn hình
+ * - size "half": cao tối đa nửa màn hình; "full": gần hết màn hình;
+ *   "auto": cao theo nội dung, tối đa gần hết màn hình (M5-01 — bảng có
+ *   nội dung ngắn không còn kéo hết màn hình)
  * - Đóng bằng nút X, chạm nền mờ, phím Esc, hoặc vuốt tay nắm xuống
  * - Giữ tiêu điểm bên trong khi mở (Radix Dialog)
  * - Bật giảm chuyển động: hiện bằng mờ dần, không trượt
@@ -29,13 +32,27 @@ export function Sheet({
   onOpenChange: (open: boolean) => void;
   title: string;
   description?: string;
-  size?: "half" | "full";
+  size?: "half" | "full" | "auto";
   children: React.ReactNode;
   footer?: React.ReactNode;
 }) {
   const t = useTranslations("ui");
   const reduce = useReducedMotionSafe();
   const controls = useDragControls();
+  // Trả tiêu điểm về nút đã mở bảng khi đóng (M5-03): bảng mở bằng lệnh,
+  // không qua Dialog.Trigger nên Radix không biết trả về đâu.
+  const openerRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (open) {
+      openerRef.current = document.activeElement as HTMLElement | null;
+      return;
+    }
+    const el = openerRef.current;
+    openerRef.current = null;
+    if (el && document.contains(el)) {
+      window.setTimeout(() => el.focus(), 0);
+    }
+  }, [open]);
 
   function onDragEnd(_: unknown, info: PanInfo) {
     if (info.offset.y > 120 || info.velocity.y > 600) onOpenChange(false);
@@ -47,7 +64,7 @@ export function Sheet({
         {open ? (
           <Dialog.Portal forceMount>
             <Dialog.Overlay asChild forceMount>
-              <motion.div
+              <m.div
                 className="fixed inset-0 z-40 bg-ink/40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -56,10 +73,10 @@ export function Sheet({
               />
             </Dialog.Overlay>
             <Dialog.Content asChild forceMount {...(description ? {} : { "aria-describedby": undefined })}>
-              <motion.div
+              <m.div
                 className={cn(
                   "fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-w-[560px] flex-col rounded-t-sheet border border-b-0 border-line bg-surface text-ink shadow-float focus:outline-none",
-                  size === "half" ? "max-h-[55dvh]" : "h-[calc(100dvh-24px)]",
+                  size === "half" ? "max-h-[55dvh]" : size === "auto" ? "max-h-[calc(100dvh-24px)]" : "h-[calc(100dvh-24px)]",
                 )}
                 initial={reduce ? { opacity: 0 } : { y: "100%" }}
                 animate={reduce ? { opacity: 1 } : { y: 0 }}
@@ -91,7 +108,7 @@ export function Sheet({
                 {footer ? (
                   <div className="border-t border-line px-page pb-[max(16px,env(safe-area-inset-bottom))] pt-3">{footer}</div>
                 ) : null}
-              </motion.div>
+              </m.div>
             </Dialog.Content>
           </Dialog.Portal>
         ) : null}

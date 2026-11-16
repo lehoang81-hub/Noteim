@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, Check, ClipboardCopy, Send, TriangleAlert } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet } from "@/components/ui/sheet";
@@ -43,6 +43,7 @@ export function SendMinutesSheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const t = useTranslations("sendMinutes");
+  const locale = useLocale();
   const ts = useTranslations("session");
   const toast = useToast();
 
@@ -342,7 +343,7 @@ export function SendMinutesSheet({
                           onBlur={() => void saveEmail(id)}
                           placeholder={t("emailMissing")}
                           aria-invalid={!!emailErrors[id] || undefined}
-                          className="h-10 w-full max-w-xs rounded-control border border-line bg-surface px-3 text-small text-ink placeholder:text-ink-3 aria-[invalid=true]:border-tag-risk focus:border-dien focus-visible:outline-none"
+                          className="min-h-11 w-full max-w-xs rounded-control border border-line bg-surface px-3 text-small text-ink placeholder:text-ink-3 aria-[invalid=true]:border-tag-risk focus:border-dien focus-visible:outline-none"
                         />
                         {emailErrors[id] ? (
                           <p role="alert" className="mt-1 text-small font-medium text-tag-risk">
@@ -440,7 +441,7 @@ export function SendMinutesSheet({
                         value={e.subject}
                         onChange={(ev) => setEdits((m) => ({ ...m, [key]: { ...e, subject: ev.target.value } }))}
                         aria-label={ts("edit")}
-                        className="mt-2 h-10 w-full rounded-control border border-line bg-surface px-2 text-small font-semibold text-ink focus:border-dien focus-visible:outline-none"
+                        className="mt-2 min-h-11 w-full rounded-control border border-line bg-surface px-2 text-small font-semibold text-ink focus:border-dien focus-visible:outline-none"
                       />
                       {/* Phần do AI soạn: viền điện */}
                       <div className="mt-2 rounded-control border border-dien p-2">
@@ -461,7 +462,7 @@ export function SendMinutesSheet({
                           {items.map((a) => (
                             <li key={a.id} className="text-small text-ink-2">
                               <span className="font-medium text-ink">{a.task}</span>
-                              {a.due_date ? `, ${shortDate(a.due_date)}` : ""}
+                              {a.due_date ? `, ${shortDate(a.due_date, locale)}` : ""}
                               {a.source_quote ? (
                                 <span className="mt-0.5 block border-l-2 border-line pl-2 text-caption text-ink-3">
                                   “{a.source_quote}”

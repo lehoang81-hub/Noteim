@@ -5,7 +5,7 @@ import { mockSource, MOCK_NOW } from "./mock";
 import { subscribeFlags } from "@/lib/debug/flags";
 import { resetDb, subscribeDb } from "./mock/store";
 import type { DataSource } from "./repository";
-import { DataError } from "./types";
+import { DataError } from "./errors";
 
 /*
  * Nơi DUY NHẤT chọn bản cài đặt dữ liệu.
@@ -44,7 +44,12 @@ export function useDataVersion() {
   return useSyncExternalStore(subscribeVersion, () => version, () => 0);
 }
 
-export * from "./types";
+export { DataError } from "./errors";
+// Chỉ re-export kiểu từ types.ts (M5, sửa review PR #41 mục 2): types.ts dựng
+// schema Zod lúc nạp module; re-export dạng type bị xóa khi biên dịch nên
+// chunk khởi tạo không mang Zod. DataError là giá trị nên re-export riêng
+// từ errors.ts (không phụ thuộc Zod).
+export type * from "./types";
 export type * from "./repository";
 
 /* ---------- Hook đọc dữ liệu ---------- */

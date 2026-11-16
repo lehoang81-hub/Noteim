@@ -61,7 +61,7 @@ export function FilterChip({
       type="button"
       aria-pressed={selected}
       className={cn(
-        "inline-flex h-9 shrink-0 items-center gap-1.5 rounded-pill border px-3.5 text-small font-medium",
+        "inline-flex h-11 shrink-0 items-center gap-1.5 rounded-pill border px-3.5 text-small font-medium",
         "transition-colors ease-noteim duration-(--t-quick)",
         selected ? "border-ink bg-ink text-bg" : "border-line bg-surface text-ink-2 hover:bg-surface-2 hover:text-ink",
         className,

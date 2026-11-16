@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, ClipboardCopy, Ellipsis, Pencil, Quote, Scissors, ListPlus, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { SummaryBullet, UserNote } from "@/components/session/summary-bullet";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { formatClock } from "@/components/ribbon/draw";
 import { data, type Bullet, type SessionDetail, type Template, type Topic } from "@/lib/data";
+import { footerNote, sectionTitle, speakerLabel } from "@/lib/data/localize";
 import type { ShareIntent } from "./share-sheet";
 
 /*
@@ -22,8 +23,9 @@ import type { ShareIntent } from "./share-sheet";
 
 function FigureBars({ figure }: { figure: NonNullable<Topic["figure"]> }) {
   const t = useTranslations("session");
+  const locale = useLocale();
   const max = Math.max(...figure.values);
-  const fmt = (v: number) => v.toLocaleString("vi-VN", { maximumFractionDigits: 2 });
+  const fmt = (v: number) => new Intl.NumberFormat(locale === "en" ? "en-US" : "vi-VN", { maximumFractionDigits: 2 }).format(v);
   return (
     <figure className="ml-5 mt-2 rounded-block border border-line p-3">
       <figcaption className="text-small font-medium text-ink">{figure.title}</figcaption>
@@ -68,10 +70,12 @@ export function SummaryTab({
   onShareIntent?: (intent: ShareIntent) => void;
 }) {
   const t = useTranslations("session");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const ts = useTranslations("transcript");
+  const locale = useLocale();
   const toast = useToast();
   const colorOf = Object.fromEntries(detail.speakers.map((s) => [s.id, s.color_index]));
-  const speakerNameOf = Object.fromEntries(detail.speakers.map((s) => [s.id, s.display_name]));
+  const speakerNameOf = Object.fromEntries(detail.speakers.map((s) => [s.id, speakerLabel(s, detail.speakers, tr)]));
   const noteById = Object.fromEntries(detail.notes.map((n) => [n.id, n]));
 
   const allBullets = detail.topics.flatMap((tp) => tp.bullets).sort((a, b) => a.timestamp_sec - b.timestamp_sec);
@@ -142,7 +146,7 @@ export function SummaryTab({
 
   const sections = (template?.sections ?? []).filter((s) => s.enabled);
   const ordered = [
-    ...sections.map((s) => ({ id: s.id, title: s.title, topics: detail.topics.filter((tp) => tp.section_id === s.id) })),
+    ...sections.map((s) => ({ id: s.id, title: sectionTitle(s, locale), topics: detail.topics.filter((tp) => tp.section_id === s.id) })),
     {
       id: "other",
       title: "",
@@ -170,7 +174,7 @@ export function SummaryTab({
                     type="button"
                     onClick={() => onSeek(topic.start_sec)}
                     aria-label={`${t("seek")} ${formatClock(topic.start_sec)}`}
-                    className="inline-flex min-h-8 items-center rounded-control text-caption font-medium tabular-nums text-ink-3 hover:underline"
+                    className="relative inline-flex min-h-8 items-center rounded-control text-caption font-medium tabular-nums text-ink-3 hover:underline after:absolute after:-inset-1.5 after:content-['']"
                   >
                     {formatClock(topic.start_sec)}
                   </button>
@@ -251,7 +255,7 @@ export function SummaryTab({
         </section>
       ))}
 
-      {template?.footer_note ? <p className="mt-8 text-small text-ink-3">{template.footer_note}</p> : null}
+      {footerNote(template, locale) ? <p className="mt-8 text-small text-ink-3">{footerNote(template, locale)}</p> : null}
 
       <div className="mt-8 flex flex-wrap gap-2">
         <Button variant="primary" onClick={onSendMinutes}>

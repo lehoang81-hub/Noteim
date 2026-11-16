@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { TaskRow } from "@/components/session/task-row";
 import { FilterChip } from "@/components/ui/chips";
@@ -28,6 +28,9 @@ const MY_CONTACT_ID = "c-me";
 export default function TasksPage() {
   const t = useTranslations("tasksPage");
   const ts = useTranslations("session");
+  // Nhãn "Bạn" của chính người dùng theo ngôn ngữ giao diện (review #41 mục 5)
+  const tr = useTranslations();
+  const locale = useLocale();
   const router = useRouter();
   const toast = useToast();
   const now = dataNow();
@@ -38,8 +41,10 @@ export default function TasksPage() {
   const [doneOpen, setDoneOpen] = useState(false);
 
   const nameOf = useMemo(
-    () => Object.fromEntries((contacts.data ?? []).map((c) => [c.id, c.id === MY_CONTACT_ID ? c.role ?? c.name : c.name])),
-    [contacts.data],
+    // Liên hệ "c-me" là chính người dùng: role trong fixture là nhãn hệ thống
+    // tiếng Việt ("Bạn"), hiển thị qua speakerYou (review #41 mục 5)
+    () => Object.fromEntries((contacts.data ?? []).map((c) => [c.id, c.id === MY_CONTACT_ID ? tr("speakerYou") : c.name])),
+    [contacts.data, tr],
   );
 
   const sessionTitle = useMemo(
@@ -166,7 +171,7 @@ export default function TasksPage() {
                           sessionLabel={t("inSession", { session: sessionTitle[a.session_id] ?? a.session_id })}
                           assignee={a.assignee_contact_id ? nameOf[a.assignee_contact_id] : undefined}
                           unassignedLabel={ts("unassigned")}
-                          due={a.due_date ? (isOverdue(a) ? ts("overdueOn", { date: shortDate(endOfDay(a.due_date)) }) : ts("due", { date: shortDate(endOfDay(a.due_date)) })) : undefined}
+                          due={a.due_date ? (isOverdue(a) ? ts("overdueOn", { date: shortDate(endOfDay(a.due_date), locale) }) : ts("due", { date: shortDate(endOfDay(a.due_date), locale) })) : undefined}
                           overdue={isOverdue(a)}
                           priority={!a.done && a.priority !== "medium" ? ts(`pr.${a.priority}`) : undefined}
                           time={a.timestamp_sec !== null ? formatClock(a.timestamp_sec) : undefined}
@@ -209,7 +214,7 @@ export default function TasksPage() {
                         openLabel={t("openSession", { session: sessionTitle[a.session_id] ?? a.session_id })}
                         sessionLabel={t("inSession", { session: sessionTitle[a.session_id] ?? a.session_id })}
                         unassignedLabel={ts("unassigned")}
-                        due={a.done_at ? ts("doneOn", { date: shortDate(a.done_at) }) : undefined}
+                        due={a.done_at ? ts("doneOn", { date: shortDate(a.done_at, locale) }) : undefined}
                       />
                     ))}
                   </div>

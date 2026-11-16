@@ -58,9 +58,23 @@ export const Template = z.object({
   id: z.string(),
   profession: Profession,
   name: z.string(),
-  sections: z.array(z.object({ id: z.string(), title: z.string(), enabled: z.boolean() })),
+  /** Tên mẫu bằng tiếng Anh (M5-02); thiếu thì dùng trường tiếng Việt */
+  name_en: z.string().optional().catch(undefined),
+  sections: z.array(
+    z.object({
+      id: z.string(),
+      title: z.string(),
+      /** Tên phần bằng tiếng Anh (M5-02) */
+      title_en: z.string().optional().catch(undefined),
+      enabled: z.boolean(),
+    }),
+  ),
   suggested_questions: z.array(z.string()),
+  /** Gợi ý câu hỏi bằng tiếng Anh (M5-02) */
+  suggested_questions_en: z.array(z.string()).optional().catch(undefined),
   footer_note: z.string().optional(),
+  /** Dòng lưu ý bằng tiếng Anh (M5-02), ví dụ mẫu Buổi khám */
+  footer_note_en: z.string().optional().catch(undefined),
 });
 export type Template = z.infer<typeof Template>;
 
@@ -100,7 +114,10 @@ export type Session = z.infer<typeof Session>;
 export const Speaker = z.object({
   id: z.string(),
   contact_id: z.string().nullable(),
-  display_name: z.string(),
+  // Chưa đặt tên thì null (M5, sửa review PR #41 mục 5): nhãn "Bạn"/
+  // "Người nói N" là nhãn hệ thống, hiển thị lúc vẽ theo ngôn ngữ giao diện
+  // qua speakerLabel trong lib/data/localize.ts, không lưu vào dữ liệu.
+  display_name: z.string().nullable(),
   is_me: z.boolean(),
   color_index: z.number().int().min(0).max(5),
   talk_ratio_percent: z.number(),
@@ -232,11 +249,7 @@ export type SessionFixture = z.infer<typeof SessionFixture>;
 
 /* ---------- Lỗi ---------- */
 
-export type DataErrorCode = "offline" | "not_found" | "quota_exceeded" | "server";
-
-export class DataError extends Error {
-  constructor(public code: DataErrorCode, message?: string) {
-    super(message ?? code);
-    this.name = "DataError";
-  }
-}
+// Đã tách sang errors.ts (M5, sửa review PR #41 mục 2): types.ts dựng schema
+// Zod lúc nạp module, còn DataError được import dạng giá trị ở nhiều nơi.
+// Re-export để chỗ import từ "@/lib/data/types" cũ vẫn chạy.
+export { DataError, type DataErrorCode } from "./errors";

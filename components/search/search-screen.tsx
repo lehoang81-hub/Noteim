@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Clock, Search as SearchIcon, Users, X } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatClock } from "@/components/ribbon/draw";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { EmptyState, SkeletonRow } from "@/components/ui/feedback";
 import { SearchField } from "@/components/ui/form";
 import { data, useData, type SearchResult as SearchResultData, type Session } from "@/lib/data";
 import { durationParts, weekdayDate } from "@/lib/format";
+import { templateName } from "@/lib/data/localize";
 
 /*
  * Tìm kiếm (docs/03-screens.md mục 11, issue M4-02).
@@ -86,6 +87,7 @@ function durationLabel(sec: number, fmt: (h: number, m: string) => string): stri
 
 export function SearchScreen() {
   const t = useTranslations("search");
+  const locale = useLocale();
   const tl = useTranslations("library");
   const me = useData(() => data.account.me(), []);
   const templates = useData(() => data.account.templates(), []);
@@ -96,6 +98,9 @@ export function SearchScreen() {
   const [raw, setRaw] = useState("");
   const [query, setQuery] = useState(""); // đã qua chờ 250ms
   const [recent, setRecent] = useState<string[]>([]);
+  // Danh sách tìm gần đây đọc localStorage sau khung vẽ đầu; chờ xong mới vẽ
+  // khối gợi ý để recent hiện ra không đẩy phần bên dưới (review #41 mục 3)
+  const [recentReady, setRecentReady] = useState(false);
   const mounted = useRef(false);
 
   // Lấy ô tìm lấy nét sẵn và danh sách tìm gần đây sau khung vẽ đầu
@@ -103,6 +108,7 @@ export function SearchScreen() {
   useEffect(() => {
     const id = window.setTimeout(() => {
       setRecent(readRecent());
+      setRecentReady(true);
       mounted.current = true;
       document.querySelector<HTMLInputElement>("input[type=search]")?.focus();
     }, 0);
@@ -151,6 +157,13 @@ export function SearchScreen() {
   const r = results.data;
   const noResult = query && r && !r.sessions.length && !r.segments.length && !r.tasks.length;
 
+  // Gợi ý theo người và theo mẫu dựa vào danh sách buổi ghi về sau độ trễ giả
+  // (300–800ms). Trước đây phần này hiện dần từng khối, đẩy EmptyState và
+  // phần trên xuống → CLS /search có lúc 0,163 (review PR #41 mục 3). Giờ:
+  // đang tải thì giữ chỗ sẵn bằng khung xương, hết tải mới hiện hết một lúc;
+  // EmptyState chỉ tính khi đã tải xong và thật sự không có gì.
+  const idleLoading = contacts.initialLoading || templates.initialLoading || sessions.initialLoading;
+
   return (
     <div className="mx-auto min-h-dvh w-full max-w-2xl">
       <header className="flex min-h-14 items-center gap-1 px-page pt-2 lg:px-8 lg:pt-4">
@@ -172,45 +185,48 @@ export function SearchScreen() {
       </header>
 
       <div className="px-page pb-40 pt-4 lg:px-8">
-        {/* Chưa gõ: tìm gần đây + gợi ý theo người và theo mẫu */}
+        {/* Chưa gõ: tìm gần đây + gợi ý theo người và theo mẫu. Chờ recent
+            đọc xong (một khung vẽ) rồi mới vẽ cả khối — review #41 mục 3. */}
         {!query ? (
           <div>
-            {recent.length ? (
-              <section aria-label={t("recent")}>
-                <div className="flex items-center gap-3">
-                  <h2 className="text-small font-semibold text-ink-2">{t("recent")}</h2>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setRecent([]);
-                      saveRecent([]);
-                    }}
-                    className="ml-auto text-caption font-medium text-ink-3 underline underline-offset-2 hover:text-ink"
-                  >
-                    {t("clearAll")}
-                  </button>
-                </div>
-                <ul className="mt-2 divide-y divide-line">
-                  {recent.map((term) => (
-                    <li key={term} className="flex items-center">
-                      <button
-                        type="button"
-                        onClick={() => setRaw(term)}
-                        className="flex min-h-12 flex-1 items-center gap-3 py-2 text-left text-body text-ink"
-                      >
-                        <Clock aria-hidden={true} className="size-5 shrink-0 text-ink-3" strokeWidth={1.75} />
-                        <span className="min-w-0 flex-1 truncate">{term}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const next = recent.filter((x) => x !== term);
-                          setRecent(next);
-                          saveRecent(next);
-                        }}
-                        aria-label={t("removeOne", { term })}
-                        className="flex size-11 shrink-0 items-center justify-center rounded-control text-ink-3 hover:bg-surface-2 hover:text-ink"
-                      >
+            {recentReady ? (
+              <>
+              {recent.length ? (
+                <section aria-label={t("recent")}>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-small font-semibold text-ink-2">{t("recent")}</h2>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setRecent([]);
+                        saveRecent([]);
+                      }}
+                      className="ml-auto text-caption font-medium text-ink-3 underline underline-offset-2 hover:text-ink"
+                    >
+                      {t("clearAll")}
+                    </button>
+                  </div>
+                  <ul className="mt-2 divide-y divide-line">
+                    {recent.map((term) => (
+                      <li key={term} className="flex items-center">
+                        <button
+                          type="button"
+                          onClick={() => setRaw(term)}
+                          className="flex min-h-12 flex-1 items-center gap-3 py-2 text-left text-body text-ink"
+                        >
+                          <Clock aria-hidden={true} className="size-5 shrink-0 text-ink-3" strokeWidth={1.75} />
+                          <span className="min-w-0 flex-1 truncate">{term}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const next = recent.filter((x) => x !== term);
+                            setRecent(next);
+                            saveRecent(next);
+                          }}
+                          aria-label={t("removeOne", { term })}
+                          className="flex size-11 shrink-0 items-center justify-center rounded-control text-ink-3 hover:bg-surface-2 hover:text-ink"
+                        >
                         <X aria-hidden={true} className="size-4" strokeWidth={2} />
                       </button>
                     </li>
@@ -219,44 +235,69 @@ export function SearchScreen() {
               </section>
             ) : null}
 
-            {people.length ? (
-              <section aria-label={t("byPeople")} className="mt-6">
-                <h2 className="flex items-center gap-2 text-small font-semibold text-ink-2">
-                  <Users aria-hidden={true} className="size-4" strokeWidth={1.75} />
-                  {t("byPeople")}
-                </h2>
-                <ul className="mt-2 flex flex-wrap gap-2">
-                  {people.map((c) => (
-                    <li key={c.id}>
-                      <Button variant="secondary" className="h-9" onClick={() => setRaw(c.name)}>
-                        {c.name}
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
+            {idleLoading ? (
+              // Giữ chỗ hai khối gợi ý cùng dạng (tiêu đề + hàng chip) để
+              // nội dung thật hiện ra không đẩy gì trong khung nhìn
+              <div aria-hidden={true} className="mt-6 space-y-6">
+                <section>
+                  <div className="h-5 w-24 animate-pulse rounded-control bg-surface-2 motion-reduce:animate-none" />
+                  <div className="mt-2 flex gap-2">
+                    <div className="h-11 w-28 animate-pulse rounded-control bg-surface-2 motion-reduce:animate-none" />
+                    <div className="h-11 w-36 animate-pulse rounded-control bg-surface-2 motion-reduce:animate-none" />
+                  </div>
+                </section>
+                <section>
+                  <div className="h-5 w-20 animate-pulse rounded-control bg-surface-2 motion-reduce:animate-none" />
+                  <div className="mt-2 flex gap-2">
+                    <div className="h-11 w-32 animate-pulse rounded-control bg-surface-2 motion-reduce:animate-none" />
+                    <div className="h-11 w-24 animate-pulse rounded-control bg-surface-2 motion-reduce:animate-none" />
+                  </div>
+                </section>
+              </div>
+            ) : (
+              <>
+                {people.length ? (
+                  <section aria-label={t("byPeople")} className="mt-6">
+                    <h2 className="flex items-center gap-2 text-small font-semibold text-ink-2">
+                      <Users aria-hidden={true} className="size-4" strokeWidth={1.75} />
+                      {t("byPeople")}
+                    </h2>
+                    <ul className="mt-2 flex flex-wrap gap-2">
+                      {people.map((c) => (
+                        <li key={c.id}>
+                          <Button variant="secondary" className="h-11" onClick={() => setRaw(c.name)}>
+                            {c.name}
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ) : null}
 
-            {usedTemplates.length ? (
-              <section aria-label={t("byTemplate")} className="mt-6">
-                <h2 className="flex items-center gap-2 text-small font-semibold text-ink-2">
-                  <SearchIcon aria-hidden={true} className="size-4" strokeWidth={1.75} />
-                  {t("byTemplate")}
-                </h2>
-                <ul className="mt-2 flex flex-wrap gap-2">
-                  {usedTemplates.map((tp) => (
-                    <li key={tp.id}>
-                      <Button variant="secondary" className="h-9" onClick={() => setRaw(tp.name)}>
-                        {tp.name}
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
+                {usedTemplates.length ? (
+                  <section aria-label={t("byTemplate")} className="mt-6">
+                    <h2 className="flex items-center gap-2 text-small font-semibold text-ink-2">
+                      <SearchIcon aria-hidden={true} className="size-4" strokeWidth={1.75} />
+                      {t("byTemplate")}
+                    </h2>
+                    <ul className="mt-2 flex flex-wrap gap-2">
+                      {usedTemplates.map((tp) => (
+                        <li key={tp.id}>
+                          <Button variant="secondary" className="h-11" onClick={() => setRaw(templateName(tp, locale))}>
+                            {templateName(tp, locale)}
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ) : null}
 
-            {!recent.length && !people.length && !usedTemplates.length ? (
-              <EmptyState drawing={<span />} message={t("emptyHint")} />
+                {!recent.length && !people.length && !usedTemplates.length ? (
+                  <EmptyState drawing={<span />} message={t("emptyHint")} />
+                ) : null}
+              </>
+            )}
+            </>
             ) : null}
           </div>
         ) : results.initialLoading ? (
@@ -275,7 +316,7 @@ export function SearchScreen() {
                   <Link href={`/s/${s.id}`} className="flex min-h-12 flex-col justify-center gap-0.5 py-2 hover:opacity-80">
                     <span className="text-body-strong font-semibold text-ink">{s.title}</span>
                     <span className="text-small text-ink-3">
-                      {weekdayDate(s.created_at)}, {durationLabel(s.duration_sec, (h, m) => (h > 0 ? tl("hours", { h, m }) : tl("minutes", { m: Number(m) })))}
+                      {weekdayDate(s.created_at, locale)}, {durationLabel(s.duration_sec, (h, m) => (h > 0 ? tl("hours", { h, m }) : tl("minutes", { m: Number(m) })))}
                     </span>
                   </Link>
                 </li>

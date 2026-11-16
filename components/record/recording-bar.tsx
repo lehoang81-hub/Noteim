@@ -29,7 +29,7 @@ export function RecordingBar() {
   return (
     <Link
       href="/record"
-      className="flex min-h-9 items-center gap-2 bg-sen px-page py-1.5 text-caption font-medium text-on-sen"
+      className="flex min-h-11 items-center gap-2 bg-sen px-page py-1.5 text-caption font-medium text-on-sen"
       aria-label={paused ? t("miniPaused") : t("miniRecording")}
     >
       <span

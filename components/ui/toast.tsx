@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, TriangleAlert } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 
@@ -66,7 +66,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           {items.map((item) => {
             const Icon = item.tone === "error" ? TriangleAlert : Check;
             return (
-              <motion.div
+              <m.div
                 key={item.id}
                 layout={!reduce}
                 initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
@@ -84,12 +84,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                       item.action?.onClick();
                       dismiss(item.id);
                     }}
-                    className="-my-2 -mr-2 inline-flex h-10 items-center rounded-control px-2 font-semibold underline underline-offset-2"
+                    className="-my-2 -mr-2 inline-flex h-11 items-center rounded-control px-2 font-semibold underline underline-offset-2"
                   >
                     {item.action.label}
                   </button>
                 ) : null}
-              </motion.div>
+              </m.div>
             );
           })}
         </AnimatePresence>

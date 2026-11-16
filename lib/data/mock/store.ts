@@ -1,33 +1,18 @@
 "use client";
 
-import contactsJson from "@/fixtures/contacts.json";
-import glossaryJson from "@/fixtures/glossary.json";
-import quotaJson from "@/fixtures/quota.json";
-import s1 from "@/fixtures/sessions/bds-gap-chi-lan.json";
-import s2 from "@/fixtures/sessions/hop-dieu-hanh-t11.json";
-import s3 from "@/fixtures/sessions/luat-tu-van-ong-phuoc.json";
-import s4 from "@/fixtures/sessions/kts-hop-cong-truong.json";
-import s5 from "@/fixtures/sessions/bac-si-buoi-kham.json";
-import s6 from "@/fixtures/sessions/cong-chung-chuyen-nhuong.json";
-import s7 from "@/fixtures/sessions/loi-xu-ly.json";
-import s8 from "@/fixtures/sessions/chua-tai-len.json";
-import sampleBusiness from "@/fixtures/samples/business_owner.json";
-import sampleDoctor from "@/fixtures/samples/doctor.json";
-import sampleLawyer from "@/fixtures/samples/lawyer.json";
-import sampleNotary from "@/fixtures/samples/notary.json";
-import sampleArchitect from "@/fixtures/samples/architect.json";
-import sampleRealestate from "@/fixtures/samples/realestate_sales.json";
-import templatesJson from "@/fixtures/templates.json";
-import userJson from "@/fixtures/user.json";
-import { z } from "zod";
-import type { RecordingDraft } from "../repository";
-import { ChatMessage, Contact, GlossaryTerm, Quota, SessionFixture, ShareLink, Template, User } from "../types";
 import { clearStorageFull, markStorageFull } from "@/lib/storage-full";
+import { normalizeSpeakerNames } from "./normalize";
+import type { RecordingDraft } from "../repository";
+import type { ChatMessage, Contact, GlossaryTerm, Quota, SessionFixture, ShareLink, Template, User } from "../types";
+import type { StoredSession } from "./seed-data";
+
+export type { StoredSession } from "./seed-data";
 
 /*
- * Kho dữ liệu của bản giả: nạp fixture (kiểm tra bằng Zod), giữ trong bộ nhớ,
- * lưu thay đổi vào localStorage để tải lại trang vẫn còn.
- * Chỉ lib/data/mock được import file này.
+ * Kho dữ liệu của bản giả: nạp fixture bằng import() động khi kho khởi tạo
+ * lần đầu (M5, sửa review PR #41 mục 2 — nhờ vậy Zod và JSON fixture không
+ * nằm trong chunk khởi tạo), giữ trong bộ nhớ, lưu thay đổi vào localStorage
+ * để tải lại trang vẫn còn. Chỉ lib/data/mock được import file này.
  */
 
 const STORAGE_KEY = "noteim-mock-db-v1";
@@ -39,7 +24,7 @@ export type MockDb = {
   templates: Template[];
   glossary: GlossaryTerm[];
   sessions: Array<
-    SessionFixture & {
+    StoredSession & {
       /** Bản nháp của buổi ghi vừa ghi, dùng để sinh nội dung khi xử lý xong */
       draft?: RecordingDraft;
       /** Lịch sử hỏi đáp của tab Hỏi AI (M3-03), lưu theo buổi ghi */
@@ -51,20 +36,23 @@ export type MockDb = {
   /** Buổi ghi vừa xóa, giữ để "Hoàn tác" (M4-01); dọn khi tải lại trang */
   removed: Array<SessionFixture & { chat_log?: ChatMessage[] }>;
   /** Buổi ghi mẫu theo nghề (M4-04), tách khỏi danh sách thư viện chính */
-  samples: SessionFixture[];
+  samples: StoredSession[];
 };
 
-function seed(): MockDb {
+/**
+ * Kho mới: các thực thể gốc và buổi ghi được nạp bất đồng bộ qua ensureDb()
+ * (M5 — fixture đi qua import() động). Mọi lần đọc/ghi dữ liệu qua repository
+ * đều chờ sessionsReady() nên không có màn hình nào nhìn thấy kho rỗng.
+ */
+function emptyDb(): MockDb {
   return {
-    user: User.parse(userJson),
-    quota: Quota.parse(quotaJson),
-    contacts: z.array(Contact).parse(contactsJson),
-    templates: z.array(Template).parse(templatesJson),
-    glossary: z.array(GlossaryTerm).parse(glossaryJson),
-    sessions: [s1, s2, s3, s4, s5, s6, s7, s8].map((s) => SessionFixture.parse(s)),
-    samples: [sampleRealestate, sampleBusiness, sampleDoctor, sampleLawyer, sampleArchitect, sampleNotary].map((s) =>
-      SessionFixture.parse(s),
-    ),
+    user: null as unknown as User,
+    quota: null as unknown as Quota,
+    contacts: [],
+    templates: [],
+    glossary: [],
+    sessions: [],
+    samples: [],
     shares: [],
     removed: [],
   };
@@ -78,20 +66,100 @@ export function getDb(): MockDb {
   try {
     const saved = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
     // Kho lưu trước bản có shares/removed thì lấy giá trị mặc định cho phần thiếu
-    db = saved ? { ...seed(), ...(JSON.parse(saved) as MockDb) } : seed();
+    db = saved ? { ...emptyDb(), ...(JSON.parse(saved) as MockDb) } : emptyDb();
+    if (saved) {
+      // Kho cũ lưu nhãn hệ thống ("Bạn", "Người nói N") vào display_name —
+      // quy về chưa đặt tên để hiển thị theo ngôn ngữ (M5 sửa review #41 mục 5)
+      for (const fx of [...db.sessions, ...db.samples]) {
+        normalizeSpeakerNames(
+          (fx.detail as { speakers?: Array<{ display_name: string | null }> } | undefined)?.speakers,
+        );
+      }
+    }
   } catch {
-    db = seed();
+    db = emptyDb();
   }
   return db;
+}
+
+/**
+ * Nạp kho lần đầu (M5): fixture đi qua import() động trong seed-data.ts.
+ * - Kho mới: nạp thực thể gốc và tám buổi ghi thư viện.
+ * - Kho từ localStorage: giữ nguyên dữ liệu người dùng; chỉ bổ sung bản tiếng
+ *   Anh cho mẫu lưu trước M5-02 (M5-02) khi thiếu.
+ * Mọi lần đọc/ghi dữ liệu gọi await sessionsReady() trước nên không có màn
+ * hình nào nhìn thấy kho rỗng.
+ */
+const loadMap = new WeakMap<MockDb, Promise<MockDb>>();
+
+/** Bảo đảm kho tồn tại và bắt đầu nạp nếu chưa (kích hoạt đúng một lần). */
+export function ensureDb(): MockDb {
+  const d = getDb();
+  if (!loadMap.has(d)) {
+    loadMap.set(
+      d,
+      (async () => {
+        const mod = await import("./seed-data");
+        if (!d.templates.length) {
+          const base = await mod.loadBase();
+          d.user = base.user;
+          d.quota = base.quota;
+          d.contacts = base.contacts;
+          d.templates = base.templates;
+          d.glossary = base.glossary;
+        } else if (d.templates.some((tp) => !tp.name_en)) {
+          await mod.backfillTemplates(d.templates);
+        }
+        // Buổi ghi thư viện: kho từ localStorage đã có sẵn, không ghi đè
+        if (!d.sessions.length) d.sessions = await mod.loadSessions();
+        return d;
+      })(),
+    );
+  }
+  return d;
+}
+
+/** Chờ kho nạp xong (thực thể gốc + buổi ghi thư viện) — mọi đọc/ghi gọi trước khi dùng. */
+export function sessionsReady(): Promise<MockDb> {
+  const d = ensureDb();
+  return loadMap.get(d)!;
+}
+
+const sampleLoad = new WeakMap<Promise<MockDb>, Promise<MockDb>>();
+
+/** Chờ sáu buổi mẫu theo nghề nạp xong — chỉ màn làm quen và Cài đặt gọi. */
+export function samplesReady(): Promise<MockDb> {
+  const base = sessionsReady();
+  let p = sampleLoad.get(base);
+  if (!p) {
+    p = base.then(async (db) => {
+      if (db.samples.length === 0) {
+        const mod = await import("./seed-data");
+        const files = await Promise.all([
+          import("@/fixtures/samples/realestate_sales.json"),
+          import("@/fixtures/samples/business_owner.json"),
+          import("@/fixtures/samples/doctor.json"),
+          import("@/fixtures/samples/lawyer.json"),
+          import("@/fixtures/samples/architect.json"),
+          import("@/fixtures/samples/notary.json"),
+        ]);
+        db.samples = mod.lazyParseSessions(files.map((m) => m.default));
+      }
+      return db;
+    });
+    sampleLoad.set(base, p);
+  }
+  return p;
 }
 
 /** Ghi thay đổi: gọi sau mỗi lần sửa kho. */
 export function commit() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-  } catch {
+  } catch (e) {
     // localStorage đầy hoặc bị chặn: thay đổi chỉ còn đến khi tải lại.
     // Không im lặng nữa: báo dải "Bộ nhớ đầy" (PR #22, lỗi 3).
+    console.error("Lưu kho mẫu thất bại:", e);
     markStorageFull();
   }
   listeners.forEach((l) => l());
@@ -99,7 +167,7 @@ export function commit() {
 
 /** Đặt lại toàn bộ dữ liệu mẫu (nút trong bảng thử nghiệm). */
 export function resetDb() {
-  db = seed();
+  db = emptyDb();
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch {

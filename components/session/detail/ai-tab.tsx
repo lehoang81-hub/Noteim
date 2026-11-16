@@ -2,12 +2,13 @@
 
 import { ArrowUp, Lock, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { AiBlock } from "@/components/session/ai-block";
 import { FilterChip } from "@/components/ui/chips";
 import { SkeletonParagraph } from "@/components/ui/feedback";
 import { formatClock } from "@/components/ribbon/draw";
+import { suggestedQuestions } from "@/lib/data/localize";
 import { data, useData, type ChatMessage, type SessionDetail, type Template } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
@@ -36,6 +37,7 @@ export function AiTab({
 }) {
   const t = useTranslations("ai");
   const ts = useTranslations("session");
+  const locale = useLocale();
   const history = useData(() => data.chat.history(detail.id), [detail.id]);
   const quota = useData(() => data.account.quota(), []);
 
@@ -154,7 +156,7 @@ export function AiTab({
         <div>
           <p className="text-small font-medium text-ink-2">{t("suggest")}</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {(template?.suggested_questions ?? []).map((q) => (
+            {suggestedQuestions(template, locale).map((q) => (
               <button
                 key={q}
                 type="button"
@@ -217,7 +219,7 @@ export function AiTab({
       {quotaLocked ? (
         <div className="mt-1 rounded-block border border-line bg-surface p-3">
           <p className="text-small text-ink-2">{t("quotaOut")}</p>
-          <Link href="/upgrade" className="mt-2 inline-flex h-10 items-center rounded-control bg-ink px-3 text-small font-semibold text-bg">
+          <Link href="/upgrade" className="mt-2 inline-flex min-h-11 items-center rounded-control bg-ink px-3 text-small font-semibold text-bg">
             {t("seePro")}
           </Link>
         </div>

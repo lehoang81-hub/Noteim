@@ -11,7 +11,10 @@ import { RecordingBar } from "@/components/record/recording-bar";
 import { ProcessingWatcher } from "./processing-watcher";
 import { cn } from "@/lib/cn";
 import { useDebugFlags } from "@/lib/debug/flags";
-import { DebugPanel } from "./debug-panel";
+import dynamic from "next/dynamic";
+
+// Bảng thử nghiệm chỉ dùng khi duyệt: nạp chậm (M5-04)
+const DebugPanel = dynamic(() => import("./debug-panel").then((m) => m.DebugPanel), { ssr: false });
 
 /*
  * Khung ứng dụng (docs/02-design-system.md, "Bố cục").
@@ -54,12 +57,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   // (docs/03-screens.md mục 3, 4): tự lo nền, trạng thái và dải báo của riêng
   // chúng. Bảng thử nghiệm và trình theo dõi xử lý vẫn sẵn.
   if (pathname === "/record" || pathname.endsWith("/processing")) {
+    // Màn này tự có <main> riêng (record-screen, processing-screen):
+    // không bọc thêm để không có hai mốc main (M5-03)
     return (
-      <div className="min-h-dvh">
-        {children}
-        <ProcessingWatcher />
-        <DebugPanel />
-      </div>
+      <div className="min-h-dvh">{children}</div>
     );
   }
 
@@ -113,7 +114,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       ) : null}
 
-      <div className="pb-[calc(88px+env(safe-area-inset-bottom))] lg:pb-0">{children}</div>
+      {/* main: mốc nội dung chính cho trình đọc màn hình (M5-03) */}
+      <main className="pb-[calc(88px+env(safe-area-inset-bottom))] lg:pb-0">{children}</main>
 
       <ProcessingWatcher />
 

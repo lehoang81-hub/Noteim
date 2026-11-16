@@ -1,7 +1,7 @@
 "use client";
 
 import { Mic } from "lucide-react";
-import { AnimatePresence, LayoutGroup, animate, motion } from "motion/react";
+import { AnimatePresence, LayoutGroup, animate, m } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { RibbonLive } from "@/components/ribbon/ribbon-live";
@@ -92,7 +92,7 @@ function StartRecording() {
   return (
     <MomentFrame title={t("m1")} desc={t("m1Desc")} ran={run > 0} onRun={onRun}>
       <Stage>
-        <motion.div
+        <m.div
           aria-hidden={true}
           className="dark absolute inset-0 bg-bg"
           initial={false}
@@ -102,7 +102,7 @@ function StartRecording() {
         <div className={cn("relative flex h-full flex-col items-center px-4", live && "dark")}>
           <AnimatePresence>
             {live ? (
-              <motion.p
+              <m.p
                 key="clock"
                 className="mt-6 flex items-center gap-2 font-display text-h1 font-semibold tabular-nums text-ink"
                 initial={{ opacity: 0 }}
@@ -112,49 +112,49 @@ function StartRecording() {
               >
                 <span className="size-2.5 rounded-pill bg-sen" />
                 00:03
-              </motion.p>
+              </m.p>
             ) : null}
           </AnimatePresence>
           <LayoutGroup id={`m1-${run}`}>
             {reduce ? (
               <AnimatePresence mode="wait" initial={false}>
                 {live ? (
-                  <motion.div key="r" className="mt-auto mb-12 w-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={FADE}>
+                  <m.div key="r" className="mt-auto mb-12 w-full" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={FADE}>
                     <RibbonLive level={level} height={120} />
-                  </motion.div>
+                  </m.div>
                 ) : (
-                  <motion.div key="b" className="mt-auto mb-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={FADE}>
+                  <m.div key="b" className="mt-auto mb-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={FADE}>
                     <RecordGlyph />
-                  </motion.div>
+                  </m.div>
                 )}
               </AnimatePresence>
             ) : live ? (
-              <motion.div
+              <m.div
                 layoutId="shape"
                 transition={SCENE}
                 className="relative mb-12 mt-auto h-[120px] w-full overflow-hidden"
                 style={{ borderRadius: 16 }}
               >
-                <motion.div
+                <m.div
                   className="absolute inset-0"
                   style={{ background: "var(--gradient-dawn)" }}
                   initial={{ opacity: 1 }}
                   animate={{ opacity: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
                 />
-                <motion.div className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.4 }}>
+                <m.div className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.4 }}>
                   <RibbonLive level={level} height={120} />
-                </motion.div>
-              </motion.div>
+                </m.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 layoutId="shape"
                 transition={SCENE}
                 className="mb-6 mt-auto flex size-18 items-center justify-center text-on-dawn shadow-record"
                 style={{ borderRadius: 999, background: "var(--gradient-dawn)" }}
               >
                 <Mic aria-hidden={true} className="size-7" strokeWidth={1.75} />
-              </motion.div>
+              </m.div>
             )}
           </LayoutGroup>
         </div>
@@ -203,9 +203,9 @@ function StopRecording() {
         {reduce ? (
           <RibbonThumb peaks={sampleRibbon.peaks} speakers={sampleRibbon.speakers} muted />
         ) : (
-          <motion.div layoutId="box" transition={SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
+          <m.div layoutId="box" transition={SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
             <RibbonThumb peaks={sampleRibbon.peaks} speakers={sampleRibbon.speakers} muted />
-          </motion.div>
+          </m.div>
         )}
         <span className="shrink-0 whitespace-nowrap text-small tabular-nums text-ink-3">{t("duration")}</span>
       </div>
@@ -216,7 +216,7 @@ function StopRecording() {
   return (
     <MomentFrame title={t("m2")} desc={t("m2Desc")} ran={run > 0} onRun={onRun}>
       <Stage>
-        <motion.div
+        <m.div
           aria-hidden={true}
           className="dark absolute inset-0 bg-bg"
           initial={false}
@@ -236,27 +236,27 @@ function StopRecording() {
                     <RibbonLive level={level} height={120} />
                   </div>
                 ) : (
-                  <motion.div layoutId="box" transition={SCENE} className="mb-12 mt-auto w-full overflow-hidden" style={{ borderRadius: 16 }}>
+                  <m.div layoutId="box" transition={SCENE} className="mb-12 mt-auto w-full overflow-hidden" style={{ borderRadius: 16 }}>
                     <RibbonLive level={level} height={120} />
-                  </motion.div>
+                  </m.div>
                 )}
               </div>
             ) : (
-              <motion.div
+              <m.div
                 className="pt-4"
                 initial={reduce ? { opacity: 0 } : false}
                 animate={{ opacity: 1 }}
                 transition={FADE}
               >
                 <p className="text-caption font-medium text-ink-3">{t("today")}</p>
-                <motion.div
+                <m.div
                   initial={reduce ? false : { y: -8 }}
                   animate={{ y: 0 }}
                   transition={{ ...SCENE, delay: 0.2 }}
                 >
                   {row}
-                </motion.div>
-                <motion.div
+                </m.div>
+                <m.div
                   className="border-b border-line py-3"
                   initial={reduce ? false : { y: -72 }}
                   animate={{ y: 0 }}
@@ -267,8 +267,8 @@ function StopRecording() {
                     <RibbonThumb peaks={[...sampleRibbon.peaks].reverse()} speakers={sampleRibbon.speakers.map((s) => (s + 1) % 4)} />
                     <span className="shrink-0 whitespace-nowrap text-small tabular-nums text-ink-3">{t("olderDuration")}</span>
                   </div>
-                </motion.div>
-              </motion.div>
+                </m.div>
+              </m.div>
             )}
           </div>
         </LayoutGroup>
@@ -322,13 +322,13 @@ function ProcessingDone() {
         <div className="mt-1 flex h-6 items-center gap-2">
           <AnimatePresence mode="wait" initial={false}>
             {showPoints ? (
-              <motion.span key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={FADE}>
+              <m.span key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={FADE}>
                 <TagChip size="sm" tag="pending" label={t("template")} />
-              </motion.span>
+              </m.span>
             ) : (
-              <motion.span key="wait" className="text-small text-ink-2" exit={{ opacity: 0 }} transition={FADE}>
+              <m.span key="wait" className="text-small text-ink-2" exit={{ opacity: 0 }} transition={FADE}>
                 {t("processing")}
-              </motion.span>
+              </m.span>
             )}
           </AnimatePresence>
         </div>
@@ -343,14 +343,14 @@ function ProcessingDone() {
           interactive={false}
           label={t("position")}
         />
-        <motion.div
+        <m.div
           className="mt-3"
           initial={false}
           animate={showPoints ? "shown" : "hidden"}
           variants={{ shown: { transition: { staggerChildren: reduce ? 0 : 0.09 } }, hidden: {} }}
         >
           {bullets.map(([id, time, speaker]) => (
-            <motion.div
+            <m.div
               key={id}
               variants={{
                 hidden: { opacity: 0, y: reduce ? 0 : 6 },
@@ -358,9 +358,9 @@ function ProcessingDone() {
               }}
             >
               <SummaryBullet text={t(id)} time={time} speakerColorIndex={speaker} seekLabel={t("seek")} />
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       </Stage>
     </MomentFrame>
   );

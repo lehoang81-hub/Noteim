@@ -17,6 +17,7 @@ const HONORIFICS = ["anh", "chị", ""] as const;
 
 export function ProfileSection() {
   const t = useTranslations("settings");
+  const tl = useTranslations("library");
   const tp = useTranslations("debug");
   const toast = useToast();
   const router = useRouter();
@@ -80,7 +81,7 @@ export function ProfileSection() {
                 honorific === h ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
               )}
             >
-              {h === "" ? t("honorificNone") : h}
+              {h === "" ? t("honorificNone") : h === "chị" ? tl("honorificChi") : tl("honorificAnh")}
             </button>
           ))}
         </div>
