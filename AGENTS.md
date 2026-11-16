@@ -35,6 +35,8 @@ Bạn đang xây **mockup tương tác** của Noteim. Mục tiêu của giai đ
 - **Chữ:** mọi chuỗi hiển thị nằm trong `messages/vi.json` và `messages/en.json`, hai file phải có cùng khóa.
 - Thao tác vuốt và nhấn giữ trên điện thoại: khung nhận cử chỉ cần `touch-action: pan-y` (hoặc phù hợp), gọi `setPointerCapture`, và phải thử bằng sự kiện chạm thật (Playwright `has_touch` + CDP `Input.dispatchTouchEvent`), không thử bằng chuột.
 - Giá trị mặc định phụ thuộc nhiều lần `useData` thì chờ đủ tất cả rồi mới đặt; độ trễ giả 300 đến 800ms làm thứ tự về không cố định.
+- Đo Lighthouse: người dùng đã làm quen (Chrome `--user-data-dir`, cùng origin), `--disable-storage-reset`, xóa cache HTTP trước mỗi lần, lấy trung vị, kiểm `finalDisplayedUrl`.
+- Chuỗi tiếng Anh có số đếm dùng ICU plural (`{count, plural, one {# session} other {# sessions}}`).
 
 ## Khi không chắc
 
