@@ -1,9 +1,12 @@
 import type {
   ActionItem,
+  AuditEvent,
   ChatMessage,
   Contact,
   GlossaryTerm,
+  Invoice,
   Lang,
+  Member,
   Profession,
   Quota,
   Session,
@@ -12,8 +15,11 @@ import type {
   SummaryVersion,
   Template,
   TranscriptSegment,
+  UsageRow,
   User,
   VisualArtifacts,
+  Visibility,
+  Workspace,
 } from "./types";
 
 /*
@@ -27,6 +33,8 @@ export type SessionFilter = {
   template_id?: string;
   range?: "week" | "all";
   has_open_tasks?: boolean;
+  /** Chỉ buổi của mình trong không gian Nhóm (M7-01, lọc "Của tôi") */
+  mine?: boolean;
 };
 
 /** Kết quả tìm kiếm (M4-02), nhóm theo Buổi ghi / Trong lời nói / Việc cần làm. */
@@ -102,6 +110,38 @@ export interface SessionRepository {
   createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: Lang; auto_detect_languages?: boolean }): Promise<{ id: string }>;
   /** Buổi ghi mẫu theo nghề (M4-04): dùng ở màn làm quen và Cài đặt > Hồ sơ */
   getSample(profession: Profession): Promise<SessionDetail>;
+  /** Đổi Riêng tư / Cả nhóm (M7-01). Chỉ người ghi buổi được đổi; buổi cá
+   * nhân luôn riêng tư. Đổi sang "workspace" chỉ có tác dụng trong không gian Nhóm. */
+  setVisibility(id: string, visibility: Visibility): Promise<void>;
+}
+
+/**
+ * Không gian làm việc, thành viên, lời mời và quyền (M7-01).
+ * Quyền kiểm ở repository: thao tác ngoài vai trò ném DataError mã
+ * "forbidden"; nhóm hết chỗ khi mời, lời mời hết hạn khi nhận.
+ */
+export interface WorkspaceRepository {
+  list(): Promise<Workspace[]>;
+  switchTo(id: string): Promise<void>;
+  create(input: Pick<Workspace, "name" | "profession" | "default_report_language">): Promise<Workspace>;
+  update(id: string, patch: Partial<Pick<Workspace, "name" | "profession" | "default_report_language">>): Promise<void>;
+  remove(id: string): Promise<void>;
+  members(id: string): Promise<Member[]>;
+  invite(id: string, email: string, role: Member["role"]): Promise<Member>;
+  revokeInvite(id: string, email: string): Promise<void>;
+  changeRole(id: string, userId: string, role: Member["role"]): Promise<void>;
+  /** Gỡ thành viên: buổi riêng tư của họ về không gian Cá nhân của họ, buổi
+   * đã chia sẻ với nhóm ở lại nhóm. */
+  removeMember(id: string, userId: string): Promise<void>;
+  transferOwnership(id: string, userId: string): Promise<void>;
+  /** Xem lời mời theo token của bản giả (sinh từ email, xem inviteToken).
+   * "expired" khi hết hạn (thật hoặc ép bằng cờ thử nghiệm), "not_found"
+   * khi token không tồn tại. */
+  getInvite(token: string): Promise<{ workspace: Workspace; invited_by: string } | "expired" | "not_found">;
+  acceptInvite(token: string): Promise<void>;
+  usage(id: string, month: string): Promise<UsageRow[]>;
+  audit(id: string, filter?: { actor_user_id?: string; action?: AuditEvent["action"] }): Promise<AuditEvent[]>;
+  invoices(id: string): Promise<Invoice[]>;
 }
 
 export interface TaskRepository {
@@ -202,4 +242,6 @@ export interface DataSource {
   share: ShareRepository;
   mail: MailRepository;
   account: AccountRepository;
+  /** Không gian làm việc (M7-01) */
+  workspaces: WorkspaceRepository;
 }
