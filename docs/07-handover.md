@@ -404,3 +404,57 @@ bản thật cần map lỗi HTTP/Supabase về cùng bộ mã.
 - **Hiệu năng**: không nạp thư viện vẽ (Recharts, Mermaid) vào chunk khởi
   tạo — đã tách bằng `next/dynamic`; bảng số liệu thay thế cho biểu đồ phải
   có; ảnh không làm lệch bố cục (CLS).
+
+## 6. Điểm Lighthouse Hiệu năng còn dưới 85 và việc cần làm khi nối backend
+
+Đo đúng cách sau khi sửa theo review PR #41 (mục 1): Chrome có `--user-data-dir`
+với người dùng **đã làm quen** (localStorage có dữ liệu), `lighthouse --port
+--disable-storage-reset`, **xóa bộ nhớ đệm HTTP trước mỗi lần**
+(`Network.clearBrowserCache`), lấy **trung vị 5 lần** (bản main lấy trung vị 3
+lần), mobile, CPU chậm 4x + mạng 4G, kiểm `finalDisplayedUrl` đúng route đang
+đo. Ngày đo 2026-11-16, bản build `pnpm build && pnpm start` ở máy.
+
+| Route | Perf main | Perf nhánh M5 | LCP main→M5 (ms) | TBT main→M5 (ms) | CLS |
+| --- | --- | --- | --- | --- | --- |
+| `/` | 76 | 73 | 4 705→4 896 | 368→361 | 0,0 |
+| `/s/[id]` | 68 | 70 | 4 899→5 040 | 545→481 | 0 |
+| `/record` | 78 | 82 | 4 269→4 082 | 339→250 | 0 |
+| `/search` | 80 | 93 | 2 918→3 019 | 326→142 | 0,163→0 |
+| `/settings` | 86 | 89 | 3 522→3 213 | 239→177 | 0 |
+| `/p/[id]` | 78 | 79 | 4 049→4 175 | 336→300 | 0 |
+| `/welcome` | 88 | 92 | 2 985→3 021 | 310→168 | 0 |
+
+Bốn route còn dưới 85 — nguyên nhân còn lại và việc cần làm khi nối backend:
+
+### `/` (73) và `/s/[id]` (70)
+
+- **Nguyên nhân còn lại**: nội dung chính của hai màn là **dữ liệu người dùng
+  render phía client**. Dưới CPU chậm 4x, chuỗi "tải JS → chạy → chờ độ trễ giả
+  300–800ms theo đặc tả (`04-data-contract.md`) → đọc dữ liệu → vẽ" chiếm gần
+  trọn LCP 4,9–5,0s. Đã xử lý phần nằm trong phạm vi mockup: fixture buổi ghi
+  và Zod nạp bằng `import()` động (chunk khởi tạo của `/` giảm 362,6 → 279,4 KB
+  đã nén, không còn dữ liệu mẫu), Motion dùng `LazyMotion` + `m.*` — TBT vẫn
+  giảm nhẹ (368→361 ms; 545→481 ms) nhưng LCP không đổi đáng kể vì nút thắt là
+  độ trễ giả, không phải dung lượng tải.
+- **Việc cần làm khi nối backend**: render phần đầu của danh sách/tóm tắt
+  **phía server** (SSR hoặc streaming) rồi bơm dữ liệu sống sau; độ trễ giả
+  biến mất thay bằng độ trễ mạng thật. Không cần đổi giao diện — các màn đã
+  có khung chờ và trạng thái rỗng/lỗi đầy đủ. LCP mục tiêu sau khi nối: dưới
+  2,5s (điểm dự kiến 90+).
+
+### `/record` (82)
+
+- **Nguyên nhân còn lại**: màn luôn tối, hydrate nhiều component (máy ghi,
+  dải thời gian, canvas). TBT đã giảm 339→250 ms và SI 2 855→1 646 ms nhờ
+  bảng xin quyền micro dựng sẵn từ máy chủ; phần còn lại là chi phí hydrate.
+- **Việc cần làm khi nối backend**: chuyển phần tĩnh của màn ghi sang server
+  component, chỉ hydrate máy ghi; đo lại sau khi Recharts/Mermaid đã ở chunk
+  riêng (đã xong từ M3).
+
+### `/p/[id]` (79)
+
+- **Nguyên nhân còn lại**: trang công khai chờ dữ liệu mock như mọi route
+  khác (độ trễ giả) rồi mới vẽ tóm tắt.
+- **Việc cần làm khi nối backend**: link không mật khẩu có thể **cache tĩnh
+  (ISR)** hoặc render server kèm header cache; link có mật khẩu giữ render
+  client sau khi nhập mật khẩu.
