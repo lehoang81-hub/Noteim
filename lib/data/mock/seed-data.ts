@@ -13,6 +13,7 @@ import {
   type Session,
   type SessionFixture,
 } from "../types";
+import { normalizeSpeakerNames } from "./normalize";
 
 /*
  * Nạp dữ liệu mẫu của bản giả (M5, sửa review PR #41 mục 2).
@@ -33,12 +34,19 @@ function lazyFixture(raw: Record<string, unknown>): StoredSession {
   const cache: Record<string, unknown> = {};
   return {
     get detail() {
-      if (!("detail" in cache)) cache.detail = SessionDetail.parse(raw.detail);
+      if (!("detail" in cache)) {
+        const d = SessionDetail.parse(raw.detail);
+        // Fixture lưu nhãn hệ thống ("Bạn", "Người nói N") — quy về chưa đặt
+        // tên để hiển thị theo ngôn ngữ giao diện (M5 sửa review #41 mục 5)
+        normalizeSpeakerNames(d.speakers);
+        cache.detail = d;
+      }
       return cache.detail;
     },
     /** Bản nhẹ cho danh sách thư viện: chỉ các trường của Session, không
      * phải trả giá parse tóm tắt, người nói, việc cần làm... (M5-04) */
     get listDetail(): Session | undefined {
+      // Session (bản nhẹ) không mang danh sách người nói nên không cần normalize
       if (!("listDetail" in cache)) cache.listDetail = SessionSchema.parse(raw.detail);
       return cache.listDetail as Session | undefined;
     },

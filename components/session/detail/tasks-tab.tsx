@@ -37,8 +37,11 @@ export function TasksTab({
   onEmail: () => void;
 }) {
   const t = useTranslations("session");
+  const tr = useTranslations(); // nhãn "Bạn" của chính người dùng theo ngôn ngữ (review #41 mục 5)
   const locale = useLocale();
-  const nameOf = Object.fromEntries(contacts.map((c) => [c.id, c.id === "c-me" ? c.role ?? c.name : c.name]));
+  // Liên hệ "c-me" là chính người dùng: role trong fixture là nhãn hệ thống
+  // tiếng Việt ("Bạn"), hiển thị qua speakerYou thay vì giữ nguyên (review #41 mục 5)
+  const nameOf = Object.fromEntries(contacts.map((c) => [c.id, c.id === "c-me" ? tr("speakerYou") : c.name]));
   const isOverdue = (a: ActionItem) => !a.done && !!a.due_date && endOfDay(a.due_date) < now;
   const overdue = items.filter(isOverdue).length;
 

@@ -24,7 +24,8 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { data, dataNow, useData, DataError, type Bullet, type SessionDetail, type Template } from "@/lib/data";
 import { cn } from "@/lib/cn";
-import { sectionTitle as sectionTitleOf } from "@/lib/data/localize";
+import { sectionTitle as sectionTitleOf, speakerLabel } from "@/lib/data/localize";
+import type { Speaker } from "@/lib/data/types";
 
 /*
  * Bảng chia sẻ (docs/03-screens.md mục 9, issue M4-01). Bốn lựa chọn:
@@ -45,7 +46,7 @@ export type ShareIntent =
  * Ý mặc định cho thẻ trích dẫn (review PR #35): ý trích dẫn đầu tiên,
  * hoặc điểm chính đầu tiên. Buổi không có ý thì dùng tóm tắt chung.
  */
-function defaultQuote(detail: SessionDetail): QuoteContent | null {
+function defaultQuote(detail: SessionDetail, labelOf: (sp: Speaker) => string): QuoteContent | null {
   const bullets = detail.topics
     .flatMap((tp) => tp.bullets)
     .sort((a, b) => a.timestamp_sec - b.timestamp_sec);
@@ -56,7 +57,7 @@ function defaultQuote(detail: SessionDetail): QuoteContent | null {
     const speaker = detail.speakers.find((s) => s.id === b.speaker_id);
     return {
       text: b.text,
-      speakerName: speaker?.display_name ?? "",
+      speakerName: speaker ? labelOf(speaker) : "",
       speakerColorIndex: speaker?.color_index ?? 0,
       startSec: b.timestamp_sec,
       endSec: end,
@@ -66,7 +67,7 @@ function defaultQuote(detail: SessionDetail): QuoteContent | null {
   const speaker = detail.speakers[0];
   return {
     text: detail.executive_summary,
-    speakerName: speaker?.display_name ?? "",
+    speakerName: speaker ? labelOf(speaker) : "",
     speakerColorIndex: speaker?.color_index ?? 0,
     startSec: 0,
     endSec: Math.min(20, Math.max(1, detail.duration_sec)),
@@ -87,6 +88,7 @@ export function ShareSheet({
   intent?: ShareIntent;
 }) {
   const t = useTranslations("share");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const [option, setOption] = useState<Option>("menu");
   const [quote, setQuote] = useState<QuoteContent | null>(null);
   const [presetBulletId, setPresetBulletId] = useState<string | null>(null);
@@ -138,7 +140,7 @@ export function ShareSheet({
             hint={t("optCardHint")}
             onClick={() => {
               // Vào từ menu chưa có ý nào: lấy ý mặc định thay vì để bảng trắng
-              setQuote((q) => q ?? defaultQuote(detail));
+              setQuote((q) => q ?? defaultQuote(detail, (sp) => speakerLabel(sp, detail.speakers, tr)));
               setOption("card");
             }}
           />
@@ -515,6 +517,7 @@ function HighlightsListen({
   onClose: () => void;
 }) {
   const t = useTranslations("share");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const tu = useTranslations("ui");
   const [playing, setPlaying] = useState(true);
   // Đồng hồ liền mạch: mỗi đoạn chiếm một khoảng trong tổng thời lượng ghép,
@@ -593,7 +596,7 @@ function HighlightsListen({
       </ul>
 
       <p aria-live="polite" className="mt-4 text-body text-ink">
-        {speaker ? `${speaker.display_name}: ` : ""}
+        {speaker ? `${speakerLabel(speaker, detail.speakers, tr)}: ` : ""}
         {cur.chunk.bullet.text}
       </p>
       <p className="mt-1 text-small tabular-nums text-ink-3">

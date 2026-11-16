@@ -10,7 +10,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { formatClock } from "@/components/ribbon/draw";
 import { data, type Bullet, type SessionDetail, type Template, type Topic } from "@/lib/data";
-import { footerNote, sectionTitle } from "@/lib/data/localize";
+import { footerNote, sectionTitle, speakerLabel } from "@/lib/data/localize";
 import type { ShareIntent } from "./share-sheet";
 
 /*
@@ -70,11 +70,12 @@ export function SummaryTab({
   onShareIntent?: (intent: ShareIntent) => void;
 }) {
   const t = useTranslations("session");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const ts = useTranslations("transcript");
   const locale = useLocale();
   const toast = useToast();
   const colorOf = Object.fromEntries(detail.speakers.map((s) => [s.id, s.color_index]));
-  const speakerNameOf = Object.fromEntries(detail.speakers.map((s) => [s.id, s.display_name]));
+  const speakerNameOf = Object.fromEntries(detail.speakers.map((s) => [s.id, speakerLabel(s, detail.speakers, tr)]));
   const noteById = Object.fromEntries(detail.notes.map((n) => [n.id, n]));
 
   const allBullets = detail.topics.flatMap((tp) => tp.bullets).sort((a, b) => a.timestamp_sec - b.timestamp_sec);

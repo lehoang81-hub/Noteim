@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import type { SessionDetail } from "@/lib/data";
+import { speakerLabel } from "@/lib/data/localize";
 
 /*
  * Thẻ trích dẫn (docs/03-screens.md mục 9, issue M4-01):
@@ -236,6 +237,7 @@ export function QuoteCardPanel({
   onDone?: () => void;
 }) {
   const t = useTranslations("share");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const toast = useToast();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [style, setStyle] = useState<QuoteCardStyle>("porcelain");
@@ -257,7 +259,7 @@ export function QuoteCardPanel({
     const speaker = detail.speakers.find((s) => s.id === b.speaker_id);
     setCurrent({
       text: b.text,
-      speakerName: speaker?.display_name ?? "",
+      speakerName: speaker ? speakerLabel(speaker, detail.speakers, tr) : "",
       speakerColorIndex: speaker?.color_index ?? 0,
       startSec: b.timestamp_sec,
       endSec: end,

@@ -282,11 +282,12 @@ export const mockSource: DataSource = {
         const sp = d.speakers.find((s) => s.id === speakerId);
         if (!sp || !contact) throw new DataError("not_found");
         // Một liên hệ chỉ gán cho một người nói trong cùng buổi (M3-02):
-        // người nói nào đang giữ liên hệ này thì trả về chưa đặt tên
-        d.speakers.forEach((other, i) => {
+        // người nói nào đang giữ liên hệ này thì trả về chưa đặt tên. Nhãn
+        // "Người nói N" sinh lúc vẽ theo ngôn ngữ (M5 sửa review #41 mục 5)
+        d.speakers.forEach((other) => {
           if (other.id !== speakerId && other.contact_id === contact.id) {
             other.contact_id = null;
-            other.display_name = `Người nói ${i + 1}`;
+            other.display_name = null;
           }
         });
         sp.contact_id = contact.id;
@@ -821,12 +822,13 @@ export const mockSource: DataSource = {
         await sessionsReady();
         const db = getDb();
         db.contacts = db.contacts.filter((c) => c.id !== id);
-        // Người nói đang gán liên hệ này về lại chưa đặt tên, ở mọi buổi ghi
-        db.sessions.forEach((fx, i) => {
+        // Người nói đang gán liên hệ này về lại chưa đặt tên, ở mọi buổi ghi;
+        // nhãn hiển thị sinh lúc vẽ theo ngôn ngữ (M5 sửa review #41 mục 5)
+        db.sessions.forEach((fx) => {
           fx.detail.speakers.forEach((s) => {
             if (s.contact_id === id) {
               s.contact_id = null;
-              s.display_name = `Người nói ${i + 1}`;
+              s.display_name = null;
             }
           });
         });

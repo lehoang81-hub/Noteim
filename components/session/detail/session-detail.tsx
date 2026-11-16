@@ -16,7 +16,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { data, dataNow, DataError, useData, type ActionItem, type SessionDetail } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
-import { templateName as localizedTemplateName } from "@/lib/data/localize";
+import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
 import type { ShareIntent } from "./share-sheet";
@@ -136,6 +136,8 @@ function Loaded({
   back: React.ReactNode;
 }) {
   const t = useTranslations("session");
+  // Bộ dịch cấp gốc cho nhãn hệ thống của người nói chưa đặt tên (review #41 mục 5)
+  const tr = useTranslations();
   const tl = useTranslations("styleguide.tags");
   const tlLib = useTranslations("library");
   const locale = useLocale();
@@ -320,10 +322,10 @@ function Loaded({
                 key={s.id}
                 type="button"
                 onClick={() => setNaming(true)}
-                aria-label={`${t("nameSpeakers")}: ${s.display_name}`}
+                aria-label={`${t("nameSpeakers")}: ${speakerLabel(s, detail.speakers, tr)}`}
                 className="-mx-1 rounded-control px-1 py-0.5 text-left"
               >
-                <SpeakerName colorIndex={s.color_index} name={s.display_name} named={!!s.contact_id || s.is_me} />
+                <SpeakerName colorIndex={s.color_index} name={speakerLabel(s, detail.speakers, tr)} named={!!s.contact_id || s.is_me} />
               </button>
             ))}
           </div>
@@ -411,18 +413,19 @@ function Loaded({
                   currentTime={ps.currentTime}
                   playing={ps.playing}
                   onSeek={seek}
-                  onQuoteCard={(seg) =>
+                  onQuoteCard={(seg) => {
+                    const sp = detail.speakers.find((s) => s.id === seg.speaker_id);
                     openShare({
                       kind: "card",
                       quote: {
                         text: seg.text,
-                        speakerName: detail.speakers.find((s) => s.id === seg.speaker_id)?.display_name ?? "",
-                        speakerColorIndex: detail.speakers.find((s) => s.id === seg.speaker_id)?.color_index ?? 0,
+                        speakerName: sp ? speakerLabel(sp, detail.speakers, tr) : "",
+                        speakerColorIndex: sp?.color_index ?? 0,
                         startSec: seg.start_sec,
                         endSec: seg.end_sec,
                       },
-                    })
-                  }
+                    });
+                  }}
                 />
               </TabsContent>
             ))}

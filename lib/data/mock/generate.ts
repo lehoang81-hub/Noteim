@@ -8,7 +8,9 @@ type SpeakerSpan = { speaker_id: string; start_sec: number; end_sec: number };
  * - peaks lấy từ mảng âm lượng đã ghi, gom về 600 cột cho trình phát và 40
  *   cột cho hàng thư viện; chưa đủ dữ liệu thì sinh dải sóng giống
  *   scripts/gen-peaks.mjs.
- * - Hai người nói: "Bạn" và "Người nói 2" chưa đặt tên, lượt nói xen kẽ.
+ * - Hai người nói: "Bạn" và "Người nói 2" chưa đặt tên (display_name null —
+ *   nhãn hiển thị sinh lúc vẽ theo ngôn ngữ, M5 sửa review #41 mục 5),
+ *   lượt nói xen kẽ.
  * - executive_summary và chủ đề lấy theo mẫu đã chọn, mỗi phần đang bật của
  *   mẫu có một chủ đề với hai ý, mốc thời gian rải đều trên thời lượng.
  * - Ghi chú tay gắn vào ý có mốc gần nhất (note_ids).
@@ -79,7 +81,7 @@ function fallbackPeaks(durationSec: number, seedText: string): number[] {
   });
 }
 
-/** Lượt nói xen kẽ giữa "Bạn" và "Người nói 2", mỗi lượt 18 đến 45 giây. */
+/** Lượt nói xen kẽ giữa người dùng và người nói 2 chưa đặt tên, mỗi lượt 18 đến 45 giây. */
 function buildSpans(durationSec: number, seedText: string): SpeakerSpan[] {
   const rand = seeded("spans:" + seedText);
   const spans: SpeakerSpan[] = [];
@@ -130,8 +132,8 @@ export async function buildSessionContent(opts: {
 
   /* Hai người nói */
   const speakers: Speaker[] = [
-    { id: "SPK_01", contact_id: "c-me", display_name: "Bạn", is_me: true, color_index: 0, talk_ratio_percent: 56, sample_start_sec: Math.min(5, duration) },
-    { id: "SPK_02", contact_id: null, display_name: "Người nói 2", is_me: false, color_index: 1, talk_ratio_percent: 44, sample_start_sec: Math.min(Math.round(duration * 0.35), duration) },
+    { id: "SPK_01", contact_id: "c-me", display_name: null, is_me: true, color_index: 0, talk_ratio_percent: 56, sample_start_sec: Math.min(5, duration) },
+    { id: "SPK_02", contact_id: null, display_name: null, is_me: false, color_index: 1, talk_ratio_percent: 44, sample_start_sec: Math.min(Math.round(duration * 0.35), duration) },
   ];
   const spans = buildSpans(duration, sessionId);
   const colorAt = (t: number) => {

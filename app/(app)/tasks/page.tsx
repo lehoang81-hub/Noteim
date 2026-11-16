@@ -28,6 +28,8 @@ const MY_CONTACT_ID = "c-me";
 export default function TasksPage() {
   const t = useTranslations("tasksPage");
   const ts = useTranslations("session");
+  // Nhãn "Bạn" của chính người dùng theo ngôn ngữ giao diện (review #41 mục 5)
+  const tr = useTranslations();
   const locale = useLocale();
   const router = useRouter();
   const toast = useToast();
@@ -39,8 +41,10 @@ export default function TasksPage() {
   const [doneOpen, setDoneOpen] = useState(false);
 
   const nameOf = useMemo(
-    () => Object.fromEntries((contacts.data ?? []).map((c) => [c.id, c.id === MY_CONTACT_ID ? c.role ?? c.name : c.name])),
-    [contacts.data],
+    // Liên hệ "c-me" là chính người dùng: role trong fixture là nhãn hệ thống
+    // tiếng Việt ("Bạn"), hiển thị qua speakerYou (review #41 mục 5)
+    () => Object.fromEntries((contacts.data ?? []).map((c) => [c.id, c.id === MY_CONTACT_ID ? tr("speakerYou") : c.name])),
+    [contacts.data, tr],
   );
 
   const sessionTitle = useMemo(

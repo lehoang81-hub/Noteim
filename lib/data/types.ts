@@ -114,7 +114,10 @@ export type Session = z.infer<typeof Session>;
 export const Speaker = z.object({
   id: z.string(),
   contact_id: z.string().nullable(),
-  display_name: z.string(),
+  // Chưa đặt tên thì null (M5, sửa review PR #41 mục 5): nhãn "Bạn"/
+  // "Người nói N" là nhãn hệ thống, hiển thị lúc vẽ theo ngôn ngữ giao diện
+  // qua speakerLabel trong lib/data/localize.ts, không lưu vào dữ liệu.
+  display_name: z.string().nullable(),
   is_me: z.boolean(),
   color_index: z.number().int().min(0).max(5),
   talk_ratio_percent: z.number(),

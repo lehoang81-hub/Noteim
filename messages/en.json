@@ -1,4 +1,6 @@
 {
+  "speakerYou": "You",
+  "speakerN": "Speaker {n}",
   "metadata": {
     "title": "Noteim",
     "description": "Meeting minutes from voice recordings, built for Vietnamese professionals."

@@ -1,6 +1,7 @@
 "use client";
 
 import { clearStorageFull, markStorageFull } from "@/lib/storage-full";
+import { normalizeSpeakerNames } from "./normalize";
 import type { RecordingDraft } from "../repository";
 import type { ChatMessage, Contact, GlossaryTerm, Quota, SessionFixture, ShareLink, Template, User } from "../types";
 import type { StoredSession } from "./seed-data";
@@ -66,6 +67,15 @@ export function getDb(): MockDb {
     const saved = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
     // Kho lưu trước bản có shares/removed thì lấy giá trị mặc định cho phần thiếu
     db = saved ? { ...emptyDb(), ...(JSON.parse(saved) as MockDb) } : emptyDb();
+    if (saved) {
+      // Kho cũ lưu nhãn hệ thống ("Bạn", "Người nói N") vào display_name —
+      // quy về chưa đặt tên để hiển thị theo ngôn ngữ (M5 sửa review #41 mục 5)
+      for (const fx of [...db.sessions, ...db.samples]) {
+        normalizeSpeakerNames(
+          (fx.detail as { speakers?: Array<{ display_name: string | null }> } | undefined)?.speakers,
+        );
+      }
+    }
   } catch {
     db = emptyDb();
   }

@@ -1,4 +1,6 @@
 {
+  "speakerYou": "Bạn",
+  "speakerN": "Người nói {n}",
   "metadata": {
     "title": "Noteim",
     "description": "Biên bản họp từ ghi âm, dành cho dân chuyên nghiệp Việt Nam."

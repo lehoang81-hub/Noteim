@@ -10,6 +10,7 @@ import { Sheet } from "@/components/ui/sheet";
 import { TextField } from "@/components/ui/form";
 import { useToast } from "@/components/ui/toast";
 import { data, useData, type SessionDetail, type Speaker } from "@/lib/data";
+import { speakerLabel } from "@/lib/data/localize";
 import type { Player } from "@/lib/player/mock-player";
 import { cn } from "@/lib/cn";
 
@@ -36,6 +37,7 @@ export function SpeakerSheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const t = useTranslations("speakers");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const ts = useTranslations("session");
   const toast = useToast();
   const contacts = useData(() => data.account.contacts(), []);
@@ -80,7 +82,7 @@ export function SpeakerSheet({
           {detail.speakers.map((sp) => (
             <li key={sp.id} className="py-4">
               <div className="flex items-center gap-3">
-                <SpeakerName colorIndex={sp.color_index} name={sp.display_name} named={!!sp.contact_id || sp.is_me} className="min-w-0 flex-1" />
+                <SpeakerName colorIndex={sp.color_index} name={speakerLabel(sp, detail.speakers, tr)} named={!!sp.contact_id || sp.is_me} className="min-w-0 flex-1" />
                 <span className="shrink-0 text-caption text-ink-3">{t("talkShare", { percent: sp.talk_ratio_percent })}</span>
                 <Button
                   variant="ghost"
@@ -298,6 +300,7 @@ function NamePicker({
 
 function MergeSpeakers({ detail, onDone }: { detail: SessionDetail; onDone: () => void }) {
   const t = useTranslations("speakers");
+  const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const ts = useTranslations("session");
   const toast = useToast();
   const [fromId, setFromId] = useState("");
@@ -322,7 +325,7 @@ function MergeSpeakers({ detail, onDone }: { detail: SessionDetail; onDone: () =
             <option value="">—</option>
             {detail.speakers.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.display_name}
+                {speakerLabel(s, detail.speakers, tr)}
               </option>
             ))}
           </select>
@@ -333,7 +336,7 @@ function MergeSpeakers({ detail, onDone }: { detail: SessionDetail; onDone: () =
             <option value="">—</option>
             {detail.speakers.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.display_name}
+                {speakerLabel(s, detail.speakers, tr)}
               </option>
             ))}
           </select>
@@ -342,7 +345,7 @@ function MergeSpeakers({ detail, onDone }: { detail: SessionDetail; onDone: () =
       {same ? <p className="mt-2 text-small font-medium text-tag-pending">{t("mergeSame")}</p> : null}
       {ready ? (
         <p className="mt-3 rounded-control bg-surface-2 px-3 py-2 text-small text-ink">
-          {t("mergeConfirm", { from: from!.display_name, into: into!.display_name, percent: from!.talk_ratio_percent })}
+          {t("mergeConfirm", { from: speakerLabel(from!, detail.speakers, tr), into: speakerLabel(into!, detail.speakers, tr), percent: from!.talk_ratio_percent })}
         </p>
       ) : null}
       <Button
@@ -374,7 +377,7 @@ function MergeSpeakers({ detail, onDone }: { detail: SessionDetail; onDone: () =
           })();
         }}
       >
-        {ready ? t("mergeConfirm", { from: from!.display_name, into: into!.display_name, percent: from!.talk_ratio_percent }) : null}
+        {ready ? t("mergeConfirm", { from: speakerLabel(from!, detail.speakers, tr), into: speakerLabel(into!, detail.speakers, tr), percent: from!.talk_ratio_percent }) : null}
       </ConfirmDialog>
     </section>
   );
