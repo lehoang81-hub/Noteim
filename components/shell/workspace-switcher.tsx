@@ -1,8 +1,10 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, Plus, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { CreateWorkspaceSheet } from "./create-workspace-sheet";
+import { MembersSheet } from "./members-sheet";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
@@ -47,6 +49,8 @@ export function WorkspaceSwitcher({ className }: { className?: string }) {
   const t = useTranslations("workspace");
   const toast = useToast();
   const [open, setOpen] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [membersOpen, setMembersOpen] = useState(false);
   const list = useData(() => data.workspaces.list(), []);
   const me = useData(() => data.account.me(), []);
 
@@ -125,7 +129,44 @@ export function WorkspaceSwitcher({ className }: { className?: string }) {
             );
           })}
         </ul>
+
+        {/* Tạo nhóm và thành viên (M7-01) */}
+        <div className="mt-1 border-t border-line pt-1">
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              setCreateOpen(true);
+            }}
+            className="flex min-h-12 w-full items-center gap-3 rounded-control px-2 py-1 text-left transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2"
+          >
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-pill border border-dashed border-line text-ink-2">
+              <Plus aria-hidden={true} className="size-5" strokeWidth={1.75} />
+            </span>
+            <span className="min-w-0 flex-1 text-body font-medium text-ink">{t("createTitle")}</span>
+          </button>
+          {current?.kind === "team" ? (
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setMembersOpen(true);
+              }}
+              className="flex min-h-12 w-full items-center gap-3 rounded-control px-2 py-1 text-left transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2"
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-pill bg-surface-2 text-ink-2">
+                <Users aria-hidden={true} className="size-5" strokeWidth={1.75} />
+              </span>
+              <span className="min-w-0 flex-1 text-body font-medium text-ink">{t("membersTitle")}</span>
+            </button>
+          ) : null}
+        </div>
       </Sheet>
+
+      <CreateWorkspaceSheet open={createOpen} onOpenChange={setCreateOpen} />
+      {current?.kind === "team" ? (
+        <MembersSheet workspaceId={current.id} open={membersOpen} onOpenChange={setMembersOpen} />
+      ) : null}
     </div>
   );
 }

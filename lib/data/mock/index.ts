@@ -1,6 +1,7 @@
 "use client";
 
 import { getFlags } from "@/lib/debug/flags";
+import { inviteToken } from "@/lib/team/invite-token";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
 import { DataError } from "../errors";
 import type {
@@ -80,14 +81,6 @@ async function stripSessions(list: Array<Session | SessionDetail>): Promise<Sess
 }
 
 /* ---------- Không gian làm việc và quyền (M7-01, issue #47) ---------- */
-
-/** Token của lời mời trong bản giả: sinh xác định từ email, không cần lưu riêng. */
-function inviteToken(email: string): string {
-  return `inv-${email
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")}`;
-}
 
 function myUserId(): string {
   return getDb().user.id;

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { collectErrors, onboard, setCurrentWorkspace } from "./helpers";
+import { collectErrors, onboard, setCurrentWorkspace, setDebugFlags } from "./helpers";
 
 /**
  * Quyền theo không gian làm việc (M7-01, issue #47).
@@ -87,4 +87,63 @@ test("đổi không gian bằng giao diện: thư viện và việc theo không 
   await expect(page.locator("a[href='/s/s-bds-lan']").first()).toBeVisible();
   await expect(page.locator("a[href='/s/s-nhom-marina-c']")).toHaveCount(0);
   expect(errors).toEqual([]);
+});
+
+const HUONG_TOKEN = "inv-huong-bui-hpmland-example-vn";
+
+test("/join: lời mời hợp lệ, bấm Tham gia được", async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto(`/join/${HUONG_TOKEN}`);
+  await expect(page.getByRole("heading", { name: "Sàn BĐS Hải Phòng Land" })).toBeVisible();
+  // Người mời hiện tên (dòng nhật ký mời cuối trùng email)
+  await expect(page.getByText(/Hoàng mời bạn tham gia/)).toBeVisible();
+  await page.getByRole("button", { name: "Tham gia" }).click();
+  await expect(page.getByText("Bạn đã tham gia nhóm Sàn BĐS Hải Phòng Land")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("/join: lời mời hết hạn (ép bằng cờ) và không tìm thấy", async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto(`/join/${HUONG_TOKEN}`);
+  await setDebugFlags(page, { inviteExpired: true });
+  await expect(page.getByText("Lời mời đã hết hạn")).toBeVisible();
+  await page.goto("/join/inv-khong-co-trong-du-lieu");
+  await expect(page.getByText("Không tìm thấy lời mời")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("mời thành viên mới: hiện hàng đang chờ kèm link mời", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  // Chuyển sang không gian nhóm rồi mở "Thành viên và lời mời"
+  await page.getByRole("button", { name: "Đổi không gian làm việc" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: /Sàn BĐS Hải Phòng Land/ }).click();
+  await page.getByRole("button", { name: "Đổi không gian làm việc" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Thành viên và lời mời" }).click();
+  // Lời mời đang chờ có sẵn trong dữ liệu mẫu
+  await expect(page.getByText("Bùi Thu Hương")).toBeVisible();
+  await expect(page.getByText("huong.bui@hpmland.example.vn").first()).toBeVisible();
+  // Mời thêm một email
+  await page.getByLabel("Email người được mời").fill("linh.tran@hpmland.example.vn");
+  await page.getByRole("button", { name: "Gửi lời mời" }).click();
+  await expect(page.getByText("linh.tran@hpmland.example.vn").first()).toBeVisible();
+  await expect(page.getByText("Đang chờ").first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("cờ Nhóm hết chỗ: nút mời khóa kèm lý do", async ({ page }) => {
+  await onboard(page);
+  await page.getByRole("button", { name: "Đổi không gian làm việc" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: /Sàn BĐS Hải Phòng Land/ }).click();
+  await page.getByRole("button", { name: "Đổi không gian làm việc" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Thành viên và lời mời" }).click();
+  await page.getByLabel("Email người được mời").fill("linh.tran@hpmland.example.vn");
+  await expect(page.getByRole("button", { name: "Gửi lời mời" })).toBeEnabled();
+  // Bật cờ: bảng thử nghiệm tải lại trang nên mở lại bảng thành viên
+  await setDebugFlags(page, { seatsFull: true });
+  await page.getByRole("button", { name: "Đổi không gian làm việc" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Thành viên và lời mời" }).click();
+  await page.getByLabel("Email người được mời").fill("linh.tran@hpmland.example.vn");
+  await expect(page.getByRole("button", { name: "Gửi lời mời" })).toBeDisabled();
+  await expect(page.getByText("Nhóm đã dùng hết số chỗ của gói")).toBeVisible();
 });
