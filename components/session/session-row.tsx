@@ -74,6 +74,24 @@ export function SessionRow({
 }: SessionRowProps) {
   const muted = status === "processing" || status === "essence" || status === "unsynced";
 
+  // Ô tích dùng chung: trong chế độ chọn là phần tử duy nhất của label hàng;
+  // ngoài chế độ chọn đứng cạnh liên kết mở buổi ghi (không lồng nhau).
+  const checkboxInput = (
+    <input
+      type="checkbox"
+      checked={!!checked}
+      onClick={(e) => {
+        // Dùng click thay vì change: change không mang phím Shift
+        // (nhấn giữ Shift+bấm để chọn liền dải, M5-01).
+        e.stopPropagation();
+        onToggleCheck?.(e.shiftKey);
+      }}
+      onChange={() => {}} // React cần onChange cho ô tích có kiểm soát
+      aria-label={`${checked ? checkOffLabel : checkOnLabel}: ${title}`}
+      className="size-5 accent-[var(--sen)]"
+    />
+  );
+
   const checkbox = (
     <span
       className={cn(
@@ -88,20 +106,7 @@ export function SessionRow({
             : "hidden",
       )}
     >
-      <input
-        type="checkbox"
-        checked={!!checked}
-        onClick={(e) => {
-          // Dùng click thay vì change: change không mang phím Shift
-          // (nhấn giữ Shift+bấm để chọn liền dải, M5-01). Ngăn lan lên nút
-          // hàng để không kích đúp.
-          e.stopPropagation();
-          onToggleCheck?.(e.shiftKey);
-        }}
-        onChange={() => {}} // React cần onChange cho ô tích có kiểm soát
-        aria-label={`${checked ? checkOffLabel : checkOnLabel}: ${title}`}
-        className="size-5 accent-[var(--sen)]"
-      />
+      {checkboxInput}
     </span>
   );
 
@@ -136,27 +141,27 @@ export function SessionRow({
               {statusText}
             </span>
           )}
-          {action ? <span className="relative z-[1] ml-auto">{action}</span> : null}
+          {action && !selecting ? <span className="relative z-[1] ml-auto">{action}</span> : null}
         </span>
       </span>
-      {trailing ? <span className="relative z-[1] self-center">{trailing}</span> : null}
+      {trailing && !selecting ? <span className="relative z-[1] self-center">{trailing}</span> : null}
     </>
   );
 
   const rowClass = cn("relative border-b border-line py-3.5", selected && "bg-surface-2", className);
 
   if (selecting) {
+    // Ô tích là phần tử tương tác DUY NHẤT của hàng, cả hàng là label của nó
+    // (review PR #41 mục 4: trước đây nút aria-pressed bọc ô tích — hai phần
+    // tử tương tác lồng nhau, trình đọc màn hình đọc hai lần). Nút ⋯ và
+    // "Thử lại" ẩn trong chế độ chọn vì thanh chọn đã đủ thao tác; bấm vào
+    // bất kỳ đâu trên hàng vẫn tích nhờ hành vi label gốc.
     return (
       <div className={rowClass}>
-        <button
-          type="button"
-          onClick={(e) => onToggleCheck?.(e.shiftKey)}
-          aria-pressed={!!checked}
-          className="flex w-full items-start gap-3 text-left"
-        >
-          {checkbox}
+        <label className="flex w-full cursor-pointer items-start gap-3 text-left">
+          {checkboxInput}
           {content}
-        </button>
+        </label>
       </div>
     );
   }
