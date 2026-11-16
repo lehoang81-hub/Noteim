@@ -93,7 +93,7 @@ export function WorkspaceSwitcher({ className }: { className?: string }) {
                 {workspaceLabel(current, t("personal"))}
               </span>
               <span className="block truncate text-caption text-ink-3">
-                {current.kind === "team" && myRole ? t(ROLE_KEY[myRole]) : t("personalNote")}
+                {current.kind === "team" ? (myRole ? t(ROLE_KEY[myRole]) : t("teamNote")) : t("personalNote")}
               </span>
             </span>
           </>
