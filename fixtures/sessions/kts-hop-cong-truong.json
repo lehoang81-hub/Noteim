@@ -3,6 +3,8 @@
   "id": "s-kts-lachtray",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Họp hiện trường nhà phố Lạch Tray",
   "template_id": "tpl-architect",
   "status": "ready",

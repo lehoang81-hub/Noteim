@@ -3,6 +3,8 @@
   "id": "s-luat-phuoc",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Tư vấn ông Phước, tranh chấp hợp đồng thuê",
   "template_id": "tpl-lawyer",
   "status": "processing",

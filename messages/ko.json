@@ -554,7 +554,10 @@
     "replayOnboarding": "온보딩 다시 보기",
     "replayOnboardingDone": "초기화 완료, 온보딩을 여는 중",
     "translateFail": "번역 오류",
-    "translateSlow": "번역 지연 (10초)"
+    "translateSlow": "번역 지연 (10초)",
+    "debugRole": "팀 역할",
+    "inviteExpired": "초대 만료됨",
+    "seatsFull": "좌석 꽉 참"
   },
   "library": {
     "greeting": "{name}{honorific}, 안녕하세요",
@@ -614,7 +617,13 @@
     "honorificChi": "님",
     "pickRowOn": "선택 해제",
     "pickRowOff": "선택",
-    "sessionAt": "{time} 녹음 세션"
+    "sessionAt": "{time} 녹음 세션",
+    "scopeMine": "내 것",
+    "scopeWorkspace": "팀 전체",
+    "recordedBy": "{name} 님 녹음",
+    "makePrivate": "비공개로 되돌리기",
+    "shareWithTeam": "팀 전체에 공유",
+    "visibilityChanged": "공유 설정을 바꿨어요"
   },
   "session": {
     "back": "라이브러리로 돌아가기",
@@ -703,7 +712,8 @@
     "keptPro": "원본 녹음을 유지합니다",
     "keepFreeTitle": "원본 유지는 Pro 기능입니다",
     "keepFreeConfirm": "Pro 플랜 보기",
-    "keepFreeBody": "Free 플랜은 7일 후 원본 음성을 자동 삭제합니다(요약은 유지). Pro 플랜은 직접 정리할 때까지 원본을 유지합니다."
+    "keepFreeBody": "Free 플랜은 7일 후 원본 음성을 자동 삭제합니다(요약은 유지). Pro 플랜은 직접 정리할 때까지 원본을 유지합니다.",
+    "forbidden": "이 녹음을 볼 권한이 없어요. 비공개 녹음은 녹음한 사람만 열 수 있어요."
   },
   "transcript": {
     "searchLabel": "녹취록에서 검색",
@@ -846,7 +856,8 @@
     "prHigh": "높음",
     "prMedium": "보통",
     "prLow": "낮음",
-    "saved": "할 일을 저장했습니다"
+    "saved": "할 일을 저장했습니다",
+    "assigneeGroupMembers": "팀 멤버"
   },
   "sendMinutes": {
     "title": "회의록 전송 및 할 일 지정",
@@ -996,7 +1007,12 @@
     "cardLangBoth": "원문 + 번역",
     "cardLangTranslation": "번역만",
     "cardTranslatedFrom": "{lang}에서 번역",
-    "cardLangLabel": "카드 내용"
+    "cardLangLabel": "카드 내용",
+    "withTeamLabel": "팀 전체에 공유",
+    "withTeamOnHint": "이 작업 공간의 모든 멤버가 이 녹음을 볼 수 있어요.",
+    "withTeamOffHint": "소유자와 관리자도 포함해 본인만 이 녹음을 볼 수 있어요.",
+    "withTeamOnDone": "팀 전체에 공유했어요",
+    "withTeamOffDone": "비공개로 되돌렸어요"
   },
   "public": {
     "expired": "이 링크는 만료되었습니다.",
@@ -1185,7 +1201,7 @@
       "askAi": "무제한, 모든 세션에 걸쳐 질문",
       "search": "발언 내용 검색 추가",
       "email": "각 사람에게 직접 전송",
-      "share": "하이라이트 추가, PDF·Word 내보내기"
+      "share": "하이라이트 추가, PDF, Word 내보내기"
     },
     "free": {
       "recordTime": "매월 180분, 세션당 최대 45분",
@@ -1234,5 +1250,61 @@
     "tourRecord": "녹음 버튼은 항상 여기에 있습니다. 누르면 바로 녹음이 시작되고, 양식을 채울 필요가 없습니다.",
     "tourNext": "다음",
     "tourDone": "완료"
+  },
+  "workspace": {
+    "personal": "개인",
+    "personalNote": "내 녹음 목록",
+    "teamNote": "공용 작업 공간",
+    "switchTitle": "작업 공간 전환",
+    "switchDone": "{name}(으)로 전환했어요",
+    "switchError": "작업 공간을 전환하지 못했어요.",
+    "roleOwner": "소유자",
+    "roleAdmin": "관리자",
+    "roleMember": "멤버",
+    "createTitle": "팀 작업 공간 만들기",
+    "createHint": "팀 이름, 주요 직업, 기본 보고서 언어를 정하세요.",
+    "createName": "팀 이름",
+    "createNamePlaceholder": "예: 하노이 치과의원",
+    "createProfession": "주요 직업",
+    "createReportLang": "기본 보고서 언어",
+    "createSubmit": "팀 만들기",
+    "createDone": "{name} 팀을 만들었어요",
+    "createError": "팀을 만들지 못했어요. 다시 시도해 주세요.",
+    "membersTitle": "멤버와 초대",
+    "membersHint": "이메일로 초대하며, 초대는 7일 후 만료돼요.",
+    "membersEmail": "초대할 이메일",
+    "membersRole": "역할",
+    "membersInviteAction": "초대 보내기",
+    "membersInvited": "{email}에 초대를 보냈어요",
+    "membersInviteError": "초대를 보내지 못했어요. 이메일을 확인하거나 다시 시도해 주세요.",
+    "membersPending": "대기 중",
+    "membersInviteExpires": "{date}에 만료",
+    "membersLink": "초대 링크 복사",
+    "membersLinkCopied": "초대 링크를 복사했어요",
+    "membersLinkCopyError": "복사하지 못했어요. 링크를 직접 선택해 복사해 주세요.",
+    "membersRevoke": "철회",
+    "membersRevoked": "초대를 철회했어요",
+    "membersRemove": "제거",
+    "membersRemoveTitle": "{name} 님을 팀에서 제거할까요?",
+    "membersRemoveBody": "{name} 님의 비공개 녹음은 개인 작업 공간으로 돌아가고, 팀에 공유된 녹음은 팀에 남아요.",
+    "membersRemoved": "{name} 님을 제거했어요",
+    "membersSeatsFull": "팀이 플랜의 좌석을 모두 사용했어요. 더 초대하려면 업그레이드해 주세요.",
+    "membersChangeRoleDone": "{name} 님의 역할을 바꿨어요",
+    "membersYou": "(나)"
+  },
+  "join": {
+    "lead": "{invitedBy} 님이 초대했어요",
+    "body": "팀에 공유된 녹음이 내 라이브러리에 나타나요. 각자의 비공개 녹음은 본인만 볼 수 있어요.",
+    "accept": "참여",
+    "joining": "참여하는 중…",
+    "joined": "{name} 팀에 참여했어요",
+    "joinedHint": "이 기기에서 Noteim을 열어 팀 작업 공간을 사용해 보세요.",
+    "openApp": "Noteim 열기",
+    "expired": "초대가 만료되었어요",
+    "expiredNote": "초대는 7일 동안만 유효해요. 초대한 사람에게 다시 보내 달라고 부탁해 주세요.",
+    "notFound": "초대를 찾을 수 없어요",
+    "notFoundNote": "링크가 잘못되었거나 초대가 철회되었어요.",
+    "full": "팀 좌석이 꽉 찼어요",
+    "fullNote": "팀이 플랜의 좌석을 모두 사용했어요. 소유자에게 좌석 추가를 부탁하고 다시 시도해 주세요."
   }
 }

@@ -4,17 +4,18 @@ import type { Contact, GlossaryTerm, Lang, LocalizedText, SessionDetail, Templat
 import type { MockDb } from "./store";
 
 /*
- * Tự chuyển dữ liệu cũ trong localStorage khi nạp (M6-01, issue #43):
- * - Mẫu: name/name_en, title/title_en, suggested_questions/_en, footer_note/_en
- *   -> LocalizedText {vi, en, ko}. Bản tiếng Hàn thiếu thì backfill từ fixture
- *   ở ensureDb (backfillTemplates), nhờ đó mở kho cũ không lỗi và vẫn đủ 3 ngôn ngữ.
- * - Buổi ghi: language -> primary_language, output_language -> original_report_language;
- *   thêm detected_languages, report_languages; đoạn lời thêm lang, translations.
- * - Người dùng: thêm default_speech_language, auto_detect_languages,
- *   default_report_language, auto_translate_on_send.
- * - Liên hệ: preferred_language null. Từ điển: variants {}.
+ * Tự chuyển dữ liệu cũ trong localStorage khi nạp:
+ * - M6-01 (issue #43): mẫu name/_en -> LocalizedText; buổi ghi language ->
+ *   primary_language, output_language -> original_report_language; người dùng
+ *   thêm các trường M6; liên hệ, từ điển thêm trường mới.
+ * - M7-01 (issue #47): buổi cũ thuộc không gian Cá nhân (workspace_id null
+ *   giữ nguyên), riêng tư, người ghi là người dùng hiện tại; người dùng thêm
+ *   current_workspace_id (mặc định không gian Cá nhân).
  * Hàm thuần, sửa tại chỗ, trả true nếu có đổi để caller commit.
  */
+
+/** Id không gian Cá nhân của người dùng mẫu (trùng fixtures/workspaces.json). */
+const PERSONAL_WORKSPACE_ID = "w-hoang";
 
 function toLocalized(vi: string, en?: string): LocalizedText {
   const out: LocalizedText = { vi };
@@ -82,6 +83,15 @@ function migrateSessionDetail(detail: SessionDetail): boolean {
     detail.report_languages = [detail.original_report_language];
     changed = true;
   }
+  // M7-01: buổi cũ thuộc không gian Cá nhân, riêng tư, người ghi là chủ buổi
+  if (!raw.visibility) {
+    detail.visibility = "private";
+    changed = true;
+  }
+  if (!raw.owner_user_id) {
+    detail.owner_user_id = detail.user_id;
+    changed = true;
+  }
   return changed;
 }
 
@@ -124,6 +134,11 @@ export function migrateStored(db: MockDb): boolean {
     }
     if (user.auto_translate_on_send === undefined) {
       user.auto_translate_on_send = true;
+      changed = true;
+    }
+    // M7-01: kho cũ chưa có khái niệm không gian — mặc định không gian Cá nhân
+    if (!user.current_workspace_id) {
+      user.current_workspace_id = PERSONAL_WORKSPACE_ID;
       changed = true;
     }
   }

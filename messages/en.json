@@ -499,7 +499,10 @@
     "replayOnboarding": "Replay onboarding",
     "replayOnboardingDone": "Reset, opening onboarding",
     "translateFail": "Translate error",
-    "translateSlow": "Slow translate (10 s)"
+    "translateSlow": "Slow translate (10 s)",
+    "debugRole": "Team role",
+    "inviteExpired": "Invite expired",
+    "seatsFull": "Seats full"
   },
   "library": {
     "greeting": "Hi {name}",
@@ -559,7 +562,13 @@
     "honorificChi": "Ms.",
     "pickRowOn": "Unselect",
     "pickRowOff": "Select",
-    "sessionAt": "Recording at {time}"
+    "sessionAt": "Recording at {time}",
+    "scopeMine": "Mine",
+    "scopeWorkspace": "Team",
+    "recordedBy": "Recorded by {name}",
+    "makePrivate": "Set back to Private",
+    "shareWithTeam": "Share with the team",
+    "visibilityChanged": "Sharing updated"
   },
   "session": {
     "back": "Back to library",
@@ -648,7 +657,8 @@
     "keptPro": "Original audio kept",
     "keepFreeTitle": "Keeping originals is a Pro feature",
     "keepFreeConfirm": "See Pro",
-    "keepFreeBody": "The Free plan auto-deletes audio after 7 days (summaries are kept). Pro keeps originals until you free them."
+    "keepFreeBody": "The Free plan auto-deletes audio after 7 days (summaries are kept). Pro keeps originals until you free them.",
+    "forbidden": "You don't have access to this session. Private sessions are only visible to the person who recorded them."
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -791,7 +801,8 @@
     "prHigh": "High",
     "prMedium": "Medium",
     "prLow": "Low",
-    "saved": "Task saved"
+    "saved": "Task saved",
+    "assigneeGroupMembers": "Team members"
   },
   "sendMinutes": {
     "title": "Send minutes and assign tasks",
@@ -996,7 +1007,12 @@
     "cardLangBoth": "Original with translation",
     "cardLangTranslation": "Translation only",
     "cardTranslatedFrom": "Translated from {lang}",
-    "cardLangLabel": "Card content"
+    "cardLangLabel": "Card content",
+    "withTeamLabel": "Share with the team",
+    "withTeamOnHint": "Everyone in this workspace can see and read the session.",
+    "withTeamOffHint": "Only you can read this session, even the owner and admins.",
+    "withTeamOnDone": "Shared with the team",
+    "withTeamOffDone": "Set back to Private"
   },
   "public": {
     "expired": "This link has expired.",
@@ -1234,5 +1250,61 @@
     "tourRecord": "The record button is always here. Tap to start recording, no forms.",
     "tourNext": "Next",
     "tourDone": "Done"
+  },
+  "workspace": {
+    "personal": "Personal",
+    "personalNote": "Your own sessions",
+    "teamNote": "Shared workspace",
+    "switchTitle": "Switch workspace",
+    "switchDone": "Switched to {name}",
+    "switchError": "Couldn't switch workspace.",
+    "roleOwner": "Owner",
+    "roleAdmin": "Admin",
+    "roleMember": "Member",
+    "createTitle": "Create team workspace",
+    "createHint": "Name the team, pick the main profession and default report language.",
+    "createName": "Team name",
+    "createNamePlaceholder": "e.g. Hanoi Dental Clinic",
+    "createProfession": "Main profession",
+    "createReportLang": "Default report language",
+    "createSubmit": "Create team",
+    "createDone": "Created team {name}",
+    "createError": "Couldn't create the team. Try again.",
+    "membersTitle": "Members and invites",
+    "membersHint": "Invite by email; invites expire after 7 days.",
+    "membersEmail": "Email to invite",
+    "membersRole": "Role",
+    "membersInviteAction": "Send invite",
+    "membersInvited": "Invite sent to {email}",
+    "membersInviteError": "Couldn't send the invite. Check the email or try again.",
+    "membersPending": "Pending",
+    "membersInviteExpires": "Expires {date}",
+    "membersLink": "Copy invite link",
+    "membersLinkCopied": "Invite link copied",
+    "membersLinkCopyError": "Couldn't copy. Select and copy the link manually.",
+    "membersRevoke": "Revoke",
+    "membersRevoked": "Invite revoked",
+    "membersRemove": "Remove",
+    "membersRemoveTitle": "Remove {name} from the team?",
+    "membersRemoveBody": "{name}'s private sessions go back to their Personal workspace; sessions shared with the team stay with the team.",
+    "membersRemoved": "Removed {name}",
+    "membersSeatsFull": "The team has used all seats of the plan. Upgrade to invite more.",
+    "membersChangeRoleDone": "Changed {name}'s role",
+    "membersYou": "(you)"
+  },
+  "join": {
+    "lead": "{invitedBy} invited you to join",
+    "body": "Sessions shared with the team will appear in your library. Everyone's private sessions stay private.",
+    "accept": "Join",
+    "joining": "Joining…",
+    "joined": "You joined {name}",
+    "joinedHint": "Open Noteim on this device to start using the team workspace.",
+    "openApp": "Open Noteim",
+    "expired": "This invite has expired",
+    "expiredNote": "Invites are valid for 7 days. Ask the inviter to send a new one.",
+    "notFound": "Invite not found",
+    "notFoundNote": "The link is wrong or the invite has been revoked.",
+    "full": "The team is full",
+    "fullNote": "The team has used all seats of the plan. Ask the owner to add seats and try again."
   }
 }

@@ -4,7 +4,7 @@
 // lúc nạp module, còn DataError được nhiều nơi import dạng giá trị. Tách ra
 // để chunk khởi tạo không phải kéo theo Zod.
 
-export type DataErrorCode = "offline" | "not_found" | "quota_exceeded" | "server";
+export type DataErrorCode = "offline" | "not_found" | "quota_exceeded" | "server" | "forbidden";
 
 export class DataError extends Error {
   constructor(public code: DataErrorCode, message?: string) {

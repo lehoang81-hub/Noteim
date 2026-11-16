@@ -2,8 +2,11 @@
 
 import { z } from "zod";
 import {
+  AuditEvent,
   Contact,
   GlossaryTerm,
+  Invoice,
+  Member,
   Quota,
   Session as SessionSchema,
   SessionDetail,
@@ -11,6 +14,7 @@ import {
   Template,
   TranscriptSegment,
   User,
+  Workspace,
   type Session,
   type SessionFixture,
 } from "../types";
@@ -45,11 +49,16 @@ function lazyFixture(raw: Record<string, unknown>): StoredSession {
       return cache.detail;
     },
     /** Bản nhẹ cho danh sách thư viện: chỉ các trường của Session, không
-     * phải trả giá parse tóm tắt, người nói, việc cần làm... (M5-04) */
+     * phải trả giá parse tóm tắt, người nói, việc cần làm... (M5-04).
+     * Parse MỖI LẦN đọc, không cache: khi buổi đã được đọc chi tiết rồi sửa
+     * qua repository (đổi visibility, tiêu đề...), danh sách cập nhật ngay
+     * không cần tải lại trang (M7-01 — lỗi bắt được khi thử đổi Riêng tư/
+     * Cả nhóm: bản cache cũ giữ nguyên visibility cũ). Chưa đọc chi tiết lần
+     * nào thì parse nhẹ từ raw, không kéo cả tóm tắt vào bộ nhớ. */
     get listDetail(): Session | undefined {
+      const src = "detail" in cache ? (cache.detail as SessionDetail) : raw.detail;
       // Session (bản nhẹ) không mang danh sách người nói nên không cần normalize
-      if (!("listDetail" in cache)) cache.listDetail = SessionSchema.parse(raw.detail);
-      return cache.listDetail as Session | undefined;
+      return SessionSchema.parse(src);
     },
     get transcript() {
       if (!("transcript" in cache)) cache.transcript = z.array(TranscriptSegment).parse(raw.transcript ?? []);
@@ -84,9 +93,14 @@ function lazyFixture(raw: Record<string, unknown>): StoredSession {
   } as unknown as StoredSession;
 }
 
-/** Bọc danh sách buổi ghi thô: đọc phần tử nào thì kiểm Zod phần tử đó. */
+/** Bọc danh sách buổi ghi thô: đọc phần tử nào thì kiểm Zod phần tử đó.
+ * Cache theo ĐỐI TƯỢNG (WeakMap), không theo chỉ số: splice/unshift của
+ * remove, restore, createFromRecording dịch chuyển mảng gốc — cache theo
+ * chỉ số sẽ trả nhầm buổi cũ cho vị trí mới, làm thư viện hiện lại buổi vừa
+ * xóa và hỏng luôn kho ghi xuống localStorage (bắt được khi M7-01 thêm buổi
+ * nhóm, khi đó số hàng không còn khớp may mắn như trước). */
 export function lazyParseSessions(raw: unknown[]): StoredSession[] {
-  const cache = new Map<number, StoredSession>();
+  const cache = new WeakMap<object, StoredSession>();
   return new Proxy(raw, {
     get(target, prop) {
       // Chỉ chặn chỉ số dạng chuỗi ("0", "1", "length"); Symbol (Symbol.iterator,
@@ -96,8 +110,15 @@ export function lazyParseSessions(raw: unknown[]): StoredSession[] {
         if (prop === "length") return target.length;
         const index = Number(prop);
         if (Number.isInteger(index) && index >= 0 && String(index) === prop) {
-          if (!cache.has(index)) cache.set(index, lazyFixture(target[index] as Record<string, unknown>));
-          return cache.get(index);
+          const item = target[index];
+          if (item === undefined || item === null) return undefined;
+          const key = item as object;
+          let fx = cache.get(key);
+          if (!fx) {
+            fx = lazyFixture(item as Record<string, unknown>);
+            cache.set(key, fx);
+          }
+          return fx;
         }
       }
       return Reflect.get(target, prop);
@@ -123,9 +144,9 @@ export async function loadBase() {
   };
 }
 
-/** Chín buổi ghi của thư viện (M6-02 thêm buổi họp đối tác Hàn), kiểm Zod lười. */
+/** Chín buổi của không gian Cá nhân + sáu buổi của không gian nhóm (M7-01), kiểm Zod lười. */
 export async function loadSessions(): Promise<StoredSession[]> {
-  const [s1, s2, s3, s4, s5, s6, s7, s8, s9] = await Promise.all([
+  const [s1, s2, s3, s4, s5, s6, s7, s8, s9, t1, t2, t3, t4, t5, t6] = await Promise.all([
     import("@/fixtures/sessions/bds-gap-chi-lan.json"),
     import("@/fixtures/sessions/hop-dieu-hanh-t11.json"),
     import("@/fixtures/sessions/luat-tu-van-ong-phuoc.json"),
@@ -135,8 +156,41 @@ export async function loadSessions(): Promise<StoredSession[]> {
     import("@/fixtures/sessions/loi-xu-ly.json"),
     import("@/fixtures/sessions/chua-tai-len.json"),
     import("@/fixtures/sessions/hop-doi-tac-han.json"),
+    import("@/fixtures/sessions/s-nhom-marina-c.json"),
+    import("@/fixtures/sessions/s-nhom-hop-tuan-45.json"),
+    import("@/fixtures/sessions/s-nhom-legend-ha-phong.json"),
+    import("@/fixtures/sessions/s-nhom-chu-dau-tu-le-hong.json"),
+    import("@/fixtures/sessions/s-nhom-van-phong-song-hong.json"),
+    import("@/fixtures/sessions/s-nhom-chot-can-12a.json"),
   ]);
-  return lazyParseSessions([s1.default, s2.default, s3.default, s4.default, s5.default, s6.default, s7.default, s8.default, s9.default]);
+  return lazyParseSessions([
+    s1.default, s2.default, s3.default, s4.default, s5.default, s6.default, s7.default, s8.default, s9.default,
+    t1.default, t2.default, t3.default, t4.default, t5.default, t6.default,
+  ]);
+}
+
+/** Không gian làm việc (M7-01): không gian Cá nhân + nhóm mẫu. */
+export async function loadWorkspaces(): Promise<Workspace[]> {
+  const m = await import("@/fixtures/workspaces.json");
+  return z.array(Workspace).parse(m.default);
+}
+
+/** Thành viên và lời mời của các không gian (M7-01). */
+export async function loadMembers(): Promise<Member[]> {
+  const m = await import("@/fixtures/members.json");
+  return z.array(Member).parse(m.default);
+}
+
+/** Nhật ký truy cập mẫu của không gian nhóm (M7-01). */
+export async function loadAudit(): Promise<AuditEvent[]> {
+  const m = await import("@/fixtures/audit.json");
+  return z.array(AuditEvent).parse(m.default);
+}
+
+/** Hóa đơn mẫu của gói Nhóm (M7-01). */
+export async function loadInvoices(): Promise<Invoice[]> {
+  const m = await import("@/fixtures/invoices.json");
+  return z.array(Invoice).parse(m.default);
 }
 
 /**

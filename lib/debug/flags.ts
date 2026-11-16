@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import type { Profession } from "@/lib/data/types";
+import type { Profession, WorkspaceRole } from "@/lib/data/types";
 
 /*
  * Cờ của bảng thử nghiệm (?debug=1), để người duyệt ép từng trạng thái
@@ -36,6 +36,12 @@ export type DebugFlags = {
   translateFail: boolean;
   /** Ép dịch bản ghi lời chậm 10 giây (M6-02) */
   translateSlow: boolean;
+  /** Ép vai trò của tôi trong không gian Nhóm để kiểm bảng quyền (M7-01); null là theo dữ liệu */
+  debugRole: WorkspaceRole | null;
+  /** Ép lời mời hết hạn khi mở /join/[token] (M7-01) */
+  inviteExpired: boolean;
+  /** Ép nhóm hết chỗ (khóa nút Mời kèm lý do, M7-01) */
+  seatsFull: boolean;
   profession: Profession | null;
   plan: "free" | "pro" | null;
 };
@@ -56,6 +62,9 @@ const DEFAULTS: DebugFlags = {
   shareExpired: false,
   translateFail: false,
   translateSlow: false,
+  debugRole: null,
+  inviteExpired: false,
+  seatsFull: false,
   profession: null,
   plan: null,
 };

@@ -554,7 +554,10 @@
     "replayOnboarding": "Xem lại làm quen",
     "replayOnboardingDone": "Đã đặt lại, đang mở màn làm quen",
     "translateFail": "Dịch lỗi",
-    "translateSlow": "Dịch chậm (10 giây)"
+    "translateSlow": "Dịch chậm (10 giây)",
+    "debugRole": "Vai trò trong nhóm",
+    "inviteExpired": "Lời mời hết hạn",
+    "seatsFull": "Nhóm hết chỗ"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",
@@ -614,7 +617,13 @@
     "honorificChi": "chị",
     "pickRowOn": "Bỏ chọn",
     "pickRowOff": "Chọn",
-    "sessionAt": "Buổi ghi lúc {time}"
+    "sessionAt": "Buổi ghi lúc {time}",
+    "scopeMine": "Của tôi",
+    "scopeWorkspace": "Cả nhóm",
+    "recordedBy": "Ghi bởi {name}",
+    "makePrivate": "Đặt lại Riêng tư",
+    "shareWithTeam": "Chia sẻ với cả nhóm",
+    "visibilityChanged": "Đã đổi chế độ chia sẻ"
   },
   "session": {
     "back": "Về thư viện",
@@ -703,7 +712,8 @@
     "keptPro": "Đã giữ lại bản ghi âm gốc",
     "keepFreeTitle": "Giữ bản gốc là tính năng Pro",
     "keepFreeConfirm": "Xem gói Pro",
-    "keepFreeBody": "Gói Free tự xóa bản ghi âm sau 7 ngày (tóm tắt vẫn được giữ). Gói Pro giữ bản gốc đến khi bạn tự dọn."
+    "keepFreeBody": "Gói Free tự xóa bản ghi âm sau 7 ngày (tóm tắt vẫn được giữ). Gói Pro giữ bản gốc đến khi bạn tự dọn.",
+    "forbidden": "Bạn không có quyền xem buổi ghi này. Buổi ghi riêng tư chỉ người ghi mở được."
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",
@@ -846,7 +856,8 @@
     "prHigh": "Cao",
     "prMedium": "Vừa",
     "prLow": "Thấp",
-    "saved": "Đã lưu việc cần làm"
+    "saved": "Đã lưu việc cần làm",
+    "assigneeGroupMembers": "Thành viên nhóm"
   },
   "sendMinutes": {
     "title": "Gửi biên bản và giao việc",
@@ -996,7 +1007,12 @@
     "cardLangBoth": "Câu gốc kèm dịch",
     "cardLangTranslation": "Chỉ bản dịch",
     "cardTranslatedFrom": "Dịch từ {lang}",
-    "cardLangLabel": "Nội dung thẻ"
+    "cardLangLabel": "Nội dung thẻ",
+    "withTeamLabel": "Chia sẻ với cả nhóm",
+    "withTeamOnHint": "Mọi thành viên trong không gian nhóm này thấy và đọc được buổi ghi.",
+    "withTeamOffHint": "Chỉ bạn đọc được buổi ghi này, kể cả Chủ và Quản trị.",
+    "withTeamOnDone": "Đã chia sẻ với cả nhóm",
+    "withTeamOffDone": "Đã đặt lại Riêng tư"
   },
   "public": {
     "expired": "Link này đã hết hạn.",
@@ -1234,5 +1250,61 @@
     "tourRecord": "Nút ghi âm luôn ở đây. Bấm là ghi ngay, không cần điền biểu mẫu.",
     "tourNext": "Tiếp",
     "tourDone": "Xong"
+  },
+  "workspace": {
+    "personal": "Cá nhân",
+    "personalNote": "Buổi ghi của riêng bạn",
+    "teamNote": "Không gian làm việc chung",
+    "switchTitle": "Đổi không gian làm việc",
+    "switchDone": "Đã chuyển sang {name}",
+    "switchError": "Không chuyển được không gian.",
+    "roleOwner": "Chủ",
+    "roleAdmin": "Quản trị",
+    "roleMember": "Thành viên",
+    "createTitle": "Tạo không gian nhóm",
+    "createHint": "Đặt tên nhóm, chọn nghề chính và ngôn ngữ báo cáo mặc định.",
+    "createName": "Tên nhóm",
+    "createNamePlaceholder": "Ví dụ: Phòng khám Răng Hà Nội",
+    "createProfession": "Nghề chính",
+    "createReportLang": "Ngôn ngữ báo cáo mặc định",
+    "createSubmit": "Tạo nhóm",
+    "createDone": "Đã tạo nhóm {name}",
+    "createError": "Không tạo được nhóm. Thử lại.",
+    "membersTitle": "Thành viên và lời mời",
+    "membersHint": "Mời bằng email; lời mời hết hạn sau 7 ngày.",
+    "membersEmail": "Email người được mời",
+    "membersRole": "Vai trò",
+    "membersInviteAction": "Gửi lời mời",
+    "membersInvited": "Đã gửi lời mời tới {email}",
+    "membersInviteError": "Không gửi được lời mời. Kiểm lại email hoặc thử lại.",
+    "membersPending": "Đang chờ",
+    "membersInviteExpires": "Hết hạn {date}",
+    "membersLink": "Sao chép link mời",
+    "membersLinkCopied": "Đã sao chép link mời",
+    "membersLinkCopyError": "Không sao chép được. Chọn và chép tay đường dẫn.",
+    "membersRevoke": "Thu hồi",
+    "membersRevoked": "Đã thu hồi lời mời",
+    "membersRemove": "Gỡ",
+    "membersRemoveTitle": "Gỡ {name} khỏi nhóm?",
+    "membersRemoveBody": "Buổi ghi riêng tư của {name} sẽ đi theo họ về không gian Cá nhân; buổi đã chia sẻ với nhóm ở lại nhóm.",
+    "membersRemoved": "Đã gỡ {name}",
+    "membersSeatsFull": "Nhóm đã dùng hết số chỗ của gói. Nâng gói để mời thêm.",
+    "membersChangeRoleDone": "Đã đổi vai trò của {name}",
+    "membersYou": "(bạn)"
+  },
+  "join": {
+    "lead": "{invitedBy} mời bạn tham gia",
+    "body": "Buổi ghi đã chia sẻ của nhóm sẽ hiện trong thư viện của bạn. Buổi riêng tư của mỗi người vẫn chỉ người đó đọc được.",
+    "accept": "Tham gia",
+    "joining": "Đang tham gia…",
+    "joined": "Bạn đã tham gia nhóm {name}",
+    "joinedHint": "Mở Noteim trên máy này để bắt đầu dùng không gian nhóm.",
+    "openApp": "Mở Noteim",
+    "expired": "Lời mời đã hết hạn",
+    "expiredNote": "Lời mời chỉ dùng trong 7 ngày. Nhờ người mời gửi lại lời mời mới.",
+    "notFound": "Không tìm thấy lời mời",
+    "notFoundNote": "Liên kết không đúng hoặc lời mời đã bị thu hồi.",
+    "full": "Nhóm đã hết chỗ",
+    "fullNote": "Nhóm đã dùng hết số chỗ của gói. Nhờ chủ nhóm nâng số chỗ rồi thử lại."
   }
 }

@@ -3,6 +3,8 @@
   "id": "s-bds-lan",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Gặp chị Lan, căn 2PN Vinhomes Marina",
   "template_id": "tpl-realestate",
   "status": "ready",
