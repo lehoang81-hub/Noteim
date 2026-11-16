@@ -467,6 +467,30 @@
     "upgrade": "Gói dịch vụ",
     "import": "Nhập file"
   },
+  "dashboard": {
+    "title": "Tổng quan",
+    "rangeLabel": "Chọn khoảng số liệu",
+    "rangeWeek": "Tuần này",
+    "rangeMonth": "Tháng này",
+    "attention": "Cần xử lý",
+    "attentionEmpty": "Không có việc gì cần xử lý",
+    "atKind": {
+      "task_overdue": "Việc quá hạn",
+      "task_due_today": "Đến hạn hôm nay",
+      "speaker_unnamed": "Người nói chưa đặt tên",
+      "audio_expiring": "Bản gốc sắp tự xóa",
+      "link_expiring": "Link chia sẻ sắp hết hạn",
+      "processing_failed": "Buổi ghi xử lý lỗi"
+    },
+    "openAttention": "Mở chỗ xử lý: {kind} — {label}",
+    "summary": "{sessions} buổi ghi, {duration}, {decisions} quyết định, xong {done} trên {total} việc",
+    "summaryNoSessions": "Chưa có buổi ghi nào trong khoảng này",
+    "dayHint": "Bấm một ngày để lọc thư viện theo ngày đó",
+    "openDay": "Lọc thư viện theo {date}",
+    "dayFilterClear": "Bỏ lọc theo ngày",
+    "loadError": "Chưa tải được Tổng quan.",
+    "retry": "Thử lại"
+  },
   "record": {
     "statusRecording": "Ghi",
     "statusPaused": "Tạm dừng",

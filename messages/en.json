@@ -467,6 +467,30 @@
     "upgrade": "Plans",
     "import": "Import file"
   },
+  "dashboard": {
+    "title": "Overview",
+    "rangeLabel": "Choose the date range",
+    "rangeWeek": "This week",
+    "rangeMonth": "This month",
+    "attention": "Needs attention",
+    "attentionEmpty": "Nothing needs attention",
+    "atKind": {
+      "task_overdue": "Overdue task",
+      "task_due_today": "Due today",
+      "speaker_unnamed": "Unnamed speaker",
+      "audio_expiring": "Raw audio expiring",
+      "link_expiring": "Share link expiring",
+      "processing_failed": "Processing failed"
+    },
+    "openAttention": "Open: {kind} — {label}",
+    "summary": "{sessions, plural, one {# session} other {# sessions}} recorded, {duration}, {decisions, plural, one {# decision} other {# decisions}}, {done} of {total} tasks done",
+    "summaryNoSessions": "No sessions recorded in this range yet",
+    "dayHint": "Tap a day to filter the library by that day",
+    "openDay": "Filter the library by {date}",
+    "dayFilterClear": "Clear the day filter",
+    "loadError": "Couldn't load the overview.",
+    "retry": "Retry"
+  },
   "debug": {
     "title": "Test panel",
     "open": "Open test panel",

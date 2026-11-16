@@ -163,7 +163,8 @@ function Loaded({
   useEffect(() => () => player.pause(), [player]);
   const ps = usePlayerState(player);
   const [expanded, setExpanded] = useState(false);
-  const [naming, setNaming] = useState(false);
+  // Mở sâu từ Tổng quan (?sheet=speakers, M7-02): vào trang là bảng đặt tên người nói
+  const [naming, setNaming] = useState(() => search.get("sheet") === "speakers");
   // Các bảng nạp chậm chỉ dựng sau lần mở đầu tiên (M5-04): tránh tải chunk
   // ngay khi vào trang dù chưa bấm gì.
   const [namingOnce, setNamingOnce] = useState(false);
@@ -175,7 +176,8 @@ function Loaded({
   const [sending, setSending] = useState(false);
   const [sendingOnce, setSendingOnce] = useState(false);
   if (sending && !sendingOnce) setSendingOnce(true);
-  const [sharing, setSharing] = useState(false);
+  // Mở sâu từ Tổng quan (?sheet=share, M7-02): vào trang là bảng chia sẻ
+  const [sharing, setSharing] = useState(() => search.get("sheet") === "share");
   const [sharingOnce, setSharingOnce] = useState(false);
   if (sharing && !sharingOnce) setSharingOnce(true);
   const [shareIntent, setShareIntent] = useState<ShareIntent>(null);

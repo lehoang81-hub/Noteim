@@ -467,6 +467,30 @@
     "upgrade": "플랜",
     "import": "파일 가져오기"
   },
+  "dashboard": {
+    "title": "요약",
+    "rangeLabel": "기간 선택",
+    "rangeWeek": "이번 주",
+    "rangeMonth": "이번 달",
+    "attention": "처리할 일",
+    "attentionEmpty": "처리할 일이 없습니다",
+    "atKind": {
+      "task_overdue": "기한 지난 할 일",
+      "task_due_today": "오늘 마감",
+      "speaker_unnamed": "이름 없는 화자",
+      "audio_expiring": "원본 음원 곧 삭제",
+      "link_expiring": "공유 링크 곧 만료",
+      "processing_failed": "처리 실패"
+    },
+    "openAttention": "열기: {kind} — {label}",
+    "summary": "{sessions}개 세션, {duration}, 결정 {decisions}개, 할 일 {total}개 중 {done}개 완료",
+    "summaryNoSessions": "이 기간에는 아직 세션이 없습니다",
+    "dayHint": "하루를 눌러 해당 날짜로 라이브러리를 필터링하세요",
+    "openDay": "{date} 날짜로 라이브러리 필터링",
+    "dayFilterClear": "날짜 필터 지우기",
+    "loadError": "요약을 불러오지 못했습니다.",
+    "retry": "다시 시도"
+  },
   "record": {
     "statusRecording": "녹음",
     "statusPaused": "일시정지",
