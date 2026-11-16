@@ -27,9 +27,9 @@ import { cn } from "@/lib/cn";
  */
 
 /** Tên ngôn ngữ theo NGÔN NGỮ GIAO DIỆN ("tiếng Hàn"/"Korean"/"한국어").
- * Khác với settings.lang* (tên gốc tiếng Hàn "한국어") — chip và nút tạo bản
- * dùng tên theo giao diện để giao diện vi/en không có chữ Hàn, không phải
- * tải phông Hàn chỉ cho một nhãn (M6-04). */
+ * Quy tắc đặt tên thống nhất (review PR #52 mục 6): mọi nhãn điều khiển dùng
+ * tên theo giao diện; chỉ danh sách ngôn ngữ trong Cài đặt và ba chip làm quen
+ * ở /welcome dùng tên gốc (endonym) — nơi ngôn ngữ là đối tượng được gọi tên. */
 const LANG_UI_NAME_KEY: Record<Lang, string> = { vi: "summary.langVi", en: "summary.langEn", ko: "summary.langKo" };
 
 function FigureBars({ figure, lang }: { figure: NonNullable<SummaryVersion["topics"][number]["figure"]>; lang: Lang }) {

@@ -26,7 +26,7 @@ import { cn } from "@/lib/cn";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const SEND_LANGS: readonly Lang[] = ["vi", "en", "ko"];
-const LANG_NAME_KEY: Record<Lang, string> = { vi: "langVi", en: "langEn", ko: "langKo" };
+const LANG_NAME_KEY: Record<Lang, string> = { vi: "summary.langVi", en: "summary.langEn", ko: "summary.langKo" };
 
 export function SendMinutesSheet({
   session,
@@ -50,7 +50,7 @@ export function SendMinutesSheet({
 }) {
   const t = useTranslations("sendMinutes");
   const ts = useTranslations("session");
-  const tl = useTranslations(); // tên ngôn ngữ ở gốc (settings.langVi...)
+  const tl = useTranslations(); // tên ngôn ngữ ở cấp gốc (summary.langVi...)
   const toast = useToast();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -426,7 +426,7 @@ export function SendMinutesSheet({
                     >
                       {SEND_LANGS.map((lg) => (
                         <option key={lg} value={lg}>
-                          {tl(`settings.${LANG_NAME_KEY[lg]}`)}
+                          {tl(LANG_NAME_KEY[lg])}
                         </option>
                       ))}
                     </select>
@@ -462,7 +462,7 @@ export function SendMinutesSheet({
                     {remaining.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.name}
-                        {c.preferred_language ? ` (${tl(`settings.${LANG_NAME_KEY[c.preferred_language]}`)})` : ""}
+                        {c.preferred_language ? ` (${tl(LANG_NAME_KEY[c.preferred_language])})` : ""}
                       </option>
                     ))}
                   </select>
@@ -535,7 +535,7 @@ export function SendMinutesSheet({
                         previewLang === g.lang ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
                       )}
                     >
-                      {t("previewGroup", { lang: tl(`settings.${LANG_NAME_KEY[g.lang]}`), count: g.recipients })}
+                      {t("previewGroup", { lang: tl(LANG_NAME_KEY[g.lang]), count: g.recipients })}
                     </button>
                   ))}
                 </div>
@@ -656,7 +656,7 @@ export function SendMinutesSheet({
           {missingVersionLangs().map((lg) => (
             <p key={lg} className="mt-2 flex items-center gap-2 text-small text-dien">
               <Languages aria-hidden={true} className="size-4 shrink-0" strokeWidth={1.75} />
-              {creatingLangs.includes(lg) ? tl("sendMinutes.willCreate", { lang: tl(`settings.${LANG_NAME_KEY[lg]}`) }) : t("willCreate", { lang: tl(`settings.${LANG_NAME_KEY[lg]}`) })}
+              {creatingLangs.includes(lg) ? tl("sendMinutes.willCreate", { lang: tl(LANG_NAME_KEY[lg]) }) : t("willCreate", { lang: tl(LANG_NAME_KEY[lg]) })}
             </p>
           ))}
 

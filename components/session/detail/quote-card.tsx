@@ -279,9 +279,10 @@ export function QuoteCardPanel({
   // Chế độ nội dung theo ngôn ngữ (M6-04): câu gốc, câu gốc kèm dịch, chỉ bản dịch
   const hasTranslation = !!quote.translatedText;
   const [langMode, setLangMode] = useState<QuoteCardLangMode>("original");
-  /** Tên ngôn ngữ hiển thị ("Tiếng Việt"/"English"/"한국어") cho nhãn Dịch từ. */
+  /** Tên ngôn ngữ theo ngôn ngữ giao diện ("tiếng Hàn"/"Korean"/"한국어") cho
+   * nhãn Dịch từ — thống nhất với chip ở tab Tóm tắt (review PR #52 mục 6). */
   const langNameOf = (lang: string): string =>
-    tr(`settings.lang${lang === "vi" ? "Vi" : lang === "en" ? "En" : "Ko"}`);
+    tr(`summary.lang${lang === "vi" ? "Vi" : lang === "en" ? "En" : "Ko"}`);
   // Ý đang dùng trên thẻ: mở từ menu thì là ý mặc định, đổi được trong bảng (review PR #35)
   const [current, setCurrent] = useState<QuoteContent>(quote);
   const themeKey = useThemeKey(); // đổi giao diện thì vẽ lại theo token

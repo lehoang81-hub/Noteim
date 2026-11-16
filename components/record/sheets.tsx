@@ -23,10 +23,12 @@ import type { Lang } from "@/lib/data/types";
  * - Đổi mẫu: chạm tên mẫu ở giữa trên để đổi ngay trong lúc ghi.
  */
 
-const SPEECH_LANGS: Array<{ id: Lang; labelKey: string; korean?: boolean }> = [
-  { id: "vi", labelKey: "settings.langVi" },
-  { id: "en", labelKey: "settings.langEn" },
-  { id: "ko", labelKey: "settings.langKo", korean: true },
+const SPEECH_LANGS: Array<{ id: Lang; labelKey: string }> = [
+  // Tên ngôn ngữ theo NGÔN NGỮ GIAO DIỆN (summary.lang*) — thống nhất với các
+  // chip khác (review PR #52 mục 6); giao diện vi/en không còn chữ Hàn trên chip
+  { id: "vi", labelKey: "summary.langVi" },
+  { id: "en", labelKey: "summary.langEn" },
+  { id: "ko", labelKey: "summary.langKo" },
 ];
 
 export type SpeechChoice = { primary_language: Lang; auto_detect: boolean };
@@ -113,7 +115,7 @@ export function ConsentSheet({
         <fieldset>
           <legend className="mb-1.5 text-small font-medium text-ink">{t("languageLabel")}</legend>
           <div role="radiogroup" aria-label={t("languageLabel")} className="flex flex-wrap gap-2">
-            {SPEECH_LANGS.map(({ id, labelKey, korean }) => (
+            {SPEECH_LANGS.map(({ id, labelKey }) => (
               <button
                 key={id}
                 type="button"
@@ -125,7 +127,7 @@ export function ConsentSheet({
                   language === id ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
                 )}
               >
-                <span lang={korean ? "ko" : undefined}>{tr(labelKey)}</span>
+                <span>{tr(labelKey)}</span>
               </button>
             ))}
           </div>
