@@ -431,6 +431,8 @@ function Loaded({
                   onSeek={seek}
                   onQuoteCard={(seg) => {
                     const sp = detail.speakers.find((s) => s.id === seg.speaker_id);
+                    // Thẻ trích dẫn: câu gốc + bản dịch ở ngôn ngữ giao diện (M6-04)
+                    const translation = seg.translations[locale as Lang];
                     openShare({
                       kind: "card",
                       quote: {
@@ -439,6 +441,10 @@ function Loaded({
                         speakerColorIndex: sp?.color_index ?? 0,
                         startSec: seg.start_sec,
                         endSec: seg.end_sec,
+                        originalText: seg.text,
+                        originalLang: seg.lang,
+                        translatedText: translation?.text,
+                        translatedLang: translation ? (locale as Lang) : undefined,
                       },
                     });
                   }}
@@ -485,7 +491,7 @@ function Loaded({
 
       {/* Gửi biên bản và giao việc, ba bước (M3-04) */}
       {sendingOnce ? (
-        <SendMinutesSheet session={detail} contacts={contacts} plan={planFlag} canPlay={canPlay} onSeek={seek} open={sending} onOpenChange={setSending} />
+        <SendMinutesSheet session={detail} contacts={contacts} plan={planFlag} defaultReportLang={me.data?.default_report_language ?? detail.original_report_language} canPlay={canPlay} onSeek={seek} open={sending} onOpenChange={setSending} />
       ) : null}
 
       {/* Bảng chia sẻ: link xem, thẻ trích dẫn, đoạn tinh túy, xuất file (M4-01) */}

@@ -181,7 +181,7 @@ export function SummaryTab({
   }
 
   /** Thẻ trích dẫn từ một ý: đến đầu ý kế tiếp, tối đa 20 giây. */
-  function quoteFromBullet(b: { id: string; text: string; timestamp_sec: number; speaker_id: string }): ShareIntent {
+  function quoteFromBullet(b: { id: string; text: string; timestamp_sec: number; speaker_id: string; is_quote: boolean; original_text?: string; original_lang?: Lang }): ShareIntent {
     const next = allBullets[allBullets.findIndex((x) => x.id === b.id) + 1];
     const end = Math.min(Math.max(b.timestamp_sec + 1, next ? next.timestamp_sec : detail.duration_sec), b.timestamp_sec + 20);
     return {
@@ -192,6 +192,11 @@ export function SummaryTab({
         speakerColorIndex: colorOf[b.speaker_id] ?? 0,
         startSec: b.timestamp_sec,
         endSec: end,
+        // Bản dịch đang xem + câu gốc (M6-04): chọn được Câu gốc / kèm dịch / chỉ bản dịch
+        originalText: b.original_text,
+        originalLang: b.original_lang,
+        translatedText: isOriginal ? undefined : b.text,
+        translatedLang: isOriginal ? undefined : verLang,
       },
     };
   }

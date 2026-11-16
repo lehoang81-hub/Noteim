@@ -704,6 +704,9 @@
     "originalQuote": "Original quote",
     "sampleNote": "Sample translation"
   },
+  "contacts": {
+    "preferredLanguage": "Preferred language"
+  },
   "speakers": {
     "title": "Who is who?",
     "description": "Name each speaker. New names appear everywhere in the session.",
@@ -816,7 +819,16 @@
     "copiedAll": "Email content copied",
     "freeNote": "With Pro, emails are sent directly to each person.",
     "emptyBody": "(Empty)",
-    "emailSaved": "Email saved"
+    "emailSaved": "Email saved",
+    "recipientLanguage": "Recipient language",
+    "previewGroup": "{lang} ({count, plural, one {# person} other {# people}})",
+    "willCreate": "{lang} version will be created before sending",
+    "emailSubjectMinutes": "Meeting minutes: {title}",
+    "emailSubjectTasks": "Your tasks from {title}",
+    "emailGreeting": "Hi {name},",
+    "emailFooter": "Sent from Noteim",
+    "emailTasksHeading": "Your action items",
+    "addRecipient": "Add recipient from contacts"
   },
   "tasksPage": {
     "title": "Tasks",
@@ -974,7 +986,14 @@
     "exportedWord": "Word exported",
     "exportError": "Could not copy. Try again.",
     "exportTasksHeading": "Tasks",
-    "exportDue": "(due {date})"
+    "exportDue": "(due {date})",
+    "languagesLabel": "Versions the recipient can view",
+    "languagesHint": "Choose which summary versions the recipient can read on the public page.",
+    "cardLangOriginal": "Original quote",
+    "cardLangBoth": "Original with translation",
+    "cardLangTranslation": "Translation only",
+    "cardTranslatedFrom": "Translated from {lang}",
+    "cardLangLabel": "Card content"
   },
   "public": {
     "expired": "This link has expired.",
@@ -991,7 +1010,8 @@
     "play": "Play",
     "pause": "Pause",
     "madeWith": "Recorded and summarized with Noteim",
-    "wrongPassword": "Wrong password. Try again."
+    "wrongPassword": "Wrong password. Try again.",
+    "languageLabel": "Language"
   },
   "search": {
     "label": "Search all sessions",
@@ -1043,7 +1063,8 @@
       "luu-tru": "Storage",
       "quyen-rieng-tu": "Privacy",
       "giao-dien": "Appearance",
-      "goi-dich-vu": "Plan"
+      "goi-dich-vu": "Plan",
+      "ngon-ngu-bao-cao": "Report language"
     },
     "profileName": "Display name",
     "profileHonorific": "How Noteim addresses you",
@@ -1125,7 +1146,13 @@
     "planMinutes": "min",
     "planReset": "New quota from {date}.",
     "planSeePro": "See Pro",
-    "profileSample": "View the sample session"
+    "profileSample": "View the sample session",
+    "reportLanguage": "Default summary language",
+    "autoTranslateOnSend": "Automatically create versions for recipients when sending",
+    "speechLanguage": "Default recording language",
+    "autoDetect": "Detect other languages automatically",
+    "reportLanguageDefault": "Use app default",
+    "reportLanguageHint": "Create unlimited language versions per session with Pro."
   },
   "upgrade": {
     "title": "Plans",

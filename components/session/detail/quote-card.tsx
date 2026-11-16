@@ -26,7 +26,15 @@ export type QuoteContent = {
   speakerColorIndex: number;
   startSec: number;
   endSec: number;
+  /** Câu gốc và bản dịch để chọn chế độ thẻ: Câu gốc / Câu gốc kèm dịch /
+   * Chỉ bản dịch (M6-04). text là câu hiển thị mặc định. */
+  originalText?: string;
+  originalLang?: string;
+  translatedText?: string;
+  translatedLang?: string;
 };
+
+export type QuoteCardLangMode = "original" | "both" | "translated";
 
 const CARD_W = 1080;
 const CARD_H = 1350;
@@ -139,9 +147,17 @@ export function drawQuoteCard(
     style: QuoteCardStyle;
     shareLabel: string;
     quoteLabel: string;
+    /** Chế độ nội dung (M6-04): câu gốc, câu gốc kèm dịch, chỉ bản dịch */
+    langMode: QuoteCardLangMode;
+    translatedFromLabel?: string;
   },
 ) {
-  const { quote, peaks, speakerSpans, speakers, sessionDurationSec, style, shareLabel, quoteLabel } = opts;
+  const { quote, peaks, speakerSpans, speakers, sessionDurationSec, style, shareLabel, quoteLabel, langMode, translatedFromLabel } = opts;
+
+  // Chọn câu vẽ chính và câu phụ theo chế độ (M6-04)
+  const mainText =
+    langMode === "translated" && quote.translatedText ? quote.translatedText : langMode === "both" && quote.translatedText ? quote.translatedText : quote.text;
+  const subText = langMode === "both" && quote.translatedText && quote.originalText ? quote.originalText : null;
   canvas.width = CARD_W;
   canvas.height = CARD_H;
   const ctx = canvas.getContext("2d");
@@ -203,18 +219,19 @@ export function drawQuoteCard(
   ctx.fillStyle = palette.sub;
   ctx.fillText(shareLabel, M + 66, LOGO_MID + 11);
 
-  /* Câu nói: tự xuống dòng, tự giảm cỡ, canh giữa khối trống phía trên dải giọng */
+  /* Câu nói: tự xuống dòng, tự giảm cỡ, canh giữa khối trống phía trên dải giọng.
+   * Phông Hàn: kèm Pretendard Variable, trình duyệt tải font đúng lúc có chữ Hàn. */
   const maxTextW = CARD_W - M * 2;
   const blockTop = 240;
   const blockBottom = RIBBON_MID - 140;
   let size = 76;
   let lines: string[] = [];
   for (; size >= 40; size -= 4) {
-    ctx.font = `600 ${size}px 'Be Vietnam Pro', sans-serif`;
-    lines = wrapText(ctx, quote.text, maxTextW);
+    ctx.font = `600 ${size}px 'Be Vietnam Pro', 'Pretendard Variable', sans-serif`;
+    lines = wrapText(ctx, mainText, maxTextW);
     if (lines.length * size * 1.32 <= blockBottom - blockTop) break;
   }
-  ctx.font = `600 ${size}px 'Be Vietnam Pro', sans-serif`;
+  ctx.font = `600 ${size}px 'Be Vietnam Pro', 'Pretendard Variable', sans-serif`;
   const lh = size * 1.32;
   const startY = blockTop + Math.max(0, (blockBottom - blockTop - lines.length * lh) / 2);
   ctx.fillStyle = palette.ink;
@@ -223,6 +240,24 @@ export function drawQuoteCard(
   for (const line of lines) {
     ctx.fillText(line, M, y);
     y += lh;
+  }
+  // Nhãn "Dịch từ ..." khi chọn chỉ bản dịch (M6-04)
+  if (langMode === "translated" && translatedFromLabel) {
+    ctx.font = "500 26px 'Be Vietnam Pro', 'Pretendard Variable', sans-serif";
+    ctx.fillStyle = palette.sub;
+    ctx.fillText(translatedFromLabel, M, y + 18);
+    y += 40;
+  }
+  // Câu gốc nhỏ dưới bản dịch khi chọn "Câu gốc kèm dịch" (M6-04)
+  if (subText) {
+    ctx.font = "400 30px 'Be Vietnam Pro', 'Pretendard Variable', sans-serif";
+    ctx.fillStyle = palette.sub;
+    let subLines = wrapText(ctx, `“${subText}”`, maxTextW);
+    if (y + subLines.length * 40 > blockBottom) subLines = subLines.slice(0, 1);
+    for (const line of subLines) {
+      ctx.fillText(line, M, y + 14);
+      y += 40;
+    }
   }
   ctx.textBaseline = "alphabetic";
 }
@@ -241,6 +276,12 @@ export function QuoteCardPanel({
   const toast = useToast();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [style, setStyle] = useState<QuoteCardStyle>("porcelain");
+  // Chế độ nội dung theo ngôn ngữ (M6-04): câu gốc, câu gốc kèm dịch, chỉ bản dịch
+  const hasTranslation = !!quote.translatedText;
+  const [langMode, setLangMode] = useState<QuoteCardLangMode>("original");
+  /** Tên ngôn ngữ hiển thị ("Tiếng Việt"/"English"/"한국어") cho nhãn Dịch từ. */
+  const langNameOf = (lang: string): string =>
+    tr(`settings.lang${lang === "vi" ? "Vi" : lang === "en" ? "En" : "Ko"}`);
   // Ý đang dùng trên thẻ: mở từ menu thì là ý mặc định, đổi được trong bảng (review PR #35)
   const [current, setCurrent] = useState<QuoteContent>(quote);
   const themeKey = useThemeKey(); // đổi giao diện thì vẽ lại theo token
@@ -285,16 +326,27 @@ export function QuoteCardPanel({
         style,
         shareLabel: t("madeWith"),
         quoteLabel: t("quoteLabel"),
+        langMode: hasTranslation ? langMode : "original",
+        translatedFromLabel:
+          current.translatedText && current.translatedLang ? t("cardTranslatedFrom", { lang: langNameOf(current.translatedLang) }) : undefined,
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [detail, current, style, t, themeKey],
+    [detail, current, style, t, themeKey, langMode, hasTranslation],
   );
 
   useEffect(() => {
-    const id = window.setTimeout(draw, 60); // đợi phông tải xong
+    // Vẽ sau khi phông sẵn sàng; có chữ Hàn thì bảo đảm Pretendard đã tải
+    // (unicode-range tải font đúng lúc có ký tự — canvas cũng thế)
+    const id = window.setTimeout(() => {
+      const hasHangul = /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7A3]/.test(
+        `${current.text}${current.originalText ?? ""}${current.translatedText ?? ""}`,
+      );
+      const ready = hasHangul ? document.fonts.load("600 76px 'Pretendard Variable'") : Promise.resolve();
+      void ready.then(() => draw());
+    }, 60);
     return () => window.clearTimeout(id);
-  }, [draw]);
+  }, [draw, current]);
 
   function toBlob(): Promise<Blob | null> {
     const canvas = canvasRef.current;
@@ -349,6 +401,33 @@ export function QuoteCardPanel({
             ))}
           </select>
         </label>
+      ) : null}
+
+      {/* Chế độ nội dung (M6-04): chỉ hiện khi có bản dịch */}
+      {hasTranslation ? (
+        <div role="radiogroup" aria-label={t("cardLangLabel")} className="mt-4 flex flex-wrap gap-2">
+          {(
+            [
+              { id: "original" as const, label: t("cardLangOriginal") },
+              { id: "both" as const, label: t("cardLangBoth") },
+              { id: "translated" as const, label: t("cardLangTranslation") },
+            ]
+          ).map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              role="radio"
+              aria-checked={langMode === m.id}
+              onClick={() => setLangMode(m.id)}
+              className={cn(
+                "h-11 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                langMode === m.id ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+              )}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
       ) : null}
 
       <div role="radiogroup" aria-label={t("styleLabel")} className="mt-4 flex flex-wrap gap-2">

@@ -759,6 +759,9 @@
     "originalQuote": "Câu gốc",
     "sampleNote": "Bản dịch mẫu"
   },
+  "contacts": {
+    "preferredLanguage": "Ngôn ngữ ưa dùng"
+  },
   "speakers": {
     "title": "Ai là ai?",
     "description": "Đặt tên cho từng người nói. Tên mới hiện ở mọi nơi trong buổi ghi.",
@@ -871,7 +874,16 @@
     "copiedAll": "Đã sao chép nội dung email",
     "freeNote": "Gói Pro gửi được trực tiếp cho từng người qua email.",
     "emptyBody": "(Trống)",
-    "emailSaved": "Đã lưu email"
+    "emailSaved": "Đã lưu email",
+    "recipientLanguage": "Ngôn ngữ nhận",
+    "previewGroup": "{lang} ({count, plural, other {# người}})",
+    "willCreate": "Sẽ tạo bản {lang} trước khi gửi",
+    "emailSubjectMinutes": "Biên bản: {title}",
+    "emailSubjectTasks": "Việc của bạn sau buổi {title}",
+    "emailGreeting": "Chào {name},",
+    "emailFooter": "Gửi từ Noteim",
+    "emailTasksHeading": "Việc cần làm của bạn",
+    "addRecipient": "Thêm người nhận từ Danh bạ"
   },
   "tasksPage": {
     "title": "Việc cần làm",
@@ -974,7 +986,14 @@
     "exportedWord": "Đã xuất Word",
     "exportError": "Chưa sao chép được. Thử lại.",
     "exportTasksHeading": "Việc cần làm",
-    "exportDue": "(hạn {date})"
+    "exportDue": "(hạn {date})",
+    "languagesLabel": "Bản người xem được mở",
+    "languagesHint": "Chọn các bản tóm tắt mà người xem được đọc ở trang công khai.",
+    "cardLangOriginal": "Câu gốc",
+    "cardLangBoth": "Câu gốc kèm dịch",
+    "cardLangTranslation": "Chỉ bản dịch",
+    "cardTranslatedFrom": "Dịch từ {lang}",
+    "cardLangLabel": "Nội dung thẻ"
   },
   "public": {
     "expired": "Link này đã hết hạn.",
@@ -991,7 +1010,8 @@
     "play": "Phát",
     "pause": "Tạm dừng",
     "madeWith": "Ghi và tóm tắt bằng Noteim",
-    "wrongPassword": "Mật khẩu chưa đúng. Thử lại."
+    "wrongPassword": "Mật khẩu chưa đúng. Thử lại.",
+    "languageLabel": "Ngôn ngữ"
   },
   "search": {
     "label": "Tìm trong mọi buổi ghi",
@@ -1043,7 +1063,8 @@
       "luu-tru": "Lưu trữ",
       "quyen-rieng-tu": "Quyền riêng tư",
       "giao-dien": "Giao diện",
-      "goi-dich-vu": "Gói dịch vụ"
+      "goi-dich-vu": "Gói dịch vụ",
+      "ngon-ngu-bao-cao": "Ngôn ngữ báo cáo"
     },
     "profileName": "Tên hiển thị",
     "profileHonorific": "Noteim gọi bạn là",
@@ -1125,7 +1146,13 @@
     "planMinutes": "phút",
     "planReset": "Hạn mức mới có từ ngày {date}.",
     "planSeePro": "Xem gói Pro",
-    "profileSample": "Xem buổi ghi mẫu"
+    "profileSample": "Xem buổi ghi mẫu",
+    "reportLanguage": "Ngôn ngữ tóm tắt mặc định",
+    "autoTranslateOnSend": "Tự tạo thêm bản cho người nhận khi gửi",
+    "speechLanguage": "Ngôn ngữ ghi âm mặc định",
+    "autoDetect": "Tự nhận tiếng khác",
+    "reportLanguageDefault": "Theo cài đặt chung",
+    "reportLanguageHint": "Tạo không giới hạn bản ngôn ngữ cho mỗi buổi với gói Pro."
   },
   "upgrade": {
     "title": "Gói dịch vụ",

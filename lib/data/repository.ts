@@ -123,6 +123,10 @@ export type PublicSessionView = Pick<
   /** Tên người chia sẻ, hiện đầu trang công khai (M4-01) */
   sharer_name: string;
   scope: ShareLink["scope"];
+  /** Ngôn ngữ của bản đang xem (M6-04) */
+  lang: Lang;
+  /** Các bản người xem được chọn (M6-04); bản đầu là bản gốc */
+  languages: Lang[];
 };
 
 export interface ShareRepository {
@@ -138,9 +142,11 @@ export interface ShareRepository {
   listAll(): Promise<ShareLink[]>;
   /** Mỗi lần mở trang công khai tăng lượt xem (M4-01) */
   recordView(shareId: string): Promise<void>;
+  /** lang: xem bản tóm tắt theo ngôn ngữ (M6-04); không truyền là bản gốc */
   getPublic(
     shareId: string,
     password?: string,
+    lang?: Lang,
   ): Promise<PublicSessionView | "expired" | "revoked" | "needs_password" | "not_found">;
 }
 
@@ -151,6 +157,8 @@ export type EmailDraft = {
   subject: string;
   body: string;
   kind: "minutes" | "tasks";
+  /** Ngôn ngữ của email, theo người nhận (M6-04) */
+  lang: Lang;
 };
 
 export interface MailRepository {
@@ -173,8 +181,9 @@ export interface AccountRepository {
   removeGlossaryTerm(id: string): Promise<void>;
   /** Tạo liên hệ mới ngay trong ô chọn tên (M3-02) */
   addContact(input: { name: string; email?: string }): Promise<Contact>;
-  /** Sửa liên hệ, ví dụ thêm email ngay tại hàng người nhận (M3-02, M3-04) */
-  updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email">>): Promise<void>;
+  /** Sửa liên hệ, ví dụ thêm email ngay tại hàng người nhận (M3-02, M3-04);
+   * preferred_language là ngôn ngữ ưa dùng khi gửi biên bản (M6-04) */
+  updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email" | "preferred_language">>): Promise<void>;
   /** Xóa liên hệ: trả về các buổi ghi đang dùng người này làm người nói,
    * để giao diện cảnh báo trước khi xóa (M4-03) */
   contactUsage(id: string): Promise<string[]>;

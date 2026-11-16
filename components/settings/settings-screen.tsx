@@ -1,6 +1,6 @@
 "use client";
 
-import { BookA, ContactRound, Gem, HardDriveDownload, LayoutTemplate, Mic, Palette, ShieldCheck, Users } from "lucide-react";
+import { BookA, ContactRound, Gem, HardDriveDownload, Languages, LayoutTemplate, Mic, Palette, ShieldCheck, Users } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -13,6 +13,7 @@ import { StorageSection } from "./storage-section";
 import { PrivacySection } from "./privacy-section";
 import { AppearanceSection } from "./appearance-section";
 import { PlanSection } from "./plan-section";
+import { ReportLanguageSection } from "./report-language-section";
 import { cn } from "@/lib/cn";
 
 /*
@@ -27,6 +28,7 @@ export const SECTION_IDS = [
   "tu-dien",
   "danh-ba",
   "ghi-am",
+  "ngon-ngu-bao-cao",
   "luu-tru",
   "quyen-rieng-tu",
   "giao-dien",
@@ -41,6 +43,7 @@ export const SECTION_ICONS: Record<SectionId, typeof Users> = {
   "tu-dien": BookA,
   "danh-ba": ContactRound,
   "ghi-am": Mic,
+  "ngon-ngu-bao-cao": Languages,
   "luu-tru": HardDriveDownload,
   "quyen-rieng-tu": ShieldCheck,
   "giao-dien": Palette,
@@ -63,6 +66,8 @@ function SectionBody({ id }: { id: SectionId }) {
       return <ContactsSection />;
     case "ghi-am":
       return <RecordingSection />;
+    case "ngon-ngu-bao-cao":
+      return <ReportLanguageSection />;
     case "luu-tru":
       return <StorageSection />;
     case "quyen-rieng-tu":

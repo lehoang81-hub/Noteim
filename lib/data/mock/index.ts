@@ -827,7 +827,7 @@ export const mockSource: DataSource = {
         const link = getDb().shares.find((s) => s.id === shareId);
         if (link) link.view_count += 1;
       }),
-    getPublic: (shareId, password) =>
+    getPublic: (shareId, password, lang) =>
       read(async () => {
         await sessionsReady();
         const db = getDb();
@@ -844,37 +844,77 @@ export const mockSource: DataSource = {
         const fx = db.sessions.find((s) => s.detail.id === link.session_id);
         if (!fx) return "not_found" as const;
         const d = fx.detail;
+        // Người xem chọn bản theo ngôn ngữ (M6-04): mặc định bản gốc, có bản
+        // đã tạo thì lấy nội dung của bản đó
+        const available = link.languages.length
+          ? link.languages
+          : [d.original_report_language, ...(fx.summary_versions ?? []).map((v) => v.lang)];
+        const viewLang = lang && available.includes(lang) ? lang : d.original_report_language;
+        const version = viewLang === d.original_report_language ? null : storedVersion(fx, viewLang);
         return {
           title: d.title,
-          executive_summary: d.executive_summary,
-          topics: d.topics,
+          executive_summary: version?.executive_summary ?? d.executive_summary,
+          topics: (version?.topics ?? d.topics) as typeof d.topics,
           duration_sec: d.duration_sec,
           created_at: d.created_at,
           speakers: d.speakers,
           sharer_name: db.user.display_name,
           scope: link.scope,
+          lang: viewLang,
+          languages: available,
         };
       }),
   },
 
   mail: {
+    // M6-04 (issue #46): tiêu đề, lời chào và chân email theo ngôn ngữ người
+    // nhận; khóa chuỗi nằm trong messages/ (tải động khi soạn, không vào
+    // chunk khởi tạo). Nội dung lấy theo bản tóm tắt của ngôn ngữ đó.
     preview: (sessionId, recipientContactIds, mode) =>
       read(async () => {
         await sessionsReady();
+        const db = getDb();
         const d = (await findFixture(sessionId)).detail;
+        const [viMsg, enMsg, koMsg] = await Promise.all([
+          import("@/messages/vi.json"),
+          import("@/messages/en.json"),
+          import("@/messages/ko.json"),
+        ]);
+        const msgFiles = { vi: viMsg.default, en: enMsg.default, ko: koMsg.default };
+        const msg = (lang: Lang, path: string, params?: Record<string, string | number>): string => {
+          let text: unknown = path.split(".").reduce<unknown>((node, key) => (node as Record<string, unknown>)?.[key], msgFiles[lang]);
+          if (typeof text !== "string") text = path.split(".").reduce<unknown>((node, key) => (node as Record<string, unknown>)?.[key], msgFiles.vi);
+          if (typeof text !== "string") return path;
+          return text.replace(/\{(\w+)\}/g, (_, name) => String(params?.[name] ?? `{${name}}`));
+        };
+        const langName = (lang: Lang): string => msg(lang, `settings.lang${lang === "vi" ? "Vi" : lang === "en" ? "En" : "Ko"}`);
         const drafts: EmailDraft[] = [];
         for (const cid of recipientContactIds) {
+          const contact = db.contacts.find((c) => c.id === cid);
+          const lang = contact?.preferred_language ?? db.user.default_report_language ?? "vi";
+          const fx = await findFixture(sessionId);
+          const version = lang === d.original_report_language ? null : storedVersion(fx, lang);
+          const summaryText = version?.executive_summary ?? d.executive_summary;
+          const taskText = (id: string, fallback: string) => version?.task_texts?.[id] ?? fallback;
           if (mode !== "tasks")
-            drafts.push({ to_contact_id: cid, kind: "minutes", subject: `Biên bản: ${d.title}`, body: d.executive_summary });
+            drafts.push({
+              to_contact_id: cid,
+              kind: "minutes",
+              lang,
+              subject: msg(lang, "sendMinutes.emailSubjectMinutes", { title: d.title }),
+              body: `${msg(lang, "sendMinutes.emailGreeting", { name: contact?.name ?? "" })}\n\n${summaryText}\n\n${msg(lang, "sendMinutes.emailFooter")}`,
+            });
           const mine = d.action_items.filter((a) => a.assignee_contact_id === cid && !a.done);
           if (mode !== "minutes" && mine.length)
             drafts.push({
               to_contact_id: cid,
               kind: "tasks",
-              subject: `Việc của bạn sau buổi ${d.title}`,
-              body: mine.map((a) => `- ${a.task}`).join("\n"),
+              lang,
+              subject: msg(lang, "sendMinutes.emailSubjectTasks", { title: d.title }),
+              body: `${msg(lang, "sendMinutes.emailGreeting", { name: contact?.name ?? "" })}\n\n${msg(lang, "sendMinutes.emailTasksHeading")}:\n${mine.map((a) => `- ${taskText(a.id, a.task)}`).join("\n")}\n\n${msg(lang, "sendMinutes.emailFooter")}`,
             });
         }
+        void langName;
         return drafts;
       }),
     send: (drafts) =>
@@ -948,6 +988,7 @@ export const mockSource: DataSource = {
         if (patch.name !== undefined) c.name = patch.name.trim();
         if (patch.role !== undefined) c.role = patch.role.trim() || undefined;
         if (patch.email !== undefined) c.email = patch.email.trim() || undefined;
+        if (patch.preferred_language !== undefined) c.preferred_language = patch.preferred_language;
       }),
     addGlossaryTerm: (term) =>
       write(() => {
