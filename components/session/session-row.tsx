@@ -97,12 +97,15 @@ export function SessionRow({
       className={cn(
         "relative z-[1] mt-1 shrink-0 items-start",
         // Chỉ hiện ô chọn khi đang chọn; ngoài chế độ chọn, máy tính hiện khi
-        // rê chuột hoặc ô đã nhận tiêu điểm (M5-01). Bề ngang giữ nguyên khi
-        // hiện ô để không đẩy chữ.
+        // rê chuột hoặc ô đã nhận tiêu điểm (M5-01).
+        // Nên sửa review PR #41 mục 6: khi CHƯA chọn, ô tích đè lên lề trang
+        // (absolute left-0, lề máy tính 32px chứa vừa ô 20px) thay vì chiếm
+        // chỗ w-5 đẩy tiêu đề lệch với "Hôm nay"/"Chào chị Mai". Khi đang
+        // chọn thì vẫn chiếm chỗ như thường.
         selecting
           ? "flex"
           : hoverCheck
-            ? "hidden w-5 lg:flex lg:opacity-0 group-hover/row:lg:opacity-100 focus-within:lg:opacity-100"
+            ? "hidden lg:absolute lg:left-0 lg:top-4 lg:mt-0 lg:flex lg:opacity-0 group-hover/row:lg:opacity-100 focus-within:lg:opacity-100"
             : "hidden",
       )}
     >
