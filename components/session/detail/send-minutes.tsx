@@ -408,7 +408,11 @@ export function SendMinutesSheet({
                         ) : null}
                       </div>
                     ) : (
-                      <p className="text-small text-ink-3">{email}</p>
+                      /* Email dài xuống dòng trong cột của mình, không chui dưới
+                         ô chọn ngôn ngữ bên phải (review PR #52 mục 3) */
+                      <p dir="ltr" className="break-all text-small text-ink-3">
+                        {email}
+                      </p>
                     )}
                   </div>
                   {/* Ngôn ngữ nhận: mặc định theo liên hệ, đổi được tại hàng (M6-04) */}
