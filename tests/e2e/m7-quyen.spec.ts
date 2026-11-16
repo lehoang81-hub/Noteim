@@ -231,3 +231,23 @@ test("bảng Chia sẻ: công tắc Chia sẻ với cả nhóm", async ({ page }
   await expect(page.getByText("Đã chia sẻ với cả nhóm")).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test("tìm kiếm chỉ trong không gian đang dùng (review PR #55)", async ({ page }) => {
+  await onboard(page);
+  const setWs = (id: string) =>
+    page.evaluate((w) => {
+      const d = JSON.parse(localStorage.getItem("noteim-mock-db-v1")!);
+      d.user.current_workspace_id = w;
+      localStorage.setItem("noteim-mock-db-v1", JSON.stringify(d));
+    }, id);
+  const search = async (q: string) => {
+    await page.goto("/search");
+    await page.getByRole("searchbox").or(page.getByRole("textbox")).first().fill(q);
+    await page.waitForTimeout(1500);
+    return page.locator("main").innerText();
+  };
+  expect(await search("Marina C")).not.toContain("Khách chốt căn góc Marina C");
+  await setWs("w-hp-land");
+  expect(await search("lai suat")).not.toContain("Gặp chị Lan");
+  expect(await search("Marina C")).toContain("Khách chốt căn góc Marina C");
+});

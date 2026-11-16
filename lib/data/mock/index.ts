@@ -109,6 +109,12 @@ function myRole(workspaceId: string): WorkspaceRole | null {
   return m?.role ?? null;
 }
 
+/** Buổi ghi thuộc không gian đang dùng: Cá nhân là buổi không thuộc nhóm nào. */
+function inCurrentWorkspace(d: Pick<Session, "workspace_id">): boolean {
+  const ws = currentWorkspace();
+  return ws.kind === "personal" ? !d.workspace_id : d.workspace_id === ws.id;
+}
+
 /** Quyền đọc nội dung buổi ghi (M7-01): buổi Cá nhân chỉ người ghi; buổi nhóm
  * phải là thành viên, buổi riêng tư chỉ người ghi được đọc — kể cả Chủ, Quản trị. */
 function canRead(d: Pick<Session, "workspace_id" | "visibility" | "owner_user_id" | "user_id">): boolean {
@@ -724,8 +730,9 @@ export const mockSource: DataSource = {
         const { stripToSession } = await import("./seed-data");
         for (const fx of getDb().sessions) {
           const d = fx.detail;
-          // Buổi riêng tư của người khác không tham gia tìm kiếm (M7-01)
-          if (!canRead(d)) continue;
+          // Buổi riêng tư của người khác không tham gia tìm kiếm (M7-01),
+          // và chỉ tìm trong không gian đang dùng, giống thư viện (review PR #55)
+          if (!canRead(d) || !inCurrentWorkspace(d)) continue;
           // Tìm trong tiêu đề, tóm tắt chung, tên các phần tóm tắt, tên chủ đề
           // và từng điểm chính (review PR #35: thiếu điểm chính nên "lai suat"
           // không ra ý "Lo lãi suất tăng mạnh sau thời gian ưu đãi")

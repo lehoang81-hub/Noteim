@@ -193,7 +193,7 @@ export function MembersSheet({
                         <p className="truncate text-small text-ink-2">{m.email}</p>
                         {invited ? (
                           <p className="mt-0.5 text-caption text-ink-3">
-                            {t("membersPending")} · {t("membersInviteExpires", { date: m.invite_expires_at ? shortDate(new Date(m.invite_expires_at), locale) : "" })}
+                            {t("membersPending")}, {t("membersInviteExpires", { date: m.invite_expires_at ? shortDate(new Date(m.invite_expires_at), locale) : "" })}
                           </p>
                         ) : null}
                         {invited && canManage ? (
