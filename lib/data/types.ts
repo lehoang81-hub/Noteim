@@ -4,7 +4,31 @@ import { z } from "zod";
  * Kiểu dữ liệu của Noteim. Nguồn sự thật: docs/04-data-contract.md.
  * Tên trường snake_case trùng tên cột database sau này.
  * Thời gian tính bằng giây (_sec), ngày giờ là chuỗi ISO.
+ *
+ * M6 (đa ngôn ngữ): thêm Lang (vi, en, ko — thêm ja, zh sau chỉ là thêm
+ * giá trị và một file messages/), LocalizedText thay các trường _en của M5,
+ * Session đổi language -> primary_language, output_language ->
+ * original_report_language. Kho từ localStorage cũ được tự chuyển khi nạp
+ * (lib/data/mock/migrate.ts).
  */
+
+export const Lang = z.enum(["vi", "en", "ko"]);
+export type Lang = z.infer<typeof Lang>;
+export const LANGS: readonly Lang[] = ["vi", "en", "ko"];
+
+/** Nhãn ngắn của ngôn ngữ gắn cạnh đoạn lời: VI, EN, 한국어 (M6-02). */
+export const LANG_BADGE: Record<Lang, string> = { vi: "VI", en: "EN", ko: "한국어" };
+
+/**
+ * Văn bản hệ thống theo ngôn ngữ: bắt buộc có vi, thiếu ngôn ngữ nào thì
+ * rơi về tiếng Anh rồi tiếng Việt (xem localized() trong lib/data/localize.ts).
+ */
+export const LocalizedText = z.object({
+  vi: z.string(),
+  en: z.string().optional(),
+  ko: z.string().optional(),
+});
+export type LocalizedText = z.infer<typeof LocalizedText>;
 
 export const Profession = z.enum([
   "business_owner",
@@ -33,7 +57,8 @@ export const User = z.object({
   profession: Profession,
   default_template_id: z.string(),
   plan: z.enum(["free", "pro"]),
-  ui_language: z.enum(["vi", "en"]),
+  /** Ngôn ngữ giao diện (M4-03; M6 mở thêm ko) */
+  ui_language: Lang.catch("vi"),
   theme: z.enum(["light", "dark", "system"]),
   consent_reminder: z.boolean(),
   /** Câu thông báo ghi âm người dùng tự sửa (M4-03); rỗng thì dùng câu mặc định */
@@ -42,6 +67,14 @@ export const User = z.object({
   auto_filter_silence: z.boolean().optional().catch(undefined),
   /** Đã làm quen xong (M4-04); null/undefined là chưa, /welcome hiện lại */
   onboarded_at: z.string().nullable().optional().catch(undefined),
+  /** Ngôn ngữ nói chính mặc định khi bắt đầu ghi (M6-01) */
+  default_speech_language: Lang.catch("vi"),
+  /** Công tắc "Có thể có tiếng khác" khi ghi (M6-02), mặc định bật */
+  auto_detect_languages: z.boolean().catch(true),
+  /** Ngôn ngữ tóm tắt mặc định (M6-04, mục "Ngôn ngữ báo cáo") */
+  default_report_language: Lang.catch("vi"),
+  /** Tự tạo thêm bản cho người nhận khi gửi (M6-04), mặc định bật */
+  auto_translate_on_send: z.boolean().catch(true),
 });
 export type User = z.infer<typeof User>;
 
@@ -57,24 +90,20 @@ export type Quota = z.infer<typeof Quota>;
 export const Template = z.object({
   id: z.string(),
   profession: Profession,
-  name: z.string(),
-  /** Tên mẫu bằng tiếng Anh (M5-02); thiếu thì dùng trường tiếng Việt */
-  name_en: z.string().optional().catch(undefined),
+  /** Tên mẫu theo ngôn ngữ (M6-01), bắt buộc có vi — thay name + name_en của M5 */
+  name: LocalizedText,
   sections: z.array(
     z.object({
       id: z.string(),
-      title: z.string(),
-      /** Tên phần bằng tiếng Anh (M5-02) */
-      title_en: z.string().optional().catch(undefined),
+      /** Tên phần theo ngôn ngữ (M6-01) — thay title + title_en của M5 */
+      title: LocalizedText,
       enabled: z.boolean(),
     }),
   ),
-  suggested_questions: z.array(z.string()),
-  /** Gợi ý câu hỏi bằng tiếng Anh (M5-02) */
-  suggested_questions_en: z.array(z.string()).optional().catch(undefined),
-  footer_note: z.string().optional(),
-  /** Dòng lưu ý bằng tiếng Anh (M5-02), ví dụ mẫu Buổi khám */
-  footer_note_en: z.string().optional().catch(undefined),
+  /** Gợi ý câu hỏi theo ngôn ngữ (M6-01) */
+  suggested_questions: z.array(LocalizedText),
+  /** Dòng lưu ý theo ngôn ngữ, ví dụ mẫu Buổi khám (M6-01) */
+  footer_note: LocalizedText.optional(),
 });
 export type Template = z.infer<typeof Template>;
 
@@ -83,6 +112,8 @@ export const Contact = z.object({
   name: z.string(),
   role: z.string().optional(),
   email: z.string().optional(),
+  /** Ngôn ngữ ưa dùng khi gửi biên bản (M6-04); null là theo cài đặt chung */
+  preferred_language: Lang.nullable().catch(null),
 });
 export type Contact = z.infer<typeof Contact>;
 
@@ -92,8 +123,14 @@ export const Session = z.object({
   workspace_id: z.string().nullable(),
   title: z.string(),
   template_id: z.string(),
-  language: z.string(),
-  output_language: z.string(),
+  /** Ngôn ngữ nói chính của buổi (M6-02) — thay language */
+  primary_language: Lang.catch("vi"),
+  /** Các ngôn ngữ xuất hiện trong buổi, gồm cả primary_language (M6-02) */
+  detected_languages: z.array(Lang).catch([]),
+  /** Các bản tóm tắt đã có (M6-03) */
+  report_languages: z.array(Lang).catch([]),
+  /** Ngôn ngữ của bản tóm tắt gốc (M6-03) — thay output_language */
+  original_report_language: Lang.catch("vi"),
   status: SessionStatus,
   processing_step: z.number().int().min(1).max(5).optional(),
   failure_reason: z.string().optional(),
@@ -136,6 +173,17 @@ export const Bullet = z.object({
 });
 export type Bullet = z.infer<typeof Bullet>;
 
+/**
+ * Một ý tóm tắt trong bản theo ngôn ngữ (M6-03): ý trích dẫn giữ thêm câu
+ * gốc (original_text, original_lang) — trích dẫn là bằng chứng, dịch sai
+ * không được thay câu gốc.
+ */
+export const SummaryBullet = Bullet.extend({
+  original_text: z.string().optional(),
+  original_lang: Lang.optional(),
+});
+export type SummaryBullet = z.infer<typeof SummaryBullet>;
+
 export const Topic = z.object({
   id: z.string(),
   section_id: z.string(),
@@ -156,6 +204,10 @@ export const Topic = z.object({
     .optional(),
 });
 export type Topic = z.infer<typeof Topic>;
+
+/** Chủ đề trong một bản tóm tắt theo ngôn ngữ (M6-03): bullets có câu gốc. */
+export const VersionTopic = Topic.omit({ bullets: true }).extend({ bullets: z.array(SummaryBullet) });
+export type VersionTopic = z.infer<typeof VersionTopic>;
 
 export const ActionItem = z.object({
   id: z.string(),
@@ -196,6 +248,17 @@ export const SessionDetail = Session.extend({
 });
 export type SessionDetail = z.infer<typeof SessionDetail>;
 
+/**
+ * Bản dịch của một đoạn bản ghi lời (M6-02). sample: bản dịch mẫu của
+ * mockup (không có trong fixture, chỉ điền khi dịch giả lập).
+ */
+export const TranslationEntry = z.object({
+  text: z.string(),
+  stale: z.boolean().catch(false),
+  sample: z.boolean().optional(),
+});
+export type TranslationEntry = z.infer<typeof TranslationEntry>;
+
 export const TranscriptSegment = z.object({
   id: z.string(),
   speaker_id: z.string(),
@@ -205,6 +268,12 @@ export const TranscriptSegment = z.object({
   // Người dùng sửa tay chỗ AI nghe sai (M3-01). Fixture cũ không có trường
   // này nên để default; bản lưu trong localStorage trước M3 cũng có thể thiếu.
   edited: z.boolean().default(false).catch(false),
+  /** Ngôn ngữ của đoạn (M6-02); dữ liệu cũ không có thì coi là tiếng Việt */
+  lang: Lang.catch("vi"),
+  /** Bản dịch đã có của đoạn (M6-02), khóa theo ngôn ngữ đích */
+  translations: z
+    .object({ vi: TranslationEntry.optional(), en: TranslationEntry.optional(), ko: TranslationEntry.optional() })
+    .catch({}),
 });
 export type TranscriptSegment = z.infer<typeof TranscriptSegment>;
 
@@ -231,10 +300,37 @@ export const ShareLink = z.object({
   expires_at: z.string().nullable(),
   revoked: z.boolean(),
   view_count: z.number(),
+  /** Các bản tóm tắt người xem được chọn (M6-04) */
+  languages: z.array(Lang).catch([]),
 });
 export type ShareLink = z.infer<typeof ShareLink>;
 
-export const GlossaryTerm = z.object({ id: z.string(), term: z.string(), note: z.string().optional() });
+/**
+ * Một bản tóm tắt theo ngôn ngữ (M6-03). Bản gốc của buổi nằm trong
+ * SessionDetail; các bản dịch lưu ở đây.
+ */
+export const SummaryVersion = z.object({
+  session_id: z.string(),
+  lang: Lang,
+  source: z.enum(["original", "translated"]),
+  translated_from: Lang.nullable(),
+  created_at: z.string(),
+  /** Bản gốc đã sửa sau khi dịch (M6-03) */
+  stale: z.boolean().catch(false),
+  executive_summary: z.string(),
+  topics: z.array(VersionTopic),
+  /** Tên việc cần làm ở ngôn ngữ này (action_item_id -> tên việc) */
+  task_texts: z.record(z.string(), z.string()).catch({}),
+});
+export type SummaryVersion = z.infer<typeof SummaryVersion>;
+
+export const GlossaryTerm = z.object({
+  id: z.string(),
+  term: z.string(),
+  note: z.string().optional(),
+  /** Cách viết ở ngôn ngữ khác (M6-02), ví dụ "Vinhomes Marina" -> "빈홈즈 마리나" */
+  variants: z.object({ vi: z.string().optional(), en: z.string().optional(), ko: z.string().optional() }).catch({}),
+});
 export type GlossaryTerm = z.infer<typeof GlossaryTerm>;
 
 /** Một file fixture buổi ghi: chi tiết + bản ghi lời (tách vì nặng). */
@@ -244,6 +340,8 @@ export const SessionFixture = z.object({
   chat: z.array(z.object({ question: z.string(), answer: z.string(), citations: z.array(z.number()) })).default([]),
   // Sơ đồ quy trình dựng bằng Mermaid ở tab Hình (M3-03); sinh từ dữ liệu buổi ghi
   flow_mermaid: z.string().optional(),
+  /** Các bản tóm tắt theo ngôn ngữ có sẵn trong fixture (M6-03); bản gốc nằm trong detail */
+  summary_versions: z.array(SummaryVersion).optional(),
 });
 export type SessionFixture = z.infer<typeof SessionFixture>;
 

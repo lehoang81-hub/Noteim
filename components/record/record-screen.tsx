@@ -47,6 +47,7 @@ import { keepScreenAwake, letScreenSleep } from "@/lib/record/wake-lock";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 import { useOffline } from "@/components/shell/app-shell";
 import type { SemanticTag } from "@/components/ui/chips";
+import type { Lang } from "@/lib/data";
 
 /*
  * Màn hình ghi âm /record (docs/03-screens.md mục 2, 3; M2-01 + M2-02).
@@ -375,6 +376,9 @@ export function RecordScreen() {
         data.sessions.createFromRecording({
           title,
           template_id: templateId,
+          // Ngôn ngữ chính chọn ở bảng "Bắt đầu ghi" (M6-02); chưa chọn thì
+          // theo cài đặt, chưa có cài đặt thì theo ngôn ngữ giao diện
+          primary_language: me.data?.default_speech_language ?? (locale as Lang),
           duration_sec: snapshot.duration_sec,
           notes: snapshot.notes.map(({ timestamp_sec, text }) => ({ timestamp_sec, text })),
           bookmarks: snapshot.bookmarks.map(({ timestamp_sec, tag }) => ({ timestamp_sec, tag })),

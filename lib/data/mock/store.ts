@@ -1,6 +1,7 @@
 "use client";
 
 import { clearStorageFull, markStorageFull } from "@/lib/storage-full";
+import { migrateStored } from "./migrate";
 import { normalizeSpeakerNames } from "./normalize";
 import type { RecordingDraft } from "../repository";
 import type { ChatMessage, Contact, GlossaryTerm, Quota, SessionFixture, ShareLink, Template, User } from "../types";
@@ -75,6 +76,8 @@ export function getDb(): MockDb {
           (fx.detail as { speakers?: Array<{ display_name: string | null }> } | undefined)?.speakers,
         );
       }
+      // Dữ liệu cũ trước M6 (_en, language, output_language...) tự chuyển khi nạp
+      if (migrateStored(db)) commit();
     }
   } catch {
     db = emptyDb();
@@ -107,7 +110,8 @@ export function ensureDb(): MockDb {
           d.contacts = base.contacts;
           d.templates = base.templates;
           d.glossary = base.glossary;
-        } else if (d.templates.some((tp) => !tp.name_en)) {
+        } else if (mod.templatesMissingKo(d.templates)) {
+          // Kho từ localStorage trước M6: bản tiếng Hàn của mẫu chưa có, lấy từ fixture
           await mod.backfillTemplates(d.templates);
         }
         // Buổi ghi thư viện: kho từ localStorage đã có sẵn, không ghi đè

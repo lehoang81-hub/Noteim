@@ -65,7 +65,7 @@ async function stripSessions(list: Array<Session | SessionDetail>): Promise<Sess
 }
 
 /** Bản sao ShareLink không kèm mật khẩu (mật khẩu chỉ dùng nội bộ bản giả). */
-function toShareLink(s: { id: string; session_id: string; scope: ShareLink["scope"]; has_password: boolean; expires_at: string | null; revoked: boolean; view_count: number }): ShareLink {
+function toShareLink(s: ShareLink & { password?: string }): ShareLink {
   return {
     id: s.id,
     session_id: s.session_id,
@@ -74,6 +74,7 @@ function toShareLink(s: { id: string; session_id: string; scope: ShareLink["scop
     expires_at: s.expires_at,
     revoked: s.revoked,
     view_count: s.view_count,
+    languages: s.languages ?? [],
   };
 }
 
@@ -332,8 +333,11 @@ export const mockSource: DataSource = {
           workspace_id: null,
           title: draft.title ?? "",
           template_id: draft.template_id,
-          language: "vi",
-          output_language: "vi",
+          // Ngôn ngữ nói chính chọn ở bảng "Bắt đầu ghi" (M6-02)
+          primary_language: draft.primary_language,
+          detected_languages: [draft.primary_language],
+          report_languages: [db.user.default_report_language ?? db.user.ui_language],
+          original_report_language: db.user.default_report_language ?? db.user.ui_language,
           status: offline ? "unsynced" : "processing",
           processing_step: offline ? undefined : 1,
           storage_status: "full",
@@ -502,6 +506,7 @@ export const mockSource: DataSource = {
         const draft: RecordingDraft = {
           title: input.file_name.replace(/\.[^.]+$/, ""),
           template_id: input.template_id,
+          primary_language: input.language,
           duration_sec: input.duration_sec,
           notes: [],
           bookmarks: [],
@@ -514,8 +519,10 @@ export const mockSource: DataSource = {
           workspace_id: null,
           title: draft.title ?? "",
           template_id: input.template_id,
-          language: input.language,
-          output_language: db.user.ui_language,
+          primary_language: input.language,
+          detected_languages: [input.language],
+          report_languages: [db.user.default_report_language ?? db.user.ui_language],
+          original_report_language: db.user.default_report_language ?? db.user.ui_language,
           status: "processing",
           processing_step: 1,
           storage_status: "full",
@@ -634,6 +641,7 @@ export const mockSource: DataSource = {
           expires_at: opts.expires_at,
           revoked: false,
           view_count: 0,
+          languages: opts.languages ?? [],
         };
         if (opts.password) link.password = opts.password;
         db.shares.push(link);
@@ -771,6 +779,7 @@ export const mockSource: DataSource = {
         const contact: Contact = {
           id: `c-new-${Date.now().toString(36)}`,
           name: input.name.trim(),
+          preferred_language: null,
           ...(input.email?.trim() ? { email: input.email.trim() } : {}),
         };
         db.contacts.push(contact);
@@ -792,7 +801,7 @@ export const mockSource: DataSource = {
           (g) => g.term.toLocaleLowerCase("vi") === clean.toLocaleLowerCase("vi"),
         );
         if (existing) return existing;
-        const item: GlossaryTerm = { id: `gl-${Date.now().toString(36)}`, term: clean };
+        const item: GlossaryTerm = { id: `gl-${Date.now().toString(36)}`, term: clean, variants: {} };
         db.glossary.push(item);
         return item;
       }),

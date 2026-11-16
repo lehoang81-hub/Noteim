@@ -7,7 +7,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
-import { data, useData } from "@/lib/data";
+import { data, useData, type Lang } from "@/lib/data";
 import { templateName } from "@/lib/data/localize";
 import { durationParts } from "@/lib/format";
 import { takeImportFile } from "@/lib/import-file";
@@ -67,7 +67,7 @@ export function ImportScreen() {
   const quota = useData(() => data.account.quota(), []);
   const templates = useData(() => data.account.templates(), []);
   const [templateId, setTemplateId] = useState("");
-  const [language, setLanguage] = useState("vi");
+  const [language, setLanguage] = useState<Lang>("vi");
 
   useEffect(() => {
     mounted.current = true;
@@ -244,11 +244,12 @@ export function ImportScreen() {
                 {t("languageLabel")}
                 <select
                   value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
+                  onChange={(e) => setLanguage(e.target.value as Lang)}
                   className="mt-1.5 h-11 w-full rounded-control border border-line bg-surface px-2 text-small text-ink"
                 >
                   <option value="vi">{t("langVi")}</option>
                   <option value="en">{t("langEn")}</option>
+                  <option value="ko">한국어</option>
                 </select>
               </label>
             </div>

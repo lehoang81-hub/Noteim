@@ -1,292 +1,445 @@
 [
-  {
-    "id": "tpl-business",
-    "profession": "business_owner",
-    "name": "Họp điều hành",
-    "sections": [
-      {
-        "id": "tpl-business-s1",
-        "title": "Quyết định",
-        "enabled": true,
-        "title_en": "Decisions"
-      },
-      {
-        "id": "tpl-business-s2",
-        "title": "Số liệu được nhắc",
-        "enabled": true,
-        "title_en": "Figures mentioned"
-      },
-      {
-        "id": "tpl-business-s3",
-        "title": "Rủi ro và vướng mắc",
-        "enabled": true,
-        "title_en": "Risks and blockers"
-      },
-      {
-        "id": "tpl-business-s4",
-        "title": "Việc giao theo người",
-        "enabled": true,
-        "title_en": "Tasks by owner"
-      }
-    ],
-    "suggested_questions": [
-      "Ai đang quá tải?",
-      "Điều gì chưa có người nhận?",
-      "Soạn thông báo cho toàn công ty"
-    ],
-    "name_en": "Leadership meeting",
-    "suggested_questions_en": [
-      "Who is overloaded?",
-      "What has no owner yet?",
-      "Draft a company-wide announcement"
-    ]
+ {
+  "id": "tpl-business",
+  "profession": "business_owner",
+  "name": {
+   "vi": "Họp điều hành",
+   "en": "Leadership meeting",
+   "ko": "경영 회의"
   },
-  {
-    "id": "tpl-doctor",
-    "profession": "doctor",
-    "name": "Buổi khám",
-    "sections": [
-      {
-        "id": "tpl-doctor-s1",
-        "title": "Lý do đến khám",
-        "enabled": true,
-        "title_en": "Reason for visit"
-      },
-      {
-        "id": "tpl-doctor-s2",
-        "title": "Lời bệnh nhân kể",
-        "enabled": true,
-        "title_en": "Patient's account"
-      },
-      {
-        "id": "tpl-doctor-s3",
-        "title": "Chỉ định và đơn thuốc đã dặn",
-        "enabled": true,
-        "title_en": "Tests and prescriptions"
-      },
-      {
-        "id": "tpl-doctor-s4",
-        "title": "Dặn dò",
-        "enabled": true,
-        "title_en": "Care instructions"
-      },
-      {
-        "id": "tpl-doctor-s5",
-        "title": "Hẹn tái khám",
-        "enabled": true,
-        "title_en": "Follow-up appointment"
-      }
-    ],
-    "suggested_questions": [
-      "Bệnh nhân kể triệu chứng từ khi nào?",
-      "Soạn tờ dặn dò cho bệnh nhân",
-      "Tôi đã dặn kiêng gì?"
-    ],
-    "footer_note": "Noteim chỉ ghi lại lời đã nói. Không phải chẩn đoán hay tư vấn y khoa.",
-    "name_en": "Clinic visit",
-    "suggested_questions_en": [
-      "When did the symptoms start?",
-      "Draft care instructions for the patient",
-      "What foods did I tell the patient to avoid?"
-    ],
-    "footer_note_en": "Noteim only records what was said. It is not a diagnosis or medical advice."
+  "sections": [
+   {
+    "id": "tpl-business-s1",
+    "title": {
+     "vi": "Quyết định",
+     "en": "Decisions",
+     "ko": "결정 사항"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-business-s2",
+    "title": {
+     "vi": "Số liệu được nhắc",
+     "en": "Figures mentioned",
+     "ko": "언급된 수치"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-business-s3",
+    "title": {
+     "vi": "Rủi ro và vướng mắc",
+     "en": "Risks and blockers",
+     "ko": "리스크와 장애물"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-business-s4",
+    "title": {
+     "vi": "Việc giao theo người",
+     "en": "Tasks by owner",
+     "ko": "담당자별 할 일"
+    },
+    "enabled": true
+   }
+  ],
+  "suggested_questions": [
+   {
+    "vi": "Ai đang quá tải?",
+    "en": "Who is overloaded?",
+    "ko": "누가 업무 과부하인가요?"
+   },
+   {
+    "vi": "Điều gì chưa có người nhận?",
+    "en": "What has no owner yet?",
+    "ko": "아직 담당자가 없는 일은 무엇인가요?"
+   },
+   {
+    "vi": "Soạn thông báo cho toàn công ty",
+    "en": "Draft a company-wide announcement",
+    "ko": "전사 공지문 초안 작성"
+   }
+  ]
+ },
+ {
+  "id": "tpl-doctor",
+  "profession": "doctor",
+  "name": {
+   "vi": "Buổi khám",
+   "en": "Clinic visit",
+   "ko": "진료 세션"
   },
-  {
-    "id": "tpl-lawyer",
-    "profession": "lawyer",
-    "name": "Tư vấn pháp lý",
-    "sections": [
-      {
-        "id": "tpl-lawyer-s1",
-        "title": "Sự việc theo trình tự thời gian",
-        "enabled": true,
-        "title_en": "Events in order"
-      },
-      {
-        "id": "tpl-lawyer-s2",
-        "title": "Yêu cầu của khách hàng",
-        "enabled": true,
-        "title_en": "Client's requests"
-      },
-      {
-        "id": "tpl-lawyer-s3",
-        "title": "Vấn đề pháp lý cần xem",
-        "enabled": true,
-        "title_en": "Legal issues to review"
-      },
-      {
-        "id": "tpl-lawyer-s4",
-        "title": "Tài liệu cần bổ sung",
-        "enabled": true,
-        "title_en": "Documents to provide"
-      },
-      {
-        "id": "tpl-lawyer-s5",
-        "title": "Mốc thời hạn",
-        "enabled": true,
-        "title_en": "Deadlines"
-      }
-    ],
-    "suggested_questions": [
-      "Liệt kê các mốc ngày tháng khách nhắc",
-      "Khách còn thiếu giấy tờ gì?",
-      "Soạn thư xác nhận nội dung tư vấn"
-    ],
-    "name_en": "Legal consultation",
-    "suggested_questions_en": [
-      "List the dates the client mentioned",
-      "Which documents are still missing?",
-      "Draft a letter confirming the advice"
-    ]
-  },
-  {
-    "id": "tpl-realestate",
-    "profession": "realestate_sales",
-    "name": "Gặp khách",
-    "sections": [
-      {
-        "id": "tpl-realestate-s1",
-        "title": "Nhu cầu",
-        "enabled": true,
-        "title_en": "Needs"
-      },
-      {
-        "id": "tpl-realestate-s2",
-        "title": "Ngân sách và phương án vay",
-        "enabled": true,
-        "title_en": "Budget and loan options"
-      },
-      {
-        "id": "tpl-realestate-s3",
-        "title": "Băn khoăn của khách",
-        "enabled": true,
-        "title_en": "Client's concerns"
-      },
-      {
-        "id": "tpl-realestate-s4",
-        "title": "Căn đang quan tâm",
-        "enabled": true,
-        "title_en": "Property of interest"
-      },
-      {
-        "id": "tpl-realestate-s5",
-        "title": "Cam kết hai bên",
-        "enabled": true,
-        "title_en": "Commitments on both sides"
-      },
-      {
-        "id": "tpl-realestate-s6",
-        "title": "Bước tiếp theo",
-        "enabled": true,
-        "title_en": "Next steps"
-      }
-    ],
-    "suggested_questions": [
-      "Khách còn băn khoăn gì?",
-      "Soạn tin nhắn Zalo cảm ơn",
-      "Lần gặp tới cần chuẩn bị gì?"
-    ],
-    "name_en": "Client meeting",
-    "suggested_questions_en": [
-      "What concerns does the client still have?",
-      "Draft a thank-you message",
-      "What should I prepare for the next meeting?"
-    ]
-  },
-  {
-    "id": "tpl-architect",
-    "profession": "architect",
-    "name": "Họp thiết kế và công trường",
-    "sections": [
-      {
-        "id": "tpl-architect-s1",
-        "title": "Yêu cầu thay đổi",
-        "enabled": true,
-        "title_en": "Change requests"
-      },
-      {
-        "id": "tpl-architect-s2",
-        "title": "Số đo và vật liệu được nhắc",
-        "enabled": true,
-        "title_en": "Measurements and materials"
-      },
-      {
-        "id": "tpl-architect-s3",
-        "title": "Hạng mục tồn tại",
-        "enabled": true,
-        "title_en": "Open items"
-      },
-      {
-        "id": "tpl-architect-s4",
-        "title": "Việc theo từng bên",
-        "enabled": true,
-        "title_en": "Tasks by party"
-      }
-    ],
-    "suggested_questions": [
-      "Chủ nhà đổi ý những gì so với lần trước?",
-      "Liệt kê số đo",
-      "Soạn biên bản hiện trường"
-    ],
-    "name_en": "Design and site meeting",
-    "suggested_questions_en": [
-      "What did the owner change since the last meeting?",
-      "List the measurements",
-      "Draft site minutes"
-    ]
-  },
-  {
-    "id": "tpl-notary",
-    "profession": "notary",
-    "name": "Phiên công chứng",
-    "sections": [
-      {
-        "id": "tpl-notary-s1",
-        "title": "Các bên tham gia",
-        "enabled": true,
-        "title_en": "Parties present"
-      },
-      {
-        "id": "tpl-notary-s2",
-        "title": "Loại giao dịch",
-        "enabled": true,
-        "title_en": "Transaction type"
-      },
-      {
-        "id": "tpl-notary-s3",
-        "title": "Giấy tờ đã xuất trình",
-        "enabled": true,
-        "title_en": "Documents presented"
-      },
-      {
-        "id": "tpl-notary-s4",
-        "title": "Giấy tờ còn thiếu",
-        "enabled": true,
-        "title_en": "Documents missing"
-      },
-      {
-        "id": "tpl-notary-s5",
-        "title": "Nội dung đã giải thích cho các bên",
-        "enabled": true,
-        "title_en": "Explanation given to the parties"
-      },
-      {
-        "id": "tpl-notary-s6",
-        "title": "Lịch hẹn",
-        "enabled": true,
-        "title_en": "Appointments"
-      }
-    ],
-    "suggested_questions": [
-      "Còn thiếu giấy tờ gì?",
-      "Tôi đã giải thích những quyền và nghĩa vụ nào?",
-      "Soạn tin nhắc lịch hẹn"
-    ],
-    "name_en": "Notarization session",
-    "suggested_questions_en": [
-      "Which documents are still missing?",
-      "Which rights and obligations did I explain?",
-      "Draft an appointment reminder"
-    ]
+  "sections": [
+   {
+    "id": "tpl-doctor-s1",
+    "title": {
+     "vi": "Lý do đến khám",
+     "en": "Reason for visit",
+     "ko": "주 호소 증상"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-doctor-s2",
+    "title": {
+     "vi": "Lời bệnh nhân kể",
+     "en": "Patient's account",
+     "ko": "진찰 소견"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-doctor-s3",
+    "title": {
+     "vi": "Chỉ định và đơn thuốc đã dặn",
+     "en": "Tests and prescriptions",
+     "ko": "진단"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-doctor-s4",
+    "title": {
+     "vi": "Dặn dò",
+     "en": "Care instructions",
+     "ko": "처방 및 지시 사항"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-doctor-s5",
+    "title": {
+     "vi": "Hẹn tái khám",
+     "en": "Follow-up appointment",
+     "ko": "다음 예약"
+    },
+    "enabled": true
+   }
+  ],
+  "suggested_questions": [
+   {
+    "vi": "Bệnh nhân kể triệu chứng từ khi nào?",
+    "en": "When did the symptoms start?",
+    "ko": "복용 약물을 어떻게 정리하나요?"
+   },
+   {
+    "vi": "Soạn tờ dặn dò cho bệnh nhân",
+    "en": "Draft care instructions for the patient",
+    "ko": "다음 검사 일정은 언제인가요?"
+   },
+   {
+    "vi": "Tôi đã dặn kiêng gì?",
+    "en": "What foods did I tell the patient to avoid?",
+    "ko": "환자에게 설명할 요약을 작성해 주세요"
+   }
+  ],
+  "footer_note": {
+   "vi": "Noteim chỉ ghi lại lời đã nói. Không phải chẩn đoán hay tư vấn y khoa.",
+   "en": "Noteim only records what was said. It is not a diagnosis or medical advice.",
+   "ko": "이 요약은 참고용이며 의사의 최종 진단을 대체하지 않습니다."
   }
+ },
+ {
+  "id": "tpl-lawyer",
+  "profession": "lawyer",
+  "name": {
+   "vi": "Tư vấn pháp lý",
+   "en": "Legal consultation",
+   "ko": "법률 상담"
+  },
+  "sections": [
+   {
+    "id": "tpl-lawyer-s1",
+    "title": {
+     "vi": "Sự việc theo trình tự thời gian",
+     "en": "Events in order",
+     "ko": "사건 개요"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-lawyer-s2",
+    "title": {
+     "vi": "Yêu cầu của khách hàng",
+     "en": "Client's requests",
+     "ko": "쟁점 사항"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-lawyer-s3",
+    "title": {
+     "vi": "Vấn đề pháp lý cần xem",
+     "en": "Legal issues to review",
+     "ko": "근거와 판례"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-lawyer-s4",
+    "title": {
+     "vi": "Tài liệu cần bổ sung",
+     "en": "Documents to provide",
+     "ko": "조치 방안"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-lawyer-s5",
+    "title": {
+     "vi": "Mốc thời hạn",
+     "en": "Deadlines",
+     "ko": "다음 단계"
+    },
+    "enabled": true
+   }
+  ],
+  "suggested_questions": [
+   {
+    "vi": "Liệt kê các mốc ngày tháng khách nhắc",
+    "en": "List the dates the client mentioned",
+    "ko": "계약서에서 어떤 부분을 확인해야 하나요?"
+   },
+   {
+    "vi": "Khách còn thiếu giấy tờ gì?",
+    "en": "Which documents are still missing?",
+    "ko": "소송 절차와 기간은 어떻게 되나요?"
+   },
+   {
+    "vi": "Soạn thư xác nhận nội dung tư vấn",
+    "en": "Draft a letter confirming the advice",
+    "ko": "고객에게 보낼 조치 목록을 작성해 주세요"
+   }
+  ]
+ },
+ {
+  "id": "tpl-realestate",
+  "profession": "realestate_sales",
+  "name": {
+   "vi": "Gặp khách",
+   "en": "Client meeting",
+   "ko": "고객 미팅"
+  },
+  "sections": [
+   {
+    "id": "tpl-realestate-s1",
+    "title": {
+     "vi": "Nhu cầu",
+     "en": "Needs",
+     "ko": "고객 요구 사항"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-realestate-s2",
+    "title": {
+     "vi": "Ngân sách và phương án vay",
+     "en": "Budget and loan options",
+     "ko": "추천 매물"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-realestate-s3",
+    "title": {
+     "vi": "Băn khoăn của khách",
+     "en": "Client's concerns",
+     "ko": "언급된 수치"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-realestate-s4",
+    "title": {
+     "vi": "Căn đang quan tâm",
+     "en": "Property of interest",
+     "ko": "우려 사항"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-realestate-s5",
+    "title": {
+     "vi": "Cam kết hai bên",
+     "en": "Commitments on both sides",
+     "ko": "다음 단계"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-realestate-s6",
+    "title": {
+     "vi": "Bước tiếp theo",
+     "en": "Next steps",
+     "ko": "담당자별 할 일"
+    },
+    "enabled": true
+   }
+  ],
+  "suggested_questions": [
+   {
+    "vi": "Khách còn băn khoăn gì?",
+    "en": "What concerns does the client still have?",
+    "ko": "고객의 예산 범위는 얼마인가요?"
+   },
+   {
+    "vi": "Soạn tin nhắn Zalo cảm ơn",
+    "en": "Draft a thank-you message",
+    "ko": "가장 선호하는 매물은 무엇인가요?"
+   },
+   {
+    "vi": "Lần gặp tới cần chuẩn bị gì?",
+    "en": "What should I prepare for the next meeting?",
+    "ko": "고객에게 보낼 요약을 작성해 주세요"
+   }
+  ]
+ },
+ {
+  "id": "tpl-architect",
+  "profession": "architect",
+  "name": {
+   "vi": "Họp thiết kế và công trường",
+   "en": "Design and site meeting",
+   "ko": "설계 및 현장 회의"
+  },
+  "sections": [
+   {
+    "id": "tpl-architect-s1",
+    "title": {
+     "vi": "Yêu cầu thay đổi",
+     "en": "Change requests",
+     "ko": "설계 결정 사항"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-architect-s2",
+    "title": {
+     "vi": "Số đo và vật liệu được nhắc",
+     "en": "Measurements and materials",
+     "ko": "현장 지시 사항"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-architect-s3",
+    "title": {
+     "vi": "Hạng mục tồn tại",
+     "en": "Open items",
+     "ko": "자재와 일정"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-architect-s4",
+    "title": {
+     "vi": "Việc theo từng bên",
+     "en": "Tasks by party",
+     "ko": "담당자별 할 일"
+    },
+    "enabled": true
+   }
+  ],
+  "suggested_questions": [
+   {
+    "vi": "Chủ nhà đổi ý những gì so với lần trước?",
+    "en": "What did the owner change since the last meeting?",
+    "ko": "이번 주에 완료해야 할 일은 무엇인가요?"
+   },
+   {
+    "vi": "Liệt kê số đo",
+    "en": "List the measurements",
+    "ko": "현장에서 지연된 작업은 무엇인가요?"
+   },
+   {
+    "vi": "Soạn biên bản hiện trường",
+    "en": "Draft site minutes",
+    "ko": "시공사에게 보낼 지시 사항을 작성해 주세요"
+   }
+  ]
+ },
+ {
+  "id": "tpl-notary",
+  "profession": "notary",
+  "name": {
+   "vi": "Phiên công chứng",
+   "en": "Notarization session",
+   "ko": "공정 인증 세션"
+  },
+  "sections": [
+   {
+    "id": "tpl-notary-s1",
+    "title": {
+     "vi": "Các bên tham gia",
+     "en": "Parties present",
+     "ko": "계약 당사자"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-notary-s2",
+    "title": {
+     "vi": "Loại giao dịch",
+     "en": "Transaction type",
+     "ko": "공증 대상 문서"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-notary-s3",
+    "title": {
+     "vi": "Giấy tờ đã xuất trình",
+     "en": "Documents presented",
+     "ko": "확인된 조건"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-notary-s4",
+    "title": {
+     "vi": "Giấy tờ còn thiếu",
+     "en": "Documents missing",
+     "ko": "제출 서류"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-notary-s5",
+    "title": {
+     "vi": "Nội dung đã giải thích cho các bên",
+     "en": "Explanation given to the parties",
+     "ko": "수수료와 비용"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-notary-s6",
+    "title": {
+     "vi": "Lịch hẹn",
+     "en": "Appointments",
+     "ko": "후속 조치"
+    },
+    "enabled": true
+   }
+  ],
+  "suggested_questions": [
+   {
+    "vi": "Còn thiếu giấy tờ gì?",
+    "en": "Which documents are still missing?",
+    "ko": "누락된 서류가 있나요?"
+   },
+   {
+    "vi": "Tôi đã giải thích những quyền và nghĩa vụ nào?",
+    "en": "Which rights and obligations did I explain?",
+    "ko": "공정 인증 일정은 언제인가요?"
+   },
+   {
+    "vi": "Soạn tin nhắc lịch hẹn",
+    "en": "Draft an appointment reminder",
+    "ko": "당사자에게 보낼 안내문을 작성해 주세요"
+   }
+  ]
+ }
 ]

@@ -1,6 +1,30 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
 
+/*
+ * Phông Hàn Pretendard Variable (M6-01, issue #43): dự phòng sau Bricolage
+ * Grotesque và Be Vietnam Pro (hai font này không có chữ Hàn). Chỉ nạp khi
+ * trang có chữ Hàn: unicode-range buộc trình duyệt tải woff2 đúng lúc có ký
+ * tự Hangul cần vẽ — giao diện Việt/Anh không có chữ Hàn thì không có lần
+ * tải nào (danh sách file tải về ở từng ngôn ngữ ghi trong PR).
+ */
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/PretendardVariable.woff2") format("woff2-variations");
+  /* Hangul âm tiết + Jamo + ký hiệu Korean, phạm vi chuẩn của Pretendard */
+  unicode-range: U+1100-115F, U+2E80-303F, U+3130-318F, U+3200-324F, U+A960-A97F, U+AC00-D7A3, U+D7B0-D7FF;
+}
+
+/* Chữ Hàn không ngắt giữa từ (M6-01): áp cho cả trang tiếng Hàn và các khối
+ * nội dung tiếng Hàn nhúng trong giao diện khác (thẻ có lang="ko"). */
+:where([lang="ko"], [lang="ko"] *) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
 /* Chế độ tối điều khiển bằng class .dark trên <html>, không theo hệ điều hành. */
 @custom-variant dark (&:where(.dark, .dark *));
 

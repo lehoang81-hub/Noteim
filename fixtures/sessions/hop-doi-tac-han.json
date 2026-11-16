@@ -1,0 +1,2689 @@
+{
+ "detail": {
+  "id": "s-hop-han",
+  "user_id": "u-hoang",
+  "workspace_id": null,
+  "title": "Họp với đối tác Hàn Quốc, khuôn mẫu nhựa",
+  "template_id": "tpl-business",
+  "primary_language": "vi",
+  "original_report_language": "vi",
+  "detected_languages": [
+   "vi",
+   "ko",
+   "en"
+  ],
+  "report_languages": [
+   "vi",
+   "ko"
+  ],
+  "status": "ready",
+  "storage_status": "full",
+  "duration_sec": 2980,
+  "size_bytes": 8940000,
+  "created_at": "2026-11-13T14:05:00+07:00",
+  "audio_expires_at": "2026-11-20T14:05:00+07:00",
+  "consent": {
+   "confirmed": true,
+   "announced": true
+  },
+  "participant_contact_ids": [
+   "c-me",
+   "c-thao",
+   "c-park",
+   "c-kim"
+  ],
+  "peaks_thumb": [
+   0.646,
+   0.738,
+   0.713,
+   0.645,
+   0.528,
+   0.306,
+   0.26,
+   0.445,
+   0.573,
+   0.638,
+   0.558,
+   0.511,
+   0.357,
+   0.203,
+   0.206,
+   0.443,
+   0.626,
+   0.677,
+   0.643,
+   0.515,
+   0.421,
+   0.304,
+   0.377,
+   0.485,
+   0.661,
+   0.876,
+   0.854,
+   0.727,
+   0.522,
+   0.381,
+   0.419,
+   0.599,
+   0.792,
+   0.823,
+   0.679,
+   0.601,
+   0.428,
+   0.323,
+   0.327,
+   0.451
+  ],
+  "speaker_colors_thumb": [
+   1,
+   3,
+   0,
+   0,
+   3,
+   1,
+   0,
+   2,
+   1,
+   0,
+   0,
+   3,
+   0,
+   3,
+   0,
+   0,
+   1,
+   2,
+   1,
+   3,
+   2,
+   0,
+   3,
+   0,
+   1,
+   2,
+   0,
+   0,
+   1,
+   0,
+   2,
+   1,
+   0,
+   2,
+   1,
+   0,
+   0,
+   0,
+   1,
+   1
+  ],
+  "open_task_count": 4,
+  "headline_tag": {
+   "tag": "figure",
+   "count": 2
+  },
+  "executive_summary": "Sau khi so sánh ba báo giá, chúng tôi chọn bộ khuôn A của Hanyang Mold với chi phí phát triển 48.000 USD cho hai khuôn chi tiết hộc tủ. Đơn giá sản xuất là 2,35 USD/sản phẩm, đợt đầu đặt 20.000 sản phẩm đúng mức MOQ 20.000. Tiến độ dự kiến 8 tuần sau khi duyệt mẫu, thanh toán T/T với 30% đặt cọc khi ký và 70% trước khi giao hàng. Phương án C có chu kỳ ép nhanh hơn 15% nhưng đắt hơn 13.000 USD nên chưa chọn ở đợt này.",
+  "speakers": [
+   {
+    "id": "SPK_01",
+    "contact_id": "c-me",
+    "display_name": "Bạn",
+    "is_me": true,
+    "color": 0,
+    "talk": 31,
+    "sample": 20
+   },
+   {
+    "id": "SPK_02",
+    "contact_id": "c-park",
+    "display_name": "Park Ji-ho",
+    "is_me": false,
+    "color": 1,
+    "talk": 25,
+    "sample": 90
+   },
+   {
+    "id": "SPK_03",
+    "contact_id": "c-kim",
+    "display_name": "Kim Min-ji",
+    "is_me": false,
+    "color": 2,
+    "talk": 22,
+    "sample": 130
+   },
+   {
+    "id": "SPK_04",
+    "contact_id": "c-thao",
+    "display_name": "Chị Thảo",
+    "is_me": false,
+    "color": 3,
+    "talk": 22,
+    "sample": 400
+   }
+  ],
+  "topics": [
+   {
+    "id": "t1",
+    "title": "Mở đầu và giới thiệu",
+    "section_id": null,
+    "start_sec": 0,
+    "end_sec": 240,
+    "tag": "pending",
+    "bullets": [
+     {
+      "id": "b1",
+      "time_sec": 52,
+      "time_label": "00:52",
+      "text": "Hai bên giới thiệu thành viên tham gia dự án",
+      "speaker_id": "SPK_02",
+      "is_quote": false
+     },
+     {
+      "id": "b2",
+      "time_sec": 118,
+      "time_label": "01:58",
+      "text": "So sánh ba báo giá khuôn, đơn giá với MOQ, và tiến độ sản xuất đợt đầu",
+      "speaker_id": "SPK_04",
+      "is_quote": true
+     },
+     {
+      "id": "b3",
+      "time_sec": 196,
+      "time_label": "03:16",
+      "text": "Mục tiêu: chốt nhà cung cấp khuôn, đơn giá và điều khoản thanh toán trong tháng này",
+      "speaker_id": "SPK_01",
+      "is_quote": false
+     }
+    ]
+   },
+   {
+    "id": "t2",
+    "title": "So sánh báo giá khuôn",
+    "section_id": "tpl-business-s1",
+    "start_sec": 240,
+    "end_sec": 750,
+    "tag": "decided",
+    "bullets": [
+     {
+      "id": "b4",
+      "time_sec": 292,
+      "time_label": "04:52",
+      "text": "Khuôn A của Hanyang Mold: 48.000 USD, thép P20, tuổi thọ 300.000 lần ép",
+      "speaker_id": "SPK_03",
+      "is_quote": false
+     },
+     {
+      "id": "b5",
+      "time_sec": 410,
+      "time_label": "06:50",
+      "text": "Khuôn B: 52.000 USD, thép S136, tuổi thọ 500.000 lần ép",
+      "speaker_id": "SPK_02",
+      "is_quote": false
+     },
+     {
+      "id": "b6",
+      "time_sec": 560,
+      "time_label": "09:20",
+      "text": "Khuôn C: 61.000 USD, làm mát conformal, chu kỳ ép 20,4 giây",
+      "speaker_id": "SPK_03",
+      "is_quote": false
+     },
+     {
+      "id": "b7",
+      "time_sec": 675,
+      "time_label": "11:15",
+      "text": "Phương án A của Hanyang Mold là lựa chọn hợp lý nhất",
+      "speaker_id": "SPK_04",
+      "is_quote": true
+     }
+    ],
+    "figure": {
+     "type": "bar",
+     "title": "So sánh báo giá khuôn",
+     "unit": "USD",
+     "labels": [
+      "Khuôn A",
+      "Khuôn B",
+      "Khuôn C"
+     ],
+     "values": [
+      48000,
+      52000,
+      61000
+     ],
+     "source_sec": 560
+    }
+   },
+   {
+    "id": "t3",
+    "title": "Đơn giá và MOQ",
+    "section_id": "tpl-business-s2",
+    "start_sec": 750,
+    "end_sec": 1140,
+    "tag": "decided",
+    "bullets": [
+     {
+      "id": "b8",
+      "time_sec": 805,
+      "time_label": "13:25",
+      "text": "Đơn giá 2,35 USD/sản phẩm khi đạt MOQ 20.000",
+      "speaker_id": "SPK_03",
+      "is_quote": false
+     },
+     {
+      "id": "b9",
+      "time_sec": 920,
+      "time_label": "15:20",
+      "text": "Đơn giá 2,35 USD đã gồm bao bì xuất khẩu và kiểm tra lần đầu",
+      "speaker_id": "SPK_01",
+      "is_quote": true
+     },
+     {
+      "id": "b10",
+      "time_sec": 1040,
+      "time_label": "17:20",
+      "text": "Màu thứ hai cộng thêm 0,05 USD mỗi sản phẩm",
+      "speaker_id": "SPK_03",
+      "is_quote": false
+     }
+    ],
+    "figure": {
+     "type": "bar",
+     "title": "Chu kỳ ép của từng phương án",
+     "unit": "giây",
+     "labels": [
+      "Khuôn A",
+      "Khuôn B",
+      "Khuôn C"
+     ],
+     "values": [
+      24,
+      24,
+      20.4
+     ],
+     "source_sec": 920
+    }
+   },
+   {
+    "id": "t4",
+    "title": "Tiến độ sản xuất",
+    "section_id": "tpl-business-s3",
+    "start_sec": 1140,
+    "end_sec": 1560,
+    "tag": "risk",
+    "bullets": [
+     {
+      "id": "b11",
+      "time_sec": 1195,
+      "time_label": "19:55",
+      "text": "Lead time 8 tuần sau khi duyệt mẫu",
+      "speaker_id": "SPK_02",
+      "is_quote": false
+     },
+     {
+      "id": "b12",
+      "time_sec": 1330,
+      "time_label": "22:10",
+      "text": "Tuần 1–3 gia công khuôn, tuần 4 chạy mẫu T1, tuần 5–6 chỉnh sửa",
+      "speaker_id": "SPK_01",
+      "is_quote": false
+     },
+     {
+      "id": "b13",
+      "time_sec": 1470,
+      "time_label": "24:30",
+      "text": "Rủi ro: sửa cấu trúc khuôn có thể cộng thêm 1 tuần tiến độ",
+      "speaker_id": "SPK_01",
+      "is_quote": false
+     }
+    ]
+   },
+   {
+    "id": "t5",
+    "title": "Điều khoản thanh toán",
+    "section_id": "tpl-business-s1",
+    "start_sec": 1560,
+    "end_sec": 2010,
+    "tag": "decided",
+    "bullets": [
+     {
+      "id": "b14",
+      "time_sec": 1580,
+      "time_label": "26:20",
+      "text": "T/T 30/70: đặt cọc 30% khi ký, 70% trước khi giao hàng",
+      "speaker_id": "SPK_01",
+      "is_quote": true
+     },
+     {
+      "id": "b15",
+      "time_sec": 1770,
+      "time_label": "29:30",
+      "text": "Khuôn bảo hành 2 năm, lỗi do khuôn sửa miễn phí",
+      "speaker_id": "SPK_01",
+      "is_quote": false
+     },
+     {
+      "id": "b16",
+      "time_sec": 1900,
+      "time_label": "31:40",
+      "text": "Thống nhất thêm điều khoản bảo mật ba năm vào hợp đồng",
+      "speaker_id": "SPK_03",
+      "is_quote": false
+     }
+    ]
+   },
+   {
+    "id": "t6",
+    "title": "Việc cần làm tiếp theo",
+    "section_id": "tpl-business-s4",
+    "start_sec": 2010,
+    "end_sec": 2980,
+    "tag": "pending",
+    "bullets": [
+     {
+      "id": "b17",
+      "time_sec": 2080,
+      "time_label": "34:40",
+      "text": "Gửi thiết kế 3D bản cuối cho phía Hàn trong tuần này",
+      "speaker_id": "SPK_04",
+      "is_quote": false
+     },
+     {
+      "id": "b18",
+      "time_sec": 2260,
+      "time_label": "37:40",
+      "text": "Xin báo giá DDP cho hai phương án cảng Busan và Incheon",
+      "speaker_id": "SPK_03",
+      "is_quote": false
+     },
+     {
+      "id": "b19",
+      "time_sec": 2455,
+      "time_label": "40:55",
+      "text": "Kiểm tra nhà máy trực tiếp vào tuần thứ sáu",
+      "speaker_id": "SPK_03",
+      "is_quote": false
+     },
+     {
+      "id": "b20",
+      "time_sec": 2700,
+      "time_label": "45:00",
+      "text": "Ký hợp đồng sau khi duyệt báo giá vận chuyển",
+      "speaker_id": "SPK_03",
+      "is_quote": false
+     }
+    ]
+   }
+  ],
+  "action_items": [
+   {
+    "id": "a1",
+    "text": "Gửi thiết kế 3D bản cuối cho phía Hàn",
+    "contact_id": "c-me",
+    "due": "2026-11-17",
+    "priority": "high",
+    "quote": "Chúng tôi gửi bản 3D cuối trong tuần này",
+    "ts": 2810
+   },
+   {
+    "id": "a2",
+    "text": "Xin báo giá DDP cho hai phương án cảng Busan và Incheon",
+    "contact_id": "c-kim",
+    "due": "2026-11-18",
+    "priority": "medium",
+    "quote": "Gửi báo giá DDP cho hai cảng Busan và Incheon trước thứ Sáu",
+    "ts": 2852
+   },
+   {
+    "id": "a3",
+    "text": "Kiểm tra nhà máy trực tiếp vào tuần thứ sáu",
+    "contact_id": "c-thao",
+    "due": "2026-11-20",
+    "priority": "medium",
+    "quote": "Xác nhận lịch visite nhà máy vào tuần thứ sáu",
+    "ts": 2884
+   },
+   {
+    "id": "a4",
+    "text": "Soạn bản nháp hợp đồng kèm điều khoản bảo mật ba năm",
+    "contact_id": "c-kim",
+    "due": "2026-11-24",
+    "priority": "medium",
+    "quote": "Soạn bản nháp hợp đồng kèm điều khoản bảo mật ba năm",
+    "ts": 2921
+   }
+  ],
+  "notes": [
+   {
+    "id": "n1",
+    "time_sec": 560,
+    "text": "Khuôn A rẻ nhất nhưng chu kỳ chậm hơn"
+   },
+   {
+    "id": "n2",
+    "time_sec": 1560,
+    "text": "T/T 30/70 — chị Thảo xác nhận được"
+   },
+   {
+    "id": "n3",
+    "time_sec": 2940,
+    "text": "Hẹn thực địa thứ sáu tuần sau"
+   }
+  ],
+  "bookmarks": [
+   {
+    "id": "m1",
+    "time_sec": 560,
+    "tag": "figure"
+   },
+   {
+    "id": "m2",
+    "time_sec": 920,
+    "tag": "figure"
+   },
+   {
+    "id": "m3",
+    "time_sec": 2010,
+    "tag": "decided"
+   }
+  ],
+  "photos": [],
+  "peaks": [
+   0.411,
+   0.498,
+   0.617,
+   0.508,
+   0.438,
+   0.46,
+   0.646,
+   0.577,
+   0.39,
+   0.213,
+   0.335,
+   0.456,
+   0.584,
+   0.585,
+   0.626,
+   0.54,
+   0.564,
+   0.629,
+   0.738,
+   0.541,
+   0.311,
+   0.222,
+   0.468,
+   0.614,
+   0.647,
+   0.548,
+   0.598,
+   0.612,
+   0.697,
+   0.694,
+   0.667,
+   0.41,
+   0.261,
+   0.305,
+   0.587,
+   0.639,
+   0.558,
+   0.451,
+   0.596,
+   0.681,
+   0.713,
+   0.579,
+   0.485,
+   0.3,
+   0.284,
+   0.376,
+   0.577,
+   0.154,
+   0.123,
+   0.114,
+   0.179,
+   0.645,
+   0.563,
+   0.364,
+   0.328,
+   0.266,
+   0.307,
+   0.341,
+   0.442,
+   0.347,
+   0.301,
+   0.335,
+   0.528,
+   0.486,
+   0.345,
+   0.188,
+   0.255,
+   0.254,
+   0.264,
+   0.223,
+   0.294,
+   0.239,
+   0.242,
+   0.267,
+   0.397,
+   0.306,
+   0.188,
+   0.106,
+   0.229,
+   0.22,
+   0.185,
+   0.12,
+   0.213,
+   0.197,
+   0.208,
+   0.199,
+   0.291,
+   0.202,
+   0.126,
+   0.089,
+   0.224,
+   0.193,
+   0.136,
+   0.079,
+   0.205,
+   0.216,
+   0.222,
+   0.187,
+   0.26,
+   0.181,
+   0.138,
+   0.125,
+   0.253,
+   0.197,
+   0.129,
+   0.098,
+   0.271,
+   0.308,
+   0.299,
+   0.224,
+   0.279,
+   0.224,
+   0.217,
+   0.207,
+   0.297,
+   0.205,
+   0.154,
+   0.189,
+   0.416,
+   0.445,
+   0.377,
+   0.411,
+   0.336,
+   0.331,
+   0.335,
+   0.422,
+   0.299,
+   0.211,
+   0.238,
+   0.499,
+   0.573,
+   0.527,
+   0.398,
+   0.449,
+   0.439,
+   0.456,
+   0.398,
+   0.4,
+   0.267,
+   0.261,
+   0.378,
+   0.638,
+   0.625,
+   0.501,
+   0.385,
+   0.513,
+   0.537,
+   0.493,
+   0.339,
+   0.096,
+   0.08,
+   0.107,
+   0.143,
+   0.193,
+   0.54,
+   0.422,
+   0.385,
+   0.558,
+   0.531,
+   0.394,
+   0.214,
+   0.269,
+   0.31,
+   0.407,
+   0.437,
+   0.511,
+   0.404,
+   0.356,
+   0.367,
+   0.503,
+   0.398,
+   0.238,
+   0.124,
+   0.265,
+   0.319,
+   0.341,
+   0.288,
+   0.351,
+   0.298,
+   0.292,
+   0.279,
+   0.357,
+   0.237,
+   0.131,
+   0.09,
+   0.249,
+   0.251,
+   0.211,
+   0.144,
+   0.243,
+   0.221,
+   0.202,
+   0.153,
+   0.222,
+   0.14,
+   0.089,
+   0.069,
+   0.203,
+   0.168,
+   0.117,
+   0.07,
+   0.191,
+   0.168,
+   0.132,
+   0.075,
+   0.162,
+   0.111,
+   0.081,
+   0.06,
+   0.18,
+   0.137,
+   0.094,
+   0.067,
+   0.201,
+   0.179,
+   0.133,
+   0.068,
+   0.16,
+   0.128,
+   0.116,
+   0.097,
+   0.206,
+   0.16,
+   0.137,
+   0.144,
+   0.299,
+   0.262,
+   0.179,
+   0.04,
+   0.061,
+   0.062,
+   0.061,
+   0.161,
+   0.249,
+   0.224,
+   0.26,
+   0.308,
+   0.443,
+   0.342,
+   0.217,
+   0.151,
+   0.309,
+   0.324,
+   0.281,
+   0.195,
+   0.302,
+   0.355,
+   0.451,
+   0.626,
+   0.525,
+   0.363,
+   0.26,
+   0.409,
+   0.437,
+   0.395,
+   0.283,
+   0.357,
+   0.403,
+   0.532,
+   0.605,
+   0.677,
+   0.5,
+   0.363,
+   0.34,
+   0.519,
+   0.482,
+   0.354,
+   0.239,
+   0.404,
+   0.535,
+   0.643,
+   0.605,
+   0.591,
+   0.436,
+   0.389,
+   0.409,
+   0.529,
+   0.4,
+   0.259,
+   0.228,
+   0.478,
+   0.593,
+   0.592,
+   0.463,
+   0.465,
+   0.399,
+   0.404,
+   0.38,
+   0.417,
+   0.271,
+   0.202,
+   0.253,
+   0.495,
+   0.515,
+   0.426,
+   0.301,
+   0.379,
+   0.369,
+   0.349,
+   0.26,
+   0.279,
+   0.19,
+   0.194,
+   0.25,
+   0.421,
+   0.365,
+   0.269,
+   0.201,
+   0.329,
+   0.312,
+   0.247,
+   0.14,
+   0.199,
+   0.051,
+   0.058,
+   0.063,
+   0.098,
+   0.254,
+   0.193,
+   0.168,
+   0.304,
+   0.258,
+   0.17,
+   0.079,
+   0.184,
+   0.191,
+   0.209,
+   0.191,
+   0.283,
+   0.226,
+   0.204,
+   0.202,
+   0.324,
+   0.243,
+   0.14,
+   0.075,
+   0.228,
+   0.262,
+   0.266,
+   0.216,
+   0.306,
+   0.288,
+   0.309,
+   0.306,
+   0.377,
+   0.245,
+   0.145,
+   0.138,
+   0.345,
+   0.378,
+   0.337,
+   0.266,
+   0.397,
+   0.447,
+   0.485,
+   0.417,
+   0.399,
+   0.244,
+   0.209,
+   0.281,
+   0.496,
+   0.466,
+   0.379,
+   0.349,
+   0.573,
+   0.661,
+   0.625,
+   0.437,
+   0.373,
+   0.287,
+   0.35,
+   0.588,
+   0.572,
+   0.47,
+   0.417,
+   0.647,
+   0.78,
+   0.794,
+   0.617,
+   0.512,
+   0.368,
+   0.399,
+   0.49,
+   0.636,
+   0.524,
+   0.441,
+   0.503,
+   0.809,
+   0.876,
+   0.74,
+   0.482,
+   0.444,
+   0.428,
+   0.501,
+   0.504,
+   0.541,
+   0.43,
+   0.455,
+   0.601,
+   0.854,
+   0.776,
+   0.551,
+   0.348,
+   0.132,
+   0.144,
+   0.145,
+   0.114,
+   0.403,
+   0.385,
+   0.493,
+   0.604,
+   0.727,
+   0.557,
+   0.37,
+   0.285,
+   0.445,
+   0.442,
+   0.354,
+   0.228,
+   0.325,
+   0.385,
+   0.478,
+   0.486,
+   0.522,
+   0.369,
+   0.276,
+   0.262,
+   0.404,
+   0.333,
+   0.219,
+   0.145,
+   0.314,
+   0.382,
+   0.406,
+   0.337,
+   0.368,
+   0.28,
+   0.253,
+   0.244,
+   0.339,
+   0.236,
+   0.15,
+   0.14,
+   0.343,
+   0.381,
+   0.345,
+   0.25,
+   0.315,
+   0.284,
+   0.28,
+   0.239,
+   0.291,
+   0.189,
+   0.157,
+   0.207,
+   0.419,
+   0.414,
+   0.333,
+   0.244,
+   0.361,
+   0.37,
+   0.346,
+   0.244,
+   0.262,
+   0.199,
+   0.248,
+   0.344,
+   0.528,
+   0.46,
+   0.36,
+   0.321,
+   0.497,
+   0.498,
+   0.393,
+   0.22,
+   0.258,
+   0.292,
+   0.418,
+   0.497,
+   0.599,
+   0.488,
+   0.437,
+   0.479,
+   0.662,
+   0.568,
+   0.359,
+   0.184,
+   0.327,
+   0.461,
+   0.579,
+   0.559,
+   0.594,
+   0.527,
+   0.575,
+   0.792,
+   0.727,
+   0.505,
+   0.275,
+   0.357,
+   0.467,
+   0.601,
+   0.608,
+   0.649,
+   0.566,
+   0.606,
+   0.697,
+   0.823,
+   0.622,
+   0.365,
+   0.237,
+   0.445,
+   0.567,
+   0.592,
+   0.496,
+   0.551,
+   0.571,
+   0.664,
+   0.679,
+   0.675,
+   0.43,
+   0.265,
+   0.265,
+   0.5,
+   0.526,
+   0.447,
+   0.349,
+   0.491,
+   0.565,
+   0.601,
+   0.502,
+   0.453,
+   0.285,
+   0.239,
+   0.278,
+   0.443,
+   0.379,
+   0.288,
+   0.256,
+   0.447,
+   0.482,
+   0.428,
+   0.286,
+   0.292,
+   0.224,
+   0.224,
+   0.223,
+   0.321,
+   0.242,
+   0.196,
+   0.206,
+   0.379,
+   0.351,
+   0.258,
+   0.146,
+   0.224,
+   0.202,
+   0.19,
+   0.147,
+   0.23,
+   0.178,
+   0.17,
+   0.185,
+   0.323,
+   0.261,
+   0.172,
+   0.101,
+   0.22,
+   0.205,
+   0.17,
+   0.108,
+   0.201,
+   0.186,
+   0.207,
+   0.217,
+   0.327,
+   0.243,
+   0.165,
+   0.129,
+   0.271,
+   0.244,
+   0.177,
+   0.104,
+   0.232,
+   0.271,
+   0.317,
+   0.302,
+   0.366,
+   0.269,
+   0.223,
+   0.224,
+   0.358,
+   0.281,
+   0.179,
+   0.136,
+   0.34,
+   0.429,
+   0.451,
+   0.37,
+   0.4,
+   0.336
+  ],
+  "speaker_spans": [
+   {
+    "start_sec": 0,
+    "end_sec": 35,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 35,
+    "end_sec": 70,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 70,
+    "end_sec": 104,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 104,
+    "end_sec": 138,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 138,
+    "end_sec": 172,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 172,
+    "end_sec": 206,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 206,
+    "end_sec": 240,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 240,
+    "end_sec": 287,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 287,
+    "end_sec": 334,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 334,
+    "end_sec": 381,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 381,
+    "end_sec": 428,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 428,
+    "end_sec": 474,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 474,
+    "end_sec": 520,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 520,
+    "end_sec": 566,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 566,
+    "end_sec": 612,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 612,
+    "end_sec": 658,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 658,
+    "end_sec": 704,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 704,
+    "end_sec": 789,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 789,
+    "end_sec": 828,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 828,
+    "end_sec": 867,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 867,
+    "end_sec": 906,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 906,
+    "end_sec": 945,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 945,
+    "end_sec": 984,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 984,
+    "end_sec": 1023,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 1023,
+    "end_sec": 1062,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 1062,
+    "end_sec": 1101,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 1101,
+    "end_sec": 1140,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 1140,
+    "end_sec": 1187,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 1187,
+    "end_sec": 1234,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 1234,
+    "end_sec": 1281,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 1281,
+    "end_sec": 1328,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 1328,
+    "end_sec": 1375,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 1375,
+    "end_sec": 1422,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 1422,
+    "end_sec": 1468,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 1468,
+    "end_sec": 1514,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 1514,
+    "end_sec": 1560,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 1560,
+    "end_sec": 1605,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 1605,
+    "end_sec": 1650,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 1650,
+    "end_sec": 1695,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 1695,
+    "end_sec": 1740,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 1740,
+    "end_sec": 1785,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 1785,
+    "end_sec": 1830,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 1830,
+    "end_sec": 1875,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 1875,
+    "end_sec": 1920,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 1920,
+    "end_sec": 1965,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 1965,
+    "end_sec": 2064,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 2064,
+    "end_sec": 2118,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 2118,
+    "end_sec": 2172,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 2172,
+    "end_sec": 2226,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 2226,
+    "end_sec": 2280,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 2280,
+    "end_sec": 2334,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 2334,
+    "end_sec": 2388,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 2388,
+    "end_sec": 2442,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 2442,
+    "end_sec": 2496,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 2496,
+    "end_sec": 2550,
+    "speaker_id": "SPK_04",
+    "color": 3
+   },
+   {
+    "start_sec": 2550,
+    "end_sec": 2604,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 2604,
+    "end_sec": 2658,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 2658,
+    "end_sec": 2712,
+    "speaker_id": "SPK_03",
+    "color": 2
+   },
+   {
+    "start_sec": 2712,
+    "end_sec": 2820,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 2820,
+    "end_sec": 2874,
+    "speaker_id": "SPK_02",
+    "color": 1
+   },
+   {
+    "start_sec": 2874,
+    "end_sec": 2927,
+    "speaker_id": "SPK_01",
+    "color": 0
+   },
+   {
+    "start_sec": 2927,
+    "end_sec": 2980,
+    "speaker_id": "SPK_02",
+    "color": 1
+   }
+  ],
+  "send_history": []
+ },
+ "transcript": [
+  {
+   "id": "s01",
+   "speaker_id": "SPK_01",
+   "start_sec": 0,
+   "end_sec": 35,
+   "text": "Chào ông Park, chào chị Kim, cảm ơn hai bên đã sắp xếp buổi họp hôm nay. Chúng tôi muốn chốt bộ hai khuôn cho chi tiết hộc tủ của đơn hàng mới.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "박 팀장님, 김 과장님, 안녕하세요. 오늘 회의를 준비해 주셔서 감사합니다. 새 주문의 서랍 부품용 금형 두 세트를 확정하고 싶습니다.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s02",
+   "speaker_id": "SPK_02",
+   "start_sec": 35,
+   "end_sec": 70,
+   "text": "안녕하세요, 만나 뵙게 되어 반갑습니다. 저희 쪽에서는 생산 담당 김민지 과장이 함께 참석했습니다. 오늘 금형 견적과 생산 일정을 정리해 드리겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Xin chào, rất vui được gặp ông. Phía chúng tôi có chị Kim Min-ji phụ trách sản xuất tham dự cùng. Hôm nay chúng tôi sẽ trình bày báo giá khuôn và kế hoạch sản xuất.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s03",
+   "speaker_id": "SPK_03",
+   "start_sec": 70,
+   "end_sec": 104,
+   "text": "Nice to meet you everyone. I will share the three mold quotations and the production plan on screen now.",
+   "edited": false,
+   "lang": "en",
+   "translations": {
+    "vi": {
+     "text": "Rất vui được gặp mọi người. Tôi sẽ trình chiếu ba báo giá khuôn và kế hoạch sản xuất trên màn hình ngay bây giờ.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s04",
+   "speaker_id": "SPK_04",
+   "start_sec": 104,
+   "end_sec": 138,
+   "text": "Chương trình hôm nay gồm ba phần — So sánh ba báo giá khuôn, đơn giá với MOQ, và tiến độ sản xuất đợt đầu.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s05",
+   "speaker_id": "SPK_02",
+   "start_sec": 138,
+   "end_sec": 172,
+   "text": "좋습니다. 순서에 동의합니다. 필요하면 영어로도 설명드리겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Tốt ạ. Chúng tôi đồng ý với trình tự này. Khi cần sẽ giải thích thêm bằng tiếng Anh.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s06",
+   "speaker_id": "SPK_01",
+   "start_sec": 172,
+   "end_sec": 206,
+   "text": "Mục tiêu của buổi họp là chốt nhà cung cấp khuôn, đơn giá và điều khoản thanh toán để ký hợp đồng trong tháng này.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "이번 회의의 목표는 금형 공급사, 단가, 결제 조건을 확정하여 이번 달 안에 계약을 체결하는 것입니다.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s07",
+   "speaker_id": "SPK_03",
+   "start_sec": 206,
+   "end_sec": 240,
+   "text": "네, 그럼 바로 세 가지 금형 견적부터 시작하겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Vâng, vậy chúng ta bắt đầu ngay với ba báo giá khuôn.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s08",
+   "speaker_id": "SPK_01",
+   "start_sec": 240,
+   "end_sec": 287,
+   "text": "Chúng tôi đã nhận ba báo giá cho bộ hai khuôn hộc tủ. Ông có thể so sánh giúp về giá, tuổi thọ và chu kỳ ép không?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s09",
+   "speaker_id": "SPK_03",
+   "start_sec": 287,
+   "end_sec": 334,
+   "text": "네. A안은 한양금형 견적으로 48,000달러입니다. P20 강재를 사용하고 예상 수명은 300,000회 사출입니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Vâng. Phương án A là báo giá của Hanyang Mold: 48.000 USD, dùng thép P20, tuổi thọ dự kiến 300.000 lần ép.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s10",
+   "speaker_id": "SPK_04",
+   "start_sec": 334,
+   "end_sec": 381,
+   "text": "Thép P20 chịu được chi tiết hộc tủ thành mỏng không? Chúng tôi lo độ bóng bề mặt sau 200.000 lần ép.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "P20 강재가 얇은 벽 두께의 서랍 부품도 견딜 수 있을까요? 200,000회 사출 이후의 표면 광택이 걱정됩니다.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s11",
+   "speaker_id": "SPK_02",
+   "start_sec": 381,
+   "end_sec": 428,
+   "text": "P20은 일반적인 선택이지만 제품 벽이 얇으면 광택이 조금 떨어질 수 있습니다. 더 좋은 강재를 원하시면 B안을 추천합니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "P20 là lựa chọn phổ biến, nhưng thành sản phẩm mỏng thì độ bóng có thể giảm một chút. Nếu muốn thép tốt hơn, chúng tôi đề nghị phương án B.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s12",
+   "speaker_id": "SPK_03",
+   "start_sec": 428,
+   "end_sec": 474,
+   "text": "Option B uses S136 stainless steel with a lifetime of about 500,000 shots, so the surface stays glossy much longer.",
+   "edited": false,
+   "lang": "en",
+   "translations": {
+    "vi": {
+     "text": "Phương án B dùng thép không gỉ S136 với tuổi thọ khoảng 500.000 lần ép, nên bề mặt giữ độ bóng lâu hơn nhiều.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s13",
+   "speaker_id": "SPK_01",
+   "start_sec": 474,
+   "end_sec": 520,
+   "text": "Giá phương án B là bao nhiêu và khác A ở điểm nào?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "B안의 가격은 얼마이고, A안과 비교하면 어떤 차이가 있나요?",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s14",
+   "speaker_id": "SPK_03",
+   "start_sec": 520,
+   "end_sec": 566,
+   "text": "B안 견적은 52,000달러입니다. A안보다 4,000달러 높지만 수명이 약 200,000회 더 길고 유지보수가 적습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Báo giá phương án B là 52.000 USD. Cao hơn A 4.000 USD nhưng tuổi thọ dài hơn khoảng 200.000 lần ép và ít bảo trì hơn.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s15",
+   "speaker_id": "SPK_04",
+   "start_sec": 566,
+   "end_sec": 612,
+   "text": "Còn phương án C có đáng quan tâm không? Nghe nói chu kỳ ép nhanh hơn hẳn.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s16",
+   "speaker_id": "SPK_02",
+   "start_sec": 612,
+   "end_sec": 658,
+   "text": "C안은 61,000달러이고 컨포멀 쿨링 채널이 적용되어 사출 사이클이 24초에서 20.4초로, 약 15% 단축됩니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Phương án C là 61.000 USD, áp dụng kênh làm mát conformal nên chu kỳ ép giảm từ 24 giây xuống 20,4 giây, nhanh hơn khoảng 15%.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s17",
+   "speaker_id": "SPK_04",
+   "start_sec": 658,
+   "end_sec": 704,
+   "text": "Ngân sách đợt đầu có hạn. Phương án A của Hanyang Mold là lựa chọn hợp lý nhất cho bộ hai khuôn hộc tủ.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s18",
+   "speaker_id": "SPK_01",
+   "start_sec": 704,
+   "end_sec": 750,
+   "text": "Thank you both. We would like to proceed with option A from Hanyang Mold, pending the shipping quotation.",
+   "edited": false,
+   "lang": "en",
+   "translations": {
+    "vi": {
+     "text": "Cảm ơn hai vị. Chúng tôi muốn tiến hành với phương án A của Hanyang Mold, chờ báo giá vận chuyển.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s19",
+   "speaker_id": "SPK_01",
+   "start_sec": 750,
+   "end_sec": 789,
+   "text": "Vậy chúng ta sang phần đơn giá. Mức 2,35 USD có áp dụng cho toàn bộ đợt đầu không?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "그럼 생산 단가로 넘어가겠습니다. 2.35달러는 첫 물량 전체에 적용되나요?",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s20",
+   "speaker_id": "SPK_03",
+   "start_sec": 789,
+   "end_sec": 828,
+   "text": "네, 단가는 개당 2.35달러이며, 최소 주문 수량 20,000개 기준 가격입니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Vâng, đơn giá là 2,35 USD mỗi sản phẩm; đây là mức giá áp dụng cho tối thiểu 20.000 sản phẩm.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s21",
+   "speaker_id": "SPK_04",
+   "start_sec": 828,
+   "end_sec": 867,
+   "text": "MOQ 20.000 có thể tách thành nhiều lần giao không, hay phải giao một lần?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s22",
+   "speaker_id": "SPK_02",
+   "start_sec": 867,
+   "end_sec": 906,
+   "text": "두 번으로 나눠 배송할 수 있습니다. 12,000개와 8,000개로 나누고 배송비는 각각 계산됩니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Có thể tách làm hai lần giao, 12.000 và 8.000 sản phẩm; cước vận chuyển tính riêng cho từng lần.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s23",
+   "speaker_id": "SPK_01",
+   "start_sec": 906,
+   "end_sec": 945,
+   "text": "Đơn giá 2,35 USD đã gồm bao bì xuất khẩu và kiểm tra lần đầu, đúng không ạ?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "단가 2.35달러에 수출 포장과 초회 검사가 포함되는 것이 맞나요?",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s24",
+   "speaker_id": "SPK_03",
+   "start_sec": 945,
+   "end_sec": 984,
+   "text": "Correct: the 2.35 US dollars per unit includes export packaging and first inspection; freight and import duties are excluded.",
+   "edited": false,
+   "lang": "en",
+   "translations": {
+    "vi": {
+     "text": "Đúng: đơn giá 2,35 USD mỗi sản phẩm đã gồm bao bì xuất khẩu và kiểm tra lần đầu; chưa gồm cước vận chuyển và thuế nhập khẩu.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s25",
+   "speaker_id": "SPK_04",
+   "start_sec": 984,
+   "end_sec": 1023,
+   "text": "Nếu thêm màu thứ hai cho vỏ thì giá thay đổi thế nào?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s26",
+   "speaker_id": "SPK_03",
+   "start_sec": 1023,
+   "end_sec": 1062,
+   "text": "색상을 하나 추가하면 개당 0.05달러가 추가됩니다. 금형은 추가 비용 없이 게이트만 보완합니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Thêm một màu thì cộng 0,05 USD mỗi sản phẩm. Khuôn không tốn thêm chi phí, chỉ bổ sung gate.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s27",
+   "speaker_id": "SPK_01",
+   "start_sec": 1062,
+   "end_sec": 1101,
+   "text": "Rõ, chúng tôi ghi nhận phụ trội 0,05 USD cho màu thứ hai.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s28",
+   "speaker_id": "SPK_02",
+   "start_sec": 1101,
+   "end_sec": 1140,
+   "text": "정리하면 단가 2.35달러, 최소 주문 20,000개, 두 차례 배송 가능입니다. 견적표는 회의 후 보내드리겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Tóm lại: đơn giá 2,35 USD, MOQ 20.000 sản phẩm, có thể giao hai lần. Bảng báo giá sẽ được gửi sau buổi họp.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s29",
+   "speaker_id": "SPK_01",
+   "start_sec": 1140,
+   "end_sec": 1187,
+   "text": "Phần quan trọng tiếp theo là tiến độ. Ông Park có thể cam kết lead time chính xác không?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "다음으로 중요한 부분은 일정입니다. 박 팀장님, 정확한 납기를 약속해 주실 수 있나요?",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s30",
+   "speaker_id": "SPK_02",
+   "start_sec": 1187,
+   "end_sec": 1234,
+   "text": "샘플 승인 후 8주입니다. 금형 가공 3주, T1 샘플 1주, 수정과 생산 준비 4주로 구성됩니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "8 tuần sau khi duyệt mẫu. Gồm 3 tuần gia công khuôn, 1 tuần mẫu T1 và 4 tuần chỉnh sửa cùng chuẩn bị sản xuất.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s31",
+   "speaker_id": "SPK_04",
+   "start_sec": 1234,
+   "end_sec": 1281,
+   "text": "Tuần thứ tư chạy thử T1 thì chúng tôi có thể nhận mẫu thử bằng đường bay không?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s32",
+   "speaker_id": "SPK_03",
+   "start_sec": 1281,
+   "end_sec": 1328,
+   "text": "가능합니다. T1 샘플 5세트를 DHL로 보내드리겠습니다. 왕복 배송비는 바이어 측 부담입니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Được ạ. Chúng tôi gửi 5 bộ mẫu T1 qua DHL; cước hai chiều phía người mua chịu.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s33",
+   "speaker_id": "SPK_01",
+   "start_sec": 1328,
+   "end_sec": 1375,
+   "text": "Nếu T1 cần chỉnh sửa thì ảnh hưởng bao nhiêu ngày tới chuỗi 8 tuần?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s34",
+   "speaker_id": "SPK_02",
+   "start_sec": 1375,
+   "end_sec": 1422,
+   "text": "수정 범위가 일반적이면 일정에 영향이 없습니다. 금형 구조 변경이 생기면 최대 1주일 추가될 수 있습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Với mức chỉnh sửa thông thường thì không ảnh hưởng tiến độ. Nếu phải thay đổi cấu trúc khuôn thì có thể cộng tối đa 1 tuần.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s35",
+   "speaker_id": "SPK_04",
+   "start_sec": 1422,
+   "end_sec": 1468,
+   "text": "Chúng tôi sẽ chuẩn bị checklist kiểm tra mẫu và gửi trước buổi review T1.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s36",
+   "speaker_id": "SPK_01",
+   "start_sec": 1468,
+   "end_sec": 1514,
+   "text": "We will send our QC checklist by Wednesday this week.",
+   "edited": false,
+   "lang": "en",
+   "translations": {
+    "vi": {
+     "text": "Chúng tôi sẽ gửi checklist kiểm tra chất lượng trước thứ Tư tuần này.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s37",
+   "speaker_id": "SPK_03",
+   "start_sec": 1514,
+   "end_sec": 1560,
+   "text": "네, 확인 후 금형 진행 상황을 매주 금요일 사진과 함께 공유드리겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Vâng, sau khi nhận chúng tôi sẽ chia sẻ tiến độ làm khuôn kèm ảnh vào mỗi thứ Sáu.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s38",
+   "speaker_id": "SPK_01",
+   "start_sec": 1560,
+   "end_sec": 1605,
+   "text": "Về thanh toán, chúng tôi đề xuất T/T 30/70: đặt cọc 30% khi ký, 70% trước khi giao hàng.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "결제 조건을 말씀드리겠습니다. T/T 30/70, 즉 계약 시 30% 계약금과 선적 전 70% 잔금을 제안합니다.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s39",
+   "speaker_id": "SPK_02",
+   "start_sec": 1605,
+   "end_sec": 1650,
+   "text": "표준은 T/T 30/70입니다. 계약 체결 시 30% 계약금, 선적 전에 70% 잔금을 받습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Chúng tôi áp dụng chuẩn T/T 30/70: đặt cọc 30% khi ký hợp đồng, 70% còn lại trước khi giao hàng.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s40",
+   "speaker_id": "SPK_04",
+   "start_sec": 1650,
+   "end_sec": 1695,
+   "text": "Khoản 70% được thanh toán sau khi kiểm tra hàng trước giao, đúng không?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s41",
+   "speaker_id": "SPK_03",
+   "start_sec": 1695,
+   "end_sec": 1740,
+   "text": "네, 검사 합격 후 선적 서류가 준비되면 잔금을 확인하고 선적합니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Vâng, sau khi kiểm tra đạt và chuẩn bị xong bộ chứng từ, chúng tôi xác nhận số tiền còn lại rồi giao hàng.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s42",
+   "speaker_id": "SPK_01",
+   "start_sec": 1740,
+   "end_sec": 1785,
+   "text": "Khuôn có được bảo hành không nếu lỗi sản xuất do khuôn?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s43",
+   "speaker_id": "SPK_02",
+   "start_sec": 1785,
+   "end_sec": 1830,
+   "text": "금형 보증은 2년이며, 금형 원인의 불량은 무상으로 수리합니다. 부품 교체 비용도 저희가 부담합니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Khuôn được bảo hành 2 năm; lỗi do khuôn sẽ được sửa miễn phí, kể cả chi phí thay linh kiện.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s44",
+   "speaker_id": "SPK_04",
+   "start_sec": 1830,
+   "end_sec": 1875,
+   "text": "Nếu sau khi duyệt thiết kế chúng tôi đổi chi tiết nhỏ thì chi phí tính thế nào?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s45",
+   "speaker_id": "SPK_03",
+   "start_sec": 1875,
+   "end_sec": 1920,
+   "text": "승인 후 변경은 시간당 65달러로 계산하고, 금형에 영향이 없는 변경은 무료입니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Thay đổi sau khi duyệt tính 65 USD mỗi giờ; thay đổi không ảnh hưởng khuôn thì miễn phí.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s46",
+   "speaker_id": "SPK_02",
+   "start_sec": 1920,
+   "end_sec": 1965,
+   "text": "We can include a three-year non-disclosure clause covering the design and the mold data.",
+   "edited": false,
+   "lang": "en",
+   "translations": {
+    "vi": {
+     "text": "Chúng tôi có thể đưa vào điều khoản bảo mật ba năm cho thiết kế và dữ liệu khuôn.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s47",
+   "speaker_id": "SPK_01",
+   "start_sec": 1965,
+   "end_sec": 2010,
+   "text": "Tốt, chúng tôi thống nhất đưa điều khoản bảo mật ba năm vào hợp đồng.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s48",
+   "speaker_id": "SPK_01",
+   "start_sec": 2010,
+   "end_sec": 2064,
+   "text": "Tôi tổng lại các việc cần làm để hai bên cùng xác nhận.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "양쪽에서 함께 확인하실 수 있도록 할 일 목록을 정리하겠습니다.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s49",
+   "speaker_id": "SPK_04",
+   "start_sec": 2064,
+   "end_sec": 2118,
+   "text": "Phía chúng tôi gửi bản thiết kế 3D cuối cùng trước thứ Sáu tuần này.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s50",
+   "speaker_id": "SPK_02",
+   "start_sec": 2118,
+   "end_sec": 2172,
+   "text": "3D 도면을 받으면 영업일 기준 이틀 안에 피드백 드리겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Khi nhận bản vẽ 3D, chúng tôi sẽ phản hồi trong vòng hai ngày làm việc.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s51",
+   "speaker_id": "SPK_01",
+   "start_sec": 2172,
+   "end_sec": 2226,
+   "text": "Về vận chuyển, hai bên cần báo giá cho phương án nào?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s52",
+   "speaker_id": "SPK_03",
+   "start_sec": 2226,
+   "end_sec": 2280,
+   "text": "해운과 항공 두 가지 방안 모두 DDP 견적을 준비하겠습니다. 부산항과 인천항을 비교해 드립니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Chúng tôi sẽ chuẩn bị báo giá DDP cho cả hai phương án đường biển và đường hàng không, so sánh cảng Busan và Incheon.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s53",
+   "speaker_id": "SPK_04",
+   "start_sec": 2280,
+   "end_sec": 2334,
+   "text": "Chúng tôi đề xuất kiểm tra nhà máy trực tiếp vào tuần thứ sáu.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s54",
+   "speaker_id": "SPK_02",
+   "start_sec": 2334,
+   "end_sec": 2388,
+   "text": "반갑습니다. 방문 일정에 맞춰 공장 준비를 하겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Chúng tôi rất hoan nghênh và sẽ chuẩn bị nhà máy theo lịch visite của quý công ty.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s55",
+   "speaker_id": "SPK_01",
+   "start_sec": 2388,
+   "end_sec": 2442,
+   "text": "Phần hợp đồng thì tiến hành thế nào?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s56",
+   "speaker_id": "SPK_03",
+   "start_sec": 2442,
+   "end_sec": 2496,
+   "text": "이번 주 안에 NDA 조항을 포함한 계약서 초안을 보내드리겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Trong tuần này chúng tôi sẽ gửi bản nháp hợp đồng có kèm điều khoản NDA.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s57",
+   "speaker_id": "SPK_04",
+   "start_sec": 2496,
+   "end_sec": 2550,
+   "text": "Đừng quên lịch họp review T1 vào cuối tuần thứ tư.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s58",
+   "speaker_id": "SPK_02",
+   "start_sec": 2550,
+   "end_sec": 2604,
+   "text": "네, 초대장을 보내드리겠습니다. 회의 링크는 이메일로 공유해 드립니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Vâng, chúng tôi sẽ gửi lời mời và chia sẻ link họp qua email.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s59",
+   "speaker_id": "SPK_01",
+   "start_sec": 2604,
+   "end_sec": 2658,
+   "text": "Chốt lại: chúng tôi chọn khuôn A của Hanyang Mold, đơn giá 2,35 USD, MOQ 20.000, thanh toán T/T 30/70.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s60",
+   "speaker_id": "SPK_03",
+   "start_sec": 2658,
+   "end_sec": 2712,
+   "text": "네, A안 견적서에 운임을 포함한 최종 금액을 이메일로 보내드리겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Vâng, chúng tôi sẽ gửi báo giá phương án A kèm cước vận chuyển qua email.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s61",
+   "speaker_id": "SPK_01",
+   "start_sec": 2712,
+   "end_sec": 2766,
+   "text": "Đợt hàng đầu tiên dự kiến đến kho của chúng tôi khi nào?",
+   "edited": false,
+   "lang": "vi",
+   "translations": {
+    "ko": {
+     "text": "첫 물량은 언제쯤 저희 창고에 도착할 것으로 예상됩니까?",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s62",
+   "speaker_id": "SPK_01",
+   "start_sec": 2766,
+   "end_sec": 2820,
+   "text": "Chúng tôi gửi bản 3D cuối trong tuần này.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s63",
+   "speaker_id": "SPK_02",
+   "start_sec": 2820,
+   "end_sec": 2874,
+   "text": "Once the mold design is approved, the first shipment leaves in week nine and arrives about two weeks later; the DDP quotations for Busan and Incheon come by Friday.",
+   "edited": false,
+   "lang": "en",
+   "translations": {
+    "vi": {
+     "text": "Khi thiết kế khuôn được duyệt, lô đầu tiên rời nhà máy ở tuần thứ chín và đến nơi sau khoảng hai tuần; báo giá DDP cho Busan và Incheon sẽ gửi trước thứ Sáu.",
+     "stale": false
+    }
+   }
+  },
+  {
+   "id": "s64",
+   "speaker_id": "SPK_01",
+   "start_sec": 2874,
+   "end_sec": 2927,
+   "text": "Tôi xác nhận lịch visite nhà máy vào tuần thứ sáu, và đề nghị phía Hàn gửi nháp hợp đồng kèm điều khoản bảo mật ba năm.",
+   "edited": false,
+   "lang": "vi",
+   "translations": {}
+  },
+  {
+   "id": "s65",
+   "speaker_id": "SPK_02",
+   "start_sec": 2927,
+   "end_sec": 2980,
+   "text": "감사합니다. 오늘 결정 사항을 정리해서 곧 보내드리겠습니다. 다음에 뵙겠습니다.",
+   "edited": false,
+   "lang": "ko",
+   "translations": {
+    "vi": {
+     "text": "Cảm ơn quý vị. Chúng tôi sẽ tổng hợp các nội dung đã chốt hôm nay và gửi sớm. Hẹn gặp lại.",
+     "stale": false
+    }
+   }
+  }
+ ],
+ "chat": [
+  {
+   "question": "Khuôn C cho chu kỳ nhanh hơn 15% đúng không?",
+   "answer": "Đúng. Nhờ kênh làm mát conformal, chu kỳ ép giảm từ 24 giây xuống 20,4 giây, nhưng chi phí phát triển cao hơn 13.000 USD.",
+   "citations": [
+    560,
+    675
+   ]
+  },
+  {
+   "question": "Đơn giá 2,35 USD đã gồm những khoản nào?",
+   "answer": "Đã gồm bao bì xuất khẩu và kiểm tra lần đầu; chưa gồm vận chuyển và thuế nhập khẩu.",
+   "citations": [
+    920,
+    945
+   ]
+  },
+  {
+   "question": "금형 개발 비용은 얼마입니까?",
+   "answer": "한양금형 A안 기준 48,000달러입니다. B안은 52,000달러, C안은 61,000달러입니다.",
+   "citations": [
+    292,
+    410,
+    560
+   ]
+  },
+  {
+   "question": "납기는 언제까지입니까?",
+   "answer": "샘플 승인 후 8주입니다. 금형 가공 3주, T1 샘플 1주, 수정과 생산 준비 4주로 구성됩니다.",
+   "citations": [
+    1195,
+    1330
+   ]
+  },
+  {
+   "question": "Kiểm tra nhà máy tuần 6 nên chuẩn bị những gì?",
+   "answer": "Chuẩn bị checklist QC, xem trực tiếp chạy thử khuôn A và chốt danh sách chỉnh sửa cho mẫu T1.",
+   "citations": [
+    1470,
+    2455
+   ]
+  }
+ ],
+ "summary_versions": [
+  {
+   "session_id": "s-hop-han",
+   "lang": "ko",
+   "source": "translated",
+   "translated_from": "vi",
+   "created_at": "2026-11-13T14:40:00+07:00",
+   "stale": false,
+   "executive_summary": "세 가지 견적을 비교한 끝에 서랍 부품용 금형 2종 세트는 한양금형의 A안을 개발비 48,000달러로 선정했습니다. 생산 단가는 개당 2.35달러이며, 첫 물량은 MOQ 20,000개에 맞춰 20,000개를 발주합니다. 납기는 샘플 승인 후 8주이며, 결제는 계약 시 30% 계약금, 선적 전 70% 잔금의 T/T 조건입니다. C안은 사출 사이클이 15% 빠르지만 13,000달러 더 비싸서 이번 차수에서는 제외했습니다.",
+   "topics": [
+    {
+     "id": "t1",
+     "title": "인사 및 소개",
+     "section_id": null,
+     "start_sec": 0,
+     "end_sec": 240,
+     "tag": "pending",
+     "bullets": [
+      {
+       "id": "b1",
+       "time_sec": 52,
+       "time_label": "00:52",
+       "text": "양측이 프로젝트 참여 인원을 소개했습니다",
+       "speaker_id": "SPK_02",
+       "is_quote": false,
+       "original_text": "Hai bên giới thiệu thành viên tham gia dự án",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b2",
+       "time_sec": 118,
+       "time_label": "01:58",
+       "text": "세 가지 금형 견적, 단가와 MOQ, 첫 생산 일정을 비교합니다",
+       "speaker_id": "SPK_04",
+       "is_quote": true,
+       "original_text": "So sánh ba báo giá khuôn, đơn giá với MOQ, và tiến độ sản xuất đợt đầu",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b3",
+       "time_sec": 196,
+       "time_label": "03:16",
+       "text": "목표: 이번 달 안에 금형 공급사, 단가, 결제 조건 확정",
+       "speaker_id": "SPK_01",
+       "is_quote": false,
+       "original_text": "Mục tiêu: chốt nhà cung cấp khuôn, đơn giá và điều khoản thanh toán trong tháng này",
+       "original_lang": "vi"
+      }
+     ]
+    },
+    {
+     "id": "t2",
+     "title": "금형 견적 비교",
+     "section_id": "tpl-business-s1",
+     "start_sec": 240,
+     "end_sec": 750,
+     "tag": "decided",
+     "bullets": [
+      {
+       "id": "b4",
+       "time_sec": 292,
+       "time_label": "04:52",
+       "text": "금형 A(한양금형): 48,000달러, P20 강재, 수명 300,000회 사출",
+       "speaker_id": "SPK_03",
+       "is_quote": false,
+       "original_text": "Khuôn A của Hanyang Mold: 48.000 USD, thép P20, tuổi thọ 300.000 lần ép",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b5",
+       "time_sec": 410,
+       "time_label": "06:50",
+       "text": "금형 B: 52,000달러, S136 강재, 수명 500,000회 사출",
+       "speaker_id": "SPK_02",
+       "is_quote": false,
+       "original_text": "Khuôn B: 52.000 USD, thép S136, tuổi thọ 500.000 lần ép",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b6",
+       "time_sec": 560,
+       "time_label": "09:20",
+       "text": "금형 C: 61,000달러, 컨포멀 쿨링 적용, 사출 사이클 20.4초",
+       "speaker_id": "SPK_03",
+       "is_quote": false,
+       "original_text": "Khuôn C: 61.000 USD, làm mát conformal, chu kỳ ép 20,4 giây",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b7",
+       "time_sec": 675,
+       "time_label": "11:15",
+       "text": "한양금형 A안이 첫 차수에 가장 합리적인 선택",
+       "speaker_id": "SPK_04",
+       "is_quote": true,
+       "original_text": "Phương án A của Hanyang Mold là lựa chọn hợp lý nhất",
+       "original_lang": "vi"
+      }
+     ],
+     "figure": {
+      "type": "bar",
+      "title": "금형 견적 비교",
+      "unit": "달러",
+      "labels": [
+       "금형 A",
+       "금형 B",
+       "금형 C"
+      ],
+      "values": [
+       48000,
+       52000,
+       61000
+      ],
+      "source_sec": 560
+     }
+    },
+    {
+     "id": "t3",
+     "title": "단가와 최소 주문 수량",
+     "section_id": "tpl-business-s2",
+     "start_sec": 750,
+     "end_sec": 1140,
+     "tag": "decided",
+     "bullets": [
+      {
+       "id": "b8",
+       "time_sec": 805,
+       "time_label": "13:25",
+       "text": "MOQ 20,000개 기준 단가 2.35달러",
+       "speaker_id": "SPK_03",
+       "is_quote": false,
+       "original_text": "Đơn giá 2,35 USD/sản phẩm khi đạt MOQ 20.000",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b9",
+       "time_sec": 920,
+       "time_label": "15:20",
+       "text": "단가 2.35달러에 수출 포장과 초회 검사 포함",
+       "speaker_id": "SPK_01",
+       "is_quote": true,
+       "original_text": "Đơn giá 2,35 USD đã gồm bao bì xuất khẩu và kiểm tra lần đầu",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b10",
+       "time_sec": 1040,
+       "time_label": "17:20",
+       "text": "두 번째 색상 추가 시 개당 0.05달러 추가",
+       "speaker_id": "SPK_03",
+       "is_quote": false,
+       "original_text": "Màu thứ hai cộng thêm 0,05 USD mỗi sản phẩm",
+       "original_lang": "vi"
+      }
+     ],
+     "figure": {
+      "type": "bar",
+      "title": "방안별 사출 사이클",
+      "unit": "초",
+      "labels": [
+       "금형 A",
+       "금형 B",
+       "금형 C"
+      ],
+      "values": [
+       24,
+       24,
+       20.4
+      ],
+      "source_sec": 920
+     }
+    },
+    {
+     "id": "t4",
+     "title": "생산 일정",
+     "section_id": "tpl-business-s3",
+     "start_sec": 1140,
+     "end_sec": 1560,
+     "tag": "risk",
+     "bullets": [
+      {
+       "id": "b11",
+       "time_sec": 1195,
+       "time_label": "19:55",
+       "text": "샘플 승인 후 납기 8주",
+       "speaker_id": "SPK_02",
+       "is_quote": false,
+       "original_text": "Lead time 8 tuần sau khi duyệt mẫu",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b12",
+       "time_sec": 1330,
+       "time_label": "22:10",
+       "text": "1–3주 금형 가공, 4주 T1 샘플, 5–6주 수정",
+       "speaker_id": "SPK_01",
+       "is_quote": false,
+       "original_text": "Tuần 1–3 gia công khuôn, tuần 4 chạy mẫu T1, tuần 5–6 chỉnh sửa",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b13",
+       "time_sec": 1470,
+       "time_label": "24:30",
+       "text": "리스크: 금형 구조 변경 시 최대 1주일 지연 가능",
+       "speaker_id": "SPK_01",
+       "is_quote": false,
+       "original_text": "Rủi ro: sửa cấu trúc khuôn có thể cộng thêm 1 tuần tiến độ",
+       "original_lang": "vi"
+      }
+     ]
+    },
+    {
+     "id": "t5",
+     "title": "결제 조건",
+     "section_id": "tpl-business-s1",
+     "start_sec": 1560,
+     "end_sec": 2010,
+     "tag": "decided",
+     "bullets": [
+      {
+       "id": "b14",
+       "time_sec": 1580,
+       "time_label": "26:20",
+       "text": "T/T 30/70: 계약 시 30% 계약금, 선적 전 70% 잔금",
+       "speaker_id": "SPK_01",
+       "is_quote": true,
+       "original_text": "T/T 30/70: đặt cọc 30% khi ký, 70% trước khi giao hàng",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b15",
+       "time_sec": 1770,
+       "time_label": "29:30",
+       "text": "금형 보증 2년, 금형 원인 불량 무상 수리",
+       "speaker_id": "SPK_01",
+       "is_quote": false,
+       "original_text": "Khuôn bảo hành 2 năm, lỗi do khuôn sửa miễn phí",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b16",
+       "time_sec": 1900,
+       "time_label": "31:40",
+       "text": "계약서에 3년 비밀유지 조항 포함 합의",
+       "speaker_id": "SPK_03",
+       "is_quote": false,
+       "original_text": "Thống nhất thêm điều khoản bảo mật ba năm vào hợp đồng",
+       "original_lang": "vi"
+      }
+     ]
+    },
+    {
+     "id": "t6",
+     "title": "다음 단계 및 할 일",
+     "section_id": "tpl-business-s4",
+     "start_sec": 2010,
+     "end_sec": 2980,
+     "tag": "pending",
+     "bullets": [
+      {
+       "id": "b17",
+       "time_sec": 2080,
+       "time_label": "34:40",
+       "text": "이번 주 안에 최종 3D 설계도를 한국 측에 전송",
+       "speaker_id": "SPK_04",
+       "is_quote": false,
+       "original_text": "Gửi thiết kế 3D bản cuối cho phía Hàn trong tuần này",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b18",
+       "time_sec": 2260,
+       "time_label": "37:40",
+       "text": "부산항과 인천항 두 가지 안의 DDP 견적 요청",
+       "speaker_id": "SPK_03",
+       "is_quote": false,
+       "original_text": "Xin báo giá DDP cho hai phương án cảng Busan và Incheon",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b19",
+       "time_sec": 2455,
+       "time_label": "40:55",
+       "text": "6주차에 공장 실사 진행",
+       "speaker_id": "SPK_03",
+       "is_quote": false,
+       "original_text": "Kiểm tra nhà máy trực tiếp vào tuần thứ sáu",
+       "original_lang": "vi"
+      },
+      {
+       "id": "b20",
+       "time_sec": 2700,
+       "time_label": "45:00",
+       "text": "운임 견적 검토 후 계약 체결",
+       "speaker_id": "SPK_03",
+       "is_quote": false,
+       "original_text": "Ký hợp đồng sau khi duyệt báo giá vận chuyển",
+       "original_lang": "vi"
+      }
+     ]
+    }
+   ],
+   "task_texts": {
+    "a1": "최종 3D 설계도를 한국 측에 전송",
+    "a2": "부산항과 인천항 두 가지 안에 대한 DDP 견적 요청",
+    "a3": "금요일에 공장 실사 진행",
+    "a4": "3년 비밀유지 조항이 포함된 계약서 초안 작성"
+   }
+  }
+ ]
+}

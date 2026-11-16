@@ -1,60 +1,91 @@
 [
-  {
-    "id": "c-me",
-    "name": "Hoàng",
-    "role": "Bạn",
-    "email": "hoang@example.vn"
-  },
-  {
-    "id": "c-lan",
-    "name": "Chị Lan",
-    "role": "Khách mua căn hộ",
-    "email": "lan.nguyen@example.vn"
-  },
-  {
-    "id": "c-tuan",
-    "name": "Anh Tuấn",
-    "role": "Trưởng nhóm kinh doanh",
-    "email": "tuan@example.vn"
-  },
-  {
-    "id": "c-minh",
-    "name": "Anh Minh",
-    "role": "Giám đốc",
-    "email": "minh@noithatviet.example.vn"
-  },
-  {
-    "id": "c-thao",
-    "name": "Chị Thảo",
-    "role": "Kế toán trưởng",
-    "email": "thao@noithatviet.example.vn"
-  },
-  {
-    "id": "c-duc",
-    "name": "Anh Đức",
-    "role": "Trưởng xưởng",
-    "email": "duc@noithatviet.example.vn"
-  },
-  {
-    "id": "c-ha",
-    "name": "Chị Hà",
-    "role": "Phụ trách marketing"
-  },
-  {
-    "id": "c-phuoc",
-    "name": "Ông Phước",
-    "role": "Khách hàng tư vấn pháp lý",
-    "email": "phuoc@example.vn"
-  },
-  {
-    "id": "c-hung",
-    "name": "Anh Hùng",
-    "role": "Chủ nhà phố Lạch Tray",
-    "email": "hung@example.vn"
-  },
-  {
-    "id": "c-nam",
-    "name": "Anh Nam",
-    "role": "Chỉ huy công trường"
-  }
+ {
+  "id": "c-me",
+  "name": "Hoàng",
+  "role": "Bạn",
+  "email": "hoang@example.vn",
+  "preferred_language": null
+ },
+ {
+  "id": "c-lan",
+  "name": "Chị Lan",
+  "role": "Khách mua căn hộ",
+  "email": "lan.nguyen@example.vn",
+  "preferred_language": null
+ },
+ {
+  "id": "c-tuan",
+  "name": "Anh Tuấn",
+  "role": "Trưởng nhóm kinh doanh",
+  "email": "tuan@example.vn",
+  "preferred_language": null
+ },
+ {
+  "id": "c-minh",
+  "name": "Anh Minh",
+  "role": "Giám đốc",
+  "email": "minh@noithatviet.example.vn",
+  "preferred_language": null
+ },
+ {
+  "id": "c-thao",
+  "name": "Chị Thảo",
+  "role": "Kế toán trưởng",
+  "email": "thao@noithatviet.example.vn",
+  "preferred_language": null
+ },
+ {
+  "id": "c-duc",
+  "name": "Anh Đức",
+  "role": "Trưởng xưởng",
+  "email": "duc@noithatviet.example.vn",
+  "preferred_language": null
+ },
+ {
+  "id": "c-ha",
+  "name": "Chị Hà",
+  "role": "Phụ trách marketing",
+  "preferred_language": null
+ },
+ {
+  "id": "c-phuoc",
+  "name": "Ông Phước",
+  "role": "Khách hàng tư vấn pháp lý",
+  "email": "phuoc@example.vn",
+  "preferred_language": null
+ },
+ {
+  "id": "c-hung",
+  "name": "Anh Hùng",
+  "role": "Chủ nhà phố Lạch Tray",
+  "email": "hung@example.vn",
+  "preferred_language": null
+ },
+ {
+  "id": "c-nam",
+  "name": "Anh Nam",
+  "role": "Chỉ huy công trường",
+  "preferred_language": null
+ },
+ {
+  "id": "c-park",
+  "name": "Park Ji-ho",
+  "role": "Giám đốc Hanyang Mold",
+  "email": "park.jiho@hanyangmold.example.kr",
+  "preferred_language": "ko"
+ },
+ {
+  "id": "c-kim",
+  "name": "Kim Min-ji",
+  "role": "Phiên dịch - Hanyang Mold",
+  "email": "kim.minji@hanyangmold.example.kr",
+  "preferred_language": "ko"
+ },
+ {
+  "id": "c-michael",
+  "name": "Michael Chen",
+  "role": "Giám đốc mua hàng - Apex Trading",
+  "email": "michael.chen@apextrading.example.com",
+  "preferred_language": "en"
+ }
 ]

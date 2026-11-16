@@ -3,6 +3,7 @@ import type {
   ChatMessage,
   Contact,
   GlossaryTerm,
+  Lang,
   Profession,
   Quota,
   Session,
@@ -37,6 +38,10 @@ export type SearchResult = {
 export type RecordingDraft = {
   title?: string;
   template_id: string;
+  /** Ngôn ngữ nói chính của buổi (M6-02) */
+  primary_language: Lang;
+  /** Có thể có tiếng khác — app tự nhận các đoạn tiếng Anh, tiếng Hàn (M6-02) */
+  auto_detect_languages?: boolean;
   duration_sec: number;
   notes: { timestamp_sec: number; text: string }[];
   bookmarks: { timestamp_sec: number; tag: string | null }[];
@@ -77,8 +82,9 @@ export interface SessionRepository {
   /** Tìm kiếm xuyên buổi: tiêu đề, tóm tắt, bản ghi lời, việc cần làm (M4-02).
    * Bản giả so khớp không phân biệt hoa thường và cả dấu tiếng Việt. */
   search(query: string): Promise<SearchResult>;
-  /** Tạo buổi ghi từ file có sẵn (M4-02): không lưu file, chỉ đọc thông tin */
-  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: string }): Promise<{ id: string }>;
+  /** Tạo buổi ghi từ file có sẵn (M4-02): không lưu file, chỉ đọc thông tin.
+   * M6-02: language là ngôn ngữ nói chính của buổi. */
+  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: Lang }): Promise<{ id: string }>;
   /** Buổi ghi mẫu theo nghề (M4-04): dùng ở màn làm quen và Cài đặt > Hồ sơ */
   getSample(profession: Profession): Promise<SessionDetail>;
 }
@@ -106,7 +112,8 @@ export type PublicSessionView = Pick<
 export interface ShareRepository {
   create(
     sessionId: string,
-    opts: Pick<ShareLink, "scope" | "expires_at"> & { password?: string },
+    // M6-04: languages là các bản tóm tắt người xem được chọn
+    opts: Pick<ShareLink, "scope" | "expires_at"> & { password?: string; languages?: Lang[] },
   ): Promise<ShareLink>;
   revoke(id: string): Promise<void>;
   /** Link đang sống của một buổi ghi (M4-01): null là chưa có */
