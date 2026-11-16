@@ -182,3 +182,10 @@ Mục mới nhất nằm dưới cùng. Mỗi PR thêm một mục.
 - Bài học: đo Lighthouse phải dùng người dùng đã làm quen, cùng origin, xóa cache HTTP mỗi lần, kiểm `finalDisplayedUrl`. Chuỗi tiếng Anh có số đếm phải dùng ICU plural.
 - Còn dưới 85 điểm hiệu năng: `/` 73, `/s/[id]` 70, `/record` 82, `/p/[id]` 79. Cách xử lý khi nối backend ở `07-handover.md` mục 6.
 - Việc tiếp theo: nối database thật theo `docs/07-handover.md`.
+
+## 2026-11-16, Claude, đặc tả M6 và M7
+
+- Hoang đồng ý làm thêm đa ngôn ngữ (có tiếng Hàn) và nhóm, bảng điều khiển trước khi nối database.
+- Viết `docs/08-da-ngon-ngu-va-nhom.md`, bổ sung kiểu dữ liệu ở `04-data-contract.md`, đường dẫn mới ở `03-screens.md`, 6 quyết định ở `DECISIONS.md`.
+- Mở issue M6 #43 đến #46 (sẵn sàng), M7 #47 đến #50 (làm sau khi M6 merge).
+- Chờ Hoang chốt: giá gói Pro, Nhóm; giới hạn bản dịch của gói Free.

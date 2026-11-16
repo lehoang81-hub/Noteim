@@ -17,11 +17,18 @@ Sơ đồ vẽ theo bề ngang điện thoại. Bố cục máy tính xem `02-de
 | `/settings/*` | Cài đặt | M4 |
 | `/welcome` | Làm quen lần đầu | M4 |
 | `/p/[shareId]` | Trang chia sẻ công khai | M4 |
-| `/upgrade` | Gói dịch vụ | M4 |
+| `/upgrade` | Gói dịch vụ | M4, M7 |
+| `/dashboard` | Tổng quan cá nhân và nhóm | M7 |
+| `/team/*` | Quản trị nhóm | M7 |
+| `/join/[token]` | Nhận lời mời vào nhóm | M7 |
 
 ## Bảng điều khiển thử nghiệm
 
 Thêm `?debug=1` vào bất kỳ đường dẫn nào để mở bảng nhỏ ở góc màn hình, cho phép ép trạng thái: mất mạng, tải chậm (3 giây), lỗi tải, hết hạn mức, thư viện rỗng, đổi nghề, đổi gói Free và Pro. Bảng này là công cụ để người duyệt kiểm tra mọi trạng thái trên điện thoại. Lựa chọn lưu trong `localStorage`.
+
+---
+
+Đa ngôn ngữ (M6) và làm việc nhóm (M7) thay đổi nhiều màn hình bên dưới; xem `08-da-ngon-ngu-va-nhom.md`.
 
 ---
 
