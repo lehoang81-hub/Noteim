@@ -2,7 +2,7 @@
 
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
-import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type SessionFixture, type ShareLink } from "../types";
+import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type ShareLink } from "../types";
 import { MOCK_NOW, commit, getDb, samplesReady, sessionsReady, type StoredSession } from "./store";
 import { buildSessionContent } from "./generate";
 
