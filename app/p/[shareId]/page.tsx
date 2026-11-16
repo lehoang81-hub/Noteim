@@ -249,8 +249,10 @@ function PublicSummary({
                   currentLang === lg ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
                 )}
               >
-                <span lang={lg === "ko" ? "ko" : undefined}>
-                  {tr(`settings.lang${lg === "vi" ? "Vi" : lg === "en" ? "En" : "Ko"}`)}
+                {/* Tên theo ngôn ngữ giao diện — giao diện vi/en không có chữ
+                    Hàn ngoài dữ liệu, không tải phông Hàn chỉ cho nút (M6-04) */}
+                <span lang={currentLang === "ko" ? "ko" : undefined}>
+                  {tr(`summary.lang${lg === "vi" ? "Vi" : lg === "en" ? "En" : "Ko"}`)}
                 </span>
               </button>
             ))}

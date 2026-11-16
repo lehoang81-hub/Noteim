@@ -14,7 +14,7 @@ import { Banner, EmptyState, SkeletonParagraph } from "@/components/ui/feedback"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { data, dataNow, DataError, useData, type ActionItem, type Lang, type SessionDetail } from "@/lib/data";
+import { data, dataNow, DataError, useData, type ActionItem, type Lang, type SessionDetail, type SummaryVersion } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
 import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
@@ -214,9 +214,25 @@ function Loaded({
     return current;
   }, [bullets, ps.currentTime, ps.playing]);
 
-  // Bản tóm tắt đang xem (M6-03): mặc định bản gốc, đổi qua ô "Tóm tắt bằng"
+  // Bản tóm tắt đang xem (M6-03): mặc định bản gốc, đổi qua ô "Tóm tắt bằng".
+  // Bản gốc có sẵn trong detail — dựng bản ngay không chờ fetch, nhờ điểm
+  // nội dung lớn nhất (tóm tắt chung) vẽ cùng lần đầu, LCP không bị đẩy xa.
   const [verLang, setVerLang] = useState<Lang>(detail.original_report_language);
-  const summary = useData(() => data.sessions.getSummary(detail.id, verLang), [detail.id, verLang]);
+  const summaryFetch = useData(() => data.sessions.getSummary(detail.id, verLang), [detail.id, verLang]);
+  const summary =
+    verLang === detail.original_report_language
+      ? ({
+          session_id: detail.id,
+          lang: detail.original_report_language,
+          source: "original",
+          translated_from: null,
+          created_at: detail.created_at,
+          stale: false,
+          executive_summary: detail.executive_summary,
+          topics: detail.topics,
+          task_texts: Object.fromEntries(detail.action_items.map((a) => [a.id, a.task])),
+        } as SummaryVersion)
+      : summaryFetch.data;
 
   const [items, setItems] = useState(detail.action_items);
   // Dữ liệu tải lại (sửa việc ở nơi khác, thêm việc...) thì đồng bộ lại danh sách;
@@ -384,7 +400,7 @@ function Loaded({
           </div>
           <div className="px-page pb-40 pt-5 lg:px-8">
             <TabsContent value="summary">
-              {summary.data ? (
+              {summary ? (
                 <SummaryTab
                   detail={detail}
                   template={template}
@@ -395,7 +411,7 @@ function Loaded({
                   onAskAi={() => setTab("ai")}
                   onSendMinutes={() => setSending(true)}
                   onShareIntent={openShare}
-                  version={summary.data}
+                  version={summary}
                   verLang={verLang}
                   onVerLang={setVerLang}
                   versions={detail.report_languages.length ? detail.report_languages : [detail.original_report_language]}
@@ -410,7 +426,7 @@ function Loaded({
             </TabsContent>
             <TabsContent value="tasks">
               <TasksTab
-                items={items.map((a) => (summary.data?.task_texts?.[a.id] ? { ...a, task: summary.data.task_texts[a.id] } : a))}
+                items={items.map((a) => (summary?.task_texts?.[a.id] ? { ...a, task: summary.task_texts[a.id] } : a))}
                 contacts={contacts}
                 now={now}
                 canSeek={canPlay}

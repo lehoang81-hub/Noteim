@@ -757,7 +757,10 @@
     "limitTitle": "Gói Free tạo được 1 bản thêm cho mỗi buổi",
     "upgrade": "Xem gói Pro",
     "originalQuote": "Câu gốc",
-    "sampleNote": "Bản dịch mẫu"
+    "sampleNote": "Bản dịch mẫu",
+    "langVi": "tiếng Việt",
+    "langEn": "tiếng Anh",
+    "langKo": "tiếng Hàn"
   },
   "contacts": {
     "preferredLanguage": "Ngôn ngữ ưa dùng"

@@ -757,7 +757,10 @@
     "limitTitle": "Free 플랜은 세션마다 버전 1개를 추가로 만들 수 있어요",
     "upgrade": "Pro 플랜 보기",
     "originalQuote": "원문",
-    "sampleNote": "샘플 번역"
+    "sampleNote": "샘플 번역",
+    "langVi": "베트남어",
+    "langEn": "영어",
+    "langKo": "한국어"
   },
   "contacts": {
     "preferredLanguage": "선호 언어"

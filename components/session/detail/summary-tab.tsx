@@ -26,7 +26,11 @@ import { cn } from "@/lib/cn";
  * thẻ trích dẫn, thêm vào đoạn tinh túy, chuyển thành việc cần làm.
  */
 
-const LANG_NAME_KEY: Record<Lang, string> = { vi: "settings.langVi", en: "settings.langEn", ko: "settings.langKo" };
+/** Tên ngôn ngữ theo NGÔN NGỮ GIAO DIỆN ("tiếng Hàn"/"Korean"/"한국어").
+ * Khác với settings.lang* (tên gốc tiếng Hàn "한국어") — chip và nút tạo bản
+ * dùng tên theo giao diện để giao diện vi/en không có chữ Hàn, không phải
+ * tải phông Hàn chỉ cho một nhãn (M6-04). */
+const LANG_UI_NAME_KEY: Record<Lang, string> = { vi: "summary.langVi", en: "summary.langEn", ko: "summary.langKo" };
 
 function FigureBars({ figure, lang }: { figure: NonNullable<SummaryVersion["topics"][number]["figure"]>; lang: Lang }) {
   const t = useTranslations("session");
@@ -167,7 +171,7 @@ export function SummaryTab({
     setCreatingLang(lang);
     try {
       await data.sessions.createSummaryVersion(detail.id, lang, (step) => setCreatingStep(step));
-      toast.show({ tone: "success", message: ts("createdToast", { lang: tl(LANG_NAME_KEY[lang]) }) });
+      toast.show({ tone: "success", message: ts("createdToast", { lang: tl(LANG_UI_NAME_KEY[lang]) }) });
       onVerLang(lang);
       setCreatingLang(null);
       setCreating(false);
@@ -229,7 +233,7 @@ export function SummaryTab({
                 verLang === lang ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
               )}
             >
-              <span lang={lang === "ko" ? "ko" : undefined}>{tl(LANG_NAME_KEY[lang])}</span>
+              <span>{tl(LANG_UI_NAME_KEY[lang])}</span>
             </button>
           ))}
           {/* Tạo bản cho ngôn ngữ chưa có. Gói Free: 1 bản thêm mỗi buổi,
@@ -255,7 +259,7 @@ export function SummaryTab({
                   )}
                 >
                   <Languages aria-hidden={true} className="size-4" strokeWidth={1.75} />
-                  {ts("createVersion", { lang: tl(LANG_NAME_KEY[lang]) })}
+                  {ts("createVersion", { lang: tl(LANG_UI_NAME_KEY[lang]) })}
                 </button>
               );
             })}
@@ -279,7 +283,7 @@ export function SummaryTab({
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 rounded-pill bg-dien-tint px-2 py-0.5 text-caption font-medium text-dien">
-            {ts("translatedFrom", { lang: tl(LANG_NAME_KEY[originalLang]) })}
+            {ts("translatedFrom", { lang: tl(LANG_UI_NAME_KEY[originalLang]) })}
           </span>
         )}
         {version.sample ? <span className="text-caption text-ink-3">{ts("sampleNote")}</span> : null}
@@ -296,7 +300,7 @@ export function SummaryTab({
       {/* Tiến trình tạo bản 2 bước (M6-03) */}
       {creating ? (
         <div role="status" className="mt-3 rounded-block border border-dien bg-dien-tint p-3">
-          <p className="text-small font-medium text-dien">{ts("createConfirmTitle", { lang: tl(LANG_NAME_KEY[creatingLang ?? "ko"]) })}</p>
+          <p className="text-small font-medium text-dien">{ts("createConfirmTitle", { lang: tl(LANG_UI_NAME_KEY[creatingLang ?? "ko"]) })}</p>
           <ul className="mt-2 flex flex-col gap-1.5">
             {[1, 2].map((step) => (
               <li key={step} className="flex items-center gap-2 text-small text-ink-2">
@@ -401,7 +405,7 @@ export function SummaryTab({
                       onOpenMenu={() => setMenuBullet(b)}
                       isOriginal={isOriginal}
                       originalQuoteLabel={ts("originalQuote")}
-                      originalLangLabel={tl(LANG_NAME_KEY[originalLang])}
+                      originalLangLabel={tl(LANG_UI_NAME_KEY[originalLang])}
                     >
                       {b.note_ids.length ? (
                         <div className="flex flex-col gap-1.5">
@@ -439,9 +443,9 @@ export function SummaryTab({
       <ConfirmDialog
         open={!!creatingLang && !creating}
         onOpenChange={(next) => !next && setCreatingLang(null)}
-        title={ts("createConfirmTitle", { lang: tl(LANG_NAME_KEY[creatingLang ?? "ko"]) })}
+        title={ts("createConfirmTitle", { lang: tl(LANG_UI_NAME_KEY[creatingLang ?? "ko"]) })}
         cancelLabel={t("cancel")}
-        confirmLabel={ts("createVersion", { lang: tl(LANG_NAME_KEY[creatingLang ?? "ko"]) })}
+        confirmLabel={ts("createVersion", { lang: tl(LANG_UI_NAME_KEY[creatingLang ?? "ko"]) })}
         onConfirm={() => creatingLang && void createVersion(creatingLang)}
       >
         {ts("createConfirmBody")}

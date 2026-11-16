@@ -702,7 +702,10 @@
     "limitTitle": "Free plan allows 1 extra version per session",
     "upgrade": "See Pro plan",
     "originalQuote": "Original quote",
-    "sampleNote": "Sample translation"
+    "sampleNote": "Sample translation",
+    "langVi": "Vietnamese",
+    "langEn": "English",
+    "langKo": "Korean"
   },
   "contacts": {
     "preferredLanguage": "Preferred language"
