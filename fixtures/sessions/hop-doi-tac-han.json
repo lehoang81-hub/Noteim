@@ -128,70 +128,73 @@
     "contact_id": "c-me",
     "display_name": "Bạn",
     "is_me": true,
-    "color": 0,
-    "talk": 31,
-    "sample": 20
+    "color_index": 0,
+    "talk_ratio_percent": 31,
+    "sample_start_sec": 20
    },
    {
     "id": "SPK_02",
     "contact_id": "c-park",
     "display_name": "Park Ji-ho",
     "is_me": false,
-    "color": 1,
-    "talk": 25,
-    "sample": 90
+    "color_index": 1,
+    "talk_ratio_percent": 25,
+    "sample_start_sec": 90
    },
    {
     "id": "SPK_03",
     "contact_id": "c-kim",
     "display_name": "Kim Min-ji",
     "is_me": false,
-    "color": 2,
-    "talk": 22,
-    "sample": 130
+    "color_index": 2,
+    "talk_ratio_percent": 22,
+    "sample_start_sec": 130
    },
    {
     "id": "SPK_04",
     "contact_id": "c-thao",
     "display_name": "Chị Thảo",
     "is_me": false,
-    "color": 3,
-    "talk": 22,
-    "sample": 400
+    "color_index": 3,
+    "talk_ratio_percent": 22,
+    "sample_start_sec": 400
    }
   ],
   "topics": [
    {
     "id": "t1",
     "title": "Mở đầu và giới thiệu",
-    "section_id": null,
+    "section_id": "tpl-business-s1",
     "start_sec": 0,
     "end_sec": 240,
     "tag": "pending",
     "bullets": [
      {
       "id": "b1",
-      "time_sec": 52,
-      "time_label": "00:52",
       "text": "Hai bên giới thiệu thành viên tham gia dự án",
       "speaker_id": "SPK_02",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 52,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b2",
-      "time_sec": 118,
-      "time_label": "01:58",
       "text": "So sánh ba báo giá khuôn, đơn giá với MOQ, và tiến độ sản xuất đợt đầu",
       "speaker_id": "SPK_04",
-      "is_quote": true
+      "is_quote": true,
+      "timestamp_sec": 118,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b3",
-      "time_sec": 196,
-      "time_label": "03:16",
       "text": "Mục tiêu: chốt nhà cung cấp khuôn, đơn giá và điều khoản thanh toán trong tháng này",
       "speaker_id": "SPK_01",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 196,
+      "edited": false,
+      "note_ids": []
      }
     ]
    },
@@ -205,39 +208,43 @@
     "bullets": [
      {
       "id": "b4",
-      "time_sec": 292,
-      "time_label": "04:52",
       "text": "Khuôn A của Hanyang Mold: 48.000 USD, thép P20, tuổi thọ 300.000 lần ép",
       "speaker_id": "SPK_03",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 292,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b5",
-      "time_sec": 410,
-      "time_label": "06:50",
       "text": "Khuôn B: 52.000 USD, thép S136, tuổi thọ 500.000 lần ép",
       "speaker_id": "SPK_02",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 410,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b6",
-      "time_sec": 560,
-      "time_label": "09:20",
       "text": "Khuôn C: 61.000 USD, làm mát conformal, chu kỳ ép 20,4 giây",
       "speaker_id": "SPK_03",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 560,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b7",
-      "time_sec": 675,
-      "time_label": "11:15",
       "text": "Phương án A của Hanyang Mold là lựa chọn hợp lý nhất",
       "speaker_id": "SPK_04",
-      "is_quote": true
+      "is_quote": true,
+      "timestamp_sec": 675,
+      "edited": false,
+      "note_ids": []
      }
     ],
     "figure": {
-     "type": "bar",
+     "chart_type": "bar",
      "title": "So sánh báo giá khuôn",
      "unit": "USD",
      "labels": [
@@ -250,7 +257,7 @@
       52000,
       61000
      ],
-     "source_sec": 560
+     "source_timestamp_sec": 560
     }
    },
    {
@@ -263,31 +270,34 @@
     "bullets": [
      {
       "id": "b8",
-      "time_sec": 805,
-      "time_label": "13:25",
       "text": "Đơn giá 2,35 USD/sản phẩm khi đạt MOQ 20.000",
       "speaker_id": "SPK_03",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 805,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b9",
-      "time_sec": 920,
-      "time_label": "15:20",
       "text": "Đơn giá 2,35 USD đã gồm bao bì xuất khẩu và kiểm tra lần đầu",
       "speaker_id": "SPK_01",
-      "is_quote": true
+      "is_quote": true,
+      "timestamp_sec": 920,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b10",
-      "time_sec": 1040,
-      "time_label": "17:20",
       "text": "Màu thứ hai cộng thêm 0,05 USD mỗi sản phẩm",
       "speaker_id": "SPK_03",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 1040,
+      "edited": false,
+      "note_ids": []
      }
     ],
     "figure": {
-     "type": "bar",
+     "chart_type": "bar",
      "title": "Chu kỳ ép của từng phương án",
      "unit": "giây",
      "labels": [
@@ -300,7 +310,7 @@
       24,
       20.4
      ],
-     "source_sec": 920
+     "source_timestamp_sec": 920
     }
    },
    {
@@ -313,27 +323,30 @@
     "bullets": [
      {
       "id": "b11",
-      "time_sec": 1195,
-      "time_label": "19:55",
       "text": "Lead time 8 tuần sau khi duyệt mẫu",
       "speaker_id": "SPK_02",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 1195,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b12",
-      "time_sec": 1330,
-      "time_label": "22:10",
       "text": "Tuần 1–3 gia công khuôn, tuần 4 chạy mẫu T1, tuần 5–6 chỉnh sửa",
       "speaker_id": "SPK_01",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 1330,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b13",
-      "time_sec": 1470,
-      "time_label": "24:30",
       "text": "Rủi ro: sửa cấu trúc khuôn có thể cộng thêm 1 tuần tiến độ",
       "speaker_id": "SPK_01",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 1470,
+      "edited": false,
+      "note_ids": []
      }
     ]
    },
@@ -347,27 +360,30 @@
     "bullets": [
      {
       "id": "b14",
-      "time_sec": 1580,
-      "time_label": "26:20",
       "text": "T/T 30/70: đặt cọc 30% khi ký, 70% trước khi giao hàng",
       "speaker_id": "SPK_01",
-      "is_quote": true
+      "is_quote": true,
+      "timestamp_sec": 1580,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b15",
-      "time_sec": 1770,
-      "time_label": "29:30",
       "text": "Khuôn bảo hành 2 năm, lỗi do khuôn sửa miễn phí",
       "speaker_id": "SPK_01",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 1770,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b16",
-      "time_sec": 1900,
-      "time_label": "31:40",
       "text": "Thống nhất thêm điều khoản bảo mật ba năm vào hợp đồng",
       "speaker_id": "SPK_03",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 1900,
+      "edited": false,
+      "note_ids": []
      }
     ]
    },
@@ -381,35 +397,39 @@
     "bullets": [
      {
       "id": "b17",
-      "time_sec": 2080,
-      "time_label": "34:40",
       "text": "Gửi thiết kế 3D bản cuối cho phía Hàn trong tuần này",
       "speaker_id": "SPK_04",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 2080,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b18",
-      "time_sec": 2260,
-      "time_label": "37:40",
       "text": "Xin báo giá DDP cho hai phương án cảng Busan và Incheon",
       "speaker_id": "SPK_03",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 2260,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b19",
-      "time_sec": 2455,
-      "time_label": "40:55",
       "text": "Kiểm tra nhà máy trực tiếp vào tuần thứ sáu",
       "speaker_id": "SPK_03",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 2455,
+      "edited": false,
+      "note_ids": []
      },
      {
       "id": "b20",
-      "time_sec": 2700,
-      "time_label": "45:00",
       "text": "Ký hợp đồng sau khi duyệt báo giá vận chuyển",
       "speaker_id": "SPK_03",
-      "is_quote": false
+      "is_quote": false,
+      "timestamp_sec": 2700,
+      "edited": false,
+      "note_ids": []
      }
     ]
    }
@@ -417,73 +437,85 @@
   "action_items": [
    {
     "id": "a1",
-    "text": "Gửi thiết kế 3D bản cuối cho phía Hàn",
-    "contact_id": "c-me",
-    "due": "2026-11-17",
     "priority": "high",
-    "quote": "Chúng tôi gửi bản 3D cuối trong tuần này",
-    "ts": 2810
+    "session_id": "s-hop-han",
+    "done": false,
+    "done_at": null,
+    "timestamp_sec": 2810,
+    "assignee_contact_id": "c-me",
+    "due_date": "2026-11-17",
+    "source_quote": "Chúng tôi gửi bản 3D cuối trong tuần này",
+    "task": "Gửi thiết kế 3D bản cuối cho phía Hàn"
    },
    {
     "id": "a2",
-    "text": "Xin báo giá DDP cho hai phương án cảng Busan và Incheon",
-    "contact_id": "c-kim",
-    "due": "2026-11-18",
     "priority": "medium",
-    "quote": "Gửi báo giá DDP cho hai cảng Busan và Incheon trước thứ Sáu",
-    "ts": 2852
+    "session_id": "s-hop-han",
+    "done": false,
+    "done_at": null,
+    "timestamp_sec": 2852,
+    "assignee_contact_id": "c-kim",
+    "due_date": "2026-11-18",
+    "source_quote": "Gửi báo giá DDP cho hai cảng Busan và Incheon trước thứ Sáu",
+    "task": "Xin báo giá DDP cho hai phương án cảng Busan và Incheon"
    },
    {
     "id": "a3",
-    "text": "Kiểm tra nhà máy trực tiếp vào tuần thứ sáu",
-    "contact_id": "c-thao",
-    "due": "2026-11-20",
     "priority": "medium",
-    "quote": "Xác nhận lịch visite nhà máy vào tuần thứ sáu",
-    "ts": 2884
+    "session_id": "s-hop-han",
+    "done": false,
+    "done_at": null,
+    "timestamp_sec": 2884,
+    "assignee_contact_id": "c-thao",
+    "due_date": "2026-11-20",
+    "source_quote": "Xác nhận lịch visite nhà máy vào tuần thứ sáu",
+    "task": "Kiểm tra nhà máy trực tiếp vào tuần thứ sáu"
    },
    {
     "id": "a4",
-    "text": "Soạn bản nháp hợp đồng kèm điều khoản bảo mật ba năm",
-    "contact_id": "c-kim",
-    "due": "2026-11-24",
     "priority": "medium",
-    "quote": "Soạn bản nháp hợp đồng kèm điều khoản bảo mật ba năm",
-    "ts": 2921
+    "session_id": "s-hop-han",
+    "done": false,
+    "done_at": null,
+    "timestamp_sec": 2921,
+    "assignee_contact_id": "c-kim",
+    "due_date": "2026-11-24",
+    "source_quote": "Soạn bản nháp hợp đồng kèm điều khoản bảo mật ba năm",
+    "task": "Soạn bản nháp hợp đồng kèm điều khoản bảo mật ba năm"
    }
   ],
   "notes": [
    {
     "id": "n1",
-    "time_sec": 560,
-    "text": "Khuôn A rẻ nhất nhưng chu kỳ chậm hơn"
+    "text": "Khuôn A rẻ nhất nhưng chu kỳ chậm hơn",
+    "timestamp_sec": 560
    },
    {
     "id": "n2",
-    "time_sec": 1560,
-    "text": "T/T 30/70 — chị Thảo xác nhận được"
+    "text": "T/T 30/70 — chị Thảo xác nhận được",
+    "timestamp_sec": 1560
    },
    {
     "id": "n3",
-    "time_sec": 2940,
-    "text": "Hẹn thực địa thứ sáu tuần sau"
+    "text": "Hẹn thực địa thứ sáu tuần sau",
+    "timestamp_sec": 2940
    }
   ],
   "bookmarks": [
    {
     "id": "m1",
-    "time_sec": 560,
-    "tag": "figure"
+    "tag": "figure",
+    "timestamp_sec": 560
    },
    {
     "id": "m2",
-    "time_sec": 920,
-    "tag": "figure"
+    "tag": "figure",
+    "timestamp_sec": 920
    },
    {
     "id": "m3",
-    "time_sec": 2010,
-    "tag": "decided"
+    "tag": "decided",
+    "timestamp_sec": 2010
    }
   ],
   "photos": [],
@@ -2387,39 +2419,42 @@
    "topics": [
     {
      "id": "t1",
+     "section_id": "tpl-business-s1",
      "title": "인사 및 소개",
-     "section_id": null,
      "start_sec": 0,
      "end_sec": 240,
      "tag": "pending",
      "bullets": [
       {
        "id": "b1",
-       "time_sec": 52,
-       "time_label": "00:52",
        "text": "양측이 프로젝트 참여 인원을 소개했습니다",
+       "timestamp_sec": 52,
        "speaker_id": "SPK_02",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Hai bên giới thiệu thành viên tham gia dự án",
        "original_lang": "vi"
       },
       {
        "id": "b2",
-       "time_sec": 118,
-       "time_label": "01:58",
        "text": "세 가지 금형 견적, 단가와 MOQ, 첫 생산 일정을 비교합니다",
+       "timestamp_sec": 118,
        "speaker_id": "SPK_04",
        "is_quote": true,
+       "edited": false,
+       "note_ids": [],
        "original_text": "So sánh ba báo giá khuôn, đơn giá với MOQ, và tiến độ sản xuất đợt đầu",
        "original_lang": "vi"
       },
       {
        "id": "b3",
-       "time_sec": 196,
-       "time_label": "03:16",
        "text": "목표: 이번 달 안에 금형 공급사, 단가, 결제 조건 확정",
+       "timestamp_sec": 196,
        "speaker_id": "SPK_01",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Mục tiêu: chốt nhà cung cấp khuôn, đơn giá và điều khoản thanh toán trong tháng này",
        "original_lang": "vi"
       }
@@ -2427,55 +2462,59 @@
     },
     {
      "id": "t2",
-     "title": "금형 견적 비교",
      "section_id": "tpl-business-s1",
+     "title": "금형 견적 비교",
      "start_sec": 240,
      "end_sec": 750,
      "tag": "decided",
      "bullets": [
       {
        "id": "b4",
-       "time_sec": 292,
-       "time_label": "04:52",
        "text": "금형 A(한양금형): 48,000달러, P20 강재, 수명 300,000회 사출",
+       "timestamp_sec": 292,
        "speaker_id": "SPK_03",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Khuôn A của Hanyang Mold: 48.000 USD, thép P20, tuổi thọ 300.000 lần ép",
        "original_lang": "vi"
       },
       {
        "id": "b5",
-       "time_sec": 410,
-       "time_label": "06:50",
        "text": "금형 B: 52,000달러, S136 강재, 수명 500,000회 사출",
+       "timestamp_sec": 410,
        "speaker_id": "SPK_02",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Khuôn B: 52.000 USD, thép S136, tuổi thọ 500.000 lần ép",
        "original_lang": "vi"
       },
       {
        "id": "b6",
-       "time_sec": 560,
-       "time_label": "09:20",
        "text": "금형 C: 61,000달러, 컨포멀 쿨링 적용, 사출 사이클 20.4초",
+       "timestamp_sec": 560,
        "speaker_id": "SPK_03",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Khuôn C: 61.000 USD, làm mát conformal, chu kỳ ép 20,4 giây",
        "original_lang": "vi"
       },
       {
        "id": "b7",
-       "time_sec": 675,
-       "time_label": "11:15",
        "text": "한양금형 A안이 첫 차수에 가장 합리적인 선택",
+       "timestamp_sec": 675,
        "speaker_id": "SPK_04",
        "is_quote": true,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Phương án A của Hanyang Mold là lựa chọn hợp lý nhất",
        "original_lang": "vi"
       }
      ],
      "figure": {
-      "type": "bar",
+      "chart_type": "bar",
       "title": "금형 견적 비교",
       "unit": "달러",
       "labels": [
@@ -2488,50 +2527,53 @@
        52000,
        61000
       ],
-      "source_sec": 560
+      "source_timestamp_sec": 560
      }
     },
     {
      "id": "t3",
-     "title": "단가와 최소 주문 수량",
      "section_id": "tpl-business-s2",
+     "title": "단가와 최소 주문 수량",
      "start_sec": 750,
      "end_sec": 1140,
-     "tag": "decided",
+     "tag": "figure",
      "bullets": [
       {
        "id": "b8",
-       "time_sec": 805,
-       "time_label": "13:25",
        "text": "MOQ 20,000개 기준 단가 2.35달러",
+       "timestamp_sec": 805,
        "speaker_id": "SPK_03",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Đơn giá 2,35 USD/sản phẩm khi đạt MOQ 20.000",
        "original_lang": "vi"
       },
       {
        "id": "b9",
-       "time_sec": 920,
-       "time_label": "15:20",
        "text": "단가 2.35달러에 수출 포장과 초회 검사 포함",
+       "timestamp_sec": 920,
        "speaker_id": "SPK_01",
        "is_quote": true,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Đơn giá 2,35 USD đã gồm bao bì xuất khẩu và kiểm tra lần đầu",
        "original_lang": "vi"
       },
       {
        "id": "b10",
-       "time_sec": 1040,
-       "time_label": "17:20",
        "text": "두 번째 색상 추가 시 개당 0.05달러 추가",
+       "timestamp_sec": 1040,
        "speaker_id": "SPK_03",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Màu thứ hai cộng thêm 0,05 USD mỗi sản phẩm",
        "original_lang": "vi"
       }
      ],
      "figure": {
-      "type": "bar",
+      "chart_type": "bar",
       "title": "방안별 사출 사이클",
       "unit": "초",
       "labels": [
@@ -2544,44 +2586,47 @@
        24,
        20.4
       ],
-      "source_sec": 920
+      "source_timestamp_sec": 920
      }
     },
     {
      "id": "t4",
-     "title": "생산 일정",
      "section_id": "tpl-business-s3",
+     "title": "생산 일정",
      "start_sec": 1140,
      "end_sec": 1560,
      "tag": "risk",
      "bullets": [
       {
        "id": "b11",
-       "time_sec": 1195,
-       "time_label": "19:55",
        "text": "샘플 승인 후 납기 8주",
+       "timestamp_sec": 1195,
        "speaker_id": "SPK_02",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Lead time 8 tuần sau khi duyệt mẫu",
        "original_lang": "vi"
       },
       {
        "id": "b12",
-       "time_sec": 1330,
-       "time_label": "22:10",
        "text": "1–3주 금형 가공, 4주 T1 샘플, 5–6주 수정",
+       "timestamp_sec": 1330,
        "speaker_id": "SPK_01",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Tuần 1–3 gia công khuôn, tuần 4 chạy mẫu T1, tuần 5–6 chỉnh sửa",
        "original_lang": "vi"
       },
       {
        "id": "b13",
-       "time_sec": 1470,
-       "time_label": "24:30",
        "text": "리스크: 금형 구조 변경 시 최대 1주일 지연 가능",
+       "timestamp_sec": 1470,
        "speaker_id": "SPK_01",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Rủi ro: sửa cấu trúc khuôn có thể cộng thêm 1 tuần tiến độ",
        "original_lang": "vi"
       }
@@ -2589,39 +2634,42 @@
     },
     {
      "id": "t5",
-     "title": "결제 조건",
      "section_id": "tpl-business-s1",
+     "title": "결제 조건",
      "start_sec": 1560,
      "end_sec": 2010,
      "tag": "decided",
      "bullets": [
       {
        "id": "b14",
-       "time_sec": 1580,
-       "time_label": "26:20",
        "text": "T/T 30/70: 계약 시 30% 계약금, 선적 전 70% 잔금",
+       "timestamp_sec": 1580,
        "speaker_id": "SPK_01",
        "is_quote": true,
+       "edited": false,
+       "note_ids": [],
        "original_text": "T/T 30/70: đặt cọc 30% khi ký, 70% trước khi giao hàng",
        "original_lang": "vi"
       },
       {
        "id": "b15",
-       "time_sec": 1770,
-       "time_label": "29:30",
        "text": "금형 보증 2년, 금형 원인 불량 무상 수리",
+       "timestamp_sec": 1770,
        "speaker_id": "SPK_01",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Khuôn bảo hành 2 năm, lỗi do khuôn sửa miễn phí",
        "original_lang": "vi"
       },
       {
        "id": "b16",
-       "time_sec": 1900,
-       "time_label": "31:40",
        "text": "계약서에 3년 비밀유지 조항 포함 합의",
+       "timestamp_sec": 1900,
        "speaker_id": "SPK_03",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Thống nhất thêm điều khoản bảo mật ba năm vào hợp đồng",
        "original_lang": "vi"
       }
@@ -2629,49 +2677,53 @@
     },
     {
      "id": "t6",
-     "title": "다음 단계 및 할 일",
      "section_id": "tpl-business-s4",
+     "title": "다음 단계 및 할 일",
      "start_sec": 2010,
      "end_sec": 2980,
      "tag": "pending",
      "bullets": [
       {
        "id": "b17",
-       "time_sec": 2080,
-       "time_label": "34:40",
        "text": "이번 주 안에 최종 3D 설계도를 한국 측에 전송",
+       "timestamp_sec": 2080,
        "speaker_id": "SPK_04",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Gửi thiết kế 3D bản cuối cho phía Hàn trong tuần này",
        "original_lang": "vi"
       },
       {
        "id": "b18",
-       "time_sec": 2260,
-       "time_label": "37:40",
        "text": "부산항과 인천항 두 가지 안의 DDP 견적 요청",
+       "timestamp_sec": 2260,
        "speaker_id": "SPK_03",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Xin báo giá DDP cho hai phương án cảng Busan và Incheon",
        "original_lang": "vi"
       },
       {
        "id": "b19",
-       "time_sec": 2455,
-       "time_label": "40:55",
        "text": "6주차에 공장 실사 진행",
+       "timestamp_sec": 2455,
        "speaker_id": "SPK_03",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Kiểm tra nhà máy trực tiếp vào tuần thứ sáu",
        "original_lang": "vi"
       },
       {
        "id": "b20",
-       "time_sec": 2700,
-       "time_label": "45:00",
        "text": "운임 견적 검토 후 계약 체결",
+       "timestamp_sec": 2700,
        "speaker_id": "SPK_03",
        "is_quote": false,
+       "edited": false,
+       "note_ids": [],
        "original_text": "Ký hợp đồng sau khi duyệt báo giá vận chuyển",
        "original_lang": "vi"
       }

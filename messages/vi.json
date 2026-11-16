@@ -517,7 +517,9 @@
     "storageFull": "Bộ nhớ của trình duyệt đã đầy. Buổi ghi mới có thể không lưu được. Xóa bớt buổi ghi hoặc đặt lại dữ liệu mẫu.",
     "backToLibrary": "Về thư viện",
     "hours": "{h} giờ",
-    "minutes": "{m} phút"
+    "minutes": "{m} phút",
+    "languageLabel": "Ngôn ngữ",
+    "autoDetect": "Có thể có tiếng khác"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -550,7 +552,9 @@
     "mailFailOne": "Gửi email lỗi một người",
     "shareExpired": "Link chia sẻ hết hạn",
     "replayOnboarding": "Xem lại làm quen",
-    "replayOnboardingDone": "Đã đặt lại, đang mở màn làm quen"
+    "replayOnboardingDone": "Đã đặt lại, đang mở màn làm quen",
+    "translateFail": "Dịch lỗi",
+    "translateSlow": "Dịch chậm (10 giây)"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",
@@ -729,7 +733,14 @@
     "quoteCardNext": "Thẻ trích dẫn có ở bước tiếp theo.",
     "glossaryAdd": "Thêm vào từ điển",
     "glossaryAdded": "Đã thêm “{term}” vào từ điển",
-    "essenceEmpty": "Buổi ghi này chỉ còn tóm tắt. Bản ghi lời đã dọn cùng bản gốc, không nghe lại được từng đoạn."
+    "essenceEmpty": "Buổi ghi này chỉ còn tóm tắt. Bản ghi lời đã dọn cùng bản gốc, không nghe lại được từng đoạn.",
+    "showTranslation": "Xem bản dịch",
+    "hideTranslation": "Ẩn bản dịch",
+    "translateSegment": "Dịch đoạn này",
+    "translating": "Đang dịch…",
+    "translateFail": "Chưa dịch được. Thử lại.",
+    "translationStale": "Cần dịch lại",
+    "sampleTranslation": "Bản dịch mẫu"
   },
   "speakers": {
     "title": "Ai là ai?",
@@ -996,7 +1007,8 @@
     "start": "Tóm tắt file này",
     "imported": "Đã nhận file, đang tóm tắt",
     "cannotReadDuration": "Không đọc được thời lượng file này.",
-    "notStored": "Bản mockup chỉ đọc thông tin file, không lưu hay tải file lên."
+    "notStored": "Bản mockup chỉ đọc thông tin file, không lưu hay tải file lên.",
+    "autoDetect": "Có thể có tiếng khác"
   },
   "settings": {
     "title": "Cài đặt",

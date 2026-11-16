@@ -265,6 +265,35 @@ export const mockSource: DataSource = {
         if (!seg) throw new DataError("not_found");
         seg.text = text;
         seg.edited = true;
+        // Câu gốc đã sửa: mọi bản dịch hiện có của đoạn này sang trạng thái
+        // "Cần dịch lại" (M6-02)
+        for (const tr of Object.values(seg.translations)) if (tr) tr.stale = true;
+      }),
+    translateSegments: (sessionId, lang, segmentIds) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        // Cờ bảng thử nghiệm: dịch chậm 10 giây, dịch lỗi có Thử lại (M6-02)
+        if (getFlags().translateSlow) await new Promise((r) => setTimeout(r, 10000));
+        if (getFlags().translateFail) throw new DataError("server");
+        // Bật "Xem bản dịch" (không kèm segmentIds): chỉ điền đoạn CHƯA có bản
+        // dịch; đoạn đang "Cần dịch lại" giữ nguyên nhãn cho đến khi người dùng
+        // chủ động dịch lại đoạn đó ("Dịch đoạn này") — M6-02
+        const bulk = !segmentIds;
+        const list = fx.transcript.filter((s) => (segmentIds ? segmentIds.includes(s.id) : true) && s.lang !== lang);
+        for (const seg of list) {
+          const existing = seg.translations[lang];
+          if (existing && (!existing.stale || bulk)) continue;
+          if (existing?.stale) {
+            // Mockup không dịch lại được nội dung: giữ bản dịch cũ, gỡ nhãn lỗi thời
+            seg.translations[lang] = { ...existing, stale: false };
+          } else {
+            // Chưa có bản dịch trong fixture: điền "bản dịch mẫu" kèm câu gốc,
+            // không bịa nội dung (docs/08, Bản ghi lời)
+            seg.translations[lang] = { text: seg.text, stale: false, sample: true };
+          }
+        }
+        return fx.transcript;
       }),
     reassignSegment: (sessionId, segmentId, speakerId) =>
       write(async () => {
@@ -605,7 +634,16 @@ export const mockSource: DataSource = {
       if (getFlags().failLoad) throw new DataError("server");
       const fx = await findFixture(sessionId);
       const hit = fx.chat.find((c) => c.question.trim().toLowerCase() === question.trim().toLowerCase());
-      const answer = hit?.answer ?? "Bản mockup chỉ trả lời được các câu gợi ý.";
+      // Hỏi AI trả lời bằng ngôn ngữ của câu hỏi (M6-03): chữ Hàn thì trả lời
+      // tiếng Hàn, chữ Latin không dấu thì tiếng Anh, còn lại tiếng Việt
+      const hasHangul = /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7A3]/.test(question);
+      const hasViDiacritics = /[ăâêôơưđáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ]/i.test(question);
+      const fallback = hasHangul
+        ? "샘플 목업에서는 추천 질문에만 답변할 수 있어요."
+        : !hasViDiacritics && /^[a-z0-9\s?,.'-]+$/i.test(question)
+          ? "The mockup can only answer the suggested questions."
+          : "Bản mockup chỉ trả lời được các câu gợi ý.";
+      const answer = hit?.answer ?? fallback;
       // Lịch sử hỏi đáp lưu theo buổi ghi (M3-03): cả câu không có trong fixture
       const log = (fx.chat_log ?? []);
       log.push({ id: `q-${Date.now().toString(36)}`, role: "user", text: question, citations: [] });

@@ -497,7 +497,9 @@
     "mailFailOne": "One recipient fails to receive email",
     "shareExpired": "Share link expired",
     "replayOnboarding": "Replay onboarding",
-    "replayOnboardingDone": "Reset, opening onboarding"
+    "replayOnboardingDone": "Reset, opening onboarding",
+    "translateFail": "Translate error",
+    "translateSlow": "Slow translate (10 s)"
   },
   "library": {
     "greeting": "Hi {name}",
@@ -676,7 +678,14 @@
     "quoteCardNext": "Quote cards arrive in the next step.",
     "glossaryAdd": "Add to glossary",
     "glossaryAdded": "“{term}” added to the glossary",
-    "essenceEmpty": "This session keeps only the summary. The transcript was purged along with the original audio."
+    "essenceEmpty": "This session keeps only the summary. The transcript was purged along with the original audio.",
+    "showTranslation": "Show translation",
+    "hideTranslation": "Hide translation",
+    "translateSegment": "Translate this segment",
+    "translating": "Translating…",
+    "translateFail": "Couldn't translate. Try again.",
+    "translationStale": "Needs re-translation",
+    "sampleTranslation": "Sample translation"
   },
   "speakers": {
     "title": "Who is who?",
@@ -861,7 +870,9 @@
     "storageFull": "Browser storage is full. New recordings may not be saved. Delete some sessions or reset the sample data.",
     "backToLibrary": "Back to library",
     "hours": "{h} h",
-    "minutes": "{m} min"
+    "minutes": "{m} min",
+    "languageLabel": "Language",
+    "autoDetect": "Other languages may be spoken"
   },
   "processing": {
     "step1": "Recording saved",
@@ -996,7 +1007,8 @@
     "start": "Summarize this file",
     "imported": "File received, summarizing",
     "cannotReadDuration": "Could not read the duration of this file.",
-    "notStored": "The mockup only reads file info; nothing is stored or uploaded."
+    "notStored": "The mockup only reads file info; nothing is stored or uploaded.",
+    "autoDetect": "Other languages may be spoken"
   },
   "settings": {
     "title": "Settings",

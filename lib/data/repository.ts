@@ -67,6 +67,9 @@ export interface SessionRepository {
   updateSegment(sessionId: string, segmentId: string, text: string): Promise<void>;
   /** Đổi người nói của một đoạn bản ghi (M3-01) */
   reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>;
+  /** Dịch đoạn bản ghi lời sang ngôn ngữ `lang` (M6-02). Không truyền
+   * segmentIds thì dịch mọi đoạn chưa có bản dịch ở `lang`. */
+  translateSegments(sessionId: string, lang: Lang, segmentIds?: string[]): Promise<TranscriptSegment[]>;
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
@@ -83,8 +86,9 @@ export interface SessionRepository {
    * Bản giả so khớp không phân biệt hoa thường và cả dấu tiếng Việt. */
   search(query: string): Promise<SearchResult>;
   /** Tạo buổi ghi từ file có sẵn (M4-02): không lưu file, chỉ đọc thông tin.
-   * M6-02: language là ngôn ngữ nói chính của buổi. */
-  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: Lang }): Promise<{ id: string }>;
+   * M6-02: language là ngôn ngữ nói chính, auto_detect_languages là công tắc
+   * "Có thể có tiếng khác" (bản giả không nhận diện được, chỉ lưu lựa chọn). */
+  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: Lang; auto_detect_languages?: boolean }): Promise<{ id: string }>;
   /** Buổi ghi mẫu theo nghề (M4-04): dùng ở màn làm quen và Cài đặt > Hồ sơ */
   getSample(profession: Profession): Promise<SessionDetail>;
 }

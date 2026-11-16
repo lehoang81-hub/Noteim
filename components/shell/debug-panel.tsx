@@ -18,8 +18,8 @@ import { resetFlags, setFlags, useDebugFlags, type DebugFlags } from "@/lib/debu
 
 const PROFESSIONS: Profession[] = ["business_owner", "doctor", "lawyer", "realestate_sales", "architect", "notary"];
 const TOGGLES: Array<
-  keyof Pick<DebugFlags, "offline" | "slow" | "failLoad" | "quotaOut" | "emptyLibrary" | "recordSpeed30" | "micDenied" | "micTaken" | "storageFull" | "mailFailOne" | "shareExpired">
-> = ["offline", "slow", "failLoad", "quotaOut", "emptyLibrary", "recordSpeed30", "micDenied", "micTaken", "storageFull", "mailFailOne", "shareExpired"];
+  keyof Pick<DebugFlags, "offline" | "slow" | "failLoad" | "quotaOut" | "emptyLibrary" | "recordSpeed30" | "micDenied" | "micTaken" | "storageFull" | "mailFailOne" | "shareExpired" | "translateFail" | "translateSlow">
+> = ["offline", "slow", "failLoad", "quotaOut", "emptyLibrary", "recordSpeed30", "micDenied", "micTaken", "storageFull", "mailFailOne", "shareExpired", "translateFail", "translateSlow"];
 
 export function DebugPanel() {
   const t = useTranslations("debug");

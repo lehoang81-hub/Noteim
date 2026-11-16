@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { getFlags } from "@/lib/debug/flags";
-import type { SemanticTag } from "@/lib/data/types";
+import type { Lang, SemanticTag } from "@/lib/data/types";
 import { savePhoto } from "@/lib/record/photo-store";
 import { markStorageFull } from "@/lib/storage-full";
 
@@ -27,6 +27,9 @@ export type RecordingPhoto = { id: string; timestamp_sec: number; url: string };
 
 export type RecordingConsent = { confirmed: boolean; announced: boolean };
 
+/** Ngôn ngữ chọn ở bảng "Bắt đầu ghi" (M6-02, issue #44) */
+export type RecordingSpeech = { primary_language: Lang; auto_detect: boolean };
+
 export type RecordingSnapshot = {
   status: RecordingStatus;
   /** Buổi ghi bị gián đoạn (tải lại hoặc đóng trang). Chỉ hiện dải báo
@@ -35,6 +38,8 @@ export type RecordingSnapshot = {
   interrupted: boolean;
   templateId: string | null;
   consent: RecordingConsent;
+  /** Ngôn ngữ chính và công tắc "Có thể có tiếng khác" chọn lúc bắt đầu (M6-02) */
+  speech: RecordingSpeech;
   /** Epoch ms lúc bắt đầu ghi, để đặt tên "Buổi ghi lúc 14:05". */
   startedAtClock: number | null;
   notes: RecordingNote[];
@@ -52,6 +57,7 @@ const INITIAL: RecordingSnapshot = {
   interrupted: false,
   templateId: null,
   consent: { confirmed: false, announced: false },
+  speech: { primary_language: "vi", auto_detect: true },
   startedAtClock: null,
   notes: [],
   bookmarks: [],
@@ -106,6 +112,7 @@ function load(): void {
       interrupted: wasActive,
       templateId: parsed.templateId ?? null,
       consent: parsed.consent ?? INITIAL.consent,
+      speech: parsed.speech ?? { primary_language: "vi", auto_detect: true },
       startedAtClock: parsed.startedAtClock ?? null,
       notes: Array.isArray(parsed.notes) ? parsed.notes : [],
       bookmarks: Array.isArray(parsed.bookmarks) ? parsed.bookmarks : [],
@@ -151,7 +158,7 @@ export function recordedSec(): number {
 
 /* ---------- Hành động ---------- */
 
-export function startRecording(opts: { templateId: string | null; consent: RecordingConsent }) {
+export function startRecording(opts: { templateId: string | null; consent: RecordingConsent; speech: RecordingSpeech }) {
   load();
   const now = nowMs();
   elapsedMs = 0;
@@ -161,6 +168,7 @@ export function startRecording(opts: { templateId: string | null; consent: Recor
     interrupted: false,
     templateId: opts.templateId,
     consent: opts.consent,
+    speech: opts.speech,
     startedAtClock: now,
     notes: [],
     bookmarks: [],

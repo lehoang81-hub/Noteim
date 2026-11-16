@@ -110,9 +110,9 @@ export async function loadBase() {
   };
 }
 
-/** Tám buổi ghi của thư viện, kiểm Zod lười. */
+/** Chín buổi ghi của thư viện (M6-02 thêm buổi họp đối tác Hàn), kiểm Zod lười. */
 export async function loadSessions(): Promise<StoredSession[]> {
-  const [s1, s2, s3, s4, s5, s6, s7, s8] = await Promise.all([
+  const [s1, s2, s3, s4, s5, s6, s7, s8, s9] = await Promise.all([
     import("@/fixtures/sessions/bds-gap-chi-lan.json"),
     import("@/fixtures/sessions/hop-dieu-hanh-t11.json"),
     import("@/fixtures/sessions/luat-tu-van-ong-phuoc.json"),
@@ -121,8 +121,9 @@ export async function loadSessions(): Promise<StoredSession[]> {
     import("@/fixtures/sessions/cong-chung-chuyen-nhuong.json"),
     import("@/fixtures/sessions/loi-xu-ly.json"),
     import("@/fixtures/sessions/chua-tai-len.json"),
+    import("@/fixtures/sessions/hop-doi-tac-han.json"),
   ]);
-  return lazyParseSessions([s1.default, s2.default, s3.default, s4.default, s5.default, s6.default, s7.default, s8.default]);
+  return lazyParseSessions([s1.default, s2.default, s3.default, s4.default, s5.default, s6.default, s7.default, s8.default, s9.default]);
 }
 
 /**

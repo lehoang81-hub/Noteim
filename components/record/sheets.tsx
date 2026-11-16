@@ -10,14 +10,26 @@ import { Switch } from "@/components/ui/form";
 import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
 import { templateName } from "@/lib/data/localize";
+import type { Lang } from "@/lib/data/types";
 
 /*
  * Các bảng trượt của màn hình ghi (docs/03-screens.md mục 2):
  * - Xin quyền micro: lần đầu tiên trong đời, một câu giải thích + hình minh họa.
  * - Hỏi đồng ý ghi âm: bảng nhỏ tự đóng sau 3 giây, đóng là coi như đồng ý,
- *   có ô "Phát câu thông báo ghi âm".
+ *   có ô "Phát câu thông báo ghi âm". M6-02 (issue #44): thêm dòng Ngôn ngữ —
+ *   chip ngôn ngữ chính (mặc định theo Cài đặt) và công tắc "Có thể có tiếng
+ *   khác" (mặc định bật); bấm vào dòng ngôn ngữ thì hẹn giờ tự đóng chạy lại
+ *   để người dùng kịp chọn, không thêm lần chạm nào cho người không cần đổi.
  * - Đổi mẫu: chạm tên mẫu ở giữa trên để đổi ngay trong lúc ghi.
  */
+
+const SPEECH_LANGS: Array<{ id: Lang; labelKey: string; korean?: boolean }> = [
+  { id: "vi", labelKey: "settings.langVi" },
+  { id: "en", labelKey: "settings.langEn" },
+  { id: "ko", labelKey: "settings.langKo", korean: true },
+];
+
+export type SpeechChoice = { primary_language: Lang; auto_detect: boolean };
 
 /** Bảng xin quyền micro (lần đầu tiên). Đóng bằng Esc hoặc nền mờ là hủy. */
 export function MicPermissionSheet({
@@ -58,40 +70,80 @@ export function MicPermissionSheet({
 /** Bảng hỏi đồng ý ghi âm: tự đóng sau 3 giây, đóng là coi như đồng ý. */
 export function ConsentSheet({
   open,
+  defaultLanguage,
+  defaultAutoDetect,
   onConfirm,
   onCancel,
 }: {
   open: boolean;
+  /** Ngôn ngữ chính mặc định theo Cài đặt (M6-02) */
+  defaultLanguage: Lang;
+  /** Công tắc "Có thể có tiếng khác" mặc định theo Cài đặt */
+  defaultAutoDetect: boolean;
   /** announced: có phát câu thông báo ghi âm hay không */
-  onConfirm: (announced: boolean) => void;
+  onConfirm: (announced: boolean, speech: SpeechChoice) => void;
   onCancel: () => void;
 }) {
   const t = useTranslations("record");
+  const tr = useTranslations(); // tên ngôn ngữ ở namespace settings (M6-02)
   const [announce, setAnnounce] = useState(false);
-  const announceRef = useRef(announce);
+  const [language, setLanguage] = useState<Lang>(defaultLanguage);
+  const [autoDetect, setAutoDetect] = useState(defaultAutoDetect);
+  const latest = useRef({ announce, language, autoDetect });
   useEffect(() => {
-    announceRef.current = announce;
-  }, [announce]);
+    latest.current = { announce, language, autoDetect };
+  }, [announce, language, autoDetect]);
 
-  // Tự đóng sau 3 giây: đóng là coi như đồng ý (docs/03-screens.md mục 2)
+  // Tự đóng sau 3 giây: đóng là coi như đồng ý (docs/03-screens.md mục 2).
+  // Bấm chip ngôn ngữ hay công tắc thì hẹn giờ chạy lại — người dùng đang
+  // tương tác thì không tự đóng giữa chừng.
+  const [interactedAt, setInteractedAt] = useState(0);
   useEffect(() => {
     if (!open) return;
-    const id = window.setTimeout(() => onConfirm(announceRef.current), 3000);
+    const id = window.setTimeout(() => onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect }), 3000);
     return () => window.clearTimeout(id);
-    // Bảng mở lại từ đầu mỗi lần; onConfirm đọc qua ref nên không cần vào deps
+    // onConfirm đọc qua ref nên không cần vào deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, interactedAt]);
 
   return (
-    <Sheet open={open} onOpenChange={(next) => !next && onConfirm(announceRef.current)} title={t("consentTitle")} size="half">
-      <div className="flex flex-col gap-1 py-1">
+    <Sheet open={open} onOpenChange={(next) => !next && onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect })} title={t("consentTitle")} size="half">
+      <div className="flex flex-col gap-3 py-1">
+        {/* Dòng Ngôn ngữ (M6-02): chip ngôn ngữ chính + công tắc tiếng khác */}
+        <fieldset>
+          <legend className="mb-1.5 text-small font-medium text-ink">{t("languageLabel")}</legend>
+          <div role="radiogroup" aria-label={t("languageLabel")} className="flex flex-wrap gap-2">
+            {SPEECH_LANGS.map(({ id, labelKey, korean }) => (
+              <button
+                key={id}
+                type="button"
+                role="radio"
+                aria-checked={language === id}
+                onClick={() => (setLanguage(id), setInteractedAt((n) => n + 1))}
+                className={cn(
+                  "h-11 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                  language === id ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+                )}
+              >
+                <span lang={korean ? "ko" : undefined}>{tr(labelKey)}</span>
+              </button>
+            ))}
+          </div>
+          <div className="mt-2">
+            <Switch
+              checked={autoDetect}
+              onCheckedChange={(v) => (setAutoDetect(v), setInteractedAt((n) => n + 1))}
+              label={t("autoDetect")}
+            />
+          </div>
+        </fieldset>
         <Switch checked={announce} onCheckedChange={setAnnounce} label={t("announce")} />
       </div>
       <div className="mt-4 grid grid-cols-2 gap-2">
         <Button variant="secondary" onClick={onCancel}>
           {t("consentCancel")}
         </Button>
-        <Button variant="primary" onClick={() => onConfirm(announceRef.current)}>
+        <Button variant="primary" onClick={() => onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect })}>
           {t("consentConfirm")}
         </Button>
       </div>
