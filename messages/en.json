@@ -499,7 +499,8 @@
     "replayOnboarding": "Replay onboarding",
     "replayOnboardingDone": "Reset, opening onboarding",
     "translateFail": "Translate error",
-    "translateSlow": "Slow translate (10 s)"
+    "translateSlow": "Slow translate (10 s)",
+    "debugRole": "Team role"
   },
   "library": {
     "greeting": "Hi {name}",
@@ -1234,5 +1235,16 @@
     "tourRecord": "The record button is always here. Tap to start recording, no forms.",
     "tourNext": "Next",
     "tourDone": "Done"
+  },
+  "workspace": {
+    "personal": "Personal",
+    "personalNote": "Your own sessions",
+    "teamNote": "Shared workspace",
+    "switchTitle": "Switch workspace",
+    "switchDone": "Switched to {name}",
+    "switchError": "Couldn't switch workspace.",
+    "roleOwner": "Owner",
+    "roleAdmin": "Admin",
+    "roleMember": "Member"
   }
 }

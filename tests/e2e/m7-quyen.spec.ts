@@ -64,3 +64,27 @@ test("mở buổi chia sẻ cả nhóm của người khác: đọc được n�
   await expect(page.getByText("còn thiếu 800 triệu so với kế hoạch", { exact: false }).first()).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test("đổi không gian bằng giao diện: thư viện và việc theo không gian", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  // Mở bộ chọn ở đầu thư viện (nút có nhãn "Đổi không gian làm việc")
+  const trigger = page.getByRole("button", { name: "Đổi không gian làm việc" });
+  await expect(trigger).toBeVisible();
+  await trigger.click();
+  // Chuyển sang không gian nhóm "Sàn BĐS Hải Phòng Land"
+  await page.getByRole("dialog").getByRole("button", { name: /Sàn BĐS Hải Phòng Land/ }).click();
+  await expect(page.locator("a[href='/s/s-nhom-marina-c']")).toBeVisible();
+  await expect(page.locator("a[href='/s/s-bds-lan']")).toHaveCount(0);
+  // Trang Việc theo không gian: có việc giao cho thành viên nhóm (buổi họp tuần 45)
+  await page.goto("/tasks");
+  await expect(page.getByText("Đàm phán lại giá Sông Hồng theo phương án giảm 5%").first()).toBeVisible();
+  await expect(page.getByText("Gửi bảng tính vay 50% cho chị Lan", { exact: false }).first()).toHaveCount(0);
+  // Đổi lại về Cá nhân: bộ chọn nằm ở thư viện, quay lại trang chủ trước
+  await page.goto("/");
+  await page.getByRole("button", { name: "Đổi không gian làm việc" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: /^Cá nhân/ }).click();
+  await expect(page.locator("a[href='/s/s-bds-lan']").first()).toBeVisible();
+  await expect(page.locator("a[href='/s/s-nhom-marina-c']")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});

@@ -554,7 +554,8 @@
     "replayOnboarding": "Xem lại làm quen",
     "replayOnboardingDone": "Đã đặt lại, đang mở màn làm quen",
     "translateFail": "Dịch lỗi",
-    "translateSlow": "Dịch chậm (10 giây)"
+    "translateSlow": "Dịch chậm (10 giây)",
+    "debugRole": "Vai trò trong nhóm"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",
@@ -1234,5 +1235,16 @@
     "tourRecord": "Nút ghi âm luôn ở đây. Bấm là ghi ngay, không cần điền biểu mẫu.",
     "tourNext": "Tiếp",
     "tourDone": "Xong"
+  },
+  "workspace": {
+    "personal": "Cá nhân",
+    "personalNote": "Buổi ghi của riêng bạn",
+    "teamNote": "Không gian làm việc chung",
+    "switchTitle": "Đổi không gian làm việc",
+    "switchDone": "Đã chuyển sang {name}",
+    "switchError": "Không chuyển được không gian.",
+    "roleOwner": "Chủ",
+    "roleAdmin": "Quản trị",
+    "roleMember": "Thành viên"
   }
 }

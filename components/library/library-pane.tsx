@@ -6,6 +6,7 @@ import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2 } from "lucide-
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
+import { WorkspaceSwitcher } from "@/components/shell/workspace-switcher";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
 import { SwipeRow } from "@/components/library/swipe-row";
 import dynamic from "next/dynamic";
@@ -317,6 +318,10 @@ export function LibraryPane({ className }: { className?: string }) {
       ) : (
         <TopBar importHref={true} />
       )}
+
+      {/* Đổi không gian ở tiêu đề thư viện trên điện thoại (M7-01); máy tính
+          có bộ chọn ở thanh bên rồi, không lặp lại */}
+      {selecting ? null : <WorkspaceSwitcher className="px-page pt-2 lg:hidden" />}
 
       <div className="px-page pb-4">
         <h1 className="font-display text-h1 font-semibold text-ink">

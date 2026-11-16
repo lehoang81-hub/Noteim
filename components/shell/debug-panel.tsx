@@ -23,6 +23,7 @@ const TOGGLES: Array<
 
 export function DebugPanel() {
   const t = useTranslations("debug");
+  const tw = useTranslations("workspace");
   const flags = useDebugFlags();
   const toast = useToast();
   const router = useRouter();
@@ -72,6 +73,19 @@ export function DebugPanel() {
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
+        <label className="text-caption font-medium text-ink-2">
+          {t("debugRole")}
+          <select
+            className={`${select} mt-1`}
+            value={flags.debugRole ?? ""}
+            onChange={(e) => setFlags({ debugRole: (e.target.value || null) as DebugFlags["debugRole"] })}
+          >
+            <option value="">{t("default")}</option>
+            <option value="owner">{tw("roleOwner")}</option>
+            <option value="admin">{tw("roleAdmin")}</option>
+            <option value="member">{tw("roleMember")}</option>
+          </select>
+        </label>
         <label className="text-caption font-medium text-ink-2">
           {t("profession")}
           <select

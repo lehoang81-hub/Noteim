@@ -856,11 +856,19 @@ export const mockSource: DataSource = {
         await sessionsReady();
         const items: ActionItem[] = [];
         const me = myUserId();
+        const ws = currentWorkspace();
         for (const fx of getDb().sessions) {
           const d = fx.detail;
           // Chỉ việc của những buổi mình được đọc (M7-01): buổi riêng tư của
           // người khác không lộ việc qua trang Việc
           if (!canRead(d)) continue;
+          // Việc theo không gian đang dùng (M7-01): Cá nhân thấy việc buổi cá
+          // nhân, Nhóm thấy việc buổi của nhóm đó
+          if (ws.kind === "personal") {
+            if (d.workspace_id || (d.owner_user_id || d.user_id) !== me) continue;
+          } else if (d.workspace_id !== ws.id) {
+            continue;
+          }
           const lang = filter?.lang;
           const version = lang ? storedVersion(fx, lang) : null;
           for (const a of d.action_items) {

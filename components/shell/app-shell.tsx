@@ -8,6 +8,7 @@ import { useSyncExternalStore } from "react";
 import { Banner } from "@/components/ui/feedback";
 import { RecordButton } from "@/components/ui/record-button";
 import { RecordingBar } from "@/components/record/recording-bar";
+import { WorkspaceSwitcher } from "./workspace-switcher";
 import { ProcessingWatcher } from "./processing-watcher";
 import { cn } from "@/lib/cn";
 import { useDebugFlags } from "@/lib/debug/flags";
@@ -20,7 +21,8 @@ const DebugPanel = dynamic(() => import("./debug-panel").then((m) => m.DebugPane
  * Khung ứng dụng (docs/02-design-system.md, "Bố cục").
  * - Điện thoại: thanh điều hướng dưới có đúng ba mục: Thư viện, nút ghi âm ở giữa
  *   (nhô lên), Việc. Tìm kiếm và Cài đặt ở góc trên phải của từng trang (TopBar).
- * - Máy tính (từ 1024px): cột trái 88px gồm logo, Thư viện, Việc, Cài đặt, nút ghi âm.
+ * - Máy tính (từ 1024px): cột trái 88px gồm logo, chọn không gian làm việc
+ *   (M7-01), Thư viện, Việc, Cài đặt, nút ghi âm.
  * - Dải báo mất mạng nằm trên cùng.
  * - /record không có khung ứng dụng; nút ghi âm ở mọi trang đi tới /record và
  *   bắt đầu ghi luôn (luồng start nằm ở màn hình ghi).
@@ -82,7 +84,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <Link href="/" aria-label={t("brand")} className="flex size-11 items-center justify-center rounded-control">
           <span aria-hidden={true} className="size-7 rounded-pill" style={{ background: "var(--gradient-dawn)" }} />
         </Link>
-        <ul className="mt-6 flex flex-col gap-1">
+        {/* Đổi không gian làm việc (M7-01): đầu thanh bên, dưới logo */}
+        <WorkspaceSwitcher className="mt-4 w-[72px]" />
+        <ul className="mt-4 flex flex-col gap-1">
           {[...items, { href: "/settings", label: t("settings"), icon: Settings }].map(({ href, label, icon: Icon }) => {
             const active = isActive(pathname, href);
             return (

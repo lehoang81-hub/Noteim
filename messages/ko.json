@@ -554,7 +554,8 @@
     "replayOnboarding": "온보딩 다시 보기",
     "replayOnboardingDone": "초기화 완료, 온보딩을 여는 중",
     "translateFail": "번역 오류",
-    "translateSlow": "번역 지연 (10초)"
+    "translateSlow": "번역 지연 (10초)",
+    "debugRole": "팀 역할"
   },
   "library": {
     "greeting": "{name}{honorific}, 안녕하세요",
@@ -1234,5 +1235,16 @@
     "tourRecord": "녹음 버튼은 항상 여기에 있습니다. 누르면 바로 녹음이 시작되고, 양식을 채울 필요가 없습니다.",
     "tourNext": "다음",
     "tourDone": "완료"
+  },
+  "workspace": {
+    "personal": "개인",
+    "personalNote": "내 녹음 목록",
+    "teamNote": "공용 작업 공간",
+    "switchTitle": "작업 공간 전환",
+    "switchDone": "{name}(으)로 전환했어요",
+    "switchError": "작업 공간을 전환하지 못했어요.",
+    "roleOwner": "소유자",
+    "roleAdmin": "관리자",
+    "roleMember": "멤버"
   }
 }
