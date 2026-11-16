@@ -113,6 +113,7 @@ export function ensureDb(): MockDb {
         } else if (mod.templatesMissingKo(d.templates)) {
           // Kho từ localStorage trước M6: bản tiếng Hàn của mẫu chưa có, lấy từ fixture
           await mod.backfillTemplates(d.templates);
+          commit();
         }
         // Buổi ghi thư viện: kho từ localStorage đã có sẵn, không ghi đè
         if (!d.sessions.length) d.sessions = await mod.loadSessions();
