@@ -459,3 +459,36 @@ Bốn route còn dưới 85 — nguyên nhân còn lại và việc cần làm k
 - **Việc cần làm khi nối backend**: link không mật khẩu có thể **cache tĩnh
   (ISR)** hoặc render server kèm header cache; link có mật khẩu giữ render
   client sau khi nhập mật khẩu.
+
+### Bổ sung M6 (2026-11-17, nhánh `m6/da-ngon-ngu`, cùng phương pháp đo)
+
+Trung vị 3 lần, người dùng đã làm quen, xóa cache HTTP mỗi lần, kiểm
+`finalDisplayedUrl` — 21/21 lần đo đều đúng route. Bản đo trên nhánh M6.
+
+| Route | Perf M5 | Perf M6 | LCP M5→M6 (ms) | Ghi chú |
+| --- | --- | --- | --- | --- |
+| `/` | 73 | 69 | 4 896→5 000 | Thư viện nạp 9 buổi (thêm buổi họp Hàn ~69 KB kèm bản tóm tắt tiếng Hàn) |
+| `/s/[id]` | 70 | 68 | 5 040→5 300 | Thêm ô "Tóm tắt bằng": bản gốc vẽ ngay từ detail, bản dịch mới chờ fetch |
+| `/record` | 82 | 76 | 4 082→4 200 | Bảng "Bắt đầu ghi" thêm dòng ngôn ngữ; lệch còn lại là hydrate (như trên) |
+| `/search` | 93 | 88 | 3 019→3 400 | Tìm kiếm mở rộng trên mọi bản tóm tắt và bản dịch đoạn lời |
+| `/settings` | 89 | 88 | 3 213→3 000 | Thêm mục "Ngôn ngữ báo cáo" |
+| `/p/[id]` | 79 | 80 | 4 175→4 400 | Trang công khai có nút đổi ngôn ngữ |
+| `/welcome` | 92 | 91 | 3 021→3 100 | — |
+
+Khả năng tiếp cận: **100/100 ở cả 7 route** (Lighthouse Accessibility, yêu cầu
+M6-04 là từ 95). Bài học M6: một nhãn "한국어" hiển thị ở giao diện Việt/Anh là
+tải phông Hàn 2 MB (Pretendard) → LCP trang chi tiết và công khai tăng 4,4s lên
+~14s. Sửa bằng cách dùng tên ngôn ngữ theo ngôn ngữ giao diện ("tiếng Hàn") ở
+chip và nút đổi ngôn ngữ; phông Hàn chỉ tải khi trang thật sự có chữ Hàn
+(unicode-range). Khi nối backend: giữ nguyên quy tắc này, không đặt tên gốc
+tiếng Hàn vào các nhãn điều khiển ở giao diện khác ngôn ngữ.
+
+
+## 7. Ghi chú M6 — nội dung tiếng Hàn
+
+Toàn bộ chuỗi giao diện tiếng Hàn (`messages/ko.json`) và nội dung dữ liệu mẫu
+tiếng Hàn (buổi họp đối tác Hàn `fixtures/sessions/hop-doi-tac-han.json`, tên
+mẫu và tên phần trong `fixtures/templates.json`) do agent viết theo giọng lịch
+sự trang trọng (합니다체). **Trước khi ra mắt thật cần người bản ngữ đọc lại**,
+đặc biệt: chuỗi xin đồng ý ghi âm, email gửi đối tác, điều khoản thanh toán
+trong buổi họp mẫu. Danh sách vị trí cần rà nằm trong PR M6.
