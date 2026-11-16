@@ -65,9 +65,13 @@
   /* Biến --font-bricolage và --font-bevietnam do next/font/google cung cấp
      (subset vietnamese), gắn trên <html> trong app/layout.tsx.
      Luôn kèm giá trị dự phòng trong var(): thiếu biến thì vẫn ra đúng phông,
-     không rơi về phông hệ thống. */
-  --font-display: var(--font-bricolage, "Bricolage Grotesque"), "Be Vietnam Pro", sans-serif;
-  --font-body: var(--font-bevietnam, "Be Vietnam Pro"), sans-serif;
+     không rơi về phông hệ thống.
+     Pretendard Variable (M6-01): phông Hàn làm dự phòng sau hai font chính.
+     @font-face khai báo kèm unicode-range chữ Hàn trong app/globals.css nên
+     file woff2 chỉ tải khi trang thật sự có chữ Hàn (unicode-range là cơ chế
+     của trình duyệt: không có ký tự khớp thì không tải). */
+  --font-display: var(--font-bricolage, "Bricolage Grotesque"), "Be Vietnam Pro", "Pretendard Variable", sans-serif;
+  --font-body: var(--font-bevietnam, "Be Vietnam Pro"), "Pretendard Variable", sans-serif;
 
   /* Thang cỡ chữ — điện thoại. Chiều cao dòng tối thiểu 1,3 lần cỡ chữ. */
   --text-display-size: 32px;

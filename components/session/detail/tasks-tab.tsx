@@ -16,6 +16,8 @@ import { endOfDay, shortDate } from "@/lib/format";
  */
 export function TasksTab({
   items,
+  /** Ngôn ngữ của nội dung việc (theo bản tóm tắt đang xem, M6-03 + Mục 2 review #52) */
+  lang,
   contacts,
   now,
   canSeek,
@@ -26,6 +28,7 @@ export function TasksTab({
   onEmail,
 }: {
   items: ActionItem[];
+  lang?: string;
   contacts: Contact[];
   now: Date;
   canSeek: boolean;
@@ -73,6 +76,7 @@ export function TasksTab({
                 <TaskRow
                   key={a.id}
                   task={a.task}
+                  lang={lang}
                   done={a.done}
                   onToggle={() => onToggle(a)}
                   toggleLabel={t("toggle")}

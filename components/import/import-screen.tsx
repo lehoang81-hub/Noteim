@@ -6,8 +6,9 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/form";
 import { useToast } from "@/components/ui/toast";
-import { data, useData } from "@/lib/data";
+import { data, useData, type Lang } from "@/lib/data";
 import { templateName } from "@/lib/data/localize";
 import { durationParts } from "@/lib/format";
 import { takeImportFile } from "@/lib/import-file";
@@ -67,7 +68,16 @@ export function ImportScreen() {
   const quota = useData(() => data.account.quota(), []);
   const templates = useData(() => data.account.templates(), []);
   const [templateId, setTemplateId] = useState("");
-  const [language, setLanguage] = useState("vi");
+  const [language, setLanguage] = useState<Lang>("vi");
+  // Công tắc "Có thể có tiếng khác" (M6-02), mặc định theo Cài đặt
+  const [autoDetect, setAutoDetect] = useState(true);
+  const [initialized, setInitialized] = useState(false);
+  // Cài đặt nạp xong thì đặt mặc định một lần; người dùng đổi tay sau đó thì giữ
+  if (me.data && !initialized) {
+    setInitialized(true);
+    setLanguage(me.data.default_speech_language);
+    setAutoDetect(me.data.auto_detect_languages);
+  }
 
   useEffect(() => {
     mounted.current = true;
@@ -146,6 +156,7 @@ export function ImportScreen() {
         duration_sec: Math.round(dur),
         template_id: templateId,
         language,
+        auto_detect_languages: autoDetect,
       });
       toast.show({ tone: "success", message: t("imported") });
       router.push(`/s/${id}/processing`);
@@ -244,13 +255,19 @@ export function ImportScreen() {
                 {t("languageLabel")}
                 <select
                   value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
+                  onChange={(e) => setLanguage(e.target.value as Lang)}
                   className="mt-1.5 h-11 w-full rounded-control border border-line bg-surface px-2 text-small text-ink"
                 >
                   <option value="vi">{t("langVi")}</option>
                   <option value="en">{t("langEn")}</option>
+                  <option value="ko">한국어</option>
                 </select>
               </label>
+            </div>
+
+            {/* Có thể có tiếng khác: app tự nhận các đoạn tiếng Anh, tiếng Hàn (M6-02) */}
+            <div className="mt-4">
+              <Switch checked={autoDetect} onCheckedChange={setAutoDetect} label={t("autoDetect")} />
             </div>
 
             <div className="mt-6 flex flex-wrap gap-2">

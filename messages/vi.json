@@ -517,7 +517,9 @@
     "storageFull": "Bộ nhớ của trình duyệt đã đầy. Buổi ghi mới có thể không lưu được. Xóa bớt buổi ghi hoặc đặt lại dữ liệu mẫu.",
     "backToLibrary": "Về thư viện",
     "hours": "{h} giờ",
-    "minutes": "{m} phút"
+    "minutes": "{m} phút",
+    "languageLabel": "Ngôn ngữ",
+    "autoDetect": "Có thể có tiếng khác"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -550,7 +552,9 @@
     "mailFailOne": "Gửi email lỗi một người",
     "shareExpired": "Link chia sẻ hết hạn",
     "replayOnboarding": "Xem lại làm quen",
-    "replayOnboardingDone": "Đã đặt lại, đang mở màn làm quen"
+    "replayOnboardingDone": "Đã đặt lại, đang mở màn làm quen",
+    "translateFail": "Dịch lỗi",
+    "translateSlow": "Dịch chậm (10 giây)"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",
@@ -729,7 +733,37 @@
     "quoteCardNext": "Thẻ trích dẫn có ở bước tiếp theo.",
     "glossaryAdd": "Thêm vào từ điển",
     "glossaryAdded": "Đã thêm “{term}” vào từ điển",
-    "essenceEmpty": "Buổi ghi này chỉ còn tóm tắt. Bản ghi lời đã dọn cùng bản gốc, không nghe lại được từng đoạn."
+    "essenceEmpty": "Buổi ghi này chỉ còn tóm tắt. Bản ghi lời đã dọn cùng bản gốc, không nghe lại được từng đoạn.",
+    "showTranslation": "Xem bản dịch",
+    "hideTranslation": "Ẩn bản dịch",
+    "translateSegment": "Dịch đoạn này",
+    "translating": "Đang dịch…",
+    "translateFail": "Chưa dịch được. Thử lại.",
+    "translationStale": "Cần dịch lại",
+    "sampleTranslation": "Bản dịch mẫu"
+  },
+  "summary": {
+    "versionLabel": "Tóm tắt bằng",
+    "createVersion": "Tạo bản {lang}",
+    "originalBadge": "Bản gốc",
+    "translatedFrom": "Dịch từ {lang}",
+    "staleBanner": "Bản gốc đã sửa sau khi dịch",
+    "retranslate": "Dịch lại",
+    "createConfirmTitle": "Tạo bản {lang}?",
+    "createConfirmBody": "Bản đang xem không đổi. Quá trình gồm 2 bước: dịch tóm tắt, dịch việc cần làm.",
+    "step1": "Dịch tóm tắt",
+    "step2": "Dịch việc cần làm",
+    "createdToast": "Đã tạo bản {lang}",
+    "limitTitle": "Gói Free tạo được 1 bản thêm cho mỗi buổi",
+    "upgrade": "Xem gói Pro",
+    "originalQuote": "Câu gốc",
+    "sampleNote": "Bản dịch mẫu",
+    "langVi": "tiếng Việt",
+    "langEn": "tiếng Anh",
+    "langKo": "tiếng Hàn"
+  },
+  "contacts": {
+    "preferredLanguage": "Ngôn ngữ ưa dùng"
   },
   "speakers": {
     "title": "Ai là ai?",
@@ -843,7 +877,16 @@
     "copiedAll": "Đã sao chép nội dung email",
     "freeNote": "Gói Pro gửi được trực tiếp cho từng người qua email.",
     "emptyBody": "(Trống)",
-    "emailSaved": "Đã lưu email"
+    "emailSaved": "Đã lưu email",
+    "recipientLanguage": "Ngôn ngữ nhận",
+    "previewGroup": "{lang} ({count, plural, other {# người}})",
+    "willCreate": "Sẽ tạo bản {lang} trước khi gửi",
+    "emailSubjectMinutes": "Biên bản: {title}",
+    "emailSubjectTasks": "Việc của bạn sau buổi {title}",
+    "emailGreeting": "Chào {name},",
+    "emailFooter": "Gửi từ Noteim",
+    "emailTasksHeading": "Việc cần làm của bạn",
+    "addRecipient": "Thêm người nhận từ Danh bạ"
   },
   "tasksPage": {
     "title": "Việc cần làm",
@@ -946,7 +989,14 @@
     "exportedWord": "Đã xuất Word",
     "exportError": "Chưa sao chép được. Thử lại.",
     "exportTasksHeading": "Việc cần làm",
-    "exportDue": "(hạn {date})"
+    "exportDue": "(hạn {date})",
+    "languagesLabel": "Bản người xem được mở",
+    "languagesHint": "Chọn các bản tóm tắt mà người xem được đọc ở trang công khai.",
+    "cardLangOriginal": "Câu gốc",
+    "cardLangBoth": "Câu gốc kèm dịch",
+    "cardLangTranslation": "Chỉ bản dịch",
+    "cardTranslatedFrom": "Dịch từ {lang}",
+    "cardLangLabel": "Nội dung thẻ"
   },
   "public": {
     "expired": "Link này đã hết hạn.",
@@ -963,7 +1013,8 @@
     "play": "Phát",
     "pause": "Tạm dừng",
     "madeWith": "Ghi và tóm tắt bằng Noteim",
-    "wrongPassword": "Mật khẩu chưa đúng. Thử lại."
+    "wrongPassword": "Mật khẩu chưa đúng. Thử lại.",
+    "languageLabel": "Ngôn ngữ"
   },
   "search": {
     "label": "Tìm trong mọi buổi ghi",
@@ -996,7 +1047,8 @@
     "start": "Tóm tắt file này",
     "imported": "Đã nhận file, đang tóm tắt",
     "cannotReadDuration": "Không đọc được thời lượng file này.",
-    "notStored": "Bản mockup chỉ đọc thông tin file, không lưu hay tải file lên."
+    "notStored": "Bản mockup chỉ đọc thông tin file, không lưu hay tải file lên.",
+    "autoDetect": "Có thể có tiếng khác"
   },
   "settings": {
     "title": "Cài đặt",
@@ -1014,7 +1066,8 @@
       "luu-tru": "Lưu trữ",
       "quyen-rieng-tu": "Quyền riêng tư",
       "giao-dien": "Giao diện",
-      "goi-dich-vu": "Gói dịch vụ"
+      "goi-dich-vu": "Gói dịch vụ",
+      "ngon-ngu-bao-cao": "Ngôn ngữ báo cáo"
     },
     "profileName": "Tên hiển thị",
     "profileHonorific": "Noteim gọi bạn là",
@@ -1089,13 +1142,20 @@
     "languageLabel": "Ngôn ngữ",
     "langVi": "Tiếng Việt",
     "langEn": "English",
+    "langKo": "한국어",
     "planCurrentFree": "Bạn đang dùng gói Free.",
     "planCurrentPro": "Bạn đang dùng gói Pro.",
     "planQuota": "Thời lượng ghi tháng này",
     "planMinutes": "phút",
     "planReset": "Hạn mức mới có từ ngày {date}.",
     "planSeePro": "Xem gói Pro",
-    "profileSample": "Xem buổi ghi mẫu"
+    "profileSample": "Xem buổi ghi mẫu",
+    "reportLanguage": "Ngôn ngữ tóm tắt mặc định",
+    "autoTranslateOnSend": "Tự tạo thêm bản cho người nhận khi gửi",
+    "speechLanguage": "Ngôn ngữ ghi âm mặc định",
+    "autoDetect": "Tự nhận tiếng khác",
+    "reportLanguageDefault": "Theo cài đặt chung",
+    "reportLanguageHint": "Tạo không giới hạn bản ngôn ngữ cho mỗi buổi với gói Pro."
   },
   "upgrade": {
     "title": "Gói dịch vụ",

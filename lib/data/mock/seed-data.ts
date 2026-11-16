@@ -7,6 +7,7 @@ import {
   Quota,
   Session as SessionSchema,
   SessionDetail,
+  SummaryVersion,
   Template,
   TranscriptSegment,
   User,
@@ -68,6 +69,18 @@ function lazyFixture(raw: Record<string, unknown>): StoredSession {
       if (!("flow_mermaid" in cache)) cache.flow_mermaid = raw.flow_mermaid;
       return cache.flow_mermaid;
     },
+    // Các bản tóm tắt theo ngôn ngữ có sẵn trong fixture (M6-03), kiểm Zod lười.
+    // Có cả setter: tạo bản mới (createSummaryVersion) gán mảng qua đây.
+    get summary_versions() {
+      if (!("summary_versions" in cache)) {
+        const list = (raw as { summary_versions?: unknown }).summary_versions;
+        cache.summary_versions = list ? z.array(SummaryVersion).parse(list) : undefined;
+      }
+      return cache.summary_versions as SummaryVersion[] | undefined;
+    },
+    set summary_versions(v: SummaryVersion[] | undefined) {
+      cache.summary_versions = v;
+    },
   } as unknown as StoredSession;
 }
 
@@ -110,9 +123,9 @@ export async function loadBase() {
   };
 }
 
-/** Tám buổi ghi của thư viện, kiểm Zod lười. */
+/** Chín buổi ghi của thư viện (M6-02 thêm buổi họp đối tác Hàn), kiểm Zod lười. */
 export async function loadSessions(): Promise<StoredSession[]> {
-  const [s1, s2, s3, s4, s5, s6, s7, s8] = await Promise.all([
+  const [s1, s2, s3, s4, s5, s6, s7, s8, s9] = await Promise.all([
     import("@/fixtures/sessions/bds-gap-chi-lan.json"),
     import("@/fixtures/sessions/hop-dieu-hanh-t11.json"),
     import("@/fixtures/sessions/luat-tu-van-ong-phuoc.json"),
@@ -121,15 +134,27 @@ export async function loadSessions(): Promise<StoredSession[]> {
     import("@/fixtures/sessions/cong-chung-chuyen-nhuong.json"),
     import("@/fixtures/sessions/loi-xu-ly.json"),
     import("@/fixtures/sessions/chua-tai-len.json"),
+    import("@/fixtures/sessions/hop-doi-tac-han.json"),
   ]);
-  return lazyParseSessions([s1.default, s2.default, s3.default, s4.default, s5.default, s6.default, s7.default, s8.default]);
+  return lazyParseSessions([s1.default, s2.default, s3.default, s4.default, s5.default, s6.default, s7.default, s8.default, s9.default]);
 }
 
 /**
- * Bổ sung trường tiếng Anh cho mẫu đã lưu trước M5-02 (M5-02, issue #37):
- * kho localStorage cũ không có name_en/title_en, lấy từ fixture. Người dùng
- * vẫn giữ phần sửa tay (thứ tự phần, bật/tắt); phần thiếu mới lấy từ fixture.
+ * Bổ sung bản tiếng Hàn (và en nếu thiếu) cho mẫu đã lưu trước M6 (M6-01,
+ * issue #43): kho localStorage cũ đã chuyển _en sang LocalizedText ở
+ * migrate.ts nhưng chưa có ko — lấy từ fixture. Người dùng vẫn giữ phần sửa
+ * tay (thứ tự phần, bật/tắt); chỉ điền ngôn ngữ còn thiếu.
  */
+export function templatesMissingKo(saved: Template[]): boolean {
+  return saved.some(
+    (tp) =>
+      !tp.name.ko ||
+      tp.sections.some((s) => !s.title.ko) ||
+      (tp.suggested_questions ?? []).some((q) => !q.ko) ||
+      (tp.footer_note ? !tp.footer_note.ko : false),
+  );
+}
+
 export async function backfillTemplates(saved: Template[]) {
   const templatesJson = await import("@/fixtures/templates.json");
   const fresh = z.array(Template).parse(templatesJson.default);
@@ -137,12 +162,23 @@ export async function backfillTemplates(saved: Template[]) {
   for (const tp of saved) {
     const f = map.get(tp.id);
     if (!f) continue;
-    if (!tp.name_en && f.name_en) tp.name_en = f.name_en;
-    if (!tp.suggested_questions_en && f.suggested_questions_en) tp.suggested_questions_en = f.suggested_questions_en;
-    if (!tp.footer_note_en && f.footer_note_en) tp.footer_note_en = f.footer_note_en;
+    if (!tp.name.ko && f.name.ko) tp.name.ko = f.name.ko;
+    if (!tp.name.en && f.name.en) tp.name.en = f.name.en;
+    if (!tp.suggested_questions?.length && f.suggested_questions?.length) tp.suggested_questions = f.suggested_questions;
+    else if (tp.suggested_questions?.length && f.suggested_questions?.length) {
+      tp.suggested_questions = tp.suggested_questions.map((q, i) => {
+        const fq = f.suggested_questions[i];
+        return fq ? { ...q, en: q.en ?? fq.en, ko: q.ko ?? fq.ko } : q;
+      });
+    }
+    if (tp.footer_note && f.footer_note) {
+      tp.footer_note = { ...tp.footer_note, en: tp.footer_note.en ?? f.footer_note.en, ko: tp.footer_note.ko ?? f.footer_note.ko };
+    } else if (!tp.footer_note && f.footer_note) {
+      tp.footer_note = f.footer_note;
+    }
     for (const sec of tp.sections) {
       const fs = f.sections.find((x) => x.id === sec.id);
-      if (fs && !sec.title_en && fs.title_en) sec.title_en = fs.title_en;
+      if (fs) sec.title = { ...sec.title, en: sec.title.en ?? fs.title.en, ko: sec.title.ko ?? fs.title.ko };
     }
   }
 }

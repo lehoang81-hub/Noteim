@@ -1,17 +1,18 @@
 "use client";
 
-import { ArrowDown, ArrowUp, Check, ClipboardCopy, Ellipsis, Pencil, Quote, UserRoundCog, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { ArrowDown, ArrowUp, Check, ClipboardCopy, Ellipsis, Languages, Pencil, Quote, TriangleAlert, UserRoundCog, X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatClock } from "@/components/ribbon/draw";
 import { SpeakerName } from "@/components/ui/chips";
 import { Button } from "@/components/ui/button";
 import { EmptyState, SkeletonParagraph } from "@/components/ui/feedback";
-import { SearchField } from "@/components/ui/form";
+import { SearchField, Switch } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { speakerLabel } from "@/lib/data/localize";
-import { data, useData, type SessionDetail, type Speaker, type TranscriptSegment } from "@/lib/data";
+import { data, useData, type Lang, type SessionDetail, type Speaker, type TranscriptSegment } from "@/lib/data";
+import { LANG_BADGE } from "@/lib/data/types";
 import { cn } from "@/lib/cn";
 
 /*
@@ -20,6 +21,10 @@ import { cn } from "@/lib/cn";
  *   nên chỉ vào tab này mới tải — bản ghi lời nặng).
  * - Đoạn đang phát nền --surface-2 và tự cuộn theo; người dùng cuộn tay thì
  *   dừng tự cuộn, hiện nút nổi "Về đoạn đang phát".
+ * - M6-02 (issue #44): đoạn khác ngôn ngữ chính có nhãn ngôn ngữ cạnh giờ;
+ *   nút "Xem bản dịch" bật dịch cho mọi đoạn khác ngôn ngữ giao diện — bản
+ *   dịch nằm dưới câu gốc, chữ nhỏ, màu phụ; từng đoạn có "Dịch đoạn này";
+ *   sửa câu gốc thì bản dịch hiện "Cần dịch lại".
  * - Tìm trong lời: tô sáng, đếm "2/5", tới và lùi. Nhấn giữ (hoặc nút ⋯ trên
  *   máy tính): sao chép, sửa lời, đổi người nói, tạo thẻ trích dẫn.
  * - Từ trong từ điển gạch chân chấm; bôi đen một từ hoặc cụm từ để thêm vào từ điển.
@@ -109,12 +114,21 @@ export function TranscriptTab({
   const [editingSegId, setEditingSegId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
 
+  // Bản dịch (M6-02): bật "Xem bản dịch" thì dịch mọi đoạn khác ngôn ngữ
+  // giao diện; từng đoạn có "Dịch đoạn này". Lỗi dịch hiện thông báo + Thử lại.
+  const locale = useLocale() as Lang;
+  const [showTranslation, setShowTranslation] = useState(false);
+  const [translating, setTranslating] = useState(false);
+  const [translateError, setTranslateError] = useState(false);
+
   const segments = useMemo(
     () => [...(transcript.data ?? [])].sort((a, b) => a.start_sec - b.start_sec),
     [transcript.data],
   );
   const segById = useMemo(() => Object.fromEntries(segments.map((s) => [s.id, s])), [segments]);
   const speakerOf = useMemo(() => Object.fromEntries(detail.speakers.map((s) => [s.id, s])), [detail.speakers]);
+  /** Buổi có đoạn nói bằng ngôn ngữ khác ngôn ngữ giao diện thì mới hiện hàng "Xem bản dịch" */
+  const hasForeign = useMemo(() => segments.some((s) => s.lang !== locale), [segments, locale]);
 
   const q = query.trim();
   const terms = useMemo(() => (glossary.data ?? []).map((g) => g.term).filter((x) => x.length > 0), [glossary.data]);
@@ -157,6 +171,19 @@ export function TranscriptTab({
   }, [activeMatch, matchIndex]);
 
   // Từ tìm đổi thì quay về chỗ khớp đầu tiên
+
+  async function translate(lang: Lang, segmentIds?: string[]) {
+    setTranslating(true);
+    setTranslateError(false);
+    try {
+      await data.sessions.translateSegments(detail.id, lang, segmentIds);
+      transcript.reload();
+    } catch {
+      setTranslateError(true);
+    } finally {
+      setTranslating(false);
+    }
+  }
 
   async function copySegment(seg: TranscriptSegment) {
     try {
@@ -214,6 +241,32 @@ export function TranscriptTab({
         </p>
       ) : null}
 
+      {/* Xem bản dịch (M6-02): chỉ hiện khi buổi có đoạn khác ngôn ngữ giao diện */}
+      {hasForeign ? (
+        <div className="mt-3 flex items-center gap-3">
+          <Switch
+            checked={showTranslation}
+            onCheckedChange={(v) => {
+              setShowTranslation(v);
+              if (v && !translating) void translate(locale);
+            }}
+            label={t(showTranslation ? "hideTranslation" : "showTranslation")}
+          />
+          {translating ? (
+            <p role="status" className="text-small text-ink-3">{t("translating")}</p>
+          ) : null}
+        </div>
+      ) : null}
+      {translateError ? (
+        <div role="alert" className="mt-2 flex items-center gap-2 rounded-control border border-tag-risk bg-tag-risk-bg px-3 py-2">
+          <TriangleAlert aria-hidden={true} className="size-4 shrink-0 text-tag-risk" strokeWidth={2} />
+          <p className="min-w-0 flex-1 text-small text-tag-risk">{t("translateFail")}</p>
+          <Button variant="secondary" className="h-9" onClick={() => void translate(locale)}>
+            {ts("retry")}
+          </Button>
+        </div>
+      ) : null}
+
       {detail.storage_status === "essence_only" ? (
         <EmptyState drawing={<span />} message={t("essenceEmpty")} />
       ) : transcript.initialLoading ? (
@@ -226,6 +279,10 @@ export function TranscriptTab({
           listRef={listRef}
           segments={segments}
           speakerOf={speakerOf}
+          primaryLang={detail.primary_language}
+          uiLang={locale}
+          showTranslation={showTranslation}
+          onTranslateSegment={(segId) => void translate(locale, [segId])}
           query={q}
           glossaryActive={glossaryActive}
           terms={terms}
@@ -308,6 +365,18 @@ export function TranscriptTab({
                 setMenuSegId(null);
               }}
             />
+            {menuSeg.lang !== locale || menuSeg.translations[locale] ? (
+              <ActionRow
+                icon={Languages}
+                label={t("translateSegment")}
+                onClick={() => {
+                  const id = menuSeg.id;
+                  setMenuSegId(null);
+                  setShowTranslation(true);
+                  void translate(locale, [id]);
+                }}
+              />
+            ) : null}
             <ActionRow
               icon={UserRoundCog}
               label={t("reassign")}
@@ -389,6 +458,12 @@ type ListProps = {
   listRef: React.RefObject<HTMLUListElement | null>;
   segments: TranscriptSegment[];
   speakerOf: Record<string, Speaker>;
+  /** Ngôn ngữ nói chính của buổi: đoạn khác ngôn ngữ này có nhãn (M6-02) */
+  primaryLang: Lang;
+  /** Ngôn ngữ giao diện: bản dịch hiển thị theo ngôn ngữ này */
+  uiLang: Lang;
+  showTranslation: boolean;
+  onTranslateSegment: (segId: string) => void;
   query: string;
   glossaryActive: boolean;
   terms: string[];
@@ -414,6 +489,10 @@ function TranscriptList(props: ListProps) {
     listRef,
     segments,
     speakerOf,
+    primaryLang,
+    uiLang,
+    showTranslation,
+    onTranslateSegment,
     query,
     glossaryActive,
     terms,
@@ -520,6 +599,7 @@ function TranscriptList(props: ListProps) {
                     }}
                     rows={3}
                     aria-label={t("edit")}
+                    lang={seg.lang}
                     className="mt-1 w-full rounded-control border border-dien bg-surface px-3 py-2 text-body text-ink focus-visible:outline-none"
                   />
                   <div className="mt-2 flex gap-2">
@@ -543,6 +623,12 @@ function TranscriptList(props: ListProps) {
                     <span className="min-w-0 truncate text-small font-medium text-ink-2">
                       {sp ? speakerLabel(sp, Object.values(speakerOf), tr) : "—"}
                     </span>
+                    {/* Đoạn khác ngôn ngữ chính: nhãn ngôn ngữ nhỏ cạnh giờ (M6-02) */}
+                    {seg.lang !== primaryLang ? (
+                      <span lang={seg.lang} className="shrink-0 rounded-pill bg-surface-2 px-1.5 text-caption font-medium text-ink-2">
+                        {LANG_BADGE[seg.lang]}
+                      </span>
+                    ) : null}
                     <span className="ml-auto shrink-0 text-caption tabular-nums text-ink-3">{formatClock(seg.start_sec)}</span>
                   </div>
                   <button
@@ -561,32 +647,39 @@ function TranscriptList(props: ListProps) {
                   >
                     {(() => {
                       let offset = 0;
-                      return pieces.map((piece, i) => {
-                        const start = offset;
-                        offset += piece.text.length;
-                        if (piece.kind === "match") {
-                          const active = isActiveSeg && activeRow && start === activeRow.range.start;
-                          return (
-                            <mark
-                              key={i}
-                              aria-current={active ? "true" : undefined}
-                              className={cn(
-                                "rounded-control px-0.5 text-inherit",
-                                active ? "bg-tag-pending text-tag-pending" : "bg-tag-pending-bg",
-                              )}
-                            >
-                              {piece.text}
-                            </mark>
-                          );
-                        }
-                        if (piece.kind === "term")
-                          return (
-                            <u key={i} className="decoration-dotted underline-offset-4">
-                              {piece.text}
-                            </u>
-                          );
-                        return <span key={i}>{piece.text}</span>;
-                      });
+                      return (
+                        // Nội dung đoạn theo ngôn ngữ của đoạn: lang để chữ Hàn
+                        // không ngắt giữa từ và đọc đúng giọng (Mục 2 review #52).
+                        // Nhãn "đã sửa" ở ngoài span nên vẫn theo ngôn ngữ giao diện.
+                        <span lang={seg.lang}>
+                          {pieces.map((piece, i) => {
+                            const start = offset;
+                            offset += piece.text.length;
+                            if (piece.kind === "match") {
+                              const active = isActiveSeg && activeRow && start === activeRow.range.start;
+                              return (
+                                <mark
+                                  key={i}
+                                  aria-current={active ? "true" : undefined}
+                                  className={cn(
+                                    "rounded-control px-0.5 text-inherit",
+                                    active ? "bg-tag-pending text-tag-pending" : "bg-tag-pending-bg",
+                                  )}
+                                >
+                                  {piece.text}
+                                </mark>
+                              );
+                            }
+                            if (piece.kind === "term")
+                              return (
+                                <u key={i} className="decoration-dotted underline-offset-4">
+                                  {piece.text}
+                                </u>
+                              );
+                            return <span key={i}>{piece.text}</span>;
+                          })}
+                        </span>
+                      );
                     })()}
                     {seg.edited ? (
                       <span className="ml-2 inline-flex items-center gap-1 align-middle text-caption font-medium text-ink-3">
@@ -595,6 +688,8 @@ function TranscriptList(props: ListProps) {
                       </span>
                     ) : null}
                   </button>
+                  {/* Bản dịch nằm dưới câu gốc, chữ nhỏ hơn, màu phụ (M6-02) */}
+                  {showTranslation ? <TranslationBlock seg={seg} uiLang={uiLang} onTranslate={onTranslateSegment} /> : null}
                 </div>
               )}
 
@@ -626,6 +721,55 @@ function TranscriptList(props: ListProps) {
         />
       ) : null}
     </>
+  );
+}
+
+/** Khối bản dịch của một đoạn: hiển thị bản dịch có sẵn, nhãn "Bản dịch mẫu"
+ * hoặc "Cần dịch lại"; đoạn chưa có bản dịch thì nút dịch nhanh (M6-02). */
+function TranslationBlock({
+  seg,
+  uiLang,
+  onTranslate,
+}: {
+  seg: TranscriptSegment;
+  uiLang: Lang;
+  onTranslate: (segId: string) => void;
+}) {
+  const t = useTranslations("transcript");
+  const ts = useTranslations("session");
+  const trEntry = seg.translations[uiLang];
+  if (!trEntry) {
+    return (
+      <button
+        type="button"
+        onClick={() => onTranslate(seg.id)}
+        className="mt-1 inline-flex min-h-9 items-center gap-1.5 rounded-control text-caption font-medium text-dien hover:underline"
+      >
+        <Languages aria-hidden={true} className="size-3.5" strokeWidth={1.75} />
+        {t("translateSegment")}
+      </button>
+    );
+  }
+  return (
+    <div lang={uiLang} className="mt-1.5 border-l-2 border-line pl-3">
+      {trEntry.sample ? <p className="text-caption font-medium text-ink-3">{t("sampleTranslation")}</p> : null}
+      <p className="text-small text-ink-2">{trEntry.text}</p>
+      {trEntry.stale ? (
+        <div className="mt-1 flex items-center gap-2">
+          <span className="inline-flex items-center gap-1 text-caption font-medium text-tag-pending">
+            <span aria-hidden={true} className="size-1.5 rounded-pill bg-tag-pending" />
+            {t("translationStale")}
+          </span>
+          <button
+            type="button"
+            onClick={() => onTranslate(seg.id)}
+            className="inline-flex min-h-6 items-center text-caption font-medium text-dien hover:underline"
+          >
+            {ts("retry")}
+          </button>
+        </div>
+      ) : null}
+    </div>
   );
 }
 

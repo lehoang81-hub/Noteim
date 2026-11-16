@@ -4,14 +4,15 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { data, useData } from "@/lib/data";
-import { setLocaleCookie } from "@/lib/locale";
+import { setLocaleCookie, type UiLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
 /*
  * Giao diện (M4-03): Sáng, Tối, Theo máy (dùng chung cơ chế với nút đổi giao
  * diện: class .dark trên <html> + localStorage "noteim-theme").
- * Ngôn ngữ: Tiếng Việt, English — đổi là cả ứng dụng đổi ngay qua cookie
- * "noteim-locale" (next-intl đọc ở máy chủ) rồi làm mới trang.
+ * Ngôn ngữ (M6-01, issue #43): Tiếng Việt, English, 한국어 — đổi là cả ứng
+ * dụng đổi ngay qua cookie "noteim-locale" (next-intl đọc ở máy chủ) rồi làm
+ * mới trang.
  */
 
 const THEME_KEY = "noteim-theme";
@@ -34,7 +35,7 @@ export function AppearanceSection() {
   const router = useRouter();
   const me = useData(() => data.account.me(), []);
 
-  function setLanguage(locale: "vi" | "en") {
+  function setLanguage(locale: UiLocale) {
     setLocaleCookie(locale);
     void data.account.updateMe({ ui_language: locale }).catch(() => undefined);
     router.refresh();
@@ -75,18 +76,22 @@ export function AppearanceSection() {
       <fieldset>
         <legend className="mb-2 text-small font-medium text-ink">{t("languageLabel")}</legend>
         <div className="flex flex-col gap-1">
-          {(["vi", "en"] as const).map((locale) => (
+          {([
+            { id: "vi" as const, label: t("langVi") },
+            { id: "en" as const, label: t("langEn") },
+            { id: "ko" as const, label: t("langKo"), korean: true },
+          ]).map(({ id, label, korean }) => (
             <button
-              key={locale}
+              key={id}
               type="button"
-              aria-pressed={me.data?.ui_language === locale}
-              onClick={() => setLanguage(locale)}
+              aria-pressed={me.data?.ui_language === id}
+              onClick={() => setLanguage(id)}
               className={cn(
                 "flex min-h-11 items-center rounded-control px-3 text-left text-body transition-colors ease-noteim duration-(--t-quick)",
-                me.data?.ui_language === locale ? "bg-sen/10 font-semibold text-ink" : "text-ink-2 hover:bg-surface-2",
+                me.data?.ui_language === id ? "bg-sen/10 font-semibold text-ink" : "text-ink-2 hover:bg-surface-2",
               )}
             >
-              {locale === "vi" ? t("langVi") : t("langEn")}
+              <span lang={korean ? "ko" : undefined}>{label}</span>
             </button>
           ))}
         </div>

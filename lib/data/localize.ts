@@ -1,41 +1,40 @@
-import type { Speaker, Template } from "./types";
+import type { LocalizedText, Speaker, Template } from "./types";
 
 /*
- * Dịch dữ liệu hệ thống theo ngôn ngữ giao diện (M5-02, issue #37).
- * Dữ liệu hệ thống (mẫu, tên phần, gợi ý câu hỏi, dòng lưu ý) có hai bản
- * tiếng Việt và tiếng Anh trong fixture; thiếu bản tiếng Anh thì rơi về
- * tiếng Việt. Dữ liệu người dùng (tiêu đề buổi, lời nói, tóm tắt) giữ nguyên.
- *
- * Quyết định cách làm được ghi ở docs/DECISIONS.md (ngày 2026-11-15):
- * thêm trường _en vào fixture thay vì map khóa sang messages/, vì mẫu do
- * người dùng bật/tắt và sắp xếp lại theo id, không phải khóa dịch tĩnh.
+ * Dịch dữ liệu hệ thống theo ngôn ngữ giao diện (M5-02, M6-01).
+ * Dữ liệu hệ thống (mẫu, tên phần, gợi ý câu hỏi, dòng lưu ý) là
+ * LocalizedText — map theo ngôn ngữ, bắt buộc có vi (M6-01, thay các trường
+ * _en của M5). Thiếu ngôn ngữ nào thì rơi về tiếng Anh rồi tiếng Việt.
+ * Dữ liệu người dùng (tiêu đề buổi, lời nói, tóm tắt) giữ nguyên.
  */
 
-export function templateName(tpl: Pick<Template, "name" | "name_en">, locale: string): string {
-  return locale === "en" && tpl.name_en ? tpl.name_en : tpl.name;
+/** Đọc LocalizedText theo ngôn ngữ: lang -> en -> vi. */
+export function localized(text: LocalizedText | undefined | null, lang: string): string {
+  if (!text) return "";
+  if (lang !== "vi" && lang !== "en") {
+    const other = text[lang as keyof LocalizedText];
+    if (other) return other;
+  }
+  if (lang === "vi" && text.vi) return text.vi;
+  return text.en || text.vi || "";
 }
 
-export function sectionTitle(
-  sec: Pick<Template["sections"][number], "title" | "title_en">,
-  locale: string,
-): string {
-  return locale === "en" && sec.title_en ? sec.title_en : sec.title;
+export function templateName(tpl: Pick<Template, "name">, locale: string): string {
+  return localized(tpl.name, locale);
 }
 
-export function suggestedQuestions(
-  tpl: Pick<Template, "suggested_questions" | "suggested_questions_en"> | undefined,
-  locale: string,
-): string[] {
+export function sectionTitle(sec: Pick<Template["sections"][number], "title">, locale: string): string {
+  return localized(sec.title, locale);
+}
+
+export function suggestedQuestions(tpl: Pick<Template, "suggested_questions"> | undefined, locale: string): string[] {
   if (!tpl) return [];
-  return locale === "en" && tpl.suggested_questions_en?.length ? tpl.suggested_questions_en : tpl.suggested_questions;
+  return (tpl.suggested_questions ?? []).map((q) => localized(q, locale));
 }
 
-export function footerNote(
-  tpl: Pick<Template, "footer_note" | "footer_note_en"> | undefined,
-  locale: string,
-): string | undefined {
-  if (!tpl) return undefined;
-  return locale === "en" && tpl.footer_note_en ? tpl.footer_note_en : tpl.footer_note;
+export function footerNote(tpl: Pick<Template, "footer_note"> | undefined, locale: string): string | undefined {
+  const note = localized(tpl?.footer_note, locale);
+  return note || undefined;
 }
 
 type LabelTranslate = (key: string, values?: Record<string, string | number>) => string;

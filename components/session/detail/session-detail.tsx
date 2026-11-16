@@ -14,7 +14,7 @@ import { Banner, EmptyState, SkeletonParagraph } from "@/components/ui/feedback"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { data, dataNow, DataError, useData, type ActionItem, type SessionDetail } from "@/lib/data";
+import { data, dataNow, DataError, useData, type ActionItem, type Lang, type SessionDetail, type SummaryVersion } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
 import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
@@ -214,6 +214,26 @@ function Loaded({
     return current;
   }, [bullets, ps.currentTime, ps.playing]);
 
+  // Bản tóm tắt đang xem (M6-03): mặc định bản gốc, đổi qua ô "Tóm tắt bằng".
+  // Bản gốc có sẵn trong detail — dựng bản ngay không chờ fetch, nhờ điểm
+  // nội dung lớn nhất (tóm tắt chung) vẽ cùng lần đầu, LCP không bị đẩy xa.
+  const [verLang, setVerLang] = useState<Lang>(detail.original_report_language);
+  const summaryFetch = useData(() => data.sessions.getSummary(detail.id, verLang), [detail.id, verLang]);
+  const summary =
+    verLang === detail.original_report_language
+      ? ({
+          session_id: detail.id,
+          lang: detail.original_report_language,
+          source: "original",
+          translated_from: null,
+          created_at: detail.created_at,
+          stale: false,
+          executive_summary: detail.executive_summary,
+          topics: detail.topics,
+          task_texts: Object.fromEntries(detail.action_items.map((a) => [a.id, a.task])),
+        } as SummaryVersion)
+      : summaryFetch.data;
+
   const [items, setItems] = useState(detail.action_items);
   // Dữ liệu tải lại (sửa việc ở nơi khác, thêm việc...) thì đồng bộ lại danh sách;
   // làm lúc vẽ thay vì trong effect
@@ -380,21 +400,34 @@ function Loaded({
           </div>
           <div className="px-page pb-40 pt-5 lg:px-8">
             <TabsContent value="summary">
-              <SummaryTab
-                detail={detail}
-                template={template}
-                tagLabels={tagLabels}
-                playingBulletId={playingBulletId}
-                canSeek={canPlay}
-                onSeek={seek}
-                onAskAi={() => setTab("ai")}
-                onSendMinutes={() => setSending(true)}
-                onShareIntent={openShare}
-              />
+              {summary ? (
+                <SummaryTab
+                  detail={detail}
+                  template={template}
+                  tagLabels={tagLabels}
+                  playingBulletId={playingBulletId}
+                  canSeek={canPlay}
+                  onSeek={seek}
+                  onAskAi={() => setTab("ai")}
+                  onSendMinutes={() => setSending(true)}
+                  onShareIntent={openShare}
+                  version={summary}
+                  verLang={verLang}
+                  onVerLang={setVerLang}
+                  versions={detail.report_languages.length ? detail.report_languages : [detail.original_report_language]}
+                  originalLang={detail.original_report_language}
+                  plan={planFlag}
+                />
+              ) : (
+                <div aria-busy={true}>
+                  <SkeletonParagraph lines={4} />
+                </div>
+              )}
             </TabsContent>
             <TabsContent value="tasks">
               <TasksTab
-                items={items}
+                items={items.map((a) => (summary?.task_texts?.[a.id] ? { ...a, task: summary.task_texts[a.id] } : a))}
+                lang={verLang}
                 contacts={contacts}
                 now={now}
                 canSeek={canPlay}
@@ -415,6 +448,8 @@ function Loaded({
                   onSeek={seek}
                   onQuoteCard={(seg) => {
                     const sp = detail.speakers.find((s) => s.id === seg.speaker_id);
+                    // Thẻ trích dẫn: câu gốc + bản dịch ở ngôn ngữ giao diện (M6-04)
+                    const translation = seg.translations[locale as Lang];
                     openShare({
                       kind: "card",
                       quote: {
@@ -423,6 +458,10 @@ function Loaded({
                         speakerColorIndex: sp?.color_index ?? 0,
                         startSec: seg.start_sec,
                         endSec: seg.end_sec,
+                        originalText: seg.text,
+                        originalLang: seg.lang,
+                        translatedText: translation?.text,
+                        translatedLang: translation ? (locale as Lang) : undefined,
                       },
                     });
                   }}
@@ -469,7 +508,7 @@ function Loaded({
 
       {/* Gửi biên bản và giao việc, ba bước (M3-04) */}
       {sendingOnce ? (
-        <SendMinutesSheet session={detail} contacts={contacts} plan={planFlag} canPlay={canPlay} onSeek={seek} open={sending} onOpenChange={setSending} />
+        <SendMinutesSheet session={detail} contacts={contacts} plan={planFlag} defaultReportLang={me.data?.default_report_language ?? detail.original_report_language} canPlay={canPlay} onSeek={seek} open={sending} onOpenChange={setSending} />
       ) : null}
 
       {/* Bảng chia sẻ: link xem, thẻ trích dẫn, đoạn tinh túy, xuất file (M4-01) */}

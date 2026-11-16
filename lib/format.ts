@@ -1,11 +1,19 @@
 /*
  * Định dạng ngày giờ, thời lượng. Không phụ thuộc giờ máy: luôn tính theo
  * múi giờ Việt Nam để máy chủ và trình duyệt ra cùng kết quả.
- * Ngôn ngữ hiển thị do người gọi truyền vào ("vi" | "en") — M5-02: ngày, số,
- * dung lượng hiển thị theo ngôn ngữ giao diện.
+ * Ngôn ngữ hiển thị do người gọi truyền vào ("vi" | "en" | "ko") — M6-01:
+ * ngày, số, dung lượng hiển thị theo ngôn ngữ giao diện, tiếng Hàn dùng
+ * Intl ko-KR ("11월 14일 (토)").
  */
 
 const TZ = "Asia/Ho_Chi_Minh";
+
+/** Thẻ ngôn ngữ cho Intl theo ngôn ngữ giao diện. */
+export function intlLocale(locale: string): string {
+  if (locale === "en") return "en-US";
+  if (locale === "ko") return "ko-KR";
+  return "vi-VN";
+}
 
 function parts(date: Date) {
   const f = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" });
@@ -19,30 +27,37 @@ export function dayDiff(a: Date, b: Date): number {
   return Math.round((db - da) / 86400_000);
 }
 
-/** "14/11" (vi) hoặc "Nov 14" (en) */
+/** "14/11" (vi) | "Nov 14" (en) | "11월 14일" (ko) */
 export function shortDate(date: Date | string, locale = "vi"): string {
   const d = typeof date === "string" ? new Date(date) : date;
   if (locale === "en") {
     return new Intl.DateTimeFormat("en-US", { timeZone: TZ, month: "short", day: "numeric" }).format(d);
   }
+  if (locale === "ko") {
+    return new Intl.DateTimeFormat("ko-KR", { timeZone: TZ, month: "long", day: "numeric" }).format(d);
+  }
   const [, m, day] = parts(d).split("-");
   return `${day}/${m}`;
 }
 
-/** "Thứ Tư, 12/11" (vi) hoặc "Sat, Nov 14" (en) */
+/** "Thứ Tư, 12/11" (vi) | "Sat, Nov 14" (en) | "11월 14일 (토)" (ko) */
 export function weekdayDate(date: Date | string, locale = "vi"): string {
   const d = typeof date === "string" ? new Date(date) : date;
   if (locale === "en") {
     const wd = new Intl.DateTimeFormat("en-US", { timeZone: TZ, weekday: "short" }).format(d);
     return `${wd}, ${shortDate(d, "en")}`;
   }
+  if (locale === "ko") {
+    const wd = new Intl.DateTimeFormat("ko-KR", { timeZone: TZ, weekday: "short" }).format(d);
+    return `${shortDate(d, "ko")} (${wd})`;
+  }
   const wd = new Intl.DateTimeFormat("vi-VN", { timeZone: TZ, weekday: "long" }).format(d);
   return `${wd.charAt(0).toUpperCase()}${wd.slice(1)}, ${shortDate(d, "vi")}`;
 }
 
-/** Định dạng số theo ngôn ngữ: 7,6 (vi) / 7.6 (en) */
+/** Định dạng số theo ngôn ngữ: 7,6 (vi) / 7.6 (en) / 7.6 (ko) */
 export function decimal(value: number, locale = "vi", maxFrac = 1): string {
-  return new Intl.NumberFormat(locale === "en" ? "en-US" : "vi-VN", { maximumFractionDigits: maxFrac }).format(value);
+  return new Intl.NumberFormat(intlLocale(locale), { maximumFractionDigits: maxFrac }).format(value);
 }
 
 /** Giờ phút và giây: { h, m } để ghép vào chuỗi dịch. */

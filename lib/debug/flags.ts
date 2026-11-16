@@ -32,6 +32,10 @@ export type DebugFlags = {
   mailFailOne: boolean;
   /** Ép trang công khai báo link hết hạn (M4-01) */
   shareExpired: boolean;
+  /** Ép dịch bản ghi lời lỗi, có Thử lại (M6-02) */
+  translateFail: boolean;
+  /** Ép dịch bản ghi lời chậm 10 giây (M6-02) */
+  translateSlow: boolean;
   profession: Profession | null;
   plan: "free" | "pro" | null;
 };
@@ -50,6 +54,8 @@ const DEFAULTS: DebugFlags = {
   storageFull: false,
   mailFailOne: false,
   shareExpired: false,
+  translateFail: false,
+  translateSlow: false,
   profession: null,
   plan: null,
 };

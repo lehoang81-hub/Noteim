@@ -22,7 +22,7 @@ import { SkeletonParagraph } from "@/components/ui/feedback";
 import { TextField } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { data, dataNow, useData, DataError, type Bullet, type SessionDetail, type Template } from "@/lib/data";
+import { data, dataNow, useData, DataError, type Bullet, type Lang, type SessionDetail, type Template } from "@/lib/data";
 import { cn } from "@/lib/cn";
 import { sectionTitle as sectionTitleOf, speakerLabel } from "@/lib/data/localize";
 import type { Speaker } from "@/lib/data/types";
@@ -194,11 +194,14 @@ const EXPIRY_CHOICES = [null, 7, 30] as const;
 
 function LinkPanel({ detail, onBack }: { detail: SessionDetail; onBack: () => void }) {
   const t = useTranslations("share");
+  const tr = useTranslations(); // tên ngôn ngữ ở gốc (M6-04)
   const toast = useToast();
   const link = useData(() => data.share.getForSession(detail.id), [detail.id]);
   const [scope, setScope] = useState<"summary" | "summary_audio">("summary");
   const [password, setPassword] = useState("");
   const [expiryDays, setExpiryDays] = useState<number | null>(null);
+  // Các bản người xem được mở (M6-04): mặc định tất cả bản đang có
+  const [shareLangs, setShareLangs] = useState<Lang[]>(detail.report_languages.length ? detail.report_languages : [detail.original_report_language]);
   const [busy, setBusy] = useState(false);
   const [confirmRevoke, setConfirmRevoke] = useState(false);
 
@@ -217,6 +220,7 @@ function LinkPanel({ detail, onBack }: { detail: SessionDetail; onBack: () => vo
         scope,
         expires_at: expiryDays ? new Date(now.getTime() + expiryDays * 86400_000).toISOString() : null,
         password: password.trim() || undefined,
+        languages: shareLangs,
       });
       toast.show({ tone: "success", message: t("linkCreated") });
       link.reload();
@@ -330,6 +334,30 @@ function LinkPanel({ detail, onBack }: { detail: SessionDetail; onBack: () => vo
             label={t("scopeAudio")}
             hint={t("scopeAudioHint")}
           />
+        </div>
+      </fieldset>
+
+      {/* Bản người xem được mở (M6-04) */}
+      <fieldset className="mt-4">
+        <legend className="text-small font-medium text-ink">{t("languagesLabel")}</legend>
+        <p className="mt-0.5 text-caption text-ink-3">{t("languagesHint")}</p>
+        <div className="mt-2 flex flex-col gap-2">
+          {(detail.report_languages.length ? detail.report_languages : [detail.original_report_language]).map((lg) => (
+            <label key={lg} className="flex min-h-11 cursor-pointer items-center gap-3">
+              <input
+                type="checkbox"
+                checked={shareLangs.includes(lg)}
+                onChange={() =>
+                  setShareLangs((list) => (list.includes(lg) ? list.filter((x) => x !== lg) : [...list, lg]))
+                }
+                className="size-5 shrink-0 accent-[var(--sen)]"
+              />
+              <span className="text-body text-ink" lang={lg === "ko" ? "ko" : undefined}>
+                {tr(`summary.lang${lg === "vi" ? "Vi" : lg === "en" ? "En" : "Ko"}`)}
+                {lg === detail.original_report_language ? `, ${tr("summary.originalBadge")}` : ""}
+              </span>
+            </label>
+          ))}
         </div>
       </fieldset>
 
@@ -459,7 +487,10 @@ function HighlightsPanel({
                   className="mt-1 size-5 shrink-0 accent-[var(--sen)]"
                 />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-body text-ink">{c.bullet.text}</span>
+                  {/* Ý thuộc bản gốc của buổi: lang theo ngôn ngữ buổi (Mục 2 review #52) */}
+                  <span lang={detail.original_report_language} className="block text-body text-ink">
+                    {c.bullet.text}
+                  </span>
                   <span className="mt-0.5 block text-caption tabular-nums text-ink-3">
                     {formatClock(c.start)} – {formatClock(c.end)}
                   </span>

@@ -14,7 +14,7 @@ const BookmarkButton = dynamic(() => import("@/components/record/bookmark-button
 const RecordFeed = dynamic(() => import("@/components/record/record-feed").then((m) => m.RecordFeed), { ssr: false });
 const HoldToEndButton = dynamic(() => import("@/components/record/hold-to-end-button").then((m) => m.HoldToEndButton), { ssr: false });
 const TemplateSheet = dynamic(() => import("@/components/record/sheets").then((m) => m.TemplateSheet), { ssr: false });
-import { ConsentSheet, MicPermissionSheet } from "@/components/record/sheets";
+import { ConsentSheet, MicPermissionSheet, type SpeechChoice } from "@/components/record/sheets";
 import { Button } from "@/components/ui/button";
 import { Banner, MicDrawing } from "@/components/ui/feedback";
 import { Sheet } from "@/components/ui/sheet";
@@ -47,6 +47,7 @@ import { keepScreenAwake, letScreenSleep } from "@/lib/record/wake-lock";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 import { useOffline } from "@/components/shell/app-shell";
 import type { SemanticTag } from "@/components/ui/chips";
+import type { Lang } from "@/lib/data";
 
 /*
  * Màn hình ghi âm /record (docs/03-screens.md mục 2, 3; M2-01 + M2-02).
@@ -147,7 +148,7 @@ export function RecordScreen() {
   const decided = useRef(false);
   const startingMic = useRef(false);
   const levelRef = useRef(0);
-  const beginRef = useRef<(announce: boolean) => void>(() => {});
+  const beginRef = useRef<(announce: boolean, speech?: SpeechChoice) => void>(() => {});
   const finishRef = useRef<() => void>(() => {});
   const lastVoiceRef = useRef(0);
   const photoInputRef = useRef<HTMLInputElement>(null);
@@ -176,11 +177,18 @@ export function RecordScreen() {
 
   /* ----- Luồng bắt đầu ghi (M2-01) ----- */
 
-  function beginRecording(announce: boolean) {
+  function beginRecording(announce: boolean, speech?: SpeechChoice) {
     if (recording.status !== "idle") return;
     const templateId =
       recording.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id ?? null;
-    startRecording({ templateId, consent: { confirmed: true, announced: announce } });
+    startRecording({
+      templateId,
+      consent: { confirmed: true, announced: announce },
+      speech: speech ?? {
+        primary_language: me.data?.default_speech_language ?? (locale as Lang),
+        auto_detect: me.data?.auto_detect_languages ?? true,
+      },
+    });
     keepScreenAwake();
     setGate(null);
     setMomentOn(true);
@@ -375,6 +383,10 @@ export function RecordScreen() {
         data.sessions.createFromRecording({
           title,
           template_id: templateId,
+          // Ngôn ngữ chính chọn ở bảng "Bắt đầu ghi" (M6-02); buổi ghi dở từ
+          // phiên trước không có lựa chọn thì theo cài đặt
+          primary_language: snapshot.speech?.primary_language ?? me.data?.default_speech_language ?? (locale as Lang),
+          auto_detect_languages: snapshot.speech?.auto_detect ?? true,
           duration_sec: snapshot.duration_sec,
           notes: snapshot.notes.map(({ timestamp_sec, text }) => ({ timestamp_sec, text })),
           bookmarks: snapshot.bookmarks.map(({ timestamp_sec, tag }) => ({ timestamp_sec, tag })),
@@ -686,7 +698,9 @@ export function RecordScreen() {
       />
       <ConsentSheet
         open={gate === "consent"}
-        onConfirm={(announced) => beginRecording(announced)}
+        defaultLanguage={me.data?.default_speech_language ?? (locale as Lang)}
+        defaultAutoDetect={me.data?.auto_detect_languages ?? true}
+        onConfirm={(announced, speech) => beginRecording(announced, speech)}
         onCancel={() => router.push("/")}
       />
       {/* Hết hạn mức tháng: nút ghi âm vẫn bấm được, bảng giải thích + gói Pro (M2-04) */}

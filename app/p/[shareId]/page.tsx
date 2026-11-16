@@ -2,7 +2,7 @@
 
 import { Lock, Pause, Play, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatClock } from "@/components/ribbon/draw";
@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button";
 import { SpeakerName } from "@/components/ui/chips";
 import { SkeletonParagraph } from "@/components/ui/feedback";
 import { TextField } from "@/components/ui/form";
-import { data, useData, type PublicSessionView } from "@/lib/data";
+import { data, useData, type Lang, type PublicSessionView } from "@/lib/data";
+import { cn } from "@/lib/cn";
+import { setLocaleCookie } from "@/lib/locale";
 import { createMockPlayer, usePlayerState } from "@/lib/player/mock-player";
 import { shortDate } from "@/lib/format";
 import { speakerLabel } from "@/lib/data/localize";
@@ -35,12 +37,17 @@ export default function PublicSessionPage() {
 function PublicSessionLoader({ shareId }: { shareId: string }) {
   const [password, setPassword] = useState("");
   const [attempt, setAttempt] = useState(0);
+  // Người xem chọn bản theo ngôn ngữ (M6-04); mặc định theo trình duyệt nếu
+  // có bản đó, không thì bản gốc — tính sau khi biết các bản được mở
+  const [lang, setLang] = useState<Lang | null>(null);
   return (
     <PublicSessionView
       key={attempt}
       shareId={shareId}
       password={attempt > 0 ? password : undefined}
       wrongPassword={attempt > 0}
+      selectedLang={lang}
+      onSelectLang={setLang}
       onSubmitPassword={(pw) => {
         setPassword(pw);
         setAttempt((n) => n + 1);
@@ -54,13 +61,17 @@ function PublicSessionView({
   password,
   wrongPassword,
   onSubmitPassword,
+  selectedLang,
+  onSelectLang,
 }: {
   shareId: string;
   password?: string;
   wrongPassword?: boolean;
   onSubmitPassword: (password: string) => void;
+  selectedLang: Lang | null;
+  onSelectLang: (lang: Lang) => void;
 }) {
-  const view = useData(() => data.share.getPublic(shareId, password), [shareId, password]);
+  const view = useData(() => data.share.getPublic(shareId, password, selectedLang ?? undefined), [shareId, password, selectedLang]);
   const counted = useRef(false);
   const result = view.data;
 
@@ -91,7 +102,7 @@ function PublicSessionView({
       </main>
     );
   }
-  return <PublicSummary view={result} />;
+  return <PublicSummary view={result} onSelectLang={onSelectLang} />;
 }
 
 function StateScreen({
@@ -158,11 +169,31 @@ function StateScreen({
   );
 }
 
-function PublicSummary({ view }: { view: Exclude<PublicSessionView, string> }) {
+function PublicSummary({
+  view,
+  onSelectLang,
+}: {
+  view: Exclude<PublicSessionView, string>;
+  onSelectLang: (lang: Lang) => void;
+}) {
   const t = useTranslations("public");
   const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const locale = useLocale();
+  const router = useRouter();
   const allowAudio = view.scope === "summary_audio";
+
+  // Bản mặc định theo ngôn ngữ trình duyệt nếu có bản đó, không thì bản gốc
+  // (M6-04); chỉ chọn một lần ngay sau lần tải đầu tiên
+  const didPick = useRef(false);
+  useEffect(() => {
+    if (didPick.current || !view.languages.length) return;
+    didPick.current = true;
+    const browserBase = (navigator.language || "").slice(0, 2).toLowerCase();
+    const pick = view.languages.find((lg) => lg === browserBase);
+    if (pick && pick !== view.lang) onSelectLang(pick);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view]);
+  const currentLang = view.lang;
   const [player] = useState(() => createMockPlayer(view.duration_sec));
   const ps = usePlayerState(player);
   const [started, setStarted] = useState(false);
@@ -191,22 +222,53 @@ function PublicSummary({ view }: { view: Exclude<PublicSessionView, string> }) {
   return (
     <main className="mx-auto min-h-dvh w-full max-w-2xl px-5 pb-28 pt-8">
       <header>
-        <h1 className="font-display text-h1 font-semibold text-ink">{view.title}</h1>
+        {/* Tiêu đề là dữ liệu gốc của buổi: lang theo bản gốc (Mục 2 review #52) */}
+        <h1 lang={view.languages[0]} className="font-display text-h1 font-semibold text-ink">{view.title}</h1>
         <p className="mt-1 text-small text-ink-2">{t("sharedBy", { name: view.sharer_name, date: shortDate(view.created_at, locale) })}</p>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
           {view.speakers.map((s) => (
             <SpeakerName key={s.id} colorIndex={s.color_index} name={speakerLabel(s, view.speakers, tr)} named={!!s.contact_id || s.is_me} />
           ))}
         </div>
+        {/* Đổi ngôn ngữ: bản tóm tắt và chữ giao diện cùng đổi (M6-04) */}
+        {view.languages.length > 1 ? (
+          <div role="radiogroup" aria-label={t("languageLabel")} className="mt-4 flex flex-wrap gap-2">
+            {view.languages.map((lg) => (
+              <button
+                key={lg}
+                type="button"
+                role="radio"
+                aria-checked={currentLang === lg}
+                onClick={() => {
+                  onSelectLang(lg);
+                  // Chữ giao diện đổi theo: ghi cookie locale rồi làm mới
+                  setLocaleCookie(lg);
+                  router.refresh();
+                }}
+                className={cn(
+                  "h-11 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                  currentLang === lg ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+                )}
+              >
+                {/* Tên theo ngôn ngữ giao diện — giao diện vi/en không có chữ
+                    Hàn ngoài dữ liệu, không tải phông Hàn chỉ cho nút (M6-04) */}
+                <span lang={currentLang === "ko" ? "ko" : undefined}>
+                  {tr(`summary.lang${lg === "vi" ? "Vi" : lg === "en" ? "En" : "Ko"}`)}
+                </span>
+              </button>
+            ))}
+          </div>
+        ) : null}
       </header>
 
       <section className="mt-8" aria-label={t("summaryLabel")}>
+        {/* Nội dung bản tóm tắt theo ngôn ngữ bản đang xem (Mục 2 review #52) */}
         <h2 className="text-small font-semibold text-ink-2">{t("keyPoints")}</h2>
-        <p className="mt-1 text-body text-ink">{view.executive_summary}</p>
+        <p lang={currentLang} className="mt-1 text-body text-ink">{view.executive_summary}</p>
 
         {view.topics.map((topic) => (
           <article key={topic.id} className="mt-6">
-            <h3 className="text-h2 font-semibold text-ink">{topic.title}</h3>
+            <h3 lang={currentLang} className="text-h2 font-semibold text-ink">{topic.title}</h3>
             <ul className="mt-2">
               {topic.bullets.map((b) => (
                 <li
@@ -225,7 +287,7 @@ function PublicSummary({ view }: { view: Exclude<PublicSessionView, string> }) {
                       className="mt-2 size-2 shrink-0 rounded-pill"
                       style={{ backgroundColor: `var(--speaker-${((colorOf[b.speaker_id] ?? 0) % 6) + 1})` }}
                     />
-                    <span className="min-w-0 flex-1 text-body text-ink">{b.text}</span>
+                    <span lang={currentLang} className="min-w-0 flex-1 text-body text-ink">{b.text}</span>
                     <span className="shrink-0 pt-0.5 text-caption tabular-nums text-ink-3">{formatClock(b.timestamp_sec)}</span>
                   </button>
                 </li>

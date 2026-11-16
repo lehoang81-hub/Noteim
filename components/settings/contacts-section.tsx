@@ -7,16 +7,18 @@ import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { TextField } from "@/components/ui/form";
 import { useToast } from "@/components/ui/toast";
-import { data, useData, type Contact } from "@/lib/data";
+import { data, useData, type Contact, type Lang } from "@/lib/data";
 
 /*
  * Danh bạ (M4-03): tên, vai trò, email; thêm, sửa, xóa.
  * Xóa liên hệ đang gán cho người nói thì cảnh báo (contactUsage).
  */
 
-type Draft = { name: string; role: string; email: string };
+type Draft = { name: string; role: string; email: string; preferred_language: Lang | null };
 
-const EMPTY_DRAFT: Draft = { name: "", role: "", email: "" };
+const EMPTY_DRAFT: Draft = { name: "", role: "", email: "", preferred_language: null };
+
+const CONTACT_LANGS: readonly Lang[] = ["vi", "en", "ko"];
 
 export function ContactsSection() {
   const t = useTranslations("settings");
@@ -50,6 +52,7 @@ export function ContactsSection() {
         name: draft.name.trim(),
         role: draft.role.trim() || undefined,
         email: draft.email.trim() || undefined,
+        preferred_language: draft.preferred_language,
       });
       setEditingId(null);
       setDraft(null);
@@ -82,7 +85,7 @@ export function ContactsSection() {
   }
 
   function editDraft(contact: Contact): Draft {
-    return { name: contact.name, role: contact.role ?? "", email: contact.email ?? "" };
+    return { name: contact.name, role: contact.role ?? "", email: contact.email ?? "", preferred_language: contact.preferred_language ?? null };
   }
 
   return (
@@ -100,6 +103,11 @@ export function ContactsSection() {
             <TextField label={t("contactRole")} value={draft.role} onChange={(e) => setDraft({ ...draft, role: e.target.value })} />
             <TextField label={t("contactEmail")} type="email" value={draft.email} onChange={(e) => setDraft({ ...draft, email: e.target.value })} />
           </div>
+          <LanguageSelect
+            label={t("preferredLanguage")}
+            value={draft.preferred_language}
+            onChange={(v) => setDraft({ ...draft, preferred_language: v })}
+          />
           <div className="flex gap-2">
             <Button type="submit" variant="primary" icon={Check}>
               {t("save")}
@@ -131,6 +139,11 @@ export function ContactsSection() {
                   <TextField label={t("contactRole")} value={draft.role} onChange={(e) => setDraft({ ...draft, role: e.target.value })} />
                   <TextField label={t("contactEmail")} type="email" value={draft.email} onChange={(e) => setDraft({ ...draft, email: e.target.value })} />
                 </div>
+                <LanguageSelect
+                  label={t("preferredLanguage")}
+                  value={draft.preferred_language}
+                  onChange={(v) => setDraft({ ...draft, preferred_language: v })}
+                />
                 <div className="flex gap-2">
                   <Button type="submit" variant="primary" icon={Check}>
                     {t("save")}
@@ -148,6 +161,11 @@ export function ContactsSection() {
                 <span className="block truncate text-small text-ink-3">
                   {[c.role, c.email].filter(Boolean).join(", ") || " "}
                 </span>
+                {c.preferred_language ? (
+                  <span lang={c.preferred_language} className="mt-0.5 inline-block rounded-pill bg-surface-2 px-1.5 text-caption font-medium text-ink-2">
+                    {t(`lang${c.preferred_language === "vi" ? "Vi" : c.preferred_language === "en" ? "En" : "Ko"}`)}
+                  </span>
+                ) : null}
               </span>
               <Button
                 variant="ghost"
@@ -183,5 +201,36 @@ export function ContactsSection() {
         )}
       </ConfirmDialog>
     </div>
+  );
+}
+
+
+/** Ô chọn ngôn ngữ ưa dùng của liên hệ (M6-04): null là theo cài đặt chung. */
+function LanguageSelect({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: Lang | null;
+  onChange: (lang: Lang | null) => void;
+}) {
+  const t = useTranslations("settings");
+  return (
+    <label className="text-small font-medium text-ink">
+      {label}
+      <select
+        value={value ?? ""}
+        onChange={(e) => onChange((e.target.value || null) as Lang | null)}
+        className="mt-1.5 h-11 w-full rounded-control border border-line bg-surface px-2 text-small text-ink"
+      >
+        <option value="">{t("reportLanguageDefault")}</option>
+        {CONTACT_LANGS.map((lg) => (
+          <option key={lg} value={lg}>
+            {t(`lang${lg === "vi" ? "Vi" : lg === "en" ? "En" : "Ko"}`)}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }

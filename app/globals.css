@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
+/* Phông Hàn chia nhỏ theo unicode-range — chỉ tải các file có ký tự cần vẽ
+ * (92 file tự host, xem styles/pretendard-subset.css; review PR #52 mục 1). */
+@import "../styles/pretendard-subset.css";
 
+/* Chữ Hàn không ngắt giữa từ (M6-01): áp cho cả trang tiếng Hàn và các khối
+ * nội dung tiếng Hàn nhúng trong giao diện khác (thẻ có lang="ko"). */
+:where([lang="ko"], [lang="ko"] *) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
 /* Chế độ tối điều khiển bằng class .dark trên <html>, không theo hệ điều hành. */
 @custom-variant dark (&:where(.dark, .dark *));
 

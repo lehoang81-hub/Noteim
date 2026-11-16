@@ -1,53 +1,99 @@
 [
-  {
-    "id": "g0",
-    "term": "Vinhomes Marina",
-    "note": "Dự án ở Hải Phòng"
-  },
-  {
-    "id": "g1",
-    "term": "Imperia",
-    "note": "Dự án so sánh"
-  },
-  {
-    "id": "g2",
-    "term": "Hoàng Huy Commerce"
-  },
-  {
-    "id": "g3",
-    "term": "Lạch Tray"
-  },
-  {
-    "id": "g4",
-    "term": "Nội Thất Việt",
-    "note": "Công ty của anh Minh"
-  },
-  {
-    "id": "g5",
-    "term": "chiết khấu"
-  },
-  {
-    "id": "g6",
-    "term": "ân hạn nợ gốc"
-  },
-  {
-    "id": "g7",
-    "term": "sổ hồng"
-  },
-  {
-    "id": "g8",
-    "term": "hợp đồng đặt cọc"
-  },
-  {
-    "id": "g9",
-    "term": "công chứng ủy quyền"
-  },
-  {
-    "id": "g10",
-    "term": "bản vẽ triển khai"
-  },
-  {
-    "id": "g11",
-    "term": "dầm bo"
+ {
+  "id": "g0",
+  "term": "Vinhomes Marina",
+  "note": "Dự án ở Hải Phòng",
+  "variants": {
+   "ko": "빈홈즈 마리나"
   }
+ },
+ {
+  "id": "g1",
+  "term": "Imperia",
+  "note": "Dự án so sánh",
+  "variants": {
+   "ko": "임페리아"
+  }
+ },
+ {
+  "id": "g2",
+  "term": "Hoàng Huy Commerce",
+  "variants": {
+   "ko": "황후이 커머스"
+  }
+ },
+ {
+  "id": "g3",
+  "term": "Lạch Tray",
+  "variants": {
+   "ko": "라찌 쩌이"
+  }
+ },
+ {
+  "id": "g4",
+  "term": "Nội Thất Việt",
+  "note": "Công ty của anh Minh",
+  "variants": {
+   "ko": "노이탁비엣"
+  }
+ },
+ {
+  "id": "g5",
+  "term": "chiết khấu",
+  "variants": {}
+ },
+ {
+  "id": "g6",
+  "term": "ân hạn nợ gốc",
+  "variants": {}
+ },
+ {
+  "id": "g7",
+  "term": "sổ hồng",
+  "variants": {}
+ },
+ {
+  "id": "g8",
+  "term": "hợp đồng đặt cọc",
+  "variants": {}
+ },
+ {
+  "id": "g9",
+  "term": "công chứng ủy quyền",
+  "variants": {}
+ },
+ {
+  "id": "g10",
+  "term": "bản vẽ triển khai",
+  "variants": {}
+ },
+ {
+  "id": "g11",
+  "term": "dầm bo",
+  "variants": {}
+ },
+ {
+  "id": "g12",
+  "term": "khuôn mẫu nhựa",
+  "variants": {
+   "ko": "금형",
+   "en": "injection mold"
+  }
+ },
+ {
+  "id": "g13",
+  "term": "ép nhựa",
+  "variants": {
+   "ko": "사출성형",
+   "en": "injection molding"
+  }
+ },
+ {
+  "id": "g14",
+  "term": "thời gian giao hàng",
+  "variants": {
+   "ko": "납기",
+   "en": "lead time"
+  }
+ }
 ]

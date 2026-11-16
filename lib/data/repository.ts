@@ -3,11 +3,13 @@ import type {
   ChatMessage,
   Contact,
   GlossaryTerm,
+  Lang,
   Profession,
   Quota,
   Session,
   SessionDetail,
   ShareLink,
+  SummaryVersion,
   Template,
   TranscriptSegment,
   User,
@@ -37,6 +39,10 @@ export type SearchResult = {
 export type RecordingDraft = {
   title?: string;
   template_id: string;
+  /** Ngôn ngữ nói chính của buổi (M6-02) */
+  primary_language: Lang;
+  /** Có thể có tiếng khác — app tự nhận các đoạn tiếng Anh, tiếng Hàn (M6-02) */
+  auto_detect_languages?: boolean;
   duration_sec: number;
   notes: { timestamp_sec: number; text: string }[];
   bookmarks: { timestamp_sec: number; tag: string | null }[];
@@ -62,6 +68,19 @@ export interface SessionRepository {
   updateSegment(sessionId: string, segmentId: string, text: string): Promise<void>;
   /** Đổi người nói của một đoạn bản ghi (M3-01) */
   reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>;
+  /** Dịch đoạn bản ghi lời sang ngôn ngữ `lang` (M6-02). Không truyền
+   * segmentIds thì dịch mọi đoạn chưa có bản dịch ở `lang`. */
+  translateSegments(sessionId: string, lang: Lang, segmentIds?: string[]): Promise<TranscriptSegment[]>;
+  /** Bản tóm tắt theo ngôn ngữ (M6-03): lang == original_report_language thì
+   * trả bản gốc trong detail, ngược lại trả bản đã tạo. */
+  getSummary(id: string, lang: Lang): Promise<SummaryVersion>;
+  /** Tạo (hoặc Dịch lại nếu bản đã có và lỗi thời) một bản tóm tắt theo
+   * ngôn ngữ, qua 2 bước: onStep(1) dịch tóm tắt, onStep(2) dịch việc (M6-03).
+   * Gói Free chỉ tạo 1 bản thêm mỗi buổi: vượt hạn mức ném DataError
+   * quota_exceeded. */
+  createSummaryVersion(id: string, lang: Lang, onStep: (step: 1 | 2) => void): Promise<SummaryVersion>;
+  /** Sửa một ý trong bản tóm tắt theo ngôn ngữ; bản khác không đổi (M6-03) */
+  updateVersionBullet(sessionId: string, lang: Lang, bulletId: string, text: string): Promise<void>;
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
@@ -77,14 +96,17 @@ export interface SessionRepository {
   /** Tìm kiếm xuyên buổi: tiêu đề, tóm tắt, bản ghi lời, việc cần làm (M4-02).
    * Bản giả so khớp không phân biệt hoa thường và cả dấu tiếng Việt. */
   search(query: string): Promise<SearchResult>;
-  /** Tạo buổi ghi từ file có sẵn (M4-02): không lưu file, chỉ đọc thông tin */
-  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: string }): Promise<{ id: string }>;
+  /** Tạo buổi ghi từ file có sẵn (M4-02): không lưu file, chỉ đọc thông tin.
+   * M6-02: language là ngôn ngữ nói chính, auto_detect_languages là công tắc
+   * "Có thể có tiếng khác" (bản giả không nhận diện được, chỉ lưu lựa chọn). */
+  createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: Lang; auto_detect_languages?: boolean }): Promise<{ id: string }>;
   /** Buổi ghi mẫu theo nghề (M4-04): dùng ở màn làm quen và Cài đặt > Hồ sơ */
   getSample(profession: Profession): Promise<SessionDetail>;
 }
 
 export interface TaskRepository {
-  listAll(filter?: { mine?: boolean }): Promise<ActionItem[]>;
+  /** lang: hiển thị theo ngôn ngữ báo cáo của từng buổi (M6-03) */
+  listAll(filter?: { mine?: boolean; lang?: Lang }): Promise<ActionItem[]>;
   upsert(item: ActionItem): Promise<void>;
   toggleDone(id: string): Promise<ActionItem>;
 }
@@ -101,12 +123,17 @@ export type PublicSessionView = Pick<
   /** Tên người chia sẻ, hiện đầu trang công khai (M4-01) */
   sharer_name: string;
   scope: ShareLink["scope"];
+  /** Ngôn ngữ của bản đang xem (M6-04) */
+  lang: Lang;
+  /** Các bản người xem được chọn (M6-04); bản đầu là bản gốc */
+  languages: Lang[];
 };
 
 export interface ShareRepository {
   create(
     sessionId: string,
-    opts: Pick<ShareLink, "scope" | "expires_at"> & { password?: string },
+    // M6-04: languages là các bản tóm tắt người xem được chọn
+    opts: Pick<ShareLink, "scope" | "expires_at"> & { password?: string; languages?: Lang[] },
   ): Promise<ShareLink>;
   revoke(id: string): Promise<void>;
   /** Link đang sống của một buổi ghi (M4-01): null là chưa có */
@@ -115,9 +142,11 @@ export interface ShareRepository {
   listAll(): Promise<ShareLink[]>;
   /** Mỗi lần mở trang công khai tăng lượt xem (M4-01) */
   recordView(shareId: string): Promise<void>;
+  /** lang: xem bản tóm tắt theo ngôn ngữ (M6-04); không truyền là bản gốc */
   getPublic(
     shareId: string,
     password?: string,
+    lang?: Lang,
   ): Promise<PublicSessionView | "expired" | "revoked" | "needs_password" | "not_found">;
 }
 
@@ -128,6 +157,8 @@ export type EmailDraft = {
   subject: string;
   body: string;
   kind: "minutes" | "tasks";
+  /** Ngôn ngữ của email, theo người nhận (M6-04) */
+  lang: Lang;
 };
 
 export interface MailRepository {
@@ -150,8 +181,9 @@ export interface AccountRepository {
   removeGlossaryTerm(id: string): Promise<void>;
   /** Tạo liên hệ mới ngay trong ô chọn tên (M3-02) */
   addContact(input: { name: string; email?: string }): Promise<Contact>;
-  /** Sửa liên hệ, ví dụ thêm email ngay tại hàng người nhận (M3-02, M3-04) */
-  updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email">>): Promise<void>;
+  /** Sửa liên hệ, ví dụ thêm email ngay tại hàng người nhận (M3-02, M3-04);
+   * preferred_language là ngôn ngữ ưa dùng khi gửi biên bản (M6-04) */
+  updateContact(id: string, patch: Partial<Pick<Contact, "name" | "role" | "email" | "preferred_language">>): Promise<void>;
   /** Xóa liên hệ: trả về các buổi ghi đang dùng người này làm người nói,
    * để giao diện cảnh báo trước khi xóa (M4-03) */
   contactUsage(id: string): Promise<string[]>;

@@ -1,13 +1,14 @@
 "use client";
 
 import { m } from "motion/react";
-import { Building2, Briefcase, Gavel, HeartPulse, PenTool, Scale, UserRound, ArrowLeft, Play } from "lucide-react";
+import { Building2, Briefcase, Gavel, HeartPulse, PenTool, Scale, UserRound, ArrowLeft, Languages, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/form";
 import { data, dataNow, useData, type Profession } from "@/lib/data";
+import { setLocaleCookie, type UiLocale } from "@/lib/locale";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
 
@@ -33,12 +34,21 @@ export function WelcomeScreen() {
   const t = useTranslations("welcome");
   const tp = useTranslations("debug");
   const tl = useTranslations("library");
+  const ts = useTranslations("settings");
   const router = useRouter();
   const [step, setStep] = useState<0 | 1 | 2 | 3>(0);
   const [profession, setProfession] = useState<Profession | null>(null);
   const [name, setName] = useState("");
   const [honorific, setHonorific] = useState<"anh" | "chị" | "">("");
   const [saving, setSaving] = useState(false);
+
+  function pickLocale(locale: UiLocale) {
+    // Chọn ngôn ngữ ngay màn đầu (review PR #52 mục 5): dò theo Accept-Language
+    // có thể sai, người dùng tự chọn được thì luôn đúng
+    setLocaleCookie(locale);
+    void data.account.updateMe({ ui_language: locale }).catch(() => undefined);
+    router.refresh();
+  }
 
   async function markOnboarded() {
     try {
@@ -67,6 +77,31 @@ export function WelcomeScreen() {
             {t("skip")}
           </Button>
         </div>
+        {/* Chọn ngôn ngữ ngay màn đầu (review PR #52 mục 5): dò theo Accept-Language
+            có thể sai với người Việt dùng máy tiếng Anh. Ba chip ghi tên gốc của
+            từng ngôn ngữ để ai cũng nhận ra ngôn ngữ của mình. */}
+        <fieldset className="mt-10">
+          <legend className="mb-2 flex items-center justify-center gap-1.5 text-caption font-medium text-ink-3">
+            <Languages aria-hidden={true} className="size-3.5" strokeWidth={1.75} />
+            {ts("languageLabel")}
+          </legend>
+          <div className="flex flex-wrap justify-center gap-2">
+            {(["vi", "en", "ko"] as const).map((lg) => (
+              <button
+                key={lg}
+                type="button"
+                onClick={() => pickLocale(lg)}
+                lang={lg === "ko" ? "ko" : undefined}
+                className={cn(
+                  "h-11 rounded-control border px-4 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                  "border-line bg-surface text-ink-2 hover:bg-surface-2",
+                )}
+              >
+                {ts(`lang${lg === "vi" ? "Vi" : lg === "en" ? "En" : "Ko"}`)}
+              </button>
+            ))}
+          </div>
+        </fieldset>
       </main>
     );
   }

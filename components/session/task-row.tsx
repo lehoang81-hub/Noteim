@@ -9,6 +9,9 @@ import { cn } from "@/lib/cn";
  */
 export function TaskRow({
   task,
+  /** Ngôn ngữ của nội dung việc và trích dẫn: lang cho trình đọc màn hình và
+   * quy tắc ngắt chữ Hàn (Mục 2 review #52); không truyền thì theo trang */
+  lang,
   done,
   onToggle,
   toggleLabel,
@@ -26,6 +29,8 @@ export function TaskRow({
   openLabel,
 }: {
   task: string;
+  /** BCP-47 của task và quote ("vi"|"en"|"ko") */
+  lang?: string;
   done: boolean;
   onToggle?: () => void;
   /** "Đánh dấu xong" */
@@ -78,10 +83,10 @@ export function TaskRow({
             aria-label={openLabel ?? task}
             className="-mx-1 block w-full rounded-control px-1 text-left"
           >
-            <p className={cn("text-body", done ? "text-ink-3 line-through" : "text-ink")}>{task}</p>
+            <p lang={lang} className={cn("text-body", done ? "text-ink-3 line-through" : "text-ink")}>{task}</p>
           </button>
         ) : (
-          <p className={cn("text-body", done ? "text-ink-3 line-through" : "text-ink")}>{task}</p>
+          <p lang={lang} className={cn("text-body", done ? "text-ink-3 line-through" : "text-ink")}>{task}</p>
         )}
         {sessionLabel ? <p className="mt-0.5 text-caption text-ink-3">{sessionLabel}</p> : null}
         <p className="mt-0.5 flex flex-wrap items-center gap-x-3 text-small">
@@ -104,7 +109,7 @@ export function TaskRow({
           ) : null}
         </p>
         {quote ? (
-          <blockquote className="mt-1.5 border-l-2 border-line pl-2.5 text-small text-ink-2">{quote}</blockquote>
+          <blockquote lang={lang} className="mt-1.5 border-l-2 border-line pl-2.5 text-small text-ink-2">{quote}</blockquote>
         ) : null}
       </div>
     </div>

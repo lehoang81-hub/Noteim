@@ -3,7 +3,7 @@
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
 import { DataError } from "../errors";
-import type { ActionItem, ChatMessage, Contact, GlossaryTerm, Session, SessionDetail, ShareLink } from "../types";
+import type { ActionItem, ChatMessage, Contact, GlossaryTerm, Lang, Session, SessionDetail, ShareLink, SummaryVersion } from "../types";
 import { MOCK_NOW, commit, getDb, samplesReady, sessionsReady, type StoredSession } from "./store";
 
 /*
@@ -65,7 +65,7 @@ async function stripSessions(list: Array<Session | SessionDetail>): Promise<Sess
 }
 
 /** Bản sao ShareLink không kèm mật khẩu (mật khẩu chỉ dùng nội bộ bản giả). */
-function toShareLink(s: { id: string; session_id: string; scope: ShareLink["scope"]; has_password: boolean; expires_at: string | null; revoked: boolean; view_count: number }): ShareLink {
+function toShareLink(s: ShareLink & { password?: string }): ShareLink {
   return {
     id: s.id,
     session_id: s.session_id,
@@ -74,6 +74,7 @@ function toShareLink(s: { id: string; session_id: string; scope: ShareLink["scop
     expires_at: s.expires_at,
     revoked: s.revoked,
     view_count: s.view_count,
+    languages: s.languages ?? [],
   };
 }
 
@@ -87,6 +88,30 @@ function refreshCounts(d: SessionDetail) {
       d.headline_tag = decided > 0 ? { tag: "decided", count: decided } : undefined;
     }
   }
+}
+
+/**
+ * Bản gốc của buổi (M6-03): đọc executive_summary/topics từ SessionDetail,
+ * gói thành SummaryVersion. Ý trích dẫn không cần original_text vì đây là
+ * câu gốc.
+ */
+function originalVersion(d: SessionDetail): SummaryVersion {
+  return {
+    session_id: d.id,
+    lang: d.original_report_language,
+    source: "original",
+    translated_from: null,
+    created_at: d.created_at,
+    stale: false,
+    executive_summary: d.executive_summary,
+    topics: d.topics,
+    task_texts: Object.fromEntries(d.action_items.map((a) => [a.id, a.task])),
+  };
+}
+
+/** Bản dịch đã lưu trong kho (fixture summary_versions hoặc bản đã tạo). */
+function storedVersion(fx: { detail: SessionDetail; summary_versions?: SummaryVersion[] }, lang: Lang): SummaryVersion | null {
+  return (fx.summary_versions ?? []).find((v) => v.lang === lang) ?? null;
 }
 
 function matches(d: Session | SessionDetail, f: SessionFilter | undefined): boolean {
@@ -250,12 +275,15 @@ export const mockSource: DataSource = {
     updateBullet: (sessionId, bulletId, text) =>
       write(async () => {
         await sessionsReady();
-        for (const t of (await findFixture(sessionId)).detail.topics)
+        const fx = await findFixture(sessionId);
+        for (const t of fx.detail.topics)
           for (const b of t.bullets)
             if (b.id === bulletId) {
               b.text = text;
               b.edited = true;
             }
+        // Sửa ý ở bản gốc: mọi bản dịch hiện "Bản gốc đã sửa sau khi dịch" (M6-03)
+        for (const v of fx.summary_versions ?? []) v.stale = true;
       }),
     updateSegment: (sessionId, segmentId, text) =>
       write(async () => {
@@ -264,6 +292,106 @@ export const mockSource: DataSource = {
         if (!seg) throw new DataError("not_found");
         seg.text = text;
         seg.edited = true;
+        // Câu gốc đã sửa: mọi bản dịch hiện có của đoạn này sang trạng thái
+        // "Cần dịch lại" (M6-02)
+        for (const tr of Object.values(seg.translations)) if (tr) tr.stale = true;
+      }),
+    translateSegments: (sessionId, lang, segmentIds) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        // Cờ bảng thử nghiệm: dịch chậm 10 giây, dịch lỗi có Thử lại (M6-02)
+        if (getFlags().translateSlow) await new Promise((r) => setTimeout(r, 10000));
+        if (getFlags().translateFail) throw new DataError("server");
+        // Bật "Xem bản dịch" (không kèm segmentIds): chỉ điền đoạn CHƯA có bản
+        // dịch; đoạn đang "Cần dịch lại" giữ nguyên nhãn cho đến khi người dùng
+        // chủ động dịch lại đoạn đó ("Dịch đoạn này") — M6-02
+        const bulk = !segmentIds;
+        const list = fx.transcript.filter((s) => (segmentIds ? segmentIds.includes(s.id) : true) && s.lang !== lang);
+        for (const seg of list) {
+          const existing = seg.translations[lang];
+          if (existing && (!existing.stale || bulk)) continue;
+          if (existing?.stale) {
+            // Mockup không dịch lại được nội dung: giữ bản dịch cũ, gỡ nhãn lỗi thời
+            seg.translations[lang] = { ...existing, stale: false };
+          } else {
+            // Chưa có bản dịch trong fixture: điền "bản dịch mẫu" kèm câu gốc,
+            // không bịa nội dung (docs/08, Bản ghi lời)
+            seg.translations[lang] = { text: seg.text, stale: false, sample: true };
+          }
+        }
+        return fx.transcript;
+      }),
+    getSummary: (id, lang) =>
+      read(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
+        if (lang === fx.detail.original_report_language) return originalVersion(fx.detail);
+        const stored = storedVersion(fx, lang);
+        if (!stored) throw new DataError("not_found");
+        return stored;
+      }),
+    createSummaryVersion: (id, lang, onStep) =>
+      write(async () => {
+        await sessionsReady();
+        const db = getDb();
+        const fx = await findFixture(id);
+        const d = fx.detail;
+        if (lang === d.original_report_language) return originalVersion(d);
+        const existing = storedVersion(fx, lang);
+        // Gói Free: 1 bản thêm mỗi buổi (bản gốc không tính). Bản lỗi thời
+        // "Dịch lại" thì không mất gì thêm.
+        const plan = getFlags().plan ?? db.user.plan;
+        if (!existing && plan === "free" && (fx.summary_versions?.length ?? 0) >= 1) {
+          throw new DataError("quota_exceeded");
+        }
+        // Cờ bảng thử nghiệm: dịch chậm 10 giây, dịch lỗi có Thử lại (docs/08)
+        if (getFlags().translateSlow) await new Promise((r) => setTimeout(r, 10000));
+        onStep(1);
+        await new Promise((r) => setTimeout(r, 1500));
+        onStep(2);
+        await new Promise((r) => setTimeout(r, 1500));
+        if (getFlags().translateFail) throw new DataError("server");
+        // Bản giả không sinh nội dung mới: giữ câu gốc ở bản dịch, đánh dấu
+        // sample để giao diện ghi "Bản dịch mẫu" (không bịa nội dung)
+        const version: SummaryVersion = existing ?? {
+          session_id: d.id,
+          lang,
+          source: "translated",
+          translated_from: d.original_report_language,
+          created_at: new Date().toISOString(),
+          stale: false,
+          executive_summary: d.executive_summary,
+          topics: d.topics.map((t) => ({
+            ...t,
+            bullets: t.bullets.map((b) => ({ ...b, original_text: b.text, original_lang: d.original_report_language })),
+          })),
+          task_texts: Object.fromEntries(d.action_items.map((a) => [a.id, a.task])),
+          sample: true,
+        };
+        version.stale = false;
+        version.created_at = new Date().toISOString();
+        if (existing) {
+          for (const v of fx.summary_versions ?? []) if (v.lang === lang) v.stale = false;
+        } else {
+          (fx.summary_versions ??= []).push(version);
+          if (!d.report_languages.includes(lang)) d.report_languages.push(lang);
+        }
+        return version;
+      }),
+    updateVersionBullet: (sessionId, lang, bulletId, text) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        const v = storedVersion(fx, lang);
+        if (!v) throw new DataError("not_found");
+        for (const t of v.topics)
+          for (const b of t.bullets)
+            if (b.id === bulletId) {
+              b.text = text;
+              b.edited = true;
+              // Sửa bản dịch không tự sửa bản khác, bản gốc giữ nguyên (M6-03)
+            }
       }),
     reassignSegment: (sessionId, segmentId, speakerId) =>
       write(async () => {
@@ -332,8 +460,11 @@ export const mockSource: DataSource = {
           workspace_id: null,
           title: draft.title ?? "",
           template_id: draft.template_id,
-          language: "vi",
-          output_language: "vi",
+          // Ngôn ngữ nói chính chọn ở bảng "Bắt đầu ghi" (M6-02)
+          primary_language: draft.primary_language,
+          detected_languages: [draft.primary_language],
+          report_languages: [db.user.default_report_language ?? db.user.ui_language],
+          original_report_language: db.user.default_report_language ?? db.user.ui_language,
           status: offline ? "unsynced" : "processing",
           processing_step: offline ? undefined : 1,
           storage_status: "full",
@@ -471,17 +602,27 @@ export const mockSource: DataSource = {
           const sectionTitles = template
             ? template.sections.filter((s) => d.topics.some((tp) => tp.section_id === s.id)).map((s) => s.title)
             : [];
+          // Tìm trên câu gốc VÀ mọi bản tóm tắt đã có (M6-03): bản dịch tiếng
+          // Hàn cũng dẫn về đúng buổi
+          const versions: Array<SummaryVersion> = [originalVersion(d), ...(fx.summary_versions ?? [])];
           const hayTitle = foldVi(
             [
               d.title,
-              d.executive_summary,
               ...sectionTitles,
-              ...d.topics.flatMap((t) => [t.title, ...t.bullets.map((b) => b.text)]),
+              ...versions.flatMap((v) => [
+                v.executive_summary,
+                ...v.topics.flatMap((t) => [t.title, ...t.bullets.flatMap((b) => [b.text, b.original_text ?? "", b.original_text ? `“${b.original_text}”` : ""])]),
+                ...Object.values(v.task_texts ?? {}),
+              ]),
             ].join(" "),
           );
           if (hayTitle.includes(q)) out.sessions.push(stripToSession(d));
           for (const seg of fx.transcript) {
-            if (foldVi(seg.text).includes(q)) out.segments.push({ session_id: d.id, segment: seg });
+            // Câu gốc và mọi bản dịch đoạn lời (M6-03)
+            const trans = Object.values(seg.translations ?? {})
+              .map((tr) => tr?.text ?? "")
+              .join(" ");
+            if (foldVi(`${seg.text} ${trans}`).includes(q)) out.segments.push({ session_id: d.id, segment: seg });
           }
           for (const task of d.action_items) {
             if (foldVi(`${task.task} ${task.source_quote ?? ""}`).includes(q)) out.tasks.push(task);
@@ -502,6 +643,7 @@ export const mockSource: DataSource = {
         const draft: RecordingDraft = {
           title: input.file_name.replace(/\.[^.]+$/, ""),
           template_id: input.template_id,
+          primary_language: input.language,
           duration_sec: input.duration_sec,
           notes: [],
           bookmarks: [],
@@ -514,8 +656,10 @@ export const mockSource: DataSource = {
           workspace_id: null,
           title: draft.title ?? "",
           template_id: input.template_id,
-          language: input.language,
-          output_language: db.user.ui_language,
+          primary_language: input.language,
+          detected_languages: [input.language],
+          report_languages: [db.user.default_report_language ?? db.user.ui_language],
+          original_report_language: db.user.default_report_language ?? db.user.ui_language,
           status: "processing",
           processing_step: 1,
           storage_status: "full",
@@ -558,7 +702,17 @@ export const mockSource: DataSource = {
     listAll: (filter) =>
       read(async () => {
         await sessionsReady();
-        const items = getDb().sessions.flatMap((s) => s.detail.action_items);
+        const items: ActionItem[] = [];
+        for (const fx of getDb().sessions) {
+          const d = fx.detail;
+          const lang = filter?.lang;
+          const version = lang ? storedVersion(fx, lang) : null;
+          for (const a of d.action_items) {
+            // Trang Việc hiển thị theo ngôn ngữ báo cáo mặc định (M6-03):
+            // tên việc lấy từ bản đã có của buổi, thiếu thì giữ câu gốc
+            items.push(version ? { ...a, task: version.task_texts[a.id] ?? a.task } : a);
+          }
+        }
         return filter?.mine ? items.filter((a) => a.assignee_contact_id === "c-me") : items;
       }),
     upsert: (item) =>
@@ -598,7 +752,16 @@ export const mockSource: DataSource = {
       if (getFlags().failLoad) throw new DataError("server");
       const fx = await findFixture(sessionId);
       const hit = fx.chat.find((c) => c.question.trim().toLowerCase() === question.trim().toLowerCase());
-      const answer = hit?.answer ?? "Bản mockup chỉ trả lời được các câu gợi ý.";
+      // Hỏi AI trả lời bằng ngôn ngữ của câu hỏi (M6-03): chữ Hàn thì trả lời
+      // tiếng Hàn, chữ Latin không dấu thì tiếng Anh, còn lại tiếng Việt
+      const hasHangul = /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7A3]/.test(question);
+      const hasViDiacritics = /[ăâêôơưđáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ]/i.test(question);
+      const fallback = hasHangul
+        ? "샘플 목업에서는 추천 질문에만 답변할 수 있어요."
+        : !hasViDiacritics && /^[a-z0-9\s?,.'-]+$/i.test(question)
+          ? "The mockup can only answer the suggested questions."
+          : "Bản mockup chỉ trả lời được các câu gợi ý.";
+      const answer = hit?.answer ?? fallback;
       // Lịch sử hỏi đáp lưu theo buổi ghi (M3-03): cả câu không có trong fixture
       const log = (fx.chat_log ?? []);
       log.push({ id: `q-${Date.now().toString(36)}`, role: "user", text: question, citations: [] });
@@ -634,6 +797,7 @@ export const mockSource: DataSource = {
           expires_at: opts.expires_at,
           revoked: false,
           view_count: 0,
+          languages: opts.languages ?? [],
         };
         if (opts.password) link.password = opts.password;
         db.shares.push(link);
@@ -663,7 +827,7 @@ export const mockSource: DataSource = {
         const link = getDb().shares.find((s) => s.id === shareId);
         if (link) link.view_count += 1;
       }),
-    getPublic: (shareId, password) =>
+    getPublic: (shareId, password, lang) =>
       read(async () => {
         await sessionsReady();
         const db = getDb();
@@ -680,37 +844,77 @@ export const mockSource: DataSource = {
         const fx = db.sessions.find((s) => s.detail.id === link.session_id);
         if (!fx) return "not_found" as const;
         const d = fx.detail;
+        // Người xem chọn bản theo ngôn ngữ (M6-04): mặc định bản gốc, có bản
+        // đã tạo thì lấy nội dung của bản đó
+        const available = link.languages.length
+          ? link.languages
+          : [d.original_report_language, ...(fx.summary_versions ?? []).map((v) => v.lang)];
+        const viewLang = lang && available.includes(lang) ? lang : d.original_report_language;
+        const version = viewLang === d.original_report_language ? null : storedVersion(fx, viewLang);
         return {
           title: d.title,
-          executive_summary: d.executive_summary,
-          topics: d.topics,
+          executive_summary: version?.executive_summary ?? d.executive_summary,
+          topics: (version?.topics ?? d.topics) as typeof d.topics,
           duration_sec: d.duration_sec,
           created_at: d.created_at,
           speakers: d.speakers,
           sharer_name: db.user.display_name,
           scope: link.scope,
+          lang: viewLang,
+          languages: available,
         };
       }),
   },
 
   mail: {
+    // M6-04 (issue #46): tiêu đề, lời chào và chân email theo ngôn ngữ người
+    // nhận; khóa chuỗi nằm trong messages/ (tải động khi soạn, không vào
+    // chunk khởi tạo). Nội dung lấy theo bản tóm tắt của ngôn ngữ đó.
     preview: (sessionId, recipientContactIds, mode) =>
       read(async () => {
         await sessionsReady();
+        const db = getDb();
         const d = (await findFixture(sessionId)).detail;
+        const [viMsg, enMsg, koMsg] = await Promise.all([
+          import("@/messages/vi.json"),
+          import("@/messages/en.json"),
+          import("@/messages/ko.json"),
+        ]);
+        const msgFiles = { vi: viMsg.default, en: enMsg.default, ko: koMsg.default };
+        const msg = (lang: Lang, path: string, params?: Record<string, string | number>): string => {
+          let text: unknown = path.split(".").reduce<unknown>((node, key) => (node as Record<string, unknown>)?.[key], msgFiles[lang]);
+          if (typeof text !== "string") text = path.split(".").reduce<unknown>((node, key) => (node as Record<string, unknown>)?.[key], msgFiles.vi);
+          if (typeof text !== "string") return path;
+          return text.replace(/\{(\w+)\}/g, (_, name) => String(params?.[name] ?? `{${name}}`));
+        };
+        const langName = (lang: Lang): string => msg(lang, `settings.lang${lang === "vi" ? "Vi" : lang === "en" ? "En" : "Ko"}`);
         const drafts: EmailDraft[] = [];
         for (const cid of recipientContactIds) {
+          const contact = db.contacts.find((c) => c.id === cid);
+          const lang = contact?.preferred_language ?? db.user.default_report_language ?? "vi";
+          const fx = await findFixture(sessionId);
+          const version = lang === d.original_report_language ? null : storedVersion(fx, lang);
+          const summaryText = version?.executive_summary ?? d.executive_summary;
+          const taskText = (id: string, fallback: string) => version?.task_texts?.[id] ?? fallback;
           if (mode !== "tasks")
-            drafts.push({ to_contact_id: cid, kind: "minutes", subject: `Biên bản: ${d.title}`, body: d.executive_summary });
+            drafts.push({
+              to_contact_id: cid,
+              kind: "minutes",
+              lang,
+              subject: msg(lang, "sendMinutes.emailSubjectMinutes", { title: d.title }),
+              body: `${msg(lang, "sendMinutes.emailGreeting", { name: contact?.name ?? "" })}\n\n${summaryText}\n\n${msg(lang, "sendMinutes.emailFooter")}`,
+            });
           const mine = d.action_items.filter((a) => a.assignee_contact_id === cid && !a.done);
           if (mode !== "minutes" && mine.length)
             drafts.push({
               to_contact_id: cid,
               kind: "tasks",
-              subject: `Việc của bạn sau buổi ${d.title}`,
-              body: mine.map((a) => `- ${a.task}`).join("\n"),
+              lang,
+              subject: msg(lang, "sendMinutes.emailSubjectTasks", { title: d.title }),
+              body: `${msg(lang, "sendMinutes.emailGreeting", { name: contact?.name ?? "" })}\n\n${msg(lang, "sendMinutes.emailTasksHeading")}:\n${mine.map((a) => `- ${taskText(a.id, a.task)}`).join("\n")}\n\n${msg(lang, "sendMinutes.emailFooter")}`,
             });
         }
+        void langName;
         return drafts;
       }),
     send: (drafts) =>
@@ -771,6 +975,7 @@ export const mockSource: DataSource = {
         const contact: Contact = {
           id: `c-new-${Date.now().toString(36)}`,
           name: input.name.trim(),
+          preferred_language: null,
           ...(input.email?.trim() ? { email: input.email.trim() } : {}),
         };
         db.contacts.push(contact);
@@ -783,6 +988,7 @@ export const mockSource: DataSource = {
         if (patch.name !== undefined) c.name = patch.name.trim();
         if (patch.role !== undefined) c.role = patch.role.trim() || undefined;
         if (patch.email !== undefined) c.email = patch.email.trim() || undefined;
+        if (patch.preferred_language !== undefined) c.preferred_language = patch.preferred_language;
       }),
     addGlossaryTerm: (term) =>
       write(() => {
@@ -792,7 +998,7 @@ export const mockSource: DataSource = {
           (g) => g.term.toLocaleLowerCase("vi") === clean.toLocaleLowerCase("vi"),
         );
         if (existing) return existing;
-        const item: GlossaryTerm = { id: `gl-${Date.now().toString(36)}`, term: clean };
+        const item: GlossaryTerm = { id: `gl-${Date.now().toString(36)}`, term: clean, variants: {} };
         db.glossary.push(item);
         return item;
       }),

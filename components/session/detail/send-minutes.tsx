@@ -1,14 +1,14 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, ClipboardCopy, Send, TriangleAlert } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { Check, ClipboardCopy, Languages, Send, TriangleAlert } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet } from "@/components/ui/sheet";
 import { formatClock } from "@/components/ribbon/draw";
 import { shortDate } from "@/lib/format";
 import { useToast } from "@/components/ui/toast";
-import { data, type Contact, type EmailDraft, type SessionDetail } from "@/lib/data";
+import { data, DataError, type Contact, type EmailDraft, type Lang, type SessionDetail } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
 /*
@@ -25,6 +25,9 @@ import { cn } from "@/lib/cn";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const SEND_LANGS: readonly Lang[] = ["vi", "en", "ko"];
+const LANG_NAME_KEY: Record<Lang, string> = { vi: "summary.langVi", en: "summary.langEn", ko: "summary.langKo" };
+
 export function SendMinutesSheet({
   session,
   contacts,
@@ -33,6 +36,7 @@ export function SendMinutesSheet({
   onSeek,
   open,
   onOpenChange,
+  defaultReportLang,
 }: {
   session: SessionDetail;
   contacts: Contact[];
@@ -41,10 +45,12 @@ export function SendMinutesSheet({
   onSeek: (time: number) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Ngôn ngữ báo cáo mặc định (M6-04): người nhận không đặt ngôn ngữ ưa dùng thì theo đây */
+  defaultReportLang: Lang;
 }) {
   const t = useTranslations("sendMinutes");
-  const locale = useLocale();
   const ts = useTranslations("session");
+  const tl = useTranslations(); // tên ngôn ngữ ở cấp gốc (summary.langVi...)
   const toast = useToast();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -54,6 +60,13 @@ export function SendMinutesSheet({
   // Lỗi email từng hàng: thiếu email (bắt buộc nhập) hoặc sai định dạng
   const [emailErrors, setEmailErrors] = useState<Record<string, "missing" | "invalid">>({});
   const [previews, setPreviews] = useState<EmailDraft[] | null>(null);
+  // Ngôn ngữ từng người nhận (M6-04): mặc định theo liên hệ, đổi được tại hàng
+  const [langById, setLangById] = useState<Record<string, Lang>>({});
+  // Người nhận thêm từ Danh bạ ngoài người tham gia (M6-04): gửi biên bản cho
+  // người không ngồi trong buổi cũng là nhu cầu thật
+  const [extraIds, setExtraIds] = useState<string[]>([]);
+  const [previewLang, setPreviewLang] = useState<Lang | null>(null);
+  const [creatingLangs, setCreatingLangs] = useState<Lang[]>([]);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [edits, setEdits] = useState<Record<string, { subject: string; body: string }>>({});
   const [sending, setSending] = useState(false);
@@ -82,6 +95,8 @@ export function SendMinutesSheet({
     return ids;
   }, [session, contactById]);
 
+  const allRecipientIds = useMemo(() => [...recipientIds, ...extraIds], [recipientIds, extraIds]);
+
   // Mỗi lần mở bảng: đặt lại về bước 1 và chỉ tích sẵn người CÓ email
   // — người chưa có email phải được tích chủ động kèm nhập email
   // (làm lúc vẽ thay vì trong effect — bảng mở từ prop bên ngoài)
@@ -93,6 +108,12 @@ export function SendMinutesSheet({
     setSelected(recipientIds.filter((id) => contactById[id]?.email));
     setEmailDraft({});
     setEmailErrors({});
+    setExtraIds([]);
+    setLangById(
+      Object.fromEntries(
+        recipientIds.map((id) => [id, contactById[id]?.preferred_language ?? defaultReportLang]),
+      ),
+    );
     setPreviews(null);
     setEdits({});
     setSending(false);
@@ -196,6 +217,8 @@ export function SendMinutesSheet({
     try {
       const result = await data.mail.preview(session.id, selected, mode);
       setPreviews(result);
+      // Mở tab ngôn ngữ đầu tiên của danh sách người nhận (M6-04)
+      setPreviewLang(result[0]?.lang ?? defaultReportLang);
       setStep(2);
     } catch {
       toast.show({ tone: "error", message: ts("saveError") });
@@ -231,11 +254,32 @@ export function SendMinutesSheet({
     return okCount;
   }
 
+  /** Ngôn ngữ người nhận đã chọn nhưng buổi chưa có bản tóm tắt (M6-04). */
+  function missingVersionLangs(): Lang[] {
+    const langs = new Set<Lang>(selected.map((id) => langById[id] ?? defaultReportLang));
+    return [...langs].filter(
+      (lang) => lang !== session.original_report_language && !session.report_languages.includes(lang),
+    );
+  }
+
   async function confirmSend() {
     if (!previews) return;
     setSending(true);
     setFailures([]);
     try {
+      // Tạo bản tóm tắt còn thiếu trong lúc gửi (M6-04, màn xác nhận đã ghi rõ)
+      const missing = missingVersionLangs();
+      for (const lang of missing) {
+        setCreatingLangs((list) => [...list, lang]);
+        try {
+          await data.sessions.createSummaryVersion(session.id, lang, () => undefined);
+        } catch (e) {
+          if (e instanceof DataError && e.code === "quota_exceeded") {
+            toast.show({ tone: "error", message: tl("summary.limitTitle") });
+          }
+        }
+        setCreatingLangs((list) => list.filter((l) => l !== lang));
+      }
       // Giả lập thời gian gửi
       await new Promise((r) => setTimeout(r, 1500));
       const okCount = await send(previews);
@@ -295,6 +339,18 @@ export function SendMinutesSheet({
     session.action_items.filter((a) => !a.done && a.assignee_contact_id).map((a) => a.assignee_contact_id as string),
   );
 
+  // Nhóm người nhận theo ngôn ngữ cho tab xem trước (M6-04)
+  const previewGroups = useMemo(() => {
+    const order: Lang[] = [];
+    const counts = new Map<Lang, number>();
+    for (const id of selected) {
+      const lg = langById[id] ?? defaultReportLang;
+      if (!counts.has(lg)) order.push(lg);
+      counts.set(lg, (counts.get(lg) ?? 0) + 1);
+    }
+    return order.map((lang) => ({ lang, recipients: counts.get(lang) ?? 0 }));
+  }, [selected, langById, defaultReportLang]);
+
   return (
     <Sheet open={open} onOpenChange={handleOpenChange} title={t("title")} size="full">
       {/* Bước 1: chọn người nhận */}
@@ -302,7 +358,7 @@ export function SendMinutesSheet({
         <div>
           <p className="text-small font-semibold text-ink-2">{t("step1")}</p>
           <div className="mt-3 flex flex-col gap-1">
-            {recipientIds.map((id) => {
+            {allRecipientIds.map((id) => {
               const c = contactById[id];
               const checked = selected.includes(id);
               const email = c?.email ?? emailDraft[id] ?? "";
@@ -352,9 +408,29 @@ export function SendMinutesSheet({
                         ) : null}
                       </div>
                     ) : (
-                      <p className="text-small text-ink-3">{email}</p>
+                      /* Email dài xuống dòng trong cột của mình, không chui dưới
+                         ô chọn ngôn ngữ bên phải (review PR #52 mục 3) */
+                      <p dir="ltr" className="break-all text-small text-ink-3">
+                        {email}
+                      </p>
                     )}
                   </div>
+                  {/* Ngôn ngữ nhận: mặc định theo liên hệ, đổi được tại hàng (M6-04) */}
+                  <label className="shrink-0">
+                    <span className="sr-only">{t("recipientLanguage")}</span>
+                    <select
+                      value={langById[id] ?? defaultReportLang}
+                      onChange={(e) => setLangById((m2) => ({ ...m2, [id]: e.target.value as Lang }))}
+                      aria-label={`${t("recipientLanguage")}: ${c?.name ?? ""}`}
+                      className="h-9 rounded-pill border border-line bg-surface px-2.5 text-caption font-medium text-ink"
+                    >
+                      {SEND_LANGS.map((lg) => (
+                        <option key={lg} value={lg}>
+                          {tl(LANG_NAME_KEY[lg])}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                   {mode === "tasks" && !recipientsWithTasks.has(id) ? (
                     <span className="shrink-0 text-caption text-ink-3">—</span>
                   ) : null}
@@ -362,6 +438,38 @@ export function SendMinutesSheet({
               );
             })}
           </div>
+
+          {/* Thêm người nhận từ Danh bạ (M6-04): người không tham gia buổi */}
+          {(() => {
+            const remaining = contacts.filter((c) => !allRecipientIds.includes(c.id) && contactById[c.id]);
+            if (!remaining.length) return null;
+            return (
+              <div className="mt-3 flex items-center gap-2">
+                <label className="text-small font-medium text-ink">
+                  <span className="sr-only">{t("addRecipient")}</span>
+                  <select
+                    value=""
+                    onChange={(e) => {
+                      const id = e.target.value;
+                      if (!id) return;
+                      setExtraIds((list) => [...list, id]);
+                      setLangById((m2) => ({ ...m2, [id]: contactById[id]?.preferred_language ?? defaultReportLang }));
+                    }}
+                    aria-label={t("addRecipient")}
+                    className="h-11 rounded-control border border-dashed border-line bg-surface px-2 text-small text-ink-2"
+                  >
+                    <option value="">{t("addRecipient")}</option>
+                    {remaining.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                        {c.preferred_language ? ` (${tl(LANG_NAME_KEY[c.preferred_language])})` : ""}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            );
+          })()}
 
           {/* Hai lựa chọn: biên bản chung / việc riêng cho từng người */}
           <div className="mt-4 flex flex-col gap-2">
@@ -393,7 +501,8 @@ export function SendMinutesSheet({
             ))}
           </div>
 
-          <Button variant="primary" icon={ArrowRight} className="mt-4" loading={previewLoading} onClick={() => void goPreview()}>
+          {/* Không gắn mũi tên vào chữ trên nút (bốn điều cấm, mục 4 review #52) */}
+          <Button variant="primary" className="mt-4" loading={previewLoading} onClick={() => void goPreview()}>
             {t("nextPreview")}
           </Button>
         </div>
@@ -411,6 +520,26 @@ export function SendMinutesSheet({
           ) : null}
           {previews && previews.length > 0 ? (
             <>
+              {/* Xem trước theo từng ngôn ngữ: "Tiếng Việt (3 người)" (M6-04) */}
+              {previewGroups.length > 1 ? (
+                <div role="tablist" aria-label={t("recipientLanguage")} className="mt-2 flex flex-wrap gap-2">
+                  {previewGroups.map((g) => (
+                    <button
+                      key={g.lang}
+                      type="button"
+                      role="tab"
+                      aria-selected={previewLang === g.lang}
+                      onClick={() => (setPreviewLang(g.lang), setSlide(0))}
+                      className={cn(
+                        "h-9 rounded-pill border px-3 text-caption font-medium transition-colors ease-noteim duration-(--t-quick)",
+                        previewLang === g.lang ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+                      )}
+                    >
+                      {t("previewGroup", { lang: tl(LANG_NAME_KEY[g.lang]), count: g.recipients })}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
               <div
                 ref={trackRef}
                 onScroll={(e) => {
@@ -419,7 +548,7 @@ export function SendMinutesSheet({
                 }}
                 className="mt-3 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [scrollbar-width:none]"
               >
-                {previews.map((d) => {
+                {previews.filter((d) => !previewLang || d.lang === previewLang).map((d) => {
                   const e = editedDraft(d);
                   const key = keyOf(d);
                   const items =
@@ -441,6 +570,7 @@ export function SendMinutesSheet({
                         value={e.subject}
                         onChange={(ev) => setEdits((m) => ({ ...m, [key]: { ...e, subject: ev.target.value } }))}
                         aria-label={ts("edit")}
+                        lang={d.lang}
                         className="mt-2 min-h-11 w-full rounded-control border border-line bg-surface px-2 text-small font-semibold text-ink focus:border-dien focus-visible:outline-none"
                       />
                       {/* Phần do AI soạn: viền điện */}
@@ -454,6 +584,7 @@ export function SendMinutesSheet({
                           onChange={(ev) => setEdits((m) => ({ ...m, [key]: { ...e, body: ev.target.value } }))}
                           rows={Math.min(10, Math.max(4, e.body.split("\n").length + 2))}
                           aria-label={ts("edit")}
+                          lang={d.lang}
                           className="w-full resize-none rounded-control bg-transparent text-small text-ink focus-visible:outline-none"
                         />
                       </div>
@@ -461,11 +592,12 @@ export function SendMinutesSheet({
                         <ul className="mt-2 flex flex-col gap-1.5">
                           {items.map((a) => (
                             <li key={a.id} className="text-small text-ink-2">
-                              <span className="font-medium text-ink">{a.task}</span>
-                              {a.due_date ? `, ${shortDate(a.due_date, locale)}` : ""}
+                              <span lang={session.original_report_language} className="font-medium text-ink">{a.task}</span>
+                              {a.due_date ? `, ${shortDate(a.due_date, langById[d.to_contact_id] ?? defaultReportLang)}` : ""}
                               {a.source_quote ? (
                                 <span className="mt-0.5 block border-l-2 border-line pl-2 text-caption text-ink-3">
-                                  “{a.source_quote}”
+                                  {/* Trích câu gốc theo ngôn ngữ buổi ghi (Mục 2 review #52) */}
+                                  <span lang={session.original_report_language}>“{a.source_quote}”</span>
                                   {canPlay && a.timestamp_sec !== null ? (
                                     <button
                                       type="button"
@@ -487,15 +619,15 @@ export function SendMinutesSheet({
               </div>
               {/* Chấm chỉ vị trí */}
               <div className="mt-1 flex items-center justify-center gap-1.5" aria-hidden={true}>
-                {previews.map((d, i) => (
+                {previews.filter((d) => !previewLang || d.lang === previewLang).map((d, i) => (
                   <span key={keyOf(d)} className={cn("size-1.5 rounded-pill", i === slide ? "bg-ink" : "bg-line")} />
                 ))}
               </div>
               <div className="mt-2 hidden items-center justify-center gap-2 lg:flex">
-                <Button variant="ghost" icon={ArrowLeft} onClick={() => slideTo(slide - 1)} disabled={slide === 0}>
+                <Button variant="ghost" onClick={() => slideTo(slide - 1)} disabled={slide === 0}>
                   {t("back")}
                 </Button>
-                <Button variant="ghost" icon={ArrowRight} onClick={() => slideTo(slide + 1)} disabled={slide >= previews.length - 1}>
+                <Button variant="ghost" onClick={() => slideTo(slide + 1)} disabled={slide >= previews.filter((d) => !previewLang || d.lang === previewLang).length - 1}>
                   {t("nextConfirm")}
                 </Button>
               </div>
@@ -503,11 +635,11 @@ export function SendMinutesSheet({
           ) : null}
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <Button variant="secondary" icon={ArrowLeft} onClick={() => setStep(1)}>
+            <Button variant="secondary" onClick={() => setStep(1)}>
               {t("back")}
             </Button>
             {previews && previews.length > 0 ? (
-              <Button variant="primary" icon={ArrowRight} onClick={() => setStep(3)}>
+              <Button variant="primary" onClick={() => setStep(3)}>
                 {t("nextConfirm")}
               </Button>
             ) : null}
@@ -519,6 +651,14 @@ export function SendMinutesSheet({
       {step === 3 ? (
         <div>
           <p className="text-small font-semibold text-ink-2">{t("step3")}</p>
+
+          {/* Bản còn thiếu sẽ tạo trong lúc gửi (M6-04) */}
+          {missingVersionLangs().map((lg) => (
+            <p key={lg} className="mt-2 flex items-center gap-2 text-small text-dien">
+              <Languages aria-hidden={true} className="size-4 shrink-0" strokeWidth={1.75} />
+              {creatingLangs.includes(lg) ? tl("sendMinutes.willCreate", { lang: tl(LANG_NAME_KEY[lg]) }) : t("willCreate", { lang: tl(LANG_NAME_KEY[lg]) })}
+            </p>
+          ))}
 
           {failures.length ? (
             <div className="mt-3 rounded-block border border-line bg-surface p-3" role="alert">
@@ -548,7 +688,7 @@ export function SendMinutesSheet({
             </>
           )}
 
-          <Button variant="ghost" icon={ArrowLeft} className="mt-4" onClick={() => setStep(2)}>
+          <Button variant="ghost" className="mt-4" onClick={() => setStep(2)}>
             {t("back")}
           </Button>
         </div>
