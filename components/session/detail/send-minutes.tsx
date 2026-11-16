@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Check, ClipboardCopy, Languages, Send, TriangleAlert } from "lucide-react";
+import { Check, ClipboardCopy, Languages, Send, TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -501,7 +501,8 @@ export function SendMinutesSheet({
             ))}
           </div>
 
-          <Button variant="primary" icon={ArrowRight} className="mt-4" loading={previewLoading} onClick={() => void goPreview()}>
+          {/* Không gắn mũi tên vào chữ trên nút (bốn điều cấm, mục 4 review #52) */}
+          <Button variant="primary" className="mt-4" loading={previewLoading} onClick={() => void goPreview()}>
             {t("nextPreview")}
           </Button>
         </div>
@@ -623,10 +624,10 @@ export function SendMinutesSheet({
                 ))}
               </div>
               <div className="mt-2 hidden items-center justify-center gap-2 lg:flex">
-                <Button variant="ghost" icon={ArrowLeft} onClick={() => slideTo(slide - 1)} disabled={slide === 0}>
+                <Button variant="ghost" onClick={() => slideTo(slide - 1)} disabled={slide === 0}>
                   {t("back")}
                 </Button>
-                <Button variant="ghost" icon={ArrowRight} onClick={() => slideTo(slide + 1)} disabled={slide >= previews.filter((d) => !previewLang || d.lang === previewLang).length - 1}>
+                <Button variant="ghost" onClick={() => slideTo(slide + 1)} disabled={slide >= previews.filter((d) => !previewLang || d.lang === previewLang).length - 1}>
                   {t("nextConfirm")}
                 </Button>
               </div>
@@ -634,11 +635,11 @@ export function SendMinutesSheet({
           ) : null}
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <Button variant="secondary" icon={ArrowLeft} onClick={() => setStep(1)}>
+            <Button variant="secondary" onClick={() => setStep(1)}>
               {t("back")}
             </Button>
             {previews && previews.length > 0 ? (
-              <Button variant="primary" icon={ArrowRight} onClick={() => setStep(3)}>
+              <Button variant="primary" onClick={() => setStep(3)}>
                 {t("nextConfirm")}
               </Button>
             ) : null}
@@ -687,7 +688,7 @@ export function SendMinutesSheet({
             </>
           )}
 
-          <Button variant="ghost" icon={ArrowLeft} className="mt-4" onClick={() => setStep(2)}>
+          <Button variant="ghost" className="mt-4" onClick={() => setStep(2)}>
             {t("back")}
           </Button>
         </div>

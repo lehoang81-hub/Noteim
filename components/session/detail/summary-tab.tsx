@@ -617,7 +617,7 @@ function BulletRow({
         {!isOriginal && bullet.is_quote && bullet.original_text ? (
           <div lang={bullet.original_lang ?? "vi"} className="mt-1 border-l-2 border-line pl-3">
             <p className="text-caption font-medium text-ink-3">
-              {originalQuoteLabel} · {originalLangLabel}
+              {originalQuoteLabel}, {originalLangLabel}
             </p>
             <p className="text-small text-ink-2">“{bullet.original_text}”</p>
           </div>

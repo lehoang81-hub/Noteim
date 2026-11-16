@@ -354,7 +354,7 @@ function LinkPanel({ detail, onBack }: { detail: SessionDetail; onBack: () => vo
               />
               <span className="text-body text-ink" lang={lg === "ko" ? "ko" : undefined}>
                 {tr(`settings.lang${lg === "vi" ? "Vi" : lg === "en" ? "En" : "Ko"}`)}
-                {lg === detail.original_report_language ? ` · ${tr("summary.originalBadge")}` : ""}
+                {lg === detail.original_report_language ? `, ${tr("summary.originalBadge")}` : ""}
               </span>
             </label>
           ))}
