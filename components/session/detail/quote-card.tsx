@@ -395,7 +395,8 @@ export function QuoteCardPanel({
           >
             {!currentId ? <option value="">{current.text}</option> : null}
             {bullets.map((b) => (
-              <option key={b.id} value={b.id}>
+              // Ý là dữ liệu gốc của buổi: lang theo ngôn ngữ buổi (Mục 2 review #52)
+              <option key={b.id} value={b.id} lang={detail.original_report_language}>
                 {formatClock(b.timestamp_sec)}, {b.text}
               </option>
             ))}

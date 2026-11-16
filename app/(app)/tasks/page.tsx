@@ -166,6 +166,7 @@ export default function TasksPage() {
                         <TaskRow
                           key={a.id}
                           task={a.task}
+                          lang={reportLang}
                           done={a.done}
                           onToggle={() => void toggle(a)}
                           toggleLabel={ts("toggle")}
@@ -210,6 +211,7 @@ export default function TasksPage() {
                       <TaskRow
                         key={a.id}
                         task={a.task}
+                        lang={reportLang}
                         done={a.done}
                         onToggle={() => void toggle(a)}
                         toggleLabel={ts("toggle")}

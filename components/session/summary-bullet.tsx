@@ -8,6 +8,9 @@ import { cn } from "@/lib/cn";
  */
 export function SummaryBullet({
   text,
+  /** Ngôn ngữ của nội dung ý: gắn lang để chữ Hàn không ngắt giữa từ và trình
+   * đọc màn hình đọc đúng giọng (review PR #52 mục 2). */
+  textLang,
   time,
   speakerColorIndex,
   speakerLabel,
@@ -19,6 +22,8 @@ export function SummaryBullet({
   children,
 }: {
   text: string;
+  /** BCP-47 của câu text ("vi"|"en"|"ko"); không truyền thì theo trang */
+  textLang?: string;
   /** "04:30" */
   time: string;
   speakerColorIndex: number;
@@ -55,7 +60,7 @@ export function SummaryBullet({
           style={{ backgroundColor: `var(--speaker-${(speakerColorIndex % 6) + 1})` }}
         />
         <span className="min-w-0 flex-1 text-body text-ink">
-          {text}
+          <span lang={textLang}>{text}</span>
           {editedLabel ? (
             <span className="ml-2 inline-flex items-center gap-1 align-middle text-caption font-medium text-ink-3">
               <span aria-hidden={true} className="size-1.5 rounded-pill bg-ink-3" />

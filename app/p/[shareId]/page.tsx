@@ -222,7 +222,8 @@ function PublicSummary({
   return (
     <main className="mx-auto min-h-dvh w-full max-w-2xl px-5 pb-28 pt-8">
       <header>
-        <h1 className="font-display text-h1 font-semibold text-ink">{view.title}</h1>
+        {/* Tiêu đề là dữ liệu gốc của buổi: lang theo bản gốc (Mục 2 review #52) */}
+        <h1 lang={view.languages[0]} className="font-display text-h1 font-semibold text-ink">{view.title}</h1>
         <p className="mt-1 text-small text-ink-2">{t("sharedBy", { name: view.sharer_name, date: shortDate(view.created_at, locale) })}</p>
         <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
           {view.speakers.map((s) => (
@@ -261,12 +262,13 @@ function PublicSummary({
       </header>
 
       <section className="mt-8" aria-label={t("summaryLabel")}>
+        {/* Nội dung bản tóm tắt theo ngôn ngữ bản đang xem (Mục 2 review #52) */}
         <h2 className="text-small font-semibold text-ink-2">{t("keyPoints")}</h2>
-        <p className="mt-1 text-body text-ink">{view.executive_summary}</p>
+        <p lang={currentLang} className="mt-1 text-body text-ink">{view.executive_summary}</p>
 
         {view.topics.map((topic) => (
           <article key={topic.id} className="mt-6">
-            <h3 className="text-h2 font-semibold text-ink">{topic.title}</h3>
+            <h3 lang={currentLang} className="text-h2 font-semibold text-ink">{topic.title}</h3>
             <ul className="mt-2">
               {topic.bullets.map((b) => (
                 <li
@@ -285,7 +287,7 @@ function PublicSummary({
                       className="mt-2 size-2 shrink-0 rounded-pill"
                       style={{ backgroundColor: `var(--speaker-${((colorOf[b.speaker_id] ?? 0) % 6) + 1})` }}
                     />
-                    <span className="min-w-0 flex-1 text-body text-ink">{b.text}</span>
+                    <span lang={currentLang} className="min-w-0 flex-1 text-body text-ink">{b.text}</span>
                     <span className="shrink-0 pt-0.5 text-caption tabular-nums text-ink-3">{formatClock(b.timestamp_sec)}</span>
                   </button>
                 </li>

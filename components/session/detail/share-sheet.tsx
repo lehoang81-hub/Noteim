@@ -487,7 +487,10 @@ function HighlightsPanel({
                   className="mt-1 size-5 shrink-0 accent-[var(--sen)]"
                 />
                 <span className="min-w-0 flex-1">
-                  <span className="block text-body text-ink">{c.bullet.text}</span>
+                  {/* Ý thuộc bản gốc của buổi: lang theo ngôn ngữ buổi (Mục 2 review #52) */}
+                  <span lang={detail.original_report_language} className="block text-body text-ink">
+                    {c.bullet.text}
+                  </span>
                   <span className="mt-0.5 block text-caption tabular-nums text-ink-3">
                     {formatClock(c.start)} – {formatClock(c.end)}
                   </span>

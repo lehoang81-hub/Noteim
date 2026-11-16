@@ -39,8 +39,9 @@ function FigureBars({ figure, lang }: { figure: NonNullable<SummaryVersion["topi
   const fmt = (v: number) => decimal(v, lang, 2);
   return (
     <figure className="ml-5 mt-2 rounded-block border border-line p-3">
-      <figcaption className="text-small font-medium text-ink">{figure.title}</figcaption>
-      <ul className="mt-2 flex flex-col gap-2">
+      {/* Tiêu đề và nhãn biểu đồ theo ngôn ngữ của bản đang xem (Mục 2 review #52) */}
+      <figcaption lang={lang} className="text-small font-medium text-ink">{figure.title}</figcaption>
+      <ul lang={lang} className="mt-2 flex flex-col gap-2">
         {figure.labels.map((label, i) => (
           <li key={label} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1">
             <span className="truncate text-caption text-ink-2">{label}</span>
@@ -327,7 +328,9 @@ export function SummaryTab({
       ) : null}
 
       <h2 className="mt-6 text-small font-semibold text-ink-2">{t("keyPoints")}</h2>
-      <p className="mt-1 text-body text-ink">{version.executive_summary}</p>
+      {/* Nội dung bản tóm tắt theo ngôn ngữ của bản đang xem: lang để chữ Hàn
+          không ngắt giữa từ và trình đọc màn hình đọc đúng giọng (Mục 2 review #52) */}
+      <p lang={verLang} className="mt-1 text-body text-ink">{version.executive_summary}</p>
 
       {ordered.map((section) => (
         <section key={section.id} className="mt-8">
@@ -338,7 +341,7 @@ export function SummaryTab({
                 <TagChip size="sm" tag={topic.tag} label={tagLabels[topic.tag]} />
               </div>
               <div className="mt-1.5 flex items-baseline gap-3">
-                <h3 className="min-w-0 flex-1 text-h2 font-semibold text-ink">{topic.title}</h3>
+                <h3 lang={verLang} className="min-w-0 flex-1 text-h2 font-semibold text-ink">{topic.title}</h3>
                 {canSeek ? (
                   <button
                     type="button"
@@ -393,6 +396,7 @@ export function SummaryTab({
                     <BulletRow
                       key={b.id}
                       bullet={b}
+                      textLang={verLang}
                       tourAnchor={b.id === allBullets[0]?.id}
                       speakerColorIndex={colorOf[b.speaker_id] ?? 0}
                       speakerName={speakerName}
@@ -515,6 +519,7 @@ export function SummaryTab({
 /** Một ý tóm tắt: chạm để phát, nhấn giữ (hoặc ⋯) để mở bảng thao tác. */
 function BulletRow({
   bullet,
+  textLang,
   speakerColorIndex,
   speakerName,
   playing,
@@ -531,6 +536,8 @@ function BulletRow({
   children,
 }: {
   bullet: SummaryVersion["topics"][number]["bullets"][number];
+  /** Ngôn ngữ của nội dung bản đang xem (Mục 2 review #52) */
+  textLang: Lang;
   speakerColorIndex: number;
   speakerName?: string;
   playing?: boolean;
@@ -584,6 +591,7 @@ function BulletRow({
     >
       <SummaryBullet
         text={bullet.text}
+        textLang={textLang}
         time={formatClock(bullet.timestamp_sec)}
         speakerColorIndex={speakerColorIndex}
         speakerLabel={speakerName}

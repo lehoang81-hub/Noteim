@@ -599,6 +599,7 @@ function TranscriptList(props: ListProps) {
                     }}
                     rows={3}
                     aria-label={t("edit")}
+                    lang={seg.lang}
                     className="mt-1 w-full rounded-control border border-dien bg-surface px-3 py-2 text-body text-ink focus-visible:outline-none"
                   />
                   <div className="mt-2 flex gap-2">
@@ -646,32 +647,39 @@ function TranscriptList(props: ListProps) {
                   >
                     {(() => {
                       let offset = 0;
-                      return pieces.map((piece, i) => {
-                        const start = offset;
-                        offset += piece.text.length;
-                        if (piece.kind === "match") {
-                          const active = isActiveSeg && activeRow && start === activeRow.range.start;
-                          return (
-                            <mark
-                              key={i}
-                              aria-current={active ? "true" : undefined}
-                              className={cn(
-                                "rounded-control px-0.5 text-inherit",
-                                active ? "bg-tag-pending text-tag-pending" : "bg-tag-pending-bg",
-                              )}
-                            >
-                              {piece.text}
-                            </mark>
-                          );
-                        }
-                        if (piece.kind === "term")
-                          return (
-                            <u key={i} className="decoration-dotted underline-offset-4">
-                              {piece.text}
-                            </u>
-                          );
-                        return <span key={i}>{piece.text}</span>;
-                      });
+                      return (
+                        // Nội dung đoạn theo ngôn ngữ của đoạn: lang để chữ Hàn
+                        // không ngắt giữa từ và đọc đúng giọng (Mục 2 review #52).
+                        // Nhãn "đã sửa" ở ngoài span nên vẫn theo ngôn ngữ giao diện.
+                        <span lang={seg.lang}>
+                          {pieces.map((piece, i) => {
+                            const start = offset;
+                            offset += piece.text.length;
+                            if (piece.kind === "match") {
+                              const active = isActiveSeg && activeRow && start === activeRow.range.start;
+                              return (
+                                <mark
+                                  key={i}
+                                  aria-current={active ? "true" : undefined}
+                                  className={cn(
+                                    "rounded-control px-0.5 text-inherit",
+                                    active ? "bg-tag-pending text-tag-pending" : "bg-tag-pending-bg",
+                                  )}
+                                >
+                                  {piece.text}
+                                </mark>
+                              );
+                            }
+                            if (piece.kind === "term")
+                              return (
+                                <u key={i} className="decoration-dotted underline-offset-4">
+                                  {piece.text}
+                                </u>
+                              );
+                            return <span key={i}>{piece.text}</span>;
+                          })}
+                        </span>
+                      );
                     })()}
                     {seg.edited ? (
                       <span className="ml-2 inline-flex items-center gap-1 align-middle text-caption font-medium text-ink-3">

@@ -565,6 +565,7 @@ export function SendMinutesSheet({
                         value={e.subject}
                         onChange={(ev) => setEdits((m) => ({ ...m, [key]: { ...e, subject: ev.target.value } }))}
                         aria-label={ts("edit")}
+                        lang={d.lang}
                         className="mt-2 min-h-11 w-full rounded-control border border-line bg-surface px-2 text-small font-semibold text-ink focus:border-dien focus-visible:outline-none"
                       />
                       {/* Phần do AI soạn: viền điện */}
@@ -578,6 +579,7 @@ export function SendMinutesSheet({
                           onChange={(ev) => setEdits((m) => ({ ...m, [key]: { ...e, body: ev.target.value } }))}
                           rows={Math.min(10, Math.max(4, e.body.split("\n").length + 2))}
                           aria-label={ts("edit")}
+                          lang={d.lang}
                           className="w-full resize-none rounded-control bg-transparent text-small text-ink focus-visible:outline-none"
                         />
                       </div>
@@ -585,11 +587,12 @@ export function SendMinutesSheet({
                         <ul className="mt-2 flex flex-col gap-1.5">
                           {items.map((a) => (
                             <li key={a.id} className="text-small text-ink-2">
-                              <span className="font-medium text-ink">{a.task}</span>
+                              <span lang={session.original_report_language} className="font-medium text-ink">{a.task}</span>
                               {a.due_date ? `, ${shortDate(a.due_date, langById[d.to_contact_id] ?? defaultReportLang)}` : ""}
                               {a.source_quote ? (
                                 <span className="mt-0.5 block border-l-2 border-line pl-2 text-caption text-ink-3">
-                                  “{a.source_quote}”
+                                  {/* Trích câu gốc theo ngôn ngữ buổi ghi (Mục 2 review #52) */}
+                                  <span lang={session.original_report_language}>“{a.source_quote}”</span>
                                   {canPlay && a.timestamp_sec !== null ? (
                                     <button
                                       type="button"

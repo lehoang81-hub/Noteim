@@ -427,6 +427,7 @@ function Loaded({
             <TabsContent value="tasks">
               <TasksTab
                 items={items.map((a) => (summary?.task_texts?.[a.id] ? { ...a, task: summary.task_texts[a.id] } : a))}
+                lang={verLang}
                 contacts={contacts}
                 now={now}
                 canSeek={canPlay}
