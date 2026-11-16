@@ -687,6 +687,23 @@
     "translationStale": "Needs re-translation",
     "sampleTranslation": "Sample translation"
   },
+  "summary": {
+    "versionLabel": "Summary in",
+    "createVersion": "Create {lang} version",
+    "originalBadge": "Original",
+    "translatedFrom": "Translated from {lang}",
+    "staleBanner": "The original was edited after translation",
+    "retranslate": "Re-translate",
+    "createConfirmTitle": "Create {lang} version?",
+    "createConfirmBody": "The version you are viewing stays unchanged. Two steps: translate the summary, then the tasks.",
+    "step1": "Translating summary",
+    "step2": "Translating tasks",
+    "createdToast": "{lang} version created",
+    "limitTitle": "Free plan allows 1 extra version per session",
+    "upgrade": "See Pro plan",
+    "originalQuote": "Original quote",
+    "sampleNote": "Sample translation"
+  },
   "speakers": {
     "title": "Who is who?",
     "description": "Name each speaker. New names appear everywhere in the session.",

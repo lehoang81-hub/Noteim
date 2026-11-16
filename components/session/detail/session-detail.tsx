@@ -14,7 +14,7 @@ import { Banner, EmptyState, SkeletonParagraph } from "@/components/ui/feedback"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { data, dataNow, DataError, useData, type ActionItem, type SessionDetail } from "@/lib/data";
+import { data, dataNow, DataError, useData, type ActionItem, type Lang, type SessionDetail } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
 import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
@@ -214,6 +214,10 @@ function Loaded({
     return current;
   }, [bullets, ps.currentTime, ps.playing]);
 
+  // Bản tóm tắt đang xem (M6-03): mặc định bản gốc, đổi qua ô "Tóm tắt bằng"
+  const [verLang, setVerLang] = useState<Lang>(detail.original_report_language);
+  const summary = useData(() => data.sessions.getSummary(detail.id, verLang), [detail.id, verLang]);
+
   const [items, setItems] = useState(detail.action_items);
   // Dữ liệu tải lại (sửa việc ở nơi khác, thêm việc...) thì đồng bộ lại danh sách;
   // làm lúc vẽ thay vì trong effect
@@ -380,21 +384,33 @@ function Loaded({
           </div>
           <div className="px-page pb-40 pt-5 lg:px-8">
             <TabsContent value="summary">
-              <SummaryTab
-                detail={detail}
-                template={template}
-                tagLabels={tagLabels}
-                playingBulletId={playingBulletId}
-                canSeek={canPlay}
-                onSeek={seek}
-                onAskAi={() => setTab("ai")}
-                onSendMinutes={() => setSending(true)}
-                onShareIntent={openShare}
-              />
+              {summary.data ? (
+                <SummaryTab
+                  detail={detail}
+                  template={template}
+                  tagLabels={tagLabels}
+                  playingBulletId={playingBulletId}
+                  canSeek={canPlay}
+                  onSeek={seek}
+                  onAskAi={() => setTab("ai")}
+                  onSendMinutes={() => setSending(true)}
+                  onShareIntent={openShare}
+                  version={summary.data}
+                  verLang={verLang}
+                  onVerLang={setVerLang}
+                  versions={detail.report_languages.length ? detail.report_languages : [detail.original_report_language]}
+                  originalLang={detail.original_report_language}
+                  plan={planFlag}
+                />
+              ) : (
+                <div aria-busy={true}>
+                  <SkeletonParagraph lines={4} />
+                </div>
+              )}
             </TabsContent>
             <TabsContent value="tasks">
               <TasksTab
-                items={items}
+                items={items.map((a) => (summary.data?.task_texts?.[a.id] ? { ...a, task: summary.data.task_texts[a.id] } : a))}
                 contacts={contacts}
                 now={now}
                 canSeek={canPlay}

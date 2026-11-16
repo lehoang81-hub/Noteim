@@ -742,6 +742,23 @@
     "translationStale": "다시 번역 필요",
     "sampleTranslation": "샘플 번역"
   },
+  "summary": {
+    "versionLabel": "요약 언어",
+    "createVersion": "{lang} 버전 만들기",
+    "originalBadge": "원본",
+    "translatedFrom": "{lang}에서 번역",
+    "staleBanner": "번역 후 원본이 수정되었습니다",
+    "retranslate": "다시 번역",
+    "createConfirmTitle": "{lang} 버전을 만들까요?",
+    "createConfirmBody": "보고 있는 버전은 그대로 유지됩니다. 요약 번역, 할 일 번역 2단계로 진행돼요.",
+    "step1": "요약 번역 중",
+    "step2": "할 일 번역 중",
+    "createdToast": "{lang} 버전을 만들었어요",
+    "limitTitle": "Free 플랜은 세션마다 버전 1개를 추가로 만들 수 있어요",
+    "upgrade": "Pro 플랜 보기",
+    "originalQuote": "원문",
+    "sampleNote": "샘플 번역"
+  },
   "speakers": {
     "title": "누가 누구인가요?",
     "description": "각 화자에게 이름을 지정하세요. 새 이름은 세션 전체에 반영됩니다.",

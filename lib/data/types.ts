@@ -321,6 +321,8 @@ export const SummaryVersion = z.object({
   topics: z.array(VersionTopic),
   /** Tên việc cần làm ở ngôn ngữ này (action_item_id -> tên việc) */
   task_texts: z.record(z.string(), z.string()).catch({}),
+  /** Bản giả không dịch được nội dung: ghi "Bản dịch mẫu" (M6-03) */
+  sample: z.boolean().optional(),
 });
 export type SummaryVersion = z.infer<typeof SummaryVersion>;
 

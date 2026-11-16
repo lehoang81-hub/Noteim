@@ -7,6 +7,7 @@ import {
   Quota,
   Session as SessionSchema,
   SessionDetail,
+  SummaryVersion,
   Template,
   TranscriptSegment,
   User,
@@ -67,6 +68,18 @@ function lazyFixture(raw: Record<string, unknown>): StoredSession {
     get flow_mermaid() {
       if (!("flow_mermaid" in cache)) cache.flow_mermaid = raw.flow_mermaid;
       return cache.flow_mermaid;
+    },
+    // Các bản tóm tắt theo ngôn ngữ có sẵn trong fixture (M6-03), kiểm Zod lười.
+    // Có cả setter: tạo bản mới (createSummaryVersion) gán mảng qua đây.
+    get summary_versions() {
+      if (!("summary_versions" in cache)) {
+        const list = (raw as { summary_versions?: unknown }).summary_versions;
+        cache.summary_versions = list ? z.array(SummaryVersion).parse(list) : undefined;
+      }
+      return cache.summary_versions as SummaryVersion[] | undefined;
+    },
+    set summary_versions(v: SummaryVersion[] | undefined) {
+      cache.summary_versions = v;
     },
   } as unknown as StoredSession;
 }

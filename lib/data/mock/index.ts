@@ -3,7 +3,7 @@
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
 import { DataError } from "../errors";
-import type { ActionItem, ChatMessage, Contact, GlossaryTerm, Session, SessionDetail, ShareLink } from "../types";
+import type { ActionItem, ChatMessage, Contact, GlossaryTerm, Lang, Session, SessionDetail, ShareLink, SummaryVersion } from "../types";
 import { MOCK_NOW, commit, getDb, samplesReady, sessionsReady, type StoredSession } from "./store";
 
 /*
@@ -88,6 +88,30 @@ function refreshCounts(d: SessionDetail) {
       d.headline_tag = decided > 0 ? { tag: "decided", count: decided } : undefined;
     }
   }
+}
+
+/**
+ * Bản gốc của buổi (M6-03): đọc executive_summary/topics từ SessionDetail,
+ * gói thành SummaryVersion. Ý trích dẫn không cần original_text vì đây là
+ * câu gốc.
+ */
+function originalVersion(d: SessionDetail): SummaryVersion {
+  return {
+    session_id: d.id,
+    lang: d.original_report_language,
+    source: "original",
+    translated_from: null,
+    created_at: d.created_at,
+    stale: false,
+    executive_summary: d.executive_summary,
+    topics: d.topics,
+    task_texts: Object.fromEntries(d.action_items.map((a) => [a.id, a.task])),
+  };
+}
+
+/** Bản dịch đã lưu trong kho (fixture summary_versions hoặc bản đã tạo). */
+function storedVersion(fx: { detail: SessionDetail; summary_versions?: SummaryVersion[] }, lang: Lang): SummaryVersion | null {
+  return (fx.summary_versions ?? []).find((v) => v.lang === lang) ?? null;
 }
 
 function matches(d: Session | SessionDetail, f: SessionFilter | undefined): boolean {
@@ -251,12 +275,15 @@ export const mockSource: DataSource = {
     updateBullet: (sessionId, bulletId, text) =>
       write(async () => {
         await sessionsReady();
-        for (const t of (await findFixture(sessionId)).detail.topics)
+        const fx = await findFixture(sessionId);
+        for (const t of fx.detail.topics)
           for (const b of t.bullets)
             if (b.id === bulletId) {
               b.text = text;
               b.edited = true;
             }
+        // Sửa ý ở bản gốc: mọi bản dịch hiện "Bản gốc đã sửa sau khi dịch" (M6-03)
+        for (const v of fx.summary_versions ?? []) v.stale = true;
       }),
     updateSegment: (sessionId, segmentId, text) =>
       write(async () => {
@@ -294,6 +321,77 @@ export const mockSource: DataSource = {
           }
         }
         return fx.transcript;
+      }),
+    getSummary: (id, lang) =>
+      read(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
+        if (lang === fx.detail.original_report_language) return originalVersion(fx.detail);
+        const stored = storedVersion(fx, lang);
+        if (!stored) throw new DataError("not_found");
+        return stored;
+      }),
+    createSummaryVersion: (id, lang, onStep) =>
+      write(async () => {
+        await sessionsReady();
+        const db = getDb();
+        const fx = await findFixture(id);
+        const d = fx.detail;
+        if (lang === d.original_report_language) return originalVersion(d);
+        const existing = storedVersion(fx, lang);
+        // Gói Free: 1 bản thêm mỗi buổi (bản gốc không tính). Bản lỗi thời
+        // "Dịch lại" thì không mất gì thêm.
+        const plan = getFlags().plan ?? db.user.plan;
+        if (!existing && plan === "free" && (fx.summary_versions?.length ?? 0) >= 1) {
+          throw new DataError("quota_exceeded");
+        }
+        // Cờ bảng thử nghiệm: dịch chậm 10 giây, dịch lỗi có Thử lại (docs/08)
+        if (getFlags().translateSlow) await new Promise((r) => setTimeout(r, 10000));
+        onStep(1);
+        await new Promise((r) => setTimeout(r, 1500));
+        onStep(2);
+        await new Promise((r) => setTimeout(r, 1500));
+        if (getFlags().translateFail) throw new DataError("server");
+        // Bản giả không sinh nội dung mới: giữ câu gốc ở bản dịch, đánh dấu
+        // sample để giao diện ghi "Bản dịch mẫu" (không bịa nội dung)
+        const version: SummaryVersion = existing ?? {
+          session_id: d.id,
+          lang,
+          source: "translated",
+          translated_from: d.original_report_language,
+          created_at: new Date().toISOString(),
+          stale: false,
+          executive_summary: d.executive_summary,
+          topics: d.topics.map((t) => ({
+            ...t,
+            bullets: t.bullets.map((b) => ({ ...b, original_text: b.text, original_lang: d.original_report_language })),
+          })),
+          task_texts: Object.fromEntries(d.action_items.map((a) => [a.id, a.task])),
+          sample: true,
+        };
+        version.stale = false;
+        version.created_at = new Date().toISOString();
+        if (existing) {
+          for (const v of fx.summary_versions ?? []) if (v.lang === lang) v.stale = false;
+        } else {
+          (fx.summary_versions ??= []).push(version);
+          if (!d.report_languages.includes(lang)) d.report_languages.push(lang);
+        }
+        return version;
+      }),
+    updateVersionBullet: (sessionId, lang, bulletId, text) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        const v = storedVersion(fx, lang);
+        if (!v) throw new DataError("not_found");
+        for (const t of v.topics)
+          for (const b of t.bullets)
+            if (b.id === bulletId) {
+              b.text = text;
+              b.edited = true;
+              // Sửa bản dịch không tự sửa bản khác, bản gốc giữ nguyên (M6-03)
+            }
       }),
     reassignSegment: (sessionId, segmentId, speakerId) =>
       write(async () => {
@@ -504,17 +602,27 @@ export const mockSource: DataSource = {
           const sectionTitles = template
             ? template.sections.filter((s) => d.topics.some((tp) => tp.section_id === s.id)).map((s) => s.title)
             : [];
+          // Tìm trên câu gốc VÀ mọi bản tóm tắt đã có (M6-03): bản dịch tiếng
+          // Hàn cũng dẫn về đúng buổi
+          const versions: Array<SummaryVersion> = [originalVersion(d), ...(fx.summary_versions ?? [])];
           const hayTitle = foldVi(
             [
               d.title,
-              d.executive_summary,
               ...sectionTitles,
-              ...d.topics.flatMap((t) => [t.title, ...t.bullets.map((b) => b.text)]),
+              ...versions.flatMap((v) => [
+                v.executive_summary,
+                ...v.topics.flatMap((t) => [t.title, ...t.bullets.flatMap((b) => [b.text, b.original_text ?? "", b.original_text ? `“${b.original_text}”` : ""])]),
+                ...Object.values(v.task_texts ?? {}),
+              ]),
             ].join(" "),
           );
           if (hayTitle.includes(q)) out.sessions.push(stripToSession(d));
           for (const seg of fx.transcript) {
-            if (foldVi(seg.text).includes(q)) out.segments.push({ session_id: d.id, segment: seg });
+            // Câu gốc và mọi bản dịch đoạn lời (M6-03)
+            const trans = Object.values(seg.translations ?? {})
+              .map((tr) => tr?.text ?? "")
+              .join(" ");
+            if (foldVi(`${seg.text} ${trans}`).includes(q)) out.segments.push({ session_id: d.id, segment: seg });
           }
           for (const task of d.action_items) {
             if (foldVi(`${task.task} ${task.source_quote ?? ""}`).includes(q)) out.tasks.push(task);
@@ -594,7 +702,17 @@ export const mockSource: DataSource = {
     listAll: (filter) =>
       read(async () => {
         await sessionsReady();
-        const items = getDb().sessions.flatMap((s) => s.detail.action_items);
+        const items: ActionItem[] = [];
+        for (const fx of getDb().sessions) {
+          const d = fx.detail;
+          const lang = filter?.lang;
+          const version = lang ? storedVersion(fx, lang) : null;
+          for (const a of d.action_items) {
+            // Trang Việc hiển thị theo ngôn ngữ báo cáo mặc định (M6-03):
+            // tên việc lấy từ bản đã có của buổi, thiếu thì giữ câu gốc
+            items.push(version ? { ...a, task: version.task_texts[a.id] ?? a.task } : a);
+          }
+        }
         return filter?.mine ? items.filter((a) => a.assignee_contact_id === "c-me") : items;
       }),
     upsert: (item) =>

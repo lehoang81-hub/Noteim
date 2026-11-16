@@ -9,6 +9,7 @@ import type {
   Session,
   SessionDetail,
   ShareLink,
+  SummaryVersion,
   Template,
   TranscriptSegment,
   User,
@@ -70,6 +71,16 @@ export interface SessionRepository {
   /** Dịch đoạn bản ghi lời sang ngôn ngữ `lang` (M6-02). Không truyền
    * segmentIds thì dịch mọi đoạn chưa có bản dịch ở `lang`. */
   translateSegments(sessionId: string, lang: Lang, segmentIds?: string[]): Promise<TranscriptSegment[]>;
+  /** Bản tóm tắt theo ngôn ngữ (M6-03): lang == original_report_language thì
+   * trả bản gốc trong detail, ngược lại trả bản đã tạo. */
+  getSummary(id: string, lang: Lang): Promise<SummaryVersion>;
+  /** Tạo (hoặc Dịch lại nếu bản đã có và lỗi thời) một bản tóm tắt theo
+   * ngôn ngữ, qua 2 bước: onStep(1) dịch tóm tắt, onStep(2) dịch việc (M6-03).
+   * Gói Free chỉ tạo 1 bản thêm mỗi buổi: vượt hạn mức ném DataError
+   * quota_exceeded. */
+  createSummaryVersion(id: string, lang: Lang, onStep: (step: 1 | 2) => void): Promise<SummaryVersion>;
+  /** Sửa một ý trong bản tóm tắt theo ngôn ngữ; bản khác không đổi (M6-03) */
+  updateVersionBullet(sessionId: string, lang: Lang, bulletId: string, text: string): Promise<void>;
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
@@ -94,7 +105,8 @@ export interface SessionRepository {
 }
 
 export interface TaskRepository {
-  listAll(filter?: { mine?: boolean }): Promise<ActionItem[]>;
+  /** lang: hiển thị theo ngôn ngữ báo cáo của từng buổi (M6-03) */
+  listAll(filter?: { mine?: boolean; lang?: Lang }): Promise<ActionItem[]>;
   upsert(item: ActionItem): Promise<void>;
   toggleDone(id: string): Promise<ActionItem>;
 }

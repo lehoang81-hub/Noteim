@@ -8,7 +8,7 @@ import { FilterChip } from "@/components/ui/chips";
 import { EmptyState } from "@/components/ui/feedback";
 import { useToast } from "@/components/ui/toast";
 import { formatClock } from "@/components/ribbon/draw";
-import { data, dataNow, useData, type ActionItem } from "@/lib/data";
+import { data, dataNow, useData, type ActionItem, type Lang } from "@/lib/data";
 import { dayDiff, endOfDay, shortDate } from "@/lib/format";
 import { cn } from "@/lib/cn";
 import { TopBar } from "@/components/shell/app-shell";
@@ -34,7 +34,10 @@ export default function TasksPage() {
   const router = useRouter();
   const toast = useToast();
   const now = dataNow();
-  const tasks = useData(() => data.tasks.listAll(), []);
+  // Trang Việc hiển thị theo ngôn ngữ báo cáo mặc định (M6-03)
+  const me = useData(() => data.account.me(), []);
+  const reportLang = me.data?.default_report_language ?? (locale as Lang);
+  const tasks = useData(() => data.tasks.listAll({ lang: reportLang }), [reportLang]);
   const sessions = useData(() => data.sessions.list(), []);
   const contacts = useData(() => data.account.contacts(), []);
   const [filter, setFilter] = useState<Filter>("all");

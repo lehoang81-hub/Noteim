@@ -742,6 +742,23 @@
     "translationStale": "Cần dịch lại",
     "sampleTranslation": "Bản dịch mẫu"
   },
+  "summary": {
+    "versionLabel": "Tóm tắt bằng",
+    "createVersion": "Tạo bản {lang}",
+    "originalBadge": "Bản gốc",
+    "translatedFrom": "Dịch từ {lang}",
+    "staleBanner": "Bản gốc đã sửa sau khi dịch",
+    "retranslate": "Dịch lại",
+    "createConfirmTitle": "Tạo bản {lang}?",
+    "createConfirmBody": "Bản đang xem không đổi. Quá trình gồm 2 bước: dịch tóm tắt, dịch việc cần làm.",
+    "step1": "Dịch tóm tắt",
+    "step2": "Dịch việc cần làm",
+    "createdToast": "Đã tạo bản {lang}",
+    "limitTitle": "Gói Free tạo được 1 bản thêm cho mỗi buổi",
+    "upgrade": "Xem gói Pro",
+    "originalQuote": "Câu gốc",
+    "sampleNote": "Bản dịch mẫu"
+  },
   "speakers": {
     "title": "Ai là ai?",
     "description": "Đặt tên cho từng người nói. Tên mới hiện ở mọi nơi trong buổi ghi.",
