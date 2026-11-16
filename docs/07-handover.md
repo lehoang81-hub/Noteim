@@ -429,16 +429,17 @@ Bốn route còn dưới 85 — nguyên nhân còn lại và việc cần làm k
 ### `/` (73) và `/s/[id]` (70)
 
 - **Nguyên nhân còn lại**: nội dung chính của hai màn là **dữ liệu người dùng
-  render phía client**. Dưới CPU chậm 4x, chuỗi "tải JS → chạy → chờ độ trễ giả
-  300–800ms theo đặc tả (`04-data-contract.md`) → đọc dữ liệu → vẽ" chiếm gần
-  trọn LCP 4,9–5,0s. Đã xử lý phần nằm trong phạm vi mockup: fixture buổi ghi
-  và Zod nạp bằng `import()` động (chunk khởi tạo của `/` giảm 362,6 → 279,4 KB
-  đã nén, không còn dữ liệu mẫu), Motion dùng `LazyMotion` + `m.*` — TBT vẫn
-  giảm nhẹ (368→361 ms; 545→481 ms) nhưng LCP không đổi đáng kể vì nút thắt là
-  độ trễ giả, không phải dung lượng tải.
+  render phía client**, nên LCP phải chờ trình duyệt tải, phân tích và chạy JS
+  trên CPU chậm 4x rồi mới vẽ. Độ trễ giả 300 đến 800ms **không phải** nút thắt:
+  reviewer đặt độ trễ về 0 rồi đo lại, điểm gần như không đổi (`/` 76 đến 77,
+  `/s` 73 đến 78). Đã xử lý phần nằm trong phạm vi mockup: fixture buổi ghi và
+  Zod nạp bằng `import()` động (chunk khởi tạo của `/` giảm 362,6 xuống
+  279,4 KB đã nén, không còn dữ liệu mẫu), Motion dùng `LazyMotion` + `m.*`.
+  TBT giảm (545 xuống 481 ms ở `/s`), LCP chưa đổi đáng kể vì vẫn phải chạy
+  JS mới có nội dung.
 - **Việc cần làm khi nối backend**: render phần đầu của danh sách/tóm tắt
-  **phía server** (SSR hoặc streaming) rồi bơm dữ liệu sống sau; độ trễ giả
-  biến mất thay bằng độ trễ mạng thật. Không cần đổi giao diện — các màn đã
+  **phía server** (SSR hoặc streaming) để HTML đầu tiên đã có nội dung, LCP
+  không còn phụ thuộc thời gian chạy JS. Không cần đổi giao diện — các màn đã
   có khung chờ và trạng thái rỗng/lỗi đầy đủ. LCP mục tiêu sau khi nối: dưới
   2,5s (điểm dự kiến 90+).
 
@@ -453,8 +454,8 @@ Bốn route còn dưới 85 — nguyên nhân còn lại và việc cần làm k
 
 ### `/p/[id]` (79)
 
-- **Nguyên nhân còn lại**: trang công khai chờ dữ liệu mock như mọi route
-  khác (độ trễ giả) rồi mới vẽ tóm tắt.
+- **Nguyên nhân còn lại**: trang công khai render phía client như mọi route
+  khác, phải chạy JS rồi mới vẽ tóm tắt.
 - **Việc cần làm khi nối backend**: link không mật khẩu có thể **cache tĩnh
   (ISR)** hoặc render server kèm header cache; link có mật khẩu giữ render
   client sau khi nhập mật khẩu.
