@@ -3,6 +3,8 @@
   "id": "s-chua-tai-len",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Buổi ghi lúc 18:20",
   "template_id": "tpl-realestate",
   "status": "unsynced",

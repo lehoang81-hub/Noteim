@@ -75,6 +75,8 @@ export const User = z.object({
   default_report_language: Lang.catch("vi"),
   /** Tự tạo thêm bản cho người nhận khi gửi (M6-04), mặc định bật */
   auto_translate_on_send: z.boolean().catch(true),
+  /** Không gian đang dùng (M7-01): id của không gian Cá nhân hoặc Nhóm; dữ liệu cũ thiếu thì migrate điền không gian Cá nhân */
+  current_workspace_id: z.string().default("").catch(""),
 });
 export type User = z.infer<typeof User>;
 
@@ -121,6 +123,10 @@ export const Session = z.object({
   id: z.string(),
   user_id: z.string(),
   workspace_id: z.string().nullable(),
+  /** Riêng tư hay chia sẻ cho cả không gian Nhóm (M7-01); buổi cá nhân luôn riêng tư. Dữ liệu cũ thiếu thì coi là riêng tư */
+  visibility: z.enum(["private", "workspace"]).default("private").catch("private"),
+  /** Người ghi buổi (M7-01) — buổi cũ thiếu thì migrate điền người dùng hiện tại */
+  owner_user_id: z.string().default("").catch(""),
   title: z.string(),
   template_id: z.string(),
   /** Ngôn ngữ nói chính của buổi (M6-02) — thay language */
@@ -214,6 +220,8 @@ export const ActionItem = z.object({
   session_id: z.string(),
   task: z.string(),
   assignee_contact_id: z.string().nullable(),
+  /** Giao cho thành viên không gian Nhóm (M7-01); null là chưa giao cho thành viên nào */
+  assignee_user_id: z.string().nullish(),
   due_date: z.string().nullable(),
   priority: z.enum(["high", "medium", "low"]),
   done: z.boolean(),
@@ -334,6 +342,83 @@ export const GlossaryTerm = z.object({
   variants: z.object({ vi: z.string().optional(), en: z.string().optional(), ko: z.string().optional() }).catch({}),
 });
 export type GlossaryTerm = z.infer<typeof GlossaryTerm>;
+
+/* ---------- M7: Không gian làm việc, vai trò và quyền ---------- */
+
+/** Buổi ghi riêng tư (mặc định) hay đã chia sẻ cho cả không gian Nhóm (M7-01). */
+export const Visibility = z.enum(["private", "workspace"]);
+export type Visibility = z.infer<typeof Visibility>;
+
+/** Vai trò trong không gian Nhóm (M7-01). Quyền chi tiết: docs/08 phần B. */
+export const WorkspaceRole = z.enum(["owner", "admin", "member"]);
+export type WorkspaceRole = z.infer<typeof WorkspaceRole>;
+
+/**
+ * Không gian làm việc (M7-01). Mỗi người luôn có một không gian Cá nhân
+ * (kind "personal", name không hiển thị trực tiếp — nhãn "Cá nhân" là nhãn
+ * hệ thống, hiển thị theo ngôn ngữ giao diện) và có thể có không gian Nhóm.
+ */
+export const Workspace = z.object({
+  id: z.string(),
+  kind: z.enum(["personal", "team"]),
+  name: z.string(),
+  profession: Profession.nullable().catch(null),
+  default_report_language: Lang.catch("vi"),
+  plan: z.enum(["free", "pro", "team"]).catch("free"),
+  /** Số chỗ tối đa của gói Nhóm; null là không giới hạn */
+  seat_limit: z.number().nullable().catch(null),
+  owner_user_id: z.string(),
+});
+export type Workspace = z.infer<typeof Workspace>;
+
+/**
+ * Thành viên của một không gian (M7-01). user_id null khi còn là lời mời
+ * (status "invited"); lời mời hết hạn sau 7 ngày, có thể thu hồi.
+ */
+export const Member = z.object({
+  workspace_id: z.string(),
+  user_id: z.string().nullable(),
+  email: z.string(),
+  display_name: z.string(),
+  role: WorkspaceRole.catch("member"),
+  status: z.enum(["active", "invited"]).catch("invited"),
+  invited_at: z.string(),
+  invite_expires_at: z.string().nullable().catch(null),
+});
+export type Member = z.infer<typeof Member>;
+
+/** Một dòng nhật ký truy cập của không gian Nhóm (M7-01). */
+export const AuditEvent = z.object({
+  id: z.string(),
+  workspace_id: z.string(),
+  actor_user_id: z.string(),
+  action: z.enum(["view", "share", "unshare", "export", "delete", "invite", "remove_member", "role_change", "purge", "send_email"]),
+  target_type: z.enum(["session", "member", "workspace", "share_link"]),
+  target_id: z.string(),
+  target_label: z.string(),
+  at: z.string(),
+});
+export type AuditEvent = z.infer<typeof AuditEvent>;
+
+/** Một dòng mức dùng theo người trong tháng (M7-01). */
+export const UsageRow = z.object({
+  user_id: z.string(),
+  month: z.string(),
+  sessions: z.number(),
+  minutes: z.number(),
+  open_tasks: z.number(),
+});
+export type UsageRow = z.infer<typeof UsageRow>;
+
+/** Một hóa đơn của gói Nhóm (M7-01, số liệu mẫu cho /team/billing sau này). */
+export const Invoice = z.object({
+  id: z.string(),
+  period: z.string(),
+  seats: z.number(),
+  amount_label: z.string(),
+  status: z.enum(["paid", "due"]),
+});
+export type Invoice = z.infer<typeof Invoice>;
 
 /** Một file fixture buổi ghi: chi tiết + bản ghi lời (tách vì nặng). */
 export const SessionFixture = z.object({

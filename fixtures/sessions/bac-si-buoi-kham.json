@@ -3,6 +3,8 @@
   "id": "s-bacsi-kham",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Buổi khám nội tổng quát, bà Nguyễn Thị Hòa",
   "template_id": "tpl-doctor",
   "status": "ready",

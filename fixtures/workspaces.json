@@ -1,0 +1,22 @@
+[
+  {
+    "id": "w-hoang",
+    "kind": "personal",
+    "name": "Cá nhân",
+    "profession": "realestate_sales",
+    "default_report_language": "vi",
+    "plan": "free",
+    "seat_limit": null,
+    "owner_user_id": "u-hoang"
+  },
+  {
+    "id": "w-hp-land",
+    "kind": "team",
+    "name": "Sàn BĐS Hải Phòng Land",
+    "profession": "realestate_sales",
+    "default_report_language": "vi",
+    "plan": "team",
+    "seat_limit": 8,
+    "owner_user_id": "u-hoang"
+  }
+]

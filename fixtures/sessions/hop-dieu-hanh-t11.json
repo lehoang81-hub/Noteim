@@ -3,6 +3,8 @@
   "id": "s-hop-t11",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Họp điều hành tháng 11",
   "template_id": "tpl-business",
   "status": "ready",

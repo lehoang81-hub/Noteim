@@ -458,6 +458,10 @@ export const mockSource: DataSource = {
           id,
           user_id: db.user.id,
           workspace_id: null,
+          // Buổi mới luôn riêng tư cho đến khi người dùng chia sẻ (M7-01);
+          // không gian của buổi gắn theo không gian đang dùng ở bước 3
+          visibility: "private",
+          owner_user_id: db.user.id,
           title: draft.title ?? "",
           template_id: draft.template_id,
           // Ngôn ngữ nói chính chọn ở bảng "Bắt đầu ghi" (M6-02)
@@ -654,6 +658,8 @@ export const mockSource: DataSource = {
           id,
           user_id: db.user.id,
           workspace_id: null,
+          visibility: "private",
+          owner_user_id: db.user.id,
           title: draft.title ?? "",
           template_id: input.template_id,
           primary_language: input.language,

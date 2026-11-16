@@ -12,5 +12,6 @@
  "default_speech_language": "vi",
  "auto_detect_languages": true,
  "default_report_language": "vi",
- "auto_translate_on_send": true
+ "auto_translate_on_send": true,
+ "current_workspace_id": "w-hoang"
 }
