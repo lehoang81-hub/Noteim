@@ -21,6 +21,39 @@ Bạn đang xây **mockup tương tác** của Noteim. Mục tiêu của giai đ
 - **Không xóa hay viết lại tài liệu sẵn có** (`README.md`, `docs/`) ngoài phạm vi issue. Được thêm mục mới, không được thay nội dung cũ.
 - **Không commit ảnh chụp vào repo.** Link xem thử của Vercel thay cho ảnh.
 
+## Chống mất việc khi máy làm việc bị reset (đọc trước khi bắt đầu)
+
+Máy của agent đã bị xóa sạch giữa chừng ở M4, M5, M6 (mất code chưa push, mất script kiểm thử, mất nội dung subagent viết). Quy tắc:
+
+1. **Chỉ GitHub là bền.** Thứ gì chưa push coi như chưa có.
+2. **Làm theo bước nhỏ.** Mỗi issue chia sẵn thành các bước (xem comment "Các bước" trên issue). Mỗi bước tối đa khoảng 45 phút làm việc, kết thúc bằng `pnpm lint` + `pnpm typecheck` sạch, commit, **push ngay**. Thông điệp: `M7-01 bước 2/6: <việc>`. `pnpm build` chạy ở bước cuối của issue và bất cứ khi nào đổi cấu hình, font, route.
+3. **Mở PR nháp ngay sau lần push đầu tiên** của issue. Thân PR là danh sách các bước dạng ô tích; tích sau mỗi lần push. Đây là chỗ để biết làm tới đâu khi phải bắt đầu lại.
+4. **Nội dung lớn commit ngay khi viết xong**, trước khi viết code dùng nó: fixture, bản dịch, dữ liệu mẫu, `messages/*.json`. Subagent viết xong phải ghi ra file và commit; đừng để kết quả chỉ nằm trong ngữ cảnh.
+5. **Kiểm thử và đo nằm trong repo**, không viết lại mỗi lần: thêm bài vào `tests/e2e/` (Playwright, dùng `tests/e2e/helpers.ts`), đo bằng `pnpm lh` (`scripts/lighthouse.mjs`). Bài kiểm thử commit cùng bước làm tính năng đó.
+6. **Máy yếu (khoảng 4 GB).** Không chạy dev và bản build cùng lúc; không để tiến trình nền dài (hay bị giết); Lighthouse chạy từng lần, `--disable-dev-shm-usage`; Playwright `workers: 1`.
+
+### Bắt đầu lại sau khi bị reset
+
+```bash
+git clone https://github.com/lehoang81-hub/Noteim && cd Noteim
+git checkout <nhánh issue đang làm>      # tên nhánh ở PR nháp
+pnpm install
+git log --oneline -8                      # bước cuối đã push
+gh pr view <số PR> --json body -q .body   # ô tích: bước nào chưa xong
+```
+
+Làm tiếp từ bước chưa tích đầu tiên. Không làm lại bước đã push. Nếu bước dở dang bị mất, làm lại riêng bước đó.
+
+### Chạy kiểm thử
+
+```bash
+pnpm build && pnpm start -p 3100          # một cửa sổ
+pnpm e2e                                  # hồi quy, cửa sổ khác
+pnpm lh --lang vi --runs 3 / /s/s-bds-lan # đo, in bảng Markdown dán vào PR
+```
+
+Không có trình duyệt Playwright thì đặt `PW_CHROMIUM_PATH` tới Chrome có sẵn.
+
 ## Bài học đã rút ra (đọc kỹ, đều là lỗi đã gặp)
 
 - **Dữ liệu:** màn hình đọc qua `useData(() => data.xxx(), [deps])` từ `@/lib/data`. Ghi qua `data.xxx` rồi để màn hình tự tải lại (lớp dữ liệu phát sự kiện khi đổi). Ngày "bây giờ" lấy từ `dataNow()`, không dùng `new Date()` để nhóm ngày hay so hạn.
