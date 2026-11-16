@@ -97,6 +97,10 @@ function RecordClock({ paused }: { paused: boolean }) {
 export function RecordScreen() {
   const t = useTranslations("record");
   const locale = useLocale();
+  // Tiêu đề buổi ghi tự sinh nằm ở namespace library (sessionAt) — dùng bộ
+  // dịch đúng namespace, không thì English hiện nguyên chữ "record.sessionAt"
+  // (review PR #41 mục 5: nhãn hệ thống sinh lúc chạy phải theo ngôn ngữ)
+  const tLib = useTranslations("library");
   const tl = useTranslations("styleguide.tags");
   const router = useRouter();
   const toast = useToast();
@@ -364,7 +368,7 @@ export function RecordScreen() {
       toast.show({ tone: "error", message: t("endError") });
       return;
     }
-    const title = t("sessionAt", { time: clockTime(snapshot.startedAtClock ?? Date.now()) });
+    const title = tLib("sessionAt", { time: clockTime(snapshot.startedAtClock ?? Date.now()) });
     setFolding(true); // khoảnh khắc "Kết thúc ghi": dải giọng gấp thành thẻ
     try {
       const [created] = await Promise.all([
@@ -417,7 +421,7 @@ export function RecordScreen() {
   /* Thẻ buổi ghi trong khoảnh khắc "Kết thúc ghi" */
   const foldPeaks = resample(recording.levels.length ? recording.levels : [0.4], 40);
   const foldSpeakers = Array.from({ length: 40 }, () => 0);
-  const foldTitle = recording.startedAtClock ? t("sessionAt", { time: clockTime(recording.startedAtClock) }) : "";
+  const foldTitle = recording.startedAtClock ? tLib("sessionAt", { time: clockTime(recording.startedAtClock) }) : "";
 
   return (
     <div className="dark flex min-h-dvh flex-col bg-bg text-ink">
