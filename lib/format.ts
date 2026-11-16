@@ -20,6 +20,11 @@ function parts(date: Date) {
   return f.format(date); // 2026-11-14
 }
 
+/** Ngày dạng "2026-11-14" theo múi giờ Việt Nam (M7-02: nhóm Tổng quan theo ngày). */
+export function vnDate(date: Date): string {
+  return parts(date);
+}
+
 /** Số ngày chênh theo lịch (không theo giờ). */
 export function dayDiff(a: Date, b: Date): number {
   const da = new Date(parts(a) + "T00:00:00Z").getTime();

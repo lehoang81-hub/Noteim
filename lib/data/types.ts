@@ -420,6 +420,73 @@ export const Invoice = z.object({
 });
 export type Invoice = z.infer<typeof Invoice>;
 
+/* ---------- M7-02: Tổng quan cá nhân và nhóm ---------- */
+
+/** Loại dòng "Cần xử lý" (M7-02, docs/04). */
+export const AttentionKind = z.enum([
+  "task_overdue",
+  "task_due_today",
+  "speaker_unnamed",
+  "audio_expiring",
+  "link_expiring",
+  "processing_failed",
+]);
+export type AttentionKind = z.infer<typeof AttentionKind>;
+
+/**
+ * Dữ liệu Tổng quan (M7-02, docs/04-data-contract.md). Mọi số liệu do bản giả
+ * tính từ kho theo không gian đang dùng và quyền đọc — không viết số cứng,
+ * không đếm nội dung buổi riêng tư của người khác (M7-01).
+ */
+export const DashboardData = z.object({
+  range: z.enum(["week", "month"]),
+  attention: z.array(
+    z.object({
+      kind: AttentionKind,
+      target_id: z.string(),
+      label: z.string(),
+      href: z.string(),
+    }),
+  ),
+  totals: z.object({
+    sessions: z.number(),
+    minutes: z.number(),
+    decisions: z.number(),
+    tasks_done: z.number(),
+    tasks_total: z.number(),
+  }),
+  by_day: z.array(
+    z.object({
+      /** "2026-11-14" theo múi giờ Việt Nam */
+      date: z.string(),
+      session_ids: z.array(z.string()),
+      minutes: z.number(),
+    }),
+  ),
+  decisions: z.array(
+    z.object({
+      session_id: z.string(),
+      bullet_id: z.string(),
+      text: z.string(),
+      timestamp_sec: z.number(),
+    }),
+  ),
+  top_contacts: z.array(
+    z.object({
+      contact_id: z.string(),
+      sessions: z.number(),
+      last_met_at: z.string(),
+    }),
+  ),
+  by_template: z.array(
+    z.object({
+      template_id: z.string(),
+      minutes: z.number(),
+    }),
+  ),
+});
+export type DashboardData = z.infer<typeof DashboardData>;
+
 /** Một file fixture buổi ghi: chi tiết + bản ghi lời (tách vì nặng). */
 export const SessionFixture = z.object({
   detail: SessionDetail,
