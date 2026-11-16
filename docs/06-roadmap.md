@@ -98,20 +98,20 @@ Nghiệm thu:
 - [ ] Hoang đi hết luồng chính trên điện thoại không gặp chỗ nào phải hỏi "bấm vào đâu"
 - [ ] Lighthouse trên điện thoại: Khả năng tiếp cận từ 95, Hiệu năng từ 85
 
-## M6. Đa ngôn ngữ
+## M6. Đa ngôn ngữ (xong 17/11/2026, PR #52)
 
 Đặc tả: `08-da-ngon-ngu-va-nhom.md` phần A. Một nhánh `m6/da-ngon-ngu`, một PR.
 
 | Issue | Việc |
 | --- | --- |
-| M6-01 (#43) | Nền tảng: kiểu `Lang`, `LocalizedText` thay `_en`, giao diện tiếng Hàn đầy đủ, font Hàn nạp khi cần, `Intl` theo `ko-KR`, chọn 3 ngôn ngữ trong Cài đặt. |
-| M6-02 (#44) | Ghi âm và lời nói nhiều ngôn ngữ: chọn ngôn ngữ khi bắt đầu, nhãn và bản dịch từng đoạn, từ điển nhiều cách viết, buổi ghi mẫu họp đối tác Hàn. |
-| M6-03 (#45) | Bản tóm tắt nhiều ngôn ngữ: chọn và tạo bản, trích dẫn giữ câu gốc, việc cần làm, Hỏi AI, tìm kiếm trên mọi bản. |
-| M6-04 (#46) | Gửi và chia sẻ theo người nhận: ngôn ngữ ưa dùng của liên hệ, email theo từng người, link công khai đổi ngôn ngữ, thẻ trích dẫn kèm dịch, mục "Ngôn ngữ báo cáo" trong Cài đặt. |
+| M6-01 (#43, xong) | Nền tảng: kiểu `Lang`, `LocalizedText` thay `_en`, giao diện tiếng Hàn đầy đủ, font Hàn nạp khi cần, `Intl` theo `ko-KR`, chọn 3 ngôn ngữ trong Cài đặt. |
+| M6-02 (#44, xong) | Ghi âm và lời nói nhiều ngôn ngữ: chọn ngôn ngữ khi bắt đầu, nhãn và bản dịch từng đoạn, từ điển nhiều cách viết, buổi ghi mẫu họp đối tác Hàn. |
+| M6-03 (#45, xong) | Bản tóm tắt nhiều ngôn ngữ: chọn và tạo bản, trích dẫn giữ câu gốc, việc cần làm, Hỏi AI, tìm kiếm trên mọi bản. |
+| M6-04 (#46, xong) | Gửi và chia sẻ theo người nhận: ngôn ngữ ưa dùng của liên hệ, email theo từng người, link công khai đổi ngôn ngữ, thẻ trích dẫn kèm dịch, mục "Ngôn ngữ báo cáo" trong Cài đặt. |
 
 ## M7. Nhóm và bảng điều khiển
 
-Đặc tả: `08-da-ngon-ngu-va-nhom.md` phần B. Một nhánh `m7/nhom`, một PR. Làm sau khi M6 merge.
+Đặc tả: `08-da-ngon-ngu-va-nhom.md` phần B. Nhánh tích hợp `m7/nhom`; mỗi issue một nhánh, một PR vào `m7/nhom`, chia bước và push sau mỗi bước (xem `05-workflow.md`). Hết mốc một PR `m7/nhom` vào `main`.
 
 | Issue | Việc |
 | --- | --- |
