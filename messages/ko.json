@@ -452,6 +452,7 @@
   },
   "shell": {
     "library": "라이브러리",
+    "dashboard": "요약",
     "tasks": "할 일",
     "settings": "설정",
     "search": "검색",

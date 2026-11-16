@@ -452,6 +452,7 @@
   },
   "shell": {
     "library": "Thư viện",
+    "dashboard": "Tổng quan",
     "tasks": "Việc",
     "settings": "Cài đặt",
     "search": "Tìm kiếm",

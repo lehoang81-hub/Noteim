@@ -452,6 +452,7 @@
   },
   "shell": {
     "library": "Library",
+    "dashboard": "Overview",
     "tasks": "Tasks",
     "settings": "Settings",
     "search": "Search",
