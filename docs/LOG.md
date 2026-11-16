@@ -210,3 +210,9 @@ Sáu mục, mỗi mục một commit, push ngay sau commit; lint, typecheck, bui
 - **Mục 6 — thống nhất tên ngôn ngữ**: nhãn điều khiển (ô chọn người nhận, tab xem trước, dòng tạo bản, danh sách bản ở link, nhãn thẻ trích dẫn, chip xin đồng ý ghi âm) dùng tên theo giao diện; Cài đặt > Giao diện và chip /welcome giữ tên gốc; ko.json chuẩn hóa settings.langVi/En về tên gốc. Đã bấm thử: ô chọn gửi hiện "tiếng Việt, tiếng Anh, tiếng Hàn"; tab xem trước "tiếng Hàn (2 người)"; bảng đồng ý ghi âm 3 chip theo giao diện; Cài đặt (giao diện Hàn) giữ "Tiếng Việt, English, 한국어".
 - **Bài học đo**: cache HTTP của Chrome nằm ở `<profile>/Default/Cache` — xóa nhầm thư mục `Cache` ở gốc hồ sơ thì cache vẫn sống, phông 2 MB "chuyển biến mất" (0,3 KB transfer) và LCP đẹp giả; luôn soi `statusCode` + `transferSize` trong `network-requests` để phát hiện request 500/304. Server prod phải build lại sau khi đổi phông, không thì route font trả 500.
 - Sau 6 mục: quét 5 route vi/ko không lỗi console (0); `pnpm lint`, `pnpm typecheck`, `pnpm build` sạch.
+
+## 2026-11-17, Claude, merge M6, đổi cách giao việc
+
+- M6 đã merge (PR #52, Hoang đồng ý). Lần kiểm thử đầu: font Hàn một file 2 MB (giao diện ko LCP 14 s), nội dung Hàn thiếu `lang="ko"` nên ngắt giữa từ, email bị ô chọn đè, dấu chấm giữa và mũi tên trên nút. Agent sửa đủ; giao diện ko LCP còn 5,0 đến 5,3 s, font 267 KB.
+- Máy agent bị reset nhiều lần (M4, M5, M6), mất code chưa push và script kiểm thử. Đổi cách làm từ M7 (PR #53): một issue một PR vào nhánh tích hợp `m7/nhom`, mỗi issue chia bước, push sau mỗi bước, PR nháp làm danh sách tiến độ; kiểm thử và đo nằm trong repo (`tests/e2e`, `pnpm lh`).
+- Các bước của #47 đến #50 ghi ở comment trên từng issue.
