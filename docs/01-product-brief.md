@@ -49,6 +49,8 @@ Người dùng bấm ghi âm trong buổi làm việc. Khi kết thúc, Noteim t
 - Nhập file ghi âm có sẵn
 - Cài đặt: hồ sơ, từ điển tên riêng, lưu trữ và dọn dẹp, gói dịch vụ
 - Giao diện sáng và tối, điện thoại và máy tính, tiếng Việt và tiếng Anh
+- M6: tiếng Hàn; buổi ghi nói nhiều thứ tiếng; bản tóm tắt và biên bản theo ngôn ngữ từng người nhận
+- M7: không gian nhóm, vai trò, bảng điều khiển cá nhân và nhóm, quản trị và nhật ký truy cập
 
 **Giả lập trong mockup:**
 

@@ -98,6 +98,28 @@ Nghiệm thu:
 - [ ] Hoang đi hết luồng chính trên điện thoại không gặp chỗ nào phải hỏi "bấm vào đâu"
 - [ ] Lighthouse trên điện thoại: Khả năng tiếp cận từ 95, Hiệu năng từ 85
 
+## M6. Đa ngôn ngữ
+
+Đặc tả: `08-da-ngon-ngu-va-nhom.md` phần A. Một nhánh `m6/da-ngon-ngu`, một PR.
+
+| Issue | Việc |
+| --- | --- |
+| M6-01 (#43) | Nền tảng: kiểu `Lang`, `LocalizedText` thay `_en`, giao diện tiếng Hàn đầy đủ, font Hàn nạp khi cần, `Intl` theo `ko-KR`, chọn 3 ngôn ngữ trong Cài đặt. |
+| M6-02 (#44) | Ghi âm và lời nói nhiều ngôn ngữ: chọn ngôn ngữ khi bắt đầu, nhãn và bản dịch từng đoạn, từ điển nhiều cách viết, buổi ghi mẫu họp đối tác Hàn. |
+| M6-03 (#45) | Bản tóm tắt nhiều ngôn ngữ: chọn và tạo bản, trích dẫn giữ câu gốc, việc cần làm, Hỏi AI, tìm kiếm trên mọi bản. |
+| M6-04 (#46) | Gửi và chia sẻ theo người nhận: ngôn ngữ ưa dùng của liên hệ, email theo từng người, link công khai đổi ngôn ngữ, thẻ trích dẫn kèm dịch, mục "Ngôn ngữ báo cáo" trong Cài đặt. |
+
+## M7. Nhóm và bảng điều khiển
+
+Đặc tả: `08-da-ngon-ngu-va-nhom.md` phần B. Một nhánh `m7/nhom`, một PR. Làm sau khi M6 merge.
+
+| Issue | Việc |
+| --- | --- |
+| M7-01 (#47) | Không gian làm việc: Cá nhân và Nhóm, đổi không gian, tạo nhóm, mời và nhận lời mời, vai trò, buổi ghi riêng tư hoặc cả nhóm, quyền kiểm ở repository. |
+| M7-02 (#48) | Bảng điều khiển cá nhân `/dashboard` và tab Nhóm; thanh điều hướng mới. |
+| M7-03 (#49) | Quản trị nhóm `/team/*`: thành viên, mức dùng, nhật ký truy cập, mẫu dùng chung, gói Nhóm và hóa đơn mẫu. |
+| M7-04 (#50) | Cập nhật `07-handover.md` (bảng database, bảo mật theo hàng cho nhóm và nhiều ngôn ngữ) và chạy lại rà tối, máy tính, tiếp cận, hiệu năng cho mọi màn mới. |
+
 ## Bài thử kỹ thuật (chạy song song, nhãn `spike`)
 
 Không thuộc mockup, nhưng kết quả quyết định hướng đi của bản thật. Nên làm trong lúc M1 đang chạy.
@@ -112,4 +134,4 @@ Kết quả cần ghi vào `docs/DECISIONS.md`:
 
 ## Sau mockup
 
-Thứ tự đề xuất, sẽ viết đặc tả riêng khi tới lúc: đăng nhập và database, ghi âm và tải lên thật, đường ống AI (model đặt trong cấu hình, chia đoạn cho buổi dài), email, thanh toán, rồi mới tới podcast tóm tắt, sketchnote, tính năng cho sinh viên.
+Sau M7. Thứ tự đề xuất, sẽ viết đặc tả riêng khi tới lúc: đăng nhập và database, ghi âm và tải lên thật, đường ống AI (model đặt trong cấu hình, chia đoạn cho buổi dài), email, thanh toán, rồi mới tới podcast tóm tắt, sketchnote, tính năng cho sinh viên.

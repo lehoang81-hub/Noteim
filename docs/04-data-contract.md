@@ -305,6 +305,164 @@ interface AccountRepository {
 
 Hàm nào trả lỗi phải ném `DataError` có trường `code`: `offline`, `not_found`, `quota_exceeded`, `server`. Giao diện hiển thị thông báo theo `code`, không hiển thị chuỗi lỗi thô.
 
+## Bổ sung M6, M7
+
+Đặc tả màn hình ở `08-da-ngon-ngu-va-nhom.md`. Các kiểu dưới đây thay hoặc mở rộng kiểu cũ; trường cũ nào bị thay thì bản giả phải tự chuyển dữ liệu cũ trong localStorage khi nạp.
+
+```ts
+type Lang = "vi" | "en" | "ko";            // thêm "ja", "zh" sau này
+type LocalizedText = { vi: string } & Partial<Record<Lang, string>>;
+
+// M6: thay đổi trên kiểu cũ
+interface User {
+  ui_language: Lang;
+  default_speech_language: Lang;
+  auto_detect_languages: boolean;
+  default_report_language: Lang;
+  auto_translate_on_send: boolean;
+  current_workspace_id: string;      // M7
+}
+
+interface Template {
+  name: LocalizedText;                // thay name + name_en
+  sections: Array<{ id: string; title: LocalizedText; enabled: boolean }>;
+  suggested_questions: LocalizedText[];
+  footer_note?: LocalizedText;
+  workspace_id: string | null;        // M7: null là mẫu hệ thống
+}
+
+interface Contact {
+  preferred_language: Lang | null;    // null là theo ngôn ngữ báo cáo mặc định
+}
+
+interface GlossaryTerm {
+  term: string;
+  variants: Partial<Record<Lang, string>>;   // cách viết ở ngôn ngữ khác
+}
+
+interface Session {
+  primary_language: Lang;             // thay language
+  detected_languages: Lang[];         // gồm cả primary_language
+  report_languages: Lang[];           // các bản tóm tắt đã có
+  original_report_language: Lang;     // thay output_language
+  visibility: "private" | "workspace";   // M7
+  owner_user_id: string;              // M7, người ghi
+}
+
+interface TranscriptSegment {
+  lang: Lang;
+  translations: Partial<Record<Lang, { text: string; stale: boolean }>>;
+}
+
+// Phần tóm tắt tách thành bản theo ngôn ngữ.
+// SessionDetail.executive_summary, topics, figure được đọc từ bản đang xem.
+interface SummaryVersion {
+  session_id: string;
+  lang: Lang;
+  source: "original" | "translated";
+  translated_from: Lang | null;
+  created_at: string;
+  stale: boolean;                     // bản gốc đã sửa sau khi dịch
+  executive_summary: string;
+  topics: Topic[];                    // bullet trích dẫn giữ thêm original_text, original_lang
+  task_texts: Record<string, string>; // action_item_id -> tên việc ở ngôn ngữ này
+}
+
+interface EmailDraft {
+  lang: Lang;                         // theo người nhận
+}
+
+interface ShareLink {
+  languages: Lang[];                  // các bản người xem được chọn
+}
+
+// M7
+interface Workspace {
+  id: string;
+  kind: "personal" | "team";
+  name: string;
+  profession: Profession | null;
+  default_report_language: Lang;
+  plan: "free" | "pro" | "team";
+  seat_limit: number | null;
+  owner_user_id: string;
+}
+
+interface Member {
+  workspace_id: string;
+  user_id: string | null;             // null khi còn là lời mời
+  email: string;
+  display_name: string;
+  role: "owner" | "admin" | "member";
+  status: "active" | "invited";
+  invited_at: string;
+  invite_expires_at: string | null;
+}
+
+interface AuditEvent {
+  id: string;
+  workspace_id: string;
+  actor_user_id: string;
+  action: "view" | "share" | "unshare" | "export" | "delete" | "invite" | "remove_member" | "role_change" | "purge" | "send_email";
+  target_type: "session" | "member" | "workspace" | "share_link";
+  target_id: string;
+  target_label: string;
+  at: string;
+}
+
+interface UsageRow { user_id: string; month: string; sessions: number; minutes: number; open_tasks: number }
+interface Invoice { id: string; period: string; seats: number; amount_label: string; status: "paid" | "due" }
+
+interface DashboardData {
+  range: "week" | "month";
+  attention: Array<{ kind: "task_overdue" | "task_due_today" | "speaker_unnamed" | "audio_expiring" | "link_expiring" | "processing_failed"; target_id: string; label: string; href: string }>;
+  totals: { sessions: number; minutes: number; decisions: number; tasks_done: number; tasks_total: number };
+  by_day: Array<{ date: string; session_ids: string[]; minutes: number }>;
+  decisions: Array<{ session_id: string; bullet_id: string; text: string; timestamp_sec: number }>;
+  top_contacts: Array<{ contact_id: string; sessions: number; last_met_at: string }>;
+  by_template: Array<{ template_id: string; minutes: number }>;
+}
+```
+
+Repository thêm:
+
+```ts
+interface SessionRepository {
+  getSummary(id: string, lang: Lang): Promise<SummaryVersion>;             // M6
+  createSummaryVersion(id: string, lang: Lang, onStep: (step: 1 | 2) => void): Promise<SummaryVersion>;   // M6
+  translateSegments(id: string, lang: Lang, segmentIds?: string[]): Promise<TranscriptSegment[]>;   // M6
+  setVisibility(id: string, visibility: Session["visibility"]): Promise<void>;   // M7
+}
+
+interface WorkspaceRepository {           // M7
+  list(): Promise<Workspace[]>;
+  switchTo(id: string): Promise<void>;
+  create(input: Pick<Workspace, "name" | "profession" | "default_report_language">): Promise<Workspace>;
+  update(id: string, patch: Partial<Pick<Workspace, "name" | "profession" | "default_report_language">>): Promise<void>;
+  remove(id: string): Promise<void>;
+  members(id: string): Promise<Member[]>;
+  invite(id: string, email: string, role: Member["role"]): Promise<Member>;
+  revokeInvite(id: string, email: string): Promise<void>;
+  changeRole(id: string, userId: string, role: Member["role"]): Promise<void>;
+  removeMember(id: string, userId: string): Promise<void>;
+  transferOwnership(id: string, userId: string): Promise<void>;
+  getInvite(token: string): Promise<{ workspace: Workspace; invited_by: string } | "expired" | "not_found">;
+  acceptInvite(token: string): Promise<void>;
+  usage(id: string, month: string): Promise<UsageRow[]>;
+  audit(id: string, filter?: { actor_user_id?: string; action?: AuditEvent["action"] }): Promise<AuditEvent[]>;
+  invoices(id: string): Promise<Invoice[]>;
+}
+
+interface DashboardRepository {           // M7
+  get(range: DashboardData["range"]): Promise<DashboardData>;
+  team(range: DashboardData["range"]): Promise<{ usage: UsageRow[]; open_tasks_by_assignee: Array<{ user_id: string; open: number; overdue: number }> }>;
+}
+```
+
+Quy tắc quyền nằm ở repository (bản giả cũng phải kiểm): `get`, `getTranscript` của buổi riêng tư người khác ném `DataError` mã `forbidden`; `list` trong không gian Nhóm chỉ trả buổi của mình và buổi `visibility: "workspace"`. Thêm `forbidden` vào danh sách mã lỗi.
+
+Khi nối database: `SummaryVersion` thành bảng `summary_versions (session_id, lang)`, `workspaces`, `members`, `audit_events` là bảng riêng; chính sách bảo mật theo hàng dựa trên `members` và `visibility`. Cập nhật `07-handover.md` mục 3 ở M7-04.
+
 ## Fixture
 
 Viết bằng tiếng Việt, nội dung như thật, tên người và số liệu hợp lý. Không dùng "Lorem ipsum", "Nguyễn Văn A", "Test 1".
