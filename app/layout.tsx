@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Be_Vietnam_Pro, Bricolage_Grotesque } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { MotionProvider } from "@/components/motion-provider";
 import { ToastProvider } from "@/components/ui/toast";
 import "./globals.css";
 
@@ -58,7 +59,9 @@ export default async function RootLayout({
       </head>
       <body className="bg-bg font-body text-ink antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ToastProvider>{children}</ToastProvider>
+          <MotionProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </MotionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

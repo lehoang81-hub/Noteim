@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { Building2, Briefcase, Gavel, HeartPulse, PenTool, Scale, UserRound, ArrowLeft, Play } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -290,7 +290,7 @@ function DawnMoment() {
       {Array.from({ length: BARS }, (_, i) => {
         const h = 10 + 38 * Math.abs(Math.sin(i / 2.4));
         return (
-          <motion.span
+          <m.span
             key={i}
             className="w-2 rounded-pill"
             style={{ background: "var(--gradient-dawn)" }}

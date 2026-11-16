@@ -3,7 +3,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { AnimatePresence, motion, useDragControls, type DragControls, type PanInfo } from "motion/react";
+import { AnimatePresence, m, useDragControls, type DragControls, type PanInfo } from "motion/react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
@@ -64,7 +64,7 @@ export function Sheet({
         {open ? (
           <Dialog.Portal forceMount>
             <Dialog.Overlay asChild forceMount>
-              <motion.div
+              <m.div
                 className="fixed inset-0 z-40 bg-ink/40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -73,7 +73,7 @@ export function Sheet({
               />
             </Dialog.Overlay>
             <Dialog.Content asChild forceMount {...(description ? {} : { "aria-describedby": undefined })}>
-              <motion.div
+              <m.div
                 className={cn(
                   "fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-w-[560px] flex-col rounded-t-sheet border border-b-0 border-line bg-surface text-ink shadow-float focus:outline-none",
                   size === "half" ? "max-h-[55dvh]" : size === "auto" ? "max-h-[calc(100dvh-24px)]" : "h-[calc(100dvh-24px)]",
@@ -108,7 +108,7 @@ export function Sheet({
                 {footer ? (
                   <div className="border-t border-line px-page pb-[max(16px,env(safe-area-inset-bottom))] pt-3">{footer}</div>
                 ) : null}
-              </motion.div>
+              </m.div>
             </Dialog.Content>
           </Dialog.Portal>
         ) : null}

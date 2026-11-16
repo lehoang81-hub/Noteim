@@ -1,9 +1,3 @@
-import businessOwner from "@/fixtures/generated/business_owner.json";
-import doctor from "@/fixtures/generated/doctor.json";
-import lawyer from "@/fixtures/generated/lawyer.json";
-import realestateSales from "@/fixtures/generated/realestate_sales.json";
-import architect from "@/fixtures/generated/architect.json";
-import notary from "@/fixtures/generated/notary.json";
 import type { RecordingDraft } from "../repository";
 import type { ActionItem, Note, SemanticTag, Speaker, Template, Topic, BookmarkData, Photo } from "../types";
 
@@ -26,14 +20,29 @@ type GeneratedProfession = {
   tasks: Array<{ task: string; priority: string }>;
 };
 
-const BY_PROFESSION: Record<string, GeneratedProfession> = {
-  business_owner: businessOwner,
-  doctor: doctor,
-  lawyer: lawyer,
-  realestate_sales: realestateSales,
-  architect: architect,
-  notary: notary,
+/* Nội dung theo nghề nạp bằng import() động (M5, sửa review PR #41 mục 2):
+ * JSON sinh nội dung không nằm trong chunk khởi tạo, chỉ tải khi một buổi ghi
+ * mới xử lý xong lần đầu. */
+type GeneratedProfessionLoader = () => Promise<{ default: GeneratedProfession }>;
+
+const BY_PROFESSION_SOURCE: Record<string, GeneratedProfessionLoader> = {
+  business_owner: () => import("@/fixtures/generated/business_owner.json"),
+  doctor: () => import("@/fixtures/generated/doctor.json"),
+  lawyer: () => import("@/fixtures/generated/lawyer.json"),
+  realestate_sales: () => import("@/fixtures/generated/realestate_sales.json"),
+  architect: () => import("@/fixtures/generated/architect.json"),
+  notary: () => import("@/fixtures/generated/notary.json"),
 };
+
+const generatedCache = new Map<string, GeneratedProfession>();
+
+async function professionData(key: string): Promise<GeneratedProfession> {
+  const cached = generatedCache.get(key);
+  if (cached) return cached;
+  const mod = await (BY_PROFESSION_SOURCE[key] ?? BY_PROFESSION_SOURCE.realestate_sales)();
+  generatedCache.set(key, mod.default);
+  return mod.default;
+}
 
 const PEAK_COUNT = 600;
 const THUMB_COUNT = 40;
@@ -104,13 +113,13 @@ export type BuiltContent = {
   open_task_count: number;
 };
 
-export function buildSessionContent(opts: {
+export async function buildSessionContent(opts: {
   sessionId: string;
   draft: RecordingDraft;
   template?: Template;
   /** Ngày tạo buổi ghi, để tính hạn của việc cần làm */
   createdAt: string;
-}): BuiltContent {
+}): Promise<BuiltContent> {
   const { sessionId, draft, template } = opts;
   const duration = Math.max(1, Math.round(draft.duration_sec));
 
@@ -132,7 +141,7 @@ export function buildSessionContent(opts: {
   const speakerColorsThumb = Array.from({ length: THUMB_COUNT }, (_, i) => colorAt(((i + 0.5) / THUMB_COUNT) * duration));
 
   /* Nội dung theo mẫu của nghề */
-  const generated = BY_PROFESSION[template?.profession ?? "realestate_sales"] ?? BY_PROFESSION.realestate_sales;
+  const generated = await professionData(template?.profession ?? "realestate_sales");
   const enabled = (template?.sections ?? []).filter((s) => s.enabled);
   const sections = enabled.length ? enabled : (template?.sections ?? []).slice(0, 3);
 

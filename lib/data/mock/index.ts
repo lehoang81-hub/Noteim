@@ -2,9 +2,9 @@
 
 import { getFlags } from "@/lib/debug/flags";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
-import { DataError, Session as SessionSchema, type ActionItem, type ChatMessage, type Contact, type GlossaryTerm, type Session, type SessionDetail, type ShareLink } from "../types";
+import { DataError } from "../errors";
+import type { ActionItem, ChatMessage, Contact, GlossaryTerm, Session, SessionDetail, ShareLink } from "../types";
 import { MOCK_NOW, commit, getDb, samplesReady, sessionsReady, type StoredSession } from "./store";
-import { buildSessionContent } from "./generate";
 
 /*
  * Bản giả của lớp dữ liệu (docs/04-data-contract.md).
@@ -20,12 +20,15 @@ function wait(): Promise<void> {
 
 async function read<T>(fn: () => T | Promise<T>): Promise<T> {
   await wait();
+  // Chờ kho nạp xong (fixture đi qua import() động — M5 sửa review #41)
+  await sessionsReady();
   if (getFlags().failLoad) throw new DataError("server");
   return structuredClone(await fn());
 }
 
 async function write<T>(fn: () => T | Promise<T>): Promise<T> {
   await wait();
+  await sessionsReady();
   if (getFlags().offline) throw new DataError("offline");
   const out = await fn();
   commit();
@@ -54,10 +57,11 @@ async function findFixture(id: string): Promise<StoredSession & { draft?: Record
   return fx;
 }
 
-/** Tách phần nhẹ của buổi ghi (dùng cho thư viện). */
-function toSession(d: Session | SessionDetail): Session {
-  // Zod bỏ các trường không thuộc Session
-  return SessionSchema.parse(d);
+/** Tách phần nhẹ của buổi ghi (dùng cho thư viện và tìm kiếm): Zod nằm ở
+ * seed-data.ts, nạp bằng import() động để không vào chunk khởi tạo. */
+async function stripSessions(list: Array<Session | SessionDetail>): Promise<Session[]> {
+  const { stripToSession } = await import("./seed-data");
+  return list.map(stripToSession);
 }
 
 /** Bản sao ShareLink không kèm mật khẩu (mật khẩu chỉ dùng nội bộ bản giả). */
@@ -128,25 +132,34 @@ function completeProcessing(id: string) {
   const draft = fx.draft;
   if (draft) {
     const template = db.templates.find((t) => t.id === draft.template_id);
-    const content = buildSessionContent({ sessionId: id, draft, template, createdAt: fx.detail.created_at });
-    Object.assign(fx.detail, content);
-    fx.detail.status = "ready";
-    delete fx.detail.processing_step;
-    delete fx.detail.failure_reason;
-    delete fx.draft;
-    // Gói Free: bản gốc tự xóa sau 7 ngày; Pro giữ đến khi tự dọn
-    const plan = getFlags().plan ?? db.user.plan;
-    fx.detail.audio_expires_at =
-      plan === "free" ? new Date(Date.parse(fx.detail.created_at) + 7 * 86400_000).toISOString() : null;
-    refreshCounts(fx.detail);
+    // Sinh nội dung nằm ở seed-data/generate (fixture nghề) — nạp bằng
+    // import() động, không nằm trong chunk khởi tạo (M5 sửa review #41)
+    void (async () => {
+      const { buildSessionContent } = await import("./generate");
+      // Trong lúc chờ module, buổi ghi có thể đã bị xóa hoặc xử lý lại
+      if (fx.detail.status !== "processing") return;
+      const content = await buildSessionContent({ sessionId: id, draft, template, createdAt: fx.detail.created_at });
+      Object.assign(fx.detail, content);
+      fx.detail.status = "ready";
+      delete fx.detail.processing_step;
+      delete fx.detail.failure_reason;
+      delete fx.draft;
+      // Gói Free: bản gốc tự xóa sau 7 ngày; Pro giữ đến khi tự dọn
+      const plan = getFlags().plan ?? getDb().user.plan;
+      fx.detail.audio_expires_at =
+        plan === "free" ? new Date(Date.parse(fx.detail.created_at) + 7 * 86400_000).toISOString() : null;
+      refreshCounts(fx.detail);
+      commit();
+      notifyProcessing(id, 6);
+    })();
   } else {
     // Không có bản nháp (buổi ghi mẫu): chỉ đánh dấu đã xử lý xong
     fx.detail.status = "ready";
     delete fx.detail.processing_step;
     refreshCounts(fx.detail);
+    commit();
+    notifyProcessing(id, 6);
   }
-  commit();
-  notifyProcessing(id, 6);
 }
 
 function advanceProcessing(id: string) {
@@ -209,11 +222,12 @@ export const mockSource: DataSource = {
       read(async () => {
         await sessionsReady();
         if (getFlags().emptyLibrary) return [];
-        return getDb()
-          .sessions.map((s) => s.listDetail ?? s.detail)
-          .filter((d) => matches(d, filter))
-          .sort((a, b) => b.created_at.localeCompare(a.created_at))
-          .map(toSession);
+        return stripSessions(
+          getDb()
+            .sessions.map((s) => s.listDetail ?? s.detail)
+            .filter((d) => matches(d, filter))
+            .sort((a, b) => b.created_at.localeCompare(a.created_at)),
+        );
       }),
     get: (id) => read(async () => (await findFixture(id)).detail),
     getTranscript: (id) => read(async () => (await findFixture(id)).transcript),
@@ -446,6 +460,7 @@ export const mockSource: DataSource = {
         const q = foldVi(query.trim());
         const out: SearchResult = { sessions: [], segments: [], tasks: [] };
         if (!q) return out;
+        const { stripToSession } = await import("./seed-data");
         for (const fx of getDb().sessions) {
           const d = fx.detail;
           // Tìm trong tiêu đề, tóm tắt chung, tên các phần tóm tắt, tên chủ đề
@@ -463,7 +478,7 @@ export const mockSource: DataSource = {
               ...d.topics.flatMap((t) => [t.title, ...t.bullets.map((b) => b.text)]),
             ].join(" "),
           );
-          if (hayTitle.includes(q)) out.sessions.push(toSession(d));
+          if (hayTitle.includes(q)) out.sessions.push(stripToSession(d));
           for (const seg of fx.transcript) {
             if (foldVi(seg.text).includes(q)) out.segments.push({ session_id: d.id, segment: seg });
           }

@@ -246,11 +246,7 @@ export type SessionFixture = z.infer<typeof SessionFixture>;
 
 /* ---------- Lỗi ---------- */
 
-export type DataErrorCode = "offline" | "not_found" | "quota_exceeded" | "server";
-
-export class DataError extends Error {
-  constructor(public code: DataErrorCode, message?: string) {
-    super(message ?? code);
-    this.name = "DataError";
-  }
-}
+// Đã tách sang errors.ts (M5, sửa review PR #41 mục 2): types.ts dựng schema
+// Zod lúc nạp module, còn DataError được import dạng giá trị ở nhiều nơi.
+// Re-export để chỗ import từ "@/lib/data/types" cũ vẫn chạy.
+export { DataError, type DataErrorCode } from "./errors";

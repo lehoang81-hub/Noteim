@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown, ChevronUp, Pause, Play, RotateCcw, RotateCw } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
 import { useTranslations } from "next-intl";
 import { RibbonPlayback, type Bookmark, type HeatSpan } from "@/components/ribbon/ribbon-playback";
 import { formatClock, type SpeakerSpan } from "@/components/ribbon/draw";
@@ -64,7 +64,7 @@ export function FloatingPlayer({
   const rateLabel = `${String(s.rate).replace(".", ",")}x`;
 
   return (
-    <motion.div
+    <m.div
       layout={!reduce}
       transition={{ duration: 0.34, ease: [0.2, 0.8, 0.2, 1] }}
       className={cn("overflow-hidden rounded-block border border-line bg-surface text-ink shadow-float", className)}
@@ -96,7 +96,7 @@ export function FloatingPlayer({
         </div>
       ) : (
         <AnimatePresence initial={false}>
-          <motion.div
+          <m.div
             key="expanded"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -157,9 +157,9 @@ export function FloatingPlayer({
               </button>
               <span aria-hidden={true} className="w-14" />
             </div>
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       )}
-    </motion.div>
+    </m.div>
   );
 }

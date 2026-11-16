@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState } from "react";
 import { Camera, ChevronDown, HardDrive, Mic, MicVocal } from "lucide-react";
-import { AnimatePresence, LayoutGroup, motion } from "motion/react";
+import { AnimatePresence, LayoutGroup, m } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { RibbonLive } from "@/components/ribbon/ribbon-live";
@@ -112,7 +112,7 @@ export function RecordScreen() {
   const micTakenRef = useRef<() => void>(() => {});
   const mic = useMicLevel({ onEnded: () => micTakenRef.current() });
   /* Ba nhánh dải giọng (khoảnh khắc bắt đầu, thẻ gấp, dải sống) cùng là
-   * motion.div ở cùng một vị trí: nếu không có key, React giữ nguyên instance
+   * m.div ở cùng một vị trí: nếu không có key, React giữ nguyên instance
    * khi đổi nhánh và hộp dải sống thừa hưởng trạng thái width/height đang dở
    * của khoảnh khắc trước, kẹt ở width: 32px (PR #22, lỗi 1). Key khác nhau
    * buộc React gắn phần tử mới cho từng nhánh. layoutId dùng useId để hai nhánh
@@ -533,7 +533,7 @@ export function RecordScreen() {
         <LayoutGroup id="record-ribbon">
           <div className="relative flex w-full flex-1 items-center justify-center py-6">
             {showMoment ? (
-              <motion.div
+              <m.div
                 key="moment"
                 className="relative flex items-center justify-center overflow-hidden"
                 style={{ background: "var(--gradient-dawn)" }}
@@ -541,17 +541,17 @@ export function RecordScreen() {
                 animate={{ width: "100%", height: 160, borderRadius: 16, opacity: reduce ? 0 : 1 }}
                 transition={reduce ? FADE : SCENE}
               >
-                <motion.span
+                <m.span
                   initial={{ opacity: 1 }}
                   animate={{ opacity: 0 }}
                   transition={{ duration: 0.25 }}
                   className="text-on-dawn"
                 >
                   <Mic aria-hidden={true} className="size-8" strokeWidth={1.75} />
-                </motion.span>
-              </motion.div>
+                </m.span>
+              </m.div>
             ) : folding ? (
-              <motion.div
+              <m.div
                 key="fold"
                 className="w-full"
                 initial={reduce ? { opacity: 0 } : false}
@@ -560,17 +560,17 @@ export function RecordScreen() {
               >
                 <div className="mx-auto w-full max-w-sm">
                   <p className="text-caption font-medium text-ink-3">{t("foldToday")}</p>
-                  <motion.div layoutId={ribbonBoxId} transition={reduce ? FADE : SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
+                  <m.div layoutId={ribbonBoxId} transition={reduce ? FADE : SCENE} className="overflow-hidden" style={{ borderRadius: 4 }}>
                     <RibbonThumb peaks={foldPeaks} speakers={foldSpeakers} muted />
-                  </motion.div>
+                  </m.div>
                   <div className="mt-1.5 flex items-baseline justify-between gap-3">
                     <p className="min-w-0 truncate text-body-strong font-semibold text-ink">{foldTitle}</p>
                     <span className="shrink-0 text-small tabular-nums text-ink-3">{t("foldProcessing")}</span>
                   </div>
                 </div>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="live"
                 /* Chỉ ghép cặp layoutId khi buổi ghi đang chạy: hộp dải sống
                  * trong lúc chờ bảng (chưa ghi) không cần tham gia khoảnh khắc
@@ -583,12 +583,12 @@ export function RecordScreen() {
                 style={{ borderRadius: 16 }}
               >
                 <RibbonLive level={level} paused={paused} height={160} />
-              </motion.div>
+              </m.div>
             )}
             {/* Gợn sóng khi tạo điểm nóng: tại vị trí hiện tại của dải giọng */}
             <AnimatePresence>
               {ripple > 0 ? (
-                <motion.span
+                <m.span
                   key={ripple}
                   aria-hidden={true}
                   className="pointer-events-none absolute right-3 top-1/2 size-10 -translate-y-1/2 rounded-pill border-2 border-on-dawn"
