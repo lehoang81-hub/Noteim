@@ -49,11 +49,16 @@ function lazyFixture(raw: Record<string, unknown>): StoredSession {
       return cache.detail;
     },
     /** Bản nhẹ cho danh sách thư viện: chỉ các trường của Session, không
-     * phải trả giá parse tóm tắt, người nói, việc cần làm... (M5-04) */
+     * phải trả giá parse tóm tắt, người nói, việc cần làm... (M5-04).
+     * Parse MỖI LẦN đọc, không cache: khi buổi đã được đọc chi tiết rồi sửa
+     * qua repository (đổi visibility, tiêu đề...), danh sách cập nhật ngay
+     * không cần tải lại trang (M7-01 — lỗi bắt được khi thử đổi Riêng tư/
+     * Cả nhóm: bản cache cũ giữ nguyên visibility cũ). Chưa đọc chi tiết lần
+     * nào thì parse nhẹ từ raw, không kéo cả tóm tắt vào bộ nhớ. */
     get listDetail(): Session | undefined {
+      const src = "detail" in cache ? (cache.detail as SessionDetail) : raw.detail;
       // Session (bản nhẹ) không mang danh sách người nói nên không cần normalize
-      if (!("listDetail" in cache)) cache.listDetail = SessionSchema.parse(raw.detail);
-      return cache.listDetail as Session | undefined;
+      return SessionSchema.parse(src);
     },
     get transcript() {
       if (!("transcript" in cache)) cache.transcript = z.array(TranscriptSegment).parse(raw.transcript ?? []);

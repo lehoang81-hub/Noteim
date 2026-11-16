@@ -617,7 +617,13 @@
     "honorificChi": "님",
     "pickRowOn": "선택 해제",
     "pickRowOff": "선택",
-    "sessionAt": "{time} 녹음 세션"
+    "sessionAt": "{time} 녹음 세션",
+    "scopeMine": "내 것",
+    "scopeWorkspace": "팀 전체",
+    "recordedBy": "{name} 님 녹음",
+    "makePrivate": "비공개로 되돌리기",
+    "shareWithTeam": "팀 전체에 공유",
+    "visibilityChanged": "공유 설정을 바꿨어요"
   },
   "session": {
     "back": "라이브러리로 돌아가기",
@@ -706,7 +712,8 @@
     "keptPro": "원본 녹음을 유지합니다",
     "keepFreeTitle": "원본 유지는 Pro 기능입니다",
     "keepFreeConfirm": "Pro 플랜 보기",
-    "keepFreeBody": "Free 플랜은 7일 후 원본 음성을 자동 삭제합니다(요약은 유지). Pro 플랜은 직접 정리할 때까지 원본을 유지합니다."
+    "keepFreeBody": "Free 플랜은 7일 후 원본 음성을 자동 삭제합니다(요약은 유지). Pro 플랜은 직접 정리할 때까지 원본을 유지합니다.",
+    "forbidden": "이 녹음을 볼 권한이 없어요. 비공개 녹음은 녹음한 사람만 열 수 있어요."
   },
   "transcript": {
     "searchLabel": "녹취록에서 검색",
@@ -849,7 +856,8 @@
     "prHigh": "높음",
     "prMedium": "보통",
     "prLow": "낮음",
-    "saved": "할 일을 저장했습니다"
+    "saved": "할 일을 저장했습니다",
+    "assigneeGroupMembers": "팀 멤버"
   },
   "sendMinutes": {
     "title": "회의록 전송 및 할 일 지정",
@@ -999,7 +1007,12 @@
     "cardLangBoth": "원문 + 번역",
     "cardLangTranslation": "번역만",
     "cardTranslatedFrom": "{lang}에서 번역",
-    "cardLangLabel": "카드 내용"
+    "cardLangLabel": "카드 내용",
+    "withTeamLabel": "팀 전체에 공유",
+    "withTeamOnHint": "이 작업 공간의 모든 멤버가 이 녹음을 볼 수 있어요.",
+    "withTeamOffHint": "소유자와 관리자도 포함해 본인만 이 녹음을 볼 수 있어요.",
+    "withTeamOnDone": "팀 전체에 공유했어요",
+    "withTeamOffDone": "비공개로 되돌렸어요"
   },
   "public": {
     "expired": "이 링크는 만료되었습니다.",

@@ -19,7 +19,7 @@ import { QuoteCardPanel, type QuoteContent } from "./quote-card";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { SkeletonParagraph } from "@/components/ui/feedback";
-import { TextField } from "@/components/ui/form";
+import { TextField, Switch } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { data, dataNow, useData, DataError, type Bullet, type Lang, type SessionDetail, type Template } from "@/lib/data";
@@ -192,6 +192,41 @@ function OptionRow({
 
 const EXPIRY_CHOICES = [null, 7, 30] as const;
 
+/**
+ * Chia sẻ với cả không gian nhóm (M7-01): công tắc riêng tư / cả nhóm, chỉ
+ * hiện với buổi của mình trong không gian Nhóm. Đổi xong ghi nhật ký nhóm.
+ */
+function TeamVisibilityRow({ detail }: { detail: SessionDetail }) {
+  const t = useTranslations("share");
+  const ts = useTranslations("session");
+  const toast = useToast();
+  const me = useData(() => data.account.me(), []);
+  // Giá trị vừa bấm, giữ hiển thị cho đến khi dữ liệu tải lại kịp (tránh
+  // bấm tiếp lần hai bị lệch một nhịp với bản ghireload chậm 300-800ms)
+  const [override, setOverride] = useState<"private" | "workspace" | null>(null);
+  const canToggle = !!detail.workspace_id && (detail.owner_user_id || detail.user_id) === me.data?.id;
+  if (!canToggle) return null;
+  const effective = override && detail.visibility !== override ? override : detail.visibility;
+  const shared = effective === "workspace";
+  return (
+    <fieldset className="mb-4 border-b border-line pb-2">
+      <Switch
+        checked={shared}
+        label={t("withTeamLabel")}
+        description={shared ? t("withTeamOnHint") : t("withTeamOffHint")}
+        onCheckedChange={(next) => {
+          const target: "private" | "workspace" = next ? "workspace" : "private";
+          setOverride(target);
+          void data.sessions
+            .setVisibility(detail.id, target)
+            .then(() => toast.show({ tone: "success", message: next ? t("withTeamOnDone") : t("withTeamOffDone") }))
+            .catch(() => toast.show({ tone: "error", message: ts("saveError") }));
+        }}
+      />
+    </fieldset>
+  );
+}
+
 function LinkPanel({ detail, onBack }: { detail: SessionDetail; onBack: () => void }) {
   const t = useTranslations("share");
   const tr = useTranslations(); // tên ngôn ngữ ở gốc (M6-04)
@@ -255,6 +290,7 @@ function LinkPanel({ detail, onBack }: { detail: SessionDetail; onBack: () => vo
     const urlPath = `/p/${existing.id}`;
     return (
       <div>
+        <TeamVisibilityRow key={detail.id} detail={detail} />
         <p className="text-small text-ink-2">{t("existingHint")}</p>
         <div className="mt-3 rounded-block border border-line bg-surface-2 p-3">
           <p dir="ltr" className="break-all text-small text-ink">
@@ -317,6 +353,7 @@ function LinkPanel({ detail, onBack }: { detail: SessionDetail; onBack: () => vo
         void create();
       }}
     >
+      <TeamVisibilityRow key={detail.id} detail={detail} />
       <fieldset>
         <legend className="text-small font-medium text-ink">{t("scopeLabel")}</legend>
         <div className="mt-2 flex flex-col gap-2">

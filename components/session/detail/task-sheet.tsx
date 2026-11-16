@@ -17,12 +17,15 @@ import { data, type ActionItem, type Contact, type SessionDetail } from "@/lib/d
 export function TaskSheet({
   session,
   contacts,
+  members,
   item,
   open,
   onOpenChange,
 }: {
   session: SessionDetail;
   contacts: Contact[];
+  /** Thành viên của không gian nhóm chứa buổi (M7-01); rỗng với buổi cá nhân */
+  members: Array<{ user_id: string | null; display_name: string; role: string }>;
   /** null là thêm mới */
   item: ActionItem | null;
   open: boolean;
@@ -33,6 +36,8 @@ export function TaskSheet({
   const toast = useToast();
 
   const [task, setTask] = useState("");
+  // Người phụ trách: "c:<liên hệ>" hoặc "u:<thành viên nhóm>" (M7-01);
+  // chuỗi rỗng là chưa giao
   const [assignee, setAssignee] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState<ActionItem["priority"]>("medium");
@@ -42,7 +47,7 @@ export function TaskSheet({
   if (open && !prevOpen) {
     setPrevOpen(true);
     setTask(item?.task ?? "");
-    setAssignee(item?.assignee_contact_id ?? "");
+    setAssignee(item?.assignee_user_id ? `u:${item.assignee_user_id}` : (item?.assignee_contact_id ?? ""));
     setDueDate(item?.due_date ?? "");
     setPriority(item?.priority ?? "medium");
   } else if (!open && prevOpen) {
@@ -56,6 +61,8 @@ export function TaskSheet({
     .filter((c): c is Contact => !!c);
   const speakerIds = new Set(namedSpeakers.map((c) => c.id));
   const otherContacts = contacts.filter((c) => !speakerIds.has(c.id) && c.id !== "c-me");
+  // Thành viên nhóm giao việc được (M7-01): bỏ lời mời chưa tham gia và chính mình
+  const teamMembers = members.filter((m) => m.user_id);
 
   async function save() {
     const text = task.trim();
@@ -74,11 +81,14 @@ export function TaskSheet({
         source_quote: null,
         timestamp_sec: null,
       };
+    // "u:<id>" là thành viên nhóm, "c:<id>" là liên hệ (M7-01)
+    const isMember = assignee.startsWith("u:");
     try {
       await data.tasks.upsert({
         ...base,
         task: text,
-        assignee_contact_id: assignee || null,
+        assignee_contact_id: isMember ? null : assignee || null,
+        assignee_user_id: isMember ? assignee.slice(2) : null,
         due_date: dueDate || null,
         priority,
       });
@@ -117,6 +127,15 @@ export function TaskSheet({
             className="h-11 w-full rounded-control border border-line bg-surface px-2 text-body text-ink"
           >
             <option value="">{t("assigneeNone")}</option>
+            {teamMembers.length ? (
+              <optgroup label={t("assigneeGroupMembers")}>
+                {teamMembers.map((m) => (
+                  <option key={m.user_id} value={`u:${m.user_id}`}>
+                    {m.display_name}
+                  </option>
+                ))}
+              </optgroup>
+            ) : null}
             {namedSpeakers.length ? (
               <optgroup label={t("assigneeGroupSpeakers")}>
                 {namedSpeakers.map((c) => (

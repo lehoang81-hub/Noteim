@@ -94,6 +94,12 @@ export function getDb(): MockDb {
           (fx.detail as { speakers?: Array<{ display_name: string | null }> } | undefined)?.speakers,
         );
       }
+      // listDetail là bản sao chậm được ghi kèm kho từ lần serialize trước —
+      // gỡ để danh sách luôn đọc từ detail (M7-01: sửa buổi qua repository
+      // phải hiện được ngay, không đọc bản nhạt đã cũ)
+      for (const fx of [...db.sessions, ...db.removed, ...db.samples]) {
+        if ("listDetail" in fx) delete (fx as { listDetail?: unknown }).listDetail;
+      }
       // Dữ liệu cũ trước M6 (_en, language, output_language...) tự chuyển khi nạp
       if (migrateStored(db)) commit();
     }

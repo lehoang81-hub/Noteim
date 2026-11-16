@@ -617,7 +617,13 @@
     "honorificChi": "chị",
     "pickRowOn": "Bỏ chọn",
     "pickRowOff": "Chọn",
-    "sessionAt": "Buổi ghi lúc {time}"
+    "sessionAt": "Buổi ghi lúc {time}",
+    "scopeMine": "Của tôi",
+    "scopeWorkspace": "Cả nhóm",
+    "recordedBy": "Ghi bởi {name}",
+    "makePrivate": "Đặt lại Riêng tư",
+    "shareWithTeam": "Chia sẻ với cả nhóm",
+    "visibilityChanged": "Đã đổi chế độ chia sẻ"
   },
   "session": {
     "back": "Về thư viện",
@@ -706,7 +712,8 @@
     "keptPro": "Đã giữ lại bản ghi âm gốc",
     "keepFreeTitle": "Giữ bản gốc là tính năng Pro",
     "keepFreeConfirm": "Xem gói Pro",
-    "keepFreeBody": "Gói Free tự xóa bản ghi âm sau 7 ngày (tóm tắt vẫn được giữ). Gói Pro giữ bản gốc đến khi bạn tự dọn."
+    "keepFreeBody": "Gói Free tự xóa bản ghi âm sau 7 ngày (tóm tắt vẫn được giữ). Gói Pro giữ bản gốc đến khi bạn tự dọn.",
+    "forbidden": "Bạn không có quyền xem buổi ghi này. Buổi ghi riêng tư chỉ người ghi mở được."
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",
@@ -849,7 +856,8 @@
     "prHigh": "Cao",
     "prMedium": "Vừa",
     "prLow": "Thấp",
-    "saved": "Đã lưu việc cần làm"
+    "saved": "Đã lưu việc cần làm",
+    "assigneeGroupMembers": "Thành viên nhóm"
   },
   "sendMinutes": {
     "title": "Gửi biên bản và giao việc",
@@ -999,7 +1007,12 @@
     "cardLangBoth": "Câu gốc kèm dịch",
     "cardLangTranslation": "Chỉ bản dịch",
     "cardTranslatedFrom": "Dịch từ {lang}",
-    "cardLangLabel": "Nội dung thẻ"
+    "cardLangLabel": "Nội dung thẻ",
+    "withTeamLabel": "Chia sẻ với cả nhóm",
+    "withTeamOnHint": "Mọi thành viên trong không gian nhóm này thấy và đọc được buổi ghi.",
+    "withTeamOffHint": "Chỉ bạn đọc được buổi ghi này, kể cả Chủ và Quản trị.",
+    "withTeamOnDone": "Đã chia sẻ với cả nhóm",
+    "withTeamOffDone": "Đã đặt lại Riêng tư"
   },
   "public": {
     "expired": "Link này đã hết hạn.",

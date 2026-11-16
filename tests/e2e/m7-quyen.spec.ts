@@ -48,8 +48,9 @@ test("mở thẳng buổi riêng tư của người khác: không lộ nội dun
   // Nội dung buổi không được lộ (tóm tắt, chủ đề, việc)
   await expect(page.getByText("phân phối độc quyền", { exact: false })).toHaveCount(0);
   await expect(page.getByText("chiết khấu cho sàn", { exact: false })).toHaveCount(0);
-  // Thay vào đó là thông báo lỗi (bước 5 sẽ thay bằng thông báo không có quyền riêng)
-  await expect(page.getByText("Chưa tải được buổi ghi này.")).toBeVisible();
+  // Thay vào đó là thông báo không có quyền, rõ ràng
+  await expect(page.getByText("Bạn không có quyền xem buổi ghi này.")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Về thư viện" }).first()).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -146,4 +147,87 @@ test("cờ Nhóm hết chỗ: nút mời khóa kèm lý do", async ({ page }) =>
   await page.getByLabel("Email người được mời").fill("linh.tran@hpmland.example.vn");
   await expect(page.getByRole("button", { name: "Gửi lời mời" })).toBeDisabled();
   await expect(page.getByText("Nhóm đã dùng hết số chỗ của gói")).toBeVisible();
+});
+
+const TEAM_SESSIONS = ["s-nhom-marina-c", "s-nhom-hop-tuan-45", "s-nhom-legend-ha-phong"];
+
+async function toTeamLibrary(page: import("@playwright/test").Page) {
+  await onboard(page);
+  await page.getByRole("button", { name: "Đổi không gian làm việc" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: /Sàn BĐS Hải Phòng Land/ }).click();
+  await expect(page.locator("a[href='/s/s-nhom-marina-c']")).toBeVisible();
+}
+
+test("thư viện nhóm: chip Của tôi / Cả nhóm và tên người ghi", async ({ page }) => {
+  const errors = collectErrors(page);
+  await toTeamLibrary(page);
+  // Hàng buổi của người khác hiện tên người ghi; hàng của mình không hiện
+  await expect(page.getByText("Ghi bởi Phạm Thùy Trâm").first()).toBeVisible();
+  await expect(page.getByText("Ghi bởi Võ Quốc Dũng").first()).toBeVisible();
+  const marinaRow = page.locator("a[href='/s/s-nhom-marina-c']").locator("xpath=ancestor::div[contains(@class,'border-b')]");
+  await expect(marinaRow.getByText("Ghi bởi")).toHaveCount(0);
+  // Chip Của tôi: chỉ buổi mình ghi
+  await page.getByRole("button", { name: "Của tôi" }).click();
+  await expect(page.locator("a[href='/s/s-nhom-marina-c']")).toBeVisible();
+  for (const id of ["s-nhom-hop-tuan-45", "s-nhom-legend-ha-phong"]) {
+    await expect(page.locator(`a[href='/s/${id}']`)).toHaveCount(0);
+  }
+  // Chip Cả nhóm: ba buổi đã chia sẻ, không có buổi riêng tư của ai
+  await page.getByRole("button", { name: "Cả nhóm" }).click();
+  for (const id of TEAM_SESSIONS) {
+    await expect(page.locator(`a[href='/s/${id}']`)).toBeVisible();
+  }
+  for (const id of TEAM_ONLY) {
+    await expect(page.locator(`a[href='/s/${id}']`)).toHaveCount(0);
+  }
+  // Bỏ chip: thư viện trở lại đủ 3 buổi chia sẻ
+  await page.getByRole("button", { name: "Cả nhóm" }).click();
+  await expect(page.locator("a[href='/s/s-nhom-marina-c']")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("menu ⋯: đổi Riêng tư sang Cả nhóm rồi trở lại", async ({ page }) => {
+  const errors = collectErrors(page);
+  await toTeamLibrary(page);
+  // Buổi của mình (s-nhom-marina-c) đang là Cả nhóm: menu có mục đặt lại Riêng tư
+  await page.locator("a[href='/s/s-nhom-marina-c']").locator("xpath=ancestor::div[contains(@class,'border-b')]").getByRole("button", { name: "Thao tác với buổi ghi" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Đặt lại Riêng tư" }).click();
+  // Ẩn khỏi lọc Cả nhóm nhưng vẫn thấy trong thư viện của mình
+  await expect(page.getByText("Đã đổi chế độ chia sẻ")).toBeVisible();
+  await page.getByRole("button", { name: "Cả nhóm" }).click();
+  await expect(page.locator("a[href='/s/s-nhom-marina-c']")).toHaveCount(0);
+  // Đặt lại như cũ qua menu
+  await page.getByRole("button", { name: "Cả nhóm" }).click();
+  await page.locator("a[href='/s/s-nhom-marina-c']").locator("xpath=ancestor::div[contains(@class,'border-b')]").getByRole("button", { name: "Thao tác với buổi ghi" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Chia sẻ với cả nhóm" }).click();
+  await expect(page.getByText("Đã đổi chế độ chia sẻ")).toBeVisible();
+  await page.getByRole("button", { name: "Cả nhóm" }).click();
+  await expect(page.locator("a[href='/s/s-nhom-marina-c']")).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test("bảng Chia sẻ: công tắc Chia sẻ với cả nhóm", async ({ page }) => {
+  const errors = collectErrors(page);
+  await toTeamLibrary(page);
+  // Buổi của người khác đã chia sẻ: không có công tắc (chỉ người ghi đổi được)
+  await page.locator("a[href='/s/s-nhom-hop-tuan-45']").click();
+  await expect(page.getByRole("heading", { name: "Họp giao việc tuần 45" })).toBeVisible();
+  await page.getByRole("button", { name: "Chia sẻ" }).click();
+  // Bảng chia sẻ mở ở menu: vào "Link xem" mới thấy phần công tắc
+  await page.getByRole("button", { name: /Link xem/ }).click();
+  await expect(page.getByText("Chia sẻ với cả nhóm")).toHaveCount(0);
+  // Mở bảng Chia sẻ của buổi của mình: có công tắc, bật tắt được
+  await page.keyboard.press("Escape");
+  await page.goto("/");
+  await page.locator("a[href='/s/s-nhom-marina-c']").click();
+  await expect(page.getByRole("heading", { name: "Khách chốt căn góc Marina C" })).toBeVisible();
+  await page.getByRole("button", { name: "Chia sẻ" }).click();
+  await page.getByRole("button", { name: /Link xem/ }).click();
+  const sw = page.getByRole("switch", { name: "Chia sẻ với cả nhóm" });
+  await expect(sw).toBeVisible();
+  await sw.click();
+  await expect(page.getByText("Đã đặt lại Riêng tư")).toBeVisible();
+  await sw.click();
+  await expect(page.getByText("Đã chia sẻ với cả nhóm")).toBeVisible();
+  expect(errors).toEqual([]);
 });

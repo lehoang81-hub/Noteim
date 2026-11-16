@@ -19,6 +19,8 @@ export function TasksTab({
   /** Ngôn ngữ của nội dung việc (theo bản tóm tắt đang xem, M6-03 + Mục 2 review #52) */
   lang,
   contacts,
+  /** Tên thành viên nhóm theo user_id (M7-01), để hiện người phụ trách được giao trong nhóm */
+  memberNames,
   now,
   canSeek,
   onSeek,
@@ -30,6 +32,7 @@ export function TasksTab({
   items: ActionItem[];
   lang?: string;
   contacts: Contact[];
+  memberNames?: Record<string, string>;
   now: Date;
   canSeek: boolean;
   onSeek: (time: number) => void;
@@ -82,7 +85,7 @@ export function TasksTab({
                   toggleLabel={t("toggle")}
                   onOpen={() => onOpen(a)}
                   openLabel={`${t("editTask")}: ${a.task}`}
-                  assignee={a.assignee_contact_id ? nameOf[a.assignee_contact_id] : undefined}
+                  assignee={a.assignee_contact_id ? nameOf[a.assignee_contact_id] : a.assignee_user_id ? memberNames?.[a.assignee_user_id] : undefined}
                   unassignedLabel={t("unassigned")}
                   due={
                     a.done && a.done_at

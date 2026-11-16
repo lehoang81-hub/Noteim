@@ -562,7 +562,13 @@
     "honorificChi": "Ms.",
     "pickRowOn": "Unselect",
     "pickRowOff": "Select",
-    "sessionAt": "Recording at {time}"
+    "sessionAt": "Recording at {time}",
+    "scopeMine": "Mine",
+    "scopeWorkspace": "Team",
+    "recordedBy": "Recorded by {name}",
+    "makePrivate": "Set back to Private",
+    "shareWithTeam": "Share with the team",
+    "visibilityChanged": "Sharing updated"
   },
   "session": {
     "back": "Back to library",
@@ -651,7 +657,8 @@
     "keptPro": "Original audio kept",
     "keepFreeTitle": "Keeping originals is a Pro feature",
     "keepFreeConfirm": "See Pro",
-    "keepFreeBody": "The Free plan auto-deletes audio after 7 days (summaries are kept). Pro keeps originals until you free them."
+    "keepFreeBody": "The Free plan auto-deletes audio after 7 days (summaries are kept). Pro keeps originals until you free them.",
+    "forbidden": "You don't have access to this session. Private sessions are only visible to the person who recorded them."
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -794,7 +801,8 @@
     "prHigh": "High",
     "prMedium": "Medium",
     "prLow": "Low",
-    "saved": "Task saved"
+    "saved": "Task saved",
+    "assigneeGroupMembers": "Team members"
   },
   "sendMinutes": {
     "title": "Send minutes and assign tasks",
@@ -999,7 +1007,12 @@
     "cardLangBoth": "Original with translation",
     "cardLangTranslation": "Translation only",
     "cardTranslatedFrom": "Translated from {lang}",
-    "cardLangLabel": "Card content"
+    "cardLangLabel": "Card content",
+    "withTeamLabel": "Share with the team",
+    "withTeamOnHint": "Everyone in this workspace can see and read the session.",
+    "withTeamOffHint": "Only you can read this session, even the owner and admins.",
+    "withTeamOnDone": "Shared with the team",
+    "withTeamOffDone": "Set back to Private"
   },
   "public": {
     "expired": "This link has expired.",

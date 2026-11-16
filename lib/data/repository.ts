@@ -35,6 +35,8 @@ export type SessionFilter = {
   has_open_tasks?: boolean;
   /** Chỉ buổi của mình trong không gian Nhóm (M7-01, lọc "Của tôi") */
   mine?: boolean;
+  /** Chỉ buổi đã chia sẻ cho cả nhóm (M7-01, lọc "Cả nhóm") */
+  shared?: boolean;
 };
 
 /** Kết quả tìm kiếm (M4-02), nhóm theo Buổi ghi / Trong lời nói / Việc cần làm. */

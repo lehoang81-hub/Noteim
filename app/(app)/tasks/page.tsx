@@ -40,14 +40,22 @@ export default function TasksPage() {
   const tasks = useData(() => data.tasks.listAll({ lang: reportLang }), [reportLang]);
   const sessions = useData(() => data.sessions.list(), []);
   const contacts = useData(() => data.account.contacts(), []);
+  // Không gian nhóm đang dùng: để hiện tên thành viên được giao việc (M7-01)
+  const workspaces = useData(() => data.workspaces.list(), []);
+  const teamId = (workspaces.data ?? []).find((w) => w.id === me.data?.current_workspace_id && w.kind === "team")?.id ?? null;
+  const members = useData(() => (teamId ? data.workspaces.members(teamId) : Promise.resolve([])), [teamId]);
   const [filter, setFilter] = useState<Filter>("all");
   const [doneOpen, setDoneOpen] = useState(false);
 
   const nameOf = useMemo(
     // Liên hệ "c-me" là chính người dùng: role trong fixture là nhãn hệ thống
-    // tiếng Việt ("Bạn"), hiển thị qua speakerYou (review #41 mục 5)
-    () => Object.fromEntries((contacts.data ?? []).map((c) => [c.id, c.id === MY_CONTACT_ID ? tr("speakerYou") : c.name])),
-    [contacts.data, tr],
+    // tiếng Việt ("Bạn"), hiển thị qua speakerYou (review #41 mục 5).
+    // Việc giao cho thành viên nhóm (M7-01) hiện tên thành viên.
+    () => ({
+      ...Object.fromEntries((members.data ?? []).map((m) => [m.user_id, m.display_name])),
+      ...Object.fromEntries((contacts.data ?? []).map((c) => [c.id, c.id === MY_CONTACT_ID ? tr("speakerYou") : c.name])),
+    }),
+    [contacts.data, members.data, tr],
   );
 
   const sessionTitle = useMemo(
@@ -57,11 +65,13 @@ export default function TasksPage() {
 
   const filtered = useMemo(() => {
     const list = tasks.data ?? [];
-    if (filter === "mine") return list.filter((a) => a.assignee_contact_id === MY_CONTACT_ID);
+    // "Việc của tôi" gồm cả việc giao cho mình với tư cách thành viên nhóm (M7-01)
+    if (filter === "mine")
+      return list.filter((a) => a.assignee_contact_id === MY_CONTACT_ID || (a.assignee_user_id && a.assignee_user_id === me.data?.id));
     if (filter === "delegated")
       return list.filter((a) => a.assignee_contact_id && a.assignee_contact_id !== MY_CONTACT_ID);
     return list;
-  }, [tasks.data, filter]);
+  }, [tasks.data, me.data?.id, filter]);
 
   const isOverdue = (a: ActionItem) => !a.done && !!a.due_date && endOfDay(a.due_date) < now;
 
@@ -173,7 +183,7 @@ export default function TasksPage() {
                           onOpen={() => openInSession(a)}
                           openLabel={t("openSession", { session: sessionTitle[a.session_id] ?? a.session_id })}
                           sessionLabel={t("inSession", { session: sessionTitle[a.session_id] ?? a.session_id })}
-                          assignee={a.assignee_contact_id ? nameOf[a.assignee_contact_id] : undefined}
+                          assignee={a.assignee_contact_id ? nameOf[a.assignee_contact_id] : a.assignee_user_id ? nameOf[a.assignee_user_id] : undefined}
                           unassignedLabel={ts("unassigned")}
                           due={a.due_date ? (isOverdue(a) ? ts("overdueOn", { date: shortDate(endOfDay(a.due_date), locale) }) : ts("due", { date: shortDate(endOfDay(a.due_date), locale) })) : undefined}
                           overdue={isOverdue(a)}

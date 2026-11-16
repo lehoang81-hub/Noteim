@@ -346,6 +346,7 @@ export const mockSource: DataSource = {
               return d.visibility === "workspace" || (d.owner_user_id || d.user_id) === me;
             })
             .filter((d) => (filter?.mine ? (d.owner_user_id || d.user_id) === me : true))
+            .filter((d) => (filter?.shared ? d.visibility === "workspace" : true))
             .filter((d) => matches(d, filter))
             .sort((a, b) => b.created_at.localeCompare(a.created_at)),
         );
