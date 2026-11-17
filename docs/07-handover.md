@@ -36,11 +36,22 @@ server`) mà giao diện đã xử lý sẵn.
 | `createFromImport(input)` | Nhận thông tin file có sẵn (không lưu file), sinh buổi ghi đi qua xử lý giả | `POST /sessions/import` | `{ file_name, duration_sec, template_id, language }` → `{ id }` | `offline`, `quota_exceeded` |
 | `getSample(profession)` | Trả buổi ghi mẫu theo nghề từ `fixtures/samples/` | Ghi cứng hoặc bảng `sample_sessions` | `Profession` → `SessionDetail` | `not_found` |
 
+### SessionRepository — bổ sung M6, M7
+
+| Phương thức | Bản giả làm gì | Bản thật cần API | Vào/ra | Lỗi cần trả |
+| --- | --- | --- | --- | --- |
+| `translateSegments(sessionId, lang, segmentIds?)` | Điền bản dịch đoạn lời từ fixture; đoạn chưa có bản dịch điền "bản dịch mẫu" kèm câu gốc (không bịa nội dung). Không kèm `segmentIds` là bật "Xem bản dịch": chỉ điền đoạn chưa có; đoạn đang "Cần dịch lại" giữ nhãn cho đến khi người dùng bấm "Dịch đoạn này" | `POST /sessions/:sid/segments/translate` (hàng đợi AI dịch, model đặt trong cấu hình) | `lang, segmentIds?` → `TranscriptSegment[]` | `offline`, `server` |
+| `getSummary(id, lang)` | Bản gốc trả từ detail; bản dịch đọc từ `summary_versions` của buổi | `GET /sessions/:id/summary/:lang` | → `SummaryVersion` | `not_found` |
+| `createSummaryVersion(id, lang, onStep)` | Tạo bản dịch tóm tắt qua 2 bước × 1,5s (Dịch tóm tắt, Dịch việc); bản giả giữ câu gốc và đánh dấu `sample`. Gói Free chỉ tạo 1 bản thêm mỗi buổi, bản "Dịch lại" không mất gì thêm | `POST /sessions/:id/summary/:lang` (hàng đợi dịch, webhook khi xong từng bước) | `onStep(1\|2)` → `SummaryVersion` | `offline`, `quota_exceeded`, `server` |
+| `updateVersionBullet(sessionId, lang, bulletId, text)` | Sửa một ý trong bản đang xem; bản khác và bản gốc không đổi; bản gốc đã sửa thì bản khác hiện "Bản gốc đã sửa sau khi dịch" | `PATCH /sessions/:sid/summary/:lang/bullets/:bid` | → `void` | `offline`, `not_found` |
+| `setVisibility(id, visibility)` | Chỉ người ghi buổi đổi Riêng tư/Cả nhóm; buổi cá nhân luôn riêng tư. Đổi sang "workspace" ghi nhật ký nhóm `share`, đổi lại ghi `unshare` | `PATCH /sessions/:id/visibility` | → `void` | `forbidden` |
+| `recordExport(id)` | Ghi nhật ký nhóm `export` khi đang ở không gian Nhóm (nút Sao chép văn bản, Xuất PDF/Word gọi); chỉ người được đọc nội dung mới ghi được dòng | Endpoint xuất thật tự ghi log ở máy chủ | → `void` | — |
+
 ### TaskRepository
 
 | Phương thức | Bản giả làm gì | Bản thật cần API | Vào/ra | Lỗi |
 | --- | --- | --- | --- | --- |
-| `listAll(filter?)` | Gom việc của mọi buổi, lọc "của tôi" | `GET /tasks?mine=1` | → `ActionItem[]` | `offline` |
+| `listAll(filter?)` | Gom việc của mọi buổi, lọc "của tôi"; M7 thêm `mine` (lọc "Giao cho tôi") và `lang` (tên việc theo bản tóm tắt của ngôn ngữ đó). Chỉ việc của buổi mình được đọc, theo không gian đang dùng | `GET /tasks?mine=1&lang=ko` | `{ mine?, lang? }` → `ActionItem[]` | `offline` |
 | `upsert(item)` | Thêm/sửa một việc (kể cả tạo từ ý tóm tắt) | `PUT /tasks/:id` | `ActionItem` → `void` | `offline` |
 | `toggleDone(id)` | Đánh dấu xong/đang làm, ghi `done_at` | `PATCH /tasks/:id/done` | → `ActionItem` | `offline` |
 
@@ -55,19 +66,19 @@ server`) mà giao diện đã xử lý sẵn.
 
 | Phương thức | Bản giả làm gì | Bản thật cần API | Vào/ra | Lỗi |
 | --- | --- | --- | --- | --- |
-| `create(sessionId, opts)` | Sinh link giả `share_<random>`, lưu mật khẩu, hạn, phạm vi | `POST /sessions/:sid/shares` | `{ scope, expires_at, password? }` → `ShareLink` | `offline` |
+| `create(sessionId, opts)` | Sinh link giả `share_<random>`, lưu mật khẩu, hạn, phạm vi; M6-04 thêm `languages`: các bản tóm tắt người xem được chọn (mặc định bản gốc) | `POST /sessions/:sid/shares` | `{ scope, expires_at, password?, languages? }` → `ShareLink` | `offline` |
 | `revoke(id)` | Đánh dấu thu hồi | `POST /shares/:id/revoke` | → `void` | `offline` |
 | `getForSession(sessionId)` | Trả link đang sống của buổi (chưa thu hồi, chưa hết hạn) | `GET /sessions/:sid/share` | → `ShareLink \| null` | `offline` |
 | `listAll()` | Mọi link đã tạo, cho mục Quyền riêng tư | `GET /shares` | → `ShareLink[]` | `offline` |
 | `recordView(shareId)` | Tăng lượt xem | `POST /shares/:id/view` | → `void` | — |
-| `getPublic(shareId, password?)` | Kiểm thứ tự: thu hồi → hết hạn → cần mật khẩu → trả nội dung công khai | `GET /public/shares/:id` (endpoint không cần đăng nhập) | → `PublicSessionView \| "expired" \| "revoked" \| "needs_password" \| "not_found"` | các trạng thái trên là giá trị trả về, không phải exception |
+| `getPublic(shareId, password?, lang?)` | Kiểm thứ tự: thu hồi → hết hạn → cần mật khẩu → trả nội dung công khai; M6-04 thêm `lang`: xem bản tóm tắt theo ngôn ngữ trong `languages` của link, không truyền là bản gốc | `GET /public/shares/:id?lang=ko` (endpoint không cần đăng nhập) | → `PublicSessionView \| "expired" \| "revoked" \| "needs_password" \| "not_found"` | các trạng thái trên là giá trị trả về, không phải exception |
 
 ### MailRepository
 
 | Phương thức | Bản giả làm gì | Bản thật cần API | Vào/ra | Lỗi |
 | --- | --- | --- | --- | --- |
-| `preview(sessionId, recipientContactIds, mode)` | Dựng thư từ tóm tắt/việc theo người nhận | `POST /mail/preview` | → `EmailDraft[]` | `offline` |
-| `send(drafts)` | Gửi giả, ghi `send_history` vào buổi; cờ "Gửi email lỗi một người" ép 1 người thất bại | `POST /mail/send` (Resend/SES) | `EmailDraft[]` → `{ contact_id, ok }[]` | `offline` |
+| `preview(sessionId, recipientContactIds, mode)` | Dựng thư từ tóm tắt/việc theo người nhận; M6-04: tiêu đề, lời chào, chân email và nội dung theo ngôn ngữ của từng người nhận (chip đổi được tại hàng, mặc định theo `preferred_language` của liên hệ), ngôn ngữ chưa có bản thì ghi "Sẽ tạo bản … trước khi gửi" | `POST /mail/preview` | → `EmailDraft[]` (mỗi bản có `lang`) | `offline` |
+| `send(drafts)` | Gửi giả, ghi `send_history` vào buổi; cờ "Gửi email lỗi một người" ép 1 người thất bại; M7: đang ở không gian Nhóm thì ghi nhật ký `send_email` | `POST /mail/send` (Resend/SES) | `EmailDraft[]` → `{ contact_id, ok }[]` | `offline` |
 
 ### AccountRepository
 
@@ -83,11 +94,44 @@ server`) mà giao diện đã xử lý sẵn.
 | `updateGlossaryTerm(id, term)` | Sửa một từ | `PATCH /me/glossary/:id` | → `void` | `offline` |
 | `removeGlossaryTerm(id)` | Xóa một từ | `DELETE /me/glossary/:id` | → `void` | `offline` |
 | `addContact(input)` | Tạo liên hệ trong ô chọn tên | `POST /contacts` | `{ name, email? }` → `Contact` | `offline` |
-| `updateContact(id, patch)` | Sửa liên hệ (thêm email tại hàng người nhận) | `PATCH /contacts/:id` | → `void` | `offline` |
+| `updateContact(id, patch)` | Sửa liên hệ (thêm email tại hàng người nhận); M6-04 thêm `preferred_language`: ngôn ngữ ưa dùng khi gửi biên bản | `PATCH /contacts/:id` | → `void` | `offline` |
 | `contactUsage(id)` | Liệt kê buổi đang dùng liên hệ làm người nói (cảnh báo trước xóa) | `GET /contacts/:id/usage` | → `string[]` (session ids) | `offline` |
 | `removeContact(id)` | Xóa liên hệ; người nói gán liên hệ này trả về "Người nói N" | `DELETE /contacts/:id` | → `void` | `offline` |
-| `updateTemplate(id, patch)` | Bật/tắt, đổi thứ tự phần của mẫu (kèm trường `*_en` giữ nguyên) | `PATCH /templates/:id` | `{ sections }` → `void` | `offline` |
+| `updateTemplate(id, patch)` | Bật/tắt, đổi thứ tự phần của mẫu; M6-04: tên mẫu/tên phần/câu hỏi gợi ý là `LocalizedText` (map theo ngôn ngữ, bắt buộc có `vi`), thiếu ngôn ngữ rơi về Anh rồi Việt | `PATCH /templates/:id` | `{ sections }` → `void` | `offline` |
 | `exportAll()` | Xuất toàn bộ kho ra JSON tải về | `GET /me/export` | → `Record<string, unknown>` | `offline` |
+
+### WorkspaceRepository (M7-01, M7-03)
+
+Quyền kiểm ở repository, bản giả cũng kiểm: thao tác ngoài vai trò ném
+`DataError` mã `forbidden` — bản thật map lỗi Postgres/RLS về cùng bộ mã.
+
+| Phương thức | Bản giả làm gì | Bản thật cần API | Vào/ra | Lỗi cần trả |
+| --- | --- | --- | --- | --- |
+| `list()` | Mọi không gian của người dùng; không gian Cá nhân đi gói theo người dùng | `GET /workspaces` | → `Workspace[]` | `offline` |
+| `switchTo(id)` | Đổi không gian đang dùng (phải là thành viên đang hoạt động) | `POST /me/current-workspace` | → `void` | `forbidden`, `not_found` |
+| `create(input)` | Tạo nhóm: sinh `w-new-*`, thêm thành viên Chủ (chính người tạo), chuyển sang dùng ngay | `POST /workspaces` | `{ name, profession, default_report_language }` → `Workspace` | `offline` |
+| `update(id, patch)` | Đổi tên, nghề chính, ngôn ngữ báo cáo mặc định — Chủ và Quản trị | `PATCH /workspaces/:id` | → `void` | `forbidden`, `not_found` |
+| `remove(id)` | Xóa nhóm — chỉ Chủ; buổi ghi của nhóm về không gian Cá nhân của từng người ghi và đổi thành riêng tư; nhật ký xóa theo nhóm | `DELETE /workspaces/:id` (cascade members, audit) | → `void` | `forbidden`, `not_found`, `server` (không xóa được Cá nhân) |
+| `members(id)` | Danh sách thành viên và lời mời — mọi thành viên đọc được | `GET /workspaces/:id/members` | → `Member[]` | `forbidden` |
+| `invite(id, email, role)` | Mời bằng email: kiểm định dạng, không mời làm Chủ, không trùng người đã trong nhóm, không vượt số chỗ (`seat_limit`); tên hiển thị tạm theo email; lời mời hết hạn sau 7 ngày; ghi nhật ký `invite` | `POST /workspaces/:id/invites` (gửi email mời thật) | → `Member` | `forbidden`, `server` (email sai, trùng), `quota_exceeded` (hết chỗ) |
+| `revokeInvite(id, email)` | Thu hồi lời mời đang chờ; ghi nhật ký `remove_member` | `DELETE /workspaces/:id/invites/:email` | → `void` | `forbidden`, `not_found` |
+| `changeRole(id, userId, role)` | Đổi vai trò giữa Quản trị và Thành viên — không đổi được Chủ, không đặt ai thành Chủ bằng cách này; ghi nhật ký `role_change` | `PATCH /workspaces/:id/members/:uid` | → `void` | `forbidden`, `not_found` |
+| `removeMember(id, userId)` | Gỡ thành viên — không gỡ được Chủ; buổi riêng tư của người bị gỡ về không gian Cá nhân của họ, buổi đã chia sẻ ở lại nhóm; ghi nhật ký `remove_member` | `DELETE /workspaces/:id/members/:uid` | → `void` | `forbidden`, `not_found` |
+| `transferOwnership(id, userId)` | Chuyển quyền Chủ — chỉ Chủ; người cũ thành Quản trị, `owner_user_id` đổi; ghi nhật ký `role_change` | `POST /workspaces/:id/transfer-ownership` | → `void` | `forbidden`, `not_found` |
+| `leave(id)` | Tự rời nhóm — Thành viên và Quản trị; Chủ phải chuyển quyền Chủ hoặc xóa nhóm trước; buổi riêng tư của người rời về Cá nhân, xong quay về Cá nhân; ghi nhật ký `remove_member` | `POST /workspaces/:id/leave` | → `void` | `forbidden`, `not_found` |
+| `setSeats(id, seats)` | Đổi số chỗ của gói Nhóm (giả lập) — chỉ Chủ; không giảm dưới số thành viên đang có, không dưới 1 | `PATCH /workspaces/:id/seats` | → `void` | `forbidden`, `not_found`, `server` (giảm dưới hiện có) |
+| `getInvite(token)` | Xem lời mời theo token: tên nhóm, ai mời; `"expired"` khi hết hạn (thật hoặc cờ thử nghiệm), `"not_found"` khi token lạ. Token bản giả sinh xác định từ email (`lib/team/invite-token.ts`); bản thật: token do máy chủ sinh, lưu ở bản ghi lời mời | `GET /invites/:token` (không cần đăng nhập) | → `{ workspace, invited_by } \| "expired" \| "not_found"` | — |
+| `acceptInvite(token)` | Nhận lời mời: thành invited thành active; hết hạn ném lỗi, hết chỗ ném `quota_exceeded` | `POST /invites/:token/accept` | → `void` | `not_found`, `server` (hết hạn), `quota_exceeded` |
+| `usage(id, month)` | Mức dùng theo người: số buổi, số phút, việc mở của từng thành viên trong tháng — **tính cả buổi riêng tư của từng người** (bảng quyền cho phép thấy tên và thời lượng để tính mức dùng), chỉ ra số, không lộ tiêu đề. Chủ và Quản trị đọc được, Thành viên ném `forbidden` | `GET /workspaces/:id/usage?month=2026-11` (máy chủ tính, không trả nội dung) | → `UsageRow[]` | `forbidden` |
+| `audit(id, filter?)` | Nhật ký truy cập: lọc theo người và loại, mới nhất trước. Chủ và Quản trị đọc được, Thành viên ném `forbidden` | `GET /workspaces/:id/audit?actor=&action=` | → `AuditEvent[]` | `forbidden` |
+| `invoices(id)` | Hóa đơn mẫu của gói Nhóm: Chủ có, Quản trị xem, Thành viên không | `GET /workspaces/:id/invoices` | → `Invoice[]` | `forbidden`, `not_found` |
+
+### DashboardRepository (M7-02)
+
+| Phương thức | Bản giả làm gì | Bản thật cần API | Vào/ra | Lỗi cần trả |
+| --- | --- | --- | --- | --- |
+| `get(range)` | Tổng quan cá nhân: Cần xử lý (việc quá hạn/đến hạn hôm nay, người nói chưa đặt tên, bản gốc sắp tự xóa, link sắp hết hạn, buổi xử lý lỗi), câu tổng kết tuần/tháng, dải giọng theo ngày, quyết định đã chốt (ý thuộc chủ đề nhãn "decided" trong khoảng), người gặp nhiều, theo mẫu, hạn mức. Chỉ tính từ buổi mình được đọc trong không gian đang dùng; không đếm nội dung buổi riêng tư của người khác | `GET /dashboard?range=week\|month` | → `DashboardData` | `offline` |
+| `team(range)` | Bảng Nhóm: mức dùng theo người (như `usage`, tính cả buổi riêng tư của từng người — chỉ ra số) và việc mở/quá hạn theo người phụ trách. Chỉ Chủ và Quản trị trong không gian Nhóm; sai vai trò ném `forbidden` | `GET /dashboard/team?range=` (máy chủ tính từ dữ liệu nhóm) | → `{ usage, open_tasks_by_assignee }` | `forbidden` |
 
 ## 2. Những gì đang giả
 
@@ -101,8 +145,23 @@ server`) mà giao diện đã xử lý sẵn.
   Bản thật: đường ống AI (chia đoạn buổi dài, model đặt trong cấu hình).
 - **Hỏi AI**: trả lời giả từng chữ từ `fixtures/generated/*.json` — bản thật
   gọi model, stream từng token, trả mốc trích dẫn.
+- **Dịch (M6)**: bản dịch đoạn lời và bản tóm tắt nhiều ngôn ngữ đọc từ fixture
+  (buổi họp đối tác Hàn có sẵn bản tiếng Hàn); chỗ chưa có bản thì bản giả giữ
+  câu gốc và đánh dấu `sample` — giao diện ghi rõ "Bản dịch mẫu", không bịa
+  nội dung. Bản thật cần:
+  - **Model dịch**: tên model đặt trong cấu hình máy chủ (không hardcode vào
+    giao diện); dịch theo từng đoạn có mốc giờ để trích dẫn vẫn nhảy đúng chỗ.
+  - **Chi phí**: dịch theo ký tự/ngôn ngữ đích; mỗi bản tóm tắt là một lần gọi
+    (gói Free 1 bản thêm mỗi buổi, Pro không giới hạn — khớp hạn mức bên trên).
+  - **Cache bản dịch**: bản dịch đã tạo lưu vĩnh viễn ở `summary_versions` và
+    `translations` của đoạn lời; không dịch lại khi mở lại trang. Bản gốc sửa
+    sau khi dịch thì bản dịch đánh dấu `stale` và chỉ dịch lại khi người dùng
+    chủ động bấm "Dịch lại" (cả bản) hoặc "Dịch đoạn này" (từng đoạn) — đừng
+    tự dịch lại toàn bộ, tốn chi phí vô ích. Câu trích nguyên văn luôn giữ câu
+    gốc trong ngoặc kép, bản dịch đặt dưới (bằng chứng pháp lý không được thay).
 - **Gửi email**: `send()` luôn thành công (trừ cờ ép lỗi), chỉ ghi lịch sử —
-  bản thật cần nhà cung cấp email và xác minh tên miền.
+  bản thật cần nhà cung cấp email và xác minh tên miền; mỗi người nhận một thư
+  theo ngôn ngữ của họ (M6-04), đang ở không gian Nhóm thì ghi thêm nhật ký.
 - **Link công khai**: lưu trong localStorage của người tạo; máy chủ không có.
   Trang `/p/[shareId]` kiểm mật khẩu/hạn/lượt xem trên dữ liệu giả. Bản thật:
   bảng shares + endpoint công khai + RLS (mục 3).
@@ -305,6 +364,97 @@ create table quota_periods (              -- hạn mức theo tháng của ngư�
   chat_questions_per_session int,
   primary key (user_id, period_end)
 );
+
+-- ---------- Bổ sung M6, M7 (docs/04 "Bổ sung M6, M7") ----------
+
+-- M7: không gian làm việc. Mỗi người luôn có một hàng kind='personal'.
+create table workspaces (
+  id uuid primary key default gen_random_uuid(),
+  kind text not null default 'team' check (kind in ('personal','team')),
+  name text not null,
+  profession text,                        -- null với Cá nhân
+  default_report_language text not null default 'vi' check (default_report_language in ('vi','en','ko')),
+  plan text not null default 'free' check (plan in ('free','pro','team')),
+  seat_limit int,                         -- null: không giới hạn (Free/Pro cá nhân)
+  owner_user_id uuid not null references profiles on delete cascade
+);
+
+-- M7: thành viên và lời mời. Lời mời là hàng user_id null, status 'invited'.
+create table members (
+  workspace_id uuid not null references workspaces on delete cascade,
+  user_id uuid references profiles on delete cascade,
+  email text not null,
+  display_name text,
+  role text not null check (role in ('owner','admin','member')),
+  status text not null check (status in ('active','invited')),
+  invited_at timestamptz not null default now(),
+  invite_expires_at timestamptz,          -- null với thành viên đã vào
+  primary key (workspace_id, email)       -- một email một dòng trong mỗi nhóm
+);
+create unique index members_one_ws_per_user
+  on members (workspace_id, coalesce(user_id, email));
+
+-- M7: nhật ký truy cập của nhóm. Chỉ ghi thêm, không sửa không xóa.
+create table audit_events (
+  id uuid primary key default gen_random_uuid(),
+  workspace_id uuid not null references workspaces on delete cascade,
+  actor_user_id uuid references profiles on delete set null,
+  action text not null check (action in
+    ('view','share','unshare','export','delete','invite','remove_member','role_change','purge','send_email')),
+  target_type text not null check (target_type in ('session','member','workspace','share_link')),
+  target_id text not null,
+  target_label text not null,             -- tiêu đề buổi/email tên, hiển thị thô
+  at timestamptz not null default now()
+);
+create index audit_events_ws_time on audit_events (workspace_id, at desc);
+
+-- M6: bản tóm tắt theo ngôn ngữ. Bản gốc nằm trong sessions.structured_summary,
+-- mỗi bản dịch một hàng, khóa (session_id, lang).
+create table summary_versions (
+  session_id uuid not null references sessions on delete cascade,
+  lang text not null check (lang in ('vi','en','ko')),
+  source text not null check (source in ('original','translated')),
+  translated_from text check (translated_from in ('vi','en','ko')),
+  created_at timestamptz not null default now(),
+  stale boolean not null default false,   -- bản gốc đã sửa sau khi dịch
+  structured_summary jsonb not null,      -- executive_summary, topics, task_texts
+  primary key (session_id, lang)
+);
+
+-- M6/M7: cột thêm vào bảng cũ.
+alter table profiles
+  add column default_speech_language text not null default 'vi' check (default_speech_language in ('vi','en','ko')),
+  add column auto_detect_languages boolean not null default true,
+  add column default_report_language text not null default 'vi' check (default_report_language in ('vi','en','ko')),
+  add column auto_translate_on_send boolean not null default true;
+alter table profiles alter column ui_language type text;  -- mở check thêm 'ko'
+alter table profiles alter column ui_language drop check;
+
+alter table sessions
+  add column primary_language text not null default 'vi' check (primary_language in ('vi','en','ko')),
+  add column detected_languages jsonb not null default '["vi"]',   -- gồm cả primary_language
+  add column report_languages jsonb not null default '["vi"]',     -- các bản tóm tắt đã có
+  add column visibility text not null default 'private' check (visibility in ('private','workspace')),
+  add column owner_user_id uuid references profiles;               -- người ghi, phục vụ nhóm
+
+alter table contacts
+  add column preferred_language text check (preferred_language in ('vi','en','ko'));  -- null: theo mặc định
+
+alter table glossary_terms
+  add column variants jsonb not null default '{}';  -- cách viết ở ngôn ngữ khác, ví dụ {"ko":"빈홈즈 마리나"}
+
+alter table shares
+  add column languages jsonb not null default '[]'; -- các bản người xem được chọn
+
+alter table action_items
+  add column assignee_user_id uuid references profiles;  -- giao cho thành viên nhóm (ngoài liên hệ)
+
+-- M6: templates đổi từ các cột *_en sang LocalizedText (một map jsonb, bắt buộc
+-- có "vi"), và mẫu dùng chung của nhóm:
+-- alter table templates alter column name type jsonb using jsonb_build_object('vi', name);
+-- (tương tự name_en, footer_note, suggested_questions; template_sections.title)
+alter table templates add column workspace_id uuid references workspaces on delete cascade;  -- null là mẫu hệ thống
+-- Nhóm có bản sao riêng của 6 mẫu hệ thống để bật/tắt không đụng nhau.
 ```
 
 Chính sách bảo mật theo hàng (RLS):
@@ -335,12 +485,118 @@ alter table shares enable row level security;
 create policy "shares_owner" on shares for all
   using (session_id in (select id from sessions where user_id = auth.uid()))
   with check (session_id in (select id from sessions where user_id = auth.uid()));
+
+-- ---------- RLS bổ sung M7: nhóm và nhiều ngôn ngữ ----------
+
+-- Hai hàm kiểm vai trò, dùng chung cho mọi policy dưới đây:
+create or replace function is_member_of(ws uuid, uid uuid) returns boolean
+language sql security definer stable as $$
+  select exists (
+    select 1 from members m
+    where m.workspace_id = ws and m.user_id = uid and m.status = 'active');
+$$;
+create or replace function is_workspace_admin(ws uuid, uid uuid) returns boolean
+language sql security definer stable as $$
+  select exists (
+    select 1 from members m
+    where m.workspace_id = ws and m.user_id = uid and m.status = 'active'
+      and m.role in ('owner','admin'));
+$$;
+
+-- workspaces: thành viên đọc; Chủ sửa. Xóa nhóm, chuyển quyền Chủ, đổi số
+-- chỗ đi qua RPC security definer để kiểm thêm "chỉ Chủ".
+alter table workspaces enable row level security;
+create policy "workspaces_member_read" on workspaces for select
+  using (owner_user_id = auth.uid() or is_member_of(id, auth.uid()));
+create policy "workspaces_owner_write" on workspaces for update
+  using (owner_user_id = auth.uid()) with check (owner_user_id = auth.uid());
+create policy "workspaces_owner_insert" on workspaces for insert
+  with check (owner_user_id = auth.uid());
+
+-- members: ai trong nhóm cũng đọc được danh sách (trang Thành viên); mời, đổi
+-- vai trò, gỡ, thu hồi lời mời qua RPC security definer kiểm is_workspace_admin
+-- (Quản trị không đổi được vai trò của Chủ) và giới hạn chỗ của gói.
+alter table members enable row level security;
+create policy "members_team_read" on members for select
+  using (is_member_of(workspace_id, auth.uid()));
+create policy "members_self_row" on members for update
+  using (user_id = auth.uid()) with check (user_id = auth.uid());  -- chỉ display_name của mình
+
+-- sessions trong nhóm: buổi visibility='workspace' thì mọi thành viên nhóm đọc;
+-- buổi riêng tư chỉ người ghi (owner_user_id) — kể cả Chủ và Quản trị cũng
+-- KHÔNG đọc được nội dung, đây là điểm bán hàng của sản phẩm (docs/08 phần B).
+-- Policy "sessions_owner" ở trên đổi điều kiện sang owner_user_id.
+alter table sessions drop policy if exists "sessions_owner";
+create policy "sessions_owner" on sessions for all
+  using (owner_user_id = auth.uid()) with check (owner_user_id = auth.uid());
+create policy "sessions_team_view" on sessions for select
+  using (
+    visibility = 'workspace'
+    and workspace_id is not null
+    and is_member_of(workspace_id, auth.uid())
+  );
+
+-- summary_versions và các bảng con của buổi (bullets, transcript_segments,
+-- action_items...) đọc theo quyền của buổi cha: trong policy, thay điều kiện
+-- cũ "user_id = auth.uid()" bằng một hàm can_read_session(sid uuid) gộp cả
+-- ba đường: người ghi, buổi chia sẻ cả nhóm, buổi có link công khai còn sống.
+create or replace function can_read_session(sid uuid) returns boolean
+language sql security definer stable as $$
+  select exists (
+    select 1 from sessions s
+    where s.id = sid
+      and (
+        s.owner_user_id = auth.uid()
+        or (s.visibility = 'workspace' and s.workspace_id is not null
+            and is_member_of(s.workspace_id, auth.uid()))
+        or can_view_session(sid)
+      ));
+$$;
+alter table summary_versions enable row level security;
+create policy "summary_versions_read" on summary_versions for select
+  using (can_read_session(session_id));
+create policy "summary_versions_owner_write" on summary_versions for all
+  using (exists (select 1 from sessions s where s.id = summary_versions.session_id
+                 and s.owner_user_id = auth.uid()))
+  with check (exists (select 1 from sessions s where s.id = summary_versions.session_id
+                 and s.owner_user_id = auth.uid()));
+
+-- audit_events: chỉ Chủ và Quản trị đọc (M7-03, docs/08 bảng quyền "Nhật ký
+-- truy cập"); ghi bằng hàm security definer gọi từ endpoint các thao tác
+-- (xem, chia sẻ, xuất, xóa, mời, gỡ, đổi vai trò, dọn bản gốc, gửi email).
+-- Không ai sửa hay xóa dòng nào.
+alter table audit_events enable row level security;
+create policy "audit_admin_read" on audit_events for select
+  using (is_workspace_admin(workspace_id, auth.uid()));
+
+-- Mức dùng và hóa đơn: máy chủ tính (mức dùng đếm cả buổi riêng tư của từng
+-- người, chỉ trả số — bảng quyền cho phép). Đọc qua RPC security definer
+-- get_workspace_usage(ws uuid, month text) / get_workspace_invoices(ws uuid)
+-- kiểm is_workspace_admin bên trong; không mở policy select thẳng để không
+-- ai đọc được hàng của người khác qua bảng trung gian.
 ```
 
 Ghi chú bảo mật: mật khẩu link băm (bcrypt/argon2) ở `shares.password_hash`;
 điểm cộng lượt xem qua RPC `record_view` (security definer, chỉ tăng số).
 File âm thanh và ảnh đặt ở object storage (Supabase Storage), bucket riêng
 theo `user_id`, đường dẫn kiểm bằng policy `storage.objects`.
+
+Ghi chú bảo mật bổ sung M7:
+
+- **Điểm bán hàng quyền riêng tư phải giữ nguyên khi nối backend**: "quản trị
+  không đọc được nội dung buổi ghi riêng tư, kể cả Chủ" — policy
+  `sessions_team_view` ở trên chỉ mở `visibility='workspace'`, không có ngoại
+  lệ cho vai trò. Mức dùng thấy được tên và thời lượng vì máy chủ tự tính số
+  (security definer), không mở nội dung.
+- Nhật ký ghi ở **mọi** thao tác trong đặc tả (xem, chia sẻ/gỡ chia sẻ, xuất,
+  xóa buổi, dọn bản gốc, mời, gỡ thành viên, đổi vai trò, gửi email), kể cả
+  thao tác có từ trước khi nhóm ra đời — chỉ ghi khi đang ở không gian Nhóm.
+- Token lời mời: bản thật do máy chủ sinh và lưu ở `members` (bản giả sinh
+  xác định từ email, `lib/team/invite-token.ts`); trang `/join/[token]` là
+  endpoint không cần đăng nhập, chỉ trả tên nhóm, ai mời và trạng thái hết hạn.
+- Dữ liệu người dùng (buổi ghi, liên hệ) **không dịch**: chỉ chuỗi hệ thống
+  (mẫu, phần, gợi ý câu hỏi) là `LocalizedText`. Thiếu ngôn ngữ rơi về Anh rồi
+  Việt — hàm gộp viết một nơi, dùng chung cho mọi bảng jsonb.
 
 ## 4. Cách đổi nguồn dữ liệu
 
@@ -370,10 +626,23 @@ chọn nguồn. Các bước nối Supabase:
    - Gửi biên bản ghi `send_history`; xóa buổi có Hoàn tác trả lại đúng chỗ.
    - Các trạng thái lỗi ép được bằng bảng thử nghiệm (`?debug=1`): mất mạng,
      tải chậm, lỗi tải, hết hạn mức, thư viện rỗng.
+   - Nhiều ngôn ngữ (M6): mở buổi họp Hàn, ô "Tóm tắt bằng" tạo bản tiếng Anh
+     được; sửa ý ở bản gốc thì bản Hàn hiện "Bản gốc đã sửa sau khi dịch";
+     gửi biên bản cho ông Park nhận thư tiếng Hàn; trang công khai đổi ngôn
+     ngữ được; tìm thấy nội dung ở cả bản dịch.
+   - Nhóm (M7): tạo nhóm, mời → mở `/join/[token]` ở trình duyệt khác để nhận
+     lời mời; đổi không gian thì thư viện, việc, tổng quan theo không gian;
+     buổi riêng tư của người khác chỉ hiện tên + thời lượng ở mức dùng, mở
+     trực tiếp bằng id thì báo không có quyền; Thành viên mở `/team/usage`,
+     `/team/audit`, `/team/billing` nhận "không có quyền"; gỡ thành viên xong
+     buổi riêng tư của họ về thư viện cá nhân của họ, buổi đã chia sẻ ở lại
+     nhóm; nhật ký đủ dòng cho mọi thao tác kể trên.
 
 Lưu ý từ mock hiện tại: lỗi trả về bằng `DataError` với mã
-`offline | not_found | quota_exceeded | server` — giao diện bắt theo mã này,
-bản thật cần map lỗi HTTP/Supabase về cùng bộ mã.
+`offline | not_found | quota_exceeded | forbidden | server` — giao diện bắt
+theo mã này, bản thật cần map lỗi HTTP/Supabase về cùng bộ mã; `forbidden`
+(M7) ném từ repository khi vai trò không đủ, giao diện chỉ hiện màn "không có
+quyền" khi gặp đúng mã này.
 
 ## 5. Bài học trong `AGENTS.md` người làm backend cần biết
 
@@ -511,11 +780,24 @@ unicode-range tự mở rộng theo chữ dùng thật.
 
 
 
-## 7. Ghi chú M6 — nội dung tiếng Hàn
+## 7. Ghi chú M6, M7 — nội dung tiếng Hàn
 
 Toàn bộ chuỗi giao diện tiếng Hàn (`messages/ko.json`) và nội dung dữ liệu mẫu
 tiếng Hàn (buổi họp đối tác Hàn `fixtures/sessions/hop-doi-tac-han.json`, tên
 mẫu và tên phần trong `fixtures/templates.json`) do agent viết theo giọng lịch
-sự trang trọng (합니다체). **Trước khi ra mắt thật cần người bản ngữ đọc lại**,
-đặc biệt: chuỗi xin đồng ý ghi âm, email gửi đối tác, điều khoản thanh toán
-trong buổi họp mẫu. Danh sách vị trí cần rà nằm trong PR M6.
+sự trang trọng (합니다체). M7 thêm khoảng 70 khóa nhóm (không gian, mời, vai trò,
+nhật ký, mức dùng, hóa đơn, gói Nhóm) cùng giọng đó.
+
+**Trước khi ra mắt thật cần người bản ngữ đọc lại**, đặc biệt: chuỗi xin đồng ý
+ghi âm, email gửi đối tác, điều khoản thanh toán trong buổi họp mẫu; thêm của
+M7: lời mời tham gia nhóm (`/join/[token]`, email mời), nhãn vai trò (Chủ,
+Quản trị, Thành viên), hộp xác nhận gỡ thành viên và rời nhóm, câu quyền riêng
+tuất "quản trị không đọc được nội dung buổi ghi riêng tư", gói Nhóm và hóa đơn.
+
+**Font Hàn**: Pretendard 1.3.9 (OFL) tự host `public/fonts/pretendard/` — 92
+file subset chính thức, mỗi file một `unicode-range` (dùng chung qua
+`styles/pretendard-subset.css`); chỉ các subset chứa chữ thật sự dùng trên trang
+được nạp (bài học M6: một file variable 2 MB làm LCP giao diện ko lên ~14s;
+bản subset còn 257–347 KB mỗi route). Khi nối backend: giữ nguyên cách nạp theo
+unicode-range, thêm ngôn ngữ mới thì thêm file subset tương ứng, không quay lại
+file duy nhất. Danh sách vị trí chuỗi Hàn cần rà nằm trong PR M6 và PR này.
