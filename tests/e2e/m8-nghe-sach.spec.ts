@@ -84,10 +84,12 @@ test("Nút Nghe sạch: bấm bật được, nhớ lựa chọn sau khi tải l
   const cleanBtn = page.getByRole("button", { name: "Nghe sạch đang tắt" });
   await expect(cleanBtn).toBeVisible();
   await cleanBtn.click();
-  // Bật: nút đổi trạng thái nhấn, bản đồ nghe áp dụng
+  // Bật: nút đổi trạng thái nhấn, bản đồ nghe áp dụng; thời lượng "nghe sạch
+  // còn" khớp clean_duration_sec của bản đồ (chỉ bỏ khoảng lặng: 2052 giây = 34:12)
   const onBtn = page.getByRole("button", { name: "Nghe sạch đang bật" });
   await expect(onBtn).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "on");
+  await expect(page.getByText("nghe sạch còn 34:12")).toBeVisible();
   // Nhớ theo người dùng: tải lại vẫn bật
   await page.reload();
   await expandPlayer(page);
@@ -234,7 +236,8 @@ test("Bản gọn và Nguyên văn: cùng một đoạn khác nhau, tiếng đ�
   expect(errors).toEqual([]);
 });
 
-test("Sửa lời theo chế độ đang xem: bản gọn sửa text_clean, câu Nguyên văn giữ nguyên; thẻ trích dẫn luôn Nguyên văn", async ({ page }) => {
+test("Sửa lời theo chế độ đang xem: bản gọn sửa text_clean, câu Nguyên văn giữ nguyên; thẻ trích dẫn luôn Nguyên văn", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "desktop", "Menu ⋯ chỉ hiện máy tính; điện thoại nhấn giữ");
   const errors = collectErrors(page);
   await onboard(page);
   await page.goto("/s/s-bds-lan?tab=transcript");
