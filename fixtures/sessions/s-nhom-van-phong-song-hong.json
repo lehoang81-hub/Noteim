@@ -139,7 +139,7 @@
         "title": "Yêu cầu của khách",
         "start_sec": 0,
         "end_sec": 700,
-        "tag": "decided",
+        "tag": "pending",
         "bullets": [
           {
             "id": "b1",
