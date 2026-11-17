@@ -174,8 +174,10 @@ export function AuditScreen() {
         </div>
 
         {/* Danh sách nhật ký, mới nhất trên cùng */}
-        <ul className="mt-4 max-h-[32rem] divide-y divide-line overflow-y-auto rounded-block border border-line bg-surface" aria-busy={events.loading}>
-          {events.initialLoading
+        <ul className="mt-4 max-h-[32rem] divide-y divide-line overflow-y-auto rounded-block border border-line bg-surface" aria-busy={events.loading || members.loading}>
+          {/* Chờ cả danh sách thành viên, nếu không tên người thực hiện chớp
+              thành "Người đã rời nhóm" (review PR #58) */}
+          {events.initialLoading || members.loading || !members.data?.length
             ? Array.from({ length: 6 }, (_, i) => (
                 <li key={i} className="p-3">
                   <SkeletonRow />

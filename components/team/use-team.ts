@@ -29,7 +29,14 @@ export function useTeamWorkspace(): {
   const role: WorkspaceRole | null = flags.debugRole ?? (isTeam ? (myMember?.role ?? null) : "owner");
   return {
     workspace: current,
-    loading: list.initialLoading || me.initialLoading || (isTeam && members.initialLoading),
+    // Danh sách thành viên tải theo current?.id: lần đầu (current còn null) nó trả
+    // [] ngay, nên initialLoading đã tắt trước khi có thành viên thật. Coi là còn
+    // tải khi chưa có vai trò mà danh sách thành viên chưa về, để chủ nhóm không
+    // thấy chớp "không có quyền" (review PR #58).
+    loading:
+      list.initialLoading ||
+      me.initialLoading ||
+      (isTeam && (members.initialLoading || (role === null && (members.loading || !members.data?.length)))),
     isTeam,
     role,
     isAdmin: role === "owner" || role === "admin",

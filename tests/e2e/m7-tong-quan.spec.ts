@@ -5,9 +5,11 @@ import { collectErrors, onboard, setDebugFlags } from "./helpers";
  * Tổng quan cá nhân và nhóm (M7-02, issue #48).
  * Bài của từng bước viết cùng bước đó; chạy lại toàn bộ ở bước 5.
  * Số liệu đếm tay từ fixture (bản giả cố định "bây giờ" 14/11/2026 19:00):
- * Tuần này: 8 buổi, 288 phút, 21 quyết định, xong 3 trên 19 việc.
- * Tháng này: 9 buổi, 304 phút, 23 quyết định, xong 4 trên 20 việc.
- * Nhóm (w-hp-land, tuần): 3 buổi chia sẻ, 103 phút, 5 quyết định, xong 1 trên 7 việc.
+ * Tuần này: 8 buổi, 288 phút, 17 quyết định, xong 3 trên 19 việc.
+ * Tháng này: 9 buổi, 304 phút, 19 quyết định, xong 4 trên 20 việc.
+ * Nhóm (w-hp-land, tuần): 3 buổi chia sẻ, 103 phút, 3 quyết định, xong 1 trên 7 việc.
+ * (M7-04: bỏ nhãn "Đã chốt" khỏi phần nhu cầu, yêu cầu, giấy tờ trong dữ
+ * liệu mẫu — cũ: tuần 21, tháng 23, nhóm 5.)
  */
 
 /* ---------- Bước 2/5: Điều hướng ---------- */
@@ -135,9 +137,9 @@ test("Tuần này: câu tổng kết khớp số đếm tay; Tháng này đổi 
   const errors = collectErrors(page);
   await onboard(page);
   await page.getByRole("navigation", { name: NAV }).getByRole("link", { name: DASH }).click();
-  await expect(page.getByText("8 buổi ghi, 4 giờ 48, 21 quyết định, xong 3 trên 19 việc")).toBeVisible();
+  await expect(page.getByText("8 buổi ghi, 4 giờ 48, 17 quyết định, xong 3 trên 19 việc")).toBeVisible();
   await page.getByRole("button", { name: "Tháng này" }).click();
-  await expect(page.getByText("9 buổi ghi, 5 giờ 04, 23 quyết định, xong 4 trên 20 việc")).toBeVisible();
+  await expect(page.getByText("9 buổi ghi, 5 giờ 04, 19 quyết định, xong 4 trên 20 việc")).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -170,7 +172,7 @@ test("Không gian nhóm: Tổng quan không đếm nội dung buổi riêng tư 
   await page.getByRole("dialog").getByRole("button", { name: /Sàn BĐS Hải Phòng Land/ }).click();
   await page.getByRole("navigation", { name: NAV }).getByRole("link", { name: DASH }).click();
   // Tuần này chỉ tính 3 buổi được đọc (của mình + chia sẻ): 103 phút
-  await expect(page.getByText("3 buổi ghi, 1 giờ 43, 5 quyết định, xong 1 trên 7 việc")).toBeVisible();
+  await expect(page.getByText("3 buổi ghi, 1 giờ 43, 3 quyết định, xong 1 trên 7 việc")).toBeVisible();
   // Việc của buổi riêng tư người khác không xuất hiện
   await expect(page.getByText("Nhắc chủ nhà giải chấp thế chấp trước 18/11")).toHaveCount(0);
   await expect(page.getByText("Soạn phụ lục phân phối độc quyền gửi chủ đầu tư")).toHaveCount(0);
@@ -321,8 +323,8 @@ test("Quyết định đã chốt hiện 5 ý, mở được hết (review PR #5
   await page.goto("/dashboard");
   const sec = page.locator("section", { has: page.getByRole("heading", { name: "Quyết định đã chốt" }) });
   await expect(sec.locator("li")).toHaveCount(5);
-  await sec.getByRole("button", { name: "Xem tất cả 21 quyết định" }).click();
-  await expect(sec.locator("li")).toHaveCount(21);
+  await sec.getByRole("button", { name: "Xem tất cả 17 quyết định" }).click();
+  await expect(sec.locator("li")).toHaveCount(17);
   await sec.getByRole("button", { name: "Thu gọn" }).click();
   await expect(sec.locator("li")).toHaveCount(5);
   // Chữ cái đầu bỏ cách xưng hô: "Chị Thảo" thành "T"
