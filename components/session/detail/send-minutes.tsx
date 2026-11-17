@@ -408,9 +408,10 @@ export function SendMinutesSheet({
                         ) : null}
                       </div>
                     ) : (
-                      /* Email dài xuống dòng trong cột của mình, không chui dưới
-                         ô chọn ngôn ngữ bên phải (review PR #52 mục 3) */
-                      <p dir="ltr" className="break-all text-small text-ink-3">
+                      /* Email dài cắt có dấu ba chấm, bấm giữ (title) thấy đủ;
+                         không xuống dòng giữa chữ như break-all cũ
+                         (ghi chú issue #50 từ kiểm thử M6) */
+                      <p dir="ltr" title={email} className="truncate text-small text-ink-3">
                         {email}
                       </p>
                     )}

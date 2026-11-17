@@ -70,6 +70,8 @@ Không có trình duyệt Playwright thì đặt `PW_CHROMIUM_PATH` tới Chrome
 - Giá trị mặc định phụ thuộc nhiều lần `useData` thì chờ đủ tất cả rồi mới đặt; độ trễ giả 300 đến 800ms làm thứ tự về không cố định.
 - Đo Lighthouse: người dùng đã làm quen (Chrome `--user-data-dir`, cùng origin), `--disable-storage-reset`, xóa cache HTTP trước mỗi lần, lấy trung vị, kiểm `finalDisplayedUrl`.
 - Chuỗi tiếng Anh có số đếm dùng ICU plural (`{count, plural, one {# session} other {# sessions}}`).
+- `pnpm lint` giờ chạy thêm `scripts/check-rules.mjs`: dấu chấm giữa, gạch dài trong `messages/`, `dark:`, nhãn in hoa sẽ làm lint thất bại. Đừng tắt hay lách; sửa chữ.
+- Màn hiện trạng thái sai thoáng qua ("không có quyền", tên "Người đã rời nhóm", khung chờ kẹt) khi máy chậm **không phải** lỗi ngẫu nhiên: thường là điều kiện chưa chờ đủ dữ liệu. Thử lại với cờ "Chậm" của `?debug=1` và theo dõi trạng thái từng 150ms; chỉ hiện "không có quyền" khi đã biết chắc vai trò.
 
 ## Khi không chắc
 

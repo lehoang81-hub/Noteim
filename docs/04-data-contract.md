@@ -432,6 +432,7 @@ interface SessionRepository {
   createSummaryVersion(id: string, lang: Lang, onStep: (step: 1 | 2) => void): Promise<SummaryVersion>;   // M6
   translateSegments(id: string, lang: Lang, segmentIds?: string[]): Promise<TranscriptSegment[]>;   // M6
   setVisibility(id: string, visibility: Session["visibility"]): Promise<void>;   // M7
+  recordExport(id: string): Promise<void>;   // M7-03, nhật ký xuất file nhóm
 }
 
 interface WorkspaceRepository {           // M7
@@ -446,6 +447,8 @@ interface WorkspaceRepository {           // M7
   changeRole(id: string, userId: string, role: Member["role"]): Promise<void>;
   removeMember(id: string, userId: string): Promise<void>;
   transferOwnership(id: string, userId: string): Promise<void>;
+  leave(id: string): Promise<void>;       // M7-03
+  setSeats(id: string, seats: number): Promise<void>;   // M7-03, đổi số chỗ giả lập
   getInvite(token: string): Promise<{ workspace: Workspace; invited_by: string } | "expired" | "not_found">;
   acceptInvite(token: string): Promise<void>;
   usage(id: string, month: string): Promise<UsageRow[]>;
@@ -460,6 +463,8 @@ interface DashboardRepository {           // M7
 ```
 
 Quy tắc quyền nằm ở repository (bản giả cũng phải kiểm): `get`, `getTranscript` của buổi riêng tư người khác ném `DataError` mã `forbidden`; `list` trong không gian Nhóm chỉ trả buổi của mình và buổi `visibility: "workspace"`. Thêm `forbidden` vào danh sách mã lỗi.
+
+M7-03 bổ sung: `audit`, `usage`, `invoices` chỉ Chủ và Quản trị đọc được; Thành viên gọi ném `DataError` mã `forbidden`. `leave` cho Thành viên và Quản trị tự rời nhóm; Chủ phải chuyển quyền Chủ hoặc xóa nhóm trước.
 
 Khi nối database: `SummaryVersion` thành bảng `summary_versions (session_id, lang)`, `workspaces`, `members`, `audit_events` là bảng riêng; chính sách bảo mật theo hàng dựa trên `members` và `visibility`. Cập nhật `07-handover.md` mục 3 ở M7-04.
 

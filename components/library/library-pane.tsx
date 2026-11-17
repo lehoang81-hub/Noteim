@@ -1,11 +1,11 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2 } from "lucide-react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2, UsersRound } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
+import { WorkspaceSwitcher } from "@/components/shell/workspace-switcher";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
 import { SwipeRow } from "@/components/library/swipe-row";
 import dynamic from "next/dynamic";
@@ -22,7 +22,7 @@ import { cn } from "@/lib/cn";
 import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { holdImportFile } from "@/lib/import-file";
-import { dayDiff, durationParts, shortDate, weekdayDate } from "@/lib/format";
+import { dayDiff, durationParts, shortDate, vnDate, weekdayDate } from "@/lib/format";
 import { templateName } from "@/lib/data/localize";
 import {
   discardRecording,
@@ -61,11 +61,16 @@ const statusMap: Record<Session["status"], SessionRowStatus> = {
 
 export function LibraryPane({ className }: { className?: string }) {
   const t = useTranslations("library");
+  const td = useTranslations("dashboard");
   const ts = useTranslations("session");
   const locale = useLocale();
   const toast = useToast();
   const router = useRouter();
   const params = useParams<{ id?: string }>();
+  // Lọc theo ngày từ Tổng quan (?day=YYYY-MM-DD, M7-02): bấm một ngày trên
+  // dải giọng của Tổng quan dẫn về đây kèm ngày đó
+  const searchParams = useSearchParams();
+  const dayParam = searchParams.get("day");
   const [filter, setFilter] = useState<FilterId>("all");
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const recording = useRecording();
@@ -103,8 +108,19 @@ export function LibraryPane({ className }: { className?: string }) {
   const me = useData(() => data.account.me(), []);
   const quota = useData(() => data.account.quota(), []);
   const templates = useData(() => data.account.templates(), []);
+  // Không gian nhóm đang dùng: chip Của tôi/Cả nhóm và tên người ghi (M7-01)
+  const workspaces = useData(() => data.workspaces.list(), []);
+  const team = (workspaces.data ?? []).find((w) => w.id === me.data?.current_workspace_id && w.kind === "team");
+  const members = useData(() => (team ? data.workspaces.members(team.id) : Promise.resolve([])), [team?.id]);
+  const [scope, setScope] = useState<null | "mine" | "workspace">(null);
   const all = useData(() => data.sessions.list(), []);
-  const list = useData(() => data.sessions.list(toFilter(filter)), [filter]);
+  const list = useData(() => data.sessions.list({ ...toFilter(filter), mine: scope === "mine", shared: scope === "workspace" }), [filter, scope]);
+  // Lọc thêm theo ngày (?day=): áp dụng sau mọi bộ lọc khác
+  const listFiltered = useMemo(() => {
+    const items = list.data ?? [];
+    if (!dayParam) return items;
+    return items.filter((s) => vnDate(new Date(s.created_at)) === dayParam);
+  }, [list.data, dayParam]);
   const shareDetail = useData(() => (shareTargetId ? data.sessions.get(shareTargetId) : Promise.resolve(null)), [shareTargetId]);
 
   // Chưa làm quen (M4-04): mở / chuyển tới /welcome, làm xong hoặc bỏ qua thì không hiện lại
@@ -120,6 +136,8 @@ export function LibraryPane({ className }: { className?: string }) {
     () => Object.fromEntries((templates.data ?? []).map((tp) => [tp.id, templateName(tp, locale)])),
     [templates.data, locale],
   );
+  // Tên người ghi theo user_id (M7-01): hàng buổi của người khác hiện tên
+  const memberName = useMemo(() => Object.fromEntries((members.data ?? []).map((m) => [m.user_id, m.display_name])), [members.data]);
 
   const week = useMemo(() => {
     const items = (all.data ?? []).filter((s) => dayDiff(new Date(s.created_at), now) < 7);
@@ -133,7 +151,7 @@ export function LibraryPane({ className }: { className?: string }) {
 
   const groups = useMemo(() => {
     const out: { label: string; items: Session[] }[] = [];
-    for (const s of list.data ?? []) {
+    for (const s of listFiltered) {
       const diff = dayDiff(new Date(s.created_at), now);
       const label = diff <= 0 ? t("today") : diff === 1 ? t("yesterday") : weekdayDate(s.created_at, locale);
       const g = out.find((x) => x.label === label);
@@ -141,7 +159,7 @@ export function LibraryPane({ className }: { className?: string }) {
       else out.push({ label, items: [s] });
     }
     return out;
-  }, [list.data, now, t, locale]);
+  }, [listFiltered, now, t, locale]);
 
   const u = me.data;
   const q = quota.data;
@@ -257,6 +275,8 @@ export function LibraryPane({ className }: { className?: string }) {
     }
   }
 
+  // Buổi của menu ⋯ đang mở (để hiện mục đổi Riêng tư/Cả nhóm, M7-01)
+  const menuSession = (all.data ?? []).find((s) => s.id === menuRowId) ?? null;
   const deleteTargets = (deleteIds ?? []).map((id) => (all.data ?? []).find((s) => s.id === id)).filter(Boolean) as Session[];
   const purgeTargets = (purgeIds ?? []).map((id) => (all.data ?? []).find((s) => s.id === id)).filter(Boolean) as Session[];
   const purgeMb = Math.max(1, Math.round(purgeTargets.reduce((n, s) => n + s.size_bytes, 0) / 1_000_000));
@@ -317,6 +337,10 @@ export function LibraryPane({ className }: { className?: string }) {
       ) : (
         <TopBar importHref={true} />
       )}
+
+      {/* Đổi không gian ở tiêu đề thư viện trên điện thoại (M7-01); máy tính
+          có bộ chọn ở thanh bên rồi, không lặp lại */}
+      {selecting ? null : <WorkspaceSwitcher className="px-page pt-2 lg:hidden" />}
 
       <div className="px-page pb-4">
         <h1 className="font-display text-h1 font-semibold text-ink">
@@ -391,6 +415,16 @@ export function LibraryPane({ className }: { className?: string }) {
         aria-label={t("filters")}
         className="flex gap-2 overflow-x-auto px-page py-2 [scrollbar-width:none]"
       >
+        {/* Lọc theo ngày từ Tổng quan (M7-02): chip hiện khi có ?day=, bấm để bỏ */}
+        {dayParam ? (
+          <FilterChip
+            selected={true}
+            onClick={() => router.replace("/")}
+            aria-label={td("dayFilterClear")}
+          >
+            {shortDate(new Date(`${dayParam}T12:00:00+07:00`), locale)}
+          </FilterChip>
+        ) : null}
         <FilterChip selected={filter === "all"} onClick={() => setFilter("all")}>
           {t("all")}
         </FilterChip>
@@ -405,6 +439,16 @@ export function LibraryPane({ className }: { className?: string }) {
             {tplName[id] ?? id}
           </FilterChip>
         ))}
+        {team
+          ? [
+              <FilterChip key="scope-mine" selected={scope === "mine"} onClick={() => setScope(scope === "mine" ? null : "mine")}>
+                {t("scopeMine")}
+              </FilterChip>,
+              <FilterChip key="scope-shared" selected={scope === "workspace"} onClick={() => setScope(scope === "workspace" ? null : "workspace")}>
+                {t("scopeWorkspace")}
+              </FilterChip>,
+            ]
+          : null}
       </div>
 
       <div className="flex-1" aria-busy={list.loading}>
@@ -420,8 +464,8 @@ export function LibraryPane({ className }: { className?: string }) {
             message={t("loadError")}
             action={<Button onClick={list.reload}>{t("retry")}</Button>}
           />
-        ) : (list.data ?? []).length === 0 ? (
-          filter === "all" ? (
+        ) : listFiltered.length === 0 ? (
+          filter === "all" && !dayParam ? (
             <EmptyState
               message={t("empty")}
               action={
@@ -434,7 +478,16 @@ export function LibraryPane({ className }: { className?: string }) {
             <EmptyState
               drawing={<span />}
               message={t("noMatch")}
-              action={<Button onClick={() => setFilter("all")}>{t("clearFilter")}</Button>}
+              action={
+                <Button
+                  onClick={() => {
+                    setFilter("all");
+                    if (dayParam) router.replace("/");
+                  }}
+                >
+                  {t("clearFilter")}
+                </Button>
+              }
             />
           )
         ) : (
@@ -457,6 +510,11 @@ export function LibraryPane({ className }: { className?: string }) {
                     checkOffLabel={t("pickRowOn")}
                     hoverCheck={true}
                     title={s.title || t("untitled")}
+                    ownerLabel={
+                      team && (s.owner_user_id || s.user_id) !== me.data?.id
+                        ? t("recordedBy", { name: memberName[s.owner_user_id || s.user_id] ?? "" })
+                        : undefined
+                    }
                     duration={durationLabel(s.duration_sec)}
                     template={tplName[s.template_id] ?? ""}
                     peaks={s.peaks_thumb}
@@ -541,6 +599,26 @@ export function LibraryPane({ className }: { className?: string }) {
               {t("swipeShare")}
             </button>
           </li>
+          {menuSession && team && (menuSession.owner_user_id || menuSession.user_id) === me.data?.id ? (
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  const id = menuRowId;
+                  setMenuRowId(null);
+                  if (id)
+                    void data.sessions
+                      .setVisibility(id, menuSession.visibility === "workspace" ? "private" : "workspace")
+                      .then(() => toast.show({ tone: "success", message: t("visibilityChanged") }))
+                      .catch(() => toast.show({ tone: "error", message: ts("saveError") }));
+                }}
+                className="flex min-h-12 w-full items-center gap-3 py-2 text-left text-body text-ink"
+              >
+                <UsersRound aria-hidden={true} className="size-5 shrink-0 text-ink-2" strokeWidth={1.75} />
+                {menuSession.visibility === "workspace" ? t("makePrivate") : t("shareWithTeam")}
+              </button>
+            </li>
+          ) : null}
           <li>
             <button
               type="button"

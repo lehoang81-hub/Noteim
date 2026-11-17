@@ -18,11 +18,12 @@ import { resetFlags, setFlags, useDebugFlags, type DebugFlags } from "@/lib/debu
 
 const PROFESSIONS: Profession[] = ["business_owner", "doctor", "lawyer", "realestate_sales", "architect", "notary"];
 const TOGGLES: Array<
-  keyof Pick<DebugFlags, "offline" | "slow" | "failLoad" | "quotaOut" | "emptyLibrary" | "recordSpeed30" | "micDenied" | "micTaken" | "storageFull" | "mailFailOne" | "shareExpired" | "translateFail" | "translateSlow">
-> = ["offline", "slow", "failLoad", "quotaOut", "emptyLibrary", "recordSpeed30", "micDenied", "micTaken", "storageFull", "mailFailOne", "shareExpired", "translateFail", "translateSlow"];
+  keyof Pick<DebugFlags, "offline" | "slow" | "failLoad" | "quotaOut" | "emptyLibrary" | "recordSpeed30" | "micDenied" | "micTaken" | "storageFull" | "mailFailOne" | "shareExpired" | "translateFail" | "translateSlow" | "inviteExpired" | "seatsFull">
+> = ["offline", "slow", "failLoad", "quotaOut", "emptyLibrary", "recordSpeed30", "micDenied", "micTaken", "storageFull", "mailFailOne", "shareExpired", "translateFail", "translateSlow", "inviteExpired", "seatsFull"];
 
 export function DebugPanel() {
   const t = useTranslations("debug");
+  const tw = useTranslations("workspace");
   const flags = useDebugFlags();
   const toast = useToast();
   const router = useRouter();
@@ -72,6 +73,19 @@ export function DebugPanel() {
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3">
+        <label className="text-caption font-medium text-ink-2">
+          {t("debugRole")}
+          <select
+            className={`${select} mt-1`}
+            value={flags.debugRole ?? ""}
+            onChange={(e) => setFlags({ debugRole: (e.target.value || null) as DebugFlags["debugRole"] })}
+          >
+            <option value="">{t("default")}</option>
+            <option value="owner">{tw("roleOwner")}</option>
+            <option value="admin">{tw("roleAdmin")}</option>
+            <option value="member">{tw("roleMember")}</option>
+          </select>
+        </label>
         <label className="text-caption font-medium text-ink-2">
           {t("profession")}
           <select

@@ -83,14 +83,15 @@ export function SessionDetailScreen() {
 
   if (!detail.data) {
     const notFound = detail.error?.code === "not_found";
+    const forbidden = detail.error?.code === "forbidden";
     return (
       <div className="px-page pt-2">
         <div className="flex min-h-14 items-center">{back}</div>
         <EmptyState
           drawing={<span />}
-          message={notFound ? t("notFound") : t("loadError")}
+          message={forbidden ? t("forbidden") : notFound ? t("notFound") : t("loadError")}
           action={
-            notFound ? (
+            forbidden || notFound ? (
               <Link
                 href="/"
                 className="inline-flex h-11 items-center rounded-control border border-line bg-surface px-4 text-small font-semibold text-ink hover:bg-surface-2"
@@ -146,6 +147,13 @@ function Loaded({
   const search = useSearchParams();
   const now = dataNow();
   const me = useData(() => data.account.me(), []);
+  // Thành viên nhóm để giao việc và hiện tên người phụ trách (M7-01);
+  // chỉ buổi thuộc không gian Nhóm mới cần
+  const members = useData(
+    () => (detail.workspace_id ? data.workspaces.members(detail.workspace_id) : Promise.resolve([])),
+    [detail.workspace_id],
+  );
+  const memberNames = Object.fromEntries((members.data ?? []).map((m) => [m.user_id, m.display_name]));
   const planFlag: "free" | "pro" = me.data?.plan ?? "free";
 
   const tab: TabId = (TABS as readonly string[]).includes(search.get("tab") ?? "") ? (search.get("tab") as TabId) : "summary";
@@ -155,7 +163,8 @@ function Loaded({
   useEffect(() => () => player.pause(), [player]);
   const ps = usePlayerState(player);
   const [expanded, setExpanded] = useState(false);
-  const [naming, setNaming] = useState(false);
+  // Mở sâu từ Tổng quan (?sheet=speakers, M7-02): vào trang là bảng đặt tên người nói
+  const [naming, setNaming] = useState(() => search.get("sheet") === "speakers");
   // Các bảng nạp chậm chỉ dựng sau lần mở đầu tiên (M5-04): tránh tải chunk
   // ngay khi vào trang dù chưa bấm gì.
   const [namingOnce, setNamingOnce] = useState(false);
@@ -167,7 +176,8 @@ function Loaded({
   const [sending, setSending] = useState(false);
   const [sendingOnce, setSendingOnce] = useState(false);
   if (sending && !sendingOnce) setSendingOnce(true);
-  const [sharing, setSharing] = useState(false);
+  // Mở sâu từ Tổng quan (?sheet=share, M7-02): vào trang là bảng chia sẻ
+  const [sharing, setSharing] = useState(() => search.get("sheet") === "share");
   const [sharingOnce, setSharingOnce] = useState(false);
   if (sharing && !sharingOnce) setSharingOnce(true);
   const [shareIntent, setShareIntent] = useState<ShareIntent>(null);
@@ -429,6 +439,7 @@ function Loaded({
                 items={items.map((a) => (summary?.task_texts?.[a.id] ? { ...a, task: summary.task_texts[a.id] } : a))}
                 lang={verLang}
                 contacts={contacts}
+                memberNames={memberNames}
                 now={now}
                 canSeek={canPlay}
                 onSeek={seek}
@@ -503,7 +514,7 @@ function Loaded({
 
       {/* Sửa / thêm việc (M3-04) */}
       {taskSheetOnce ? (
-        <TaskSheet session={detail} contacts={contacts} item={editingTask} open={taskSheet} onOpenChange={setTaskSheet} />
+        <TaskSheet session={detail} contacts={contacts} members={members.data ?? []} item={editingTask} open={taskSheet} onOpenChange={setTaskSheet} />
       ) : null}
 
       {/* Gửi biên bản và giao việc, ba bước (M3-04) */}

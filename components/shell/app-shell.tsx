@@ -1,6 +1,6 @@
 "use client";
 
-import { FileUp, Library, ListChecks, Search, Settings } from "lucide-react";
+import { FileUp, LayoutDashboard, Library, ListChecks, Search, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -8,6 +8,7 @@ import { useSyncExternalStore } from "react";
 import { Banner } from "@/components/ui/feedback";
 import { RecordButton } from "@/components/ui/record-button";
 import { RecordingBar } from "@/components/record/recording-bar";
+import { WorkspaceSwitcher } from "./workspace-switcher";
 import { ProcessingWatcher } from "./processing-watcher";
 import { cn } from "@/lib/cn";
 import { useDebugFlags } from "@/lib/debug/flags";
@@ -18,12 +19,14 @@ const DebugPanel = dynamic(() => import("./debug-panel").then((m) => m.DebugPane
 
 /*
  * Khung ứng dụng (docs/02-design-system.md, "Bố cục").
- * - Điện thoại: thanh điều hướng dưới có đúng ba mục: Thư viện, nút ghi âm ở giữa
- *   (nhô lên), Việc. Tìm kiếm và Cài đặt ở góc trên phải của từng trang (TopBar).
- * - Máy tính (từ 1024px): cột trái 88px gồm logo, Thư viện, Việc, Cài đặt, nút ghi âm.
+ * - Điện thoại: thanh điều hướng dưới năm mục: Thư viện, Tổng quan (M7-02),
+ *   nút ghi âm ở giữa (nhô lên), Việc, Cài đặt. Tìm kiếm ở góc trên của từng
+ *   trang (TopBar).
+ * - Máy tính (từ 1024px): cột trái 88px gồm logo, chọn không gian làm việc
+ *   (M7-01), Thư viện, Tổng quan (M7-02), Việc, Cài đặt, nút ghi âm.
  * - Dải báo mất mạng nằm trên cùng.
  * - /record không có khung ứng dụng; nút ghi âm ở mọi trang đi tới /record và
- *   bắt đầu ghi luôn (luồng start nằm ở màn hình ghi).
+ *   bắt đầu ghi luôn (luồng start nằm ở màn hình ghi) — vẫn 2 lần chạm.
  */
 
 function subscribeOnline(cb: () => void) {
@@ -64,9 +67,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // Cả hai thanh dùng cùng bốn mục: Thư viện, Tổng quan (M7-02), Việc, Cài đặt
   const items = [
     { href: "/", label: t("library"), icon: Library },
+    { href: "/dashboard", label: t("dashboard"), icon: LayoutDashboard },
     { href: "/tasks", label: t("tasks"), icon: ListChecks },
+  ];
+  const navItems = [
+    ...items,
+    { href: "/settings", label: t("settings"), icon: Settings },
   ];
 
   return (
@@ -82,8 +91,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <Link href="/" aria-label={t("brand")} className="flex size-11 items-center justify-center rounded-control">
           <span aria-hidden={true} className="size-7 rounded-pill" style={{ background: "var(--gradient-dawn)" }} />
         </Link>
-        <ul className="mt-6 flex flex-col gap-1">
-          {[...items, { href: "/settings", label: t("settings"), icon: Settings }].map(({ href, label, icon: Icon }) => {
+        {/* Đổi không gian làm việc (M7-01): đầu thanh bên, dưới logo */}
+        <WorkspaceSwitcher className="mt-4 w-[72px]" />
+        <ul className="mt-4 flex flex-col gap-1">
+          {navItems.map(({ href, label, icon: Icon }) => {
             const active = isActive(pathname, href);
             return (
               <li key={href}>
@@ -119,13 +130,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <ProcessingWatcher />
 
-      {/* Thanh điều hướng dưới trên điện thoại */}
+      {/* Thanh điều hướng dưới trên điện thoại: Thư viện, Tổng quan,
+          Ghi âm (giữa), Việc, Cài đặt (M7-02) */}
       <nav
         aria-label={t("nav")}
         className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
-        <ul className="mx-auto grid h-16 max-w-md grid-cols-3 items-center">
-          {items.map(({ href, label, icon: Icon }, i) => {
+        <ul className="mx-auto grid h-16 max-w-md grid-cols-5 items-center">
+          {navItems.map(({ href, label, icon: Icon }, i) => {
             const active = isActive(pathname, href);
             const link = (
               <Link
@@ -140,15 +152,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 {label}
               </Link>
             );
-            return i === 0 ? (
+            // Nút ghi âm đứng giữa (vị trí 3 trên 5): sau Tổng quan (M7-02)
+            return (
               <li key={href} className="contents">
-                <span>{link}</span>
-                <span className="flex justify-center">
-                  <RecordButton label={t("record")} className="-mt-9" onClick={() => router.push("/record")} />
-                </span>
+                {link}
+                {i === 1 ? (
+                  <span className="flex justify-center">
+                    <RecordButton label={t("record")} className="-mt-9" onClick={() => router.push("/record")} />
+                  </span>
+                ) : null}
               </li>
-            ) : (
-              <li key={href}>{link}</li>
             );
           })}
         </ul>

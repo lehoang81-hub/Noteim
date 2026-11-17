@@ -1,10 +1,28 @@
 "use client";
 
 import { getFlags } from "@/lib/debug/flags";
+import { inviteToken } from "@/lib/team/invite-token";
+import { dayDiff, endOfDay, vnDate } from "@/lib/format";
 import type { DataSource, EmailDraft, RecordingDraft, SessionFilter, SearchResult as SearchResult } from "../repository";
 import { DataError } from "../errors";
-import type { ActionItem, ChatMessage, Contact, GlossaryTerm, Lang, Session, SessionDetail, ShareLink, SummaryVersion } from "../types";
-import { MOCK_NOW, commit, getDb, samplesReady, sessionsReady, type StoredSession } from "./store";
+import type {
+  ActionItem,
+  AuditEvent,
+  ChatMessage,
+  Contact,
+  DashboardData,
+  GlossaryTerm,
+  Lang,
+  Member,
+  Session,
+  SessionDetail,
+  ShareLink,
+  SummaryVersion,
+  UsageRow,
+  Workspace,
+  WorkspaceRole,
+} from "../types";
+import { MOCK_NOW, commit, getDb, persistSilently, samplesReady, sessionsReady, type StoredSession } from "./store";
 
 /*
  * Bản giả của lớp dữ liệu (docs/04-data-contract.md).
@@ -64,6 +82,105 @@ async function stripSessions(list: Array<Session | SessionDetail>): Promise<Sess
   return list.map(stripToSession);
 }
 
+/* ---------- Không gian làm việc và quyền (M7-01, issue #47) ---------- */
+
+function myUserId(): string {
+  return getDb().user.id;
+}
+
+/** Không gian đang dùng; dữ liệu lạ thì quy về không gian Cá nhân. */
+function currentWorkspace(): Workspace {
+  const db = getDb();
+  const id = db.user.current_workspace_id || "w-hoang";
+  return db.workspaces.find((w) => w.id === id) ?? db.workspaces.find((w) => w.kind === "personal")!;
+}
+
+/**
+ * Vai trò của tôi trong một không gian. Không gian Cá nhân coi như Chủ;
+ * không gian Nhóm theo dữ liệu thành viên. Cờ "Đổi vai trò" của bảng thử
+ * nghiệm ép vai trò để kiểm bảng quyền (M7-01).
+ */
+function myRole(workspaceId: string): WorkspaceRole | null {
+  const db = getDb();
+  const ws = db.workspaces.find((w) => w.id === workspaceId);
+  if (!ws) return null;
+  if (ws.kind === "personal") return "owner";
+  const forced = getFlags().debugRole;
+  if (forced) return forced;
+  const m = db.members.find((x) => x.workspace_id === workspaceId && x.user_id === myUserId() && x.status === "active");
+  return m?.role ?? null;
+}
+
+/**
+ * Quyền quản trị nhóm (M7-03): mức dùng theo người, nhật ký truy cập, hóa đơn
+ * chỉ Chủ và Quản trị thấy. Thành viên ném forbidden (docs/08 bảng quyền).
+ */
+function assertAdmin(workspaceId: string) {
+  const r = myRole(workspaceId);
+  if (!r || r === "member") throw new DataError("forbidden");
+}
+
+/** Buổi ghi thuộc không gian đang dùng: Cá nhân là buổi không thuộc nhóm nào. */
+function inCurrentWorkspace(d: Pick<Session, "workspace_id">): boolean {
+  const ws = currentWorkspace();
+  return ws.kind === "personal" ? !d.workspace_id : d.workspace_id === ws.id;
+}
+
+/** Quyền đọc nội dung buổi ghi (M7-01): buổi Cá nhân chỉ người ghi; buổi nhóm
+ * phải là thành viên, buổi riêng tư chỉ người ghi được đọc — kể cả Chủ, Quản trị. */
+function canRead(d: Pick<Session, "workspace_id" | "visibility" | "owner_user_id" | "user_id">): boolean {
+  const owner = d.owner_user_id || d.user_id;
+  if (!d.workspace_id) return owner === myUserId();
+  if (!myRole(d.workspace_id)) return false;
+  return d.visibility === "workspace" || owner === myUserId();
+}
+
+function assertCanRead(d: Pick<Session, "workspace_id" | "visibility" | "owner_user_id" | "user_id">) {
+  if (!canRead(d)) throw new DataError("forbidden");
+}
+
+/** Quyền sửa buổi ghi: đọc được và là người ghi. */
+function assertOwnSession(d: Pick<Session, "workspace_id" | "visibility" | "owner_user_id" | "user_id">) {
+  assertCanRead(d);
+  if ((d.owner_user_id || d.user_id) !== myUserId()) throw new DataError("forbidden");
+}
+
+/** Ghi một dòng nhật ký của không gian nhóm (M7-01). */
+function pushAudit(
+  workspaceId: string,
+  action: AuditEvent["action"],
+  targetType: AuditEvent["target_type"],
+  targetId: string,
+  targetLabel: string,
+) {
+  getDb().audit.push({
+    id: `a-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 6)}`,
+    workspace_id: workspaceId,
+    actor_user_id: myUserId(),
+    action,
+    target_type: targetType,
+    target_id: targetId,
+    target_label: targetLabel,
+    at: MOCK_NOW.toISOString(),
+  });
+}
+
+/*
+ * Nhật ký "ai xem" (M7-03): mỗi phiên trình duyệt ghi một dòng cho mỗi buổi và
+ * người xem. Lưu bằng persistSilently (không gọi commit) để không kích hoạt tải
+ * lại của useData (vòng lặp), nhưng vẫn còn sau khi tải lại trang.
+ */
+const viewLogged = new Set<string>();
+
+function pushViewAudit(d: Pick<Session, "workspace_id" | "id" | "title">) {
+  if (!d.workspace_id) return;
+  const key = `${d.id}:${myUserId()}`;
+  if (viewLogged.has(key)) return;
+  viewLogged.add(key);
+  pushAudit(d.workspace_id, "view", "session", d.id, d.title);
+  persistSilently();
+}
+
 /** Bản sao ShareLink không kèm mật khẩu (mật khẩu chỉ dùng nội bộ bản giả). */
 function toShareLink(s: ShareLink & { password?: string }): ShareLink {
   return {
@@ -76,6 +193,80 @@ function toShareLink(s: ShareLink & { password?: string }): ShareLink {
     view_count: s.view_count,
     languages: s.languages ?? [],
   };
+}
+
+/*
+ * Tổng quan (M7-02, issue #48). Mọi số liệu tính tại chỗ từ kho theo không
+ * gian đang dùng — không có số cứng trong dữ liệu mẫu.
+ */
+
+/** Cửa sổ khoảng: Tuần này = 7 ngày gần nhất (khớp lọc "Tuần này" của thư viện), Tháng này = 30 ngày. */
+function rangeWindow(range: DashboardData["range"]): number {
+  return (range === "week" ? 7 : 30) * 86400_000;
+}
+
+/**
+ * Buổi ghi được ĐỌC NỘI DUNG trong không gian đang dùng — cùng phạm vi với
+ * sessions.list. Buổi riêng tư của người khác không lọt vào đây: số liệu
+ * Tổng quan không đếm nội dung buổi riêng tư người khác (quyền M7-01).
+ */
+function visibleSessions(): SessionDetail[] {
+  const db = getDb();
+  const ws = currentWorkspace();
+  const me = myUserId();
+  return db.sessions
+    .map((s) => s.detail)
+    .filter((d) => {
+      if (ws.kind === "personal") return !d.workspace_id && (d.owner_user_id || d.user_id) === me;
+      return d.workspace_id === ws.id && (d.visibility === "workspace" || (d.owner_user_id || d.user_id) === me);
+    });
+}
+
+/** Gom "Cần xử lý" từ các buổi được đọc nội dung (M7-02). */
+function buildAttention(visible: SessionDetail[]): DashboardData["attention"] {
+  const now = MOCK_NOW;
+  const out: DashboardData["attention"] = [];
+  // Việc quá hạn và đến hạn hôm nay: hàng nào mở đúng chỗ sửa việc, kèm mốc
+  // trong buổi nếu có
+  const tasks: DashboardData["attention"] = [];
+  for (const d of visible) {
+    for (const a of d.action_items) {
+      if (a.done || !a.due_date) continue;
+      const end = endOfDay(a.due_date);
+      // target_id ghép id buổi: id việc chỉ duy nhất trong từng buổi của fixture
+      if (end.getTime() < now.getTime()) {
+        tasks.push({ kind: "task_overdue", target_id: `${d.id}:${a.id}`, label: a.task, href: `/s/${d.id}?tab=tasks` });
+      } else if (dayDiff(now, end) === 0) {
+        tasks.push({ kind: "task_due_today", target_id: `${d.id}:${a.id}`, label: a.task, href: `/s/${d.id}?tab=tasks` });
+      }
+    }
+  }
+  tasks.sort((a, b) => a.label.localeCompare(b.label, "vi"));
+  out.push(...tasks);
+  for (const d of visible) {
+    // Người nói chưa đặt tên: một dòng mỗi buổi (nhấn vào mở bảng đặt tên)
+    if (d.status === "ready" && d.speakers.some((s) => !s.contact_id && !s.is_me))
+      out.push({ kind: "speaker_unnamed", target_id: d.id, label: d.title, href: `/s/${d.id}?sheet=speakers` });
+    // Bản gốc sắp tự xóa (gói Free, nhắc trước 48 giờ như cảnh báo của buổi)
+    if (d.audio_expires_at) {
+      const diff = new Date(d.audio_expires_at).getTime() - now.getTime();
+      if (diff > 0 && diff <= 48 * 3600_000)
+        out.push({ kind: "audio_expiring", target_id: d.id, label: d.title, href: `/s/${d.id}` });
+    }
+    // Buổi ghi xử lý lỗi: mở buổi để bấm Chạy lại
+    if (d.status === "failed")
+      out.push({ kind: "processing_failed", target_id: d.id, label: d.title, href: `/s/${d.id}` });
+  }
+  // Link chia sẻ sắp hết hạn: chỉ link của buổi được đọc trong không gian đang dùng
+  for (const sh of getDb().shares) {
+    if (sh.revoked || !sh.expires_at) continue;
+    const diff = new Date(sh.expires_at).getTime() - now.getTime();
+    if (diff <= 0 || diff > 48 * 3600_000) continue;
+    const d = visible.find((x) => x.id === sh.session_id);
+    if (!d) continue;
+    out.push({ kind: "link_expiring", target_id: sh.id, label: d.title, href: `/s/${d.id}?sheet=share` });
+  }
+  return out;
 }
 
 function refreshCounts(d: SessionDetail) {
@@ -247,19 +438,47 @@ export const mockSource: DataSource = {
       read(async () => {
         await sessionsReady();
         if (getFlags().emptyLibrary) return [];
+        const db = getDb();
+        const ws = currentWorkspace();
+        const me = myUserId();
         return stripSessions(
-          getDb()
-            .sessions.map((s) => s.listDetail ?? s.detail)
+          db.sessions
+            .map((s) => s.listDetail ?? s.detail)
+            .filter((d) => {
+              // Không gian Cá nhân: chỉ buổi của mình — buổi nhóm không lẫn vào,
+              // kể cả buổi riêng tư của người khác sau khi bị gỡ khỏi nhóm (M7-01)
+              if (ws.kind === "personal") return !d.workspace_id && (d.owner_user_id || d.user_id) === me;
+              if (d.workspace_id !== ws.id) return false;
+              // Không gian Nhóm: buổi của mình và buổi đã chia sẻ cho cả nhóm
+              return d.visibility === "workspace" || (d.owner_user_id || d.user_id) === me;
+            })
+            .filter((d) => (filter?.mine ? (d.owner_user_id || d.user_id) === me : true))
+            .filter((d) => (filter?.shared ? d.visibility === "workspace" : true))
             .filter((d) => matches(d, filter))
             .sort((a, b) => b.created_at.localeCompare(a.created_at)),
         );
       }),
-    get: (id) => read(async () => (await findFixture(id)).detail),
-    getTranscript: (id) => read(async () => (await findFixture(id)).transcript),
+    get: (id) =>
+      read(async () => {
+        const fx = await findFixture(id);
+        // Buổi riêng tư của người khác ném forbidden — giao diện hiện thông
+        // báo không có quyền, không lộ nội dung (docs/08 phần B)
+        assertCanRead(fx.detail);
+        // Nhật ký nhóm: ai xem buổi ghi nào (M7-03)
+        pushViewAudit(fx.detail);
+        return fx.detail;
+      }),
+    getTranscript: (id) =>
+      read(async () => {
+        const fx = await findFixture(id);
+        assertCanRead(fx.detail);
+        return fx.transcript;
+      }),
     getVisuals: (id) =>
       read(async () => {
         await sessionsReady();
         const fx = await findFixture(id);
+        assertCanRead(fx.detail);
         const d = fx.detail;
         return {
           timeline: d.topics.map((t) => ({ topic_id: t.id, start_sec: t.start_sec, end_sec: t.end_sec, tag: t.tag })),
@@ -270,12 +489,15 @@ export const mockSource: DataSource = {
     update: (id, patch) =>
       write(async () => {
         await sessionsReady();
-        Object.assign((await findFixture(id)).detail, patch);
+        const fx = await findFixture(id);
+        assertOwnSession(fx.detail);
+        Object.assign(fx.detail, patch);
       }),
     updateBullet: (sessionId, bulletId, text) =>
       write(async () => {
         await sessionsReady();
         const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
         for (const t of fx.detail.topics)
           for (const b of t.bullets)
             if (b.id === bulletId) {
@@ -288,7 +510,9 @@ export const mockSource: DataSource = {
     updateSegment: (sessionId, segmentId, text) =>
       write(async () => {
         await sessionsReady();
-        const seg = (await findFixture(sessionId)).transcript.find((s) => s.id === segmentId);
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        const seg = fx.transcript.find((s) => s.id === segmentId);
         if (!seg) throw new DataError("not_found");
         seg.text = text;
         seg.edited = true;
@@ -397,6 +621,7 @@ export const mockSource: DataSource = {
       write(async () => {
         await sessionsReady();
         const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
         const seg = fx.transcript.find((s) => s.id === segmentId);
         const sp = fx.detail.speakers.find((s) => s.id === speakerId);
         if (!seg || !sp) throw new DataError("not_found");
@@ -406,6 +631,7 @@ export const mockSource: DataSource = {
       write(async () => {
         await sessionsReady();
         const d = (await findFixture(sessionId)).detail;
+        assertOwnSession(d);
         const contact = getDb().contacts.find((c) => c.id === contactId);
         const sp = d.speakers.find((s) => s.id === speakerId);
         if (!sp || !contact) throw new DataError("not_found");
@@ -425,6 +651,7 @@ export const mockSource: DataSource = {
       write(async () => {
         await sessionsReady();
         const d = (await findFixture(sessionId)).detail;
+        assertOwnSession(d);
         const from = d.speakers.find((s) => s.id === fromId);
         const into = d.speakers.find((s) => s.id === intoId);
         if (!from || !into) throw new DataError("not_found");
@@ -457,7 +684,12 @@ export const mockSource: DataSource = {
         const detail: SessionDetail = {
           id,
           user_id: db.user.id,
-          workspace_id: null,
+          // Buổi mới thuộc không gian đang dùng; ở không gian Cá nhân để
+          // workspace_id null (quy ước của dữ liệu cũ, M7-01)
+          workspace_id: currentWorkspace().kind === "team" ? currentWorkspace().id : null,
+          // Buổi mới luôn riêng tư cho đến khi người dùng chia sẻ (M7-01)
+          visibility: "private",
+          owner_user_id: db.user.id,
           title: draft.title ?? "",
           template_id: draft.template_id,
           // Ngôn ngữ nói chính chọn ở bảng "Bắt đầu ghi" (M6-02)
@@ -521,7 +753,9 @@ export const mockSource: DataSource = {
     retryProcessing: (id) =>
       write(async () => {
         await sessionsReady();
-        const d = (await findFixture(id)).detail;
+        const fx = await findFixture(id);
+        assertOwnSession(fx.detail);
+        const d = fx.detail;
         d.status = "processing";
         d.processing_step = 1;
         delete d.failure_reason;
@@ -533,11 +767,14 @@ export const mockSource: DataSource = {
         let freed = 0;
         for (const id of ids) {
           const fx = await findFixture(id);
+          assertOwnSession(fx.detail);
           freed += fx.detail.size_bytes;
           fx.detail.storage_status = "essence_only";
           fx.detail.size_bytes = 0;
           fx.detail.audio_expires_at = null;
           fx.transcript = [];
+          // Nhật ký nhóm: dọn bản gốc (M7-03)
+          if (fx.detail.workspace_id) pushAudit(fx.detail.workspace_id, "purge", "session", fx.detail.id, fx.detail.title);
         }
         return { freed_bytes: freed };
       }),
@@ -545,6 +782,11 @@ export const mockSource: DataSource = {
       write(async () => {
         await sessionsReady();
         const db = getDb();
+        const target = await findFixture(id);
+        assertOwnSession(target.detail);
+        // Nhật ký nhóm: xóa buổi ghi (M7-03). Xóa còn hoàn tác được nhưng vẫn
+        // ghi — nhật ký là hành động đã làm, không phải trạng thái cuối.
+        if (target.detail.workspace_id) pushAudit(target.detail.workspace_id, "delete", "session", target.detail.id, target.detail.title);
         // Giữ buổi ghi trong removed để "Hoàn tác" đưa về đúng chỗ cũ (M4-01)
         const i = db.sessions.findIndex((s) => s.detail.id === id);
         if (i < 0) throw new DataError("not_found");
@@ -567,6 +809,7 @@ export const mockSource: DataSource = {
       write(async () => {
         await sessionsReady();
         const fx = await findFixture(id);
+        assertOwnSession(fx.detail);
         const d = fx.detail;
         // Chuyển các chủ đề sang phần tương ứng của mẫu mới theo thứ tự,
         // nhờ đó tóm tắt hiện đủ các phần của mẫu mới (bản giả)
@@ -595,6 +838,9 @@ export const mockSource: DataSource = {
         const { stripToSession } = await import("./seed-data");
         for (const fx of getDb().sessions) {
           const d = fx.detail;
+          // Buổi riêng tư của người khác không tham gia tìm kiếm (M7-01),
+          // và chỉ tìm trong không gian đang dùng, giống thư viện (review PR #55)
+          if (!canRead(d) || !inCurrentWorkspace(d)) continue;
           // Tìm trong tiêu đề, tóm tắt chung, tên các phần tóm tắt, tên chủ đề
           // và từng điểm chính (review PR #35: thiếu điểm chính nên "lai suat"
           // không ra ý "Lo lãi suất tăng mạnh sau thời gian ưu đãi")
@@ -653,7 +899,10 @@ export const mockSource: DataSource = {
         const detail: SessionDetail = {
           id,
           user_id: db.user.id,
-          workspace_id: null,
+          // Buổi nhập cũng thuộc không gian đang dùng (M7-01)
+          workspace_id: currentWorkspace().kind === "team" ? currentWorkspace().id : null,
+          visibility: "private",
+          owner_user_id: db.user.id,
           title: draft.title ?? "",
           template_id: input.template_id,
           primary_language: input.language,
@@ -696,6 +945,27 @@ export const mockSource: DataSource = {
         if (!sample) throw new DataError("not_found");
         return sample.detail;
       }),
+    setVisibility: (id, visibility) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
+        const d = fx.detail;
+        assertOwnSession(d);
+        // Buổi cá nhân luôn riêng tư: đổi chỉ có ý nghĩa trong không gian Nhóm
+        if (!d.workspace_id) return;
+        d.visibility = visibility;
+        // Nhật ký nhóm: chia sẻ hoặc gỡ chia sẻ (M7-01)
+        pushAudit(d.workspace_id, visibility === "workspace" ? "share" : "unshare", "session", d.id, d.title);
+      }),
+    recordExport: (id) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
+        assertCanRead(fx.detail);
+        // Nhật ký nhóm: xuất file (M7-03). Chỉ người được đọc nội dung mới
+        // xuất được; buổi cá nhân không thuộc nhật ký nhóm nào.
+        if (fx.detail.workspace_id) pushAudit(fx.detail.workspace_id, "export", "session", fx.detail.id, fx.detail.title);
+      }),
   },
 
   tasks: {
@@ -703,8 +973,20 @@ export const mockSource: DataSource = {
       read(async () => {
         await sessionsReady();
         const items: ActionItem[] = [];
+        const me = myUserId();
+        const ws = currentWorkspace();
         for (const fx of getDb().sessions) {
           const d = fx.detail;
+          // Chỉ việc của những buổi mình được đọc (M7-01): buổi riêng tư của
+          // người khác không lộ việc qua trang Việc
+          if (!canRead(d)) continue;
+          // Việc theo không gian đang dùng (M7-01): Cá nhân thấy việc buổi cá
+          // nhân, Nhóm thấy việc buổi của nhóm đó
+          if (ws.kind === "personal") {
+            if (d.workspace_id || (d.owner_user_id || d.user_id) !== me) continue;
+          } else if (d.workspace_id !== ws.id) {
+            continue;
+          }
           const lang = filter?.lang;
           const version = lang ? storedVersion(fx, lang) : null;
           for (const a of d.action_items) {
@@ -713,7 +995,10 @@ export const mockSource: DataSource = {
             items.push(version ? { ...a, task: version.task_texts[a.id] ?? a.task } : a);
           }
         }
-        return filter?.mine ? items.filter((a) => a.assignee_contact_id === "c-me") : items;
+        // "Giao cho tôi": giao cho liên hệ của mình hoặc giao cho thành viên là mình (M7-01)
+        return filter?.mine
+          ? items.filter((a) => a.assignee_contact_id === "c-me" || a.assignee_user_id === me)
+          : items;
       }),
     upsert: (item) =>
       write(async () => {
@@ -787,6 +1072,9 @@ export const mockSource: DataSource = {
     create: (sessionId, opts) =>
       write(() => {
         const db = getDb();
+        const fx = db.sessions.find((s) => s.detail.id === sessionId);
+        if (!fx) throw new DataError("not_found");
+        assertOwnSession(fx.detail);
         // Mỗi buổi ghi chỉ giữ một link sống: tạo mới thì thu hồi link cũ
         for (const s of db.shares) if (s.session_id === sessionId && !s.revoked) s.revoked = true;
         const link: ShareLink & { password?: string } = {
@@ -801,13 +1089,19 @@ export const mockSource: DataSource = {
         };
         if (opts.password) link.password = opts.password;
         db.shares.push(link);
+        // Nhật ký nhóm: tạo link chia sẻ (M7-03)
+        if (fx.detail.workspace_id) pushAudit(fx.detail.workspace_id, "share", "share_link", link.id, fx.detail.title);
         return link;
       }),
     revoke: (id) =>
       write(() => {
-        const link = getDb().shares.find((s) => s.id === id);
+        const db = getDb();
+        const link = db.shares.find((s) => s.id === id);
         if (!link) throw new DataError("not_found");
         link.revoked = true;
+        // Nhật ký nhóm: thu hồi link chia sẻ (M7-03)
+        const fx = db.sessions.find((s) => s.detail.id === link.session_id);
+        if (fx?.detail.workspace_id) pushAudit(fx.detail.workspace_id, "unshare", "share_link", link.id, fx.detail.title);
       }),
     getForSession: (sessionId) =>
       read(() => {
@@ -938,6 +1232,9 @@ export const mockSource: DataSource = {
             sent_at: MOCK_NOW.toISOString(),
             recipient_count: okCount,
           });
+          // Nhật ký nhóm: gửi biên bản qua email (M7-03); một dòng mỗi lần gửi
+          const sentFx = await findFixture(sessionId);
+          if (sentFx.detail.workspace_id) pushAudit(sentFx.detail.workspace_id, "send_email", "session", sessionId, sentFx.detail.title);
         }
         return results;
       }),
@@ -1049,7 +1346,7 @@ export const mockSource: DataSource = {
       read(async () => {
         await sessionsReady();
         const db = getDb();
-        // Mật khẩu link chia sẻ không xuất ra file
+        // Mật khẩu link chia sẻ không xuất ra file; chỉ xuất buổi mình được đọc (M7-01)
         const shares = db.shares.map((s) => toShareLink(s));
         return {
           exported_at: MOCK_NOW.toISOString(),
@@ -1058,9 +1355,444 @@ export const mockSource: DataSource = {
           contacts: db.contacts,
           templates: db.templates,
           glossary: db.glossary,
-          sessions: db.sessions.map((s) => ({ detail: s.detail, transcript: s.transcript })),
+          sessions: db.sessions.filter((s) => canRead(s.detail)).map((s) => ({ detail: s.detail, transcript: s.transcript })),
           shares,
         };
+      }),
+  },
+
+  /* ---------- Không gian làm việc (M7-01, issue #47) ---------- */
+  workspaces: {
+    list: () =>
+      read(() => {
+        const db = getDb();
+        const f = getFlags();
+        // Không gian Cá nhân đi gói theo người dùng: cờ "Đổi gói" áp dụng cả đây
+        return db.workspaces.map((w) => (w.kind === "personal" ? { ...w, plan: f.plan ?? db.user.plan } : w));
+      }),
+    switchTo: (id) =>
+      write(() => {
+        const db = getDb();
+        const ws = db.workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        if (ws.kind === "team" && !myRole(ws.id)) throw new DataError("forbidden");
+        db.user.current_workspace_id = ws.id;
+      }),
+    create: (input) =>
+      write(() => {
+        const db = getDb();
+        const ws: Workspace = {
+          id: `w-new-${Date.now().toString(36)}`,
+          kind: "team",
+          name: input.name.trim(),
+          profession: input.profession,
+          default_report_language: input.default_report_language,
+          plan: "free",
+          seat_limit: null,
+          owner_user_id: db.user.id,
+        };
+        db.workspaces.push(ws);
+        db.members.push({
+          workspace_id: ws.id,
+          user_id: db.user.id,
+          email: db.user.email,
+          display_name: db.user.display_name,
+          role: "owner",
+          status: "active",
+          invited_at: MOCK_NOW.toISOString(),
+          invite_expires_at: null,
+        });
+        // Tạo xong chuyển sang không gian vừa tạo
+        db.user.current_workspace_id = ws.id;
+        return ws;
+      }),
+    update: (id, patch) =>
+      write(() => {
+        const r = myRole(id);
+        if (!r || r === "member") throw new DataError("forbidden");
+        const ws = getDb().workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        if (patch.name !== undefined) ws.name = patch.name.trim();
+        if (patch.profession !== undefined) ws.profession = patch.profession;
+        if (patch.default_report_language !== undefined) ws.default_report_language = patch.default_report_language;
+      }),
+    remove: (id) =>
+      write(() => {
+        const db = getDb();
+        const ws = db.workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        if (ws.kind === "personal") throw new DataError("server", "Không thể xóa không gian Cá nhân");
+        if (myRole(id) !== "owner") throw new DataError("forbidden");
+        db.workspaces = db.workspaces.filter((w) => w.id !== id);
+        db.members = db.members.filter((m) => m.workspace_id !== id);
+        db.audit = db.audit.filter((a) => a.workspace_id !== id);
+        // Buổi ghi của nhóm về không gian Cá nhân của từng người ghi
+        db.sessions.forEach((fx) => {
+          if (fx.detail.workspace_id === id) {
+            fx.detail.workspace_id = null;
+            fx.detail.visibility = "private";
+          }
+        });
+        const personal = db.workspaces.find((w) => w.kind === "personal");
+        if (db.user.current_workspace_id === id) db.user.current_workspace_id = personal?.id ?? "";
+      }),
+    members: (id) =>
+      read(() => {
+        if (!myRole(id)) throw new DataError("forbidden");
+        return getDb().members.filter((m) => m.workspace_id === id);
+      }),
+    invite: (id, email, role) =>
+      write(() => {
+        const db = getDb();
+        const r = myRole(id);
+        if (!r || r === "member") throw new DataError("forbidden");
+        const ws = db.workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        const clean = email.trim().toLowerCase();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) throw new DataError("server", "Email không hợp lệ");
+        if (role === "owner") throw new DataError("server", "Không thể mời làm Chủ; hãy chuyển quyền Chủ sau khi họ tham gia");
+        if (db.members.some((m) => m.workspace_id === id && m.email.toLowerCase() === clean))
+          throw new DataError("server", "Email này đã trong nhóm hoặc đang được mời");
+        const used = db.members.filter((m) => m.workspace_id === id).length;
+        if (getFlags().seatsFull || (ws.seat_limit != null && used >= ws.seat_limit)) {
+          throw new DataError("quota_exceeded", "Nhóm đã dùng hết số chỗ của gói");
+        }
+        const member: Member = {
+          workspace_id: id,
+          user_id: null,
+          email: clean,
+          // Tên hiển thị tạm theo email; sửa được sau khi họ tham gia
+          display_name: clean
+            .split("@")[0]
+            .split(/[._-]+/)
+            .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+            .join(" "),
+          role,
+          status: "invited",
+          invited_at: MOCK_NOW.toISOString(),
+          // Lời mời hết hạn sau 7 ngày (docs/08)
+          invite_expires_at: new Date(MOCK_NOW.getTime() + 7 * 86400_000).toISOString(),
+        };
+        db.members.push(member);
+        pushAudit(id, "invite", "member", clean, clean);
+        return member;
+      }),
+    revokeInvite: (id, email) =>
+      write(() => {
+        const db = getDb();
+        const r = myRole(id);
+        if (!r || r === "member") throw new DataError("forbidden");
+        const clean = email.trim().toLowerCase();
+        const before = db.members.length;
+        db.members = db.members.filter(
+          (m) => !(m.workspace_id === id && m.status === "invited" && m.email.toLowerCase() === clean),
+        );
+        if (db.members.length === before) throw new DataError("not_found");
+        // Thu hồi lời mời: lời mời là thành viên đang chờ, ghi nhật ký như gỡ (M7-03)
+        pushAudit(id, "remove_member", "member", clean, clean);
+      }),
+    changeRole: (id, userId, role) =>
+      write(() => {
+        const r = myRole(id);
+        if (!r || r === "member") throw new DataError("forbidden");
+        const m = getDb().members.find((x) => x.workspace_id === id && x.user_id === userId);
+        if (!m) throw new DataError("not_found");
+        // Quản trị đổi vai trò được mọi người trừ Chủ; không đặt ai làm Chủ
+        // bằng cách này (docs/08 bảng quyền)
+        if (m.role === "owner") throw new DataError("forbidden", "Không thể đổi vai trò của Chủ");
+        if (role === "owner") throw new DataError("server", "Chuyển quyền Chủ bằng chức năng riêng");
+        m.role = role;
+        pushAudit(id, "role_change", "member", userId, m.display_name);
+      }),
+    removeMember: (id, userId) =>
+      write(async () => {
+        await sessionsReady();
+        const r = myRole(id);
+        if (!r || r === "member") throw new DataError("forbidden");
+        const db = getDb();
+        const m = db.members.find((x) => x.workspace_id === id && x.user_id === userId);
+        if (!m) throw new DataError("not_found");
+        if (m.role === "owner") throw new DataError("forbidden", "Không thể gỡ Chủ");
+        // Buổi riêng tư của người bị gỡ đi theo họ về không gian Cá nhân của
+        // họ; buổi đã chia sẻ với nhóm ở lại nhóm (docs/08 phần B)
+        db.sessions.forEach((fx) => {
+          const d = fx.detail;
+          if (d.workspace_id === id && (d.owner_user_id || d.user_id) === userId && d.visibility === "private") {
+            d.workspace_id = null;
+          }
+        });
+        db.members = db.members.filter((x) => x !== m);
+        pushAudit(id, "remove_member", "member", userId, m.display_name);
+      }),
+    transferOwnership: (id, userId) =>
+      write(() => {
+        if (myRole(id) !== "owner") throw new DataError("forbidden");
+        const db = getDb();
+        const m = db.members.find((x) => x.workspace_id === id && x.user_id === userId && x.status === "active");
+        if (!m) throw new DataError("not_found");
+        const me = db.members.find((x) => x.workspace_id === id && x.user_id === myUserId());
+        if (me) me.role = "admin";
+        m.role = "owner";
+        const ws = db.workspaces.find((w) => w.id === id);
+        if (ws) ws.owner_user_id = userId;
+        pushAudit(id, "role_change", "member", userId, m.display_name);
+      }),
+    leave: (id) =>
+      write(async () => {
+        await sessionsReady();
+        const db = getDb();
+        const ws = db.workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        if (ws.kind !== "team") throw new DataError("server", "Không gian Cá nhân không thể rời");
+        const me = db.members.find((x) => x.workspace_id === id && x.user_id === myUserId());
+        if (!me) throw new DataError("forbidden");
+        // Chủ không tự rời: phải chuyển quyền Chủ hoặc xóa nhóm (docs/08 phần B)
+        // vai trò lấy qua myRole để cờ "Vai trò trong nhóm" của bảng thử nghiệm ăn theo
+        if (myRole(id) === "owner") throw new DataError("forbidden", "Chủ nhóm phải chuyển quyền Chủ hoặc xóa nhóm trước khi rời");
+        // Buổi riêng tư của người rời đi theo họ về không gian Cá nhân; buổi
+        // đã chia sẻ với nhóm ở lại nhóm (như khi bị gỡ, docs/08 phần B)
+        db.sessions.forEach((fx) => {
+          const d = fx.detail;
+          if (d.workspace_id === id && (d.owner_user_id || d.user_id) === myUserId() && d.visibility === "private") {
+            d.workspace_id = null;
+          }
+        });
+        db.members = db.members.filter((x) => x !== me);
+        pushAudit(id, "remove_member", "member", myUserId(), me.display_name);
+        // Rời xong quay về không gian Cá nhân
+        const personal = db.workspaces.find((w) => w.kind === "personal");
+        if (personal) db.user.current_workspace_id = personal.id;
+      }),
+    setSeats: (id, seats) =>
+      write(() => {
+        const db = getDb();
+        // Đổi số chỗ là hành động gói: chỉ Chủ (Quản trị chỉ xem, docs/08)
+        if (myRole(id) !== "owner") throw new DataError("forbidden");
+        const ws = db.workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        if (ws.kind !== "team") throw new DataError("server", "Chỉ không gian Nhóm có số chỗ");
+        const used = db.members.filter((m) => m.workspace_id === id).length;
+        const next = Math.floor(seats);
+        if (next < Math.max(1, used))
+          throw new DataError("server", `Không thể giảm dưới số thành viên đang có (${used})`);
+        ws.seat_limit = next;
+      }),
+    getInvite: (token) =>
+      read(() => {
+        const db = getDb();
+        const m = db.members.find((x) => x.status === "invited" && inviteToken(x.email) === token);
+        if (!m) return "not_found" as const;
+        // Cờ "Lời mời hết hạn" của bảng thử nghiệm: ép trạng thái hết hạn
+        if (getFlags().inviteExpired || (m.invite_expires_at && new Date(m.invite_expires_at).getTime() < MOCK_NOW.getTime()))
+          return "expired" as const;
+        const ws = db.workspaces.find((w) => w.id === m.workspace_id);
+        if (!ws) return "not_found" as const;
+        // Ai mời: dòng nhật ký mời mới nhất trùng email; thiếu thì coi chủ nhóm mời
+        const evt = db.audit
+          .filter((a) => a.workspace_id === ws.id && a.action === "invite" && a.target_label.toLowerCase() === m.email.toLowerCase())
+          .at(-1);
+        const inviter = db.members.find((x) => x.workspace_id === ws.id && x.user_id === (evt?.actor_user_id ?? ws.owner_user_id));
+        return { workspace: ws, invited_by: inviter?.display_name ?? ws.name };
+      }),
+    acceptInvite: (token) =>
+      write(() => {
+        const db = getDb();
+        const m = db.members.find((x) => x.status === "invited" && inviteToken(x.email) === token);
+        if (!m) throw new DataError("not_found", "Không tìm thấy lời mời");
+        if (getFlags().inviteExpired || (m.invite_expires_at && new Date(m.invite_expires_at).getTime() < MOCK_NOW.getTime()))
+          throw new DataError("server", "Lời mời đã hết hạn");
+        const ws = db.workspaces.find((w) => w.id === m.workspace_id);
+        if (!ws) throw new DataError("not_found");
+        const used = db.members.filter((x) => x.workspace_id === ws.id).length;
+        if (getFlags().seatsFull || (ws.seat_limit != null && used >= ws.seat_limit)) {
+          throw new DataError("quota_exceeded", "Nhóm đã hết chỗ");
+        }
+        m.status = "active";
+      }),
+    usage: (id, month) =>
+      read(() => {
+        // Mức dùng theo người: Chủ và Quản trị, Thành viên không (docs/08 bảng quyền, M7-03)
+        assertAdmin(id);
+        const db = getDb();
+        const rows: UsageRow[] = [];
+        for (const m of db.members.filter((x) => x.workspace_id === id && x.status === "active" && x.user_id)) {
+          const uid = m.user_id!;
+          // Mức dùng tính cả buổi riêng tư của từng người: chỉ ra số buổi, số
+          // phút, số việc — không lộ tiêu đề và nội dung (docs/08 bảng quyền)
+          const own = db.sessions
+            .map((s) => s.detail)
+            .filter((d) => d.workspace_id === id && (d.owner_user_id || d.user_id) === uid);
+          const minutes = Math.round(own.reduce((n, d) => n + d.duration_sec, 0) / 60);
+          const open = own.reduce((n, d) => n + d.action_items.filter((a) => !a.done && (a.assignee_user_id ?? null) === uid).length, 0);
+          rows.push({ user_id: uid, month, sessions: own.length, minutes, open_tasks: open });
+        }
+        return rows;
+      }),
+    audit: (id, filter) =>
+      read(() => {
+        // Nhật ký truy cập: Chủ và Quản trị, Thành viên không (docs/08 bảng quyền, M7-03)
+        assertAdmin(id);
+        return getDb()
+          .audit.filter((a) => a.workspace_id === id)
+          .filter((a) => (filter?.actor_user_id ? a.actor_user_id === filter.actor_user_id : true))
+          .filter((a) => (filter?.action ? a.action === filter.action : true))
+          .sort((x, y) => y.at.localeCompare(x.at));
+      }),
+    invoices: (id) =>
+      read(() => {
+        const r = myRole(id);
+        // Gói, thanh toán, hóa đơn: Chủ có, Quản trị xem, Thành viên không (docs/08)
+        if (!r || r === "member") throw new DataError("forbidden");
+        const ws = getDb().workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        return ws.kind === "team" ? getDb().invoices : [];
+      }),
+  },
+
+  /* ---------- Tổng quan cá nhân và nhóm (M7-02, issue #48) ---------- */
+  dashboard: {
+    get: (range) =>
+      read(async () => {
+        await sessionsReady();
+        if (getFlags().emptyLibrary) {
+          // Thư viện rỗng (người mới): mọi số liệu về 0 — giao diện hiện hướng
+          // dẫn ghi buổi đầu tiên thay vì dãy số 0
+          return {
+            range,
+            attention: [],
+            totals: { sessions: 0, minutes: 0, decisions: 0, tasks_done: 0, tasks_total: 0 },
+            by_day: [],
+            decisions: [],
+            top_contacts: [],
+            by_template: [],
+          } satisfies DashboardData;
+        }
+        const now = MOCK_NOW;
+        const db = getDb();
+        const visible = visibleSessions();
+        const inRange = visible
+          .filter((d) => now.getTime() - new Date(d.created_at).getTime() <= rangeWindow(range))
+          .sort((a, b) => b.created_at.localeCompare(a.created_at));
+
+        // Tuần này: câu tổng kết và dải giọng theo ngày
+        const dayMap = new Map<string, { session_ids: string[]; sec: number }>();
+        for (const d of inRange) {
+          const date = vnDate(new Date(d.created_at));
+          const g = dayMap.get(date) ?? { session_ids: [], sec: 0 };
+          g.session_ids.push(d.id);
+          g.sec += d.duration_sec;
+          dayMap.set(date, g);
+        }
+        const by_day = [...dayMap.entries()]
+          .map(([date, g]) => ({ date, session_ids: g.session_ids, minutes: Math.round(g.sec / 60) }))
+          .sort((a, b) => a.date.localeCompare(b.date));
+
+        // Quyết định đã chốt: ý thuộc chủ đề nhãn "decided" trong khoảng
+        const decisions: DashboardData["decisions"] = [];
+        for (const d of inRange) {
+          for (const t of d.topics) {
+            if (t.tag !== "decided") continue;
+            for (const b of t.bullets)
+              decisions.push({ session_id: d.id, bullet_id: b.id, text: b.text, timestamp_sec: b.timestamp_sec });
+          }
+        }
+        decisions.sort(
+          (a, b) =>
+            (inRange.find((x) => x.id === b.session_id)!.created_at).localeCompare(
+              inRange.find((x) => x.id === a.session_id)!.created_at,
+            ) || a.timestamp_sec - b.timestamp_sec,
+        );
+
+        // Người gặp nhiều: liên hệ trong các buổi của khoảng, đủ 5 người.
+        // Loại chính người dùng ("c-me" trùng email người dùng) — đó là người
+        // mình gặp, không phải người gặp mình.
+        const selfContactId = db.contacts.find((c) => c.email?.toLowerCase() === db.user.email.toLowerCase())?.id;
+        const contactMap = new Map<string, { sessions: number; last_met_at: string }>();
+        for (const d of inRange) {
+          for (const cid of d.participant_contact_ids) {
+            if (cid === selfContactId) continue;
+            const g = contactMap.get(cid) ?? { sessions: 0, last_met_at: d.created_at };
+            g.sessions += 1;
+            if (d.created_at > g.last_met_at) g.last_met_at = d.created_at;
+            contactMap.set(cid, g);
+          }
+        }
+        const top_contacts = [...contactMap.entries()]
+          .map(([contact_id, g]) => ({ contact_id, ...g }))
+          .sort((a, b) => b.sessions - a.sessions || b.last_met_at.localeCompare(a.last_met_at))
+          .slice(0, 5);
+
+        // Theo mẫu: thời lượng gom theo mẫu, vẽ biểu đồ thanh ngang
+        const tplMap = new Map<string, number>();
+        for (const d of inRange) tplMap.set(d.template_id, (tplMap.get(d.template_id) ?? 0) + d.duration_sec);
+        const by_template = [...tplMap.entries()]
+          .map(([template_id, sec]) => ({ template_id, minutes: Math.round(sec / 60) }))
+          .sort((a, b) => b.minutes - a.minutes);
+
+        const tasks = inRange.flatMap((d) => d.action_items);
+        return {
+          range,
+          attention: buildAttention(visible),
+          totals: {
+            sessions: inRange.length,
+            minutes: Math.round(inRange.reduce((n, d) => n + d.duration_sec, 0) / 60),
+            decisions: decisions.length,
+            tasks_done: tasks.filter((a) => a.done).length,
+            tasks_total: tasks.length,
+          },
+          by_day,
+          decisions,
+          top_contacts,
+          by_template,
+        } satisfies DashboardData;
+      }),
+
+    team: (range) =>
+      read(async () => {
+        await sessionsReady();
+        const ws = currentWorkspace();
+        // Tab Nhóm chỉ có trong không gian Nhóm và chỉ Chủ, Quản trị thấy
+        // (docs/08 phần B) — sai vai trò ném forbidden
+        if (ws.kind !== "team") throw new DataError("forbidden");
+        const role = myRole(ws.id);
+        if (role !== "owner" && role !== "admin") throw new DataError("forbidden");
+        const db = getDb();
+        const from = MOCK_NOW.getTime() - rangeWindow(range);
+        const month = vnDate(MOCK_NOW).slice(0, 7);
+        const allWs = db.sessions.map((s) => s.detail).filter((d) => d.workspace_id === ws.id);
+        // Mức dùng theo người TÍNH CẢ buổi riêng tư của từng người: bảng quyền
+        // cho phép Chủ, Quản trị thấy tên và thời lượng để tính mức dùng,
+        // nhưng chỉ ra số — không lộ tiêu đề và nội dung (docs/08 phần B)
+        const usage: UsageRow[] = [];
+        for (const m of db.members.filter((x) => x.workspace_id === ws.id && x.status === "active" && x.user_id)) {
+          const uid = m.user_id!;
+          const own = allWs.filter((d) => (d.owner_user_id || d.user_id) === uid && new Date(d.created_at).getTime() >= from);
+          usage.push({
+            user_id: uid,
+            month,
+            sessions: own.length,
+            minutes: Math.round(own.reduce((n, d) => n + d.duration_sec, 0) / 60),
+            // Việc mở đếm trên mọi buổi của nhóm đã giao cho người này (số lượng)
+            open_tasks: allWs.reduce(
+              (n, d) => n + d.action_items.filter((a) => !a.done && (a.assignee_user_id ?? null) === uid).length,
+              0,
+            ),
+          });
+        }
+        // Việc mở theo người phụ trách, kèm số quá hạn của nhóm — chỉ số lượng
+        const open_tasks_by_assignee = usage.map((u) => {
+          let open = 0;
+          let overdue = 0;
+          for (const d of allWs) {
+            for (const a of d.action_items) {
+              if (a.done || (a.assignee_user_id ?? null) !== u.user_id) continue;
+              open += 1;
+              if (a.due_date && endOfDay(a.due_date).getTime() < MOCK_NOW.getTime()) overdue += 1;
+            }
+          }
+          return { user_id: u.user_id, open, overdue };
+        });
+        return { usage, open_tasks_by_assignee };
       }),
   },
 };

@@ -3,6 +3,8 @@
   "id": "s-loi",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Gặp anh Tuấn, kế hoạch tháng 12",
   "template_id": "tpl-realestate",
   "status": "failed",

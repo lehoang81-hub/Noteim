@@ -1,9 +1,13 @@
 import type {
   ActionItem,
+  AuditEvent,
   ChatMessage,
   Contact,
+  DashboardData,
   GlossaryTerm,
+  Invoice,
   Lang,
+  Member,
   Profession,
   Quota,
   Session,
@@ -12,8 +16,11 @@ import type {
   SummaryVersion,
   Template,
   TranscriptSegment,
+  UsageRow,
   User,
   VisualArtifacts,
+  Visibility,
+  Workspace,
 } from "./types";
 
 /*
@@ -27,6 +34,10 @@ export type SessionFilter = {
   template_id?: string;
   range?: "week" | "all";
   has_open_tasks?: boolean;
+  /** Chỉ buổi của mình trong không gian Nhóm (M7-01, lọc "Của tôi") */
+  mine?: boolean;
+  /** Chỉ buổi đã chia sẻ cho cả nhóm (M7-01, lọc "Cả nhóm") */
+  shared?: boolean;
 };
 
 /** Kết quả tìm kiếm (M4-02), nhóm theo Buổi ghi / Trong lời nói / Việc cần làm. */
@@ -102,6 +113,49 @@ export interface SessionRepository {
   createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: Lang; auto_detect_languages?: boolean }): Promise<{ id: string }>;
   /** Buổi ghi mẫu theo nghề (M4-04): dùng ở màn làm quen và Cài đặt > Hồ sơ */
   getSample(profession: Profession): Promise<SessionDetail>;
+  /** Đổi Riêng tư / Cả nhóm (M7-01). Chỉ người ghi buổi được đổi; buổi cá
+   * nhân luôn riêng tư. Đổi sang "workspace" chỉ có tác dụng trong không gian Nhóm. */
+  setVisibility(id: string, visibility: Visibility): Promise<void>;
+  /** Ghi nhật ký "xuất file" của buổi ghi khi đang ở không gian Nhóm (M7-03).
+   * Nút xuất (Sao chép văn bản, Xuất PDF, Xuất Word) gọi để nhật ký nhóm có
+   * dòng xuất; chỉ người được đọc nội dung mới ghi được dòng này. */
+  recordExport(id: string): Promise<void>;
+}
+
+/**
+ * Không gian làm việc, thành viên, lời mời và quyền (M7-01).
+ * Quyền kiểm ở repository: thao tác ngoài vai trò ném DataError mã
+ * "forbidden"; nhóm hết chỗ khi mời, lời mời hết hạn khi nhận.
+ */
+export interface WorkspaceRepository {
+  list(): Promise<Workspace[]>;
+  switchTo(id: string): Promise<void>;
+  create(input: Pick<Workspace, "name" | "profession" | "default_report_language">): Promise<Workspace>;
+  update(id: string, patch: Partial<Pick<Workspace, "name" | "profession" | "default_report_language">>): Promise<void>;
+  remove(id: string): Promise<void>;
+  members(id: string): Promise<Member[]>;
+  invite(id: string, email: string, role: Member["role"]): Promise<Member>;
+  revokeInvite(id: string, email: string): Promise<void>;
+  changeRole(id: string, userId: string, role: Member["role"]): Promise<void>;
+  /** Gỡ thành viên: buổi riêng tư của họ về không gian Cá nhân của họ, buổi
+   * đã chia sẻ với nhóm ở lại nhóm. */
+  removeMember(id: string, userId: string): Promise<void>;
+  transferOwnership(id: string, userId: string): Promise<void>;
+  /** Rời nhóm (M7-03): Thành viên và Quản trị tự rời; Chủ phải chuyển quyền
+   * Chủ hoặc xóa nhóm trước. Buổi riêng tư của người rời về không gian Cá
+   * nhân của họ, buổi đã chia sẻ với nhóm ở lại nhóm; xong quay về Cá nhân. */
+  leave(id: string): Promise<void>;
+  /** Đổi số chỗ của gói Nhóm, giả lập (M7-03): chỉ Chủ; không giảm dưới số
+   * thành viên đang có, không dưới 1. */
+  setSeats(id: string, seats: number): Promise<void>;
+  /** Xem lời mời theo token của bản giả (sinh từ email, xem inviteToken).
+   * "expired" khi hết hạn (thật hoặc ép bằng cờ thử nghiệm), "not_found"
+   * khi token không tồn tại. */
+  getInvite(token: string): Promise<{ workspace: Workspace; invited_by: string } | "expired" | "not_found">;
+  acceptInvite(token: string): Promise<void>;
+  usage(id: string, month: string): Promise<UsageRow[]>;
+  audit(id: string, filter?: { actor_user_id?: string; action?: AuditEvent["action"] }): Promise<AuditEvent[]>;
+  invoices(id: string): Promise<Invoice[]>;
 }
 
 export interface TaskRepository {
@@ -109,6 +163,23 @@ export interface TaskRepository {
   listAll(filter?: { mine?: boolean; lang?: Lang }): Promise<ActionItem[]>;
   upsert(item: ActionItem): Promise<void>;
   toggleDone(id: string): Promise<ActionItem>;
+}
+
+/**
+ * Tổng quan cá nhân và nhóm (M7-02, docs/04). Mọi số liệu tính từ dữ liệu của
+ * kho theo không gian đang dùng và quyền đọc của người dùng: không đếm nội
+ * dung buổi riêng tư của người khác (quyền của M7-01, docs/08 phần B).
+ */
+export interface DashboardRepository {
+  get(range: DashboardData["range"]): Promise<DashboardData>;
+  /** Bảng Nhóm: mức dùng và việc mở của cả nhóm. Chỉ Chủ và Quản trị trong
+   * không gian Nhóm; không đúng vai trò ném DataError mã "forbidden".
+   * Mức dùng tính cả buổi riêng tư của từng người (bảng quyền cho phép thấy
+   * tên và thời lượng để tính mức dùng), nhưng chỉ ra số — không lộ nội dung. */
+  team(range: DashboardData["range"]): Promise<{
+    usage: UsageRow[];
+    open_tasks_by_assignee: Array<{ user_id: string; open: number; overdue: number }>;
+  }>;
 }
 
 export interface ChatRepository {
@@ -202,4 +273,8 @@ export interface DataSource {
   share: ShareRepository;
   mail: MailRepository;
   account: AccountRepository;
+  /** Không gian làm việc (M7-01) */
+  workspaces: WorkspaceRepository;
+  /** Tổng quan cá nhân và nhóm (M7-02) */
+  dashboard: DashboardRepository;
 }

@@ -1,0 +1,5 @@
+[
+  { "id": "inv-2026-09", "period": "2026-09", "seats": 5, "amount_label": "4.500.000 ₫", "status": "paid" },
+  { "id": "inv-2026-10", "period": "2026-10", "seats": 5, "amount_label": "4.500.000 ₫", "status": "paid" },
+  { "id": "inv-2026-11", "period": "2026-11", "seats": 6, "amount_label": "5.400.000 ₫", "status": "due" }
+]

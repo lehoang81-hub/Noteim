@@ -346,7 +346,7 @@ export function SearchScreen() {
 
             <Group title={t("groupTasks")} count={r.tasks.length}>
               {r.tasks.map((task) => (
-                <li key={task.id}>
+                <li key={`${task.session_id}:${task.id}`}>
                   <Link
                     href={task.timestamp_sec ? `/s/${task.session_id}?tab=tasks&t=${task.timestamp_sec}` : `/s/${task.session_id}?tab=tasks`}
                     className="flex min-h-12 flex-col justify-center py-2 hover:opacity-80"

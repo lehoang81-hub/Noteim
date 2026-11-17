@@ -3,6 +3,8 @@
   "id": "s-congchung",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Phiên công chứng chuyển nhượng nhà Lê Lợi",
   "template_id": "tpl-notary",
   "status": "ready",
@@ -140,7 +142,7 @@
     "title": "Giấy tờ đã xuất trình",
     "start_sec": 280,
     "end_sec": 700,
-    "tag": "decided",
+    "tag": "figure",
     "bullets": [
      {
       "id": "cc1a",

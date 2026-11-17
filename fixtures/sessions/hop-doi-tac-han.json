@@ -3,6 +3,8 @@
   "id": "s-hop-han",
   "user_id": "u-hoang",
   "workspace_id": null,
+  "visibility": "private",
+  "owner_user_id": "u-hoang",
   "title": "Họp với đối tác Hàn Quốc, khuôn mẫu nhựa",
   "template_id": "tpl-business",
   "primary_language": "vi",

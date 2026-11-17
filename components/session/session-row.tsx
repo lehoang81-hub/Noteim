@@ -25,6 +25,8 @@ export interface SessionRowProps {
   duration: string;
   /** Tên mẫu, ví dụ "Gặp khách" */
   template: string;
+  /** Nhãn người ghi đã dịch, ví dụ "Ghi bởi Trâm" — chỉ với buổi của người khác trong nhóm (M7-01) */
+  ownerLabel?: string;
   peaks: number[];
   speakers: number[];
   status?: SessionRowStatus;
@@ -56,6 +58,7 @@ export function SessionRow({
   title,
   duration,
   template,
+  ownerLabel,
   peaks,
   speakers,
   status = "ready",
@@ -113,6 +116,9 @@ export function SessionRow({
     </span>
   );
 
+  // Nhãn người ghi (M7-01): chỉ hiện ở không gian nhóm với buổi của người khác
+  const recordedBy = ownerLabel ? <span className="text-small text-ink-2">{ownerLabel}</span> : null;
+
   const content = (
     <>
       <span className="min-w-0 flex-1">
@@ -126,6 +132,7 @@ export function SessionRow({
             <>
               {tag ? <TagChip size="sm" tag={tag.tag} label={tag.label} /> : null}
               <span className="text-small text-ink-2">{template}</span>
+              {recordedBy}
             </>
           ) : (
             <span
@@ -191,6 +198,7 @@ export function SessionRow({
           <>
             {tag ? <TagChip size="sm" tag={tag.tag} label={tag.label} /> : null}
             <span className="text-small text-ink-2">{template}</span>
+            {recordedBy}
           </>
         ) : (
           <span

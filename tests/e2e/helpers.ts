@@ -30,6 +30,23 @@ export async function setDebugFlags(page: Page, flags: Record<string, unknown>) 
   await page.reload();
 }
 
+/**
+ * Đặt không gian đang dùng của bản giả rồi tải lại (M7-01).
+ * Dùng ở bước 2 khi chưa có giao diện đổi không gian; sau bước 3 bài cũ
+ * vẫn dùng được vì ghi thẳng vào kho như switchTo của repository.
+ */
+export async function setCurrentWorkspace(page: Page, id: string) {
+  await page.evaluate((wid) => {
+    const raw = localStorage.getItem("noteim-mock-db-v1");
+    if (!raw) throw new Error("Kho dữ liệu mẫu chưa có — hãy mở trang trước khi đổi không gian");
+    const db = JSON.parse(raw);
+    if (!db.user) throw new Error("Kho chưa nạp người dùng");
+    db.user.current_workspace_id = wid;
+    localStorage.setItem("noteim-mock-db-v1", JSON.stringify(db));
+  }, id);
+  await page.reload();
+}
+
 /** Vuốt ngang bằng sự kiện chạm thật (CDP). Không dùng chuột cho cử chỉ. */
 export async function touchSwipe(page: Page, x: number, y: number, dx: number, steps = 14) {
   const cdp = await page.context().newCDPSession(page);

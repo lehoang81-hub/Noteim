@@ -1,0 +1,72 @@
+[
+  {
+    "workspace_id": "w-hoang",
+    "user_id": "u-hoang",
+    "email": "hoang@example.vn",
+    "display_name": "Hoàng",
+    "role": "owner",
+    "status": "active",
+    "invited_at": "2026-09-01T08:00:00+07:00",
+    "invite_expires_at": null
+  },
+  {
+    "workspace_id": "w-hp-land",
+    "user_id": "u-hoang",
+    "email": "hoang@example.vn",
+    "display_name": "Hoàng",
+    "role": "owner",
+    "status": "active",
+    "invited_at": "2026-09-15T08:30:00+07:00",
+    "invite_expires_at": null
+  },
+  {
+    "workspace_id": "w-hp-land",
+    "user_id": "u-tram",
+    "email": "tram.pham@hpmland.example.vn",
+    "display_name": "Phạm Thùy Trâm",
+    "role": "admin",
+    "status": "active",
+    "invited_at": "2026-10-02T09:00:00+07:00",
+    "invite_expires_at": null
+  },
+  {
+    "workspace_id": "w-hp-land",
+    "user_id": "u-dung",
+    "email": "dung.vo@hpmland.example.vn",
+    "display_name": "Võ Quốc Dũng",
+    "role": "member",
+    "status": "active",
+    "invited_at": "2026-10-06T10:15:00+07:00",
+    "invite_expires_at": null
+  },
+  {
+    "workspace_id": "w-hp-land",
+    "user_id": "u-hung",
+    "email": "hung.le@hpmland.example.vn",
+    "display_name": "Lê Công Hùng",
+    "role": "member",
+    "status": "active",
+    "invited_at": "2026-10-09T14:00:00+07:00",
+    "invite_expires_at": null
+  },
+  {
+    "workspace_id": "w-hp-land",
+    "user_id": "u-mai-anh",
+    "email": "maianh.do@hpmland.example.vn",
+    "display_name": "Đỗ Mai Anh",
+    "role": "member",
+    "status": "active",
+    "invited_at": "2026-10-13T11:30:00+07:00",
+    "invite_expires_at": null
+  },
+  {
+    "workspace_id": "w-hp-land",
+    "user_id": null,
+    "email": "huong.bui@hpmland.example.vn",
+    "display_name": "Bùi Thu Hương",
+    "role": "member",
+    "status": "invited",
+    "invited_at": "2026-11-09T10:00:00+07:00",
+    "invite_expires_at": "2026-11-16T10:00:00+07:00"
+  }
+]

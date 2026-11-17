@@ -4,7 +4,7 @@ import { clearStorageFull, markStorageFull } from "@/lib/storage-full";
 import { migrateStored } from "./migrate";
 import { normalizeSpeakerNames } from "./normalize";
 import type { RecordingDraft } from "../repository";
-import type { ChatMessage, Contact, GlossaryTerm, Quota, SessionFixture, ShareLink, Template, User } from "../types";
+import type { AuditEvent, ChatMessage, Contact, GlossaryTerm, Invoice, Member, Quota, SessionFixture, ShareLink, Template, User, Workspace } from "../types";
 import type { StoredSession } from "./seed-data";
 
 export type { StoredSession } from "./seed-data";
@@ -18,12 +18,26 @@ export type { StoredSession } from "./seed-data";
 
 const STORAGE_KEY = "noteim-mock-db-v1";
 
+/**
+ * Id không gian Cá nhân của người dùng mẫu (trùng fixtures/workspaces.json).
+ * migrate.ts dùng giá trị này khi chuyển kho cũ, không import ngược vào store
+ * để tránh phụ thuộc vòng.
+ */
+export const PERSONAL_WORKSPACE_ID = "w-hoang";
+
 export type MockDb = {
   user: User;
   quota: Quota;
   contacts: Contact[];
   templates: Template[];
   glossary: GlossaryTerm[];
+  /** Không gian làm việc và thành viên (M7-01) */
+  workspaces: Workspace[];
+  members: Member[];
+  /** Nhật ký truy cập của không gian nhóm (M7-01), nạp từ fixture và ghi thêm khi thao tác */
+  audit: AuditEvent[];
+  /** Hóa đơn gói nhóm (M7-01), số liệu mẫu */
+  invoices: Invoice[];
   sessions: Array<
     StoredSession & {
       /** Bản nháp của buổi ghi vừa ghi, dùng để sinh nội dung khi xử lý xong */
@@ -52,6 +66,10 @@ function emptyDb(): MockDb {
     contacts: [],
     templates: [],
     glossary: [],
+    workspaces: [],
+    members: [],
+    audit: [],
+    invoices: [],
     sessions: [],
     samples: [],
     shares: [],
@@ -75,6 +93,12 @@ export function getDb(): MockDb {
         normalizeSpeakerNames(
           (fx.detail as { speakers?: Array<{ display_name: string | null }> } | undefined)?.speakers,
         );
+      }
+      // listDetail là bản sao chậm được ghi kèm kho từ lần serialize trước —
+      // gỡ để danh sách luôn đọc từ detail (M7-01: sửa buổi qua repository
+      // phải hiện được ngay, không đọc bản nhạt đã cũ)
+      for (const fx of [...db.sessions, ...db.removed, ...db.samples]) {
+        if ("listDetail" in fx) delete (fx as { listDetail?: unknown }).listDetail;
       }
       // Dữ liệu cũ trước M6 (_en, language, output_language...) tự chuyển khi nạp
       if (migrateStored(db)) commit();
@@ -115,6 +139,12 @@ export function ensureDb(): MockDb {
           await mod.backfillTemplates(d.templates);
           commit();
         }
+        // Không gian, thành viên, nhật ký, hóa đơn (M7-01): nạp một lần,
+        // kho đã lưu thì giữ nguyên phần người dùng đã đổi (mời, gỡ, đổi vai trò)
+        if (!d.workspaces.length) d.workspaces = await mod.loadWorkspaces();
+        if (!d.members.length) d.members = await mod.loadMembers();
+        if (!d.audit.length) d.audit = await mod.loadAudit();
+        if (!d.invoices.length) d.invoices = await mod.loadInvoices();
         // Buổi ghi thư viện: kho từ localStorage đã có sẵn, không ghi đè
         if (!d.sessions.length) d.sessions = await mod.loadSessions();
         return d;
@@ -155,6 +185,20 @@ export function samplesReady(): Promise<MockDb> {
     sampleLoad.set(base, p);
   }
   return p;
+}
+
+/**
+ * Lưu kho xuống localStorage mà không báo cho useData tải lại. Chỉ dùng cho ghi
+ * phụ không đổi gì trên màn hình đang mở, ví dụ dòng nhật ký "Xem buổi ghi"
+ * (review PR #57: trước đây dòng này chỉ nằm trong bộ nhớ, tải lại trang là mất).
+ */
+export function persistSilently() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  } catch (e) {
+    console.error("Lưu kho mẫu thất bại:", e);
+    markStorageFull();
+  }
 }
 
 /** Ghi thay đổi: gọi sau mỗi lần sửa kho. */
