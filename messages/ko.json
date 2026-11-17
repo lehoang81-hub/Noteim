@@ -1434,6 +1434,19 @@
     "actPurge": "원본 오디오 정리",
     "actSendEmail": "이메일 전송",
     "auditEmpty": "이 필터에 해당하는 기록이 없어요",
-    "actorGone": "나간 멤버"
+    "actorGone": "나간 멤버",
+    "usageMonth": "월",
+    "usageColMember": "멤버",
+    "usageColRole": "역할",
+    "usageColSessions": "세션",
+    "usageColMinutes": "분",
+    "usageColOpenTasks": "열린 작업",
+    "usageEmpty": "이 달의 사용량이 없어요",
+    "csvUsage": "사용량 CSV 내려받기",
+    "csvAudit": "기록 CSV 내려받기",
+    "csvColTime": "시각",
+    "csvColActor": "실행한 사람",
+    "csvColAction": "작업",
+    "csvColTarget": "대상"
   }
 }

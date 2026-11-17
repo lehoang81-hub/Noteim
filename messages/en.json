@@ -1434,6 +1434,19 @@
     "actPurge": "Purged the raw audio",
     "actSendEmail": "Sent an email",
     "auditEmpty": "No log entries match this filter",
-    "actorGone": "Member who left"
+    "actorGone": "Member who left",
+    "usageMonth": "Month",
+    "usageColMember": "Member",
+    "usageColRole": "Role",
+    "usageColSessions": "Sessions",
+    "usageColMinutes": "Minutes",
+    "usageColOpenTasks": "Open tasks",
+    "usageEmpty": "No usage in this month",
+    "csvUsage": "Download usage CSV",
+    "csvAudit": "Download log CSV",
+    "csvColTime": "Time",
+    "csvColActor": "Actor",
+    "csvColAction": "Action",
+    "csvColTarget": "Target"
   }
 }

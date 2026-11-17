@@ -1,11 +1,14 @@
 "use client";
 
+import { Download } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { SkeletonRow } from "@/components/ui/feedback";
 import { NoAccess } from "./no-access";
 import { useTeamWorkspace } from "./use-team";
 import { data, useData, type AuditEvent } from "@/lib/data";
+import { downloadCsv } from "@/lib/team/csv";
 
 /*
  * Trang /team/audit (M7-03, docs/08 phần B): nhật ký truy cập của nhóm, lọc
@@ -106,6 +109,17 @@ export function AuditScreen() {
   const memberName = new Map((members.data ?? []).map((m) => [m.user_id, m.display_name]));
   const list = events.data ?? [];
 
+  function download() {
+    if (!workspace) return;
+    // CSV nhật ký theo bộ lọc đang chọn: Thời gian, Người thực hiện, Hành động, Đối tượng
+    downloadCsv("nhat-ky-truy-cap.csv", [t("csvColTime"), t("csvColActor"), t("csvColAction"), t("csvColTarget")], list.map((e) => [
+      auditTime(e.at, locale),
+      memberName.get(e.actor_user_id) ?? t("actorGone"),
+      t(ACTION_KEY[e.action]),
+      e.target_label,
+    ]));
+  }
+
   return (
     <div className="mx-auto w-full max-w-3xl">
       <div className="px-page pt-2 lg:px-8 lg:pt-6">
@@ -148,6 +162,12 @@ export function AuditScreen() {
               ))}
             </select>
           </label>
+        </div>
+
+        <div className="mt-4 flex justify-end">
+          <Button variant="secondary" icon={Download} onClick={download}>
+            {t("csvAudit")}
+          </Button>
         </div>
 
         {/* Danh sách nhật ký, mới nhất trên cùng */}

@@ -1434,6 +1434,19 @@
     "actPurge": "Dọn bản gốc",
     "actSendEmail": "Gửi email",
     "auditEmpty": "Chưa có dòng nhật ký nào khớp bộ lọc này",
-    "actorGone": "Người đã rời nhóm"
+    "actorGone": "Người đã rời nhóm",
+    "usageMonth": "Tháng",
+    "usageColMember": "Thành viên",
+    "usageColRole": "Vai trò",
+    "usageColSessions": "Buổi",
+    "usageColMinutes": "Phút",
+    "usageColOpenTasks": "Việc mở",
+    "usageEmpty": "Không có mức dùng trong tháng này",
+    "csvUsage": "Tải CSV mức dùng",
+    "csvAudit": "Tải CSV nhật ký",
+    "csvColTime": "Thời gian",
+    "csvColActor": "Người thực hiện",
+    "csvColAction": "Hành động",
+    "csvColTarget": "Đối tượng"
   }
 }
