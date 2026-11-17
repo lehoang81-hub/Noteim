@@ -208,10 +208,11 @@ function buildAttention(visible: SessionDetail[]): DashboardData["attention"] {
     for (const a of d.action_items) {
       if (a.done || !a.due_date) continue;
       const end = endOfDay(a.due_date);
+      // target_id ghép id buổi: id việc chỉ duy nhất trong từng buổi của fixture
       if (end.getTime() < now.getTime()) {
-        tasks.push({ kind: "task_overdue", target_id: a.id, label: a.task, href: `/s/${d.id}?tab=tasks` });
+        tasks.push({ kind: "task_overdue", target_id: `${d.id}:${a.id}`, label: a.task, href: `/s/${d.id}?tab=tasks` });
       } else if (dayDiff(now, end) === 0) {
-        tasks.push({ kind: "task_due_today", target_id: a.id, label: a.task, href: `/s/${d.id}?tab=tasks` });
+        tasks.push({ kind: "task_due_today", target_id: `${d.id}:${a.id}`, label: a.task, href: `/s/${d.id}?tab=tasks` });
       }
     }
   }

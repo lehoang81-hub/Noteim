@@ -174,7 +174,7 @@ export default function TasksPage() {
                     <div className="mt-1">
                       {g.items.map((a) => (
                         <TaskRow
-                          key={a.id}
+                          key={`${a.session_id}:${a.id}`}
                           task={a.task}
                           lang={reportLang}
                           done={a.done}
@@ -219,7 +219,7 @@ export default function TasksPage() {
                   <div className="mt-1">
                     {groups.done.map((a) => (
                       <TaskRow
-                        key={a.id}
+                        key={`${a.session_id}:${a.id}`}
                         task={a.task}
                         lang={reportLang}
                         done={a.done}

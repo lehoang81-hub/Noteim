@@ -67,10 +67,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     );
   }
 
+  // Cả hai thanh dùng cùng bốn mục: Thư viện, Tổng quan (M7-02), Việc, Cài đặt
   const items = [
     { href: "/", label: t("library"), icon: Library },
     { href: "/dashboard", label: t("dashboard"), icon: LayoutDashboard },
     { href: "/tasks", label: t("tasks"), icon: ListChecks },
+  ];
+  const navItems = [
+    ...items,
+    { href: "/settings", label: t("settings"), icon: Settings },
   ];
 
   return (
@@ -89,7 +94,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {/* Đổi không gian làm việc (M7-01): đầu thanh bên, dưới logo */}
         <WorkspaceSwitcher className="mt-4 w-[72px]" />
         <ul className="mt-4 flex flex-col gap-1">
-          {[...items, { href: "/settings", label: t("settings"), icon: Settings }].map(({ href, label, icon: Icon }) => {
+          {navItems.map(({ href, label, icon: Icon }) => {
             const active = isActive(pathname, href);
             return (
               <li key={href}>
@@ -132,7 +137,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
         <ul className="mx-auto grid h-16 max-w-md grid-cols-5 items-center">
-          {items.map(({ href, label, icon: Icon }, i) => {
+          {navItems.map(({ href, label, icon: Icon }, i) => {
             const active = isActive(pathname, href);
             const link = (
               <Link
