@@ -293,8 +293,8 @@
   ],
   "photos": [],
   "peaks": [
-   0.1,
-   0.07,
+   0.08,
+   0.08,
    0.83,
    0.81,
    0.79,
@@ -311,8 +311,8 @@
    0.85,
    0.63,
    0.52,
-   0.76,
-   0.82,
+   0.07,
+   0.1,
    0.41,
    0.45,
    0.35,
@@ -322,8 +322,8 @@
    0.19,
    0.16,
    0.2,
-   0.29,
-   0.41,
+   0.09,
+   0.07,
    0.4,
    0.34,
    0.29,
@@ -332,7 +332,7 @@
    0.37,
    0.3,
    0.33,
-   0.25,
+   0.07,
    0.3,
    0.22,
    0.54,
@@ -341,9 +341,9 @@
    0.7,
    0.74,
    0.74,
-   0.75,
-   0.86,
-   0.11,
+   0.1,
+   0.09,
+   0.09,
    0.76,
    0.68,
    0.63,
@@ -352,7 +352,7 @@
    0.45,
    0.39,
    0.71,
-   0.59,
+   0.09,
    0.84,
    0.58,
    0.84,
@@ -361,7 +361,7 @@
    0.32,
    0.33,
    0.31,
-   0.15,
+   0.09,
    0.15,
    0.26,
    0.21,
@@ -370,7 +370,7 @@
    0.43,
    0.33,
    0.49,
-   0.39,
+   0.07,
    0.3,
    0.3,
    0.35,
@@ -378,8 +378,8 @@
    0.38,
    0.45,
    0.27,
-   0.43,
-   0.49,
+   0.1,
+   0.07,
    0.5,
    0.54,
    0.68,
@@ -387,16 +387,16 @@
    0.7,
    0.73,
    0.58,
-   0.8,
-   0.55,
+   0.08,
+   0.09,
    0.72,
    0.58,
    0.52,
    0.63,
    0.56,
    0.82,
-   0.86,
-   0.1,
+   0.08,
+   0.08,
    0.59,
    0.59,
    0.66,
@@ -404,95 +404,95 @@
    0.42,
    0.44,
    0.41,
-   0.18,
+   0.08,
    0.15,
    0.23,
    0.18,
    0.19,
    0.23,
    0.38,
-   0.44,
-   0.09,
+   0.1,
+   0.1,
    0.47,
    0.39,
    0.29,
    0.31,
    0.22,
    0.24,
-   0.31,
+   0.07,
    0.47,
    0.43,
    0.39,
    0.63,
    0.56,
    0.76,
-   0.78,
+   0.1,
    0.74,
    0.74,
    0.65,
    0.83,
    0.68,
    0.55,
-   0.44,
+   0.07,
    0.59,
    0.46,
    0.55,
    0.66,
    0.78,
-   0.75,
-   0.12,
+   0.07,
+   0.08,
    0.64,
    0.67,
    0.7,
    0.41,
    0.36,
-   0.19,
+   0.09,
    0.28,
    0.29,
    0.18,
    0.21,
    0.36,
-   0.32,
-   0.41,
+   0.08,
+   0.09,
    0.27,
    0.32,
    0.42,
    0.46,
-   0.52,
+   0.09,
    0.33,
    0.2,
    0.42,
    0.33,
-   0.42,
-   0.06,
+   0.08,
+   0.08,
    0.23,
    0.48,
    0.59,
    0.84,
-   0.71,
+   0.1,
    0.53,
    0.77,
    0.52,
    0.73,
-   0.61,
    0.07,
+   0.09,
    0.61,
    0.64,
    0.61,
-   0.73,
+   0.07,
    0.67,
    0.58,
    0.92,
-   0.69,
+   0.07,
    0.08,
    0.83,
    0.47,
    0.54,
-   0.43,
+   0.09,
    0.26,
    0.33,
    0.15,
-   0.08,
+   0.07,
    0.24,
    0.27,
    0.31,
@@ -502,7 +502,7 @@
    0.5,
    0.33,
    0.49,
-   0.24,
+   0.1,
    0.25,
    0.3,
    0.23,
@@ -512,9 +512,9 @@
    0.48,
    0.46,
    0.62,
-   0.75,
+   0.08,
    0.07,
-   0.12,
+   0.1,
    0.66,
    0.67,
    0.72,
@@ -523,8 +523,8 @@
    0.54,
    0.71,
    0.53,
-   0.65,
-   0.74,
+   0.07,
+   0.07,
    0.57,
    0.65,
    0.71,
@@ -533,8 +533,8 @@
    0.54,
    0.48,
    0.44,
-   0.5,
-   0.06,
+   0.07,
+   0.09,
    0.16,
    0.21,
    0.18,
@@ -542,8 +542,8 @@
    0.28,
    0.34,
    0.28,
-   0.39,
-   0.36,
+   0.07,
+   0.09,
    0.4,
    0.28,
    0.26,
@@ -1121,7 +1121,8 @@
    "text": "Mình đi quanh nhà một vòng rồi chốt từng hạng mục nhé.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Mình đi quanh nhà một vòng rồi chốt từng hạng mục nhé."
   },
   {
    "id": "seg-01",
@@ -1131,7 +1132,8 @@
    "text": "Sân sau mở rộng 1,2 mét thì mình phải làm lại mái che, anh Quân đồng ý chứ?",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Sân sau mở rộng 1,2 mét thì mình phải làm lại mái che, anh Quân đồng ý chứ?"
   },
   {
    "id": "seg-02",
@@ -1141,7 +1143,8 @@
    "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm."
   },
   {
    "id": "seg-03",
@@ -1151,7 +1154,8 @@
    "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám."
   },
   {
    "id": "seg-04",
@@ -1161,7 +1165,8 @@
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm."
   },
   {
    "id": "seg-05",
@@ -1171,7 +1176,8 @@
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được."
   },
   {
    "id": "seg-06",
@@ -1181,7 +1187,8 @@
    "text": "Gạch phòng khách đổi sang gạch 60x60 vân đá, mình gửi ba mẫu cho chị chủ chọn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Gạch phòng khách đổi sang gạch 60x60 vân đá, mình gửi ba mẫu cho chị chủ chọn."
   },
   {
    "id": "seg-07",
@@ -1191,7 +1198,8 @@
    "text": "Tủ bếp dời sang tường đông thì đường nước phải đi lại, anh Hùng xem giá thêm bao nhiêu.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tủ bếp dời sang tường đông thì đường nước phải đi lại, anh Hùng xem giá thêm bao nhiêu."
   },
   {
    "id": "seg-08",
@@ -1201,7 +1209,8 @@
    "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé."
   },
   {
    "id": "seg-09",
@@ -1211,7 +1220,8 @@
    "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm."
   },
   {
    "id": "seg-10",
@@ -1221,7 +1231,8 @@
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm."
   },
   {
    "id": "seg-11",
@@ -1231,7 +1242,8 @@
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được."
   },
   {
    "id": "seg-12",
@@ -1241,7 +1253,8 @@
    "text": "Trần thạch bao tồn kho còn bao nhiêu mét vuông?",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Trần thạch bao tồn kho còn bao nhiêu mét vuông?"
   },
   {
    "id": "seg-13",
@@ -1251,7 +1264,8 @@
    "text": "Vậy tuần này mình chốt xong ba hạng mục, thứ Sáu mình gửi biên bản hiện trường.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Vậy tuần này mình chốt xong ba hạng mục, thứ Sáu mình gửi biên bản hiện trường."
   },
   {
    "id": "seg-14",
@@ -1261,7 +1275,8 @@
    "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám."
   },
   {
    "id": "seg-15",
@@ -1271,7 +1286,8 @@
    "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé."
   },
   {
    "id": "seg-16",
@@ -1281,7 +1297,8 @@
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm."
   },
   {
    "id": "seg-17",
@@ -1291,7 +1308,8 @@
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được."
   },
   {
    "id": "seg-18",
@@ -1301,7 +1319,8 @@
    "text": "Mình đi quanh nhà một vòng rồi chốt từng hạng mục nhé.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Mình đi quanh nhà một vòng rồi chốt từng hạng mục nhé."
   },
   {
    "id": "seg-19",
@@ -1311,7 +1330,8 @@
    "text": "Sân sau mở rộng 1,2 mét thì mình phải làm lại mái che, anh Quân đồng ý chứ?",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Sân sau mở rộng 1,2 mét thì mình phải làm lại mái che, anh Quân đồng ý chứ?"
   },
   {
    "id": "seg-20",
@@ -1321,7 +1341,8 @@
    "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm."
   },
   {
    "id": "seg-21",
@@ -1331,7 +1352,8 @@
    "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám."
   },
   {
    "id": "seg-22",
@@ -1341,7 +1363,8 @@
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm."
   },
   {
    "id": "seg-23",
@@ -1351,7 +1374,8 @@
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được."
   },
   {
    "id": "seg-24",
@@ -1361,7 +1385,8 @@
    "text": "Gạch phòng khách đổi sang gạch 60x60 vân đá, mình gửi ba mẫu cho chị chủ chọn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Gạch phòng khách đổi sang gạch 60x60 vân đá, mình gửi ba mẫu cho chị chủ chọn."
   },
   {
    "id": "seg-25",
@@ -1371,7 +1396,8 @@
    "text": "Tủ bếp dời sang tường đông thì đường nước phải đi lại, anh Hùng xem giá thêm bao nhiêu.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tủ bếp dời sang tường đông thì đường nước phải đi lại, anh Hùng xem giá thêm bao nhiêu."
   },
   {
    "id": "seg-26",
@@ -1381,7 +1407,8 @@
    "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé."
   },
   {
    "id": "seg-27",
@@ -1391,7 +1418,8 @@
    "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm."
   },
   {
    "id": "seg-28",
@@ -1401,7 +1429,8 @@
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm."
   },
   {
    "id": "seg-29",
@@ -1411,7 +1440,8 @@
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được."
   },
   {
    "id": "seg-30",
@@ -1421,7 +1451,8 @@
    "text": "Trần thạch bao tồn kho còn bao nhiêu mét vuông?",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Trần thạch bao tồn kho còn bao nhiêu mét vuông?"
   },
   {
    "id": "seg-31",
@@ -1431,7 +1462,8 @@
    "text": "Vậy tuần này mình chốt xong ba hạng mục, thứ Sáu mình gửi biên bản hiện trường.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Vậy tuần này mình chốt xong ba hạng mục, thứ Sáu mình gửi biên bản hiện trường."
   },
   {
    "id": "seg-32",
@@ -1441,7 +1473,8 @@
    "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám."
   },
   {
    "id": "seg-33",
@@ -1451,7 +1484,8 @@
    "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé."
   }
  ],
  "chat": [
@@ -1473,5 +1507,150 @@
     900
    ]
   }
- ]
+ ],
+ "listening_map": {
+  "session_id": "s-sample-architect",
+  "silences": [
+   {
+    "start_sec": 0,
+    "end_sec": 4
+   },
+   {
+    "start_sec": 23,
+    "end_sec": 25
+   },
+   {
+    "start_sec": 50,
+    "end_sec": 54
+   },
+   {
+    "start_sec": 79,
+    "end_sec": 84
+   },
+   {
+    "start_sec": 107,
+    "end_sec": 111
+   },
+   {
+    "start_sec": 134,
+    "end_sec": 141
+   },
+   {
+    "start_sec": 163,
+    "end_sec": 167
+   },
+   {
+    "start_sec": 189,
+    "end_sec": 193
+   },
+   {
+    "start_sec": 214,
+    "end_sec": 217
+   },
+   {
+    "start_sec": 238,
+    "end_sec": 243
+   },
+   {
+    "start_sec": 262,
+    "end_sec": 266
+   },
+   {
+    "start_sec": 285,
+    "end_sec": 291
+   },
+   {
+    "start_sec": 309,
+    "end_sec": 312
+   },
+   {
+    "start_sec": 330,
+    "end_sec": 334
+   },
+   {
+    "start_sec": 351,
+    "end_sec": 354
+   },
+   {
+    "start_sec": 371,
+    "end_sec": 375
+   },
+   {
+    "start_sec": 390,
+    "end_sec": 393
+   },
+   {
+    "start_sec": 408,
+    "end_sec": 414
+   },
+   {
+    "start_sec": 428,
+    "end_sec": 431
+   },
+   {
+    "start_sec": 445,
+    "end_sec": 448
+   },
+   {
+    "start_sec": 461,
+    "end_sec": 463
+   },
+   {
+    "start_sec": 476,
+    "end_sec": 480
+   },
+   {
+    "start_sec": 492,
+    "end_sec": 494
+   },
+   {
+    "start_sec": 506,
+    "end_sec": 510
+   },
+   {
+    "start_sec": 520,
+    "end_sec": 522
+   },
+   {
+    "start_sec": 532,
+    "end_sec": 535
+   },
+   {
+    "start_sec": 544,
+    "end_sec": 546
+   },
+   {
+    "start_sec": 555,
+    "end_sec": 558
+   },
+   {
+    "start_sec": 583,
+    "end_sec": 587
+   },
+   {
+    "start_sec": 612,
+    "end_sec": 619
+   },
+   {
+    "start_sec": 643,
+    "end_sec": 647
+   },
+   {
+    "start_sec": 671,
+    "end_sec": 675
+   },
+   {
+    "start_sec": 697,
+    "end_sec": 701
+   }
+  ],
+  "fillers": [],
+  "speaker_gain_db": {
+   "SPK_01": 4,
+   "SPK_02": 1,
+   "SPK_03": -6
+  },
+  "noise_level": "high",
+  "clean_duration_sec": 1554
+ }
 }

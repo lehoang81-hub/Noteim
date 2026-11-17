@@ -459,7 +459,7 @@
    0.81,
    0.5,
    0.73,
-   0.52,
+   0.12,
    0.59,
    0.54,
    0.4,
@@ -467,7 +467,7 @@
    0.77,
    0.4,
    0.05,
-   0.05,
+   0.12,
    0.05,
    0.05,
    0.51,
@@ -480,8 +480,8 @@
    0.18,
    0.32,
    0.39,
-   0.41,
-   0.31,
+   0.11,
+   0.12,
    0.4,
    0.35,
    0.44,
@@ -489,8 +489,8 @@
    0.29,
    0.33,
    0.48,
-   0.26,
-   0.45,
+   0.11,
+   0.13,
    0.42,
    0.53,
    0.49,
@@ -498,8 +498,8 @@
    0.8,
    0.74,
    0.94,
-   0.59,
-   0.59,
+   0.11,
+   0.11,
    0.61,
    0.55,
    0.58,
@@ -508,7 +508,7 @@
    0.52,
    0.58,
    0.56,
-   0.76,
+   0.1,
    0.55,
    0.65,
    0.7,
@@ -517,7 +517,7 @@
    0.34,
    0.44,
    0.16,
-   0.13,
+   0.11,
    0.25,
    0.15,
    0.21,
@@ -528,7 +528,7 @@
    0.29,
    0.42,
    0.43,
-   0.41,
+   0.1,
    0.32,
    0.26,
    0.23,
@@ -537,7 +537,7 @@
    0.57,
    0.45,
    0.41,
-   0.68,
+   0.14,
    0.83,
    0.77,
    0.83,
@@ -546,14 +546,14 @@
    0.77,
    0.73,
    0.65,
-   0.64,
-   0.05,
-   0.05,
-   0.05,
+   0.13,
+   0.12,
+   0.13,
+   0.11,
    0.05,
    0.68,
    0.75,
-   0.8,
+   0.11,
    0.51,
    0.57,
    0.61,
@@ -561,7 +561,7 @@
    0.36,
    0.16,
    0.23,
-   0.17,
+   0.12,
    0.13,
    0.16,
    0.18,
@@ -572,9 +572,9 @@
    0.43,
    0.4,
    0.25,
-   0.19,
-   0.22,
-   0.25,
+   0.13,
+   0.12,
+   0.1,
    0.32,
    0.27,
    0.27,
@@ -582,9 +582,9 @@
    0.43,
    0.47,
    0.76,
-   0.85,
-   0.05,
-   0.05,
+   0.12,
+   0.12,
+   0.13,
    0.05,
    0.05,
    0.72,
@@ -595,8 +595,8 @@
    0.54,
    0.5,
    0.64,
-   0.54,
-   0.5,
+   0.12,
+   0.12,
    0.05,
    0.05,
    0.05,
@@ -606,7 +606,7 @@
    0.24,
    0.22,
    0.18,
-   0.12,
+   0.1,
    0.21,
    0.33,
    0.39,
@@ -614,8 +614,8 @@
    0.41,
    0.33,
    0.39,
-   0.35,
-   0.25,
+   0.12,
+   0.12,
    0.3,
    0.31,
    0.18,
@@ -625,9 +625,9 @@
    0.49,
    0.58,
    0.55,
-   0.71,
-   0.79,
-   0.63,
+   0.14,
+   0.11,
+   0.13,
    0.56,
    0.75,
    0.64,
@@ -636,12 +636,12 @@
    0.52,
    0.65,
    0.05,
-   0.05,
+   0.12,
    0.05,
    0.05,
    0.54,
    0.77,
-   0.74,
+   0.13,
    0.47,
    0.68,
    0.68,
@@ -651,7 +651,7 @@
    0.13,
    0.21,
    0.3,
-   0.25,
+   0.11,
    0.35,
    0.34,
    0.34,
@@ -662,7 +662,7 @@
    0.19,
    0.17,
    0.34,
-   0.38,
+   0.11,
    0.16,
    0.36,
    0.47,
@@ -672,8 +672,8 @@
    0.69,
    0.52,
    0.76,
-   0.73,
-   0.59,
+   0.13,
+   0.12,
    0.69,
    0.63,
    0.64,
@@ -681,8 +681,8 @@
    0.61,
    0.5,
    0.05,
-   0.05,
-   0.05,
+   0.11,
+   0.11,
    0.05,
    0.76,
    0.68,
@@ -692,8 +692,8 @@
    0.23,
    0.3,
    0.16,
-   0.24,
-   0.19,
+   0.12,
+   0.14,
    0.28,
    0.26,
    0.43,
@@ -704,8 +704,8 @@
    0.36,
    0.28,
    0.21,
-   0.22,
-   0.29,
+   0.11,
+   0.12,
    0.22,
    0.26,
    0.47,
@@ -716,10 +716,10 @@
    0.68,
    0.67,
    0.72,
-   0.67,
-   0.79,
-   0.6,
-   0.57,
+   0.13,
+   0.1,
+   0.14,
+   0.12,
    0.65,
    0.63,
    0.42,
@@ -732,8 +732,8 @@
    0.79,
    0.72,
    0.4,
-   0.31,
-   0.22,
+   0.12,
+   0.12,
    0.28,
    0.34,
    0.37,
@@ -743,8 +743,8 @@
    0.33,
    0.35,
    0.05,
-   0.05,
-   0.05,
+   0.12,
+   0.11,
    0.05,
    0.32,
    0.14,
@@ -754,9 +754,9 @@
    0.39,
    0.44,
    0.31,
-   0.76,
-   0.56,
-   0.6,
+   0.14,
+   0.13,
+   0.12,
    0.82,
    0.73,
    0.66,
@@ -765,15 +765,15 @@
    0.5,
    0.68,
    0.59,
-   0.64,
-   0.59,
+   0.13,
+   0.12,
    0.84,
    0.83,
    0.64,
    0.66,
    0.87,
    0.81,
-   0.78,
+   0.13,
    0.45,
    0.35,
    0.44,
@@ -784,24 +784,24 @@
    0.23,
    0.5,
    0.26,
-   0.3,
-   0.3,
-   0.33,
-   0.44,
-   0.37,
-   0.25,
-   0.2,
-   0.16,
-   0.28,
-   0.22,
-   0.43,
-   0.3,
+   0.1,
+   0.12,
+   0.12,
+   0.1,
+   0.1,
+   0.13,
+   0.13,
+   0.12,
+   0.11,
+   0.14,
+   0.12,
+   0.1,
    0.55,
    0.58,
    0.05,
    0.05,
-   0.05,
-   0.05,
+   0.12,
+   0.12,
    0.7,
    0.52,
    0.5,
@@ -811,7 +811,7 @@
    0.59,
    0.52,
    0.44,
-   0.91,
+   0.12,
    0.61,
    0.67,
    0.87,
@@ -821,12 +821,12 @@
    0.42,
    0.23,
    0.24,
-   0.21,
+   0.13,
    0.32,
    0.19,
    0.38,
-   0.31,
-   0.37,
+   0.11,
+   0.11,
    0.41,
    0.47,
    0.38,
@@ -836,14 +836,14 @@
    0.19,
    0.26,
    0.13,
-   0.29,
+   0.11,
    0.3,
    0.32,
    0.45,
    0.49,
    0.05,
    0.05,
-   0.05,
+   0.12,
    0.05,
    0.82,
    0.74,
@@ -853,8 +853,8 @@
    0.47,
    0.49,
    0.49,
-   0.71,
-   0.6,
+   0.11,
+   0.11,
    0.54,
    0.91,
    0.78,
@@ -863,15 +863,15 @@
    0.65,
    0.74,
    0.35,
-   0.33,
-   0.24,
+   0.13,
+   0.11,
    0.17,
    0.37,
    0.22,
    0.37,
    0.45,
-   0.51,
-   0.48,
+   0.11,
+   0.12,
    0.35,
    0.33,
    0.26,
@@ -881,8 +881,8 @@
    0.2,
    0.15,
    0.22,
-   0.26,
-   0.32,
+   0.13,
+   0.11,
    0.35,
    0.56,
    0.7,
@@ -892,8 +892,8 @@
    0.64,
    0.63,
    0.05,
-   0.05,
-   0.05,
+   0.12,
+   0.14,
    0.05,
    0.55,
    0.63,
@@ -902,21 +902,21 @@
    0.96,
    0.92,
    0.57,
-   0.8,
-   0.79,
+   0.11,
+   0.11,
    0.5,
    0.51,
    0.23,
    0.32,
    0.05,
-   0.05,
-   0.05,
+   0.11,
+   0.1,
    0.05,
    0.29,
    0.3,
    0.52,
    0.32,
-   0.51,
+   0.11,
    0.38,
    0.26,
    0.18,
@@ -924,7 +924,7 @@
    0.19,
    0.12,
    0.2,
-   0.17,
+   0.1,
    0.3,
    0.38,
    0.48,
@@ -933,8 +933,8 @@
    0.52,
    0.74,
    0.54,
-   0.65,
-   0.61,
+   0.12,
+   0.12,
    0.46,
    0.41,
    0.66,
@@ -943,9 +943,9 @@
    0.73,
    0.61,
    0.54,
-   0.05,
-   0.05,
-   0.05,
+   0.13,
+   0.13,
+   0.12,
    0.05,
    0.55,
    0.33,
@@ -954,8 +954,8 @@
    0.33,
    0.36,
    0.24,
-   0.28,
-   0.41,
+   0.12,
+   0.12,
    0.31,
    0.35,
    0.43,
@@ -965,8 +965,8 @@
    0.32,
    0.2,
    0.19,
-   0.1,
-   0.22,
+   0.11,
+   0.11,
    0.21,
    0.28,
    0.34,
@@ -981,7 +981,7 @@
    0.36,
    0.4,
    0.58,
-   0.56,
+   0.13,
    0.69,
    0.72,
    0.66,
@@ -990,8 +990,8 @@
    0.71,
    0.73,
    0.64,
-   0.55,
-   0.48,
+   0.12,
+   0.13,
    0.64,
    0.49,
    0.37,
@@ -1000,12 +1000,12 @@
    0.41,
    0.33,
    0.37,
-   0.53,
-   0.29,
-   0.05,
-   0.05,
-   0.05,
-   0.05,
+   0.1,
+   0.11,
+   0.11,
+   0.11,
+   0.12,
+   0.14,
    0.25,
    0.22,
    0.16,
@@ -1014,8 +1014,8 @@
    0.19,
    0.36,
    0.27,
-   0.47,
-   0.45,
+   0.12,
+   0.13,
    0.59,
    0.51,
    0.46,
@@ -1026,8 +1026,8 @@
    0.34,
    0.52,
    0.51,
-   0.5,
-   0.71,
+   0.1,
+   0.12,
    0.91,
    0.86,
    0.85,
@@ -1036,8 +1036,8 @@
    0.6,
    0.45,
    0.43,
-   0.62,
-   0.46,
+   0.12,
+   0.12,
    0.31,
    0.3,
    0.39,
@@ -1151,7 +1151,8 @@
    "text": "Dạ em chào chị Lan, cảm ơn chị đã qua văn phòng sáng nay. Hôm nay em muốn hiểu kỹ nhu cầu của gia đình mình trước rồi mới giới thiệu căn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Dạ em chào chị Lan, cảm ơn chị đã qua văn phòng sáng nay. Hôm nay em muốn hiểu kỹ nhu cầu của gia đình mình trước rồi mới giới thiệu căn."
   },
   {
    "id": "g17",
@@ -1161,27 +1162,30 @@
    "text": "Buổi trao đổi hôm nay chị cứ nói thật nhu cầu và ngân sách, căn nào hợp em gửi thông tin sau, chị không bị ép mua đâu ạ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Buổi trao đổi hôm nay chị cứ nói thật nhu cầu và ngân sách, căn nào hợp em gửi thông tin sau, chị không bị ép mua đâu ạ."
   },
   {
    "id": "g2",
    "speaker_id": "SPK_02",
    "start_sec": 80,
    "end_sec": 130,
-   "text": "Ừ em, nhà chị bốn người, hai bé đang học cấp 1. Chị cần hai phòng ngủ là đủ, quan trọng là gần trường Lê Văn Tám cho bọn trẻ đi bộ được.",
+   "text": "Ờ... ừ em, nhà chị là bốn người, hai bé đang học cấp 1. Chị cần hai phòng ngủ là đủ, là đủ, quan trọng là gần trường Lê Văn Tám cho bọn trẻ đi bộ được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Nhà chị là bốn người, hai bé đang học cấp 1. Chị cần hai phòng ngủ là đủ, quan trọng là gần trường Lê Văn Tám cho bọn trẻ đi bộ được."
   },
   {
    "id": "g18",
    "speaker_id": "SPK_02",
    "start_sec": 135,
    "end_sec": 168,
-   "text": "Nhà chị giờ ở Lê Chân, sáng đưa đón hai bé sang Lê Văn Tám chạy xe máy gần hai mươi phút.",
+   "text": "Nhà chị giờ ở Lê Chân, sáng đưa đón hai bé sang Lê Văn Tám, thì là, chạy xe máy gần hai mươi phút.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Nhà chị giờ ở Lê Chân, sáng đưa đón hai bé sang Lê Văn Tám, chạy xe máy gần hai mươi phút."
   },
   {
    "id": "g19",
@@ -1191,7 +1195,8 @@
    "text": "Bé lớn học lớp ba, bé nhỏ mới mẫu giáo bốn tuổi. Sáng bà nội đưa, chiều chị đón, nên chỗ nào cũng phải gần mới được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Bé lớn học lớp ba, bé nhỏ mới mẫu giáo bốn tuổi. Sáng bà nội đưa, chiều chị đón, nên chỗ nào cũng phải gần mới được."
   },
   {
    "id": "g20",
@@ -1201,27 +1206,30 @@
    "text": "Chị nghe chị hàng xóm giới thiệu khu Marina, bảo trường liên cấp nằm ngay trong dự án, học xong chạy xuống nhà là được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị nghe chị hàng xóm giới thiệu khu Marina, bảo trường liên cấp nằm ngay trong dự án, học xong chạy xuống nhà là được."
   },
   {
    "id": "g21",
    "speaker_id": "SPK_02",
    "start_sec": 252,
    "end_sec": 283,
-   "text": "Cuối tuần chị cũng muốn có chỗ cho hai bé chạy nhảy, có công viên nước, có chợ đi bộ mười phút tới nơi.",
+   "text": "Cuối tuần chị cũng muốn có chỗ cho hai bé chạy nhảy, kiểu có công viên nước, có chợ đi bộ mười phút tới nơi.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Cuối tuần chị cũng muốn có chỗ cho hai bé chạy nhảy, có công viên nước, có chợ đi bộ mười phút tới nơi."
   },
   {
    "id": "g3",
    "speaker_id": "SPK_02",
    "start_sec": 290,
    "end_sec": 330,
-   "text": "Chị thích tầng trung thôi, khoảng tầng 12 đến 20, ban công hướng Đông Nam cho mát.",
+   "text": "Chị thích tầng trung thôi, à, khoảng tầng 12 đến 20, ban công hướng Đông Nam cho mát.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị thích tầng trung thôi, khoảng tầng 12 đến 20, ban công hướng Đông Nam cho mát."
   },
   {
    "id": "g22",
@@ -1231,7 +1239,8 @@
    "text": "Dạ để em ghi lại cho đúng: hai phòng ngủ, gần trường, tầng trung, ban công hướng Đông Nam. Chị xem có thiếu gì không ạ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Dạ để em ghi lại cho đúng: hai phòng ngủ, gần trường, tầng trung, ban công hướng Đông Nam. Chị xem có thiếu gì không ạ."
   },
   {
    "id": "g23",
@@ -1241,7 +1250,8 @@
    "text": "Khu Marina đang mở bán tháp B, đúng tầm tiêu chí của mình. Chiều nay em gửi chị mặt bằng và giá từng căn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Khu Marina đang mở bán tháp B, đúng tầm tiêu chí của mình. Chiều nay em gửi chị mặt bằng và giá từng căn."
   },
   {
    "id": "g57",
@@ -1251,37 +1261,41 @@
    "text": "Mùa này người đi xem đông lắm, căn nào vừa ra là có người giữ ngay.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Mùa này người đi xem đông lắm, căn nào vừa ra là có người giữ ngay."
   },
   {
    "id": "g4",
    "speaker_id": "SPK_02",
    "start_sec": 440,
    "end_sec": 470,
-   "text": "Ngân sách thì tối đa 4,2 tỷ em ạ. Chị có sẵn khoảng 2,1 tỷ.",
+   "text": "Ngân sách thì là tối đa 4,2 tỷ em ạ. Chị có sẵn khoảng 2,1 tỷ, ừ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Ngân sách thì tối đa 4,2 tỷ em ạ. Chị có sẵn khoảng 2,1 tỷ."
   },
   {
    "id": "g24",
    "speaker_id": "SPK_02",
    "start_sec": 475,
    "end_sec": 515,
-   "text": "Hai phẩy một tỷ đó là chị để dành ba năm nay đấy em, phần còn lại là đất vay, nên chị tính rất kỹ.",
+   "text": "Hai phẩy một tỷ đó là chị để dành, để dành ba năm nay đấy em, phần còn lại là đất vay, nên chị tính rất kỹ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Hai phẩy một tỷ đó là chị để dành ba năm nay đấy em, phần còn lại là đất vay, nên chị tính rất kỹ."
   },
   {
    "id": "g5",
    "speaker_id": "SPK_02",
    "start_sec": 530,
    "end_sec": 560,
-   "text": "Còn lại chị định vay một nửa, nhưng cần ân hạn nợ gốc ít nhất 12 tháng.",
+   "text": "Còn lại chị định vay, ừm, vay một nửa, nhưng cần ân hạn nợ gốc ít nhất 12 tháng.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Còn lại chị định vay một nửa, nhưng cần ân hạn nợ gốc ít nhất 12 tháng."
   },
   {
    "id": "g25",
@@ -1291,7 +1305,8 @@
    "text": "Vay một nửa giá trị căn thì tháng đầu chị trả khoảng hai mươi bốn triệu, em tính theo lãi suất ưu đãi đang có.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Vay một nửa giá trị căn thì tháng đầu chị trả khoảng hai mươi bốn triệu, em tính theo lãi suất ưu đãi đang có."
   },
   {
    "id": "g6",
@@ -1301,7 +1316,8 @@
    "text": "Dạ hiện ngân hàng đối tác đang ưu đãi 6,5% trong 18 tháng đầu, sau đó thả nổi theo lãi cơ sở cộng biên độ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Dạ hiện ngân hàng đối tác đang ưu đãi 6,5% trong 18 tháng đầu, sau đó thả nổi theo lãi cơ sở cộng biên độ."
   },
   {
    "id": "g26",
@@ -1311,17 +1327,19 @@
    "text": "Tôi với chị Lan đi xem ba dự án rồi, bên nào người bán cũng nói dự án mình là nhất. Hôm nay tôi đi cùng để nghe cho khách quan.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tôi với chị Lan đi xem ba dự án rồi, bên nào người bán cũng nói dự án mình là nhất. Hôm nay tôi đi cùng để nghe cho khách quan."
   },
   {
    "id": "g7",
    "speaker_id": "SPK_03",
    "start_sec": 700,
    "end_sec": 740,
-   "text": "Em nghe bên đồng nghiệp nói phí quản lý chỗ này hơi cao so với mặt bằng chung.",
+   "text": "Em nghe bên, à, đồng nghiệp nói phí quản lý chỗ này hơi cao so với mặt bằng chung.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Em nghe bên đồng nghiệp nói phí quản lý chỗ này hơi cao so với mặt bằng chung."
   },
   {
    "id": "g27",
@@ -1331,7 +1349,8 @@
    "text": "Bên dự án khác người ta thu mười hai nghìn một mét, chỗ này nghe nói mười lăm nghìn, chênh nhau cả chục triệu một năm đấy.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Bên dự án khác người ta thu mười hai nghìn một mét, chỗ này nghe nói mười lăm nghìn, chênh nhau cả chục triệu một năm đấy."
   },
   {
    "id": "g28",
@@ -1341,7 +1360,8 @@
    "text": "Chuyện phí quản lý em ghi nhận ạ, để em kiểm lại hợp đồng dịch vụ cho chính xác.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chuyện phí quản lý em ghi nhận ạ, để em kiểm lại hợp đồng dịch vụ cho chính xác."
   },
   {
    "id": "g8",
@@ -1351,7 +1371,8 @@
    "text": "Nói thật là giá này cao hơn bên Imperia khoảng 300 triệu em ạ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Nói thật là giá này cao hơn bên Imperia khoảng 300 triệu em ạ."
   },
   {
    "id": "g29",
@@ -1361,7 +1382,8 @@
    "text": "Căn mười hai ơi ba tỷ chín trăm năm mươi, rẻ hơn nhưng nhìn ra đường. Chị thấy căn mười tám ơi đáng tiền hơn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Căn mười hai ơi ba tỷ chín trăm năm mươi, rẻ hơn nhưng nhìn ra đường. Chị thấy căn mười tám ơi đáng tiền hơn."
   },
   {
    "id": "g9",
@@ -1371,7 +1393,8 @@
    "text": "Chị lo nhất là sau 18 tháng lãi suất tăng lên thì áp lực trả nợ lớn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị lo nhất là sau 18 tháng lãi suất tăng lên thì áp lực trả nợ lớn."
   },
   {
    "id": "g30",
@@ -1381,7 +1404,8 @@
    "text": "Về lãi suất, em sẽ nhờ anh Tuấn bên ngân hàng đối tác tính giúp chị kịch bản xấu nhất, tức sau khi hết ưu đãi.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Về lãi suất, em sẽ nhờ anh Tuấn bên ngân hàng đối tác tính giúp chị kịch bản xấu nhất, tức sau khi hết ưu đãi."
   },
   {
    "id": "g31",
@@ -1391,7 +1415,8 @@
    "text": "Chị giữ tiền không phải để ăn lãi đâu em, chị giữ để có nhà cho con cháu sau này, nên lần này chị chọn rất kỹ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị giữ tiền không phải để ăn lãi đâu em, chị giữ để có nhà cho con cháu sau này, nên lần này chị chọn rất kỹ."
   },
   {
    "id": "g32",
@@ -1401,7 +1426,8 @@
    "text": "Nhà chị mua lần trước năm mười hai, lúc đó giấy tờ gì chị cũng đi kiểm tra hết, mất cả tháng mới xong.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Nhà chị mua lần trước năm mười hai, lúc đó giấy tờ gì chị cũng đi kiểm tra hết, mất cả tháng mới xong."
   },
   {
    "id": "g33",
@@ -1411,7 +1437,8 @@
    "text": "Lần này chị có người bạn làm ngành pháp lý nhờ xem giúp, sổ hồng, hợp đồng đặt cọc, phạt vi phạm gì cũng phải rõ ràng.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Lần này chị có người bạn làm ngành pháp lý nhờ xem giúp, sổ hồng, hợp đồng đặt cọc, phạt vi phạm gì cũng phải rõ ràng."
   },
   {
    "id": "g10",
@@ -1421,7 +1448,8 @@
    "text": "Em giới thiệu chị căn 18.06, hai phòng ngủ, 72 mét vuông, ban công đúng hướng Đông Nam chị muốn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Em giới thiệu chị căn 18.06, hai phòng ngủ, 72 mét vuông, ban công đúng hướng Đông Nam chị muốn."
   },
   {
    "id": "g34",
@@ -1431,7 +1459,8 @@
    "text": "Giá căn mười tám ơ sáu là bốn phẩy mười lăm tỷ, đã gồm thuế và nội thất cơ bản, chốt được em làm thủ tục ngay.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Giá căn mười tám ơ sáu là bốn phẩy mười lăm tỷ, đã gồm thuế và nội thất cơ bản, chốt được em làm thủ tục ngay."
   },
   {
    "id": "g35",
@@ -1441,7 +1470,8 @@
    "text": "Tháp B bàn giao quý hai năm sau, chủ đầu tư bên này giao đúng hạn ba năm nay rồi, chị cứ yên tâm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tháp B bàn giao quý hai năm sau, chủ đầu tư bên này giao đúng hạn ba năm nay rồi, chị cứ yên tâm."
   },
   {
    "id": "g36",
@@ -1451,7 +1481,8 @@
    "text": "Nhà bếp tách riêng, phòng ngủ master có nhà vệ sinh riêng, phòng khách cửa kính trọn, chị thích kiểu đó không ạ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Nhà bếp tách riêng, phòng ngủ master có nhà vệ sinh riêng, phòng khách cửa kính trọn, chị thích kiểu đó không ạ."
   },
   {
    "id": "g37",
@@ -1461,7 +1492,8 @@
    "text": "Anh chị mai thu xếp qua xem nhà mẫu với em nhé, đứng trong căn mới cảm nhận hết được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Anh chị mai thu xếp qua xem nhà mẫu với em nhé, đứng trong căn mới cảm nhận hết được."
   },
   {
    "id": "g11",
@@ -1471,7 +1503,8 @@
    "text": "Bếp tách riêng chị thích. Có điều phòng ngủ phụ hơi nhỏ.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Bếp tách riêng chị thích. Có điều phòng ngủ phụ hơi nhỏ."
   },
   {
    "id": "g58",
@@ -1481,7 +1514,8 @@
    "text": "Chị để ý giúp em chỗ để xe với trạm sạc xe điện nhé.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị để ý giúp em chỗ để xe với trạm sạc xe điện nhé."
   },
   {
    "id": "g38",
@@ -1491,7 +1525,8 @@
    "text": "Phòng khách kính trọn thì sáng quá, chị chỉ sợ nắng trưa. Để mai chị xem tận nơi rồi tính.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Phòng khách kính trọn thì sáng quá, chị chỉ sợ nắng trưa. Để mai chị xem tận nơi rồi tính."
   },
   {
    "id": "g39",
@@ -1501,7 +1536,8 @@
    "text": "Chị sợ nhất là cọc xong chủ đầu tư làm lỡ hẹn, mấy vụ trên báo chí chị đọc thấy lo lắm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị sợ nhất là cọc xong chủ đầu tư làm lỡ hẹn, mấy vụ trên báo chí chị đọc thấy lo lắm."
   },
   {
    "id": "g40",
@@ -1511,7 +1547,8 @@
    "text": "Em cho chị xin chính sách bảo hành chi tiết được không?",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Em cho chị xin chính sách bảo hành chi tiết được không?"
   },
   {
    "id": "g12",
@@ -1521,7 +1558,8 @@
    "text": "Bên em giữ căn 18.06 cho chị đến hết thứ Bảy 16/11 nhé.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Bên em giữ căn 18.06 cho chị đến hết thứ Bảy 16/11 nhé."
   },
   {
    "id": "g59",
@@ -1531,7 +1569,8 @@
    "text": "Em cứ tính giúp chị tổng tiền phải đóng trước khi nhận nhà, đừng để phát sinh.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Em cứ tính giúp chị tổng tiền phải đóng trước khi nhận nhà, đừng để phát sinh."
   },
   {
    "id": "g41",
@@ -1541,7 +1580,8 @@
    "text": "Giữ căn mình làm giấy đặt cọc năm mươi triệu, tiền này sau đó trừ vào đợt thanh toán đầu tiên, không mất đi đâu cả.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Giữ căn mình làm giấy đặt cọc năm mươi triệu, tiền này sau đó trừ vào đợt thanh toán đầu tiên, không mất đi đâu cả."
   },
   {
    "id": "g42",
@@ -1551,7 +1591,8 @@
    "text": "Nếu đổi ý, mình hoàn lại chín mươi phần trăm trong vòng mười lăm ngày, điều khoản ghi thẳng vào phụ lục.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Nếu đổi ý, mình hoàn lại chín mươi phần trăm trong vòng mười lăm ngày, điều khoản ghi thẳng vào phụ lục."
   },
   {
    "id": "g43",
@@ -1561,7 +1602,8 @@
    "text": "Tới hết thứ Bảy là hết hạn giữ căn, em phải báo bên dự án để họ mở bán lại.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Tới hết thứ Bảy là hết hạn giữ căn, em phải báo bên dự án để họ mở bán lại."
   },
   {
    "id": "g13",
@@ -1571,7 +1613,8 @@
    "text": "Chị phải để anh nhà xem đã rồi mới quyết được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị phải để anh nhà xem đã rồi mới quyết được."
   },
   {
    "id": "g60",
@@ -1581,7 +1624,8 @@
    "text": "Em ghi lại đây: giữ căn đến hết ngày mười sáu tháng mười một, chị trả lời trước thứ Bảy.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Em ghi lại đây: giữ căn đến hết ngày mười sáu tháng mười một, chị trả lời trước thứ Bảy."
   },
   {
    "id": "g44",
@@ -1591,7 +1635,8 @@
    "text": "Theo tôi thì căn này hợp với chị đó, tiện cho hai cháu đi học hết, đi làm về cũng tiện.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Theo tôi thì căn này hợp với chị đó, tiện cho hai cháu đi học hết, đi làm về cũng tiện."
   },
   {
    "id": "g45",
@@ -1601,7 +1646,8 @@
    "text": "Mà lỡ căn này thì tiếc lắm đấy, tôi thấy giá khu này đầu năm tới còn tăng.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Mà lỡ căn này thì tiếc lắm đấy, tôi thấy giá khu này đầu năm tới còn tăng."
   },
   {
    "id": "g46",
@@ -1611,7 +1657,8 @@
    "text": "Chị phải về bàn với anh nhà đã, chuyện tiền tỷ đâu có quyết trong một buổi được.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị phải về bàn với anh nhà đã, chuyện tiền tỷ đâu có quyết trong một buổi được."
   },
   {
    "id": "g14",
@@ -1621,7 +1668,8 @@
    "text": "Em gửi chị bảng tính trước tối mai nhé, có cả phương án vay 50%.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Em gửi chị bảng tính trước tối mai nhé, có cả phương án vay 50%."
   },
   {
    "id": "g47",
@@ -1631,7 +1679,8 @@
    "text": "Cuối tuần cho chị xin lịch xem nhà mẫu với, hai bé đi cùng cho chúng nó chạy chơi.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Cuối tuần cho chị xin lịch xem nhà mẫu với, hai bé đi cùng cho chúng nó chạy chơi."
   },
   {
    "id": "g48",
@@ -1641,7 +1690,8 @@
    "text": "Nếu căn này không lấy được thì bên em còn căn nào tương tự không em?",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Nếu căn này không lấy được thì bên em còn căn nào tương tự không em?"
   },
   {
    "id": "g49",
@@ -1651,7 +1701,8 @@
    "text": "Chị cứ thoải mái, căn hợp thì mình tiến, không hợp em tìm căn khác cho. Khách mua nhà mà bị giục là khó chịu lắm.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị cứ thoải mái, căn hợp thì mình tiến, không hợp em tìm căn khác cho. Khách mua nhà mà bị giục là khó chịu lắm."
   },
   {
    "id": "g50",
@@ -1661,7 +1712,8 @@
    "text": "Bảng tính em làm hai kịch bản: một là trả đều từ đầu, hai là ân hạn gốc mười hai tháng rồi trả sau.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Bảng tính em làm hai kịch bản: một là trả đều từ đầu, hai là ân hạn gốc mười hai tháng rồi trả sau."
   },
   {
    "id": "g51",
@@ -1671,7 +1723,8 @@
    "text": "Chị xem xong góp ý, em sửa ngay trong hôm đó luôn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị xem xong góp ý, em sửa ngay trong hôm đó luôn."
   },
   {
    "id": "g15",
@@ -1681,7 +1734,8 @@
    "text": "Để chị hỏi anh nhà xem hôm nào rảnh rồi chị báo em.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Để chị hỏi anh nhà xem hôm nào rảnh rồi chị báo em."
   },
   {
    "id": "g52",
@@ -1691,7 +1745,8 @@
    "text": "Chiết khấu thanh toán nhanh thì em phải hỏi anh Tuấn, anh ấy phụ trách chính sách bán hàng của dự án.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chiết khấu thanh toán nhanh thì em phải hỏi anh Tuấn, anh ấy phụ trách chính sách bán hàng của dự án."
   },
   {
    "id": "g53",
@@ -1701,7 +1756,8 @@
    "text": "Trước chiều thứ Sáu em có câu trả lời cho chị, kể cả phần quà gửi đỡng khai trương nếu còn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Trước chiều thứ Sáu em có câu trả lời cho chị, kể cả phần quà gửi đỡng khai trương nếu còn."
   },
   {
    "id": "g54",
@@ -1711,7 +1767,8 @@
    "text": "Chị cảm ơn em, hôm nay chị nắm rõ hơn nhiều so với lần trước đi xem một mình.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Chị cảm ơn em, hôm nay chị nắm rõ hơn nhiều so với lần trước đi xem một mình."
   },
   {
    "id": "g16",
@@ -1721,7 +1778,8 @@
    "text": "Em xin anh Tuấn chính sách chiết khấu cho chị nếu mình thanh toán nhanh.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Em xin anh Tuấn chính sách chiết khấu cho chị nếu mình thanh toán nhanh."
   },
   {
    "id": "g55",
@@ -1731,7 +1789,8 @@
    "text": "Đầu tuần sau nếu mọi thứ ổn thì chị với anh nhà qua làm hợp đồng đặt cọc luôn.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Đầu tuần sau nếu mọi thứ ổn thì chị với anh nhà qua làm hợp đồng đặt cọc luôn."
   },
   {
    "id": "g56",
@@ -1741,7 +1800,8 @@
    "text": "Có gì chị gọi em số cũ nhé. Cảm ơn hai em nhiều, hôm nay mệt mấy cũng đáng.",
    "lang": "vi",
    "translations": {},
-   "edited": false
+   "edited": false,
+   "text_clean": "Có gì chị gọi em số cũ nhé. Cảm ơn hai em nhiều, hôm nay mệt mấy cũng đáng."
   }
  ],
  "chat": [
@@ -1788,5 +1848,300 @@
     2400
    ]
   }
- ]
+ ],
+ "listening_map": {
+  "session_id": "s-sample-realestate_sales",
+  "silences": [
+   {
+    "start_sec": 40,
+    "end_sec": 45
+   },
+   {
+    "start_sec": 75,
+    "end_sec": 80
+   },
+   {
+    "start_sec": 130,
+    "end_sec": 135
+   },
+   {
+    "start_sec": 168,
+    "end_sec": 175
+   },
+   {
+    "start_sec": 205,
+    "end_sec": 212
+   },
+   {
+    "start_sec": 245,
+    "end_sec": 252
+   },
+   {
+    "start_sec": 283,
+    "end_sec": 290
+   },
+   {
+    "start_sec": 330,
+    "end_sec": 336
+   },
+   {
+    "start_sec": 368,
+    "end_sec": 375
+   },
+   {
+    "start_sec": 408,
+    "end_sec": 422
+   },
+   {
+    "start_sec": 438,
+    "end_sec": 440
+   },
+   {
+    "start_sec": 470,
+    "end_sec": 475
+   },
+   {
+    "start_sec": 515,
+    "end_sec": 530
+   },
+   {
+    "start_sec": 560,
+    "end_sec": 572
+   },
+   {
+    "start_sec": 612,
+    "end_sec": 620
+   },
+   {
+    "start_sec": 660,
+    "end_sec": 665
+   },
+   {
+    "start_sec": 692,
+    "end_sec": 700
+   },
+   {
+    "start_sec": 740,
+    "end_sec": 752
+   },
+   {
+    "start_sec": 786,
+    "end_sec": 790
+   },
+   {
+    "start_sec": 808,
+    "end_sec": 810
+   },
+   {
+    "start_sec": 850,
+    "end_sec": 855
+   },
+   {
+    "start_sec": 895,
+    "end_sec": 900
+   },
+   {
+    "start_sec": 940,
+    "end_sec": 945
+   },
+   {
+    "start_sec": 978,
+    "end_sec": 985
+   },
+   {
+    "start_sec": 1022,
+    "end_sec": 1030
+   },
+   {
+    "start_sec": 1072,
+    "end_sec": 1080
+   },
+   {
+    "start_sec": 1125,
+    "end_sec": 1140
+   },
+   {
+    "start_sec": 1190,
+    "end_sec": 1198
+   },
+   {
+    "start_sec": 1238,
+    "end_sec": 1245
+   },
+   {
+    "start_sec": 1285,
+    "end_sec": 1295
+   },
+   {
+    "start_sec": 1330,
+    "end_sec": 1340
+   },
+   {
+    "start_sec": 1365,
+    "end_sec": 1370
+   },
+   {
+    "start_sec": 1410,
+    "end_sec": 1462
+   },
+   {
+    "start_sec": 1478,
+    "end_sec": 1485
+   },
+   {
+    "start_sec": 1525,
+    "end_sec": 1530
+   },
+   {
+    "start_sec": 1565,
+    "end_sec": 1570
+   },
+   {
+    "start_sec": 1585,
+    "end_sec": 1590
+   },
+   {
+    "start_sec": 1630,
+    "end_sec": 1632
+   },
+   {
+    "start_sec": 1658,
+    "end_sec": 1665
+   },
+   {
+    "start_sec": 1700,
+    "end_sec": 1710
+   },
+   {
+    "start_sec": 1745,
+    "end_sec": 1750
+   },
+   {
+    "start_sec": 1775,
+    "end_sec": 1780
+   },
+   {
+    "start_sec": 1820,
+    "end_sec": 1830
+   },
+   {
+    "start_sec": 1865,
+    "end_sec": 1875
+   },
+   {
+    "start_sec": 1910,
+    "end_sec": 1915
+   },
+   {
+    "start_sec": 1938,
+    "end_sec": 1945
+   },
+   {
+    "start_sec": 1968,
+    "end_sec": 1970
+   },
+   {
+    "start_sec": 2000,
+    "end_sec": 2005
+   },
+   {
+    "start_sec": 2040,
+    "end_sec": 2048
+   },
+   {
+    "start_sec": 2082,
+    "end_sec": 2092
+   },
+   {
+    "start_sec": 2128,
+    "end_sec": 2135
+   },
+   {
+    "start_sec": 2175,
+    "end_sec": 2182
+   },
+   {
+    "start_sec": 2198,
+    "end_sec": 2200
+   },
+   {
+    "start_sec": 2240,
+    "end_sec": 2245
+   },
+   {
+    "start_sec": 2280,
+    "end_sec": 2288
+   },
+   {
+    "start_sec": 2320,
+    "end_sec": 2345
+   },
+   {
+    "start_sec": 2380,
+    "end_sec": 2390
+   },
+   {
+    "start_sec": 2430,
+    "end_sec": 2440
+   },
+   {
+    "start_sec": 2472,
+    "end_sec": 2480
+   }
+  ],
+  "fillers": [
+   {
+    "start_sec": 80,
+    "end_sec": 81.3,
+    "text": "Ờ..."
+   },
+   {
+    "start_sec": 81.7,
+    "end_sec": 82,
+    "text": "ừ"
+   },
+   {
+    "start_sec": 155.2,
+    "end_sec": 157.2,
+    "text": "thì là"
+   },
+   {
+    "start_sec": 267.2,
+    "end_sec": 268.4,
+    "text": "kiểu"
+   },
+   {
+    "start_sec": 302.7,
+    "end_sec": 303.6,
+    "text": "à,"
+   },
+   {
+    "start_sec": 444.6,
+    "end_sec": 447.4,
+    "text": "thì là"
+   },
+   {
+    "start_sec": 469.1,
+    "end_sec": 470,
+    "text": "ừ."
+   },
+   {
+    "start_sec": 538.3,
+    "end_sec": 539.4,
+    "text": "ừm,"
+   },
+   {
+    "start_sec": 706.3,
+    "end_sec": 707.3,
+    "text": "à,"
+   }
+  ],
+  "speaker_gain_db": {
+   "SPK_01": 2,
+   "SPK_02": 0,
+   "SPK_03": -2
+  },
+  "noise_level": "high",
+  "clean_duration_sec": 2052
+ }
 }
