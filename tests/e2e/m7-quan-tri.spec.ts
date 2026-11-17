@@ -225,3 +225,26 @@ test("bằng chứng ảnh trang /team, sáng và tối (gộp 4 tổ hợp qua 
   await page.waitForTimeout(300);
   await page.screenshot({ path: `test-results/team-${tag}-dark.png`, fullPage: true });
 });
+
+test("nhật ký Xem buổi ghi còn sau khi tải lại trang (review PR #57)", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "chỉ cần chạy một lần");
+  await onboard(page);
+  await page.evaluate(() => {
+    const d = JSON.parse(localStorage.getItem("noteim-mock-db-v1")!);
+    d.user.current_workspace_id = "w-hp-land";
+    localStorage.setItem("noteim-mock-db-v1", JSON.stringify(d));
+  });
+  const views = () =>
+    page.evaluate(
+      () =>
+        (JSON.parse(localStorage.getItem("noteim-mock-db-v1")!).audit as Array<{ action: string; target_id: string }>).filter(
+          (a) => a.action === "view" && a.target_id === "s-nhom-marina-c",
+        ).length,
+    );
+  const before = await views();
+  await page.goto("/s/s-nhom-marina-c");
+  await expect(page.getByRole("heading", { name: /Marina C/ }).first()).toBeVisible();
+  await page.goto("/team/audit");
+  expect(await views()).toBe(before + 1);
+  await expect(page.getByText("Hoàng Xem buổi ghi").first()).toBeVisible();
+});

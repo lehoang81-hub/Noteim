@@ -22,7 +22,7 @@ import type {
   Workspace,
   WorkspaceRole,
 } from "../types";
-import { MOCK_NOW, commit, getDb, samplesReady, sessionsReady, type StoredSession } from "./store";
+import { MOCK_NOW, commit, getDb, persistSilently, samplesReady, sessionsReady, type StoredSession } from "./store";
 
 /*
  * Bản giả của lớp dữ liệu (docs/04-data-contract.md).
@@ -167,9 +167,8 @@ function pushAudit(
 
 /*
  * Nhật ký "ai xem" (M7-03): mỗi phiên trình duyệt ghi một dòng cho mỗi buổi và
- * người xem. Không commit ở đây để không kích hoạt tải lại của useData (vòng
- * lặp); dòng được lưu xuống localStorage cùng lần commit của thao tác ghi kế
- * tiếp trong phiên xem đó.
+ * người xem. Lưu bằng persistSilently (không gọi commit) để không kích hoạt tải
+ * lại của useData (vòng lặp), nhưng vẫn còn sau khi tải lại trang.
  */
 const viewLogged = new Set<string>();
 
@@ -179,6 +178,7 @@ function pushViewAudit(d: Pick<Session, "workspace_id" | "id" | "title">) {
   if (viewLogged.has(key)) return;
   viewLogged.add(key);
   pushAudit(d.workspace_id, "view", "session", d.id, d.title);
+  persistSilently();
 }
 
 /** Bản sao ShareLink không kèm mật khẩu (mật khẩu chỉ dùng nội bộ bản giả). */
