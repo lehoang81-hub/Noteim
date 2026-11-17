@@ -136,3 +136,60 @@ test("Buổi không có bản đồ nghe (cờ debug): nút tắt, có dòng gi�
   await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "off");
   expect(errors).toEqual([]);
 });
+
+/* ---------- Bước 4/6: Chữ chạy theo tiếng ---------- */
+
+test("Chữ chạy theo: chữ đang đọc đổi theo thời gian khi phát 20 giây, sáng và tối", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+
+  async function playAndSample(sampleAtMs: number[]): Promise<string[]> {
+    await page.goto("/s/s-bds-lan?tab=transcript");
+    await expect(page.locator('[data-seg]').first()).toBeVisible();
+    await page.getByRole("button", { name: "Phát", exact: true }).click();
+    const out: string[] = [];
+    let elapsed = 0;
+    for (const at of sampleAtMs) {
+      await page.waitForTimeout(at - elapsed);
+      elapsed = at;
+      out.push((await page.locator('[data-state="reading"]').first().textContent()) ?? "");
+    }
+    return out;
+  }
+
+  // Sáng: ghi chữ đang đọc ở giây 5, 10, 15, 20
+  const light = await playAndSample([5000, 10000, 15000, 20000]);
+  for (const w of light) expect(w?.length).toBeGreaterThan(0);
+  expect(new Set(light).size).toBeGreaterThanOrEqual(3);
+
+  // Tối: chữ đang đọc vẫn có và khác giây 5 (token nền đổi theo class dark)
+  await page.evaluate(() => localStorage.setItem("noteim-theme", "dark"));
+  await page.reload();
+  const dark = await playAndSample([5000]);
+  expect(dark[0]?.length).toBeGreaterThan(0);
+  expect(errors).toEqual([]);
+});
+
+test("Chữ chạy theo: bấm vào một chữ nghe từ chữ đó", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await page.goto("/s/s-bds-lan?tab=transcript");
+  await expect(page.locator('[data-seg]').first()).toBeVisible();
+  // Chưa phát: không có chữ mốc nào
+  await expect(page.locator('[data-word]')).toHaveCount(0);
+
+  // Bấm đoạn thứ hai (80→130 giây) để phát, chờ chữ mốc hiện, rồi bấm một
+  // chữ giữa câu: kim phải dừng ở mốc của chữ đó, không về đầu đoạn
+  const seg2 = page.locator('[data-seg]').nth(2);
+  await seg2.scrollIntoViewIfNeeded();
+  await seg2.locator("button").first().click();
+  await expect(seg2.locator("[data-word]").first()).toBeVisible({ timeout: 15000 });
+  const word = seg2.locator("[data-word]").nth(10);
+  await word.click();
+  const slider = page.getByRole("slider", { name: "Vị trí phát" });
+  const now = Number(await slider.getAttribute("aria-valuenow"));
+  // Mốc của chữ thứ 10 trong câu (khác đầu đoạn 80), vẫn trong đoạn
+  expect(now).toBeGreaterThan(81);
+  expect(now).toBeLessThanOrEqual(131);
+  expect(errors).toEqual([]);
+});

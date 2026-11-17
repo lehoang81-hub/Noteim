@@ -825,7 +825,8 @@
     "translating": "번역 중…",
     "translateFail": "번역하지 못했어요. 다시 시도해 주세요.",
     "translationStale": "다시 번역 필요",
-    "sampleTranslation": "샘플 번역"
+    "sampleTranslation": "샘플 번역",
+    "playingBadge": "재생 중"
   },
   "summary": {
     "versionLabel": "요약 언어",

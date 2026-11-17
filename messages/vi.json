@@ -825,7 +825,8 @@
     "translating": "Đang dịch…",
     "translateFail": "Chưa dịch được. Thử lại.",
     "translationStale": "Cần dịch lại",
-    "sampleTranslation": "Bản dịch mẫu"
+    "sampleTranslation": "Bản dịch mẫu",
+    "playingBadge": "Đang phát"
   },
   "summary": {
     "versionLabel": "Tóm tắt bằng",

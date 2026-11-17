@@ -770,7 +770,8 @@
     "translating": "Translating…",
     "translateFail": "Couldn't translate. Try again.",
     "translationStale": "Needs re-translation",
-    "sampleTranslation": "Sample translation"
+    "sampleTranslation": "Sample translation",
+    "playingBadge": "Playing"
   },
   "summary": {
     "versionLabel": "Summary in",

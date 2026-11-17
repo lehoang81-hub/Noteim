@@ -13,6 +13,8 @@ import { useToast } from "@/components/ui/toast";
 import { speakerLabel } from "@/lib/data/localize";
 import { data, useData, type Lang, type SessionDetail, type Speaker, type TranscriptSegment } from "@/lib/data";
 import { LANG_BADGE } from "@/lib/data/types";
+import { wordStateAt, wordTimings } from "@/lib/listening/words";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
 
 /*
@@ -31,7 +33,7 @@ import { cn } from "@/lib/cn";
  */
 
 type Range = { start: number; end: number };
-type Piece = { text: string; kind: "plain" | "match" | "term"; matchIndex?: number };
+type Piece = { text: string; kind: "plain" | "match" | "term"; matchIndex?: number; start: number; end: number };
 
 /** Tất cả chỗ khớp của `needle` trong `hay`, không phân biệt hoa thường, giữ dấu. */
 function findAll(hay: string, needle: string): Range[] {
@@ -66,14 +68,25 @@ function annotate(text: string, query: string, terms: string[]): Piece[] {
       const slice = { start: pos, end: point };
       const m = matches.findIndex((r) => r.start === slice.start && r.end === slice.end);
       const tr = termRanges.findIndex((r) => r.start === slice.start && r.end === slice.end);
-      if (m >= 0) pieces.push({ text: text.slice(slice.start, slice.end), kind: "match", matchIndex: localMatch++ });
+      if (m >= 0) pieces.push({ text: text.slice(slice.start, slice.end), kind: "match", matchIndex: localMatch++, start: slice.start, end: slice.end });
       else if (tr >= 0 && !matches.some((r) => r.start < slice.end && slice.start < r.end))
-        pieces.push({ text: text.slice(slice.start, slice.end), kind: "term" });
-      else pieces.push({ text: text.slice(slice.start, slice.end), kind: "plain" });
+        pieces.push({ text: text.slice(slice.start, slice.end), kind: "term", start: slice.start, end: slice.end });
+      else pieces.push({ text: text.slice(slice.start, slice.end), kind: "plain", start: slice.start, end: slice.end });
       pos = point;
     }
   }
   return pieces;
+}
+
+/** Kiểu tô sáng tại một khoảng ký tự (ưu tiên chỗ khớp tìm kiếm, rồi từ điển). */
+function pieceKindAt(charStart: number, charEnd: number, pieces: Piece[]): Piece["kind"] {
+  let kind: Piece["kind"] = "plain";
+  for (const p of pieces) {
+    if (p.start >= charEnd || p.end <= charStart) continue;
+    if (p.kind === "match") return "match";
+    if (p.kind === "term") kind = "term";
+  }
+  return kind;
 }
 
 export function TranscriptTab({
@@ -289,6 +302,7 @@ export function TranscriptTab({
           matchIndex={matchIndex}
           activeMatch={activeMatch}
           playingSegId={playingSegId}
+          currentTime={currentTime}
           editingSegId={editingSegId}
           editValue={editValue}
           setEditValue={setEditValue}
@@ -470,6 +484,8 @@ type ListProps = {
   matchIndex: Array<{ segId: string; range: Range }> | null;
   activeMatch: number;
   playingSegId: string | null;
+  /** Thời điểm đang phát, để tô chữ chạy theo (M8-01) */
+  currentTime: number;
   editingSegId: string | null;
   editValue: string;
   setEditValue: (v: string) => void;
@@ -485,6 +501,7 @@ function TranscriptList(props: ListProps) {
   const t = useTranslations("transcript");
   const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
   const ts = useTranslations("session");
+  const reduce = useReducedMotionSafe();
   const {
     listRef,
     segments,
@@ -499,6 +516,7 @@ function TranscriptList(props: ListProps) {
     matchIndex,
     activeMatch,
     playingSegId,
+    currentTime,
     editingSegId,
     editValue,
     setEditValue,
@@ -562,6 +580,9 @@ function TranscriptList(props: ListProps) {
           const editing = editingSegId === seg.id;
           const pieces = annotate(seg.text, query, glossaryActive ? terms : []);
           const isActiveSeg = activeRow?.segId === seg.id;
+          // Chữ chạy theo tiếng (M8-01): mốc chia đều theo ký tự, chỉ trên đoạn
+          // đang phát; người dùng bật giảm chuyển động thì giữ tô cả đoạn.
+          const words = isPlaying && canPlay && !reduce ? wordTimings(seg.text, seg.start_sec, seg.end_sec) : [];
           return (
             <li
               key={seg.id}
@@ -571,10 +592,10 @@ function TranscriptList(props: ListProps) {
                 isPlaying && "bg-surface-2",
               )}
             >
-              {/* Vạch dọc màu người nói */}
+              {/* Vạch dọc màu người nói — đoạn đang phát dày hơn cho nổi rõ (M8-01) */}
               <span
                 aria-hidden={true}
-                className="w-1 shrink-0 self-stretch rounded-pill"
+                className={cn("shrink-0 self-stretch rounded-pill", isPlaying ? "w-1.5" : "w-1")}
                 style={{ backgroundColor: `var(--speaker-${((sp?.color_index ?? 0) % 6) + 1})` }}
               />
               {editing ? (
@@ -629,23 +650,76 @@ function TranscriptList(props: ListProps) {
                         {LANG_BADGE[seg.lang]}
                       </span>
                     ) : null}
-                    <span className="ml-auto shrink-0 text-caption tabular-nums text-ink-3">{formatClock(seg.start_sec)}</span>
+                    {/* Đoạn đang phát: nhãn nhỏ nổi rõ cạnh giờ (M8-01) */}
+                    {isPlaying ? (
+                      <span className="ml-auto shrink-0 rounded-pill bg-dien-tint px-1.5 text-caption font-semibold text-dien">{t("playingBadge")}</span>
+                    ) : null}
+                    <span className={cn("shrink-0 text-caption tabular-nums", isPlaying ? "text-dien" : "text-ink-3", !isPlaying && "ml-auto")}>
+                      {formatClock(seg.start_sec)}
+                    </span>
                   </div>
                   <button
                     type="button"
-                    onClick={() => {
+                    onClick={(e) => {
                       // Nhấn giữ vừa mở bảng thao tác thì không phát luôn
                       if (holdFired.current) {
                         holdFired.current = false;
                         return;
                       }
-                      if (canPlay) onSeek(seg.start_sec);
+                      if (!canPlay) return;
+                      // Bấm vào một chữ thì nghe từ chữ đó (M8-01); ngoài ra
+                      // bấm vào đoạn nghe từ đầu đoạn.
+                      const wordEl = (e.target as HTMLElement).closest<HTMLElement>("[data-word]");
+                      if (wordEl && words.length) {
+                        const w = words[Number(wordEl.dataset.word)];
+                        if (w) {
+                          onSeek(w.start);
+                          return;
+                        }
+                      }
+                      onSeek(seg.start_sec);
                     }}
                     aria-label={canPlay ? t("playFrom", { time: formatClock(seg.start_sec) }) : undefined}
                     aria-current={isPlaying ? "true" : undefined}
                     className="mt-0.5 block w-full text-left text-body text-ink"
                   >
                     {(() => {
+                      // Đoạn đang phát: từng chữ đổi màu theo thời gian — đã
+                      // đọc màu chữ chính, đang đọc gạch chân màu điện, chưa
+                      // đọc màu chữ phụ (M8-01). Trình đọc màn hình không đọc
+                      // lại từng chữ: chỉ đoạn có aria-current ở trên.
+                      if (words.length) {
+                        return (
+                          <span lang={seg.lang} className="whitespace-pre-wrap">
+                            {words.map((w, i) => {
+                              const st = wordStateAt(w, currentTime);
+                              const kind = pieceKindAt(w.charStart, w.charEnd, pieces);
+                              const active = isActiveSeg && activeRow && w.charStart >= activeRow.range.start && w.charEnd <= activeRow.range.end;
+                              return (
+                                <span key={i}>
+                                  {i > 0 ? " " : null}
+                                  <span
+                                    data-word={i}
+                                    data-state={st}
+                                    aria-current={active ? "true" : undefined}
+                                    className={cn(
+                                      "rounded-control",
+                                      st === "read" && "text-ink",
+                                      st === "unread" && "text-ink-2",
+                                      st === "reading" && "text-ink underline decoration-dien decoration-2 underline-offset-4",
+                                      kind === "match" && "bg-tag-pending-bg px-0.5",
+                                      kind === "match" && active && "bg-tag-pending text-tag-pending",
+                                      kind === "term" && st !== "reading" && "underline decoration-dotted underline-offset-4",
+                                    )}
+                                  >
+                                    {w.w}
+                                  </span>
+                                </span>
+                              );
+                            })}
+                          </span>
+                        );
+                      }
                       let offset = 0;
                       return (
                         // Nội dung đoạn theo ngôn ngữ của đoạn: lang để chữ Hàn
