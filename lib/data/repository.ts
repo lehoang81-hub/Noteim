@@ -3,6 +3,7 @@ import type {
   AuditEvent,
   ChatMessage,
   Contact,
+  DashboardData,
   GlossaryTerm,
   Invoice,
   Lang,
@@ -153,6 +154,23 @@ export interface TaskRepository {
   toggleDone(id: string): Promise<ActionItem>;
 }
 
+/**
+ * Tổng quan cá nhân và nhóm (M7-02, docs/04). Mọi số liệu tính từ dữ liệu của
+ * kho theo không gian đang dùng và quyền đọc của người dùng: không đếm nội
+ * dung buổi riêng tư của người khác (quyền của M7-01, docs/08 phần B).
+ */
+export interface DashboardRepository {
+  get(range: DashboardData["range"]): Promise<DashboardData>;
+  /** Bảng Nhóm: mức dùng và việc mở của cả nhóm. Chỉ Chủ và Quản trị trong
+   * không gian Nhóm; không đúng vai trò ném DataError mã "forbidden".
+   * Mức dùng tính cả buổi riêng tư của từng người (bảng quyền cho phép thấy
+   * tên và thời lượng để tính mức dùng), nhưng chỉ ra số — không lộ nội dung. */
+  team(range: DashboardData["range"]): Promise<{
+    usage: UsageRow[];
+    open_tasks_by_assignee: Array<{ user_id: string; open: number; overdue: number }>;
+  }>;
+}
+
 export interface ChatRepository {
   history(sessionId: string): Promise<ChatMessage[]>;
   ask(sessionId: string, question: string, onToken: (text: string) => void): Promise<ChatMessage>;
@@ -246,4 +264,6 @@ export interface DataSource {
   account: AccountRepository;
   /** Không gian làm việc (M7-01) */
   workspaces: WorkspaceRepository;
+  /** Tổng quan cá nhân và nhóm (M7-02) */
+  dashboard: DashboardRepository;
 }

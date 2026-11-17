@@ -1,7 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2, UsersRound } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -23,7 +22,7 @@ import { cn } from "@/lib/cn";
 import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { holdImportFile } from "@/lib/import-file";
-import { dayDiff, durationParts, shortDate, weekdayDate } from "@/lib/format";
+import { dayDiff, durationParts, shortDate, vnDate, weekdayDate } from "@/lib/format";
 import { templateName } from "@/lib/data/localize";
 import {
   discardRecording,
@@ -62,11 +61,16 @@ const statusMap: Record<Session["status"], SessionRowStatus> = {
 
 export function LibraryPane({ className }: { className?: string }) {
   const t = useTranslations("library");
+  const td = useTranslations("dashboard");
   const ts = useTranslations("session");
   const locale = useLocale();
   const toast = useToast();
   const router = useRouter();
   const params = useParams<{ id?: string }>();
+  // Lọc theo ngày từ Tổng quan (?day=YYYY-MM-DD, M7-02): bấm một ngày trên
+  // dải giọng của Tổng quan dẫn về đây kèm ngày đó
+  const searchParams = useSearchParams();
+  const dayParam = searchParams.get("day");
   const [filter, setFilter] = useState<FilterId>("all");
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const recording = useRecording();
@@ -111,6 +115,12 @@ export function LibraryPane({ className }: { className?: string }) {
   const [scope, setScope] = useState<null | "mine" | "workspace">(null);
   const all = useData(() => data.sessions.list(), []);
   const list = useData(() => data.sessions.list({ ...toFilter(filter), mine: scope === "mine", shared: scope === "workspace" }), [filter, scope]);
+  // Lọc thêm theo ngày (?day=): áp dụng sau mọi bộ lọc khác
+  const listFiltered = useMemo(() => {
+    const items = list.data ?? [];
+    if (!dayParam) return items;
+    return items.filter((s) => vnDate(new Date(s.created_at)) === dayParam);
+  }, [list.data, dayParam]);
   const shareDetail = useData(() => (shareTargetId ? data.sessions.get(shareTargetId) : Promise.resolve(null)), [shareTargetId]);
 
   // Chưa làm quen (M4-04): mở / chuyển tới /welcome, làm xong hoặc bỏ qua thì không hiện lại
@@ -141,7 +151,7 @@ export function LibraryPane({ className }: { className?: string }) {
 
   const groups = useMemo(() => {
     const out: { label: string; items: Session[] }[] = [];
-    for (const s of list.data ?? []) {
+    for (const s of listFiltered) {
       const diff = dayDiff(new Date(s.created_at), now);
       const label = diff <= 0 ? t("today") : diff === 1 ? t("yesterday") : weekdayDate(s.created_at, locale);
       const g = out.find((x) => x.label === label);
@@ -149,7 +159,7 @@ export function LibraryPane({ className }: { className?: string }) {
       else out.push({ label, items: [s] });
     }
     return out;
-  }, [list.data, now, t, locale]);
+  }, [listFiltered, now, t, locale]);
 
   const u = me.data;
   const q = quota.data;
@@ -405,6 +415,16 @@ export function LibraryPane({ className }: { className?: string }) {
         aria-label={t("filters")}
         className="flex gap-2 overflow-x-auto px-page py-2 [scrollbar-width:none]"
       >
+        {/* Lọc theo ngày từ Tổng quan (M7-02): chip hiện khi có ?day=, bấm để bỏ */}
+        {dayParam ? (
+          <FilterChip
+            selected={true}
+            onClick={() => router.replace("/")}
+            aria-label={td("dayFilterClear")}
+          >
+            {shortDate(new Date(`${dayParam}T12:00:00+07:00`), locale)}
+          </FilterChip>
+        ) : null}
         <FilterChip selected={filter === "all"} onClick={() => setFilter("all")}>
           {t("all")}
         </FilterChip>
@@ -444,8 +464,8 @@ export function LibraryPane({ className }: { className?: string }) {
             message={t("loadError")}
             action={<Button onClick={list.reload}>{t("retry")}</Button>}
           />
-        ) : (list.data ?? []).length === 0 ? (
-          filter === "all" ? (
+        ) : listFiltered.length === 0 ? (
+          filter === "all" && !dayParam ? (
             <EmptyState
               message={t("empty")}
               action={
@@ -458,7 +478,16 @@ export function LibraryPane({ className }: { className?: string }) {
             <EmptyState
               drawing={<span />}
               message={t("noMatch")}
-              action={<Button onClick={() => setFilter("all")}>{t("clearFilter")}</Button>}
+              action={
+                <Button
+                  onClick={() => {
+                    setFilter("all");
+                    if (dayParam) router.replace("/");
+                  }}
+                >
+                  {t("clearFilter")}
+                </Button>
+              }
             />
           )
         ) : (
