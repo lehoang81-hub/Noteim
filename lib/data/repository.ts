@@ -137,6 +137,10 @@ export interface WorkspaceRepository {
    * đã chia sẻ với nhóm ở lại nhóm. */
   removeMember(id: string, userId: string): Promise<void>;
   transferOwnership(id: string, userId: string): Promise<void>;
+  /** Rời nhóm (M7-03): Thành viên và Quản trị tự rời; Chủ phải chuyển quyền
+   * Chủ hoặc xóa nhóm trước. Buổi riêng tư của người rời về không gian Cá
+   * nhân của họ, buổi đã chia sẻ với nhóm ở lại nhóm; xong quay về Cá nhân. */
+  leave(id: string): Promise<void>;
   /** Xem lời mời theo token của bản giả (sinh từ email, xem inviteToken).
    * "expired" khi hết hạn (thật hoặc ép bằng cờ thử nghiệm), "not_found"
    * khi token không tồn tại. */

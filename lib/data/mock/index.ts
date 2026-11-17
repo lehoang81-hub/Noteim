@@ -111,6 +111,15 @@ function myRole(workspaceId: string): WorkspaceRole | null {
   return m?.role ?? null;
 }
 
+/**
+ * Quyền quản trị nhóm (M7-03): mức dùng theo người, nhật ký truy cập, hóa đơn
+ * chỉ Chủ và Quản trị thấy. Thành viên ném forbidden (docs/08 bảng quyền).
+ */
+function assertAdmin(workspaceId: string) {
+  const r = myRole(workspaceId);
+  if (!r || r === "member") throw new DataError("forbidden");
+}
+
 /** Buổi ghi thuộc không gian đang dùng: Cá nhân là buổi không thuộc nhóm nào. */
 function inCurrentWorkspace(d: Pick<Session, "workspace_id">): boolean {
   const ws = currentWorkspace();
@@ -1438,6 +1447,8 @@ export const mockSource: DataSource = {
           (m) => !(m.workspace_id === id && m.status === "invited" && m.email.toLowerCase() === clean),
         );
         if (db.members.length === before) throw new DataError("not_found");
+        // Thu hồi lời mời: lời mời là thành viên đang chờ, ghi nhật ký như gỡ (M7-03)
+        pushAudit(id, "remove_member", "member", clean, clean);
       }),
     changeRole: (id, userId, role) =>
       write(() => {
@@ -1485,6 +1496,31 @@ export const mockSource: DataSource = {
         if (ws) ws.owner_user_id = userId;
         pushAudit(id, "role_change", "member", userId, m.display_name);
       }),
+    leave: (id) =>
+      write(async () => {
+        await sessionsReady();
+        const db = getDb();
+        const ws = db.workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        if (ws.kind !== "team") throw new DataError("server", "Không gian Cá nhân không thể rời");
+        const me = db.members.find((x) => x.workspace_id === id && x.user_id === myUserId());
+        if (!me) throw new DataError("forbidden");
+        // Chủ không tự rời: phải chuyển quyền Chủ hoặc xóa nhóm (docs/08 phần B)
+        if (me.role === "owner") throw new DataError("forbidden", "Chủ nhóm phải chuyển quyền Chủ hoặc xóa nhóm trước khi rời");
+        // Buổi riêng tư của người rời đi theo họ về không gian Cá nhân; buổi
+        // đã chia sẻ với nhóm ở lại nhóm (như khi bị gỡ, docs/08 phần B)
+        db.sessions.forEach((fx) => {
+          const d = fx.detail;
+          if (d.workspace_id === id && (d.owner_user_id || d.user_id) === myUserId() && d.visibility === "private") {
+            d.workspace_id = null;
+          }
+        });
+        db.members = db.members.filter((x) => x !== me);
+        pushAudit(id, "remove_member", "member", myUserId(), me.display_name);
+        // Rời xong quay về không gian Cá nhân
+        const personal = db.workspaces.find((w) => w.kind === "personal");
+        if (personal) db.user.current_workspace_id = personal.id;
+      }),
     getInvite: (token) =>
       read(() => {
         const db = getDb();
@@ -1519,7 +1555,8 @@ export const mockSource: DataSource = {
       }),
     usage: (id, month) =>
       read(() => {
-        if (!myRole(id)) throw new DataError("forbidden");
+        // Mức dùng theo người: Chủ và Quản trị, Thành viên không (docs/08 bảng quyền, M7-03)
+        assertAdmin(id);
         const db = getDb();
         const rows: UsageRow[] = [];
         for (const m of db.members.filter((x) => x.workspace_id === id && x.status === "active" && x.user_id)) {
@@ -1537,7 +1574,8 @@ export const mockSource: DataSource = {
       }),
     audit: (id, filter) =>
       read(() => {
-        if (!myRole(id)) throw new DataError("forbidden");
+        // Nhật ký truy cập: Chủ và Quản trị, Thành viên không (docs/08 bảng quyền, M7-03)
+        assertAdmin(id);
         return getDb()
           .audit.filter((a) => a.workspace_id === id)
           .filter((a) => (filter?.actor_user_id ? a.actor_user_id === filter.actor_user_id : true))
