@@ -120,13 +120,13 @@ Nghiệm thu:
 | M7-03 (#49, xong) | Quản trị nhóm `/team/*`: thành viên, mức dùng, nhật ký truy cập, mẫu dùng chung, gói Nhóm và hóa đơn mẫu. |
 | M7-04 (#50, xong) | Cập nhật `07-handover.md` (bảng database, bảo mật theo hàng cho nhóm và nhiều ngôn ngữ) và chạy lại rà tối, máy tính, tiếp cận, hiệu năng cho mọi màn mới. |
 
-## M8. Nghe sạch và chữ chạy theo tiếng
+## M8. Nghe sạch và chữ chạy theo tiếng (xong 17/11/2026, PR #62)
 
 Đặc tả: `09-nghe-sach.md`. Một issue, nhánh `m8/01-nghe-sach`, PR vào `main` (chặng chỉ một issue nên không cần nhánh tích hợp), chờ Hoang duyệt.
 
 | Issue | Việc |
 | --- | --- |
-| M8-01 (#60) | Nút và bảng Nghe sạch, bản đồ nghe giả, chữ chạy theo từng từ, đoạn đang phát nổi rõ, ý tóm tắt sáng theo, Bản gọn và Nguyên văn. |
+| M8-01 (#60, xong) | Nút và bảng Nghe sạch, bản đồ nghe giả, chữ chạy theo từng từ, đoạn đang phát nổi rõ, ý tóm tắt sáng theo, Bản gọn và Nguyên văn. |
 
 ## Bài thử kỹ thuật (chạy song song, nhãn `spike`)
 
