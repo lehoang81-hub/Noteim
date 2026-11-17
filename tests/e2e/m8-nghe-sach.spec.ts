@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { collectErrors, onboard } from "./helpers";
+import { collectErrors, onboard, setDebugFlags } from "./helpers";
 
 /**
  * Nghe sạch và chữ chạy theo tiếng (M8-01, issue #60).
@@ -67,5 +67,72 @@ test("Tắt Nghe sạch: phát đúng theo thời gian gốc, không nhảy", as
   const now = Number(await slider.getAttribute("aria-valuenow"));
   expect(now).toBeGreaterThanOrEqual(36);
   expect(now).toBeLessThanOrEqual(44);
+  expect(errors).toEqual([]);
+});
+
+/* ---------- Bước 3/6: Nút và bảng Nghe sạch ---------- */
+
+async function expandPlayer(page: import("@playwright/test").Page) {
+  await page.getByRole("button", { name: "Mở rộng trình phát" }).click();
+}
+
+test("Nút Nghe sạch: bấm bật được, nhớ lựa chọn sau khi tải lại trang", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await page.goto("/s/s-bds-lan");
+  await expandPlayer(page);
+  const cleanBtn = page.getByRole("button", { name: "Nghe sạch đang tắt" });
+  await expect(cleanBtn).toBeVisible();
+  await cleanBtn.click();
+  // Bật: nút đổi trạng thái nhấn, bản đồ nghe áp dụng
+  const onBtn = page.getByRole("button", { name: "Nghe sạch đang bật" });
+  await expect(onBtn).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "on");
+  // Nhớ theo người dùng: tải lại vẫn bật
+  await page.reload();
+  await expandPlayer(page);
+  await expect(page.getByRole("button", { name: "Nghe sạch đang bật" })).toHaveAttribute("aria-pressed", "true");
+  // Bấm lần nữa tắt được
+  await page.getByRole("button", { name: "Nghe sạch đang bật" }).click();
+  await expect(page.getByRole("button", { name: "Nghe sạch đang tắt" })).toBeVisible();
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "off");
+  expect(errors).toEqual([]);
+});
+
+test("Bảng Nghe sạch: đủ 4 công tắc, dòng file gốc, đổi Bỏ qua à,ừ được nhớ", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await page.goto("/s/s-bds-lan");
+  await expandPlayer(page);
+  await page.getByRole("button", { name: "Mở bảng Nghe sạch" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog.getByText("Nghe sạch", { exact: true })).toBeVisible();
+  for (const name of ["Lọc tiếng ồn", "Cân âm lượng người nói", "Bỏ qua khoảng lặng", 'Bỏ qua "à, ừ"']) {
+    await expect(dialog.getByText(name, { exact: true })).toBeVisible();
+  }
+  // Mặc định khi bật Nghe sạch: lọc ồn/cân âm/bỏ lặng bật, bỏ à,ừ tắt
+  await expect(dialog.getByText("Nhảy qua tiếng đệm. Có thể nghe hơi giật")).toBeVisible();
+  await expect(dialog.getByText("File gốc giữ nguyên. Tải về và gửi đi luôn là bản gốc.")).toBeVisible();
+  // Đổi công tắc Bỏ qua "à, ừ" rồi mở lại: được nhớ (trình phát vẫn đang mở rộng)
+  await dialog.getByText('Bỏ qua "à, ừ"').click();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await page.getByRole("button", { name: "Mở bảng Nghe sạch" }).click();
+  await expect(dialog.getByText("Nhảy qua tiếng đệm. Có thể nghe hơi giật")).toBeVisible();
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("noteim-mock-db-v1") || "{}").user?.listening_prefs);
+  expect(saved?.skip_fillers).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test("Buổi không có bản đồ nghe (cờ debug): nút tắt, có dòng giải thích", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await setDebugFlags(page, { noListeningMap: true });
+  await page.goto("/s/s-bds-lan");
+  await expandPlayer(page);
+  const cleanBtn = page.getByRole("button", { name: "Nghe sạch đang tắt" });
+  await expect(cleanBtn).toBeDisabled();
+  await expect(page.getByText("Buổi này chưa có dữ liệu nghe sạch.")).toBeVisible();
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "off");
   expect(errors).toEqual([]);
 });

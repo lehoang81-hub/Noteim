@@ -447,7 +447,22 @@
       "back10": "10초 뒤로",
       "forward10": "10초 앞으로",
       "rate": "재생 속도 {rate}, 눌러서 변경",
-      "position": "재생 위치"
+      "position": "재생 위치",
+      "clean": "깨끗한 듣기",
+      "cleanOpen": "깨끗한 듣기 패널 열기",
+      "cleanRemaining": "깨끗한 듣기 {time}",
+      "cleanDenoise": "소음 줄이기",
+      "cleanDenoiseHint": "선풍기, 에어컨, 차량, 시끄러운 카페 소음을 줄입니다",
+      "cleanLevel": "화자 음량 맞추기",
+      "cleanLevelHint": "작게 말하는 사람은 높이고, 크게 말하는 사람은 낮춥니다",
+      "cleanSkipSilence": "침묵 건너뛰기",
+      "cleanSkipSilenceHint": "재생 중 1.5초 이상 침묵 구간을 건너뜁니다",
+      "cleanSkipFillers": "\"음, 어\" 건너뛰기",
+      "cleanSkipFillersHint": "군소리를 건너뜁니다. 끊겨 들릴 수 있습니다",
+      "cleanOriginalNote": "원본 파일은 그대로 유지됩니다. 내려받기와 보내기는 항상 원본입니다.",
+      "cleanNone": "이 회의에는 깨끗한 듣기 데이터가 아직 없습니다.",
+      "cleanOn": "깨끗한 듣기 켜짐",
+      "cleanOff": "깨끗한 듣기 꺼짐"
     }
   },
   "shell": {

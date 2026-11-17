@@ -26,10 +26,17 @@ import {
 
 export type Bookmark = { time: number; tag?: SemanticTag | null };
 export type HeatSpan = { start: number; end: number; tag: SemanticTag };
+/** Khoảng bị bỏ qua khi nghe sạch (M8-01): tô nhạt hơn trên dải giọng. */
+export type DimRange = { start: number; end: number };
 
 const MARK_ZONE = 10;
 const HEAT_GAP = 4;
 const HEAT_HEIGHT = 4;
+
+function inRanges(ranges: DimRange[], t: number): boolean {
+  for (const r of ranges) if (t >= r.start && t < r.end) return true;
+  return false;
+}
 
 export function RibbonPlayback({
   peaks,
@@ -39,6 +46,8 @@ export function RibbonPlayback({
   onSeek,
   bookmarks = [],
   heat = [],
+  dim = [],
+  flashMark = null,
   height = 72,
   dye = 1,
   label,
@@ -52,6 +61,10 @@ export function RibbonPlayback({
   onSeek?: (time: number) => void;
   bookmarks?: Bookmark[];
   heat?: HeatSpan[];
+  /** Khoảng bị bỏ qua khi nghe sạch (M8-01): vẽ nhạt hơn hẳn */
+  dim?: DimRange[];
+  /** Mốc vừa nhảy qua (khoảng lặng dài hơn 5 giây): chớp một dấu nhỏ thoáng qua (M8-01) */
+  flashMark?: number | null;
   height?: number;
   dye?: number;
   /** Nhãn cho trình đọc màn hình, ví dụ "Vị trí phát" */
@@ -95,7 +108,9 @@ export function RibbonPlayback({
       const x = i * BAR_STEP;
       const t = ((x + 1.5) / width) * duration;
       ctx.fillStyle = x + 1.5 > dyeX ? neutral : speakerColor(canvas, speakerAt(spans, t));
-      ctx.globalAlpha = x + 1.5 <= progressX ? 1 : 0.35;
+      const skipped = dim.length > 0 && inRanges(dim, t);
+      // Nghe sạch (M8-01): khoảng bị bỏ qua vẽ nhạt hơn hẳn để thấy đường đi
+      ctx.globalAlpha = skipped ? 0.14 : x + 1.5 <= progressX ? 1 : 0.35;
       drawBar(ctx, x, mid, bars[i] * height);
     }
     ctx.globalAlpha = 1;
@@ -127,7 +142,18 @@ export function RibbonPlayback({
       ctx.fillStyle = tokenColor(canvas, "--ink");
       ctx.fillRect(Math.round(progressX) - 1, top + 2, 2, height - 4);
     }
-  }, [peaks, spans, duration, currentTime, bookmarks, heat, height, dye, width, top, total, showHeat, theme]);
+
+    // Dấu nhỏ thoáng qua: vừa nhảy qua một khoảng lặng dài (M8-01)
+    if (flashMark !== null && flashMark > 0 && flashMark < duration) {
+      const fx = (flashMark / duration) * width;
+      ctx.fillStyle = tokenColor(canvas, "--dien");
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath();
+      ctx.roundRect(fx - 1.5, top + 2, 3, Math.min(14, height / 3), 1.5);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }, [peaks, spans, duration, currentTime, bookmarks, heat, dim, flashMark, height, dye, width, top, total, showHeat, theme]);
 
   function timeFromEvent(e: React.PointerEvent) {
     const rect = e.currentTarget.getBoundingClientRect();
