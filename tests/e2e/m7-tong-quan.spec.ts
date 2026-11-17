@@ -75,21 +75,21 @@ test("Cần xử lý: đủ các loại có trong dữ liệu mẫu, mỗi loạ
   await expect(page.getByRole("heading", { name: "Cần xử lý" })).toBeVisible();
   // Việc quá hạn (3) và đến hạn hôm nay (1) — đếm tay từ fixture
   for (const label of [
-    "Việc quá hạn — Gửi bảng tính vay 50% cho chị Lan",
-    "Việc quá hạn — Gửi bản vẽ điều chỉnh cầu thang",
-    "Việc quá hạn — Lập kế hoạch ca tối cho xưởng",
-    "Đến hạn hôm nay — Xử lý vết nứt dầm bo tầng 3",
+    "Việc quá hạn, Gửi bảng tính vay 50% cho chị Lan",
+    "Việc quá hạn, Gửi bản vẽ điều chỉnh cầu thang",
+    "Việc quá hạn, Lập kế hoạch ca tối cho xưởng",
+    "Đến hạn hôm nay, Xử lý vết nứt dầm bo tầng 3",
   ]) {
     await expect(page.getByRole("link", { name: `${ATTN}: ${label}` })).toBeVisible();
   }
   // Người nói chưa đặt tên: 3 buổi (buổi khám, chị Lan, công chứng)
-  await expect(page.getByRole("link", { name: /Người nói chưa đặt tên — Buổi khám nội tổng quát/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Người nói chưa đặt tên — Gặp chị Lan/ })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Người nói chưa đặt tên — Phiên công chứng/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Người nói chưa đặt tên, Buổi khám nội tổng quát/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Người nói chưa đặt tên, Gặp chị Lan/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Người nói chưa đặt tên, Phiên công chứng/ })).toBeVisible();
   // Bản gốc sắp tự xóa: buổi công chứng hết hạn 15/11 (còn dưới 48 giờ)
-  await expect(page.getByRole("link", { name: /Bản gốc sắp tự xóa — Phiên công chứng/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Bản gốc sắp tự xóa, Phiên công chứng/ })).toBeVisible();
   // Buổi ghi xử lý lỗi
-  await expect(page.getByRole("link", { name: /Buổi ghi xử lý lỗi — Gặp anh Tuấn/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Buổi ghi xử lý lỗi, Gặp anh Tuấn/ })).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -97,7 +97,7 @@ test("Cần xử lý: dòng việc quá hạn đi thẳng tới tab Việc của
   const errors = collectErrors(page);
   await onboard(page);
   await page.getByRole("navigation", { name: NAV }).getByRole("link", { name: DASH }).click();
-  await page.getByRole("link", { name: `${ATTN}: Việc quá hạn — Gửi bảng tính vay 50% cho chị Lan` }).click();
+  await page.getByRole("link", { name: `${ATTN}: Việc quá hạn, Gửi bảng tính vay 50% cho chị Lan` }).click();
   await expect(page).toHaveURL(/\/s\/s-bds-lan\?tab=tasks/);
   // Đúng chỗ sửa việc: chính việc đó nằm trong tab Việc
   await expect(page.getByText("Gửi bảng tính vay 50% cho chị Lan").first()).toBeVisible();
@@ -109,12 +109,12 @@ test("Cần xử lý: dòng đến hạn hôm nay đi tới đúng buổi, dòng
   await onboard(page);
   await page.getByRole("navigation", { name: NAV }).getByRole("link", { name: DASH }).click();
   // Đến hạn hôm nay
-  await page.getByRole("link", { name: `${ATTN}: Đến hạn hôm nay — Xử lý vết nứt dầm bo tầng 3` }).click();
+  await page.getByRole("link", { name: `${ATTN}: Đến hạn hôm nay, Xử lý vết nứt dầm bo tầng 3` }).click();
   await expect(page).toHaveURL(/\/s\/s-kts-lachtray\?tab=tasks/);
   await expect(page.getByText("Xử lý vết nứt dầm bo tầng 3").first()).toBeVisible();
   // Buổi ghi xử lý lỗi: mở buổi ở trạng thái lỗi, có nút Thử lại
   await page.goto("/dashboard");
-  await page.getByRole("link", { name: /Buổi ghi xử lý lỗi — Gặp anh Tuấn/ }).click();
+  await page.getByRole("link", { name: /Buổi ghi xử lý lỗi, Gặp anh Tuấn/ }).click();
   await expect(page).toHaveURL(/\/s\/s-loi/);
   await expect(page.getByText("Chưa tóm tắt được buổi ghi này. Bản ghi âm vẫn an toàn.")).toBeVisible();
   expect(errors).toEqual([]);
@@ -124,7 +124,7 @@ test("Cần xử lý: dòng người nói chưa đặt tên mở thẳng bảng 
   const errors = collectErrors(page);
   await onboard(page);
   await page.getByRole("navigation", { name: NAV }).getByRole("link", { name: DASH }).click();
-  await page.getByRole("link", { name: /Người nói chưa đặt tên — Gặp chị Lan/ }).click();
+  await page.getByRole("link", { name: /Người nói chưa đặt tên, Gặp chị Lan/ }).click();
   await expect(page).toHaveURL(/\/s\/s-bds-lan\?sheet=speakers/);
   // Bảng "Ai là ai?" mở sẵn
   await expect(page.getByRole("dialog").getByText("Đặt tên cho từng người nói")).toBeVisible();
@@ -176,7 +176,7 @@ test("Không gian nhóm: Tổng quan không đếm nội dung buổi riêng tư 
   await expect(page.getByText("Soạn phụ lục phân phối độc quyền gửi chủ đầu tư")).toHaveCount(0);
   await expect(page.getByText("Đàm phán lại giá Sông Hồng theo phương án giảm 5%")).toHaveCount(0);
   // Việc của buổi được đọc vẫn hiện (đến hạn hôm nay)
-  await expect(page.getByRole("link", { name: /Đến hạn hôm nay — Gửi anh Khánh bản dự thảo hợp đồng đặt cọc/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Đến hạn hôm nay, Gửi anh Khánh bản dự thảo hợp đồng đặt cọc/ })).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -314,4 +314,18 @@ test("Thành viên thường không thấy tab Nhóm (cờ ép vai trò)", async
   // Phần cá nhân vẫn hiện bình thường trong không gian nhóm
   await expect(page.getByRole("heading", { name: "Cần xử lý" })).toBeVisible();
   expect(errors).toEqual([]);
+});
+
+test("Quyết định đã chốt hiện 5 ý, mở được hết (review PR #56)", async ({ page }) => {
+  await onboard(page);
+  await page.goto("/dashboard");
+  const sec = page.locator("section", { has: page.getByRole("heading", { name: "Quyết định đã chốt" }) });
+  await expect(sec.locator("li")).toHaveCount(5);
+  await sec.getByRole("button", { name: "Xem tất cả 21 quyết định" }).click();
+  await expect(sec.locator("li")).toHaveCount(21);
+  await sec.getByRole("button", { name: "Thu gọn" }).click();
+  await expect(sec.locator("li")).toHaveCount(5);
+  // Chữ cái đầu bỏ cách xưng hô: "Chị Thảo" thành "T"
+  const contacts = page.locator("section", { has: page.getByRole("heading", { name: "Người gặp nhiều" }) });
+  await expect(contacts.locator("li").first()).toContainText("T");
 });

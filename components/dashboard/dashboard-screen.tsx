@@ -16,13 +16,31 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+
+/** Số quyết định hiện sẵn; còn lại mở bằng nút "Xem tất cả" (review PR #56). */
+const DECISIONS_SHOWN = 5;
+const HONORIFICS = /^(anh|chị|chi|ông|bà|cô|chú|bác|em|mr\.?|ms\.?|mrs\.?)\s+/i;
+
+/** Chữ cái đầu của tên, bỏ cách xưng hô ("Chị Thảo" thành "T"). */
+function initialOf(name: string): string {
+  const clean = name.trim().replace(HONORIFICS, "");
+  return (clean || name.trim()).charAt(0).toUpperCase();
+}
 import { TopBar } from "@/components/shell/app-shell";
 import { RibbonThumb } from "@/components/ribbon/ribbon-thumb";
 import { formatClock } from "@/components/ribbon/draw";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chips";
 import { EmptyState } from "@/components/ui/feedback";
-import { data, dataNow, useData, type AttentionKind, type DashboardData, type Session, type WorkspaceRole } from "@/lib/data";
+import {
+  data,
+  dataNow,
+  useData,
+  type AttentionKind,
+  type DashboardData,
+  type Session,
+  type WorkspaceRole,
+} from "@/lib/data";
 import { dayDiff, durationParts, shortDate, weekdayDate } from "@/lib/format";
 import { templateName } from "@/lib/data/localize";
 import { cn } from "@/lib/cn";
@@ -41,12 +59,18 @@ import { cn } from "@/lib/cn";
  */
 
 // Biểu đồ "Theo mẫu" nằm cuối trang: nạp chậm khi cuộn tới (M7-02)
-const TemplateChart = dynamic(() => import("./template-chart").then((m) => m.TemplateChart), {
-  ssr: false,
-  loading: () => (
-    <div className="h-28 w-full animate-pulse rounded-block bg-surface-2 motion-reduce:animate-none" aria-hidden={true} />
-  ),
-});
+const TemplateChart = dynamic(
+  () => import("./template-chart").then((m) => m.TemplateChart),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="h-28 w-full animate-pulse rounded-block bg-surface-2 motion-reduce:animate-none"
+        aria-hidden={true}
+      />
+    ),
+  },
+);
 
 const KIND_ICON: Record<AttentionKind, LucideIcon> = {
   task_overdue: CircleAlert,
@@ -58,15 +82,32 @@ const KIND_ICON: Record<AttentionKind, LucideIcon> = {
 };
 
 type Range = DashboardData["range"];
-type TeamData = { usage: Array<{ user_id: string; sessions: number; minutes: number; open_tasks: number }>; open_tasks_by_assignee: Array<{ user_id: string; open: number; overdue: number }> };
+type TeamData = {
+  usage: Array<{
+    user_id: string;
+    sessions: number;
+    minutes: number;
+    open_tasks: number;
+  }>;
+  open_tasks_by_assignee: Array<{
+    user_id: string;
+    open: number;
+    overdue: number;
+  }>;
+};
 
 /**
  * Gom dải giọng của các buổi trong cùng ngày thành một dải, gom về tối đa
  * 40 cột để vừa bề ngang điện thoại (giống resampleThumb của bản giả:
  * cột gộp giữ âm lượng cao nhất và màu người nói của cột đó).
  */
-function mergeStrip(sessions: Session[], ids: string[]): { peaks: number[]; speakers: number[] } | null {
-  const rows = ids.map((id) => sessions.find((s) => s.id === id)).filter((s): s is Session => !!s);
+function mergeStrip(
+  sessions: Session[],
+  ids: string[],
+): { peaks: number[]; speakers: number[] } | null {
+  const rows = ids
+    .map((id) => sessions.find((s) => s.id === id))
+    .filter((s): s is Session => !!s);
   if (!rows.length) return null;
   const peaks: number[] = [];
   const speakers: number[] = [];
@@ -108,6 +149,7 @@ export function DashboardScreen() {
   const now = dataNow();
   const [range, setRange] = useState<Range>("week");
   const [tab, setTab] = useState<"personal" | "team">("personal");
+  const [showAllDecisions, setShowAllDecisions] = useState(false);
 
   const dash = useData(() => data.dashboard.get(range), [range]);
   const sessions = useData(() => data.sessions.list(), []);
@@ -118,9 +160,16 @@ export function DashboardScreen() {
   const me = useData(() => data.account.me(), []);
 
   // Không gian nhóm đang dùng và vai trò của tôi: tab Nhóm chỉ Chủ, Quản trị
-  const team = (workspaces.data ?? []).find((w) => w.id === me.data?.current_workspace_id && w.kind === "team");
-  const members = useData(() => (team ? data.workspaces.members(team.id) : Promise.resolve([])), [team?.id]);
-  const myRole = (members.data ?? []).find((m) => m.user_id === me.data?.id)?.role;
+  const team = (workspaces.data ?? []).find(
+    (w) => w.id === me.data?.current_workspace_id && w.kind === "team",
+  );
+  const members = useData(
+    () => (team ? data.workspaces.members(team.id) : Promise.resolve([])),
+    [team?.id],
+  );
+  const myRole = (members.data ?? []).find(
+    (m) => m.user_id === me.data?.id,
+  )?.role;
   const canTeam = !!team && (myRole === "owner" || myRole === "admin");
   // Không đủ quyền xem Nhóm thì luôn hiển thị tab Cá nhân (không cần effect)
   const activeTab: "personal" | "team" = canTeam ? tab : "personal";
@@ -128,11 +177,16 @@ export function DashboardScreen() {
     () => (canTeam ? data.dashboard.team(range) : Promise.resolve(null)),
     [range, canTeam, team?.id],
   );
-  const shared = useData(() => (team ? data.sessions.list({ shared: true }) : Promise.resolve([])), [team?.id]);
+  const shared = useData(
+    () => (team ? data.sessions.list({ shared: true }) : Promise.resolve([])),
+    [team?.id],
+  );
 
   function durationLabel(minutes: number) {
     const { h, m } = durationParts(minutes * 60);
-    return h > 0 ? tl("hours", { h, m: String(m).padStart(2, "0") }) : tl("minutes", { m });
+    return h > 0
+      ? tl("hours", { h, m: String(m).padStart(2, "0") })
+      : tl("minutes", { m });
   }
 
   function dayLabel(date: string) {
@@ -143,10 +197,18 @@ export function DashboardScreen() {
     return weekdayDate(d, locale);
   }
 
-  const sessionTitle = Object.fromEntries((sessions.data ?? []).map((s) => [s.id, s.title]));
-  const contactName = Object.fromEntries((contacts.data ?? []).map((c) => [c.id, c.name]));
-  const memberName = Object.fromEntries((members.data ?? []).map((m) => [m.user_id, m.display_name]));
-  const tplName = Object.fromEntries((templates.data ?? []).map((tp) => [tp.id, templateName(tp, locale)]));
+  const sessionTitle = Object.fromEntries(
+    (sessions.data ?? []).map((s) => [s.id, s.title]),
+  );
+  const contactName = Object.fromEntries(
+    (contacts.data ?? []).map((c) => [c.id, c.name]),
+  );
+  const memberName = Object.fromEntries(
+    (members.data ?? []).map((m) => [m.user_id, m.display_name]),
+  );
+  const tplName = Object.fromEntries(
+    (templates.data ?? []).map((tp) => [tp.id, templateName(tp, locale)]),
+  );
 
   // Người mới: chưa có buổi ghi nào trong không gian đang dùng — hiện hướng
   // dẫn, không hiện dãy số 0
@@ -181,24 +243,36 @@ export function DashboardScreen() {
       <TopBar title={t("title")} />
       <div className="mx-auto w-full max-w-[720px] px-page pt-1 pb-40 lg:px-0">
         {/* Chọn khoảng: áp dụng cho các phần số liệu */}
-        <div role="group" aria-label={t("rangeLabel")} className="flex gap-2 pt-1 pb-2">
-          <FilterChip selected={range === "week"} onClick={() => setRange("week")}>
+        <div
+          role="group"
+          aria-label={t("rangeLabel")}
+          className="flex gap-2 pt-1 pb-2"
+        >
+          <FilterChip
+            selected={range === "week"}
+            onClick={() => setRange("week")}
+          >
             {t("rangeWeek")}
           </FilterChip>
-          <FilterChip selected={range === "month"} onClick={() => setRange("month")}>
+          <FilterChip
+            selected={range === "month"}
+            onClick={() => setRange("month")}
+          >
             {t("rangeMonth")}
           </FilterChip>
         </div>
 
         {/* Tab Nhóm chỉ hiện cho Chủ và Quản trị trong không gian Nhóm */}
         {canTeam ? (
-          <div role="tablist" aria-label={t("tabLabel")} className="mt-1 flex w-fit gap-1 rounded-pill bg-surface-2 p-1">
-            {(
-              [
-                { value: "personal" as const, label: t("tabPersonal") },
-                { value: "team" as const, label: t("tabTeam") },
-              ]
-            ).map((tb) => (
+          <div
+            role="tablist"
+            aria-label={t("tabLabel")}
+            className="mt-1 flex w-fit gap-1 rounded-pill bg-surface-2 p-1"
+          >
+            {[
+              { value: "personal" as const, label: t("tabPersonal") },
+              { value: "team" as const, label: t("tabTeam") },
+            ].map((tb) => (
               <button
                 key={tb.value}
                 role="tab"
@@ -207,7 +281,9 @@ export function DashboardScreen() {
                 onClick={() => setTab(tb.value)}
                 className={cn(
                   "min-h-9 rounded-pill px-4 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
-                  activeTab === tb.value ? "bg-surface text-ink" : "text-ink-3 hover:text-ink",
+                  activeTab === tb.value
+                    ? "bg-surface text-ink"
+                    : "text-ink-3 hover:text-ink",
                 )}
               >
                 {tb.label}
@@ -235,11 +311,16 @@ export function DashboardScreen() {
         ) : isNew ? (
           /* Người mới: hướng dẫn ghi buổi đầu tiên thay vì dãy số 0 */
           <div className="mt-6">
-            <h2 className="text-center text-body-strong font-semibold text-ink">{t("emptyTitle")}</h2>
+            <h2 className="text-center text-body-strong font-semibold text-ink">
+              {t("emptyTitle")}
+            </h2>
             <EmptyState
               message={t("emptyBody")}
               action={
-                <Button variant="primary" onClick={() => router.push("/record")}>
+                <Button
+                  variant="primary"
+                  onClick={() => router.push("/record")}
+                >
                   {t("emptyRecord")}
                 </Button>
               }
@@ -261,11 +342,16 @@ export function DashboardScreen() {
             <>
               {/* ---------- 1. Cần xử lý (đầu trang, quan trọng nhất) ---------- */}
               <section aria-labelledby="dash-attention" className="mt-3">
-                <h2 id="dash-attention" className="text-small font-semibold text-ink-2">
+                <h2
+                  id="dash-attention"
+                  className="text-small font-semibold text-ink-2"
+                >
                   {t("attention")}
                 </h2>
                 {d.attention.length === 0 ? (
-                  <p className="py-3 text-body text-ink-3">{t("attentionEmpty")}</p>
+                  <p className="py-3 text-body text-ink-3">
+                    {t("attentionEmpty")}
+                  </p>
                 ) : (
                   <ul className="divide-y divide-line">
                     {d.attention.map((a) => {
@@ -275,12 +361,23 @@ export function DashboardScreen() {
                           <Link
                             href={a.href}
                             className="group flex min-h-14 items-center gap-3 py-2.5 pr-1 transition-colors ease-noteim duration-(--t-quick)"
-                            aria-label={t("openAttention", { kind: t(`atKind.${a.kind}`), label: a.label })}
+                            aria-label={t("openAttention", {
+                              kind: t(`atKind.${a.kind}`),
+                              label: a.label,
+                            })}
                           >
-                            <Icon aria-hidden={true} className="size-5 shrink-0 text-ink-2" strokeWidth={1.75} />
+                            <Icon
+                              aria-hidden={true}
+                              className="size-5 shrink-0 text-ink-2"
+                              strokeWidth={1.75}
+                            />
                             <span className="min-w-0 flex-1">
-                              <span className="block text-caption text-ink-3">{t(`atKind.${a.kind}`)}</span>
-                              <span className="block truncate text-body font-medium text-ink">{a.label}</span>
+                              <span className="block text-caption text-ink-3">
+                                {t(`atKind.${a.kind}`)}
+                              </span>
+                              <span className="block truncate text-body font-medium text-ink">
+                                {a.label}
+                              </span>
                             </span>
                             <ChevronRight
                               aria-hidden={true}
@@ -297,11 +394,16 @@ export function DashboardScreen() {
 
               {/* ---------- 2. Tuần này / Tháng này ---------- */}
               <section aria-labelledby="dash-week" className="mt-6">
-                <h2 id="dash-week" className="text-small font-semibold text-ink-2">
+                <h2
+                  id="dash-week"
+                  className="text-small font-semibold text-ink-2"
+                >
                   {range === "week" ? t("rangeWeek") : t("rangeMonth")}
                 </h2>
                 {d.totals.sessions === 0 ? (
-                  <p className="py-3 text-body text-ink-3">{t("summaryNoSessions")}</p>
+                  <p className="py-3 text-body text-ink-3">
+                    {t("summaryNoSessions")}
+                  </p>
                 ) : (
                   <>
                     <p className="py-2 text-body text-ink">
@@ -317,22 +419,35 @@ export function DashboardScreen() {
                     {/* Dải giọng ghép theo ngày: bấm một ngày để lọc thư viện */}
                     <ul className="divide-y divide-line">
                       {d.by_day.map((day) => {
-                        const strip = mergeStrip(sessions.data ?? [], day.session_ids);
+                        const strip = mergeStrip(
+                          sessions.data ?? [],
+                          day.session_ids,
+                        );
                         return (
                           <li key={day.date}>
                             <button
                               type="button"
                               onClick={() => router.push(`/?day=${day.date}`)}
-                              aria-label={t("openDay", { date: dayLabel(day.date) })}
+                              aria-label={t("openDay", {
+                                date: dayLabel(day.date),
+                              })}
                               className="group flex w-full items-center gap-4 py-3 text-left transition-colors ease-noteim duration-(--t-quick)"
                             >
                               <span className="w-24 shrink-0">
-                                <span className="block text-body font-medium text-ink">{dayLabel(day.date)}</span>
-                                <span className="block text-caption text-ink-3">{tl("minutes", { m: day.minutes })}</span>
+                                <span className="block text-body font-medium text-ink">
+                                  {dayLabel(day.date)}
+                                </span>
+                                <span className="block text-caption text-ink-3">
+                                  {tl("minutes", { m: day.minutes })}
+                                </span>
                               </span>
                               {strip ? (
                                 <span className="min-w-0 flex-1 overflow-hidden">
-                                  <RibbonThumb peaks={strip.peaks} speakers={strip.speakers} className="max-w-full" />
+                                  <RibbonThumb
+                                    peaks={strip.peaks}
+                                    speakers={strip.speakers}
+                                    className="max-w-full"
+                                  />
                                 </span>
                               ) : null}
                               <ChevronRight
@@ -351,58 +466,102 @@ export function DashboardScreen() {
 
               {/* ---------- 3. Quyết định đã chốt ---------- */}
               <section aria-labelledby="dash-decisions" className="mt-6">
-                <h2 id="dash-decisions" className="text-small font-semibold text-ink-2">
+                <h2
+                  id="dash-decisions"
+                  className="text-small font-semibold text-ink-2"
+                >
                   {t("decisions")}
                 </h2>
                 {d.decisions.length === 0 ? (
-                  <p className="py-3 text-body text-ink-3">{t("decisionsEmpty")}</p>
+                  <p className="py-3 text-body text-ink-3">
+                    {t("decisionsEmpty")}
+                  </p>
                 ) : (
-                  <ul className="divide-y divide-line">
-                    {d.decisions.map((dc) => (
-                      <li key={`${dc.session_id}:${dc.bullet_id}`}>
-                        <Link
-                          href={`/s/${dc.session_id}?t=${dc.timestamp_sec}`}
-                          className="group flex min-h-14 items-start gap-3 py-3 pr-1 transition-colors ease-noteim duration-(--t-quick)"
-                          aria-label={t("openDecision", { session: sessionTitle[dc.session_id] ?? dc.session_id })}
-                        >
-                          <Quote aria-hidden={true} className="mt-0.5 size-5 shrink-0 text-tag-decided" strokeWidth={1.75} />
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-body font-medium text-ink">{dc.text}</span>
-                            <span className="mt-0.5 block truncate text-caption text-ink-3">
-                              {sessionTitle[dc.session_id] ?? dc.session_id} · {formatClock(dc.timestamp_sec)}
+                  <>
+                    <ul className="divide-y divide-line">
+                      {(showAllDecisions
+                        ? d.decisions
+                        : d.decisions.slice(0, DECISIONS_SHOWN)
+                      ).map((dc) => (
+                        <li key={`${dc.session_id}:${dc.bullet_id}`}>
+                          <Link
+                            href={`/s/${dc.session_id}?t=${dc.timestamp_sec}`}
+                            className="group flex min-h-14 items-start gap-3 py-3 pr-1 transition-colors ease-noteim duration-(--t-quick)"
+                            aria-label={t("openDecision", {
+                              session:
+                                sessionTitle[dc.session_id] ?? dc.session_id,
+                            })}
+                          >
+                            <Quote
+                              aria-hidden={true}
+                              className="mt-0.5 size-5 shrink-0 text-tag-decided"
+                              strokeWidth={1.75}
+                            />
+                            <span className="min-w-0 flex-1">
+                              <span className="block text-body font-medium text-ink">
+                                {dc.text}
+                              </span>
+                              <span className="mt-0.5 block truncate text-caption text-ink-3">
+                                {sessionTitle[dc.session_id] ?? dc.session_id},{" "}
+                                {formatClock(dc.timestamp_sec)}
+                              </span>
                             </span>
-                          </span>
-                          <ChevronRight
-                            aria-hidden={true}
-                            className="mt-1 size-5 shrink-0 text-ink-3 transition-transform ease-noteim duration-(--t-quick) group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
-                            strokeWidth={1.75}
-                          />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                            <ChevronRight
+                              aria-hidden={true}
+                              className="mt-1 size-5 shrink-0 text-ink-3 transition-transform ease-noteim duration-(--t-quick) group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+                              strokeWidth={1.75}
+                            />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    {d.decisions.length > DECISIONS_SHOWN && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAllDecisions((v) => !v)}
+                        aria-expanded={showAllDecisions}
+                        className="mt-1 min-h-11 text-small font-medium text-ai underline-offset-4 hover:underline"
+                      >
+                        {showAllDecisions
+                          ? t("decisionsLess")
+                          : t("decisionsAll", { count: d.decisions.length })}
+                      </button>
+                    )}
+                  </>
                 )}
               </section>
 
               {/* ---------- 4. Người gặp nhiều ---------- */}
               <section aria-labelledby="dash-contacts" className="mt-6">
-                <h2 id="dash-contacts" className="text-small font-semibold text-ink-2">
+                <h2
+                  id="dash-contacts"
+                  className="text-small font-semibold text-ink-2"
+                >
                   {t("topContacts")}
                 </h2>
                 {d.top_contacts.length === 0 ? (
-                  <p className="py-3 text-body text-ink-3">{t("topContactsEmpty")}</p>
+                  <p className="py-3 text-body text-ink-3">
+                    {t("topContactsEmpty")}
+                  </p>
                 ) : (
                   <ul className="divide-y divide-line">
                     {d.top_contacts.map((c) => (
-                      <li key={c.contact_id} className="flex min-h-14 items-center gap-3 py-2.5">
+                      <li
+                        key={c.contact_id}
+                        className="flex min-h-14 items-center gap-3 py-2.5"
+                      >
                         <span className="flex size-9 shrink-0 items-center justify-center rounded-pill bg-surface-2 text-small font-semibold text-ink">
-                          {(contactName[c.contact_id] ?? "?").trim().charAt(0)}
+                          {initialOf(contactName[c.contact_id] ?? "?")}
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-body font-medium text-ink">{contactName[c.contact_id] ?? c.contact_id}</span>
+                          <span className="block truncate text-body font-medium text-ink">
+                            {contactName[c.contact_id] ?? c.contact_id}
+                          </span>
                           <span className="block text-caption text-ink-3">
-                            {t("contactSessions", { count: c.sessions })} ·{" "}
-                            {t("contactLastMet", { date: shortDate(c.last_met_at, locale) })}
+                            {t("contactSessions", { count: c.sessions })},{" "}
+                            {t("contactLastMet", {
+                              date: shortDate(c.last_met_at, locale),
+                            })}
                           </span>
                         </span>
                       </li>
@@ -413,7 +572,10 @@ export function DashboardScreen() {
 
               {/* ---------- 5. Theo mẫu (biểu đồ nạp chậm) ---------- */}
               <section aria-labelledby="dash-templates" className="mt-6">
-                <h2 id="dash-templates" className="text-small font-semibold text-ink-2">
+                <h2
+                  id="dash-templates"
+                  className="text-small font-semibold text-ink-2"
+                >
                   {t("byTemplate")}
                 </h2>
                 <div ref={setChartNode} className="mt-3">
@@ -428,19 +590,30 @@ export function DashboardScreen() {
                       label={t("byTemplateAria")}
                     />
                   ) : (
-                    <div className="h-28 w-full rounded-block bg-surface-2 opacity-40" aria-hidden={true} />
+                    <div
+                      className="h-28 w-full rounded-block bg-surface-2 opacity-40"
+                      aria-hidden={true}
+                    />
                   )}
                 </div>
               </section>
 
               {/* ---------- 6. Hạn mức ---------- */}
               <section aria-labelledby="dash-quota" className="mt-6">
-                <h2 id="dash-quota" className="text-small font-semibold text-ink-2">
+                <h2
+                  id="dash-quota"
+                  className="text-small font-semibold text-ink-2"
+                >
                   {t("quota")}
                 </h2>
                 {q ? (
                   <div className="py-3">
-                    <p className="text-body text-ink">{t("quotaUsed", { used: q.minutes_used, limit: q.minutes_limit })}</p>
+                    <p className="text-body text-ink">
+                      {t("quotaUsed", {
+                        used: q.minutes_used,
+                        limit: q.minutes_limit,
+                      })}
+                    </p>
                     <div className="mt-2 h-3 w-full overflow-hidden rounded-pill bg-surface-2">
                       <div
                         className="h-full rounded-pill bg-sen transition-[width] ease-noteim duration-(--t-base) motion-reduce:transition-none"
@@ -451,8 +624,13 @@ export function DashboardScreen() {
                     </div>
                     {q.minutes_used / Math.max(1, q.minutes_limit) >= 0.8 ? (
                       <>
-                        <p className="mt-2 text-small font-medium text-tag-risk">{t("quotaNear")}</p>
-                        <Button className="mt-3" onClick={() => router.push("/upgrade")}>
+                        <p className="mt-2 text-small font-medium text-tag-risk">
+                          {t("quotaNear")}
+                        </p>
+                        <Button
+                          className="mt-3"
+                          onClick={() => router.push("/upgrade")}
+                        >
                           {t("quotaUpgrade")}
                         </Button>
                       </>
@@ -460,7 +638,10 @@ export function DashboardScreen() {
                     <p className="mt-2 text-caption text-ink-3">
                       {t("quotaLeft", {
                         left: Math.max(0, q.minutes_limit - q.minutes_used),
-                        date: shortDate(new Date(Date.parse(q.period_end) + 86400_000), locale),
+                        date: shortDate(
+                          new Date(Date.parse(q.period_end) + 86400_000),
+                          locale,
+                        ),
                       })}
                     </p>
                   </div>
@@ -487,7 +668,12 @@ function TeamPanel({
 }: {
   data: TeamData | null;
   loading: boolean;
-  members: Array<{ user_id: string | null; display_name: string; role: WorkspaceRole; status: string }>;
+  members: Array<{
+    user_id: string | null;
+    display_name: string;
+    role: WorkspaceRole;
+    status: string;
+  }>;
   shared: Session[];
   memberName: Record<string, string>;
   myId: string;
@@ -510,15 +696,26 @@ function TeamPanel({
       </div>
     );
   }
-  if (!data || data.usage.length === 0) return <p className="py-6 text-body text-ink-3">{t("teamEmpty")}</p>;
+  if (!data || data.usage.length === 0)
+    return <p className="py-6 text-body text-ink-3">{t("teamEmpty")}</p>;
 
   const teamMinutes = data.usage.reduce((n, r) => n + r.minutes, 0);
   const teamSessions = data.usage.reduce((n, r) => n + r.sessions, 0);
-  const teamOverdue = data.open_tasks_by_assignee.reduce((n, r) => n + r.overdue, 0);
-  const activeCount = members.filter((m) => m.status === "active" && m.user_id).length;
+  const teamOverdue = data.open_tasks_by_assignee.reduce(
+    (n, r) => n + r.overdue,
+    0,
+  );
+  const activeCount = members.filter(
+    (m) => m.status === "active" && m.user_id,
+  ).length;
   const limit = teamMinutesLimit(personalLimit, activeCount);
-  const openByName = Object.fromEntries(data.open_tasks_by_assignee.map((r) => [r.user_id, r.open]));
-  const ROLE_KEY: Record<WorkspaceRole, "roleOwner" | "roleAdmin" | "roleMember"> = {
+  const openByName = Object.fromEntries(
+    data.open_tasks_by_assignee.map((r) => [r.user_id, r.open]),
+  );
+  const ROLE_KEY: Record<
+    WorkspaceRole,
+    "roleOwner" | "roleAdmin" | "roleMember"
+  > = {
     owner: "roleOwner",
     admin: "roleAdmin",
     member: "roleMember",
@@ -528,18 +725,30 @@ function TeamPanel({
     <>
       {/* Phút đã dùng của cả nhóm so với hạn mức chung */}
       <section aria-labelledby="dash-team-usage" className="mt-3">
-        <h2 id="dash-team-usage" className="text-small font-semibold text-ink-2">
+        <h2
+          id="dash-team-usage"
+          className="text-small font-semibold text-ink-2"
+        >
           {t("teamUsage", { minutes: teamMinutes })}
-          <span className="ml-2 font-normal text-ink-3">{t("teamUsageLimit", { limit })}</span>
+          <span className="ml-2 font-normal text-ink-3">
+            {t("teamUsageLimit", { limit })}
+          </span>
         </h2>
         <p className="sr-only">{`${t("teamSessions")}: ${teamSessions}`}</p>
         <div className="mt-2 h-3 w-full overflow-hidden rounded-pill bg-surface-2">
           <div
             className="h-full rounded-pill bg-sen transition-[width] ease-noteim duration-(--t-base) motion-reduce:transition-none"
-            style={{ width: `${Math.min(100, Math.round((teamMinutes / limit) * 100))}%` }}
+            style={{
+              width: `${Math.min(100, Math.round((teamMinutes / limit) * 100))}%`,
+            }}
           />
         </div>
-        <p className={cn("mt-2 text-small font-medium", teamOverdue > 0 ? "text-tag-risk" : "text-ink-3")}>
+        <p
+          className={cn(
+            "mt-2 text-small font-medium",
+            teamOverdue > 0 ? "text-tag-risk" : "text-ink-3",
+          )}
+        >
           {t("teamOverdue", { count: teamOverdue })}
         </p>
       </section>
@@ -551,11 +760,21 @@ function TeamPanel({
           <table className="w-full text-left text-small">
             <thead>
               <tr className="text-caption text-ink-3">
-                <th scope="col" className="py-2 pr-3 font-medium">{t("teamMember")}</th>
-                <th scope="col" className="py-2 pr-3 font-medium">{t("teamRole")}</th>
-                <th scope="col" className="py-2 pr-3 text-right font-medium">{t("teamSessions")}</th>
-                <th scope="col" className="py-2 pr-3 text-right font-medium">{t("teamMinutes")}</th>
-                <th scope="col" className="py-2 text-right font-medium">{t("teamOpenTasks")}</th>
+                <th scope="col" className="py-2 pr-3 font-medium">
+                  {t("teamMember")}
+                </th>
+                <th scope="col" className="py-2 pr-3 font-medium">
+                  {t("teamRole")}
+                </th>
+                <th scope="col" className="py-2 pr-3 text-right font-medium">
+                  {t("teamSessions")}
+                </th>
+                <th scope="col" className="py-2 pr-3 text-right font-medium">
+                  {t("teamMinutes")}
+                </th>
+                <th scope="col" className="py-2 text-right font-medium">
+                  {t("teamOpenTasks")}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
@@ -563,11 +782,21 @@ function TeamPanel({
                 const m = members.find((x) => x.user_id === row.user_id);
                 return (
                   <tr key={row.user_id}>
-                    <td className="max-w-[9rem] truncate py-2.5 pr-3 font-medium text-ink">{m?.display_name ?? row.user_id}</td>
-                    <td className="py-2.5 pr-3 text-ink-2">{m ? tw(ROLE_KEY[m.role]) : ""}</td>
-                    <td className="py-2.5 pr-3 text-right text-ink-2">{row.sessions}</td>
-                    <td className="py-2.5 pr-3 text-right text-ink-2">{row.minutes}</td>
-                    <td className="py-2.5 text-right text-ink-2">{openByName[row.user_id] ?? 0}</td>
+                    <td className="max-w-[9rem] truncate py-2.5 pr-3 font-medium text-ink">
+                      {m?.display_name ?? row.user_id}
+                    </td>
+                    <td className="py-2.5 pr-3 text-ink-2">
+                      {m ? tw(ROLE_KEY[m.role]) : ""}
+                    </td>
+                    <td className="py-2.5 pr-3 text-right text-ink-2">
+                      {row.sessions}
+                    </td>
+                    <td className="py-2.5 pr-3 text-right text-ink-2">
+                      {row.minutes}
+                    </td>
+                    <td className="py-2.5 text-right text-ink-2">
+                      {openByName[row.user_id] ?? 0}
+                    </td>
                   </tr>
                 );
               })}
@@ -578,7 +807,10 @@ function TeamPanel({
 
       {/* Buổi ghi được chia sẻ với nhóm gần đây */}
       <section aria-labelledby="dash-team-shared" className="mt-6">
-        <h2 id="dash-team-shared" className="text-small font-semibold text-ink-2">
+        <h2
+          id="dash-team-shared"
+          className="text-small font-semibold text-ink-2"
+        >
           {t("teamShared")}
         </h2>
         {shared.length === 0 ? (
@@ -589,15 +821,26 @@ function TeamPanel({
               const ownerId = s.owner_user_id || s.user_id;
               return (
                 <li key={s.id}>
-                  <Link href={`/s/${s.id}`} className="group flex min-h-14 items-center gap-3 py-2.5 pr-1">
+                  <Link
+                    href={`/s/${s.id}`}
+                    className="group flex min-h-14 items-center gap-3 py-2.5 pr-1"
+                  >
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-body font-medium text-ink">{s.title}</span>
+                      <span className="block truncate text-body font-medium text-ink">
+                        {s.title}
+                      </span>
                       <span className="block text-caption text-ink-3">
                         {shortDate(s.created_at, locale)}
-                        {ownerId !== myId ? ` · ${t("teamSharedBy", { name: memberName[ownerId] ?? "" })}` : ""}
+                        {ownerId !== myId
+                          ? `, ${t("teamSharedBy", { name: memberName[ownerId] ?? "" })}`
+                          : ""}
                       </span>
                     </span>
-                    <ChevronRight aria-hidden={true} className="size-5 shrink-0 text-ink-3" strokeWidth={1.75} />
+                    <ChevronRight
+                      aria-hidden={true}
+                      className="size-5 shrink-0 text-ink-3"
+                      strokeWidth={1.75}
+                    />
                   </Link>
                 </li>
               );

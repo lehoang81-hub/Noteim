@@ -482,7 +482,7 @@
       "link_expiring": "Share link expiring",
       "processing_failed": "Processing failed"
     },
-    "openAttention": "Open: {kind} — {label}",
+    "openAttention": "Open: {kind}, {label}",
     "summary": "{sessions, plural, one {# session} other {# sessions}} recorded, {duration}, {decisions, plural, one {# decision} other {# decisions}}, {done} of {total} tasks done",
     "summaryNoSessions": "No sessions recorded in this range yet",
     "dayHint": "Tap a day to filter the library by that day",
@@ -522,7 +522,9 @@
     "teamShared": "Recently shared with the team",
     "teamNoShared": "No sessions shared with the team yet",
     "teamSharedBy": "Recorded by {name}",
-    "teamEmpty": "No team data in this range"
+    "teamEmpty": "No team data in this range",
+    "decisionsAll": "{count, plural, one {See # decision} other {See all # decisions}}",
+    "decisionsLess": "Show less"
   },
   "debug": {
     "title": "Test panel",

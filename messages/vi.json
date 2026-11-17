@@ -482,7 +482,7 @@
       "link_expiring": "Link chia sẻ sắp hết hạn",
       "processing_failed": "Buổi ghi xử lý lỗi"
     },
-    "openAttention": "Mở chỗ xử lý: {kind} — {label}",
+    "openAttention": "Mở chỗ xử lý: {kind}, {label}",
     "summary": "{sessions} buổi ghi, {duration}, {decisions} quyết định, xong {done} trên {total} việc",
     "summaryNoSessions": "Chưa có buổi ghi nào trong khoảng này",
     "dayHint": "Bấm một ngày để lọc thư viện theo ngày đó",
@@ -522,7 +522,9 @@
     "teamShared": "Buổi ghi được chia sẻ với nhóm gần đây",
     "teamNoShared": "Chưa có buổi ghi nào được chia sẻ với nhóm",
     "teamSharedBy": "Ghi bởi {name}",
-    "teamEmpty": "Chưa có dữ liệu nhóm trong khoảng này"
+    "teamEmpty": "Chưa có dữ liệu nhóm trong khoảng này",
+    "decisionsAll": "{count, plural, other {Xem tất cả # quyết định}}",
+    "decisionsLess": "Thu gọn"
   },
   "record": {
     "statusRecording": "Ghi",
