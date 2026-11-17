@@ -6,7 +6,8 @@ import { useTranslations } from "next-intl";
 import { RibbonPlayback, type Bookmark, type HeatSpan } from "@/components/ribbon/ribbon-playback";
 import { formatClock, type SpeakerSpan } from "@/components/ribbon/draw";
 import { cn } from "@/lib/cn";
-import { PLAYBACK_RATES, usePlayerState, type Player } from "@/lib/player/mock-player";
+import type { ListeningMap, ListeningPrefs } from "@/lib/data/types";
+import { PLAYBACK_RATES, usePlayerState, type Player, type SkipRange } from "@/lib/player/mock-player";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 
 /*
@@ -14,9 +15,20 @@ import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
  * - Thu gọn: nút phát, mốc hiện tại, dải giọng nhỏ, tổng thời lượng, nút mở rộng
  * - Mở rộng: dải giọng đầy đủ có điểm nóng và dải nhiệt, lùi 10 giây,
  *   phát, tới 10 giây, tốc độ
+ * - Nghe sạch (M8-01): nút bật chế độ và bảng công tắc — bước 3 dựng UI;
+ *   bước 2 đã nhận bản đồ nghe để kim phát nhảy qua khoảng cần bỏ qua.
  * Vị trí (nổi trên thanh điều hướng) do khung ứng dụng quyết định ở M1;
  * component này chỉ lo phần bên trong.
  */
+
+export type ListeningControl = {
+  map: ListeningMap | null;
+  prefs: ListeningPrefs | null;
+  /** Thời lượng nghe sạch theo lựa chọn hiện tại */
+  cleanDuration: number;
+  /** Đổi lựa chọn và nhớ theo người dùng */
+  onPrefs: (patch: Partial<ListeningPrefs>) => void;
+};
 
 export function FloatingPlayer({
   player,
@@ -24,6 +36,8 @@ export function FloatingPlayer({
   spans,
   bookmarks,
   heat,
+  skips = [],
+  listening,
   expanded,
   onExpandedChange,
   className,
@@ -33,6 +47,10 @@ export function FloatingPlayer({
   spans: SpeakerSpan[];
   bookmarks?: Bookmark[];
   heat?: HeatSpan[];
+  /** Khoảng đang bỏ qua trên dải giọng (nghe sạch bật, M8-01) */
+  skips?: SkipRange[];
+  /** Điều khiển Nghe sạch; undefined khi buổi không phát được */
+  listening?: ListeningControl;
   expanded: boolean;
   onExpandedChange: (expanded: boolean) => void;
   className?: string;
@@ -68,6 +86,8 @@ export function FloatingPlayer({
       layout={!reduce}
       transition={{ duration: 0.34, ease: [0.2, 0.8, 0.2, 1] }}
       className={cn("overflow-hidden rounded-block border border-line bg-surface text-ink shadow-float", className)}
+      // Trạng thái nghe sạch cho kiểm thử tự động: "on" khi bản đồ nghe đã áp dụng
+      data-listening={listening?.prefs?.enabled && skips.length > 0 ? "on" : "off"}
     >
       {!expanded ? (
         <div className="flex items-center gap-3 p-2 pr-1">

@@ -14,8 +14,9 @@ import { Banner, EmptyState, SkeletonParagraph } from "@/components/ui/feedback"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { data, dataNow, DataError, useData, type ActionItem, type Lang, type SessionDetail, type SummaryVersion } from "@/lib/data";
+import { data, dataNow, DataError, useData, type ListeningPrefs, type ActionItem, type Lang, type ListeningMap, type SessionDetail, type SummaryVersion } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
+import { cleanDurationOf, skipsFromMap } from "@/lib/listening/skips";
 import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
@@ -162,6 +163,7 @@ function Loaded({
   const [player] = useState<Player>(() => createMockPlayer(detail.duration_sec));
   useEffect(() => () => player.pause(), [player]);
   const ps = usePlayerState(player);
+
   const [expanded, setExpanded] = useState(false);
   // Mở sâu từ Tổng quan (?sheet=speakers, M7-02): vào trang là bảng đặt tên người nói
   const [naming, setNaming] = useState(() => search.get("sheet") === "speakers");
@@ -196,6 +198,24 @@ function Loaded({
     touched.current = true;
     player.seek(time);
     player.play();
+  }
+
+  // Nghe sạch (M8-01): bản đồ nghe của buổi + lựa chọn của người dùng. Kim
+  // nhảy qua khoảng lặng/tiếng đệm khi phát; file gốc không bị cắt sửa.
+  const listeningMap = useData(
+    () => (canPlay ? data.sessions.getListeningMap(detail.id) : Promise.resolve(null)),
+    [detail.id, canPlay],
+  );
+  const prefs: ListeningPrefs | null = me.data?.listening_prefs ?? null;
+  const skips = useMemo(() => skipsFromMap(listeningMap.data, prefs), [listeningMap.data, prefs]);
+  useEffect(() => {
+    player.setSkips(skips);
+  }, [player, skips]);
+  const cleanDuration = cleanDurationOf(detail.duration_sec, skips);
+  function setPrefs(patch: Partial<ListeningPrefs>) {
+    void data.account
+      .updateMe({ listening_prefs: { ...(prefs ?? { enabled: false, denoise: true, level: true, skip_silence: true, skip_fillers: false }), ...patch } })
+      .catch(() => undefined);
   }
 
   // /tasks và /search dẫn tới đây kèm mốc thời gian (?t=giây): tua tới đúng
@@ -501,6 +521,8 @@ function Loaded({
             }))}
             bookmarks={detail.bookmarks.map((b) => ({ time: b.timestamp_sec, tag: b.tag }))}
             heat={detail.topics.map((tp) => ({ start: tp.start_sec, end: tp.end_sec, tag: tp.tag }))}
+            skips={skips}
+            listening={{ map: listeningMap.data ?? null, prefs, cleanDuration, onPrefs: setPrefs }}
             expanded={expanded}
             onExpandedChange={setExpanded}
           />
