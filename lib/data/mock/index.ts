@@ -1574,6 +1574,7 @@ export const mockSource: DataSource = {
           } satisfies DashboardData;
         }
         const now = MOCK_NOW;
+        const db = getDb();
         const visible = visibleSessions();
         const inRange = visible
           .filter((d) => now.getTime() - new Date(d.created_at).getTime() <= rangeWindow(range))
@@ -1608,10 +1609,14 @@ export const mockSource: DataSource = {
             ) || a.timestamp_sec - b.timestamp_sec,
         );
 
-        // Người gặp nhiều: liên hệ trong các buổi của khoảng, đủ 5 người
+        // Người gặp nhiều: liên hệ trong các buổi của khoảng, đủ 5 người.
+        // Loại chính người dùng ("c-me" trùng email người dùng) — đó là người
+        // mình gặp, không phải người gặp mình.
+        const selfContactId = db.contacts.find((c) => c.email?.toLowerCase() === db.user.email.toLowerCase())?.id;
         const contactMap = new Map<string, { sessions: number; last_met_at: string }>();
         for (const d of inRange) {
           for (const cid of d.participant_contact_ids) {
+            if (cid === selfContactId) continue;
             const g = contactMap.get(cid) ?? { sessions: 0, last_met_at: d.created_at };
             g.sessions += 1;
             if (d.created_at > g.last_met_at) g.last_met_at = d.created_at;
