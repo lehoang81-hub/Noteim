@@ -483,6 +483,33 @@ chip và nút đổi ngôn ngữ; phông Hàn chỉ tải khi trang thật sự 
 (unicode-range). Khi nối backend: giữ nguyên quy tắc này, không đặt tên gốc
 tiếng Hàn vào các nhãn điều khiển ở giao diện khác ngôn ngữ.
 
+### Bổ sung M7 (2026-11-18, nhánh `m7/04-ban-giao`, cùng phương pháp đo)
+
+Trung vị 3 lần, người dùng đã làm quen, xóa cache HTTP mỗi lần, kiểm
+`finalDisplayedUrl`, `--cats performance,accessibility`. Route mới của M7:
+`/dashboard` (M7-02), `/team/members` (M7-03) — `/team/members` chưa có số mốc,
+lần đầu ghi đây. Mốc M6 lấy từ bảng trên (vi).
+
+| Route | Perf vi (mốc) | Perf vi M7 | Perf ko | A11y | LCP vi→ko (s) | Font vi→ko (KB) |
+| --- | --- | --- | --- | --- | --- | --- |
+| `/` | 69 | 71 | 70 | 100 | 5,27→5,97 | 124→288 |
+| `/s/s-bds-lan` | 68 | 72 | 65 | 100 | 5,29→5,85 | 141→321 |
+| `/dashboard` | 71 (M7-02) | 76 | 70 | 100 | 4,95→5,35 | 124→347 |
+| `/team/members` | chưa có | 75 | 75 | 100 | 4,93→5,71 | 116→257 |
+
+Không route nào tụt so với mốc: `/` +2, `/s` +4 điểm so với M6; `/dashboard` +5
+điểm so với M7-02. TBT giảm ở mọi route (thư viện 398 ms, chi tiết 374 ms so
+với 368/481 ms của M5). A11y 100/100 cả 8 lần đo.
+
+Ghi chú tiếng Hàn: điểm Perf ko thấp hơn vi 5–7 điểm ở `/s` và `/dashboard` do
+phông Hàn (Pretendard, subset theo unicode-range) nạp thêm 160–230 KB cho các
+chữ Hàn của giao diện và của tên mẫu; LCP ko chênh vi 0,4–0,7 s, cùng mức chênh
+đã chốt ở M6 (0,35–0,69 s). Mục tiêu "< 300 KB phông cho `/` ko" của M6 giờ là
+288 KB (thêm chữ của giao diện nhóm M7) — vẫn dưới đích. Khi nối backend: nếu
+thêm ngôn ngữ mới, nhớ đo lại cả hai ngôn ngữ cho route mới, phông nạp theo
+unicode-range tự mở rộng theo chữ dùng thật.
+
+
 
 ## 7. Ghi chú M6 — nội dung tiếng Hàn
 
