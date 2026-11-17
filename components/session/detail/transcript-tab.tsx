@@ -13,8 +13,9 @@ import { useToast } from "@/components/ui/toast";
 import { speakerLabel } from "@/lib/data/localize";
 import { data, useData, type Lang, type SessionDetail, type Speaker, type TranscriptSegment } from "@/lib/data";
 import { LANG_BADGE } from "@/lib/data/types";
-import { wordStateAt, wordTimings } from "@/lib/listening/words";
+import { wordStateAt, wordTimings, type WordTiming } from "@/lib/listening/words";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
+import { useCallback } from "react";
 import { cn } from "@/lib/cn";
 
 /*
@@ -96,6 +97,7 @@ export function TranscriptTab({
   playing,
   onSeek,
   onQuoteCard,
+  fillers = [],
 }: {
   detail: SessionDetail;
   canPlay: boolean;
@@ -104,6 +106,8 @@ export function TranscriptTab({
   onSeek: (time: number) => void;
   /** Tạo thẻ trích dẫn từ đoạn lời này (M4-01) */
   onQuoteCard?: (seg: TranscriptSegment) => void;
+  /** Tiếng đệm trong bản đồ nghe, để màu phụ ở chế độ Nguyên văn (M8-01) */
+  fillers?: Array<{ start_sec: number; end_sec: number; text: string }>;
 }) {
   const t = useTranslations("transcript");
   const tr = useTranslations(); // nhãn người nói chưa đặt tên ở cấp gốc (review #41 mục 5)
@@ -127,6 +131,11 @@ export function TranscriptTab({
   const [editingSegId, setEditingSegId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
 
+  // Bản gọn và Nguyên văn (M8-01): Bản gọn mặc định — bỏ tiếng đệm, từ lặp,
+  // nói vấp; Nguyên văn giữ từng chữ (tiếng đệm màu chữ phụ) để đối chiếu
+  // khi cần làm bằng chứng. Tìm kiếm, sửa lời theo chế độ đang xem.
+  const [mode, setMode] = useState<"clean" | "verbatim">("clean");
+
   // Bản dịch (M6-02): bật "Xem bản dịch" thì dịch mọi đoạn khác ngôn ngữ
   // giao diện; từng đoạn có "Dịch đoạn này". Lỗi dịch hiện thông báo + Thử lại.
   const locale = useLocale() as Lang;
@@ -138,6 +147,12 @@ export function TranscriptTab({
     () => [...(transcript.data ?? [])].sort((a, b) => a.start_sec - b.start_sec),
     [transcript.data],
   );
+  /** Câu hiển thị theo chế độ đang xem (M8-01). Bản gọn thiếu thì dùng câu
+   * Nguyên văn (dữ liệu cũ trước khi có text_clean). */
+  const displayText = useCallback(
+    (seg: TranscriptSegment) => (mode === "clean" ? seg.text_clean || seg.text : seg.text),
+    [mode],
+  );
   const segById = useMemo(() => Object.fromEntries(segments.map((s) => [s.id, s])), [segments]);
   const speakerOf = useMemo(() => Object.fromEntries(detail.speakers.map((s) => [s.id, s])), [detail.speakers]);
   /** Buổi có đoạn nói bằng ngôn ngữ khác ngôn ngữ giao diện thì mới hiện hàng "Xem bản dịch" */
@@ -147,13 +162,13 @@ export function TranscriptTab({
   const terms = useMemo(() => (glossary.data ?? []).map((g) => g.term).filter((x) => x.length > 0), [glossary.data]);
   const glossaryActive = q === "" && terms.length > 0;
 
-  /** Đánh số chỗ khớp liên tục trên cả danh sách để tới/lùi. */
+  /** Đánh số chỗ khớp liên tục trên cả danh sách để tới/lùi — theo chế độ đang xem (M8-01). */
   const matchIndex = useMemo(() => {
     if (!q) return null;
     const rows: Array<{ segId: string; range: Range }> = [];
-    for (const seg of segments) for (const range of findAll(seg.text, q)) rows.push({ segId: seg.id, range });
+    for (const seg of segments) for (const range of findAll(displayText(seg), q)) rows.push({ segId: seg.id, range });
     return rows;
-  }, [segments, q]);
+  }, [segments, q, displayText]);
 
   /** Đoạn đang phát: đoạn cuối có mốc bắt đầu trước (hoặc đúng) thời điểm hiện tại. */
   const playingSegId = useMemo(() => {
@@ -200,7 +215,7 @@ export function TranscriptTab({
 
   async function copySegment(seg: TranscriptSegment) {
     try {
-      await navigator.clipboard.writeText(seg.text);
+      await navigator.clipboard.writeText(displayText(seg));
       toast.show({ tone: "success", message: t("copied") });
     } catch {
       toast.show({ tone: "error", message: ts("saveError") });
@@ -212,8 +227,32 @@ export function TranscriptTab({
 
   return (
     <div className="max-w-[68ch]">
-      {/* Ô tìm + đếm chỗ khớp + tới lùi */}
+      {/* Ô tìm + chuyển Bản gọn/Nguyên văn + đếm chỗ khớp (M8-01) */}
       <div className="flex items-center gap-2">
+        <div role="group" aria-label={t("modeLabel")} className="flex shrink-0 items-center rounded-pill border border-line p-0.5">
+          <button
+            type="button"
+            onClick={() => setMode("clean")}
+            aria-pressed={mode === "clean"}
+            className={cn(
+              "h-9 rounded-pill px-2.5 text-caption font-semibold transition-colors ease-noteim duration-(--t-quick)",
+              mode === "clean" ? "bg-ink text-bg" : "text-ink-2 hover:text-ink",
+            )}
+          >
+            {t("modeClean")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("verbatim")}
+            aria-pressed={mode === "verbatim"}
+            className={cn(
+              "h-9 rounded-pill px-2.5 text-caption font-semibold transition-colors ease-noteim duration-(--t-quick)",
+              mode === "verbatim" ? "bg-ink text-bg" : "text-ink-2 hover:text-ink",
+            )}
+          >
+            {t("modeVerbatim")}
+          </button>
+        </div>
         <SearchField
           value={query}
           onChange={setQuery}
@@ -303,6 +342,9 @@ export function TranscriptTab({
           activeMatch={activeMatch}
           playingSegId={playingSegId}
           currentTime={currentTime}
+          mode={mode}
+          displayText={displayText}
+          fillers={fillers}
           editingSegId={editingSegId}
           editValue={editValue}
           setEditValue={setEditValue}
@@ -313,12 +355,12 @@ export function TranscriptTab({
           onSaveEdit={async () => {
             const seg = editingSegId ? segById[editingSegId] : null;
             const next = editValue.trim();
-            if (!seg || !next || next === seg.text) {
+            if (!seg || !next || next === displayText(seg)) {
               setEditingSegId(null);
               return;
             }
             try {
-              await data.sessions.updateSegment(detail.id, seg.id, next);
+              await data.sessions.updateSegment(detail.id, seg.id, next, mode === "clean" ? "text_clean" : "text");
               setEditingSegId(null);
               toast.show({ tone: "success", message: t("editSaved") });
             } catch {
@@ -357,7 +399,7 @@ export function TranscriptTab({
         open={!!menuSeg}
         onOpenChange={(open) => !open && setMenuSegId(null)}
         title={menuSeg ? t("actions", { time: formatClock(menuSeg.start_sec) }) : ""}
-        description={menuSeg?.text}
+        description={menuSeg ? displayText(menuSeg) : ""}
         size="half"
       >
         {menuSeg ? (
@@ -375,7 +417,7 @@ export function TranscriptTab({
               label={t("edit")}
               onClick={() => {
                 setEditingSegId(menuSeg.id);
-                setEditValue(menuSeg.text);
+                setEditValue(displayText(menuSeg));
                 setMenuSegId(null);
               }}
             />
@@ -486,6 +528,12 @@ type ListProps = {
   playingSegId: string | null;
   /** Thời điểm đang phát, để tô chữ chạy theo (M8-01) */
   currentTime: number;
+  /** Chế độ xem: bản gọn hoặc nguyên văn (M8-01) */
+  mode: "clean" | "verbatim";
+  /** Câu hiển thị theo chế độ */
+  displayText: (seg: TranscriptSegment) => string;
+  /** Tiếng đệm trong bản đồ nghe (mốc giờ), để màu phụ ở Nguyên văn */
+  fillers: Array<{ start_sec: number; end_sec: number; text: string }>;
   editingSegId: string | null;
   editValue: string;
   setEditValue: (v: string) => void;
@@ -517,6 +565,9 @@ function TranscriptList(props: ListProps) {
     activeMatch,
     playingSegId,
     currentTime,
+    mode,
+    displayText,
+    fillers,
     editingSegId,
     editValue,
     setEditValue,
@@ -578,11 +629,18 @@ function TranscriptList(props: ListProps) {
           const sp = speakerOf[seg.speaker_id];
           const isPlaying = playingSegId === seg.id;
           const editing = editingSegId === seg.id;
-          const pieces = annotate(seg.text, query, glossaryActive ? terms : []);
+          const text = displayText(seg);
+          const pieces = annotate(text, query, glossaryActive ? terms : []);
           const isActiveSeg = activeRow?.segId === seg.id;
           // Chữ chạy theo tiếng (M8-01): mốc chia đều theo ký tự, chỉ trên đoạn
           // đang phát; người dùng bật giảm chuyển động thì giữ tô cả đoạn.
-          const words = isPlaying && canPlay && !reduce ? wordTimings(seg.text, seg.start_sec, seg.end_sec) : [];
+          const words = isPlaying && canPlay && !reduce ? wordTimings(text, seg.start_sec, seg.end_sec) : [];
+          // Nguyên văn (M8-01): mọi đoạn render theo từ để tiếng đệm màu chữ phụ
+          const verbatimWords =
+            mode === "verbatim" && !editing && words.length === 0 ? wordTimings(text, seg.start_sec, seg.end_sec) : [];
+          const segFillers = fillers.filter((f) => f.start_sec >= seg.start_sec - 0.5 && f.end_sec <= seg.end_sec + 0.5);
+          const fillerWord = (w: WordTiming) => segFillers.some((f) => w.end > f.start_sec && w.start < f.end_sec);
+          const seekWords = words.length ? words : verbatimWords;
           return (
             <li
               key={seg.id}
@@ -670,8 +728,8 @@ function TranscriptList(props: ListProps) {
                       // Bấm vào một chữ thì nghe từ chữ đó (M8-01); ngoài ra
                       // bấm vào đoạn nghe từ đầu đoạn.
                       const wordEl = (e.target as HTMLElement).closest<HTMLElement>("[data-word]");
-                      if (wordEl && words.length) {
-                        const w = words[Number(wordEl.dataset.word)];
+                      if (wordEl && seekWords.length) {
+                        const w = seekWords[Number(wordEl.dataset.word)];
                         if (w) {
                           onSeek(w.start);
                           return;
@@ -694,6 +752,7 @@ function TranscriptList(props: ListProps) {
                             {words.map((w, i) => {
                               const st = wordStateAt(w, currentTime);
                               const kind = pieceKindAt(w.charStart, w.charEnd, pieces);
+                              const filler = mode === "verbatim" && fillerWord(w);
                               const active = isActiveSeg && activeRow && w.charStart >= activeRow.range.start && w.charEnd <= activeRow.range.end;
                               return (
                                 <span key={i}>
@@ -704,12 +763,38 @@ function TranscriptList(props: ListProps) {
                                     aria-current={active ? "true" : undefined}
                                     className={cn(
                                       "rounded-control",
-                                      st === "read" && "text-ink",
-                                      st === "unread" && "text-ink-2",
-                                      st === "reading" && "text-ink underline decoration-dien decoration-2 underline-offset-4",
+                                      filler && st !== "reading" ? "text-ink-3" : st === "read" ? "text-ink" : st === "unread" ? "text-ink-2" : "text-ink",
+                                      st === "reading" && "underline decoration-dien decoration-2 underline-offset-4",
                                       kind === "match" && "bg-tag-pending-bg px-0.5",
                                       kind === "match" && active && "bg-tag-pending text-tag-pending",
                                       kind === "term" && st !== "reading" && "underline decoration-dotted underline-offset-4",
+                                    )}
+                                  >
+                                    {w.w}
+                                  </span>
+                                </span>
+                              );
+                            })}
+                          </span>
+                        );
+                      }
+                      // Nguyên văn, đoạn không đang phát: tiếng đệm màu chữ phụ (M8-01)
+                      if (verbatimWords.length) {
+                        return (
+                          <span lang={seg.lang} className="whitespace-pre-wrap">
+                            {verbatimWords.map((w, i) => {
+                              const kind = pieceKindAt(w.charStart, w.charEnd, pieces);
+                              return (
+                                <span key={i}>
+                                  {i > 0 ? " " : null}
+                                  <span
+                                    data-word={i}
+                                    className={cn(
+                                      "rounded-control",
+                                      fillerWord(w) && "text-ink-3",
+                                      kind === "match" && "bg-tag-pending-bg px-0.5",
+                                      kind === "match" && isActiveSeg && activeRow && w.charStart >= activeRow.range.start && w.charEnd <= activeRow.range.end && "bg-tag-pending text-tag-pending",
+                                      kind === "term" && "underline decoration-dotted underline-offset-4",
                                     )}
                                   >
                                     {w.w}

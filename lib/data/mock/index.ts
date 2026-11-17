@@ -507,13 +507,20 @@ export const mockSource: DataSource = {
         // Sửa ý ở bản gốc: mọi bản dịch hiện "Bản gốc đã sửa sau khi dịch" (M6-03)
         for (const v of fx.summary_versions ?? []) v.stale = true;
       }),
-    updateSegment: (sessionId, segmentId, text) =>
+    updateSegment: (sessionId, segmentId, text, field = "text") =>
       write(async () => {
         await sessionsReady();
         const fx = await findFixture(sessionId);
         assertOwnSession(fx.detail);
         const seg = fx.transcript.find((s) => s.id === segmentId);
         if (!seg) throw new DataError("not_found");
+        // M8-01: sửa theo chế độ đang xem — bản gọn sửa text_clean, không đụng
+        // câu Nguyên văn (bằng chứng không bị đổi); bản dịch không lỗi thời.
+        if (field === "text_clean") {
+          seg.text_clean = text;
+          seg.edited = true;
+          return;
+        }
         seg.text = text;
         seg.edited = true;
         // Câu gốc đã sửa: mọi bản dịch hiện có của đoạn này sang trạng thái

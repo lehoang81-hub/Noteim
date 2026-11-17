@@ -76,8 +76,10 @@ export interface SessionRepository {
     patch: Partial<Pick<Session, "title" | "template_id" | "participant_contact_ids" | "audio_expires_at">>,
   ): Promise<void>;
   updateBullet(sessionId: string, bulletId: string, text: string): Promise<void>;
-  /** Sửa lời một đoạn bản ghi: lưu và đánh dấu edited (M3-01) */
-  updateSegment(sessionId: string, segmentId: string, text: string): Promise<void>;
+  /** Sửa lời một đoạn bản ghi: lưu và đánh dấu edited (M3-01). M8-01 thêm
+   * field: "text" là câu Nguyên văn (bản dịch của đoạn lỗi thời), "text_clean"
+   * là bản gọn theo chế độ đang xem — câu gốc giữ nguyên. */
+  updateSegment(sessionId: string, segmentId: string, text: string, field?: "text" | "text_clean"): Promise<void>;
   /** Đổi người nói của một đoạn bản ghi (M3-01) */
   reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>;
   /** Dịch đoạn bản ghi lời sang ngôn ngữ `lang` (M6-02). Không truyền

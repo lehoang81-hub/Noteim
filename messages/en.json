@@ -771,7 +771,10 @@
     "translateFail": "Couldn't translate. Try again.",
     "translationStale": "Needs re-translation",
     "sampleTranslation": "Sample translation",
-    "playingBadge": "Playing"
+    "playingBadge": "Playing",
+    "modeLabel": "Transcript view mode",
+    "modeClean": "Concise",
+    "modeVerbatim": "Verbatim"
   },
   "summary": {
     "versionLabel": "Summary in",

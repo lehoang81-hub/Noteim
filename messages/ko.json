@@ -826,7 +826,10 @@
     "translateFail": "번역하지 못했어요. 다시 시도해 주세요.",
     "translationStale": "다시 번역 필요",
     "sampleTranslation": "샘플 번역",
-    "playingBadge": "재생 중"
+    "playingBadge": "재생 중",
+    "modeLabel": "기록 보기 모드",
+    "modeClean": "간결본",
+    "modeVerbatim": "원문"
   },
   "summary": {
     "versionLabel": "요약 언어",

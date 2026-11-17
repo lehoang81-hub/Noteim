@@ -119,8 +119,12 @@ test("Bảng Nghe sạch: đủ 4 công tắc, dòng file gốc, đổi Bỏ qua
   await expect(dialog).toHaveCount(0);
   await page.getByRole("button", { name: "Mở bảng Nghe sạch" }).click();
   await expect(dialog.getByText("Nhảy qua tiếng đệm. Có thể nghe hơi giật")).toBeVisible();
-  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("noteim-mock-db-v1") || "{}").user?.listening_prefs);
-  expect(saved?.skip_fillers).toBe(true);
+  // Ghi xuống kho có độ trễ giả: chờ lựa chọn thực sự được lưu
+  await expect
+    .poll(() =>
+      page.evaluate(() => JSON.parse(localStorage.getItem("noteim-mock-db-v1") || "{}").user?.listening_prefs?.skip_fillers),
+    )
+    .toBe(true);
   expect(errors).toEqual([]);
 });
 
@@ -191,5 +195,74 @@ test("Chữ chạy theo: bấm vào một chữ nghe từ chữ đó", async ({ 
   // Mốc của chữ thứ 10 trong câu (khác đầu đoạn 80), vẫn trong đoạn
   expect(now).toBeGreaterThan(81);
   expect(now).toBeLessThanOrEqual(131);
+  expect(errors).toEqual([]);
+});
+
+/* ---------- Bước 5/6: Bản gọn và Nguyên văn ---------- */
+
+test("Bản gọn và Nguyên văn: cùng một đoạn khác nhau, tiếng đệm màu phụ, tìm theo chế độ", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await page.goto("/s/s-bds-lan?tab=transcript");
+  await expect(page.locator('[data-seg]').first()).toBeVisible();
+  const seg = page.locator('[data-seg]').nth(2); // đoạn 80→130 có tiếng đệm "Ờ... ừ"
+
+  // Bản gọn là mặc định: đoạn hiển thị câu đã bỏ tiếng đệm
+  await expect(page.getByRole("button", { name: "Bản gọn" })).toHaveAttribute("aria-pressed", "true");
+  await expect(seg).toContainText("Nhà chị là bốn người");
+  await expect(seg).not.toContainText("Ờ");
+
+  // Nguyên văn: đủ từng chữ, tiếng đệm màu chữ phụ
+  await page.getByRole("button", { name: "Nguyên văn" }).click();
+  await expect(seg).toContainText("Ờ");
+  const fillerWord = seg.locator("[data-word]").filter({ hasText: "Ờ" }).first();
+  await expect(fillerWord).toHaveClass(/text-ink-3/);
+  // Từ thường vẫn màu chữ chính
+  const normalWord = seg.locator("[data-word]").filter({ hasText: "bốn" }).first();
+  await expect(normalWord).not.toHaveClass(/text-ink-3/);
+
+  // Tìm kiếm theo chế độ đang xem: "ừm" chỉ có ở Nguyên văn (đoạn vấp tự sửa)
+  // — đang ở Nguyên văn thì thấy chỗ khớp tô sáng, quay về Bản gọn thì không còn
+  await page.getByPlaceholder("Tìm trong lời…").fill("ừm");
+  const g5seg = page.locator("[data-seg]").filter({ hasText: "Còn lại chị định vay" });
+  await expect(g5seg.locator('[class*="bg-tag-pending"]').first()).toBeVisible();
+  await page.getByRole("button", { name: "Bản gọn" }).click();
+  await expect(page.getByText('Không có đoạn nào chứa “ừm”.')).toBeVisible();
+  await page.getByRole("button", { name: "Nguyên văn" }).click();
+  await expect(g5seg.locator('[class*="bg-tag-pending"]').first()).toBeVisible();
+  await page.getByPlaceholder("Tìm trong lời…").fill("");
+  expect(errors).toEqual([]);
+});
+
+test("Sửa lời theo chế độ đang xem: bản gọn sửa text_clean, câu Nguyên văn giữ nguyên; thẻ trích dẫn luôn Nguyên văn", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await page.goto("/s/s-bds-lan?tab=transcript");
+  await expect(page.locator('[data-seg]').first()).toBeVisible();
+  const seg = page.locator('[data-seg]').nth(2);
+
+  // Sửa ở Bản gọn: thêm ghi chú gọn vào câu
+  await seg.locator("button[aria-label^='Thao tác với đoạn lời']").click();
+  const menu = page.getByRole("dialog");
+  await menu.getByRole("button", { name: "Sửa lời" }).click();
+  const box = page.getByRole("textbox", { name: "Sửa lời" });
+  await expect(box).toHaveValue(/Nhà chị là bốn người/); // bản gọn, không có "Ờ"
+  await box.fill("Nhà chị là bốn người, hai bé đang học cấp 1 (gọn).");
+  await page.getByRole("button", { name: "Lưu", exact: true }).click();
+  await expect(page.getByText("Đã lưu bản ghi lời")).toBeVisible();
+
+  // Bản gọn hiện câu đã sửa; Nguyên văn vẫn giữ câu gốc đầy đủ tiếng đệm
+  await expect(seg).toContainText("(gọn)");
+  await page.getByRole("button", { name: "Nguyên văn" }).click();
+  await expect(seg).toContainText("Ờ");
+  await expect(seg).not.toContainText("(gọn)");
+
+  // Thẻ trích dẫn luôn lấy Nguyên văn dù đang xem Bản gọn
+  await page.getByRole("button", { name: "Bản gọn" }).click();
+  await seg.locator("button[aria-label^='Thao tác với đoạn lời']").click();
+  await menu.getByRole("button", { name: "Tạo thẻ trích dẫn" }).click();
+  const card = page.locator("[role='dialog']").last();
+  await expect(card).toBeVisible({ timeout: 15000 });
+  await expect(card.getByText("Ờ", { exact: false }).first()).toBeVisible();
   expect(errors).toEqual([]);
 });

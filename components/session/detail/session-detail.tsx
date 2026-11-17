@@ -477,6 +477,7 @@ function Loaded({
                   currentTime={ps.currentTime}
                   playing={ps.playing}
                   onSeek={seek}
+                  fillers={listeningMap.data?.fillers ?? []}
                   onQuoteCard={(seg) => {
                     const sp = detail.speakers.find((s) => s.id === seg.speaker_id);
                     // Thẻ trích dẫn: câu gốc + bản dịch ở ngôn ngữ giao diện (M6-04)
