@@ -116,6 +116,10 @@ export interface SessionRepository {
   /** Đổi Riêng tư / Cả nhóm (M7-01). Chỉ người ghi buổi được đổi; buổi cá
    * nhân luôn riêng tư. Đổi sang "workspace" chỉ có tác dụng trong không gian Nhóm. */
   setVisibility(id: string, visibility: Visibility): Promise<void>;
+  /** Ghi nhật ký "xuất file" của buổi ghi khi đang ở không gian Nhóm (M7-03).
+   * Nút xuất (Sao chép văn bản, Xuất PDF, Xuất Word) gọi để nhật ký nhóm có
+   * dòng xuất; chỉ người được đọc nội dung mới ghi được dòng này. */
+  recordExport(id: string): Promise<void>;
 }
 
 /**

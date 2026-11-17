@@ -432,6 +432,7 @@ interface SessionRepository {
   createSummaryVersion(id: string, lang: Lang, onStep: (step: 1 | 2) => void): Promise<SummaryVersion>;   // M6
   translateSegments(id: string, lang: Lang, segmentIds?: string[]): Promise<TranscriptSegment[]>;   // M6
   setVisibility(id: string, visibility: Session["visibility"]): Promise<void>;   // M7
+  recordExport(id: string): Promise<void>;   // M7-03, nhật ký xuất file nhóm
 }
 
 interface WorkspaceRepository {           // M7

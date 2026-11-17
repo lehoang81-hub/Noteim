@@ -1418,6 +1418,22 @@
     "menuTemplatesNote": "Mẫu tóm tắt dùng chung của cả nhóm",
     "menuBilling": "Gói và hóa đơn",
     "menuBillingNote": "Gói Nhóm, số chỗ, hóa đơn",
-    "settingsIntro": "Quản trị nhóm {name}"
+    "settingsIntro": "Quản trị nhóm {name}",
+    "filterPerson": "Theo người",
+    "filterAction": "Theo loại",
+    "filterAllPeople": "Mọi người",
+    "filterAllActions": "Mọi loại",
+    "actView": "Xem buổi ghi",
+    "actShare": "Chia sẻ với nhóm",
+    "actUnshare": "Gỡ chia sẻ",
+    "actExport": "Xuất file",
+    "actDelete": "Xóa buổi ghi",
+    "actInvite": "Mời thành viên",
+    "actRemoveMember": "Gỡ thành viên",
+    "actRoleChange": "Đổi vai trò",
+    "actPurge": "Dọn bản gốc",
+    "actSendEmail": "Gửi email",
+    "auditEmpty": "Chưa có dòng nhật ký nào khớp bộ lọc này",
+    "actorGone": "Người đã rời nhóm"
   }
 }

@@ -1418,6 +1418,22 @@
     "menuTemplatesNote": "Summary templates shared with the team",
     "menuBilling": "Plan and invoices",
     "menuBillingNote": "Team plan, seats, invoices",
-    "settingsIntro": "Manage {name}"
+    "settingsIntro": "Manage {name}",
+    "filterPerson": "By person",
+    "filterAction": "By type",
+    "filterAllPeople": "Everyone",
+    "filterAllActions": "All types",
+    "actView": "Viewed a session",
+    "actShare": "Shared with team",
+    "actUnshare": "Unshared",
+    "actExport": "Exported a file",
+    "actDelete": "Deleted a session",
+    "actInvite": "Invited a member",
+    "actRemoveMember": "Removed a member",
+    "actRoleChange": "Changed a role",
+    "actPurge": "Purged the raw audio",
+    "actSendEmail": "Sent an email",
+    "auditEmpty": "No log entries match this filter",
+    "actorGone": "Member who left"
   }
 }

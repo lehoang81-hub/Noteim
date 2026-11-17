@@ -1418,6 +1418,22 @@
     "menuTemplatesNote": "팀 전체가 쓰는 요약 템플릿",
     "menuBilling": "요금제와 청구서",
     "menuBillingNote": "팀 요금제, 좌석 수, 청구서",
-    "settingsIntro": "{name} 관리"
+    "settingsIntro": "{name} 관리",
+    "filterPerson": "사람별",
+    "filterAction": "유형별",
+    "filterAllPeople": "모두",
+    "filterAllActions": "모든 유형",
+    "actView": "세션 조회",
+    "actShare": "팀 공유",
+    "actUnshare": "공유 해제",
+    "actExport": "파일 내보내기",
+    "actDelete": "세션 삭제",
+    "actInvite": "멤버 초대",
+    "actRemoveMember": "멤버 제거",
+    "actRoleChange": "역할 변경",
+    "actPurge": "원본 오디오 정리",
+    "actSendEmail": "이메일 전송",
+    "auditEmpty": "이 필터에 해당하는 기록이 없어요",
+    "actorGone": "나간 멤버"
   }
 }

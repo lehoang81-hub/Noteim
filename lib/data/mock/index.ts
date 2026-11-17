@@ -165,6 +165,22 @@ function pushAudit(
   });
 }
 
+/*
+ * Nhật ký "ai xem" (M7-03): mỗi phiên trình duyệt ghi một dòng cho mỗi buổi và
+ * người xem. Không commit ở đây để không kích hoạt tải lại của useData (vòng
+ * lặp); dòng được lưu xuống localStorage cùng lần commit của thao tác ghi kế
+ * tiếp trong phiên xem đó.
+ */
+const viewLogged = new Set<string>();
+
+function pushViewAudit(d: Pick<Session, "workspace_id" | "id" | "title">) {
+  if (!d.workspace_id) return;
+  const key = `${d.id}:${myUserId()}`;
+  if (viewLogged.has(key)) return;
+  viewLogged.add(key);
+  pushAudit(d.workspace_id, "view", "session", d.id, d.title);
+}
+
 /** Bản sao ShareLink không kèm mật khẩu (mật khẩu chỉ dùng nội bộ bản giả). */
 function toShareLink(s: ShareLink & { password?: string }): ShareLink {
   return {
@@ -448,6 +464,8 @@ export const mockSource: DataSource = {
         // Buổi riêng tư của người khác ném forbidden — giao diện hiện thông
         // báo không có quyền, không lộ nội dung (docs/08 phần B)
         assertCanRead(fx.detail);
+        // Nhật ký nhóm: ai xem buổi ghi nào (M7-03)
+        pushViewAudit(fx.detail);
         return fx.detail;
       }),
     getTranscript: (id) =>
@@ -755,6 +773,8 @@ export const mockSource: DataSource = {
           fx.detail.size_bytes = 0;
           fx.detail.audio_expires_at = null;
           fx.transcript = [];
+          // Nhật ký nhóm: dọn bản gốc (M7-03)
+          if (fx.detail.workspace_id) pushAudit(fx.detail.workspace_id, "purge", "session", fx.detail.id, fx.detail.title);
         }
         return { freed_bytes: freed };
       }),
@@ -764,6 +784,9 @@ export const mockSource: DataSource = {
         const db = getDb();
         const target = await findFixture(id);
         assertOwnSession(target.detail);
+        // Nhật ký nhóm: xóa buổi ghi (M7-03). Xóa còn hoàn tác được nhưng vẫn
+        // ghi — nhật ký là hành động đã làm, không phải trạng thái cuối.
+        if (target.detail.workspace_id) pushAudit(target.detail.workspace_id, "delete", "session", target.detail.id, target.detail.title);
         // Giữ buổi ghi trong removed để "Hoàn tác" đưa về đúng chỗ cũ (M4-01)
         const i = db.sessions.findIndex((s) => s.detail.id === id);
         if (i < 0) throw new DataError("not_found");
@@ -934,6 +957,15 @@ export const mockSource: DataSource = {
         // Nhật ký nhóm: chia sẻ hoặc gỡ chia sẻ (M7-01)
         pushAudit(d.workspace_id, visibility === "workspace" ? "share" : "unshare", "session", d.id, d.title);
       }),
+    recordExport: (id) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
+        assertCanRead(fx.detail);
+        // Nhật ký nhóm: xuất file (M7-03). Chỉ người được đọc nội dung mới
+        // xuất được; buổi cá nhân không thuộc nhật ký nhóm nào.
+        if (fx.detail.workspace_id) pushAudit(fx.detail.workspace_id, "export", "session", fx.detail.id, fx.detail.title);
+      }),
   },
 
   tasks: {
@@ -1057,13 +1089,19 @@ export const mockSource: DataSource = {
         };
         if (opts.password) link.password = opts.password;
         db.shares.push(link);
+        // Nhật ký nhóm: tạo link chia sẻ (M7-03)
+        if (fx.detail.workspace_id) pushAudit(fx.detail.workspace_id, "share", "share_link", link.id, fx.detail.title);
         return link;
       }),
     revoke: (id) =>
       write(() => {
-        const link = getDb().shares.find((s) => s.id === id);
+        const db = getDb();
+        const link = db.shares.find((s) => s.id === id);
         if (!link) throw new DataError("not_found");
         link.revoked = true;
+        // Nhật ký nhóm: thu hồi link chia sẻ (M7-03)
+        const fx = db.sessions.find((s) => s.detail.id === link.session_id);
+        if (fx?.detail.workspace_id) pushAudit(fx.detail.workspace_id, "unshare", "share_link", link.id, fx.detail.title);
       }),
     getForSession: (sessionId) =>
       read(() => {
@@ -1194,6 +1232,9 @@ export const mockSource: DataSource = {
             sent_at: MOCK_NOW.toISOString(),
             recipient_count: okCount,
           });
+          // Nhật ký nhóm: gửi biên bản qua email (M7-03); một dòng mỗi lần gửi
+          const sentFx = await findFixture(sessionId);
+          if (sentFx.detail.workspace_id) pushAudit(sentFx.detail.workspace_id, "send_email", "session", sessionId, sentFx.detail.title);
         }
         return results;
       }),
