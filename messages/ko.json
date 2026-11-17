@@ -1474,6 +1474,7 @@
     "invoiceAmount": "금액",
     "invoiceStatus": "상태",
     "invoicePaid": "결제 완료",
-    "invoiceDue": "미결제"
+    "invoiceDue": "미결제",
+    "privacyTitle": "세션 개인정보 보호"
   }
 }

@@ -1474,6 +1474,7 @@
     "invoiceAmount": "Số tiền",
     "invoiceStatus": "Trạng thái",
     "invoicePaid": "Đã trả",
-    "invoiceDue": "Cần trả"
+    "invoiceDue": "Cần trả",
+    "privacyTitle": "Quyền riêng tư buổi ghi"
   }
 }

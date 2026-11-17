@@ -1474,6 +1474,7 @@
     "invoiceAmount": "Amount",
     "invoiceStatus": "Status",
     "invoicePaid": "Paid",
-    "invoiceDue": "Due"
+    "invoiceDue": "Due",
+    "privacyTitle": "Session privacy"
   }
 }

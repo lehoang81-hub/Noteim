@@ -1547,7 +1547,8 @@ export const mockSource: DataSource = {
         const me = db.members.find((x) => x.workspace_id === id && x.user_id === myUserId());
         if (!me) throw new DataError("forbidden");
         // Chủ không tự rời: phải chuyển quyền Chủ hoặc xóa nhóm (docs/08 phần B)
-        if (me.role === "owner") throw new DataError("forbidden", "Chủ nhóm phải chuyển quyền Chủ hoặc xóa nhóm trước khi rời");
+        // vai trò lấy qua myRole để cờ "Vai trò trong nhóm" của bảng thử nghiệm ăn theo
+        if (myRole(id) === "owner") throw new DataError("forbidden", "Chủ nhóm phải chuyển quyền Chủ hoặc xóa nhóm trước khi rời");
         // Buổi riêng tư của người rời đi theo họ về không gian Cá nhân; buổi
         // đã chia sẻ với nhóm ở lại nhóm (như khi bị gỡ, docs/08 phần B)
         db.sessions.forEach((fx) => {

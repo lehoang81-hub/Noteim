@@ -72,9 +72,12 @@ export function AuditScreen() {
     () => (workspace && workspace.kind === "team" ? data.workspaces.members(workspace.id) : Promise.resolve([])),
     [workspace?.id],
   );
+  // Fetch theo không gian; quyền chặn ở repository (Thành viên ném forbidden)
+  // và ở giao diện (NoAccess). Không dựa isAdmin vào fetcher: biến này sẵn
+  // sàng sau members, không kích hoạt tải lại của useData.
   const events = useData(
     () =>
-      workspace && workspace.kind === "team" && isAdmin
+      workspace && workspace.kind === "team"
         ? data.workspaces.audit(workspace.id, {
             actor_user_id: person || undefined,
             action: (action || undefined) as AuditEvent["action"] | undefined,

@@ -150,6 +150,7 @@ export function TeamScreen() {
   }
 
   const canLeave = role !== "owner";
+  const isOwner = role === "owner";
   const transferTarget = list.find((m) => m.user_id === transferTo);
 
   return (
@@ -272,16 +273,16 @@ export function TeamScreen() {
 
         {/* Quyền riêng tư: điểm bán hàng với bác sĩ, luật sư (docs/08 phần B) */}
         <section
-          aria-label={t("noAccess")}
+          aria-label={t("privacyTitle")}
           className="flex items-start gap-3 rounded-block border border-line bg-surface-2/60 p-4"
         >
-          <ShieldCheck aria-hidden={true} className="mt-0.5 size-5 shrink-0 text-tag-ok" strokeWidth={1.75} />
+          <ShieldCheck aria-hidden={true} className="mt-0.5 size-5 shrink-0 text-tag-decided" strokeWidth={1.75} />
           <p className="text-small text-ink-2">{tw("privacyNote")}</p>
         </section>
 
-        {/* Hành động nhóm */}
+        {/* Hành động nhóm: chuyển Chủ và xóa nhóm chỉ Chủ (docs/08 bảng quyền) */}
         <div className="flex flex-col gap-2">
-          {isAdmin ? (
+          {isOwner ? (
             <Button variant="secondary" onClick={() => setTransferOpen(true)}>
               {t("transfer")}
             </Button>
@@ -291,7 +292,7 @@ export function TeamScreen() {
               {t("leave")}
             </Button>
           ) : null}
-          {isAdmin ? (
+          {isOwner ? (
             <Button variant="ghost" className="text-tag-risk" onClick={() => setRemoveOpen(true)}>
               {t("remove")}
             </Button>
