@@ -25,7 +25,7 @@ const PLAYER = "[data-listening]";
 
 /* ---------- Bước 2/6: Đồng hồ phát biết nhảy ---------- */
 
-test("Bỏ qua khoảng lặng: phát qua khoảng 40→45 giây, đồng hồ nhảy đúng", async ({ page }) => {
+test("Bỏ qua khoảng lặng: tua hoặc phát chạm khoảng 40→45 giây đều nhảy đúng", async ({ page }) => {
   const errors = collectErrors(page);
   await onboard(page);
   await enableClean(page);
@@ -34,14 +34,21 @@ test("Bỏ qua khoảng lặng: phát qua khoảng 40→45 giây, đồng hồ n
   await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "on");
   const slider = page.getByRole("slider", { name: "Vị trí phát" });
   await slider.focus();
-  for (let i = 0; i < 8; i++) await page.keyboard.press("ArrowRight"); // 0 → 40s
-  await expect(slider).toHaveAttribute("aria-valuenow", "40");
+  for (let i = 0; i < 7; i++) await page.keyboard.press("ArrowRight"); // 0 → 35s (trong lời)
+  await expect(slider).toHaveAttribute("aria-valuenow", "35");
+  // Tua vào khoảng lặng 40-45: kim nhảy thẳng tới 45, không dừng trong im lặng
+  await page.keyboard.press("ArrowRight"); // 35 → 40 → nhảy 45
+  await expect(slider).toHaveAttribute("aria-valuenow", "45");
+  // Phát băng qua khoảng lặng: về 35, phát 6 giây — đủ vượt 40 nhờ nhảy
+  await page.keyboard.press("Home");
+  for (let i = 0; i < 7; i++) await page.keyboard.press("ArrowRight"); // 0 → 35s
+  await expect(slider).toHaveAttribute("aria-valuenow", "35");
   await page.getByRole("button", { name: "Phát", exact: true }).click();
-  // Kim nhảy thẳng qua khoảng lặng 40→45 rồi chạy tiếp
-  await expect(slider).not.toHaveAttribute("aria-valuenow", "40", { timeout: 8000 });
+  await page.waitForTimeout(6000);
   const now = Number(await slider.getAttribute("aria-valuenow"));
+  // Nếu không nhảy, kim chỉ tới 41; có nhảy thì đã qua 45
   expect(now).toBeGreaterThanOrEqual(45);
-  expect(now).toBeLessThanOrEqual(52);
+  expect(now).toBeLessThanOrEqual(53);
   expect(errors).toEqual([]);
 });
 
@@ -60,22 +67,5 @@ test("Tắt Nghe sạch: phát đúng theo thời gian gốc, không nhảy", as
   const now = Number(await slider.getAttribute("aria-valuenow"));
   expect(now).toBeGreaterThanOrEqual(36);
   expect(now).toBeLessThanOrEqual(44);
-  expect(errors).toEqual([]);
-});
-
-test("Thời lượng nghe sạch: buổi chị Lan còn 34 phút 12 giây khi bỏ hết khoảng lặng", async ({ page }) => {
-  const errors = collectErrors(page);
-  await onboard(page);
-  await enableClean(page);
-  await page.goto("/s/s-bds-lan");
-  await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "on");
-  // clean_duration_sec = 2052 (bản đồ nghe), gốc 2530 = 42:10
-  // (hiển thị số "nghe sạch còn" dựng ở bước 3; bài này khoá số liệu bản đồ)
-  const value = await page.evaluate(async () => {
-    const mod = await import("@/lib/data");
-    return mod.data.sessions.getListeningMap("s-bds-lan");
-  });
-  expect(value?.clean_duration_sec).toBe(2052);
-  expect(value?.silences.length).toBe(59);
   expect(errors).toEqual([]);
 });

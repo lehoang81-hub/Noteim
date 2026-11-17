@@ -6,6 +6,7 @@ import {
   Contact,
   GlossaryTerm,
   Invoice,
+  ListeningMap,
   Member,
   Quota,
   Session as SessionSchema,
@@ -15,6 +16,7 @@ import {
   TranscriptSegment,
   User,
   Workspace,
+  type ListeningMap as ListeningMapFull,
   type Session,
   type SessionFixture,
 } from "../types";
@@ -89,6 +91,14 @@ function lazyFixture(raw: Record<string, unknown>): StoredSession {
     },
     set summary_versions(v: SummaryVersion[] | undefined) {
       cache.summary_versions = v;
+    },
+    // Bản đồ nghe tính sẵn (M8-01), kiểm Zod lười như các phần nặng khác
+    get listening_map() {
+      if (!("listening_map" in cache)) {
+        const lm = (raw as { listening_map?: unknown }).listening_map;
+        cache.listening_map = lm ? ListeningMap.parse(lm) : undefined;
+      }
+      return cache.listening_map as ListeningMapFull | undefined;
     },
   } as unknown as StoredSession;
 }
