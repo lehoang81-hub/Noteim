@@ -248,3 +248,22 @@ test("nhật ký Xem buổi ghi còn sau khi tải lại trang (review PR #57)",
   expect(await views()).toBe(before + 1);
   await expect(page.getByText("Hoàng Xem buổi ghi").first()).toBeVisible();
 });
+
+test("Chủ nhóm không thấy chớp \"không có quyền\" khi mở trang quản trị (review PR #58)", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "chỉ cần chạy một lần");
+  await onboard(page);
+  await page.evaluate(() => {
+    const d = JSON.parse(localStorage.getItem("noteim-mock-db-v1")!);
+    d.user.current_workspace_id = "w-hp-land";
+    localStorage.setItem("noteim-mock-db-v1", JSON.stringify(d));
+  });
+  for (const route of ["/team/usage", "/team/members", "/team/audit", "/team/billing", "/team/templates"]) {
+    await page.goto(route);
+    let flashed = false;
+    for (let i = 0; i < 30; i++) {
+      if (await page.getByText("Bạn không có quyền mở trang này").count()) flashed = true;
+      await page.waitForTimeout(100);
+    }
+    expect(flashed, route).toBe(false);
+  }
+});
