@@ -966,6 +966,16 @@ export const mockSource: DataSource = {
         // xuất được; buổi cá nhân không thuộc nhật ký nhóm nào.
         if (fx.detail.workspace_id) pushAudit(fx.detail.workspace_id, "export", "session", fx.detail.id, fx.detail.title);
       }),
+    getListeningMap: (id) =>
+      read(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
+        assertCanRead(fx.detail);
+        // Cờ "Không có bản đồ nghe" của bảng thử nghiệm: ép trạng thái buổi cũ
+        // chưa xử lý (M8-01) — nút Nghe sạch tắt kèm dòng giải thích.
+        if (getFlags().noListeningMap) return null;
+        return fx.listening_map ?? null;
+      }),
   },
 
   tasks: {

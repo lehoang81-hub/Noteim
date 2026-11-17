@@ -7,6 +7,7 @@ import type {
   GlossaryTerm,
   Invoice,
   Lang,
+  ListeningMap,
   Member,
   Profession,
   Quota,
@@ -120,6 +121,10 @@ export interface SessionRepository {
    * Nút xuất (Sao chép văn bản, Xuất PDF, Xuất Word) gọi để nhật ký nhóm có
    * dòng xuất; chỉ người được đọc nội dung mới ghi được dòng này. */
   recordExport(id: string): Promise<void>;
+  /** Bản đồ nghe của buổi (M8-01, docs/09): khoảng lặng, tiếng đệm, mức to
+   * nhỏ theo người nói. null là buổi chưa có dữ liệu nghe sạch (buổi cũ chưa
+   * xử lại, buổi ghi mới đang xử lý) — nút Nghe sạch tắt kèm dòng giải thích. */
+  getListeningMap(id: string): Promise<ListeningMap | null>;
 }
 
 /**

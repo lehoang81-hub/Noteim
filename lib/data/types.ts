@@ -77,8 +77,20 @@ export const User = z.object({
   auto_translate_on_send: z.boolean().catch(true),
   /** Không gian đang dùng (M7-01): id của không gian Cá nhân hoặc Nhóm; dữ liệu cũ thiếu thì migrate điền không gian Cá nhân */
   current_workspace_id: z.string().default("").catch(""),
+  /** Lựa chọn Nghe sạch, nhớ theo người dùng áp dụng cho mọi buổi (M8-01).
+   * enabled: chế độ đang bật; các công tắc là giá trị khi bật Nghe sạch. */
+  listening_prefs: z
+    .object({
+      enabled: z.boolean().catch(false),
+      denoise: z.boolean().catch(true),
+      level: z.boolean().catch(true),
+      skip_silence: z.boolean().catch(true),
+      skip_fillers: z.boolean().catch(false),
+    })
+    .catch({ enabled: false, denoise: true, level: true, skip_silence: true, skip_fillers: false }),
 });
 export type User = z.infer<typeof User>;
+export type ListeningPrefs = NonNullable<User["listening_prefs"]>;
 
 export const Quota = z.object({
   period_end: z.string(),
@@ -273,6 +285,22 @@ export const TranscriptSegment = z.object({
   start_sec: z.number(),
   end_sec: z.number(),
   text: z.string(),
+  /** Bản gọn: bỏ tiếng đệm, từ lặp, nói vấp (M8-01). Dữ liệu cũ thiếu thì
+   * migrate dùng câu Nguyên văn; không bao giờ rỗng khi hiển thị. */
+  text_clean: z.string().catch(""),
+  /** Mốc từng chữ (có khi nối AI thật). Mockup chưa có: chữ chạy theo chia
+   * đều thời lượng đoạn theo số ký tự, xem lib/listening/words.ts. */
+  words: z
+    .array(
+      z.object({
+        w: z.string(),
+        start_sec: z.number(),
+        end_sec: z.number(),
+        filler: z.boolean().catch(false),
+      }),
+    )
+    .optional()
+    .catch(undefined),
   // Người dùng sửa tay chỗ AI nghe sai (M3-01). Fixture cũ không có trường
   // này nên để default; bản lưu trong localStorage trước M3 cũng có thể thiếu.
   edited: z.boolean().default(false).catch(false),
@@ -284,6 +312,25 @@ export const TranscriptSegment = z.object({
     .catch({}),
 });
 export type TranscriptSegment = z.infer<typeof TranscriptSegment>;
+
+/**
+ * Bản đồ nghe tính trước một lần khi xử lý buổi ghi (M8-01, docs/09).
+ * Lúc nghe máy người dùng chỉ đọc bản đồ để nhảy qua khoảng lặng/tiếng đệm và
+ * cân âm lượng; không tạo bản ghi âm sạch lưu riêng — file gốc là bằng chứng.
+ */
+export const ListeningMap = z.object({
+  session_id: z.string(),
+  /** Khoảng lặng dài hơn 1,5 giây giữa các lượt nói */
+  silences: z.array(z.object({ start_sec: z.number(), end_sec: z.number() })),
+  /** Vị trí tiếng đệm ("à", "ừ", "ừm", "thì là"...) trong câu Nguyên văn */
+  fillers: z.array(z.object({ start_sec: z.number(), end_sec: z.number(), text: z.string() })),
+  /** Mức tăng/giảm âm lượng theo người nói, -6 đến +9 dB */
+  speaker_gain_db: z.record(z.string(), z.number().min(-6).max(9)),
+  noise_level: z.enum(["low", "medium", "high"]),
+  /** Thời lượng khi bỏ khoảng lặng (không bỏ tiếng đệm) */
+  clean_duration_sec: z.number(),
+});
+export type ListeningMap = z.infer<typeof ListeningMap>;
 
 export const VisualArtifacts = z.object({
   timeline: z.array(z.object({ topic_id: z.string(), start_sec: z.number(), end_sec: z.number(), tag: SemanticTag })),
@@ -496,6 +543,8 @@ export const SessionFixture = z.object({
   flow_mermaid: z.string().optional(),
   /** Các bản tóm tắt theo ngôn ngữ có sẵn trong fixture (M6-03); bản gốc nằm trong detail */
   summary_versions: z.array(SummaryVersion).optional(),
+  /** Bản đồ nghe tính sẵn (M8-01); buổi ghi mới chưa xử lý thì không có */
+  listening_map: ListeningMap.optional().catch(undefined),
 });
 export type SessionFixture = z.infer<typeof SessionFixture>;
 
