@@ -182,12 +182,12 @@ test("mục Nhóm trong Cài đặt chỉ hiện trong không gian Nhóm", async
   await toTeamSpace(page);
   await page.goto("/settings");
   // Nhãn của mục: "Nhóm" đứng trước mô tả "Tên nhóm, nghề chính..."
-  await expect(page.getByRole("link", { name: /^Nhóm/ }).locator("visible = true").first()).toBeVisible();
-  await page.getByRole("link", { name: /^Nhóm/ }).locator("visible = true").first().click();
-  await expect(page.getByText("Quản trị nhóm Sàn BĐS Hải Phòng Land").locator("visible = true").first()).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Nhóm/ }).filter({ visible: true }).first()).toBeVisible();
+  await page.getByRole("link", { name: /^Nhóm/ }).filter({ visible: true }).first().click();
+  await expect(page.getByText("Quản trị nhóm Sàn BĐS Hải Phòng Land").filter({ visible: true }).first()).toBeVisible();
   // Sáu trang quản trị (mục con Cài đặt vẽ hai lần, một cái ẩn theo breakpoint)
   for (const label of ["Thông tin nhóm", "Thành viên và lời mời", "Mức dùng", "Nhật ký truy cập", "Mẫu tóm tắt dùng chung", "Gói và hóa đơn"]) {
-    await expect(page.getByRole("link", { name: label }).locator("visible = true").first()).toBeVisible();
+    await expect(page.getByRole("link", { name: label }).filter({ visible: true }).first()).toBeVisible();
   }
   // Không gian Cá nhân: mục Nhóm không hiện
   await page.goto("/");

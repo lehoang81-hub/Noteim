@@ -48,11 +48,11 @@ export function UsageScreen() {
     [workspace?.id],
   );
   const invoices = useData(
-    () => (workspace && workspace.kind === "team" && isAdmin ? data.workspaces.invoices(workspace.id) : Promise.resolve([])),
+    () => (workspace && workspace.kind === "team" ? data.workspaces.invoices(workspace.id) : Promise.resolve([])),
     [workspace?.id],
   );
   const rows = useData(
-    () => (workspace && workspace.kind === "team" && isAdmin ? data.workspaces.usage(workspace.id, month) : Promise.resolve([])),
+    () => (workspace && workspace.kind === "team" ? data.workspaces.usage(workspace.id, month) : Promise.resolve([])),
     [workspace?.id, month],
   );
 

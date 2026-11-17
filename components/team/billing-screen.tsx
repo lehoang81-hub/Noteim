@@ -25,7 +25,7 @@ export function BillingScreen() {
   const [busy, setBusy] = useState(false);
 
   const invoices = useData(
-    () => (workspace && workspace.kind === "team" && isAdmin ? data.workspaces.invoices(workspace.id) : Promise.resolve([])),
+    () => (workspace && workspace.kind === "team" ? data.workspaces.invoices(workspace.id) : Promise.resolve([])),
     [workspace?.id],
   );
   const members = useData(
