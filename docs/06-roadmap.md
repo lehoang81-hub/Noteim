@@ -109,16 +109,24 @@ Nghiệm thu:
 | M6-03 (#45, xong) | Bản tóm tắt nhiều ngôn ngữ: chọn và tạo bản, trích dẫn giữ câu gốc, việc cần làm, Hỏi AI, tìm kiếm trên mọi bản. |
 | M6-04 (#46, xong) | Gửi và chia sẻ theo người nhận: ngôn ngữ ưa dùng của liên hệ, email theo từng người, link công khai đổi ngôn ngữ, thẻ trích dẫn kèm dịch, mục "Ngôn ngữ báo cáo" trong Cài đặt. |
 
-## M7. Nhóm và bảng điều khiển
+## M7. Nhóm và bảng điều khiển (xong 17/11/2026, PR #59)
 
 Đặc tả: `08-da-ngon-ngu-va-nhom.md` phần B. Nhánh tích hợp `m7/nhom`; mỗi issue một nhánh, một PR vào `m7/nhom`, chia bước và push sau mỗi bước (xem `05-workflow.md`). Hết mốc một PR `m7/nhom` vào `main`.
 
 | Issue | Việc |
 | --- | --- |
-| M7-01 (#47) | Không gian làm việc: Cá nhân và Nhóm, đổi không gian, tạo nhóm, mời và nhận lời mời, vai trò, buổi ghi riêng tư hoặc cả nhóm, quyền kiểm ở repository. |
-| M7-02 (#48) | Bảng điều khiển cá nhân `/dashboard` và tab Nhóm; thanh điều hướng mới. |
-| M7-03 (#49) | Quản trị nhóm `/team/*`: thành viên, mức dùng, nhật ký truy cập, mẫu dùng chung, gói Nhóm và hóa đơn mẫu. |
-| M7-04 (#50) | Cập nhật `07-handover.md` (bảng database, bảo mật theo hàng cho nhóm và nhiều ngôn ngữ) và chạy lại rà tối, máy tính, tiếp cận, hiệu năng cho mọi màn mới. |
+| M7-01 (#47, xong) | Không gian làm việc: Cá nhân và Nhóm, đổi không gian, tạo nhóm, mời và nhận lời mời, vai trò, buổi ghi riêng tư hoặc cả nhóm, quyền kiểm ở repository. |
+| M7-02 (#48, xong) | Bảng điều khiển cá nhân `/dashboard` và tab Nhóm; thanh điều hướng mới. |
+| M7-03 (#49, xong) | Quản trị nhóm `/team/*`: thành viên, mức dùng, nhật ký truy cập, mẫu dùng chung, gói Nhóm và hóa đơn mẫu. |
+| M7-04 (#50, xong) | Cập nhật `07-handover.md` (bảng database, bảo mật theo hàng cho nhóm và nhiều ngôn ngữ) và chạy lại rà tối, máy tính, tiếp cận, hiệu năng cho mọi màn mới. |
+
+## M8. Nghe sạch và chữ chạy theo tiếng
+
+Đặc tả: `09-nghe-sach.md`. Một issue, nhánh `m8/01-nghe-sach`, PR vào `main` (chặng chỉ một issue nên không cần nhánh tích hợp), chờ Hoang duyệt.
+
+| Issue | Việc |
+| --- | --- |
+| M8-01 (#60) | Nút và bảng Nghe sạch, bản đồ nghe giả, chữ chạy theo từng từ, đoạn đang phát nổi rõ, ý tóm tắt sáng theo, Bản gọn và Nguyên văn. |
 
 ## Bài thử kỹ thuật (chạy song song, nhãn `spike`)
 
