@@ -468,6 +468,52 @@ M7-03 bổ sung: `audit`, `usage`, `invoices` chỉ Chủ và Quản trị đọ
 
 Khi nối database: `SummaryVersion` thành bảng `summary_versions (session_id, lang)`, `workspaces`, `members`, `audit_events` là bảng riêng; chính sách bảo mật theo hàng dựa trên `members` và `visibility`. Cập nhật `07-handover.md` mục 3 ở M7-04.
 
+## Bổ sung M8 (nghe sạch, docs/09-nghe-sach.md)
+
+Nguyên tắc: chỉ lưu một file gốc, không cắt sửa — "Nghe sạch" là **chế độ
+phát** bật tắt được, dựa trên bản đồ nghe tính trước một lần khi xử lý. Máy
+người dùng chỉ đọc bản đồ để nhảy qua và chỉnh âm lượng; lọc ồn chạy nhẹ trên
+máy. Tải file, gửi biên bản, xuất file, link công khai luôn dùng file gốc.
+
+```ts
+interface ListeningMap {
+  session_id: string;
+  silences: Array<{ start_sec: number; end_sec: number }>;   // khoảng lặng hơn 1,5 giây
+  fillers: Array<{ start_sec: number; end_sec: number; text: string }>;
+  speaker_gain_db: Record<string, number>;                   // speaker_id -> mức tăng giảm, -6 đến +9
+  noise_level: "low" | "medium" | "high";
+  clean_duration_sec: number;                                // thời lượng khi bỏ khoảng lặng (không bỏ tiếng đệm)
+}
+
+interface TranscriptSegment {
+  text_clean: string;          // Bản gọn; text giữ Nguyên văn
+  words?: Array<{ w: string; start_sec: number; end_sec: number; filler?: boolean }>;   // có khi nối AI thật
+}
+
+interface User {
+  listening_prefs: { enabled: boolean; denoise: boolean; level: boolean; skip_silence: boolean; skip_fillers: boolean };
+}
+
+interface SessionRepository {
+  getListeningMap(id: string): Promise<ListeningMap | null>;   // null: buổi chưa có dữ liệu nghe sạch
+}
+```
+
+- Bản giả: `getListeningMap` đọc từ fixture (`scripts/gen-listening-map.mjs`
+  sinh cho mọi buổi mẫu từ `speaker_spans`, `transcript` và `peaks` — khoảng
+  lặng là chỗ trống giữa hai đoạn, nền ồn của buổi được vẽ thấp vào `peaks`).
+  `text_clean` viết tay cho các đoạn có tiếng đệm, từ lặp, nói vấp; đoạn còn
+  lại trùng câu gốc. Mốc từng chữ mockup chưa có: chia đều thời lượng đoạn
+  theo số ký tự (`lib/listening/words.ts`, hàm riêng — thay bằng mốc thật sau).
+- Dữ liệu cũ trong localStorage tự chuyển khi nạp (migrate): thiếu
+  `listening_prefs` điền mặc định (`enabled: false`, còn lại theo đặc tả);
+  thiếu `text_clean` thì dùng `text`.
+- Bản thật: lọc ồn bằng `AudioWorklet` (ví dụ RNNoise WASM), cân âm lượng bằng
+  `GainNode` theo người nói đang phát, nhảy khoảng lặng bằng `seek` theo bản
+  đồ. Khi xử lý buổi ghi, cùng lượt AI sinh mốc từng chữ, đánh dấu tiếng đệm,
+  sinh `text_clean` và tính bản đồ nghe (VAD cho khoảng lặng, mức âm lượng
+  trung bình theo người nói). Ghi chi tiết vào `07-handover.md` ở bước 6.
+
 ## Fixture
 
 Viết bằng tiếng Việt, nội dung như thật, tên người và số liệu hợp lý. Không dùng "Lorem ipsum", "Nguyễn Văn A", "Test 1".

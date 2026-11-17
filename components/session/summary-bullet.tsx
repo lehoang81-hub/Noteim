@@ -44,7 +44,7 @@ export function SummaryBullet({
     <div
       className={cn(
         "border-l-2 pl-3 transition-colors ease-noteim duration-(--t-base)",
-        playing ? "border-sen" : "border-transparent",
+        playing ? "border-dien" : "border-transparent",
       )}
     >
       <button
@@ -75,11 +75,13 @@ export function SummaryBullet({
         <span
           className={cn(
             "pt-0.5 text-caption font-medium tabular-nums group-hover:underline",
-            playing ? "text-sen-text" : "text-ink-3",
+            playing ? "text-dien" : "text-ink-3",
           )}
         >
           {time}
         </span>
+        {/* Ý đang phát: chấm nhỏ màu điện cạnh giờ (M8-01) */}
+        {playing ? <span aria-hidden={true} className="mt-1 size-1.5 shrink-0 self-start rounded-pill bg-dien" /> : null}
       </button>
       {children ? <div className="mb-1.5 ml-5">{children}</div> : null}
     </div>

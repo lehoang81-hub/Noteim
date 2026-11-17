@@ -507,13 +507,20 @@ export const mockSource: DataSource = {
         // Sửa ý ở bản gốc: mọi bản dịch hiện "Bản gốc đã sửa sau khi dịch" (M6-03)
         for (const v of fx.summary_versions ?? []) v.stale = true;
       }),
-    updateSegment: (sessionId, segmentId, text) =>
+    updateSegment: (sessionId, segmentId, text, field = "text") =>
       write(async () => {
         await sessionsReady();
         const fx = await findFixture(sessionId);
         assertOwnSession(fx.detail);
         const seg = fx.transcript.find((s) => s.id === segmentId);
         if (!seg) throw new DataError("not_found");
+        // M8-01: sửa theo chế độ đang xem — bản gọn sửa text_clean, không đụng
+        // câu Nguyên văn (bằng chứng không bị đổi); bản dịch không lỗi thời.
+        if (field === "text_clean") {
+          seg.text_clean = text;
+          seg.edited = true;
+          return;
+        }
         seg.text = text;
         seg.edited = true;
         // Câu gốc đã sửa: mọi bản dịch hiện có của đoạn này sang trạng thái
@@ -965,6 +972,16 @@ export const mockSource: DataSource = {
         // Nhật ký nhóm: xuất file (M7-03). Chỉ người được đọc nội dung mới
         // xuất được; buổi cá nhân không thuộc nhật ký nhóm nào.
         if (fx.detail.workspace_id) pushAudit(fx.detail.workspace_id, "export", "session", fx.detail.id, fx.detail.title);
+      }),
+    getListeningMap: (id) =>
+      read(async () => {
+        await sessionsReady();
+        const fx = await findFixture(id);
+        assertCanRead(fx.detail);
+        // Cờ "Không có bản đồ nghe" của bảng thử nghiệm: ép trạng thái buổi cũ
+        // chưa xử lý (M8-01) — nút Nghe sạch tắt kèm dòng giải thích.
+        if (getFlags().noListeningMap) return null;
+        return fx.listening_map ?? null;
       }),
   },
 

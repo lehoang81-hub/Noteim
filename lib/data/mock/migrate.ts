@@ -108,6 +108,11 @@ function migrateSegments(segments: TranscriptSegment[] | undefined, fallbackLang
       seg.translations = {};
       changed = true;
     }
+    // M8-01: kho cũ chưa có bản gọn — dùng câu Nguyên văn làm bản gọn
+    if (typeof raw.text_clean !== "string" || raw.text_clean === "") {
+      seg.text_clean = seg.text;
+      changed = true;
+    }
   }
   return changed;
 }
@@ -139,6 +144,11 @@ export function migrateStored(db: MockDb): boolean {
     // M7-01: kho cũ chưa có khái niệm không gian — mặc định không gian Cá nhân
     if (!user.current_workspace_id) {
       user.current_workspace_id = PERSONAL_WORKSPACE_ID;
+      changed = true;
+    }
+    // M8-01: lựa chọn Nghe sạch mặc định (chưa bật; công tắc theo đặc tả)
+    if (!user.listening_prefs) {
+      user.listening_prefs = { enabled: false, denoise: true, level: true, skip_silence: true, skip_fillers: false };
       changed = true;
     }
   }

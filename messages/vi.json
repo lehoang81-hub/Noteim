@@ -447,7 +447,22 @@
       "back10": "Lùi 10 giây",
       "forward10": "Tới 10 giây",
       "rate": "Tốc độ {rate}, bấm để đổi",
-      "position": "Vị trí phát"
+      "position": "Vị trí phát",
+      "clean": "Nghe sạch",
+      "cleanOpen": "Mở bảng Nghe sạch",
+      "cleanRemaining": "nghe sạch còn {time}",
+      "cleanDenoise": "Lọc tiếng ồn",
+      "cleanDenoiseHint": "Giảm tiếng quạt, điều hòa, xe, quán ồn",
+      "cleanLevel": "Cân âm lượng người nói",
+      "cleanLevelHint": "Người nói nhỏ được tăng, người nói to được giảm",
+      "cleanSkipSilence": "Bỏ qua khoảng lặng",
+      "cleanSkipSilenceHint": "Nhảy qua chỗ im lặng hơn 1,5 giây khi phát",
+      "cleanSkipFillers": "Bỏ qua \"à, ừ\"",
+      "cleanSkipFillersHint": "Nhảy qua tiếng đệm. Có thể nghe hơi giật",
+      "cleanOriginalNote": "File gốc giữ nguyên. Tải về và gửi đi luôn là bản gốc.",
+      "cleanNone": "Buổi này chưa có dữ liệu nghe sạch.",
+      "cleanOn": "Nghe sạch đang bật",
+      "cleanOff": "Nghe sạch đang tắt"
     }
   },
   "shell": {
@@ -810,7 +825,11 @@
     "translating": "Đang dịch…",
     "translateFail": "Chưa dịch được. Thử lại.",
     "translationStale": "Cần dịch lại",
-    "sampleTranslation": "Bản dịch mẫu"
+    "sampleTranslation": "Bản dịch mẫu",
+    "playingBadge": "Đang phát",
+    "modeLabel": "Chế độ xem bản ghi lời",
+    "modeClean": "Bản gọn",
+    "modeVerbatim": "Nguyên văn"
   },
   "summary": {
     "versionLabel": "Tóm tắt bằng",

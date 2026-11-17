@@ -893,7 +893,8 @@
       "text": "Dạ chào ông Việt, chiều nay hai bên mình chốt lại phương án phân phối dự án Lê Hồng cho sàn. Theo buổi làm việc trước, đợt một là 40 căn thương mại, giá bán từ 2,1 đến 2,9 tỷ mỗi căn.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Dạ chào ông Việt, chiều nay hai bên mình chốt lại phương án phân phối dự án Lê Hồng cho sàn. Theo buổi làm việc trước, đợt một là 40 căn thương mại, giá bán từ 2,1 đến 2,9 tỷ mỗi căn."
     },
     {
       "id": "t2",
@@ -903,7 +904,8 @@
       "text": "Đúng vậy. Tôi mở phân phối độc quyền cho sàn giai đoạn một. Sàn giữ chiết khấu 1,5%, thêm 0,5% nếu chốt trên 15 căn trong quý một.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Đúng vậy. Tôi mở phân phối độc quyền cho sàn giai đoạn một. Sàn giữ chiết khấu 1,5%, thêm 0,5% nếu chốt trên 15 căn trong quý một."
     },
     {
       "id": "t3",
@@ -913,7 +915,8 @@
       "text": "Bên sàn cam kết bố trí sáu nhân viên bán hàng chuyên trách cho dự án và ngân sách quảng cáo khu vực Hải Phòng từ đầu tháng 12. Hàng tuần bên tôi gửi báo cáo khách xem nhà cho phòng kinh doanh của công ty.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Bên sàn cam kết bố trí sáu nhân viên bán hàng chuyên trách cho dự án và ngân sách quảng cáo khu vực Hải Phòng từ đầu tháng 12. Hàng tuần bên tôi gửi báo cáo khách xem nhà cho phòng kinh doanh của công ty."
     },
     {
       "id": "t4",
@@ -923,7 +926,8 @@
       "text": "Tôi giao cho sàn đợt đầu 40 căn, làm tốt thì đợt hai nói chuyện shophouse. Nhưng tôi yêu cầu chỉ định người phụ trách riêng, khách lớn phải có sàn trực tiếp dẫn xem.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Tôi giao cho sàn đợt đầu 40 căn, làm tốt thì đợt hai nói chuyện shophouse. Nhưng tôi yêu cầu chỉ định người phụ trách riêng, khách lớn phải có sàn trực tiếp dẫn xem."
     },
     {
       "id": "t5",
@@ -933,7 +937,8 @@
       "text": "Bên em để chị Trâm phụ trách trực tiếp dự án, em là người duyệt mọi báo cáo. Kịch bản dẫn xem và bảng hỏi khách đều làm theo chuẩn công ty mình gửi ông duyệt trước khi áp dụng.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Bên em để chị Trâm phụ trách trực tiếp dự án, em là người duyệt mọi báo cáo. Kịch bản dẫn xem và bảng hỏi khách đều làm theo chuẩn công ty mình gửi ông duyệt trước khi áp dụng."
     },
     {
       "id": "t6",
@@ -943,7 +948,8 @@
       "text": "Được. Ký phụ lục phân phối ngày 25/11 tại văn phòng công ty. Phần quảng cáo, tôi duyệt nội dung mẫu trước, không chạy trước khi có chữ ký của phòng truyền thông.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Được. Ký phụ lục phân phối ngày 25/11 tại văn phòng công ty. Phần quảng cáo, tôi duyệt nội dung mẫu trước, không chạy trước khi có chữ ký của phòng truyền thông."
     },
     {
       "id": "t7",
@@ -953,7 +959,8 @@
       "text": "Vâng. Bên em soạn phụ lục gồm phân khu căn, bảng chiết khấu và cam kết nhân sự, gửi trước thứ Hai tuần sau để phòng pháp lý hai bên rà một lượt.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Vâng. Bên em soạn phụ lục gồm phân khu căn, bảng chiết khấu và cam kết nhân sự, gửi trước thứ Hai tuần sau để phòng pháp lý hai bên rà một lượt."
     },
     {
       "id": "t8",
@@ -963,8 +970,20 @@
       "text": "OK, tôi chờ phụ lục của sàn. Chính sách giá không đổi trước 31/12, sau đó tôi mới tính lại cho đợt hai.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "OK, tôi chờ phụ lục của sàn. Chính sách giá không đổi trước 31/12, sau đó tôi mới tính lại cho đợt hai."
     }
   ],
-  "chat": []
+  "chat": [],
+  "listening_map": {
+    "session_id": "s-nhom-chu-dau-tu-le-hong",
+    "silences": [],
+    "fillers": [],
+    "speaker_gain_db": {
+      "SPK_01": 1,
+      "SPK_02": -1
+    },
+    "noise_level": "low",
+    "clean_duration_sec": 3120
+  }
 }

@@ -801,3 +801,44 @@ file subset chính thức, mỗi file một `unicode-range` (dùng chung qua
 bản subset còn 257–347 KB mỗi route). Khi nối backend: giữ nguyên cách nạp theo
 unicode-range, thêm ngôn ngữ mới thì thêm file subset tương ứng, không quay lại
 file duy nhất. Danh sách vị trí chuỗi Hàn cần rà nằm trong PR M6 và PR này.
+
+## 8. Nghe sạch (M8) — khi nối thật
+
+Đặc tả ở `docs/09-nghe-sach.md`. Nguyên tắc: chỉ lưu MỘT file gốc, không tạo
+bản sạch lưu riêng — "Nghe sạch" là chế độ phát, dựa trên bản đồ nghe tính
+trước một lần. Tải file, gửi biên bản, xuất file, link công khai luôn dùng bản
+gốc; lấy bằng chứng (luật, công chứng, y tế) dùng câu Nguyên văn.
+
+**Kiểu dữ liệu và repository** (đã có ở mockup): `ListeningMap`
+(`silences`, `fillers`, `speaker_gain_db`, `noise_level`, `clean_duration_sec`),
+`TranscriptSegment.text_clean` (+ `words` khi có mốc thật),
+`User.listening_prefs`, `SessionRepository.getListeningMap(id)` — null là buổi
+chưa có dữ liệu. Bản đồ nghe thành cột JSONB của bảng `sessions` (khoảng vài
+KB, tính một lần khi xử lý); `listening_prefs` thành cột của `profiles`.
+
+**B2 — ghi âm**: lưu dạng nén giọng nói (Opus khoảng 24 đến 32 kbps, khoảng 10
+đến 15 MB mỗi giờ), chỉ một file gốc.
+
+**B3 — cùng lượt AI nhận dạng**: lọc ồn tạm cho AI nghe (không lưu bản đã
+lọc), lấy mốc thời gian từng chữ (`TranscriptSegment.words` — thay hàm chia
+đều theo ký tự `lib/listening/words.ts`), tách người nói, đánh dấu tiếng đệm,
+sinh `text_clean` (bản gọn bỏ đệm, lặp, vấp), tính `ListeningMap` (VAD cho
+khoảng lặng, mức âm lượng trung bình theo người nói cho `speaker_gain_db`).
+Mockup sinh bản đồ bằng `scripts/gen-listening-map.mjs` từ `speaker_spans`,
+`transcript` và `peaks` để dữ liệu mẫu có sẵn.
+
+**Lúc nghe — Web Audio API**:
+- Cân âm lượng: `GainNode` theo người nói đang phát, mức từ
+  `speaker_gain_db` (người nói nhỏ được tăng tối đa +9 dB, to giảm tới -6 dB).
+- Lọc ồn: bộ lọc nhẹ chạy trong `AudioWorklet` (ví dụ RNNoise bản WASM) —
+  công tắc chỉ đổi trạng thái ở mockup, bản thật nối vào đây.
+- Bỏ qua khoảng lặng/tiếng đệm: `seek` theo bản đồ. Mockup đã làm đúng cách
+  này: đồng hồ phát nhận danh sách khoảng bỏ qua (`Player.setSkips` trong
+  `lib/player/mock-player.ts`, gộp khoảng chồng lấp ở `lib/listening/skips.ts`)
+  — bản thật giữ nguyên cách di chuyển kim, chỉ thay phần phát âm thanh, và
+  thanh thời gian vẫn theo thời gian gốc.
+- Chữ chạy theo: mốc từng chữ thật thay cho chia đều theo ký tự; bảng "Bản
+  gọn/Nguyên văn" hiển thị theo `text_clean`/`text` như mockup đã làm.
+
+**Cần thử ở B0**: iPhone khóa màn hình có giữ được Web Audio không; nếu không,
+khi khóa màn hình chỉ giữ nhảy khoảng lặng và cân âm lượng đơn giản.

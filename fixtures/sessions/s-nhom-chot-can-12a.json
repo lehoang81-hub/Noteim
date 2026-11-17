@@ -893,7 +893,8 @@
       "text": "Dạ buổi nay ba bên mình gặp nhau để chốt căn 12A tòa B Hoàng Huy. Bên chị Ngọc là chủ nhà, anh Phúc là khách mua, em là bên môi giới. Căn 96 mét vuông ba phòng ngủ, giá trao đổi quanh 3,2 tỷ.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Dạ buổi nay ba bên mình gặp nhau để chốt căn 12A tòa B Hoàng Huy. Bên chị Ngọc là chủ nhà, anh Phúc là khách mua, em là bên môi giới. Căn 96 mét vuông ba phòng ngủ, giá trao đổi quanh 3,2 tỷ."
     },
     {
       "id": "t2",
@@ -903,7 +904,8 @@
       "text": "Tôi xem căn hai lần rồi, ưng hướng và tầng. Nhưng sổ hồng căn này còn thế chấp ở Vietbank thì tôi không ký được, phải sạch nợ trước khi làm hợp đồng.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Tôi xem căn hai lần rồi, ưng hướng và tầng. Nhưng sổ hồng căn này còn thế chấp ở Vietbank thì tôi không ký được, phải sạch nợ trước khi làm hợp đồng."
     },
     {
       "id": "t3",
@@ -913,7 +915,8 @@
       "text": "Khoản thế chấp của tôi còn 1,1 tỷ, tôi giải chấp được trước 18/11 nếu khách đặt cọc sớm. Sau khi giải chấp, ngân hàng trả sổ gốc trong ba ngày làm việc.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Khoản thế chấp của tôi còn 1,1 tỷ, tôi giải chấp được trước 18/11 nếu khách đặt cọc sớm. Sau khi giải chấp, ngân hàng trả sổ gốc trong ba ngày làm việc."
     },
     {
       "id": "t4",
@@ -923,7 +926,8 @@
       "text": "Thứ tự làm việc như sau: bên anh Phúc đặt cọc 150 triệu, chị Ngọc giải chấp trước 18/11, hai bên ký hợp đồng công chứng ngày 21/11 tại văn phòng công chứng Nguyễn Bỉnh Khiêm.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Thứ tự làm việc như sau: bên anh Phúc đặt cọc 150 triệu, chị Ngọc giải chấp trước 18/11, hai bên ký hợp đồng công chứng ngày 21/11 tại văn phòng công chứng Nguyễn Bỉnh Khiêm."
     },
     {
       "id": "t5",
@@ -933,7 +937,8 @@
       "text": "Cọc 150 triệu tôi đồng ý, nhưng ghi rõ trong giấy đặt cọc: nếu đến 18/11 sổ chưa giải chấp xong thì cọc trả lại đầy đủ, hai bên không phạt gì.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Cọc 150 triệu tôi đồng ý, nhưng ghi rõ trong giấy đặt cọc: nếu đến 18/11 sổ chưa giải chấp xong thì cọc trả lại đầy đủ, hai bên không phạt gì."
     },
     {
       "id": "t6",
@@ -943,7 +948,8 @@
       "text": "Tôi chấp nhận điều khoản đó. Giá cuối cùng tôi giữ 3,15 tỷ, không giảm thêm; phí công chứng mỗi bên chịu một nửa.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Tôi chấp nhận điều khoản đó. Giá cuối cùng tôi giữ 3,15 tỷ, không giảm thêm; phí công chứng mỗi bên chịu một nửa."
     },
     {
       "id": "t7",
@@ -953,7 +959,8 @@
       "text": "Giá 3,15 tỷ, anh Phúc thấy sao? Nếu ok em lập giấy đặt cọc ngay chiều nay cho hai bên ký.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Giá 3,15 tỷ, anh Phúc thấy sao? Nếu ok em lập giấy đặt cọc ngay chiều nay cho hai bên ký."
     },
     {
       "id": "t8",
@@ -963,8 +970,21 @@
       "text": "OK, 3,15 tỷ theo phương án đó. Em gửi giấy đặt cọc sớm, tôi ký chiều nay luôn cho kịp lịch giải chấp.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "OK, 3,15 tỷ theo phương án đó. Em gửi giấy đặt cọc sớm, tôi ký chiều nay luôn cho kịp lịch giải chấp."
     }
   ],
-  "chat": []
+  "chat": [],
+  "listening_map": {
+    "session_id": "s-nhom-chot-can-12a",
+    "silences": [],
+    "fillers": [],
+    "speaker_gain_db": {
+      "SPK_01": 1,
+      "SPK_02": -1,
+      "SPK_03": 0
+    },
+    "noise_level": "low",
+    "clean_duration_sec": 1820
+  }
 }

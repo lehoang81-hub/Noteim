@@ -873,7 +873,8 @@
       "text": "Dạ em chào anh Khoa, hôm nay anh xem lại khu văn phòng tầng 9 tòa Sông Hồng nhé. Khu trống đang có 90 mét vuông, chủ tòa để giá 360.000 một mét vuông một tháng, chưa gồm phí quản lý.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Dạ em chào anh Khoa, hôm nay anh xem lại khu văn phòng tầng 9 tòa Sông Hồng nhé. Khu trống đang có 90 mét vuông, chủ tòa để giá 360.000 một mét vuông một tháng, chưa gồm phí quản lý."
     },
     {
       "id": "t2",
@@ -883,7 +884,8 @@
       "text": "Bên tôi cần đúng khu đó cho 14 nhân viên. Nhưng anh nói thật, mức 360.000 là cao hơn hai tòa cạnh bên từ 6 đến 8 phần trăm. Tôi ký được nếu giá giảm 8%.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Bên tôi cần đúng khu đó cho 14 nhân viên. Nhưng anh nói thật, mức 360.000 là cao hơn hai tòa cạnh bên từ 6 đến 8 phần trăm. Tôi ký được nếu giá giảm 8%."
     },
     {
       "id": "t3",
@@ -893,7 +895,8 @@
       "text": "Mặt bằng tòa Sông Hồng mới sơn lại, thang máy riêng cho khu văn phòng và đổ bộ điều hòa đa zone. Giá giảm 8% thì em không có quyền, nhưng em có phương án khác giữ lợi ích cho anh.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Mặt bằng tòa Sông Hồng mới sơn lại, thang máy riêng cho khu văn phòng và đổ bộ điều hòa đa zone. Giá giảm 8% thì em không có quyền, nhưng em có phương án khác giữ lợi ích cho anh."
     },
     {
       "id": "t4",
@@ -903,7 +906,8 @@
       "text": "Anh nói phương án nghe trước. Nếu vẫn phải trả gần bằng giá chào thì bên tôi không có lý do chuyển sang tòa này.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Anh nói phương án nghe trước. Nếu vẫn phải trả gần bằng giá chào thì bên tôi không có lý do chuyển sang tòa này."
     },
     {
       "id": "t5",
@@ -913,7 +917,8 @@
       "text": "Phương án của em: giá giảm 5% còn 342.000, cộng ba tháng miễn phí quản lý. Quy đổi ra, năm đầu anh tiết kiệm được khoảng 58 triệu so với giá chào, gần bằng giảm 8% nhưng chủ tòa dễ gật hơn.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Phương án của em: giá giảm 5% còn 342.000, cộng ba tháng miễn phí quản lý. Quy đổi ra, năm đầu anh tiết kiệm được khoảng 58 triệu so với giá chào, gần bằng giảm 8% nhưng chủ tòa dễ gật hơn."
     },
     {
       "id": "t6",
@@ -923,7 +928,8 @@
       "text": "Mức đó gần kỳ vọng của tôi rồi. Nhận nhà từ tháng 1/2027, hợp đồng hai năm, ba tháng miễn phí quản lý tính từ khi nhận nhà.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Mức đó gần kỳ vọng của tôi rồi. Nhận nhà từ tháng 1/2027, hợp đồng hai năm, ba tháng miễn phí quản lý tính từ khi nhận nhà."
     },
     {
       "id": "t7",
@@ -933,7 +939,8 @@
       "text": "Vâng, em đàm phán lại với chủ tòa và báo anh phương án bằng văn bản trước thứ Sáu.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Vâng, em đàm phán lại với chủ tòa và báo anh phương án bằng văn bản trước thứ Sáu."
     },
     {
       "id": "t8",
@@ -943,8 +950,20 @@
       "text": "OK, cuối tuần tôi chốt. Anh giữ khu tầng 9 giúp tôi, đừng để khách khác đặt trước.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "OK, cuối tuần tôi chốt. Anh giữ khu tầng 9 giúp tôi, đừng để khách khác đặt trước."
     }
   ],
-  "chat": []
+  "chat": [],
+  "listening_map": {
+    "session_id": "s-nhom-van-phong-song-hong",
+    "silences": [],
+    "fillers": [],
+    "speaker_gain_db": {
+      "SPK_01": 1,
+      "SPK_02": -1
+    },
+    "noise_level": "low",
+    "clean_duration_sec": 1560
+  }
 }

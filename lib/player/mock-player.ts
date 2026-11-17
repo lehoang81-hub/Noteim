@@ -16,6 +16,9 @@ export type PlayerState = {
   rate: number;
 };
 
+/** Khoảng cần bỏ qua khi phát (nghe sạch, M8-01): [bắt đầu, kết thúc] giây. */
+export type SkipRange = { start: number; end: number };
+
 export interface Player {
   getState(): PlayerState;
   subscribe(listener: () => void): () => void;
@@ -25,6 +28,10 @@ export interface Player {
   seek(time: number): void;
   skip(seconds: number): void;
   setRate(rate: number): void;
+  /** Đặt các khoảng cần bỏ qua (khoảng lặng, tiếng đệm — M8-01). Khi phát,
+   * đồng hồ nhảy thẳng tới cuối khoảng thay vì phát qua. Danh sách rỗng là
+   * phát thường: file gốc không bị cắt sửa, đây chỉ là cách di chuyển kim. */
+  setSkips(skips: SkipRange[]): void;
 }
 
 export const PLAYBACK_RATES = [1, 1.25, 1.5, 2] as const;
@@ -34,11 +41,18 @@ export function createMockPlayer(duration: number, startAt = 0): Player {
   const listeners = new Set<() => void>();
   let raf = 0;
   let last = 0;
+  let skips: SkipRange[] = [];
 
   const emit = () => listeners.forEach((l) => l());
   const set = (patch: Partial<PlayerState>) => {
     state = { ...state, ...patch };
     emit();
+  };
+
+  /** Kim đang nằm trong khoảng cần bỏ qua thì trả về điểm cuối của khoảng. */
+  const skipEndAt = (t: number): number | null => {
+    for (const s of skips) if (t >= s.start && t < s.end) return s.end;
+    return null;
   };
 
   function tick(now: number) {
@@ -49,7 +63,9 @@ export function createMockPlayer(duration: number, startAt = 0): Player {
       set({ currentTime: state.duration, playing: false });
       return;
     }
-    set({ currentTime: next });
+    // Nghe sạch: nhảy qua khoảng lặng/tiếng đệm trong bản đồ nghe (M8-01)
+    const jump = skipEndAt(next);
+    set({ currentTime: jump ?? next });
     raf = requestAnimationFrame(tick);
   }
 
@@ -62,6 +78,9 @@ export function createMockPlayer(duration: number, startAt = 0): Player {
     play() {
       if (state.playing) return;
       if (state.currentTime >= state.duration) state = { ...state, currentTime: 0 };
+      // Bật phát từ trong khoảng bỏ qua: nhảy tới cuối khoảng ngay
+      const jump = skipEndAt(state.currentTime);
+      if (jump !== null) state = { ...state, currentTime: jump };
       last = performance.now();
       set({ playing: true });
       raf = requestAnimationFrame(tick);
@@ -75,13 +94,24 @@ export function createMockPlayer(duration: number, startAt = 0): Player {
       else player.play();
     },
     seek(time) {
-      set({ currentTime: Math.min(state.duration, Math.max(0, time)) });
+      const t = Math.min(state.duration, Math.max(0, time));
+      const jump = skipEndAt(t);
+      set({ currentTime: jump ?? t });
     },
     skip(seconds) {
       player.seek(state.currentTime + seconds);
     },
     setRate(rate) {
       set({ rate });
+    },
+    setSkips(list) {
+      skips = [...list].sort((a, b) => a.start - b.start);
+      // Vừa nhận bản đồ nghe mà kim đang nằm trong khoảng bỏ qua: nhảy ngay,
+      // không phát tiếp phần im lặng (tránh trạng thái sai thoáng qua)
+      if (state.playing) {
+        const jump = skipEndAt(state.currentTime);
+        if (jump !== null) set({ currentTime: jump });
+      }
     },
   };
   return player;

@@ -888,7 +888,8 @@
       "text": "Dạ em chào chị Nhàn, chiều nay mình xem lại đúng căn tầng 14 tòa The Legend Hà Phong nhé. Căn này 120 mét vuông, view thành phố, chủ tòa đang để giá chào 380.000 một mét vuông một tháng.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Dạ em chào chị Nhàn, chiều nay mình xem lại đúng căn tầng 14 tòa The Legend Hà Phong nhé. Căn này 120 mét vuông, view thành phố, chủ tòa đang để giá chào 380.000 một mét vuông một tháng."
     },
     {
       "id": "t2",
@@ -898,7 +899,8 @@
       "text": "Bên tôi cần đúng 120 mét vuông cho 18 nhân viên, chia ba phòng riêng và một khu vực mở. Văn phòng phải nhận nhà từ đầu tháng 1 năm 2027, hợp đồng ký hai năm.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Bên tôi cần đúng 120 mét vuông cho 18 nhân viên, chia ba phòng riêng và một khu vực mở. Văn phòng phải nhận nhà từ đầu tháng 1 năm 2027, hợp đồng ký hai năm."
     },
     {
       "id": "t3",
@@ -908,7 +910,8 @@
       "text": "Căn tầng 14 còn nguyên, chủ tòa cho sửa mặt bằng trước khi nhận. Giá chào chưa gồm phí quản lý 22.000 một mét vuông một tháng và ba chỗ đậu ô tô tính thêm 1,5 triệu mỗi tháng.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Căn tầng 14 còn nguyên, chủ tòa cho sửa mặt bằng trước khi nhận. Giá chào chưa gồm phí quản lý 22.000 một mét vuông một tháng và ba chỗ đậu ô tô tính thêm 1,5 triệu mỗi tháng."
     },
     {
       "id": "t4",
@@ -918,7 +921,8 @@
       "text": "Phí đậu xe thì bên tôi chấp nhận được. Nhưng giá thuê 380.000 cao hơn mặt bằng khu đó, tôi chỉ ký khi giá về mức 350.000.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Phí đậu xe thì bên tôi chấp nhận được. Nhưng giá thuê 380.000 cao hơn mặt bằng khu đó, tôi chỉ ký khi giá về mức 350.000."
     },
     {
       "id": "t5",
@@ -928,7 +932,8 @@
       "text": "Em sẽ đàm phán lại với chủ tòa theo phương án giảm 5% còn 361.000, kèm ba tháng miễn phí quản lý. Với hợp đồng hai năm thì chủ tòa dễ đồng ý phương án này hơn là cắt sâu giá một lần.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Em sẽ đàm phán lại với chủ tòa theo phương án giảm 5% còn 361.000, kèm ba tháng miễn phí quản lý. Với hợp đồng hai năm thì chủ tòa dễ đồng ý phương án này hơn là cắt sâu giá một lần."
     },
     {
       "id": "t6",
@@ -938,7 +943,8 @@
       "text": "Giá về 361.000 kèm miễn phí quản lý thì ổn. Khi ký tôi đặt cọc hai tháng tiền thuê, nhưng chờ phương án giá cuối cùng của chủ tòa đã, cuối tuần tôi trả lời.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Giá về 361.000 kèm miễn phí quản lý thì ổn. Khi ký tôi đặt cọc hai tháng tiền thuê, nhưng chờ phương án giá cuối cùng của chủ tòa đã, cuối tuần tôi trả lời."
     },
     {
       "id": "t7",
@@ -948,7 +954,8 @@
       "text": "Vâng, em gửi phương án giá chính thức cho chị trước chiều thứ Sáu.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "Vâng, em gửi phương án giá chính thức cho chị trước chiều thứ Sáu."
     },
     {
       "id": "t8",
@@ -958,8 +965,20 @@
       "text": "OK. Chị kèm luôn sơ đồ chia phòng cho em, chủ tòa duyệt sớm thì bên tôi khánh thành kịp tháng 1.",
       "lang": "vi",
       "translations": {},
-      "edited": false
+      "edited": false,
+      "text_clean": "OK. Chị kèm luôn sơ đồ chia phòng cho em, chủ tòa duyệt sớm thì bên tôi khánh thành kịp tháng 1."
     }
   ],
-  "chat": []
+  "chat": [],
+  "listening_map": {
+    "session_id": "s-nhom-legend-ha-phong",
+    "silences": [],
+    "fillers": [],
+    "speaker_gain_db": {
+      "SPK_01": -1,
+      "SPK_02": 1
+    },
+    "noise_level": "low",
+    "clean_duration_sec": 1740
+  }
 }

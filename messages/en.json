@@ -447,7 +447,22 @@
       "back10": "Back 10 seconds",
       "forward10": "Forward 10 seconds",
       "rate": "Speed {rate}, press to change",
-      "position": "Playback position"
+      "position": "Playback position",
+      "clean": "Clean listen",
+      "cleanOpen": "Open clean listening panel",
+      "cleanRemaining": "{time} with clean listening",
+      "cleanDenoise": "Denoise",
+      "cleanDenoiseHint": "Reduces fans, air conditioning, traffic, noisy cafés",
+      "cleanLevel": "Level speakers",
+      "cleanLevelHint": "Quiet speakers are raised, loud ones are lowered",
+      "cleanSkipSilence": "Skip silence",
+      "cleanSkipSilenceHint": "Jumps over gaps longer than 1.5 seconds while playing",
+      "cleanSkipFillers": "Skip \"um, uh\"",
+      "cleanSkipFillersHint": "Jumps over filler sounds. May sound choppy",
+      "cleanOriginalNote": "The original file stays untouched. Downloads and shared copies are always the original.",
+      "cleanNone": "This session has no clean listening data yet.",
+      "cleanOn": "Clean listening is on",
+      "cleanOff": "Clean listening is off"
     }
   },
   "shell": {
@@ -755,7 +770,11 @@
     "translating": "Translating…",
     "translateFail": "Couldn't translate. Try again.",
     "translationStale": "Needs re-translation",
-    "sampleTranslation": "Sample translation"
+    "sampleTranslation": "Sample translation",
+    "playingBadge": "Playing",
+    "modeLabel": "Transcript view mode",
+    "modeClean": "Concise",
+    "modeVerbatim": "Verbatim"
   },
   "summary": {
     "versionLabel": "Summary in",

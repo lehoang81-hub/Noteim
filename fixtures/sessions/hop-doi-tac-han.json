@@ -1513,7 +1513,8 @@
      "text": "박 팀장님, 김 과장님, 안녕하세요. 오늘 회의를 준비해 주셔서 감사합니다. 새 주문의 서랍 부품용 금형 두 세트를 확정하고 싶습니다.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Chào ông Park, chào chị Kim, cảm ơn hai bên đã sắp xếp buổi họp hôm nay. Chúng tôi muốn chốt bộ hai khuôn cho chi tiết hộc tủ của đơn hàng mới."
   },
   {
    "id": "s02",
@@ -1528,7 +1529,8 @@
      "text": "Xin chào, rất vui được gặp ông. Phía chúng tôi có chị Kim Min-ji phụ trách sản xuất tham dự cùng. Hôm nay chúng tôi sẽ trình bày báo giá khuôn và kế hoạch sản xuất.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "안녕하세요, 만나 뵙게 되어 반갑습니다. 저희 쪽에서는 생산 담당 김민지 과장이 함께 참석했습니다. 오늘 금형 견적과 생산 일정을 정리해 드리겠습니다."
   },
   {
    "id": "s03",
@@ -1543,7 +1545,8 @@
      "text": "Rất vui được gặp mọi người. Tôi sẽ trình chiếu ba báo giá khuôn và kế hoạch sản xuất trên màn hình ngay bây giờ.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Nice to meet you everyone. I will share the three mold quotations and the production plan on screen now."
   },
   {
    "id": "s04",
@@ -1553,7 +1556,8 @@
    "text": "Chương trình hôm nay gồm ba phần — So sánh ba báo giá khuôn, đơn giá với MOQ, và tiến độ sản xuất đợt đầu.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Chương trình hôm nay gồm ba phần — So sánh ba báo giá khuôn, đơn giá với MOQ, và tiến độ sản xuất đợt đầu."
   },
   {
    "id": "s05",
@@ -1568,7 +1572,8 @@
      "text": "Tốt ạ. Chúng tôi đồng ý với trình tự này. Khi cần sẽ giải thích thêm bằng tiếng Anh.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "좋습니다. 순서에 동의합니다. 필요하면 영어로도 설명드리겠습니다."
   },
   {
    "id": "s06",
@@ -1583,7 +1588,8 @@
      "text": "이번 회의의 목표는 금형 공급사, 단가, 결제 조건을 확정하여 이번 달 안에 계약을 체결하는 것입니다.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Mục tiêu của buổi họp là chốt nhà cung cấp khuôn, đơn giá và điều khoản thanh toán để ký hợp đồng trong tháng này."
   },
   {
    "id": "s07",
@@ -1598,7 +1604,8 @@
      "text": "Vâng, vậy chúng ta bắt đầu ngay với ba báo giá khuôn.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "네, 그럼 바로 세 가지 금형 견적부터 시작하겠습니다."
   },
   {
    "id": "s08",
@@ -1608,7 +1615,8 @@
    "text": "Chúng tôi đã nhận ba báo giá cho bộ hai khuôn hộc tủ. Ông có thể so sánh giúp về giá, tuổi thọ và chu kỳ ép không?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Chúng tôi đã nhận ba báo giá cho bộ hai khuôn hộc tủ. Ông có thể so sánh giúp về giá, tuổi thọ và chu kỳ ép không?"
   },
   {
    "id": "s09",
@@ -1623,7 +1631,8 @@
      "text": "Vâng. Phương án A là báo giá của Hanyang Mold: 48.000 USD, dùng thép P20, tuổi thọ dự kiến 300.000 lần ép.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "네. A안은 한양금형 견적으로 48,000달러입니다. P20 강재를 사용하고 예상 수명은 300,000회 사출입니다."
   },
   {
    "id": "s10",
@@ -1638,7 +1647,8 @@
      "text": "P20 강재가 얇은 벽 두께의 서랍 부품도 견딜 수 있을까요? 200,000회 사출 이후의 표면 광택이 걱정됩니다.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Thép P20 chịu được chi tiết hộc tủ thành mỏng không? Chúng tôi lo độ bóng bề mặt sau 200.000 lần ép."
   },
   {
    "id": "s11",
@@ -1653,7 +1663,8 @@
      "text": "P20 là lựa chọn phổ biến, nhưng thành sản phẩm mỏng thì độ bóng có thể giảm một chút. Nếu muốn thép tốt hơn, chúng tôi đề nghị phương án B.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "P20은 일반적인 선택이지만 제품 벽이 얇으면 광택이 조금 떨어질 수 있습니다. 더 좋은 강재를 원하시면 B안을 추천합니다."
   },
   {
    "id": "s12",
@@ -1668,7 +1679,8 @@
      "text": "Phương án B dùng thép không gỉ S136 với tuổi thọ khoảng 500.000 lần ép, nên bề mặt giữ độ bóng lâu hơn nhiều.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Option B uses S136 stainless steel with a lifetime of about 500,000 shots, so the surface stays glossy much longer."
   },
   {
    "id": "s13",
@@ -1683,7 +1695,8 @@
      "text": "B안의 가격은 얼마이고, A안과 비교하면 어떤 차이가 있나요?",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Giá phương án B là bao nhiêu và khác A ở điểm nào?"
   },
   {
    "id": "s14",
@@ -1698,7 +1711,8 @@
      "text": "Báo giá phương án B là 52.000 USD. Cao hơn A 4.000 USD nhưng tuổi thọ dài hơn khoảng 200.000 lần ép và ít bảo trì hơn.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "B안 견적은 52,000달러입니다. A안보다 4,000달러 높지만 수명이 약 200,000회 더 길고 유지보수가 적습니다."
   },
   {
    "id": "s15",
@@ -1708,7 +1722,8 @@
    "text": "Còn phương án C có đáng quan tâm không? Nghe nói chu kỳ ép nhanh hơn hẳn.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Còn phương án C có đáng quan tâm không? Nghe nói chu kỳ ép nhanh hơn hẳn."
   },
   {
    "id": "s16",
@@ -1723,7 +1738,8 @@
      "text": "Phương án C là 61.000 USD, áp dụng kênh làm mát conformal nên chu kỳ ép giảm từ 24 giây xuống 20,4 giây, nhanh hơn khoảng 15%.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "C안은 61,000달러이고 컨포멀 쿨링 채널이 적용되어 사출 사이클이 24초에서 20.4초로, 약 15% 단축됩니다."
   },
   {
    "id": "s17",
@@ -1733,7 +1749,8 @@
    "text": "Ngân sách đợt đầu có hạn. Phương án A của Hanyang Mold là lựa chọn hợp lý nhất cho bộ hai khuôn hộc tủ.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Ngân sách đợt đầu có hạn. Phương án A của Hanyang Mold là lựa chọn hợp lý nhất cho bộ hai khuôn hộc tủ."
   },
   {
    "id": "s18",
@@ -1748,7 +1765,8 @@
      "text": "Cảm ơn hai vị. Chúng tôi muốn tiến hành với phương án A của Hanyang Mold, chờ báo giá vận chuyển.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Thank you both. We would like to proceed with option A from Hanyang Mold, pending the shipping quotation."
   },
   {
    "id": "s19",
@@ -1763,7 +1781,8 @@
      "text": "그럼 생산 단가로 넘어가겠습니다. 2.35달러는 첫 물량 전체에 적용되나요?",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Vậy chúng ta sang phần đơn giá. Mức 2,35 USD có áp dụng cho toàn bộ đợt đầu không?"
   },
   {
    "id": "s20",
@@ -1778,7 +1797,8 @@
      "text": "Vâng, đơn giá là 2,35 USD mỗi sản phẩm; đây là mức giá áp dụng cho tối thiểu 20.000 sản phẩm.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "네, 단가는 개당 2.35달러이며, 최소 주문 수량 20,000개 기준 가격입니다."
   },
   {
    "id": "s21",
@@ -1788,7 +1808,8 @@
    "text": "MOQ 20.000 có thể tách thành nhiều lần giao không, hay phải giao một lần?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "MOQ 20.000 có thể tách thành nhiều lần giao không, hay phải giao một lần?"
   },
   {
    "id": "s22",
@@ -1803,7 +1824,8 @@
      "text": "Có thể tách làm hai lần giao, 12.000 và 8.000 sản phẩm; cước vận chuyển tính riêng cho từng lần.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "두 번으로 나눠 배송할 수 있습니다. 12,000개와 8,000개로 나누고 배송비는 각각 계산됩니다."
   },
   {
    "id": "s23",
@@ -1818,7 +1840,8 @@
      "text": "단가 2.35달러에 수출 포장과 초회 검사가 포함되는 것이 맞나요?",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Đơn giá 2,35 USD đã gồm bao bì xuất khẩu và kiểm tra lần đầu, đúng không ạ?"
   },
   {
    "id": "s24",
@@ -1833,7 +1856,8 @@
      "text": "Đúng: đơn giá 2,35 USD mỗi sản phẩm đã gồm bao bì xuất khẩu và kiểm tra lần đầu; chưa gồm cước vận chuyển và thuế nhập khẩu.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Correct: the 2.35 US dollars per unit includes export packaging and first inspection; freight and import duties are excluded."
   },
   {
    "id": "s25",
@@ -1843,7 +1867,8 @@
    "text": "Nếu thêm màu thứ hai cho vỏ thì giá thay đổi thế nào?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Nếu thêm màu thứ hai cho vỏ thì giá thay đổi thế nào?"
   },
   {
    "id": "s26",
@@ -1858,7 +1883,8 @@
      "text": "Thêm một màu thì cộng 0,05 USD mỗi sản phẩm. Khuôn không tốn thêm chi phí, chỉ bổ sung gate.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "색상을 하나 추가하면 개당 0.05달러가 추가됩니다. 금형은 추가 비용 없이 게이트만 보완합니다."
   },
   {
    "id": "s27",
@@ -1868,7 +1894,8 @@
    "text": "Rõ, chúng tôi ghi nhận phụ trội 0,05 USD cho màu thứ hai.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Rõ, chúng tôi ghi nhận phụ trội 0,05 USD cho màu thứ hai."
   },
   {
    "id": "s28",
@@ -1883,7 +1910,8 @@
      "text": "Tóm lại: đơn giá 2,35 USD, MOQ 20.000 sản phẩm, có thể giao hai lần. Bảng báo giá sẽ được gửi sau buổi họp.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "정리하면 단가 2.35달러, 최소 주문 20,000개, 두 차례 배송 가능입니다. 견적표는 회의 후 보내드리겠습니다."
   },
   {
    "id": "s29",
@@ -1898,7 +1926,8 @@
      "text": "다음으로 중요한 부분은 일정입니다. 박 팀장님, 정확한 납기를 약속해 주실 수 있나요?",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Phần quan trọng tiếp theo là tiến độ. Ông Park có thể cam kết lead time chính xác không?"
   },
   {
    "id": "s30",
@@ -1913,7 +1942,8 @@
      "text": "8 tuần sau khi duyệt mẫu. Gồm 3 tuần gia công khuôn, 1 tuần mẫu T1 và 4 tuần chỉnh sửa cùng chuẩn bị sản xuất.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "샘플 승인 후 8주입니다. 금형 가공 3주, T1 샘플 1주, 수정과 생산 준비 4주로 구성됩니다."
   },
   {
    "id": "s31",
@@ -1923,7 +1953,8 @@
    "text": "Tuần thứ tư chạy thử T1 thì chúng tôi có thể nhận mẫu thử bằng đường bay không?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Tuần thứ tư chạy thử T1 thì chúng tôi có thể nhận mẫu thử bằng đường bay không?"
   },
   {
    "id": "s32",
@@ -1938,7 +1969,8 @@
      "text": "Được ạ. Chúng tôi gửi 5 bộ mẫu T1 qua DHL; cước hai chiều phía người mua chịu.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "가능합니다. T1 샘플 5세트를 DHL로 보내드리겠습니다. 왕복 배송비는 바이어 측 부담입니다."
   },
   {
    "id": "s33",
@@ -1948,7 +1980,8 @@
    "text": "Nếu T1 cần chỉnh sửa thì ảnh hưởng bao nhiêu ngày tới chuỗi 8 tuần?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Nếu T1 cần chỉnh sửa thì ảnh hưởng bao nhiêu ngày tới chuỗi 8 tuần?"
   },
   {
    "id": "s34",
@@ -1963,7 +1996,8 @@
      "text": "Với mức chỉnh sửa thông thường thì không ảnh hưởng tiến độ. Nếu phải thay đổi cấu trúc khuôn thì có thể cộng tối đa 1 tuần.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "수정 범위가 일반적이면 일정에 영향이 없습니다. 금형 구조 변경이 생기면 최대 1주일 추가될 수 있습니다."
   },
   {
    "id": "s35",
@@ -1973,7 +2007,8 @@
    "text": "Chúng tôi sẽ chuẩn bị checklist kiểm tra mẫu và gửi trước buổi review T1.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Chúng tôi sẽ chuẩn bị checklist kiểm tra mẫu và gửi trước buổi review T1."
   },
   {
    "id": "s36",
@@ -1988,7 +2023,8 @@
      "text": "Chúng tôi sẽ gửi checklist kiểm tra chất lượng trước thứ Tư tuần này.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "We will send our QC checklist by Wednesday this week."
   },
   {
    "id": "s37",
@@ -2003,7 +2039,8 @@
      "text": "Vâng, sau khi nhận chúng tôi sẽ chia sẻ tiến độ làm khuôn kèm ảnh vào mỗi thứ Sáu.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "네, 확인 후 금형 진행 상황을 매주 금요일 사진과 함께 공유드리겠습니다."
   },
   {
    "id": "s38",
@@ -2018,7 +2055,8 @@
      "text": "결제 조건을 말씀드리겠습니다. T/T 30/70, 즉 계약 시 30% 계약금과 선적 전 70% 잔금을 제안합니다.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Về thanh toán, chúng tôi đề xuất T/T 30/70: đặt cọc 30% khi ký, 70% trước khi giao hàng."
   },
   {
    "id": "s39",
@@ -2033,7 +2071,8 @@
      "text": "Chúng tôi áp dụng chuẩn T/T 30/70: đặt cọc 30% khi ký hợp đồng, 70% còn lại trước khi giao hàng.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "표준은 T/T 30/70입니다. 계약 체결 시 30% 계약금, 선적 전에 70% 잔금을 받습니다."
   },
   {
    "id": "s40",
@@ -2043,7 +2082,8 @@
    "text": "Khoản 70% được thanh toán sau khi kiểm tra hàng trước giao, đúng không?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Khoản 70% được thanh toán sau khi kiểm tra hàng trước giao, đúng không?"
   },
   {
    "id": "s41",
@@ -2058,7 +2098,8 @@
      "text": "Vâng, sau khi kiểm tra đạt và chuẩn bị xong bộ chứng từ, chúng tôi xác nhận số tiền còn lại rồi giao hàng.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "네, 검사 합격 후 선적 서류가 준비되면 잔금을 확인하고 선적합니다."
   },
   {
    "id": "s42",
@@ -2068,7 +2109,8 @@
    "text": "Khuôn có được bảo hành không nếu lỗi sản xuất do khuôn?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Khuôn có được bảo hành không nếu lỗi sản xuất do khuôn?"
   },
   {
    "id": "s43",
@@ -2083,7 +2125,8 @@
      "text": "Khuôn được bảo hành 2 năm; lỗi do khuôn sẽ được sửa miễn phí, kể cả chi phí thay linh kiện.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "금형 보증은 2년이며, 금형 원인의 불량은 무상으로 수리합니다. 부품 교체 비용도 저희가 부담합니다."
   },
   {
    "id": "s44",
@@ -2093,7 +2136,8 @@
    "text": "Nếu sau khi duyệt thiết kế chúng tôi đổi chi tiết nhỏ thì chi phí tính thế nào?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Nếu sau khi duyệt thiết kế chúng tôi đổi chi tiết nhỏ thì chi phí tính thế nào?"
   },
   {
    "id": "s45",
@@ -2108,7 +2152,8 @@
      "text": "Thay đổi sau khi duyệt tính 65 USD mỗi giờ; thay đổi không ảnh hưởng khuôn thì miễn phí.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "승인 후 변경은 시간당 65달러로 계산하고, 금형에 영향이 없는 변경은 무료입니다."
   },
   {
    "id": "s46",
@@ -2123,7 +2168,8 @@
      "text": "Chúng tôi có thể đưa vào điều khoản bảo mật ba năm cho thiết kế và dữ liệu khuôn.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "We can include a three-year non-disclosure clause covering the design and the mold data."
   },
   {
    "id": "s47",
@@ -2133,7 +2179,8 @@
    "text": "Tốt, chúng tôi thống nhất đưa điều khoản bảo mật ba năm vào hợp đồng.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Tốt, chúng tôi thống nhất đưa điều khoản bảo mật ba năm vào hợp đồng."
   },
   {
    "id": "s48",
@@ -2148,7 +2195,8 @@
      "text": "양쪽에서 함께 확인하실 수 있도록 할 일 목록을 정리하겠습니다.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Tôi tổng lại các việc cần làm để hai bên cùng xác nhận."
   },
   {
    "id": "s49",
@@ -2158,7 +2206,8 @@
    "text": "Phía chúng tôi gửi bản thiết kế 3D cuối cùng trước thứ Sáu tuần này.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Phía chúng tôi gửi bản thiết kế 3D cuối cùng trước thứ Sáu tuần này."
   },
   {
    "id": "s50",
@@ -2173,7 +2222,8 @@
      "text": "Khi nhận bản vẽ 3D, chúng tôi sẽ phản hồi trong vòng hai ngày làm việc.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "3D 도면을 받으면 영업일 기준 이틀 안에 피드백 드리겠습니다."
   },
   {
    "id": "s51",
@@ -2183,7 +2233,8 @@
    "text": "Về vận chuyển, hai bên cần báo giá cho phương án nào?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Về vận chuyển, hai bên cần báo giá cho phương án nào?"
   },
   {
    "id": "s52",
@@ -2198,7 +2249,8 @@
      "text": "Chúng tôi sẽ chuẩn bị báo giá DDP cho cả hai phương án đường biển và đường hàng không, so sánh cảng Busan và Incheon.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "해운과 항공 두 가지 방안 모두 DDP 견적을 준비하겠습니다. 부산항과 인천항을 비교해 드립니다."
   },
   {
    "id": "s53",
@@ -2208,7 +2260,8 @@
    "text": "Chúng tôi đề xuất kiểm tra nhà máy trực tiếp vào tuần thứ sáu.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Chúng tôi đề xuất kiểm tra nhà máy trực tiếp vào tuần thứ sáu."
   },
   {
    "id": "s54",
@@ -2223,7 +2276,8 @@
      "text": "Chúng tôi rất hoan nghênh và sẽ chuẩn bị nhà máy theo lịch visite của quý công ty.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "반갑습니다. 방문 일정에 맞춰 공장 준비를 하겠습니다."
   },
   {
    "id": "s55",
@@ -2233,7 +2287,8 @@
    "text": "Phần hợp đồng thì tiến hành thế nào?",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Phần hợp đồng thì tiến hành thế nào?"
   },
   {
    "id": "s56",
@@ -2248,7 +2303,8 @@
      "text": "Trong tuần này chúng tôi sẽ gửi bản nháp hợp đồng có kèm điều khoản NDA.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "이번 주 안에 NDA 조항을 포함한 계약서 초안을 보내드리겠습니다."
   },
   {
    "id": "s57",
@@ -2258,7 +2314,8 @@
    "text": "Đừng quên lịch họp review T1 vào cuối tuần thứ tư.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Đừng quên lịch họp review T1 vào cuối tuần thứ tư."
   },
   {
    "id": "s58",
@@ -2273,7 +2330,8 @@
      "text": "Vâng, chúng tôi sẽ gửi lời mời và chia sẻ link họp qua email.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "네, 초대장을 보내드리겠습니다. 회의 링크는 이메일로 공유해 드립니다."
   },
   {
    "id": "s59",
@@ -2283,7 +2341,8 @@
    "text": "Chốt lại: chúng tôi chọn khuôn A của Hanyang Mold, đơn giá 2,35 USD, MOQ 20.000, thanh toán T/T 30/70.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Chốt lại: chúng tôi chọn khuôn A của Hanyang Mold, đơn giá 2,35 USD, MOQ 20.000, thanh toán T/T 30/70."
   },
   {
    "id": "s60",
@@ -2298,7 +2357,8 @@
      "text": "Vâng, chúng tôi sẽ gửi báo giá phương án A kèm cước vận chuyển qua email.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "네, A안 견적서에 운임을 포함한 최종 금액을 이메일로 보내드리겠습니다."
   },
   {
    "id": "s61",
@@ -2313,7 +2373,8 @@
      "text": "첫 물량은 언제쯤 저희 창고에 도착할 것으로 예상됩니까?",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Đợt hàng đầu tiên dự kiến đến kho của chúng tôi khi nào?"
   },
   {
    "id": "s62",
@@ -2323,7 +2384,8 @@
    "text": "Chúng tôi gửi bản 3D cuối trong tuần này.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Chúng tôi gửi bản 3D cuối trong tuần này."
   },
   {
    "id": "s63",
@@ -2338,7 +2400,8 @@
      "text": "Khi thiết kế khuôn được duyệt, lô đầu tiên rời nhà máy ở tuần thứ chín và đến nơi sau khoảng hai tuần; báo giá DDP cho Busan và Incheon sẽ gửi trước thứ Sáu.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "Once the mold design is approved, the first shipment leaves in week nine and arrives about two weeks later; the DDP quotations for Busan and Incheon come by Friday."
   },
   {
    "id": "s64",
@@ -2348,7 +2411,8 @@
    "text": "Tôi xác nhận lịch visite nhà máy vào tuần thứ sáu, và đề nghị phía Hàn gửi nháp hợp đồng kèm điều khoản bảo mật ba năm.",
    "edited": false,
    "lang": "vi",
-   "translations": {}
+   "translations": {},
+   "text_clean": "Tôi xác nhận lịch visite nhà máy vào tuần thứ sáu, và đề nghị phía Hàn gửi nháp hợp đồng kèm điều khoản bảo mật ba năm."
   },
   {
    "id": "s65",
@@ -2363,7 +2427,8 @@
      "text": "Cảm ơn quý vị. Chúng tôi sẽ tổng hợp các nội dung đã chốt hôm nay và gửi sớm. Hẹn gặp lại.",
      "stale": false
     }
-   }
+   },
+   "text_clean": "감사합니다. 오늘 결정 사항을 정리해서 곧 보내드리겠습니다. 다음에 뵙겠습니다."
   }
  ],
  "chat": [
@@ -2739,5 +2804,18 @@
     "a4": "3년 비밀유지 조항이 포함된 계약서 초안 작성"
    }
   }
- ]
+ ],
+ "listening_map": {
+  "session_id": "s-hop-han",
+  "silences": [],
+  "fillers": [],
+  "speaker_gain_db": {
+   "SPK_01": 5,
+   "SPK_02": 2,
+   "SPK_03": 2,
+   "SPK_04": -6
+  },
+  "noise_level": "low",
+  "clean_duration_sec": 2980
+ }
 }
