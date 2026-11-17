@@ -781,6 +781,9 @@ function ExportPanel({
 
   async function copyText() {
     setBusy(true);
+    // Nhật ký nhóm: xuất file (M7-03). Nhật ký không chặn việc xuất; lỗi không
+    // báo người dùng vì việc xuất vẫn thành công.
+    void data.sessions.recordExport(detail.id).catch(() => {});
     try {
       await navigator.clipboard.writeText(text);
       toast.show({ tone: "success", message: t("copiedText") });
@@ -792,6 +795,8 @@ function ExportPanel({
   }
 
   function exportSimulated(kind: "pdf" | "word") {
+    // Nhật ký nhóm: xuất file giả lập (M7-03), cùng lý do im lặng khi lỗi
+    void data.sessions.recordExport(detail.id).catch(() => {});
     toast.show({ tone: "success", message: kind === "pdf" ? t("exportedPdf") : t("exportedWord") });
   }
 

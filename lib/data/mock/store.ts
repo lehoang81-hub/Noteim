@@ -187,6 +187,20 @@ export function samplesReady(): Promise<MockDb> {
   return p;
 }
 
+/**
+ * Lưu kho xuống localStorage mà không báo cho useData tải lại. Chỉ dùng cho ghi
+ * phụ không đổi gì trên màn hình đang mở, ví dụ dòng nhật ký "Xem buổi ghi"
+ * (review PR #57: trước đây dòng này chỉ nằm trong bộ nhớ, tải lại trang là mất).
+ */
+export function persistSilently() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+  } catch (e) {
+    console.error("Lưu kho mẫu thất bại:", e);
+    markStorageFull();
+  }
+}
+
 /** Ghi thay đổi: gọi sau mỗi lần sửa kho. */
 export function commit() {
   try {

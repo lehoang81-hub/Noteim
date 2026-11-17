@@ -1,6 +1,6 @@
 "use client";
 
-import { BookA, ContactRound, Gem, HardDriveDownload, Languages, LayoutTemplate, Mic, Palette, ShieldCheck, Users } from "lucide-react";
+import { BookA, Building2, ContactRound, Gem, HardDriveDownload, Languages, LayoutTemplate, Mic, Palette, ShieldCheck, Users } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -14,6 +14,8 @@ import { PrivacySection } from "./privacy-section";
 import { AppearanceSection } from "./appearance-section";
 import { PlanSection } from "./plan-section";
 import { ReportLanguageSection } from "./report-language-section";
+import { TeamSection } from "./team-section";
+import { useTeamWorkspace } from "@/components/team/use-team";
 import { cn } from "@/lib/cn";
 
 /*
@@ -33,9 +35,13 @@ export const SECTION_IDS = [
   "quyen-rieng-tu",
   "giao-dien",
   "goi-dich-vu",
+  "nhom",
 ] as const;
 
 export type SectionId = (typeof SECTION_IDS)[number];
+
+/** Mục chỉ hiện khi đang dùng không gian Nhóm (M7-03, docs/08 phần B). */
+const TEAM_ONLY_SECTIONS: SectionId[] = ["nhom"];
 
 export const SECTION_ICONS: Record<SectionId, typeof Users> = {
   "ho-so": Users,
@@ -48,6 +54,7 @@ export const SECTION_ICONS: Record<SectionId, typeof Users> = {
   "quyen-rieng-tu": ShieldCheck,
   "giao-dien": Palette,
   "goi-dich-vu": Gem,
+  "nhom": Building2,
 };
 
 function isSection(v: string | undefined): v is SectionId {
@@ -76,15 +83,20 @@ function SectionBody({ id }: { id: SectionId }) {
       return <AppearanceSection />;
     case "goi-dich-vu":
       return <PlanSection />;
+    case "nhom":
+      return <TeamSection />;
   }
 }
 
 function SectionMenu({ active }: { active: SectionId | null }) {
   const t = useTranslations("settings");
+  // Mục Nhóm chỉ hiện khi đang dùng không gian Nhóm (M7-03)
+  const { isTeam } = useTeamWorkspace();
   return (
     <nav aria-label={t("nav")} className="flex flex-col">
       {SECTION_IDS.map((id) => {
         const Icon = SECTION_ICONS[id];
+        if (!isTeam && TEAM_ONLY_SECTIONS.includes(id)) return null;
         return (
           <Link
             key={id}

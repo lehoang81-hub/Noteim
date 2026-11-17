@@ -116,6 +116,10 @@ export interface SessionRepository {
   /** Đổi Riêng tư / Cả nhóm (M7-01). Chỉ người ghi buổi được đổi; buổi cá
    * nhân luôn riêng tư. Đổi sang "workspace" chỉ có tác dụng trong không gian Nhóm. */
   setVisibility(id: string, visibility: Visibility): Promise<void>;
+  /** Ghi nhật ký "xuất file" của buổi ghi khi đang ở không gian Nhóm (M7-03).
+   * Nút xuất (Sao chép văn bản, Xuất PDF, Xuất Word) gọi để nhật ký nhóm có
+   * dòng xuất; chỉ người được đọc nội dung mới ghi được dòng này. */
+  recordExport(id: string): Promise<void>;
 }
 
 /**
@@ -137,6 +141,13 @@ export interface WorkspaceRepository {
    * đã chia sẻ với nhóm ở lại nhóm. */
   removeMember(id: string, userId: string): Promise<void>;
   transferOwnership(id: string, userId: string): Promise<void>;
+  /** Rời nhóm (M7-03): Thành viên và Quản trị tự rời; Chủ phải chuyển quyền
+   * Chủ hoặc xóa nhóm trước. Buổi riêng tư của người rời về không gian Cá
+   * nhân của họ, buổi đã chia sẻ với nhóm ở lại nhóm; xong quay về Cá nhân. */
+  leave(id: string): Promise<void>;
+  /** Đổi số chỗ của gói Nhóm, giả lập (M7-03): chỉ Chủ; không giảm dưới số
+   * thành viên đang có, không dưới 1. */
+  setSeats(id: string, seats: number): Promise<void>;
   /** Xem lời mời theo token của bản giả (sinh từ email, xem inviteToken).
    * "expired" khi hết hạn (thật hoặc ép bằng cờ thử nghiệm), "not_found"
    * khi token không tồn tại. */
