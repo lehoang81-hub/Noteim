@@ -43,3 +43,6 @@ next-env.d.ts
 # Kiểm thử trình duyệt
 /test-results/
 /playwright-report/
+
+# Âm thanh thử dài: sinh lại bằng scripts/gen-test-audio.py, không commit
+/test-data/audio/04-*
