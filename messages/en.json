@@ -1280,7 +1280,16 @@
     "payCard": "International card",
     "payNote": "The mockup is not connected to payments.",
     "notConnectedTitle": "The mockup is not connected to payments",
-    "notConnectedBody": "In the real product you would continue to the VietQR page or the card gateway."
+    "notConnectedBody": "In the real product you would continue to the VietQR page or the card gateway.",
+    "teamName": "Team",
+    "teamPrice": "… per person / month",
+    "team": {
+      "workspace": "Shared workspace for the whole team",
+      "quota": "Shared monthly minutes",
+      "templates": "Shared summary templates",
+      "audit": "Access log of who did what",
+      "seats": "Adjust seats as needed"
+    }
   },
   "welcome": {
     "brandLine": "Noteim",
@@ -1447,6 +1456,24 @@
     "csvColTime": "Time",
     "csvColActor": "Actor",
     "csvColAction": "Action",
-    "csvColTarget": "Target"
+    "csvColTarget": "Target",
+    "templatesIntro": "Summary templates shared with the team: every member uses them for recording; only the owner and admins can edit sections.",
+    "billingPlan": "Current plan",
+    "billingTeamName": "Team plan",
+    "billingPricePerSeat": "… per person / month",
+    "billingQuotaShared": "Shared monthly minutes {limit} minutes",
+    "billingQuotaHint": "Illustrated as the personal limit multiplied by the number of members; final numbers pending.",
+    "billingSeats": "Seats",
+    "billingSeatsEdit": "Change seats",
+    "billingSeatsDone": "Seats changed to {count}",
+    "billingSeatsError": "Could not change. Seats cannot go below the current member count.",
+    "billingOwnerOnly": "Only the owner changes seats; admins can view.",
+    "billingInvoices": "Sample invoices",
+    "invoicePeriod": "Period",
+    "invoiceSeats": "Seats",
+    "invoiceAmount": "Amount",
+    "invoiceStatus": "Status",
+    "invoicePaid": "Paid",
+    "invoiceDue": "Due"
   }
 }

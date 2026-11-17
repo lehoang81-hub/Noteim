@@ -145,6 +145,9 @@ export interface WorkspaceRepository {
    * Chủ hoặc xóa nhóm trước. Buổi riêng tư của người rời về không gian Cá
    * nhân của họ, buổi đã chia sẻ với nhóm ở lại nhóm; xong quay về Cá nhân. */
   leave(id: string): Promise<void>;
+  /** Đổi số chỗ của gói Nhóm, giả lập (M7-03): chỉ Chủ; không giảm dưới số
+   * thành viên đang có, không dưới 1. */
+  setSeats(id: string, seats: number): Promise<void>;
   /** Xem lời mời theo token của bản giả (sinh từ email, xem inviteToken).
    * "expired" khi hết hạn (thật hoặc ép bằng cờ thử nghiệm), "not_found"
    * khi token không tồn tại. */

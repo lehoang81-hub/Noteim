@@ -1280,7 +1280,16 @@
     "payCard": "Thẻ quốc tế",
     "payNote": "Bản mockup chưa nối thanh toán.",
     "notConnectedTitle": "Bản mockup chưa nối thanh toán",
-    "notConnectedBody": "Khi ra bản thật, bạn sẽ chuyển đến trang thanh toán của VietQR hoặc cổng thẻ quốc tế."
+    "notConnectedBody": "Khi ra bản thật, bạn sẽ chuyển đến trang thanh toán của VietQR hoặc cổng thẻ quốc tế.",
+    "teamName": "Nhóm",
+    "teamPrice": "… đ/người/tháng",
+    "team": {
+      "workspace": "Không gian làm việc chung cho cả nhóm",
+      "quota": "Hạn mức phút dùng chung",
+      "templates": "Mẫu tóm tắt dùng chung",
+      "audit": "Nhật ký truy cập ai làm gì",
+      "seats": "Đổi số chỗ theo nhu cầu"
+    }
   },
   "welcome": {
     "brandLine": "Noteim",
@@ -1447,6 +1456,24 @@
     "csvColTime": "Thời gian",
     "csvColActor": "Người thực hiện",
     "csvColAction": "Hành động",
-    "csvColTarget": "Đối tượng"
+    "csvColTarget": "Đối tượng",
+    "templatesIntro": "Mẫu tóm tắt dùng chung của nhóm: mọi thành viên dùng khi ghi, chỉ Chủ và Quản trị sửa được các phần.",
+    "billingPlan": "Gói hiện tại",
+    "billingTeamName": "Gói Nhóm",
+    "billingPricePerSeat": "… đ/người/tháng",
+    "billingQuotaShared": "Hạn mức phút dùng chung {limit} phút",
+    "billingQuotaHint": "Hạn mức minh họa bằng hạn mức mỗi người nhân số thành viên đang dùng; số gói chờ chốt.",
+    "billingSeats": "Số chỗ",
+    "billingSeatsEdit": "Đổi số chỗ",
+    "billingSeatsDone": "Đã đổi số chỗ thành {count}",
+    "billingSeatsError": "Không đổi được. Số chỗ không thấp hơn số thành viên đang có.",
+    "billingOwnerOnly": "Chỉ Chủ đổi được số chỗ; Quản trị xem.",
+    "billingInvoices": "Hóa đơn mẫu",
+    "invoicePeriod": "Kỳ",
+    "invoiceSeats": "Số chỗ",
+    "invoiceAmount": "Số tiền",
+    "invoiceStatus": "Trạng thái",
+    "invoicePaid": "Đã trả",
+    "invoiceDue": "Cần trả"
   }
 }

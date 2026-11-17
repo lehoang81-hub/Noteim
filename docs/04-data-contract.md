@@ -448,6 +448,7 @@ interface WorkspaceRepository {           // M7
   removeMember(id: string, userId: string): Promise<void>;
   transferOwnership(id: string, userId: string): Promise<void>;
   leave(id: string): Promise<void>;       // M7-03
+  setSeats(id: string, seats: number): Promise<void>;   // M7-03, đổi số chỗ giả lập
   getInvite(token: string): Promise<{ workspace: Workspace; invited_by: string } | "expired" | "not_found">;
   acceptInvite(token: string): Promise<void>;
   usage(id: string, month: string): Promise<UsageRow[]>;

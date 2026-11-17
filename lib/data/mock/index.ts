@@ -1562,6 +1562,20 @@ export const mockSource: DataSource = {
         const personal = db.workspaces.find((w) => w.kind === "personal");
         if (personal) db.user.current_workspace_id = personal.id;
       }),
+    setSeats: (id, seats) =>
+      write(() => {
+        const db = getDb();
+        // Đổi số chỗ là hành động gói: chỉ Chủ (Quản trị chỉ xem, docs/08)
+        if (myRole(id) !== "owner") throw new DataError("forbidden");
+        const ws = db.workspaces.find((w) => w.id === id);
+        if (!ws) throw new DataError("not_found");
+        if (ws.kind !== "team") throw new DataError("server", "Chỉ không gian Nhóm có số chỗ");
+        const used = db.members.filter((m) => m.workspace_id === id).length;
+        const next = Math.floor(seats);
+        if (next < Math.max(1, used))
+          throw new DataError("server", `Không thể giảm dưới số thành viên đang có (${used})`);
+        ws.seat_limit = next;
+      }),
     getInvite: (token) =>
       read(() => {
         const db = getDb();

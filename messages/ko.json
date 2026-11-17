@@ -1280,7 +1280,16 @@
     "payCard": "국제 카드",
     "payNote": "목업은 아직 결제에 연결되어 있지 않습니다.",
     "notConnectedTitle": "목업은 아직 결제에 연결되어 있지 않습니다",
-    "notConnectedBody": "실제 버전에서는 VietQR 결제 페이지 또는 국제 카드 결제창으로 이동합니다."
+    "notConnectedBody": "실제 버전에서는 VietQR 결제 페이지 또는 국제 카드 결제창으로 이동합니다.",
+    "teamName": "팀",
+    "teamPrice": "… /인/월",
+    "team": {
+      "workspace": "팀 전체가 쓰는 공유 작업 공간",
+      "quota": "공유 월 사용 한도",
+      "templates": "공유 요약 템플릿",
+      "audit": "누가 무엇을 했는지 접근 기록",
+      "seats": "필요에 따라 좌석 수 조정"
+    }
   },
   "welcome": {
     "brandLine": "Noteim",
@@ -1447,6 +1456,24 @@
     "csvColTime": "시각",
     "csvColActor": "실행한 사람",
     "csvColAction": "작업",
-    "csvColTarget": "대상"
+    "csvColTarget": "대상",
+    "templatesIntro": "팀 공유 요약 템플릿: 모든 멤버가 기록할 때 사용하고, 섹션은 소유자와 관리자만 수정할 수 있어요.",
+    "billingPlan": "현재 요금제",
+    "billingTeamName": "팀 요금제",
+    "billingPricePerSeat": "… /인/월",
+    "billingQuotaShared": "공유 월 한도 {limit}분",
+    "billingQuotaHint": "개인 한도에 현재 멤버 수를 곱한 참고치예요. 확정 수치는 추후 공지됩니다.",
+    "billingSeats": "좌석 수",
+    "billingSeatsEdit": "좌석 수 변경",
+    "billingSeatsDone": "좌석 수를 {count}로 변경했어요",
+    "billingSeatsError": "변경할 수 없어요. 좌석 수는 현재 멤버 수보다 적을 수 없어요.",
+    "billingOwnerOnly": "좌석 수는 소유자만 변경할 수 있고, 관리자는 볼 수만 있어요.",
+    "billingInvoices": "샘플 청구서",
+    "invoicePeriod": "기간",
+    "invoiceSeats": "좌석 수",
+    "invoiceAmount": "금액",
+    "invoiceStatus": "상태",
+    "invoicePaid": "결제 완료",
+    "invoiceDue": "미결제"
   }
 }
