@@ -36,12 +36,22 @@ export class CleanAudioChain {
   private levelOn = true;
   private speakerDb: number | null = null;
 
-  /** Nối thẻ audio vào đồ thị; gọi lại với thẻ khác thì dựng lại (đổi trình phát). */
+  /**
+   * Ghi nhận thẻ audio. Chỉ dựng đồ thị Web Audio khi Nghe sạch được bật lần đầu
+   * (review PR #67): một khi đã createMediaElementSource thì tiếng chỉ ra qua
+   * AudioContext, mà iPhone tạm dừng AudioContext khi khóa màn hình hoặc chuyển
+   * app. Người không bật Nghe sạch vẫn nghe bình thường khi khóa màn hình.
+   */
   bind(el: HTMLAudioElement) {
     if (this.el === el) return;
     this.unbind();
-    if (typeof AudioContext === "undefined") return; // trình duyệt cũ: phát thẳng
     this.el = el;
+    if (this.cleanOn) this.ensureGraph();
+  }
+
+  private ensureGraph() {
+    const el = this.el;
+    if (!el || this.ctx || typeof AudioContext === "undefined") return; // trình duyệt cũ: phát thẳng
     this.ctx = new AudioContext();
     this.source = this.ctx.createMediaElementSource(el);
     this.highpass = this.ctx.createBiquadFilter();
@@ -55,6 +65,7 @@ export class CleanAudioChain {
     this.lowpass.connect(this.compressor);
     this.compressor.connect(this.gain);
     this.gain.connect(this.ctx.destination);
+    if (!el.paused) void this.ctx.resume().catch(() => undefined);
     this.apply();
   }
 
@@ -65,6 +76,7 @@ export class CleanAudioChain {
 
   setClean(on: boolean) {
     this.cleanOn = on;
+    if (on) this.ensureGraph();
     this.apply();
   }
 

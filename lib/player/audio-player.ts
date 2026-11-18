@@ -60,6 +60,15 @@ export function createAudioPlayer(url: string, duration: number, clean?: CleanAu
       cancelAnimationFrame(raf);
       set({ playing: false, currentTime: duration, waiting: false });
     });
+    // Khóa màn hình, chuyển tab: requestAnimationFrame ngừng chạy nhưng tiếng vẫn
+    // phát. Dùng timeupdate (khoảng 4 lần mỗi giây) để vẫn nhảy khoảng lặng và
+    // cập nhật vị trí (review PR #67).
+    el.addEventListener("timeupdate", () => {
+      if (typeof document === "undefined" || !document.hidden || el.paused) return;
+      const jump = skipEndAt(el.currentTime);
+      if (jump !== null) el.currentTime = jump;
+      set({ currentTime: jump ?? el.currentTime });
+    });
     el.addEventListener("error", () => {
       cancelAnimationFrame(raf);
       set({ playing: false, waiting: false, error: "load" });

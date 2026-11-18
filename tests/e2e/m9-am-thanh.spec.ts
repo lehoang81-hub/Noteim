@@ -268,3 +268,24 @@ test('Cờ "Lỗi tải âm thanh": hiện câu lỗi và Thử lại, tắt c�
   await expect(page.getByText("Không phát được âm thanh.")).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+test("Nghe sạch tắt thì không dựng Web Audio (iPhone khóa màn hình vẫn nghe) (review PR #67)", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "chỉ cần chạy một lần");
+  await page.addInitScript(() => {
+    const Orig = window.AudioContext;
+    (window as unknown as { __ctxCount: number }).__ctxCount = 0;
+    window.AudioContext = class extends Orig {
+      constructor(...a: ConstructorParameters<typeof AudioContext>) {
+        super(...a);
+        (window as unknown as { __ctxCount: number }).__ctxCount++;
+      }
+    } as typeof AudioContext;
+  });
+  await onboard(page);
+  await page.goto("/s/s-bds-lan");
+  await page.getByRole("button", { name: "Phát", exact: true }).click();
+  await expect.poll(() => page.evaluate(() => document.querySelector("audio")?.currentTime ?? 0)).toBeGreaterThan(1);
+  const count = () => page.evaluate(() => (window as unknown as { __ctxCount: number }).__ctxCount);
+  const prefs = await page.evaluate(() => JSON.parse(localStorage.getItem("noteim-mock-db-v1")!).user.listening_prefs?.enabled);
+  if (!prefs) expect(await count()).toBe(0);
+});
