@@ -25,7 +25,7 @@
  */
 import { readFileSync } from "node:fs";
 import crypto from "node:crypto";
-import { apiFetch, sleep, groupTokensToSegments } from "../common.mjs";
+import { apiFetch, groupTokensToSegments } from "../common.mjs";
 
 export const provider = {
   code: "google",
@@ -81,7 +81,7 @@ function offsetToSec(offset) {
   return (Number(offset.s || 0) + Number(offset.nanos || 0) / 1e9) || null;
 }
 
-export async function transcribe({ filePath, apiKey: _unused, model = provider.modelDefault }) {
+export async function transcribe({ filePath, model = provider.modelDefault }) {
   const acc = serviceAccountJson();
   const token = await accessToken(acc);
   const base = `https://speech.googleapis.com/v2/projects/${acc.project_id}/locations/global/recognizers/_:recognize`;
