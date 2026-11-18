@@ -2,33 +2,42 @@
   "audio": "02-hop-doi-tac-han",
   "from_fixture": "fixtures/sessions/hop-doi-tac-han.json",
   "session_id": "s-hop-han",
-  "duration_sec": 510.06,
+  "engine": "edge",
+  "duration_sec": 464.44,
   "room": "phong-hop-may",
   "note": "Nói lẫn Việt, Hàn, Anh. Phòng họp cạnh xưởng, có điều hòa và tiếng máy.",
   "voices": {
     "SPK_01": {
-      "voice": "vi+m3",
-      "pitch": 45,
-      "speed_wpm": 165,
-      "gain_db": 0
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "+0Hz",
+      "rate": "+0%",
+      "gain_db": 0,
+      "role": "Bạn (môi giới)",
+      "engine": "edge"
     },
     "SPK_02": {
-      "voice": "ko+m2",
-      "pitch": 40,
-      "speed_wpm": 160,
-      "gain_db": 2
+      "voice": "ko-KR-InJoonNeural",
+      "pitch": "-10Hz",
+      "rate": "+0%",
+      "gain_db": 2,
+      "role": "Park Ji-ho (trầm hơn một chút)",
+      "engine": "edge"
     },
     "SPK_03": {
-      "voice": "ko+f3",
-      "pitch": 65,
-      "speed_wpm": 170,
-      "gain_db": -4
+      "voice": "ko-KR-SunHiNeural",
+      "pitch": "+8Hz",
+      "rate": "+5%",
+      "gain_db": -4,
+      "role": "Kim Min-ji (cao và nhanh hơn)",
+      "engine": "edge"
     },
     "SPK_04": {
-      "voice": "vi+f1",
-      "pitch": 58,
-      "speed_wpm": 155,
-      "gain_db": -6
+      "voice": "vi-VN-HoaiMyNeural",
+      "pitch": "+10Hz",
+      "rate": "+0%",
+      "gain_db": -6,
+      "role": "Chị Thảo (cao hơn)",
+      "engine": "edge"
     }
   },
   "segments": [
@@ -36,586 +45,1041 @@
       "id": "s01",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 1.97,
-      "end_sec": 10.53,
+      "start_sec": 1.39,
+      "end_sec": 9.73,
       "text": "Chào ông Park, chào chị Kim, cảm ơn hai bên đã sắp xếp buổi họp hôm nay. Chúng tôi muốn chốt bộ hai khuôn cho chi tiết hộc tủ của đơn hàng mới.",
-      "fixture_start_sec": 0
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s02",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 11.64,
-      "end_sec": 26.29,
+      "start_sec": 10.77,
+      "end_sec": 24.11,
       "text": "안녕하세요, 만나 뵙게 되어 반갑습니다. 저희 쪽에서는 생산 담당 김민지 과장이 함께 참석했습니다. 오늘 금형 견적과 생산 일정을 정리해 드리겠습니다.",
-      "fixture_start_sec": 35
+      "fixture_start_sec": 35,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s03",
       "speaker_id": "SPK_03",
       "lang": "en",
-      "start_sec": 31.31,
-      "end_sec": 37.13,
+      "start_sec": 25.09,
+      "end_sec": 32.84,
       "text": "Nice to meet you everyone. I will share the three mold quotations and the production plan on screen now.",
-      "fixture_start_sec": 70
+      "fixture_start_sec": 70,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s04",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 41.67,
-      "end_sec": 48.75,
+      "start_sec": 33.29,
+      "end_sec": 39.9,
       "text": "Chương trình hôm nay gồm ba phần — So sánh ba báo giá khuôn, đơn giá với MOQ, và tiến độ sản xuất đợt đầu.",
-      "fixture_start_sec": 104
+      "fixture_start_sec": 104,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s05",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 49.64,
-      "end_sec": 56.21,
+      "start_sec": 40.87,
+      "end_sec": 48.0,
       "text": "좋습니다. 순서에 동의합니다. 필요하면 영어로도 설명드리겠습니다.",
-      "fixture_start_sec": 138
+      "fixture_start_sec": 138,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s06",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 57.36,
-      "end_sec": 63.33,
+      "start_sec": 48.72,
+      "end_sec": 54.09,
       "text": "Mục tiêu của buổi họp là chốt nhà cung cấp khuôn, đơn giá và điều khoản thanh toán để ký hợp đồng trong tháng này.",
-      "fixture_start_sec": 172
+      "fixture_start_sec": 172,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s07",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 63.83,
-      "end_sec": 68.26,
+      "start_sec": 55.09,
+      "end_sec": 59.0,
       "text": "네, 그럼 바로 세 가지 금형 견적부터 시작하겠습니다.",
-      "fixture_start_sec": 206
+      "fixture_start_sec": 206,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s08",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 69.0,
-      "end_sec": 76.5,
+      "start_sec": 59.83,
+      "end_sec": 66.97,
       "text": "Chúng tôi đã nhận ba báo giá cho bộ hai khuôn hộc tủ. Ông có thể so sánh giúp về giá, tuổi thọ và chu kỳ ép không?",
-      "fixture_start_sec": 240
+      "fixture_start_sec": 240,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s09",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 76.95,
-      "end_sec": 87.65,
+      "start_sec": 67.66,
+      "end_sec": 76.16,
       "text": "네. A안은 한양금형 견적으로 48,000달러입니다. P20 강재를 사용하고 예상 수명은 300,000회 사출입니다.",
-      "fixture_start_sec": 287
+      "fixture_start_sec": 287,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s10",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 88.44,
-      "end_sec": 95.46,
+      "start_sec": 77.06,
+      "end_sec": 83.42,
       "text": "Thép P20 chịu được chi tiết hộc tủ thành mỏng không? Chúng tôi lo độ bóng bề mặt sau 200.000 lần ép.",
-      "fixture_start_sec": 334
+      "fixture_start_sec": 334,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s11",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 96.27,
-      "end_sec": 107.99,
+      "start_sec": 84.11,
+      "end_sec": 93.96,
       "text": "P20은 일반적인 선택이지만 제품 벽이 얇으면 광택이 조금 떨어질 수 있습니다. 더 좋은 강재를 원하시면 B안을 추천합니다.",
-      "fixture_start_sec": 381
+      "fixture_start_sec": 381,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s12",
       "speaker_id": "SPK_03",
       "lang": "en",
-      "start_sec": 108.41,
-      "end_sec": 116.78,
+      "start_sec": 95.07,
+      "end_sec": 103.61,
       "text": "Option B uses S136 stainless steel with a lifetime of about 500,000 shots, so the surface stays glossy much longer.",
-      "fixture_start_sec": 428
+      "fixture_start_sec": 428,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s13",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 117.8,
-      "end_sec": 120.72,
+      "start_sec": 104.25,
+      "end_sec": 107.16,
       "text": "Giá phương án B là bao nhiêu và khác A ở điểm nào?",
-      "fixture_start_sec": 474
+      "fixture_start_sec": 474,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s14",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 121.39,
-      "end_sec": 131.05,
+      "start_sec": 108.22,
+      "end_sec": 116.98,
       "text": "B안 견적은 52,000달러입니다. A안보다 4,000달러 높지만 수명이 약 200,000회 더 길고 유지보수가 적습니다.",
-      "fixture_start_sec": 520
+      "fixture_start_sec": 520,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s15",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 131.67,
-      "end_sec": 136.4,
+      "start_sec": 117.79,
+      "end_sec": 122.72,
       "text": "Còn phương án C có đáng quan tâm không? Nghe nói chu kỳ ép nhanh hơn hẳn.",
-      "fixture_start_sec": 566
+      "fixture_start_sec": 566,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s16",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 140.93,
-      "end_sec": 152.74,
+      "start_sec": 123.53,
+      "end_sec": 132.82,
       "text": "C안은 61,000달러이고 컨포멀 쿨링 채널이 적용되어 사출 사이클이 24초에서 20.4초로, 약 15% 단축됩니다.",
-      "fixture_start_sec": 612
+      "fixture_start_sec": 612,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s17",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 153.68,
-      "end_sec": 160.31,
+      "start_sec": 133.32,
+      "end_sec": 140.14,
       "text": "Ngân sách đợt đầu có hạn. Phương án A của Hanyang Mold là lựa chọn hợp lý nhất cho bộ hai khuôn hộc tủ.",
-      "fixture_start_sec": 658
+      "fixture_start_sec": 658,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s18",
       "speaker_id": "SPK_01",
       "lang": "en",
-      "start_sec": 161.44,
-      "end_sec": 167.51,
+      "start_sec": 141.01,
+      "end_sec": 147.62,
       "text": "Thank you both. We would like to proceed with option A from Hanyang Mold, pending the shipping quotation.",
-      "fixture_start_sec": 704
+      "fixture_start_sec": 704,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s19",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 167.95,
-      "end_sec": 173.87,
+      "start_sec": 148.03,
+      "end_sec": 154.48,
       "text": "Vậy chúng ta sang phần đơn giá. Mức 2,35 USD có áp dụng cho toàn bộ đợt đầu không?",
-      "fixture_start_sec": 750
+      "fixture_start_sec": 750,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s20",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 176.99,
-      "end_sec": 183.44,
+      "start_sec": 155.47,
+      "end_sec": 161.0,
       "text": "네, 단가는 개당 2.35달러이며, 최소 주문 수량 20,000개 기준 가격입니다.",
-      "fixture_start_sec": 789
+      "fixture_start_sec": 789,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s21",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 184.33,
-      "end_sec": 189.43,
+      "start_sec": 165.71,
+      "end_sec": 169.92,
       "text": "MOQ 20.000 có thể tách thành nhiều lần giao không, hay phải giao một lần?",
-      "fixture_start_sec": 828
+      "fixture_start_sec": 828,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s22",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 189.92,
-      "end_sec": 198.58,
+      "start_sec": 170.69,
+      "end_sec": 178.36,
       "text": "두 번으로 나눠 배송할 수 있습니다. 12,000개와 8,000개로 나누고 배송비는 각각 계산됩니다.",
-      "fixture_start_sec": 867
+      "fixture_start_sec": 867,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s23",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 199.31,
-      "end_sec": 204.61,
+      "start_sec": 182.68,
+      "end_sec": 187.76,
       "text": "Đơn giá 2,35 USD đã gồm bao bì xuất khẩu và kiểm tra lần đầu, đúng không ạ?",
-      "fixture_start_sec": 906
+      "fixture_start_sec": 906,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s24",
       "speaker_id": "SPK_03",
       "lang": "en",
-      "start_sec": 210.22,
-      "end_sec": 218.35,
+      "start_sec": 188.84,
+      "end_sec": 197.82,
       "text": "Correct: the 2.35 US dollars per unit includes export packaging and first inspection; freight and import duties are excluded.",
-      "fixture_start_sec": 945
+      "fixture_start_sec": 945,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s25",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 219.02,
-      "end_sec": 222.24,
+      "start_sec": 198.66,
+      "end_sec": 201.65,
       "text": "Nếu thêm màu thứ hai cho vỏ thì giá thay đổi thế nào?",
-      "fixture_start_sec": 984
+      "fixture_start_sec": 984,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s26",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 223.27,
-      "end_sec": 231.95,
+      "start_sec": 202.84,
+      "end_sec": 210.38,
       "text": "색상을 하나 추가하면 개당 0.05달러가 추가됩니다. 금형은 추가 비용 없이 게이트만 보완합니다.",
-      "fixture_start_sec": 1023
+      "fixture_start_sec": 1023,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s27",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 232.8,
-      "end_sec": 237.16,
+      "start_sec": 211.12,
+      "end_sec": 215.32,
       "text": "Rõ, chúng tôi ghi nhận phụ trội 0,05 USD cho màu thứ hai.",
-      "fixture_start_sec": 1062
+      "fixture_start_sec": 1062,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s28",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 237.93,
-      "end_sec": 248.21,
+      "start_sec": 216.52,
+      "end_sec": 226.65,
       "text": "정리하면 단가 2.35달러, 최소 주문 20,000개, 두 차례 배송 가능입니다. 견적표는 회의 후 보내드리겠습니다.",
-      "fixture_start_sec": 1101
+      "fixture_start_sec": 1101,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s29",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 249.3,
-      "end_sec": 254.34,
+      "start_sec": 227.63,
+      "end_sec": 232.88,
       "text": "Phần quan trọng tiếp theo là tiến độ. Ông Park có thể cam kết lead time chính xác không?",
-      "fixture_start_sec": 1140
+      "fixture_start_sec": 1140,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s30",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 258.2,
-      "end_sec": 268.27,
+      "start_sec": 233.5,
+      "end_sec": 242.63,
       "text": "샘플 승인 후 8주입니다. 금형 가공 3주, T1 샘플 1주, 수정과 생산 준비 4주로 구성됩니다.",
-      "fixture_start_sec": 1187
+      "fixture_start_sec": 1187,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s31",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 269.17,
-      "end_sec": 273.99,
+      "start_sec": 243.36,
+      "end_sec": 247.41,
       "text": "Tuần thứ tư chạy thử T1 thì chúng tôi có thể nhận mẫu thử bằng đường bay không?",
-      "fixture_start_sec": 1234
+      "fixture_start_sec": 1234,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s32",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 275.14,
-      "end_sec": 283.56,
+      "start_sec": 248.59,
+      "end_sec": 256.81,
       "text": "가능합니다. T1 샘플 5세트를 DHL로 보내드리겠습니다. 왕복 배송비는 바이어 측 부담입니다.",
-      "fixture_start_sec": 1281
+      "fixture_start_sec": 1281,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s33",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 284.69,
-      "end_sec": 288.38,
+      "start_sec": 257.54,
+      "end_sec": 261.19,
       "text": "Nếu T1 cần chỉnh sửa thì ảnh hưởng bao nhiêu ngày tới chuỗi 8 tuần?",
-      "fixture_start_sec": 1328
+      "fixture_start_sec": 1328,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s34",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 289.42,
-      "end_sec": 299.09,
+      "start_sec": 262.29,
+      "end_sec": 270.75,
       "text": "수정 범위가 일반적이면 일정에 영향이 없습니다. 금형 구조 변경이 생기면 최대 1주일 추가될 수 있습니다.",
-      "fixture_start_sec": 1375
+      "fixture_start_sec": 1375,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s35",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 299.65,
-      "end_sec": 304.16,
+      "start_sec": 271.77,
+      "end_sec": 275.66,
       "text": "Chúng tôi sẽ chuẩn bị checklist kiểm tra mẫu và gửi trước buổi review T1.",
-      "fixture_start_sec": 1422
+      "fixture_start_sec": 1422,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s36",
       "speaker_id": "SPK_01",
       "lang": "en",
-      "start_sec": 305.33,
-      "end_sec": 308.26,
+      "start_sec": 276.7,
+      "end_sec": 279.58,
       "text": "We will send our QC checklist by Wednesday this week.",
-      "fixture_start_sec": 1468
+      "fixture_start_sec": 1468,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s37",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 309.17,
-      "end_sec": 315.4,
+      "start_sec": 284.66,
+      "end_sec": 289.75,
       "text": "네, 확인 후 금형 진행 상황을 매주 금요일 사진과 함께 공유드리겠습니다.",
-      "fixture_start_sec": 1514
+      "fixture_start_sec": 1514,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s38",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 316.23,
-      "end_sec": 324.02,
+      "start_sec": 290.61,
+      "end_sec": 298.14,
       "text": "Về thanh toán, chúng tôi đề xuất T/T 30/70: đặt cọc 30% khi ký, 70% trước khi giao hàng.",
-      "fixture_start_sec": 1560
+      "fixture_start_sec": 1560,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s39",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 325.12,
-      "end_sec": 336.79,
+      "start_sec": 298.72,
+      "end_sec": 308.11,
       "text": "표준은 T/T 30/70입니다. 계약 체결 시 30% 계약금, 선적 전에 70% 잔금을 받습니다.",
-      "fixture_start_sec": 1605
+      "fixture_start_sec": 1605,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s40",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 337.97,
-      "end_sec": 342.6,
+      "start_sec": 308.59,
+      "end_sec": 312.46,
       "text": "Khoản 70% được thanh toán sau khi kiểm tra hàng trước giao, đúng không?",
-      "fixture_start_sec": 1650
+      "fixture_start_sec": 1650,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s41",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 343.24,
-      "end_sec": 349.35,
+      "start_sec": 313.26,
+      "end_sec": 318.14,
       "text": "네, 검사 합격 후 선적 서류가 준비되면 잔금을 확인하고 선적합니다.",
-      "fixture_start_sec": 1695
+      "fixture_start_sec": 1695,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s42",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 350.0,
-      "end_sec": 352.94,
+      "start_sec": 319.32,
+      "end_sec": 321.85,
       "text": "Khuôn có được bảo hành không nếu lỗi sản xuất do khuôn?",
-      "fixture_start_sec": 1740
+      "fixture_start_sec": 1740,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s43",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 353.36,
-      "end_sec": 362.47,
+      "start_sec": 322.61,
+      "end_sec": 331.03,
       "text": "금형 보증은 2년이며, 금형 원인의 불량은 무상으로 수리합니다. 부품 교체 비용도 저희가 부담합니다.",
-      "fixture_start_sec": 1785
+      "fixture_start_sec": 1785,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s44",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 363.11,
-      "end_sec": 367.72,
+      "start_sec": 331.9,
+      "end_sec": 335.88,
       "text": "Nếu sau khi duyệt thiết kế chúng tôi đổi chi tiết nhỏ thì chi phí tính thế nào?",
-      "fixture_start_sec": 1830
+      "fixture_start_sec": 1830,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s45",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 368.46,
-      "end_sec": 375.84,
+      "start_sec": 336.33,
+      "end_sec": 342.15,
       "text": "승인 후 변경은 시간당 65달러로 계산하고, 금형에 영향이 없는 변경은 무료입니다.",
-      "fixture_start_sec": 1875
+      "fixture_start_sec": 1875,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s46",
       "speaker_id": "SPK_02",
       "lang": "en",
-      "start_sec": 381.69,
-      "end_sec": 386.46,
+      "start_sec": 343.01,
+      "end_sec": 348.66,
       "text": "We can include a three-year non-disclosure clause covering the design and the mold data.",
-      "fixture_start_sec": 1920
+      "fixture_start_sec": 1920,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s47",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 387.0,
-      "end_sec": 390.46,
+      "start_sec": 349.64,
+      "end_sec": 353.05,
       "text": "Tốt, chúng tôi thống nhất đưa điều khoản bảo mật ba năm vào hợp đồng.",
-      "fixture_start_sec": 1965
+      "fixture_start_sec": 1965,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s48",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 391.01,
-      "end_sec": 394.08,
+      "start_sec": 353.47,
+      "end_sec": 356.4,
       "text": "Tôi tổng lại các việc cần làm để hai bên cùng xác nhận.",
-      "fixture_start_sec": 2010
+      "fixture_start_sec": 2010,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s49",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 394.67,
-      "end_sec": 398.74,
+      "start_sec": 361.61,
+      "end_sec": 365.14,
       "text": "Phía chúng tôi gửi bản thiết kế 3D cuối cùng trước thứ Sáu tuần này.",
-      "fixture_start_sec": 2064
+      "fixture_start_sec": 2064,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s50",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 399.53,
-      "end_sec": 404.93,
+      "start_sec": 365.57,
+      "end_sec": 369.74,
       "text": "3D 도면을 받으면 영업일 기준 이틀 안에 피드백 드리겠습니다.",
-      "fixture_start_sec": 2118
+      "fixture_start_sec": 2118,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s51",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 405.43,
-      "end_sec": 408.57,
+      "start_sec": 370.8,
+      "end_sec": 373.8,
       "text": "Về vận chuyển, hai bên cần báo giá cho phương án nào?",
-      "fixture_start_sec": 2172
+      "fixture_start_sec": 2172,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s52",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 409.53,
-      "end_sec": 417.71,
+      "start_sec": 374.48,
+      "end_sec": 381.65,
       "text": "해운과 항공 두 가지 방안 모두 DDP 견적을 준비하겠습니다. 부산항과 인천항을 비교해 드립니다.",
-      "fixture_start_sec": 2226
+      "fixture_start_sec": 2226,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s53",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 418.89,
-      "end_sec": 422.39,
+      "start_sec": 385.62,
+      "end_sec": 388.76,
       "text": "Chúng tôi đề xuất kiểm tra nhà máy trực tiếp vào tuần thứ sáu.",
-      "fixture_start_sec": 2280
+      "fixture_start_sec": 2280,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s54",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 427.65,
-      "end_sec": 432.96,
+      "start_sec": 389.81,
+      "end_sec": 395.02,
       "text": "반갑습니다. 방문 일정에 맞춰 공장 준비를 하겠습니다.",
-      "fixture_start_sec": 2334
+      "fixture_start_sec": 2334,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s55",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 433.49,
-      "end_sec": 435.37,
+      "start_sec": 395.74,
+      "end_sec": 397.55,
       "text": "Phần hợp đồng thì tiến hành thế nào?",
-      "fixture_start_sec": 2388
+      "fixture_start_sec": 2388,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s56",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 436.28,
-      "end_sec": 441.56,
+      "start_sec": 398.07,
+      "end_sec": 402.3,
       "text": "이번 주 안에 NDA 조항을 포함한 계약서 초안을 보내드리겠습니다.",
-      "fixture_start_sec": 2442
+      "fixture_start_sec": 2442,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s57",
       "speaker_id": "SPK_04",
       "lang": "vi",
-      "start_sec": 442.45,
-      "end_sec": 445.74,
+      "start_sec": 403.1,
+      "end_sec": 406.05,
       "text": "Đừng quên lịch họp review T1 vào cuối tuần thứ tư.",
-      "fixture_start_sec": 2496
+      "fixture_start_sec": 2496,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s58",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 446.66,
-      "end_sec": 452.77,
+      "start_sec": 406.47,
+      "end_sec": 412.92,
       "text": "네, 초대장을 보내드리겠습니다. 회의 링크는 이메일로 공유해 드립니다.",
-      "fixture_start_sec": 2550
+      "fixture_start_sec": 2550,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s59",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 453.82,
-      "end_sec": 462.63,
+      "start_sec": 413.96,
+      "end_sec": 423.32,
       "text": "Chốt lại: chúng tôi chọn khuôn A của Hanyang Mold, đơn giá 2,35 USD, MOQ 20.000, thanh toán T/T 30/70.",
-      "fixture_start_sec": 2604
+      "fixture_start_sec": 2604,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s60",
       "speaker_id": "SPK_03",
       "lang": "ko",
-      "start_sec": 463.11,
-      "end_sec": 468.68,
+      "start_sec": 424.5,
+      "end_sec": 429.42,
       "text": "네, A안 견적서에 운임을 포함한 최종 금액을 이메일로 보내드리겠습니다.",
-      "fixture_start_sec": 2658
+      "fixture_start_sec": 2658,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-SunHiNeural",
+        "pitch": "+8Hz",
+        "rate": "+5%"
+      }
     },
     {
       "id": "s61",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 469.36,
-      "end_sec": 472.38,
+      "start_sec": 430.39,
+      "end_sec": 433.05,
       "text": "Đợt hàng đầu tiên dự kiến đến kho của chúng tôi khi nào?",
-      "fixture_start_sec": 2712
+      "fixture_start_sec": 2712,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s62",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 472.68,
-      "end_sec": 475.08,
+      "start_sec": 433.35,
+      "end_sec": 435.5,
       "text": "Chúng tôi gửi bản 3D cuối trong tuần này.",
-      "fixture_start_sec": 2766
+      "fixture_start_sec": 2766,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s63",
       "speaker_id": "SPK_02",
       "lang": "en",
-      "start_sec": 479.56,
-      "end_sec": 489.94,
+      "start_sec": 436.24,
+      "end_sec": 447.75,
       "text": "Once the mold design is approved, the first shipment leaves in week nine and arrives about two weeks later; the DDP quotations for Busan and Incheon come by Friday.",
-      "fixture_start_sec": 2820
+      "fixture_start_sec": 2820,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s64",
       "speaker_id": "SPK_01",
       "lang": "vi",
-      "start_sec": 490.82,
-      "end_sec": 497.3,
+      "start_sec": 448.72,
+      "end_sec": 454.73,
       "text": "Tôi xác nhận lịch visite nhà máy vào tuần thứ sáu, và đề nghị phía Hàn gửi nháp hợp đồng kèm điều khoản bảo mật ba năm.",
-      "fixture_start_sec": 2874
+      "fixture_start_sec": 2874,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
     },
     {
       "id": "s65",
       "speaker_id": "SPK_02",
       "lang": "ko",
-      "start_sec": 501.46,
-      "end_sec": 509.06,
+      "start_sec": 455.45,
+      "end_sec": 463.44,
       "text": "감사합니다. 오늘 결정 사항을 정리해서 곧 보내드리겠습니다. 다음에 뵙겠습니다.",
-      "fixture_start_sec": 2927
+      "fixture_start_sec": 2927,
+      "gain_db": 2,
+      "voice": {
+        "engine": "edge",
+        "voice": "ko-KR-InJoonNeural",
+        "pitch": "-10Hz",
+        "rate": "+0%"
+      }
     }
   ]
 }
