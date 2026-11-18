@@ -14,6 +14,10 @@ export type PlayerState = {
   duration: number;
   playing: boolean;
   rate: number;
+  /** Đang đợi âm thanh đệm (trình phát thật, M9-01): hiện trạng thái chờ trên nút */
+  waiting?: boolean;
+  /** Lỗi tải âm thanh (trình phát thật, M9-01): hiện câu lỗi và Thử lại */
+  error?: "load" | null;
 };
 
 /** Khoảng cần bỏ qua khi phát (nghe sạch, M8-01): [bắt đầu, kết thúc] giây. */
@@ -32,6 +36,10 @@ export interface Player {
    * đồng hồ nhảy thẳng tới cuối khoảng thay vì phát qua. Danh sách rỗng là
    * phát thường: file gốc không bị cắt sửa, đây chỉ là cách di chuyển kim. */
   setSkips(skips: SkipRange[]): void;
+  /** Thử tải lại âm thanh sau lỗi (trình phát thật, M9-01); bản giả không có */
+  retry?(): void;
+  /** Dọn tài nguyên (thẻ audio, Web Audio) khi màn đóng; bản giả không cần */
+  destroy?(): void;
 }
 
 export const PLAYBACK_RATES = [1, 1.25, 1.5, 2] as const;

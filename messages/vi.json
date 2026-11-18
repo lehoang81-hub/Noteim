@@ -462,7 +462,9 @@
       "cleanOriginalNote": "File gốc giữ nguyên. Tải về và gửi đi luôn là bản gốc.",
       "cleanNone": "Buổi này chưa có dữ liệu nghe sạch.",
       "cleanOn": "Nghe sạch đang bật",
-      "cleanOff": "Nghe sạch đang tắt"
+      "cleanOff": "Nghe sạch đang tắt",
+      "errorLoad": "Không phát được âm thanh.",
+      "retry": "Thử lại"
     }
   },
   "shell": {
@@ -632,7 +634,9 @@
     "translateSlow": "Dịch chậm (10 giây)",
     "debugRole": "Vai trò trong nhóm",
     "inviteExpired": "Lời mời hết hạn",
-    "seatsFull": "Nhóm hết chỗ"
+    "seatsFull": "Nhóm hết chỗ",
+    "audioMock": "Âm thanh giả",
+    "audioFail": "Lỗi tải âm thanh"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",

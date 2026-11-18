@@ -462,7 +462,9 @@
       "cleanOriginalNote": "The original file stays untouched. Downloads and shared copies are always the original.",
       "cleanNone": "This session has no clean listening data yet.",
       "cleanOn": "Clean listening is on",
-      "cleanOff": "Clean listening is off"
+      "cleanOff": "Clean listening is off",
+      "errorLoad": "Audio won't play.",
+      "retry": "Retry"
     }
   },
   "shell": {
@@ -577,7 +579,9 @@
     "translateSlow": "Slow translate (10 s)",
     "debugRole": "Team role",
     "inviteExpired": "Invite expired",
-    "seatsFull": "Seats full"
+    "seatsFull": "Seats full",
+    "audioMock": "Mock audio",
+    "audioFail": "Audio load failure"
   },
   "library": {
     "greeting": "Hi {name}",

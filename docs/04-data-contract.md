@@ -118,6 +118,7 @@ interface Session {
   storage_status: StorageStatus;
   duration_sec: number;
   size_bytes: number;
+  audio_url: string | null;     // M9: file âm thanh thật; null là chưa có, phát giả như cũ
   created_at: string;
   audio_expires_at: string | null;
   consent: { confirmed: boolean; announced: boolean };
@@ -513,6 +514,32 @@ interface SessionRepository {
   đồ. Khi xử lý buổi ghi, cùng lượt AI sinh mốc từng chữ, đánh dấu tiếng đệm,
   sinh `text_clean` và tính bản đồ nghe (VAD cho khoảng lặng, mức âm lượng
   trung bình theo người nói). Ghi chi tiết vào `07-handover.md` ở bước 6.
+
+## Bổ sung M9 (âm thanh thật cho 3 buổi mẫu, issue #65)
+
+- `Session.audio_url: string | null` — đường dẫn file âm thanh thật. Ba buổi
+  mẫu có âm thanh thật (giọng AI edge-tts, PR #64): `s-bds-lan`
+  (`/audio/01-bds-gap-chi-lan.m4a`), `s-hop-han` (`02-hop-doi-tac-han.m4a`),
+  `s-sample-doctor` (`03-bac-si-kham.m4a`); chỉ dùng `.m4a` (AAC) để phát được
+  trên mọi trình duyệt kể cả iPhone. Buổi khác `audio_url` null — trình phát
+  dùng đồng hồ giả như cũ.
+- Với 3 buổi này: `duration_sec` = độ dài file; mốc từng đoạn bản ghi lời lấy
+  từ `truth.json` (khớp theo `id`); mọi `source_ref` (ý tóm tắt, việc, trích
+  dẫn, biểu đồ, ghi chú, dấu trang, ảnh, trích dẫn Hỏi AI) đổi theo mốc mới
+  (ánh xạ gấp khúc theo `fixture_start_sec`, sinh bằng script
+  `scripts/attach-test-audio.mjs`); `peaks`/`peaks_thumb` sinh lại từ RMS của
+  chính file; `ListeningMap` tính lại từ âm thanh (khoảng lặng xác năng lượng
+  trong khoảng trống giữa các đoạn, dài hơn 1,5 giây; `speaker_gain_db` đo
+  RMS thật của từng người, giữ -6 đến +9 dB; `clean_duration_sec` trừ các
+  khoảng lặng). Dữ liệu ánh xạ đầy đủ nằm ở `fixtures/audio-attach.json`
+  (keyframes, peaks, bản đồ nghe) — migrate kho localStorage cũ đọc từ đây,
+  giữ nguyên phần người dùng đã sửa, chỉ đổi mốc.
+- Trình phát: buổi có `audio_url` dùng `HTMLAudioElement` qua
+  `createAudioPlayer(url, duration)` cùng interface `Player` với đồng hồ giả
+  (`lib/player/mock-player.ts`); Nghe sạch nối `MediaElementSource` vào Web
+  Audio (GainNode theo người nói, lọc tạm cắt 100 Hz–7 kHz + nén nhẹ — bản
+  thật dùng RNNoise, xem `07-handover.md`). Buổi không có âm thanh phát giả
+  như trước, mọi phần khác không đổi.
 
 ## Fixture
 

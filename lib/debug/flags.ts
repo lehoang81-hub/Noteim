@@ -38,6 +38,10 @@ export type DebugFlags = {
   translateSlow: boolean;
   /** Ép "Không có bản đồ nghe" — buổi cũ chưa xử lý, nút Nghe sạch tắt (M8-01) */
   noListeningMap: boolean;
+  /** Ép dùng đồng hồ phát giả cho cả 3 buổi có âm thanh thật (M9-01, để bộ kiểm thử cũ chạy nhanh) */
+  audioMock: boolean;
+  /** Ép tải âm thanh lỗi, hiện "Không phát được âm thanh" và Thử lại (M9-01) */
+  audioFail: boolean;
   /** Ép vai trò của tôi trong không gian Nhóm để kiểm bảng quyền (M7-01); null là theo dữ liệu */
   debugRole: WorkspaceRole | null;
   /** Ép lời mời hết hạn khi mở /join/[token] (M7-01) */
@@ -65,6 +69,8 @@ const DEFAULTS: DebugFlags = {
   translateFail: false,
   translateSlow: false,
   noListeningMap: false,
+  audioMock: false,
+  audioFail: false,
   debugRole: null,
   inviteExpired: false,
   seatsFull: false,

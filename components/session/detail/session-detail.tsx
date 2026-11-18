@@ -14,10 +14,13 @@ import { Banner, EmptyState, SkeletonParagraph } from "@/components/ui/feedback"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { data, dataNow, DataError, useData, type ListeningPrefs, type ActionItem, type Lang, type ListeningMap, type SessionDetail, type SummaryVersion } from "@/lib/data";
+import { data, dataNow, DataError, useData, type ListeningPrefs, type ActionItem, type Lang, type SessionDetail, type SummaryVersion } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
 import { cleanDurationOf, skipsFromMap } from "@/lib/listening/skips";
 import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
+import { useDebugFlags } from "@/lib/debug/flags";
+import { createAudioPlayer } from "@/lib/player/audio-player";
+import { CleanAudioChain } from "@/lib/player/clean-audio";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
 import type { ShareIntent } from "./share-sheet";
@@ -160,8 +163,36 @@ function Loaded({
   const tab: TabId = (TABS as readonly string[]).includes(search.get("tab") ?? "") ? (search.get("tab") as TabId) : "summary";
   const setTab = (v: string) => router.replace(`/s/${detail.id}?tab=${v}`, { scroll: false });
 
-  const [player] = useState<Player>(() => createMockPlayer(detail.duration_sec));
-  useEffect(() => () => player.pause(), [player]);
+  // Buổi có file âm thanh thật dùng trình phát thật (M9-01); cờ "Âm thanh giả"
+  // ép dùng đồng hồ giả cho cả 3 buổi đó (để bộ kiểm thử cũ chạy nhanh)
+  const flags = useDebugFlags();
+  const audioUrl = detail.audio_url && !flags.audioMock ? detail.audio_url : null;
+  const cleanChain = useRef<CleanAudioChain | null>(null);
+  function makePlayer(url: string | null): Player {
+    if (!url) {
+      cleanChain.current = null;
+      return createMockPlayer(detail.duration_sec);
+    }
+    const chain = new CleanAudioChain();
+    cleanChain.current = chain;
+    return createAudioPlayer(url, detail.duration_sec, chain);
+  }
+  const [player, setPlayer] = useState<Player>(() => makePlayer(audioUrl));
+  // Đổi cờ "Âm thanh giả": thay trình phát, không giữ vị trí cũ của loại kia
+  const playerKind = useRef(audioUrl ? "audio" : "mock");
+  useEffect(() => {
+    const kind = audioUrl ? "audio" : "mock";
+    if (playerKind.current === kind) return;
+    playerKind.current = kind;
+    player.pause();
+    player.destroy?.();
+    setPlayer(makePlayer(audioUrl));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioUrl]);
+  useEffect(() => () => {
+    player.pause();
+    player.destroy?.();
+  }, [player]);
   const ps = usePlayerState(player);
 
   const [expanded, setExpanded] = useState(false);
@@ -217,6 +248,31 @@ function Loaded({
       .updateMe({ listening_prefs: { ...(prefs ?? { enabled: false, denoise: true, level: true, skip_silence: true, skip_fillers: false }), ...patch } })
       .catch(() => undefined);
   }
+
+  // Nghe sạch qua Web Audio (M9-01, trình phát thật): bộ lọc áp theo lựa chọn
+  // và người nói đang phát. Gain đang áp dụng cũng ghi ra thuộc tính dữ liệu
+  // trên trình phát (data-gain-db) cho kiểm thử. Tắt Nghe sạch là đi thẳng.
+  const cleanOn = !!listeningMap.data && !!prefs?.enabled;
+  const currentSpeakerId = useMemo(() => {
+    const t = ps.currentTime;
+    return detail.speaker_spans.find((sp) => t >= sp.start_sec && t < sp.end_sec)?.speaker_id ?? null;
+  }, [detail.speaker_spans, ps.currentTime]);
+  const appliedGainDb =
+    cleanOn && !!prefs?.level && currentSpeakerId
+      ? (listeningMap.data?.speaker_gain_db[currentSpeakerId] ?? null)
+      : null;
+  useEffect(() => {
+    cleanChain.current?.setClean(cleanOn);
+  }, [cleanOn]);
+  useEffect(() => {
+    cleanChain.current?.setDenoise(prefs?.denoise ?? true);
+  }, [prefs?.denoise]);
+  useEffect(() => {
+    cleanChain.current?.setLevel(prefs?.level ?? true);
+  }, [prefs?.level]);
+  useEffect(() => {
+    cleanChain.current?.setSpeakerGainDb(appliedGainDb);
+  }, [appliedGainDb]);
 
   // /tasks và /search dẫn tới đây kèm mốc thời gian (?t=giây): tua tới đúng
   // đoạn rồi dọn URL, giữ nguyên tab đang mở (M4-02: vào từ tab Lời)
@@ -524,6 +580,7 @@ function Loaded({
             heat={detail.topics.map((tp) => ({ start: tp.start_sec, end: tp.end_sec, tag: tp.tag }))}
             skips={skips}
             listening={{ map: listeningMap.data ?? null, prefs, cleanDuration, onPrefs: setPrefs }}
+            gainDb={appliedGainDb}
             expanded={expanded}
             onExpandedChange={setExpanded}
           />

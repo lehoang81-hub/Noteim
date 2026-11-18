@@ -155,6 +155,8 @@ export const Session = z.object({
   storage_status: StorageStatus,
   duration_sec: z.number(),
   size_bytes: z.number(),
+  /** File âm thanh thật của buổi (M9-01); thiếu/null là chưa có — trình phát dùng đồng hồ giả như cũ */
+  audio_url: z.string().nullable().optional().catch(undefined),
   created_at: z.string(),
   audio_expires_at: z.string().nullable(),
   consent: z.object({ confirmed: z.boolean(), announced: z.boolean() }),

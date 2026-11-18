@@ -1,6 +1,7 @@
 "use client";
 
 import { clearStorageFull, markStorageFull } from "@/lib/storage-full";
+import { applyAudioAttach } from "./audio-attach";
 import { migrateStored } from "./migrate";
 import { normalizeSpeakerNames } from "./normalize";
 import type { RecordingDraft } from "../repository";
@@ -147,6 +148,8 @@ export function ensureDb(): MockDb {
         if (!d.invoices.length) d.invoices = await mod.loadInvoices();
         // Buổi ghi thư viện: kho từ localStorage đã có sẵn, không ghi đè
         if (!d.sessions.length) d.sessions = await mod.loadSessions();
+        // M9-01: kho lưu trước M9 còn mốc cũ của 3 buổi có âm thanh thật — tự cập nhật
+        if (await applyAudioAttach(d)) commit();
         return d;
       })(),
     );
