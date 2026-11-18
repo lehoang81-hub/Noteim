@@ -88,7 +88,10 @@ def edge_synth(text, voice, rate, pitch):
     async def run():
         c = edge_tts.Communicate(text, voice, rate=rate, pitch=pitch)
         await c.save(mp3 + ".part")
-    asyncio.run(run())
+    try:
+        asyncio.run(asyncio.wait_for(run(), 120))   # mỗi đoạn tối đa 120s, treo mạng thì coi như lỗi để thử lại
+    except asyncio.TimeoutError as e:
+        raise RuntimeError("hết 120s không đọc xong") from e
     os.replace(mp3 + ".part", mp3)
     return decode_to_pcm(mp3)
 
@@ -289,8 +292,10 @@ def build(cfg, rng, engine):
     parts, truth, cur = [], [], 0.8
     parts.append(np.zeros(int(0.8 * SR), np.float32))
     prev = None
-    for s in segs:
+    for i, s in enumerate(segs, 1):
         a, gain, voice_used = synth_segment(cfg, s, engine)
+        if i % 10 == 0 or i == len(segs):
+            print(f"  {cfg['name']}: {i}/{len(segs)} đoạn", flush=True)
         if len(a) == 0:
             print(f"DỪNG: đoạn {s['id']} đọc ra file rỗng.", file=sys.stderr)
             raise SystemExit(1)
