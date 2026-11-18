@@ -1,12 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { EyeOff, Mic, Square, Trash2 } from "lucide-react";
+import { Copy, Download, EyeOff, Mic, Pause, Play, Square, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/form";
 import { cn } from "@/lib/cn";
 import { intlLocale } from "@/lib/format";
+import { CleanAudioChain } from "@/lib/player/clean-audio";
 import {
   clearAll,
   clearSession,
@@ -94,6 +95,28 @@ function fmtClock(totalSec: number): string {
   return h > 0 ? `${h}:${mm}:${ss}` : `${mm}:${ss}`;
 }
 
+function extFromMime(mime: string): string {
+  if (mime.includes("mp4") || mime.includes("aac")) return "m4a";
+  if (mime.includes("ogg")) return "ogg";
+  if (mime.includes("wav")) return "wav";
+  return "webm";
+}
+
+/** Nhận tên trình duyệt từ user agent cho bản xuất JSON. */
+function detectBrowser(ua: string): { name: string; version: string } {
+  const grab = (re: RegExp) => re.exec(ua)?.[1] ?? "";
+  if (ua.includes("Edg/")) return { name: "Edge", version: grab(/Edg\/([\d.]+)/) };
+  if (ua.includes("OPR/")) return { name: "Opera", version: grab(/OPR\/([\d.]+)/) };
+  if (ua.includes("CriOS/")) return { name: "Chrome iOS", version: grab(/CriOS\/([\d.]+)/) };
+  if (ua.includes("FxiOS/")) return { name: "Firefox iOS", version: grab(/FxiOS\/([\d.]+)/) };
+  if (ua.includes("Firefox/")) return { name: "Firefox", version: grab(/Firefox\/([\d.]+)/) };
+  if (ua.includes("Chrome/") || ua.includes("Chromium/")) {
+    return { name: "Chrome", version: grab(/Chrom(?:e|ium)\/([\d.]+)/) };
+  }
+  if (ua.includes("Safari/")) return { name: "Safari", version: grab(/Version\/([\d.]+)/) };
+  return { name: "Other", version: "" };
+}
+
 export function GhiAmSpikeScreen() {
   const t = useTranslations("spikeGhiAm");
   const locale = useLocale();
@@ -115,6 +138,10 @@ export function GhiAmSpikeScreen() {
   const [wallSec, setWallSec] = useState<number | null>(null);
   const [totalSec, setTotalSec] = useState<number | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
+  const [cleanOn, setCleanOn] = useState(false);
+  const [samplePlaying, setSamplePlaying] = useState(false);
+  const [recPlaying, setRecPlaying] = useState(false);
+  const [copyState, setCopyState] = useState<"ok" | "fail" | null>(null);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -125,8 +152,13 @@ export function GhiAmSpikeScreen() {
   const nextIndexRef = useRef(0);
   const pendingSavesRef = useRef<Set<Promise<void>>>(new Set());
   const hideTimerRef = useRef<number | null>(null);
+  const copyTimerRef = useRef<number | null>(null);
   const wakeRef = useRef<SpikeWakeLock | null>(null);
   const logSeqRef = useRef(0);
+  const chainRef = useRef<CleanAudioChain | null>(null);
+  const sampleAudioRef = useRef<HTMLAudioElement | null>(null);
+  const recAudioRef = useRef<HTMLAudioElement | null>(null);
+  const jsonAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   /* Bản dịch đọc qua ref trong các trình nghe gắn lâu (sự kiện trang, track,
    * wake lock) để không phải gỡ gắn lại mỗi lần đổi ngôn ngữ. */
@@ -139,6 +171,43 @@ export function GhiAmSpikeScreen() {
     logSeqRef.current += 1;
     const entry: LogEntry = { id: logSeqRef.current, ts: Date.now(), text };
     setLogs((cur) => (cur.length >= 500 ? [entry, ...cur.slice(0, 499)] : [entry, ...cur]));
+  }, []);
+
+  /* Nhật ký AudioContext.state: CleanAudioChain tự dựng AudioContext riêng bên
+   * trong nên trang bọc window.AudioContext (chỉ trong trang này) để ghi mỗi
+   * lần state đổi. Chỉ ghi các AudioContext thật, phân tích khoảng trống dùng
+   * OfflineAudioContext nên không lẫn vào đây. */
+  const ctxLogRef = useRef<(state: string) => void>(() => undefined);
+  useEffect(() => {
+    ctxLogRef.current = (state: string) => addLog(tRef.current("logCtxState", { state }));
+  });
+  useEffect(() => {
+    const Orig = window.AudioContext;
+    if (!Orig) return;
+    const Wrapped = class extends Orig {
+      constructor(...args: ConstructorParameters<typeof AudioContext>) {
+        super(...args);
+        const self = this as unknown as AudioContext;
+        ctxLogRef.current(self.state);
+        self.addEventListener("statechange", () => ctxLogRef.current(self.state));
+      }
+    };
+    window.AudioContext = Wrapped as unknown as typeof AudioContext;
+    return () => {
+      window.AudioContext = Orig;
+    };
+  }, []);
+
+  /* Bộ lọc Nghe sạch của app: chỉ dựng đồ thị Web Audio KHI BẬT Nghe sạch
+   * (bài học M9), dựng trong cử chỉ bấm công tắc rồi resume trong cử chỉ
+   * bấm Phát. */
+  useEffect(() => {
+    chainRef.current = new CleanAudioChain();
+    if (sampleAudioRef.current) chainRef.current.bind(sampleAudioRef.current);
+    return () => {
+      chainRef.current?.destroy();
+      chainRef.current = null;
+    };
   }, []);
 
   const fmtTime = useCallback(
@@ -470,6 +539,131 @@ export function GhiAmSpikeScreen() {
   const recorderUnsupported = mime === null;
   const recording = phase === "recording" || phase === "stopping" || phase === "starting";
 
+  /* Ghép các khúc theo thứ tự index để phát lại và tải về. */
+  const mergedExt = useMemo(() => extFromMime(chunks[0]?.mime ?? ""), [chunks]);
+  const mergedUrl = useMemo(() => {
+    if (chunks.length === 0) return null;
+    const type = chunks[0].mime || chunks[0].blob.type;
+    return URL.createObjectURL(new Blob(chunks.map((c) => c.blob), type ? { type } : undefined));
+  }, [chunks]);
+  useEffect(() => {
+    return () => {
+      if (mergedUrl) URL.revokeObjectURL(mergedUrl);
+    };
+  }, [mergedUrl]);
+
+  /* Kết quả xuất ra: JSON mô tả thiết bị, trình duyệt, định dạng ghi, nhật ký,
+   * khoảng trống và metadata từng khúc. */
+  const jsonOut = useMemo(() => {
+    const nav = navigator as Navigator & { deviceMemory?: number };
+    const payload = {
+      schema: "noteim-spike-ghi-am-v1",
+      exportedAt: new Date().toISOString(),
+      device: {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform ?? "",
+        languages: Array.from(navigator.languages ?? []),
+        hardwareConcurrency: navigator.hardwareConcurrency ?? null,
+        deviceMemory: nav.deviceMemory ?? null,
+        screen: { width: screen.width, height: screen.height, pixelRatio: window.devicePixelRatio },
+      },
+      browser: detectBrowser(navigator.userAgent),
+      recordMime: mime ?? null,
+      recording: {
+        wallSec: wallSec,
+        totalAudioSec: totalSec,
+        gapMode: gapMode,
+        chunkCount: chunks.length,
+      },
+      gaps: gaps.map((g) => ({
+        kind: g.kind,
+        sec: Math.round(g.sec * 10) / 10,
+        atIso: new Date(g.ts).toISOString(),
+        atLocal: fmtTime(g.ts),
+      })),
+      chunks: chunks.map((c) => ({
+        index: c.index + 1,
+        savedAtIso: new Date(c.ts).toISOString(),
+        sizeBytes: c.size,
+        mime: c.mime,
+        durSec: durMap[c.index] != null ? Math.round((durMap[c.index] as number) * 100) / 100 : null,
+      })),
+      logs: [...logs].reverse().map((l) => ({ ts: l.ts, iso: new Date(l.ts).toISOString(), text: l.text })),
+    };
+    return JSON.stringify(payload, null, 2);
+  }, [chunks, durMap, fmtTime, gapMode, gaps, logs, mime, totalSec, wallSec]);
+
+  const toggleSample = useCallback(async () => {
+    const el = sampleAudioRef.current;
+    if (!el) return;
+    if (el.paused) {
+      // resume trong cử chỉ bấm: AudioContext chỉ chạy được sau cử chỉ trên iPhone
+      chainRef.current?.resume();
+      try {
+        await el.play();
+      } catch {
+        setError(tRef.current("samplePlayFail"));
+      }
+    } else {
+      el.pause();
+    }
+  }, []);
+
+  const toggleRecAudio = useCallback(async () => {
+    const el = recAudioRef.current;
+    if (!el) return;
+    try {
+      if (el.paused) await el.play();
+      else el.pause();
+    } catch {
+      setError(tRef.current("samplePlayFail"));
+    }
+  }, []);
+
+  const downloadGhi = useCallback(() => {
+    if (!mergedUrl) return;
+    const stamp = new Date().toISOString().slice(0, 19).replace("T", "-").replace(/:/g, "-");
+    const a = document.createElement("a");
+    a.href = mergedUrl;
+    a.download = `noteim-ghi-am-${stamp}.${mergedExt}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }, [mergedExt, mergedUrl]);
+
+  const toggleClean = useCallback(
+    (on: boolean) => {
+      setCleanOn(on);
+      chainRef.current?.setClean(on);
+      addLog(tRef.current(on ? "logCleanOn" : "logCleanOff"));
+    },
+    [addLog],
+  );
+
+  /* Sao chép kết quả cho Hoang dán gửi lại; trình duyệt chặn clipboard thì
+   * chép thủ công từ ô hiển thị. */
+  const copyJson = useCallback(async () => {
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(jsonOut);
+      ok = true;
+    } catch {
+      const ta = jsonAreaRef.current;
+      if (ta) {
+        ta.focus();
+        ta.select();
+        try {
+          ok = document.execCommand("copy");
+        } catch {
+          ok = false;
+        }
+      }
+    }
+    setCopyState(ok ? "ok" : "fail");
+    if (copyTimerRef.current !== null) window.clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = window.setTimeout(() => setCopyState(null), 4000);
+  }, [jsonOut]);
+
   return (
     <div className="dark min-h-dvh bg-bg text-ink">
       <main className="mx-auto flex w-full max-w-[720px] flex-col gap-8 px-5 pb-16 pt-8">
@@ -608,6 +802,65 @@ export function GhiAmSpikeScreen() {
           ) : null}
         </section>
 
+        <section className="flex flex-col gap-3" aria-labelledby="spike-nghe-title">
+          <h2 id="spike-nghe-title" className="text-h2 font-semibold">
+            {t("sectionNgheLai")}
+          </h2>
+          {mergedUrl ? (
+            <div className="flex flex-col gap-3">
+              <audio
+                ref={recAudioRef}
+                src={mergedUrl}
+                controls={true}
+                data-rec-audio="true"
+                className="w-full"
+                onPlay={() => setRecPlaying(true)}
+                onPause={() => setRecPlaying(false)}
+                onEnded={() => setRecPlaying(false)}
+              />
+              <div className="flex flex-wrap gap-3">
+                <Button variant="secondary" icon={recPlaying ? Pause : Play} onClick={() => void toggleRecAudio()}>
+                  {recPlaying ? t("pauseBtn") : t("playBtn")}
+                </Button>
+                <Button variant="secondary" icon={Download} onClick={downloadGhi}>
+                  {t("download")}
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <p className="text-small text-ink-3">{t("ngheLaiEmpty")}</p>
+          )}
+        </section>
+
+        <section className="flex flex-col gap-3" aria-labelledby="spike-mau-title">
+          <h2 id="spike-mau-title" className="text-h2 font-semibold">
+            {t("sectionMau")}
+          </h2>
+          <p className="text-small text-ink-3">{t("sampleNote")}</p>
+          <audio
+            ref={sampleAudioRef}
+            src="/audio/01-bds-gap-chi-lan.m4a"
+            controls={true}
+            preload="none"
+            data-sample-audio="true"
+            className="w-full"
+            onPlay={() => {
+              setSamplePlaying(true);
+              chainRef.current?.resume();
+            }}
+            onPause={() => setSamplePlaying(false)}
+            onEnded={() => setSamplePlaying(false)}
+          />
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-wrap gap-3">
+              <Button variant="secondary" icon={samplePlaying ? Pause : Play} onClick={() => void toggleSample()}>
+                {samplePlaying ? t("pauseBtn") : t("playBtn")}
+              </Button>
+            </div>
+            <Switch checked={cleanOn} onCheckedChange={toggleClean} label={t("cleanLabel")} />
+          </div>
+        </section>
+
         <section className="flex flex-col gap-3" aria-labelledby="spike-log-title">
           <h2 id="spike-log-title" className="text-h2 font-semibold">
             {t("sectionNhatKy")}
@@ -627,6 +880,31 @@ export function GhiAmSpikeScreen() {
               ))}
             </ul>
           )}
+        </section>
+
+        <section className="flex flex-col gap-3" aria-labelledby="spike-ket-qua-title">
+          <h2 id="spike-ket-qua-title" className="text-h2 font-semibold">
+            {t("sectionKetQua")}
+          </h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <Button variant="primary" icon={Copy} onClick={() => void copyJson()}>
+              {t("copyBtn")}
+            </Button>
+            {copyState ? (
+              <p role="status" className={cn("text-small", copyState === "ok" ? "text-ink-2" : "text-tag-risk")}>
+                {copyState === "ok" ? t("copied") : t("copyFail")}
+              </p>
+            ) : null}
+          </div>
+          <textarea
+            ref={jsonAreaRef}
+            readOnly={true}
+            value={jsonOut}
+            rows={10}
+            aria-label={t("sectionKetQua")}
+            data-json-out="true"
+            className="w-full rounded-block border border-line bg-surface p-3 text-small text-ink-2"
+          />
         </section>
       </main>
     </div>
