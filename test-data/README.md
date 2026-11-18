@@ -36,8 +36,9 @@ Mỗi người nói một giọng, cao độ và tốc độ chỉnh khác nhau 
 
 ## Giới hạn quan trọng
 
-- Giọng là **giọng đọc máy** (espeak-ng, chạy offline), nghe rõ là máy. Dùng tốt để thử **đường ống**: tải lên, lưu, phát, bản đồ nghe, đối chiếu mốc thời gian, buổi dài, khóa màn hình.
-- **Không dùng để đánh giá chất lượng AI nhận dạng giọng người.** Việc đó cần ghi âm người thật: xem mục "Ghi âm người thật" bên dưới.
+- Giọng là **giọng AI tự nhiên** (edge-tts, giọng đọc Microsoft, cần mạng): giọng Việt Bắc `vi-VN-NamMinhNeural` (nam) và `vi-VN-HoaiMyNeural` (nữ), giọng Hàn `ko-KR-InJoonNeural` và `ko-KR-SunHiNeural`. Nghe gần người đọc thật hơn espeak-ng; espeak-ng giờ chỉ là phương án dự phòng chạy offline (`--engine espeak`), nghe rõ là máy.
+- **Giọng AI vẫn rõ hơn người thật**: đọc đều, không ngập ngừng thật, không nhiễu mất chữ như ghi âm thật. Dùng tốt để thử **đường ống**: tải lên, lưu, phát, bản đồ nghe, đối chiếu mốc thời gian, buổi dài, khóa màn hình; có thể dùng để thử nhận dạng, nhưng không thay thế được đánh giá trên giọng người thật. Việc đó cần ghi âm người thật: xem mục "Ghi âm người thật" bên dưới.
+- **Chỉ có giọng Bắc nếu không dùng FPT**: edge-tts chưa có giọng Việt miền Nam hoặc miền Trung. `--engine fpt` (cần khóa `FPT_TTS_KEY`) đổi Người nói 3 (bộ 01) và Chị Hằng (bộ 03) sang giọng miền Nam (`giahung`, `thuminh`), các người nói còn lại vẫn dùng Edge. `--engine elevenlabs` (cần khóa `ELEVENLABS_API_KEY`) cũng chỉ đổi hai người nói đó, nhưng giọng mặc định ElevenLabs đọc tiếng Việt chưa đạt khi thử (giọng Mỹ pha nặng: Rachel lỗi nặng, Paul và Domi lỗi nhiều chữ, Lily khá nhất vẫn sai) — chỉ nên dùng khi có `voice_id` giọng Việt tốt hơn, đặt qua `ELEVEN_VOICE_SPK3` và `ELEVEN_VOICE_CHI_HANG`.
 
 ## Ghi âm người thật (cho phần đánh giá AI ở B0)
 
@@ -46,6 +47,12 @@ Mỗi người nói một giọng, cao độ và tốc độ chỉnh khác nhau 
 ## Sinh lại
 
 ```bash
-pip install espeakng-loader numpy
-python3 scripts/gen-test-audio.py      # ghi cả 4 bộ vào test-data/audio, khoảng 3 phút
+pip install edge-tts numpy
+python3 scripts/gen-test-audio.py                       # ghi cả 4 bộ vào test-data/audio, cần mạng
+python3 scripts/gen-test-audio.py --only 03-bac-si-kham # sinh riêng một bộ
+python3 scripts/gen-test-audio.py --engine espeak       # dự phòng offline, giọng đọc máy
+python3 scripts/gen-test-audio.py --engine fpt          # cần khóa FPT_TTS_KEY trong biến môi trường
+python3 scripts/gen-test-audio.py --engine elevenlabs   # cần khóa ELEVENLABS_API_KEY trong biến môi trường
 ```
+
+Mỗi đoạn đọc thành file mp3 riêng trong thư mục tạm rồi mới ghép, nên chạy lại không mất công đọc lại phần đã xong. Bộ đọc lỗi (mạng, giới hạn) thì thử lại 3 lần, có chờ; vẫn lỗi thì dừng và báo, không lặng lẽ rơi về espeak. `start_sec`/`end_sec` trong .truth.json đo từ độ dài thật của từng đoạn đã đọc (sau khi cắt im lặng đầu/cuối file đọc ra).
