@@ -317,3 +317,8 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 - M9 đã merge (PR #67, Hoang đồng ý). Ba buổi mẫu phát tiếng thật; bấm ý, việc, trích dẫn nghe đúng câu (lệch dưới 0,5 giây).
 - Claude sửa thêm: chỉ dựng Web Audio khi bật Nghe sạch (iPhone khóa màn hình vẫn nghe khi tắt), `timeupdate` dự phòng khi trang ẩn.
 - Còn thử ở B0: iPhone khóa màn hình khi đang bật Nghe sạch.
+
+## 2026-11-18, Claude, đặc tả B0
+
+- Viết `10-b0-thu-rui-ro.md`: so sánh AI nhận dạng giọng nói tiếng Việt (#69) và trang thử ghi âm, nghe dài trên điện thoại thật (#70).
+- Hoang cần: khóa Soniox, ElevenLabs, tài khoản dịch vụ Google Cloud (Speech-to-Text), tùy chọn FPT.AI; vài bản ghi người thật đọc theo kịch bản; cầm iPhone làm danh sách G1 đến N3.

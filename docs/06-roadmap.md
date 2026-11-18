@@ -136,6 +136,15 @@ Dùng 3 bộ âm thanh thử giọng tự nhiên (PR #64) cho 3 buổi mẫu, tr
 | --- | --- |
 | M9-01 (#65, xong) | Gắn âm thanh, đổi mốc lời và tóm tắt theo file, trình phát thật, Nghe sạch có tiếng, kiểm khớp nội dung. |
 
+## B0. Thử rủi ro trước khi làm phần chạy thật
+
+Đặc tả: `10-b0-thu-rui-ro.md`. Hai issue độc lập, làm song song được, mỗi issue một nhánh, một PR vào `main`. Kết quả: `11-b0-ket-qua.md` và quyết định trong `DECISIONS.md`.
+
+| Issue | Việc |
+| --- | --- |
+| B0-01 (#69) | So sánh Soniox, ElevenLabs Scribe, Google Chirp 3, (FPT.AI) trên 3 file thử và bản ghi người thật: sai chữ, sai số liệu, tách người nói, nhận ngôn ngữ, tốc độ, giá. |
+| B0-02 (#70) | Trang `/spike/ghi-am` để Hoang thử ghi âm theo khúc và nghe dài trên iPhone, Android: khóa màn hình, chuyển app, cuộc gọi, 60 phút, mất mạng. |
+
 ## Bài thử kỹ thuật (chạy song song, nhãn `spike`)
 
 Không thuộc mockup, nhưng kết quả quyết định hướng đi của bản thật. Nên làm trong lúc M1 đang chạy.
