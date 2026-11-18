@@ -5,9 +5,12 @@ import { collectErrors, onboard, setDebugFlags } from "./helpers";
  * Tổng quan cá nhân và nhóm (M7-02, issue #48).
  * Bài của từng bước viết cùng bước đó; chạy lại toàn bộ ở bước 5.
  * Số liệu đếm tay từ fixture (bản giả cố định "bây giờ" 14/11/2026 19:00):
- * Tuần này: 8 buổi, 288 phút, 17 quyết định, xong 3 trên 19 việc.
- * Tháng này: 9 buổi, 304 phút, 19 quyết định, xong 4 trên 20 việc.
- * Nhóm (w-hp-land, tuần): 3 buổi chia sẻ, 103 phút, 3 quyết định, xong 1 trên 7 việc.
+ * M9-01 (issue #65): 3 buổi mẫu đổi sang âm thanh thật nên thời lượng ngắn lại
+ * (s-bds-lan 2530→383,5 giây, s-hop-han 2980→464,4 giây):
+ * Tuần này: 8 buổi, 211 phút (cũ 288), 17 quyết định, xong 3 trên 19 việc.
+ * Tháng này: 9 buổi, 227 phút (cũ 304), 19 quyết định, xong 4 trên 20 việc.
+ * Theo mẫu (tuần): Họp điều hành 76 (cũ 118, gồm cả s-hop-han), Gặp khách 40 (cũ 76).
+ * Nhóm (w-hp-land, tuần): 3 buổi chia sẻ, 103 phút — chỉ tính buổi nhóm, không đổi.
  * (M7-04: bỏ nhãn "Đã chốt" khỏi phần nhu cầu, yêu cầu, giấy tờ trong dữ
  * liệu mẫu — cũ: tuần 21, tháng 23, nhóm 5.)
  */
@@ -137,9 +140,9 @@ test("Tuần này: câu tổng kết khớp số đếm tay; Tháng này đổi 
   const errors = collectErrors(page);
   await onboard(page);
   await page.getByRole("navigation", { name: NAV }).getByRole("link", { name: DASH }).click();
-  await expect(page.getByText("8 buổi ghi, 4 giờ 48, 17 quyết định, xong 3 trên 19 việc")).toBeVisible();
+  await expect(page.getByText("8 buổi ghi, 3 giờ 31, 17 quyết định, xong 3 trên 19 việc")).toBeVisible();
   await page.getByRole("button", { name: "Tháng này" }).click();
-  await expect(page.getByText("9 buổi ghi, 5 giờ 04, 19 quyết định, xong 4 trên 20 việc")).toBeVisible();
+  await expect(page.getByText("9 buổi ghi, 3 giờ 47, 19 quyết định, xong 4 trên 20 việc")).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -226,11 +229,13 @@ test("Theo mẫu: biểu đồ thanh ngang đúng mẫu và thời lượng, n�
   await page.getByRole("heading", { name: "Theo mẫu" }).scrollIntoViewIfNeeded();
   const chart = page.getByRole("img", { name: "Thời lượng ghi theo từng mẫu tóm tắt" });
   await expect(chart).toBeVisible();
-  // Đếm tay (tuần): Họp điều hành 118, Gặp khách 76, Họp thiết kế và công trường 37,
-  // Tư vấn pháp lý 33, Phiên công chứng 25 phút
+  // Đếm tay (tuần): Họp điều hành 76 (gồm cả s-hop-han sau khi gắn âm thanh
+  // thật), Gặp khách 40, Họp thiết kế và công trường 37, Tư vấn pháp lý 33,
+  // Phiên công chứng 25 phút
   await expect(chart.getByText("Họp điều hành")).toBeVisible();
-  await expect(chart.getByText("118 phút")).toBeVisible();
+  await expect(chart.getByText("76 phút")).toBeVisible();
   await expect(chart.getByText("Gặp khách")).toBeVisible();
+  await expect(chart.getByText("40 phút")).toBeVisible();
   await expect(chart.getByText("Phiên công chứng")).toBeVisible();
   expect(errors).toEqual([]);
 });
