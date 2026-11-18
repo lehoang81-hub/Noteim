@@ -322,3 +322,9 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 
 - Viết `10-b0-thu-rui-ro.md`: so sánh AI nhận dạng giọng nói tiếng Việt (#69) và trang thử ghi âm, nghe dài trên điện thoại thật (#70).
 - Hoang cần: khóa Soniox, ElevenLabs, tài khoản dịch vụ Google Cloud (Speech-to-Text), tùy chọn FPT.AI; vài bản ghi người thật đọc theo kịch bản; cầm iPhone làm danh sách G1 đến N3.
+
+## 2026-11-18, Claude, B0-02 trang thử ghi âm (PR #73)
+
+- Trang `/spike/ghi-am` xong đủ 4 bước: ghi theo khúc 10 giây lưu ngay vào IndexedDB kho riêng ("noteim-spike-ghi-am"), nhật ký sự kiện có giờ, công tắc giữ màn hình sáng, bảng khoảng trống, nút "Giả lập ẩn trang 30 giây", nghe lại ghép khúc, nghe mẫu dùng CleanAudioChain có nhật ký AudioContext.state, hướng dẫn G1 đến N3, xuất JSON và tải bản ghi.
+- Sửa sau kiểm thử: SSR lỗi 500 vì biến toàn cục `screen` (máy chủ không có) — JSON kết quả chỉ dựng trên trình duyệt qua `useSyncExternalStore`, trang trả 200.
+- e2e đạt hết: bộ mới 7 bài đạt (micro giả Chromium — ghi 25 giây ra 3 khúc, tải lại trang vẫn còn, nghe lại được, JSON đúng cấu trúc); bộ cũ 124 bài đạt hết (smoke, m7, m8, m9), không đổi màn hiện có. Vercel: https://noteim-git-b0-02-thu-ghi-am-hlrace16store.vercel.app/spike/ghi-am
