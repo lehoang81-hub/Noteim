@@ -323,6 +323,11 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 - Viết `10-b0-thu-rui-ro.md`: so sánh AI nhận dạng giọng nói tiếng Việt (#69) và trang thử ghi âm, nghe dài trên điện thoại thật (#70).
 - Hoang cần: khóa Soniox, ElevenLabs, tài khoản dịch vụ Google Cloud (Speech-to-Text), tùy chọn FPT.AI; vài bản ghi người thật đọc theo kịch bản; cầm iPhone làm danh sách G1 đến N3.
 
+## 2026-11-18, Claude, B0-01 so sánh ASR (PR #72)
+
+- Bộ chấm `scripts/b0-asr/score.mjs` tự kiểm 10/10 đạt (truth chấm chính nó 0% mọi chỉ số; đổi 5 âm tiết = 5/1272 = 0,39% đo đúng); `run.mjs` + 4 adapter (soniox, elevenlabs, google chirp_3, fpt) viết xong nhưng chưa gọi API lần nào: máy không có khóa nào, cả 4 hãng đều bỏ qua đúng cách (thoát mã 2). Tổng tiền API: 0 USD.
+- Đã trả lời từ tài liệu chính thức (ngày xem 2026-11-18): chirp_3 tách người nói KHÔNG hỗ trợ vi-VN (gồm ko-KR); Recognize dưới 1 phút, BatchRecognize 1 phút đến 1 giờ, không mốc từng chữ. Bảng giá/giới hạn từng hãng vào `docs/11-b0-ket-qua.md` phần A.
+- Sinh thật `04-dai-62-phut` (3720s, ogg 9,6 MB / m4a 12,7 MB, không commit theo README + .gitignore); `test-data/human/` trống — chờ bản ghi người thật; lệnh chạy lại để sẵn trong `scripts/b0-asr/README.md`.
 ## 2026-11-18, Claude, B0-02 trang thử ghi âm (PR #73)
 
 - Trang `/spike/ghi-am` xong đủ 4 bước: ghi theo khúc 10 giây lưu ngay vào IndexedDB kho riêng ("noteim-spike-ghi-am"), nhật ký sự kiện có giờ, công tắc giữ màn hình sáng, bảng khoảng trống, nút "Giả lập ẩn trang 30 giây", nghe lại ghép khúc, nghe mẫu dùng CleanAudioChain có nhật ký AudioContext.state, hướng dẫn G1 đến N3, xuất JSON và tải bản ghi.
