@@ -2,24 +2,46 @@
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { Mic, Square, Trash2 } from "lucide-react";
+import { EyeOff, Mic, Square, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/form";
 import { cn } from "@/lib/cn";
 import { intlLocale } from "@/lib/format";
-import { clearAll, loadChunks, loadSession, saveChunk, type SpikeChunk } from "./chunk-store";
+import {
+  clearAll,
+  clearSession,
+  loadChunks,
+  loadSession,
+  saveChunk,
+  saveSession,
+  type SpikeChunk,
+  type SpikeGap,
+  type SpikeSession,
+} from "./chunk-store";
+import { computeGaps, measureChunks } from "./gap-analysis";
+import { createSpikeWakeLock, type SpikeWakeLock } from "./wake-lock";
 
 /*
- * Màn hình thử ghi âm theo khúc (B0-02 bước 1, docs/10-B phần B):
+ * Màn hình thử ghi âm theo khúc (B0-02, docs/10-B phần B):
  * - Ghi thật bằng MediaRecorder, mỗi 10 giây một khúc, mỗi khúc lưu NGAY vào
  *   kho IndexedDB riêng (mất trang vẫn còn các khúc đã ghi).
- * - Đồng hồ đếm giây thực đã trôi và nút dừng.
+ * - Đồng hồ đếm giây thực đã trôi, nút dừng, nhật ký sự kiện có giờ địa phương,
+ *   công tắc giữ màn hình sáng, bảng khoảng trống sau khi dừng và nút
+ *   "Giả lập ẩn trang 30 giây" để kiểm logic khoảng trống trên máy tính.
  * - Trang spike nền luôn tối (thêm class dark cho vùng trang theo AGENTS.md),
  *   không dùng tiện ích dark:, mọi màu qua token.
  */
 
 const CHUNK_MS = 10_000;
+const HIDE_SIM_MS = 30_000;
 
 type Phase = "idle" | "starting" | "recording" | "stopping";
+
+interface LogEntry {
+  id: number;
+  ts: number;
+  text: string;
+}
 
 /** WebKit (Safari, iOS) mới ghi được mp4; Chromium chỉ ra khúc lúc dừng nên dùng webm. */
 function isWebKitBrowser(): boolean {
@@ -84,13 +106,40 @@ export function GhiAmSpikeScreen() {
   const [chunks, setChunks] = useState<SpikeChunk[]>([]);
   const [durMap, setDurMap] = useState<Record<number, number | null>>({});
   const [clockSec, setClockSec] = useState(0);
+  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [wakeOn, setWakeOn] = useState(false);
+  const [wakeSupported, setWakeSupported] = useState<boolean | null>(null);
+  const [simulating, setSimulating] = useState(false);
+  const [gaps, setGaps] = useState<SpikeGap[]>([]);
+  const [gapMode, setGapMode] = useState<SpikeSession["gapMode"]>("idle");
+  const [wallSec, setWallSec] = useState<number | null>(null);
+  const [totalSec, setTotalSec] = useState<number | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const clockTimerRef = useRef<number | null>(null);
   const startWallRef = useRef(0);
+  const stopWallRef = useRef(0);
+  const sessionStartIndexRef = useRef(0);
   const nextIndexRef = useRef(0);
   const pendingSavesRef = useRef<Set<Promise<void>>>(new Set());
+  const hideTimerRef = useRef<number | null>(null);
+  const wakeRef = useRef<SpikeWakeLock | null>(null);
+  const logSeqRef = useRef(0);
+
+  /* Bản dịch đọc qua ref trong các trình nghe gắn lâu (sự kiện trang, track,
+   * wake lock) để không phải gỡ gắn lại mỗi lần đổi ngôn ngữ. */
+  const tRef = useRef(t);
+  useEffect(() => {
+    tRef.current = t;
+  });
+
+  const addLog = useCallback((text: string) => {
+    logSeqRef.current += 1;
+    const entry: LogEntry = { id: logSeqRef.current, ts: Date.now(), text };
+    setLogs((cur) => (cur.length >= 500 ? [entry, ...cur.slice(0, 499)] : [entry, ...cur]));
+  }, []);
 
   const fmtTime = useCallback(
     (ts: number) =>
@@ -131,6 +180,10 @@ export function GhiAmSpikeScreen() {
         setDurMap(
           Object.fromEntries(Object.entries(session.chunkDurs ?? {}).map(([k, v]) => [Number(k), v])),
         );
+        setGaps(session.gaps ?? []);
+        setGapMode(session.gapMode ?? "idle");
+        setWallSec(session.wallSec ?? null);
+        setTotalSec(session.totalDurSec ?? null);
       })
       .catch((e) => {
         if (alive) setIdbError(t("idbBanner", { msg: errText(e) }));
@@ -140,18 +193,61 @@ export function GhiAmSpikeScreen() {
     };
   }, [t]);
 
-  /* Dọn dẹp khi rời trang: dừng recorder, thả micro. */
+  /* Dọn dẹp khi rời trang: dừng recorder, thả micro và khoá sáng. */
   useEffect(() => {
     return () => {
       if (clockTimerRef.current !== null) window.clearInterval(clockTimerRef.current);
+      if (hideTimerRef.current !== null) window.clearTimeout(hideTimerRef.current);
       try {
         recorderRef.current?.stop();
       } catch {
         /* đã dừng rồi thì bỏ qua */
       }
       streamRef.current?.getTracks().forEach((tr) => tr.stop());
+      wakeRef.current?.dispose();
     };
   }, []);
+
+  /* Giữ màn hình sáng: bật ngay khi mở trang (nếu trình duyệt hỗ trợ), log
+   * từng lần mất và lấy lại qua handlers. */
+  useEffect(() => {
+    const wl = createSpikeWakeLock({
+      onLost: () => addLog(tRef.current("logWakeLost")),
+      onReacquired: () => addLog(tRef.current("logWakeBack")),
+      onFail: (msg) => addLog(tRef.current("logWakeFail", { msg })),
+    });
+    wakeRef.current = wl;
+    setWakeSupported(wl.supported);
+    if (wl.supported) {
+      void wl.setOn(true).then((ok) => {
+        setWakeOn(ok);
+        if (ok) addLog(tRef.current("logWakeOn"));
+      });
+    }
+    return () => {
+      wl.dispose();
+      wakeRef.current = null;
+    };
+  }, [addLog]);
+
+  /* Sự kiện trang theo đặc tả: visibilitychange, pagehide, freeze, resume. */
+  useEffect(() => {
+    const onVisibility = () =>
+      addLog(tRef.current(document.visibilityState === "hidden" ? "logHidden" : "logVisible"));
+    const onPageHide = () => addLog(tRef.current("logPagehide"));
+    const onFreeze = () => addLog(tRef.current("logFreeze"));
+    const onResume = () => addLog(tRef.current("logResume"));
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("pagehide", onPageHide);
+    document.addEventListener("freeze", onFreeze);
+    document.addEventListener("resume", onResume);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("pagehide", onPageHide);
+      document.removeEventListener("freeze", onFreeze);
+      document.removeEventListener("resume", onResume);
+    };
+  }, [addLog]);
 
   const handleChunk = useCallback(
     (blob: Blob) => {
@@ -168,16 +264,26 @@ export function GhiAmSpikeScreen() {
       };
       setChunks((cur) => [...cur, chunk]);
       // Lưu NGAY từng khúc vào kho riêng; lỗi hiện lên giao diện, không im lặng
-      const saving = saveChunk(chunk).catch((e) => {
-        setIdbError(t("idbBanner", { msg: errText(e) }));
-      });
+      const saving = saveChunk(chunk)
+        .then(() => addLog(tRef.current("logChunk", { index: index + 1, size: fmtSize(chunk.size) })))
+        .catch((e) => {
+          setIdbError(tRef.current("idbBanner", { msg: errText(e) }));
+        });
       pendingSavesRef.current.add(saving);
       void saving.finally(() => {
         pendingSavesRef.current.delete(saving);
       });
     },
-    [t],
+    [addLog, fmtSize],
   );
+
+  const resetSessionView = useCallback(() => {
+    setDurMap({});
+    setGaps([]);
+    setGapMode("idle");
+    setWallSec(null);
+    setTotalSec(null);
+  }, []);
 
   const startGhi = useCallback(async () => {
     setError(null);
@@ -186,19 +292,32 @@ export function GhiAmSpikeScreen() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
+      // Track micro: mất tiếng, tắt tiếng (cuộc gọi đến hay báo qua mute)
+      for (const track of stream.getAudioTracks()) {
+        track.addEventListener("ended", () => addLog(tRef.current("logTrackEnded")));
+        track.addEventListener("mute", () => addLog(tRef.current("logMute")));
+        track.addEventListener("unmute", () => addLog(tRef.current("logUnmute")));
+      }
       const m = pickMime();
       const rec = new MediaRecorder(stream, m ? { mimeType: m } : undefined);
       recorderRef.current = rec;
       rec.ondataavailable = (ev) => {
         if (ev.data && ev.data.size > 0) handleChunk(ev.data);
       };
-      rec.onerror = () => {
-        setError(t("recError"));
+      rec.onerror = (ev) => {
+        const err = (ev as Event & { error?: DOMException }).error;
+        setError(tRef.current("recError"));
+        addLog(tRef.current("logRecError", { msg: err?.message || err?.name || "MediaRecorder" }));
       };
       startWallRef.current = Date.now();
+      stopWallRef.current = 0;
+      sessionStartIndexRef.current = nextIndexRef.current;
       setClockSec(0);
+      resetSessionView();
+      void clearSession().catch(() => undefined);
       rec.start(CHUNK_MS);
       setPhase("recording");
+      addLog(t("logStart", { mime: m || "?" }));
       clockTimerRef.current = window.setInterval(() => {
         setClockSec((Date.now() - startWallRef.current) / 1000);
       }, 250);
@@ -208,13 +327,99 @@ export function GhiAmSpikeScreen() {
       setPhase("idle");
       if (e instanceof DOMException && e.name === "NotAllowedError") setError(t("micDenied"));
       else setError(t("micError", { msg: errText(e) }));
+      addLog(t("logRecError", { msg: errText(e) }));
     }
-  }, [handleChunk, t]);
+  }, [addLog, handleChunk, resetSessionView, t]);
+
+  /* Đo thời lượng từng khúc, tính khoảng trống và giữ lại kết quả phiên. */
+  const analyzeSession = useCallback(async () => {
+    setAnalyzing(true);
+    try {
+      await Promise.allSettled([...pendingSavesRef.current]);
+      const all = await loadChunks();
+      const sessionChunks = all.filter((c) => c.index >= sessionStartIndexRef.current);
+      const startedAt = startWallRef.current;
+      const stoppedAt = stopWallRef.current || Date.now();
+      const measured = await measureChunks(sessionChunks);
+      sessionChunks.forEach((c, i) => {
+        if (measured.durs[i] === null) addLog(tRef.current("logDurUnknown", { index: c.index + 1 }));
+      });
+      const result = computeGaps(startedAt, stoppedAt, sessionChunks, measured.durs, measured.total);
+      setDurMap((cur) => {
+        const next = { ...cur };
+        sessionChunks.forEach((c, i) => {
+          next[c.index] = measured.durs[i];
+        });
+        return next;
+      });
+      setGaps(result.gaps);
+      setGapMode(result.mode);
+      setWallSec(result.wallSec);
+      setTotalSec(measured.total);
+      await saveSession({
+        key: "hien-tai",
+        startedAt,
+        stoppedAt,
+        mime: recorderRef.current?.mimeType ?? "",
+        gapMode: result.mode,
+        gaps: result.gaps,
+        wallSec: result.wallSec,
+        totalDurSec: measured.total,
+        chunkDurs: Object.fromEntries(
+          sessionChunks.map((c, i) => [String(c.index), measured.durs[i]]),
+        ),
+      });
+    } catch (e) {
+      setIdbError(tRef.current("idbBanner", { msg: errText(e) }));
+    } finally {
+      setAnalyzing(false);
+    }
+  }, [addLog]);
+
+  const endHideSim = useCallback(() => {
+    if (hideTimerRef.current !== null) {
+      window.clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+    const rec = recorderRef.current;
+    if (rec?.state === "paused") {
+      try {
+        rec.resume();
+      } catch {
+        /* đã chạy lại rồi thì bỏ qua */
+      }
+    }
+    setSimulating(false);
+    addLog(tRef.current("logHideSimEnd"));
+  }, [addLog]);
+
+  const endHideSimRef = useRef(endHideSim);
+  useEffect(() => {
+    endHideSimRef.current = endHideSim;
+  });
+
+  /* Nút "Giả lập ẩn trang 30 giây": tạm ngưng recorder đúng 30 giây rồi ghi
+   * tiếp, mô phỏng trang bị ẩn để kiểm bảng khoảng trống trên máy tính. */
+  const startHideSim = useCallback(() => {
+    const rec = recorderRef.current;
+    if (!rec || rec.state !== "recording") return;
+    try {
+      rec.pause();
+    } catch (e) {
+      addLog(t("logRecError", { msg: errText(e) }));
+      return;
+    }
+    setSimulating(true);
+    addLog(t("logHideSimStart", { sec: 30 }));
+    hideTimerRef.current = window.setTimeout(() => endHideSimRef.current(), HIDE_SIM_MS);
+  }, [addLog, t]);
 
   const stopGhi = useCallback(() => {
     const rec = recorderRef.current;
     if (!rec || rec.state === "inactive") return;
     setPhase("stopping");
+    stopWallRef.current = Date.now();
+    if (rec.state === "paused") endHideSimRef.current();
     rec.onstop = () => {
       if (clockTimerRef.current !== null) {
         window.clearInterval(clockTimerRef.current);
@@ -223,8 +428,10 @@ export function GhiAmSpikeScreen() {
       streamRef.current?.getTracks().forEach((tr) => tr.stop());
       streamRef.current = null;
       recorderRef.current = null;
-      setClockSec((Date.now() - startWallRef.current) / 1000);
+      setClockSec(Math.max(0, (stopWallRef.current - startWallRef.current) / 1000));
       setPhase("idle");
+      addLog(tRef.current("logStop"));
+      void analyzeSession();
     };
     try {
       rec.stop();
@@ -232,7 +439,18 @@ export function GhiAmSpikeScreen() {
       setPhase("idle");
       setError(t("recError"));
     }
-  }, [t]);
+  }, [addLog, analyzeSession, t]);
+
+  const toggleWake = useCallback(
+    async (on: boolean) => {
+      const wl = wakeRef.current;
+      if (!wl) return;
+      const ok = await wl.setOn(on);
+      setWakeOn(on && ok);
+      if (ok) addLog(tRef.current(on ? "logWakeOn" : "logWakeOff"));
+    },
+    [addLog],
+  );
 
   const clearGhi = useCallback(async () => {
     if (!window.confirm(t("clearConfirm"))) return;
@@ -240,13 +458,14 @@ export function GhiAmSpikeScreen() {
       await clearAll();
       nextIndexRef.current = 0;
       setChunks([]);
-      setDurMap({});
+      resetSessionView();
       setError(null);
       setIdbError(null);
+      addLog(t("logCleared"));
     } catch (e) {
       setIdbError(t("idbBanner", { msg: errText(e) }));
     }
-  }, [t]);
+  }, [addLog, resetSessionView, t]);
 
   const recorderUnsupported = mime === null;
   const recording = phase === "recording" || phase === "stopping" || phase === "starting";
@@ -310,7 +529,21 @@ export function GhiAmSpikeScreen() {
             >
               {t("stopGhi")}
             </Button>
+            <Button variant="secondary" icon={EyeOff} onClick={startHideSim} disabled={phase !== "recording" || simulating}>
+              {t("hideSim")}
+            </Button>
           </div>
+          <p className="text-small text-ink-3">{simulating ? t("hideSimActive") : t("hideSimHint")}</p>
+          {wakeSupported === false ? (
+            <p className="text-small text-ink-3">{t("wakeUnsupported")}</p>
+          ) : wakeSupported ? (
+            <Switch
+              checked={wakeOn}
+              onCheckedChange={(v) => void toggleWake(v)}
+              label={t("wakeLabel")}
+              description={t("wakeDescription")}
+            />
+          ) : null}
         </section>
 
         <section className="flex flex-col gap-3" aria-labelledby="spike-khuc-title">
@@ -345,6 +578,55 @@ export function GhiAmSpikeScreen() {
               {t("clearChunks")}
             </Button>
           </div>
+        </section>
+
+        <section className="flex flex-col gap-3" aria-labelledby="spike-gap-title">
+          <h2 id="spike-gap-title" className="text-h2 font-semibold">
+            {t("sectionGap")}
+          </h2>
+          {analyzing ? <p className="text-small text-ink-3">{t("gapAnalyzing")}</p> : null}
+          {gapMode !== "idle" && !analyzing ? (
+            <div className="flex flex-col gap-2">
+              {gaps.length > 0 ? (
+                <ul className="flex flex-col divide-y divide-line rounded-block border border-line">
+                  {gaps.map((g, i) => (
+                    <li key={`${g.ts}-${i}`} data-gap-sec={Math.round(g.sec)} className="px-4 py-3 text-small">
+                      {g.kind === "total"
+                        ? t("gapTotal", { dur: fmtDur(g.sec) })
+                        : t("gapRow", { dur: fmtDur(g.sec), time: fmtTime(g.ts) })}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-small text-ink-3">{gapMode === "unknown" ? t("gapUnknown") : t("gapNone")}</p>
+              )}
+              <div className="flex flex-col gap-0.5 text-small text-ink-2 tabular-nums">
+                {wallSec != null ? <p>{t("wallLabel", { dur: fmtDur(wallSec) })}</p> : null}
+                {totalSec != null ? <p>{t("totalLabel", { dur: fmtDur(totalSec) })}</p> : <p>{t("totalUnknown")}</p>}
+              </div>
+            </div>
+          ) : null}
+        </section>
+
+        <section className="flex flex-col gap-3" aria-labelledby="spike-log-title">
+          <h2 id="spike-log-title" className="text-h2 font-semibold">
+            {t("sectionNhatKy")}
+          </h2>
+          {logs.length === 0 ? (
+            <p className="text-small text-ink-3">{t("logEmpty")}</p>
+          ) : (
+            <ul
+              data-logs="true"
+              className="flex max-h-72 flex-col gap-1.5 overflow-y-auto rounded-block border border-line px-4 py-3"
+            >
+              {logs.map((l) => (
+                <li key={l.id} data-log={l.text} className="flex gap-3 text-small">
+                  <span className="shrink-0 text-ink-3 tabular-nums">{fmtTime(l.ts)}</span>
+                  <span className="min-w-0 text-ink-2">{l.text}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </main>
     </div>
