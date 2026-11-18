@@ -140,6 +140,103 @@ test("Tắt Nghe sạch: tiếng đi thẳng (không cân âm lượng) và vẫ
   expect(errors).toEqual([]);
 });
 
+/* ---------- Bước 4/6: Khớp nội dung ---------- */
+
+/** Giây hiện tại của thẻ audio thật; -1 khi buổi chưa có tiếng đang phát. */
+async function audioTime(page: import("@playwright/test").Page) {
+  return page.evaluate(() => (document.querySelector("audio") as HTMLAudioElement)?.currentTime ?? -1);
+}
+
+/** Chờ kim vào đúng khoảng mốc: đúng câu đáp án; với mốc chính xác thì lệch dưới 0,5 giây. */
+async function expectLandsIn(page: import("@playwright/test").Page, lo: number, hi: number) {
+  await expect
+    .poll(
+      async () => {
+        const t = await audioTime(page);
+        return t >= lo && t <= hi;
+      },
+      { timeout: 8000, intervals: [80] },
+    )
+    .toBe(true);
+}
+
+// Mốc chờ (truth.json + audio-attach.json, buổi chị Lan — 383,5 giây):
+//   ý b1 20,2 giây (câu g2 "Ờ... ừ em, nhà chị là bốn người…" 17,01–27,79)
+//   việc a1 307,5 giây ("Nghe từ 05:07", câu g14 "Em gửi chị bảng tính…" 306,78–310,86)
+//   trích dẫn b7 145,0 giây ("Giá này cao hơn bên Imperia…" câu g8 144,53–148,64)
+//   dải giọng bấm giữa = 191,75 giây (383,5/2)
+test("Bấm ý tóm tắt, việc, trích dẫn, chữ, dải giọng: nghe đúng câu đó (sai lệch < 0,5 giây)", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+
+  // Ý tóm tắt b1 -> 20,2 giây, lệch dưới 0,5 giây
+  await page.goto("/s/s-bds-lan?tab=summary");
+  await page.getByRole("button", { name: /Nghe từ.*Cần căn 2 phòng ngủ/ }).click();
+  await expectLandsIn(page, 20.2 - 0.5, 20.2 + 0.5);
+
+  // Việc a1 -> 307,5 giây, lệch dưới 0,5 giây
+  await page.goto("/s/s-bds-lan?tab=tasks");
+  await page.getByRole("button", { name: "Nghe từ 05:07" }).click();
+  await expectLandsIn(page, 307.5 - 0.5, 307.5 + 0.5);
+
+  // Câu trích dẫn b7 -> 145,0 giây, lệch dưới 0,5 giây
+  await page.goto("/s/s-bds-lan?tab=summary");
+  await page.getByRole("button", { name: /Nghe từ.*Giá này cao hơn bên Imperia/ }).click();
+  await expectLandsIn(page, 145.0 - 0.5, 145.0 + 0.5);
+
+  // Chữ ở tab Lời: bấm một chữ giữa đoạn g2 (17,01–27,79) — nghe đúng câu đó
+  await page.goto("/s/s-bds-lan?tab=transcript");
+  const seg2 = page.locator('[data-seg="g2"]');
+  await seg2.scrollIntoViewIfNeeded();
+  await seg2.locator("button").first().click();
+  await expect(seg2.locator("[data-word]").first()).toBeVisible({ timeout: 15000 });
+  await seg2.locator("[data-word]").nth(10).click();
+  await expectLandsIn(page, 17.01, 27.79);
+
+  // Dải giọng: bấm giữa trình phát thu gọn = giữa buổi (191,75 giây; bấm bằng
+  // chuột chỉ chính xác tới từng điểm ảnh nên cho lệch tới 1,5 giây)
+  const ribbon = page.getByRole("slider", { name: "Vị trí phát" });
+  const box = await ribbon.boundingBox();
+  if (!box) throw new Error("Không thấy dải giọng");
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await expectLandsIn(page, 191.75 - 1.5, 191.75 + 1.5);
+
+  // Tiếng vẫn phát tiếp sau các lần tua
+  const t1 = await audioTime(page);
+  await page.waitForTimeout(1200);
+  const t2 = await audioTime(page);
+  expect(t2).toBeGreaterThan(t1);
+  expect(errors).toEqual([]);
+});
+
+// Buổi họp Hàn (464,4 giây): đoạn tiếng Hàn s02 10,77–24,11, tiếng Anh s03 25,09–32,84
+test("Buổi họp Hàn: bấm đoạn tiếng Hàn và tiếng Anh phát đúng chỗ đó", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await page.goto("/s/s-hop-han?tab=transcript");
+  await expect(page.locator('[data-seg="s02"]')).toBeVisible();
+
+  // Đoạn tiếng Hàn (Park Ji-ho): phát từ đầu đoạn, kim trong khoảng đáp án
+  const koSeg = page.locator('[data-seg="s02"]');
+  await koSeg.scrollIntoViewIfNeeded();
+  await koSeg.locator("button").first().click();
+  await expectLandsIn(page, 10.77, 24.11);
+
+  // Bấm một chữ giữa đoạn tiếng Hàn: vẫn trong đúng câu đó
+  await expect(koSeg.locator("[data-word]").first()).toBeVisible({ timeout: 15000 });
+  await koSeg.locator("[data-word]").nth(6).click();
+  await expectLandsIn(page, 10.77, 24.11);
+
+  // Đoạn tiếng Anh (Kim Min-ji, giọng Hàn): phát đúng chỗ của câu tiếng Anh
+  const enSeg = page.locator('[data-seg="s03"]');
+  await enSeg.scrollIntoViewIfNeeded();
+  await enSeg.locator("button").first().click();
+  await expectLandsIn(page, 25.09, 32.84);
+  const t = await audioTime(page);
+  expect(t).toBeGreaterThanOrEqual(25.09);
+  expect(errors).toEqual([]);
+});
+
 test('Cờ "Lỗi tải âm thanh": hiện câu lỗi và Thử lại, tắt cờ thì phát được', async ({ page }) => {
   const errors = collectErrors(page);
   await onboard(page);
