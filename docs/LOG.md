@@ -295,3 +295,8 @@ Làm theo 4 bước, mỗi bước một commit push ngay (`B0-giong bước N/4
 - **Bước 3 kiểm bằng số**: sinh lại cả 4 bộ (bộ 62 phút vẫn ngoài commit); không đoạn nào rỗng hay ngắn bất thường; tốc độ chữ/giây theo ngôn ngữ vi 8,3–18,1 / ko 4,3–6,9 / en 11,1–15,3 (tiếng Hàn thấp hơn vì mỗi chữ Hangul mang một âm tiết); thời lượng truth = file chính xác (383,5 / 464,4 / 148,6 giây, file dài 3720 giây = 62 phút); lệch âm lượng từng người so với gain_db tối đa 0,1 dB. Bảng dán trong PR #64.
 - **Đã thử ElevenLabs** (khóa Hoang đưa): giọng mặc định đọc tiếng Việt chưa đạt — Rachel lỗi nặng, Paul và Domi lỗi nhiều chữ, Lily khá nhất vẫn sai ("tính phương án" thành "tin phúc an") — đo bằng ASR đối chiếu. Giữ Edge cho tất cả các người nói; sau này có `voice_id` giọng Việt tốt thì đặt `ELEVEN_VOICE_SPK3`/`ELEVEN_VOICE_CHI_HANG`.
 - **Bước 4 tài liệu**: `test-data/README.md` thêm bảng giọng, cập nhật Giới hạn (giọng AI vẫn rõ hơn người thật; chỉ có giọng Bắc nếu không dùng FPT; kết quả thử ElevenLabs) và Sinh lại; lint sạch.
+
+## 2026-11-18, Claude, âm thanh thử giọng tự nhiên, mở M9
+
+- Merge PR #64: 3 bộ âm thanh thử làm lại bằng giọng Microsoft (edge-tts), Hoang nghe thấy tốt hơn hẳn bản espeak. Hoang đồng ý dùng làm dữ liệu cho mockup.
+- Mở #65 (M9-01): gắn 3 file vào 3 buổi mẫu để bấm phát nghe được tiếng thật, chữ và tóm tắt khớp theo mốc trong `truth.json`.

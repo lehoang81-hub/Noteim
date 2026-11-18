@@ -128,6 +128,14 @@ Nghiệm thu:
 | --- | --- |
 | M8-01 (#60, xong) | Nút và bảng Nghe sạch, bản đồ nghe giả, chữ chạy theo từng từ, đoạn đang phát nổi rõ, ý tóm tắt sáng theo, Bản gọn và Nguyên văn. |
 
+## M9. Âm thanh thật cho buổi mẫu
+
+Dùng 3 bộ âm thanh thử giọng tự nhiên (PR #64) cho 3 buổi mẫu, trình phát thật qua `HTMLAudioElement`, Nghe sạch qua Web Audio. Một issue, nhánh `m9/01-am-thanh-that`, PR vào `main`, chờ Hoang duyệt.
+
+| Issue | Việc |
+| --- | --- |
+| M9-01 (#65) | Gắn âm thanh, đổi mốc lời và tóm tắt theo file, trình phát thật, Nghe sạch có tiếng, kiểm khớp nội dung. |
+
 ## Bài thử kỹ thuật (chạy song song, nhãn `spike`)
 
 Không thuộc mockup, nhưng kết quả quyết định hướng đi của bản thật. Nên làm trong lúc M1 đang chạy.
