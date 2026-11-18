@@ -222,23 +222,25 @@ SETS = [
 
 # Bảng giọng dùng cho engine tự nhiên (edge / fpt / elevenlabs).
 # pitch: lệch cao độ (Hz); rate: lệch tốc độ (%); gain_db: âm lượng theo người nói.
-# Các giá trị pitch/rate do bảng giọng ở bước 2/4 điền đầy đủ; đây đang là giá trị trung tính.
+# Mỗi người nói một giọng, cao độ và tốc độ khác nhau để phân biệt nghe được.
+# Bộ 02: đoạn tiếng Anh của Park và Kim đọc bằng CHÍNH giọng Hàn của họ
+# (giọng Anh pha Hàn, như thật) — không đổi sang giọng tiếng Anh.
 NAT_VOICES = {
     "01-bds-gap-chi-lan": {
         "SPK_01": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Bạn (môi giới)"},
-        "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": -9, "role": "Chị Lan"},
-        "SPK_03": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": -3, "role": "Người nói 3 (bạn của chị Lan)"},
+        "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "-8%", "gain_db": -9, "role": "Chị Lan (chậm hơn một chút, nhỏ hơn 9 dB)"},
+        "SPK_03": {"voice": "vi-VN-NamMinhNeural", "pitch": "-15Hz", "rate": "+10%", "gain_db": -3, "role": "Người nói 3 (bạn của chị Lan, trầm và nhanh hơn)"},
     },
     "02-hop-doi-tac-han": {
         "SPK_01": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Bạn (môi giới)"},
-        "SPK_02": {"voice": "ko-KR-InJoonNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 2, "role": "Park Ji-ho"},
-        "SPK_03": {"voice": "ko-KR-SunHiNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": -4, "role": "Kim Min-ji"},
-        "SPK_04": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": -6, "role": "Chị Thảo"},
+        "SPK_02": {"voice": "ko-KR-InJoonNeural", "pitch": "-10Hz", "rate": "+0%", "gain_db": 2, "role": "Park Ji-ho (trầm hơn một chút)"},
+        "SPK_03": {"voice": "ko-KR-SunHiNeural", "pitch": "+8Hz", "rate": "+5%", "gain_db": -4, "role": "Kim Min-ji (cao và nhanh hơn)"},
+        "SPK_04": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+10Hz", "rate": "+0%", "gain_db": -6, "role": "Chị Thảo (cao hơn)"},
     },
     "03-bac-si-kham": {
         "SPK_01": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Bạn (bác sĩ)"},
-        "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": -7, "role": "Chị Hằng (bệnh nhân)"},
-        "SPK_03": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Người nhà (con chị Hằng)"},
+        "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "-15%", "gain_db": -7, "role": "Chị Hằng (bệnh nhân, chậm và nhỏ)"},
+        "SPK_03": {"voice": "vi-VN-NamMinhNeural", "pitch": "-10Hz", "rate": "-5%", "gain_db": 0, "role": "Người nhà (con chị Hằng)"},
     },
 }
 
