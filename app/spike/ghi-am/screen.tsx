@@ -36,6 +36,10 @@ import { createSpikeWakeLock, type SpikeWakeLock } from "./wake-lock";
 const CHUNK_MS = 10_000;
 const HIDE_SIM_MS = 30_000;
 
+/** Danh sách bài Hoang thử trên điện thoại thật (docs/10-B phần B). */
+const GUIDE_CODES = ["G1", "G2", "G3", "G4", "G5", "G6", "N1", "N2", "N3"] as const;
+type GuideCode = (typeof GUIDE_CODES)[number];
+
 type Phase = "idle" | "starting" | "recording" | "stopping";
 
 interface LogEntry {
@@ -142,6 +146,7 @@ export function GhiAmSpikeScreen() {
   const [samplePlaying, setSamplePlaying] = useState(false);
   const [recPlaying, setRecPlaying] = useState(false);
   const [copyState, setCopyState] = useState<"ok" | "fail" | null>(null);
+  const [activeTask, setActiveTask] = useState<GuideCode | null>(null);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -664,6 +669,15 @@ export function GhiAmSpikeScreen() {
     copyTimerRef.current = window.setTimeout(() => setCopyState(null), 4000);
   }, [jsonOut]);
 
+  /* Bấm bài nào trong danh sách G1 đến N3 thì nhật ký đánh dấu đang thử bài đó. */
+  const startTask = useCallback(
+    (code: GuideCode) => {
+      setActiveTask(code);
+      addLog(tRef.current("logTask", { code }));
+    },
+    [addLog],
+  );
+
   return (
     <div className="dark min-h-dvh bg-bg text-ink">
       <main className="mx-auto flex w-full max-w-[720px] flex-col gap-8 px-5 pb-16 pt-8">
@@ -859,6 +873,39 @@ export function GhiAmSpikeScreen() {
             </div>
             <Switch checked={cleanOn} onCheckedChange={toggleClean} label={t("cleanLabel")} />
           </div>
+        </section>
+
+        <section className="flex flex-col gap-3" aria-labelledby="spike-huong-dan-title">
+          <h2 id="spike-huong-dan-title" className="text-h2 font-semibold">
+            {t("sectionHuongDan")}
+          </h2>
+          <p className="text-small text-ink-3">{t("guideIntro")}</p>
+          <ul className="flex flex-col divide-y divide-line rounded-block border border-line">
+            {GUIDE_CODES.map((code) => (
+              <li key={code}>
+                <button
+                  type="button"
+                  onClick={() => startTask(code)}
+                  aria-pressed={activeTask === code}
+                  data-guide-code={code}
+                  className={cn(
+                    "flex w-full items-start gap-3 px-4 py-3 text-left transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2",
+                    activeTask === code && "bg-surface-2",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "mt-0.5 inline-flex min-w-9 justify-center rounded-pill border px-2 py-0.5 text-caption",
+                      activeTask === code ? "border-sen bg-sen text-on-sen" : "border-line text-ink-3",
+                    )}
+                  >
+                    {code}
+                  </span>
+                  <span className="min-w-0 text-small text-ink-2">{t(`guide${code}`)}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section className="flex flex-col gap-3" aria-labelledby="spike-log-title">
