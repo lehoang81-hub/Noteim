@@ -842,3 +842,49 @@ Mockup sinh bản đồ bằng `scripts/gen-listening-map.mjs` từ `speaker_spa
 
 **Cần thử ở B0**: iPhone khóa màn hình có giữ được Web Audio không; nếu không,
 khi khóa màn hình chỉ giữ nhảy khoảng lặng và cân âm lượng đơn giản.
+
+## 9. Âm thanh thật và Nghe sạch qua Web Audio (M9-01) — khi nối thật
+
+Đặc tả ở `04-data-contract.md` mục "Bổ sung M9". Ba buổi mẫu có file âm thanh
+thật (`Session.audio_url`): `s-bds-lan`, `s-hop-han`, `s-sample-doctor`; buổi
+khác vẫn phát giả như cũ. Người làm backend thay phần sau, giao diện giữ nguyên:
+
+**Trình phát thật** (`lib/player/audio-player.ts`, mockup): `HTMLAudioElement`
+theo đúng interface `Player` (`createAudioPlayer(url, duration)`), vị trí cập
+nhật bằng `requestAnimationFrame` khi đang phát, chạm Phát mới nạp file
+(`preload="none"`, iPhone chặn tự phát), đang đệm hiện trạng thái chờ trên nút,
+lỗi tải hiện "Không phát được âm thanh" và Thử lại. Bản thật chỉ cần đổi nguồn
+`url` thành link file của người dùng (lưu dạng nén giọng nói, xem mục 8 B2);
+interface `Player` và giao diện không phải sửa.
+
+**Nghe sạch qua Web Audio** (`lib/player/clean-audio.ts`, mockup): thẻ audio
+nối qua `MediaElementSource` rồi mới ra loa:
+
+```
+nguồn -> BiquadFilter highpass 100 Hz -> BiquadFilter lowpass 7 kHz
+      -> DynamicsCompressor (ngưỡng -24 dB, tỉ lệ 2:1) -> GainNode -> loa
+```
+
+- Cân âm lượng người nói: `GainNode` đổi theo người nói của đoạn đang phát,
+  mức từ `ListeningMap.speaker_gain_db`, chuyển mượt 80 ms
+  (`setTargetAtTime`, hằng số thời gian 0,08 s).
+- **Lọc tiếng ồn là bản tạm**: hai `BiquadFilter` cắt dải và một nén nhẹ chỉ
+  đủ giảm gầm/tít và ghim chỗ quá to, KHÔNG khử ồn được như bản thật. Bản
+  thật thay hai lọc + nén bằng RNNoise bản WASM chạy trong `AudioWorklet`
+  (giữ nguyên chỗ nối `MediaElementSource` và `GainNode`).
+- Tắt Nghe sạch là đi thẳng: các lọc đưa về thông qua toàn dải, nén về mức 0,
+  gain về 1 — đồ thị vẫn nối vì `MediaElementSource` không gỡ ra được sau khi
+  tạo, nhờ vậy bật tắt không giật.
+- AudioContext dựng muộn cùng thẻ audio và `resume()` ngay trong cử chỉ bấm
+  Phát (iPhone chặn AudioContext chưa resume). Cần thử ở B0: iPhone khóa màn
+  hình có giữ được Web Audio không (xem mục 8).
+
+**Dữ liệu**: `Session.audio_url: string | null` (null là chưa có âm thanh).
+Mốc từng đoạn, `peaks`, bản đồ nghe của 3 buổi tính từ chính file âm thanh
+bằng `scripts/attach-test-audio.mjs` (đáp án `truth.json` khớp theo id đoạn;
+khoảng lặng xác năng lượng trong khoảng trống giữa các đoạn; `speaker_gain_db`
+đo RMS thật của từng người; keyframes ánh xạ thời gian cũ -> mới lưu ở
+`fixtures/audio-attach.json`). Kho localStorage cũ tự chuyển khi nạp
+(`lib/data/mock/audio-attach.ts`) — giữ nguyên phần người dùng đã sửa, chỉ đổi
+mốc. Bản thật: khi xử lý buổi ghi, cùng lượt AI sinh mốc, bản đồ nghe và gán
+`audio_url` (xem mục 8 B3); không cần keyframes migrate nữa.
