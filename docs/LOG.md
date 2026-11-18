@@ -328,3 +328,8 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 - Bộ chấm `scripts/b0-asr/score.mjs` tự kiểm 10/10 đạt (truth chấm chính nó 0% mọi chỉ số; đổi 5 âm tiết = 5/1272 = 0,39% đo đúng); `run.mjs` + 4 adapter (soniox, elevenlabs, google chirp_3, fpt) viết xong nhưng chưa gọi API lần nào: máy không có khóa nào, cả 4 hãng đều bỏ qua đúng cách (thoát mã 2). Tổng tiền API: 0 USD.
 - Đã trả lời từ tài liệu chính thức (ngày xem 2026-11-18): chirp_3 tách người nói KHÔNG hỗ trợ vi-VN (gồm ko-KR); Recognize dưới 1 phút, BatchRecognize 1 phút đến 1 giờ, không mốc từng chữ. Bảng giá/giới hạn từng hãng vào `docs/11-b0-ket-qua.md` phần A.
 - Sinh thật `04-dai-62-phut` (3720s, ogg 9,6 MB / m4a 12,7 MB, không commit theo README + .gitignore); `test-data/human/` trống — chờ bản ghi người thật; lệnh chạy lại để sẵn trong `scripts/b0-asr/README.md`.
+## 2026-11-18, Claude, B0-02 trang thử ghi âm (PR #73)
+
+- Trang `/spike/ghi-am` xong đủ 4 bước: ghi theo khúc 10 giây lưu ngay vào IndexedDB kho riêng ("noteim-spike-ghi-am"), nhật ký sự kiện có giờ, công tắc giữ màn hình sáng, bảng khoảng trống, nút "Giả lập ẩn trang 30 giây", nghe lại ghép khúc, nghe mẫu dùng CleanAudioChain có nhật ký AudioContext.state, hướng dẫn G1 đến N3, xuất JSON và tải bản ghi.
+- Sửa sau kiểm thử: SSR lỗi 500 vì biến toàn cục `screen` (máy chủ không có) — JSON kết quả chỉ dựng trên trình duyệt qua `useSyncExternalStore`, trang trả 200.
+- e2e đạt hết: bộ mới 7 bài đạt (micro giả Chromium — ghi 25 giây ra 3 khúc, tải lại trang vẫn còn, nghe lại được, JSON đúng cấu trúc); bộ cũ 124 bài đạt hết (smoke, m7, m8, m9), không đổi màn hiện có. Vercel: https://noteim-git-b0-02-thu-ghi-am-hlrace16store.vercel.app/spike/ghi-am
