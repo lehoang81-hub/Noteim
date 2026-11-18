@@ -251,7 +251,6 @@ function processOne({ fixture, base }) {
   // ---- peaks từ RMS thật, quy về 0..1 theo tầng ồn và mức nói của buổi ----
   const lo = floorDb + 4;
   const hi = Math.max(lo + 1, speechDb - 2);
-  const perSec = db.length / duration;
   const peaks = Array.from({ length: PEAKS_N }, (_, i) => {
     const f0 = Math.floor((i / PEAKS_N) * db.length);
     const f1 = Math.max(f0 + 1, Math.floor(((i + 1) / PEAKS_N) * db.length));
