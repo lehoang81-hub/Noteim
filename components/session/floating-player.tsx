@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioWaveform, ChevronDown, ChevronRight, ChevronUp, Pause, Play, RotateCcw, RotateCw } from "lucide-react";
+import { AudioWaveform, ChevronDown, ChevronRight, ChevronUp, Loader2, Pause, Play, RotateCcw, RotateCw } from "lucide-react";
 import { AnimatePresence, m } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -119,13 +119,19 @@ export function FloatingPlayer({
     <button
       type="button"
       onClick={player.toggle}
+      disabled={!!s.error}
+      aria-busy={!!s.waiting}
       aria-label={s.playing ? t("pause") : t("play")}
       className={cn(
         "flex shrink-0 items-center justify-center rounded-pill bg-ink text-bg transition-[scale] ease-noteim duration-(--t-quick)",
         big ? "size-14" : "size-11",
+        s.error && "cursor-not-allowed opacity-50",
       )}
     >
-      {s.playing ? (
+      {/* Đang đệm âm thanh: trạng thái chờ trên nút (M9-01) */}
+      {s.waiting ? (
+        <Loader2 aria-hidden={true} className={cn("animate-spin", big ? "size-6" : "size-5")} strokeWidth={2} />
+      ) : s.playing ? (
         <Pause aria-hidden={true} className={big ? "size-6" : "size-5"} strokeWidth={2} />
       ) : (
         <Play aria-hidden={true} className={cn(big ? "size-6" : "size-5", "translate-x-px")} strokeWidth={2} />
@@ -192,6 +198,20 @@ export function FloatingPlayer({
       // Trạng thái nghe sạch cho kiểm thử tự động: "on" khi bản đồ nghe đã áp dụng
       data-listening={cleanOn ? "on" : "off"}
     >
+      {/* Lỗi tải âm thanh: câu lỗi và Thử lại (M9-01) */}
+      {s.error === "load" ? (
+        <div role="alert" className="flex items-center gap-2 bg-tag-risk-bg px-3 py-2 text-small text-tag-risk">
+          <span className="min-w-0 flex-1 font-medium">{t("errorLoad")}</span>
+          <button
+            type="button"
+            onClick={() => player.retry?.()}
+            className="flex h-9 shrink-0 items-center rounded-control bg-surface px-3 font-semibold text-ink hover:bg-surface-2"
+          >
+            {t("retry")}
+          </button>
+        </div>
+      ) : null}
+
       {!expanded ? (
         <div className="flex items-center gap-3 p-2 pr-1">
           {playButton(false)}

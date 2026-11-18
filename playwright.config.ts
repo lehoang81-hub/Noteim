@@ -21,7 +21,14 @@ export default defineConfig({
     locale: "vi-VN",
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
-    launchOptions: { executablePath, args: ["--disable-dev-shm-usage"] },
+    launchOptions: {
+      executablePath,
+      args: [
+        "--disable-dev-shm-usage",
+        // M9-01: trình phát thật cần phát được trong kiểm thử mà không có cử chỉ người dùng
+        "--autoplay-policy=no-user-gesture-required",
+      ],
+    },
   },
   projects: [
     { name: "phone", use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } } },

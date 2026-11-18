@@ -14,10 +14,12 @@ import { Banner, EmptyState, SkeletonParagraph } from "@/components/ui/feedback"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
-import { data, dataNow, DataError, useData, type ListeningPrefs, type ActionItem, type Lang, type ListeningMap, type SessionDetail, type SummaryVersion } from "@/lib/data";
+import { data, dataNow, DataError, useData, type ListeningPrefs, type ActionItem, type Lang, type SessionDetail, type SummaryVersion } from "@/lib/data";
 import { durationParts, shortDate } from "@/lib/format";
 import { cleanDurationOf, skipsFromMap } from "@/lib/listening/skips";
 import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
+import { useDebugFlags } from "@/lib/debug/flags";
+import { createAudioPlayer } from "@/lib/player/audio-player";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
 import { SummaryTab } from "./summary-tab";
 import type { ShareIntent } from "./share-sheet";
@@ -160,8 +162,29 @@ function Loaded({
   const tab: TabId = (TABS as readonly string[]).includes(search.get("tab") ?? "") ? (search.get("tab") as TabId) : "summary";
   const setTab = (v: string) => router.replace(`/s/${detail.id}?tab=${v}`, { scroll: false });
 
-  const [player] = useState<Player>(() => createMockPlayer(detail.duration_sec));
-  useEffect(() => () => player.pause(), [player]);
+  // Buổi có file âm thanh thật dùng trình phát thật (M9-01); cờ "Âm thanh giả"
+  // ép dùng đồng hồ giả cho cả 3 buổi đó (để bộ kiểm thử cũ chạy nhanh)
+  const flags = useDebugFlags();
+  const audioUrl = detail.audio_url && !flags.audioMock ? detail.audio_url : null;
+  function makePlayer(url: string | null): Player {
+    return url ? createAudioPlayer(url, detail.duration_sec) : createMockPlayer(detail.duration_sec);
+  }
+  const [player, setPlayer] = useState<Player>(() => makePlayer(audioUrl));
+  // Đổi cờ "Âm thanh giả": thay trình phát, không giữ vị trí cũ của loại kia
+  const playerKind = useRef(audioUrl ? "audio" : "mock");
+  useEffect(() => {
+    const kind = audioUrl ? "audio" : "mock";
+    if (playerKind.current === kind) return;
+    playerKind.current = kind;
+    player.pause();
+    player.destroy?.();
+    setPlayer(makePlayer(audioUrl));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioUrl]);
+  useEffect(() => () => {
+    player.pause();
+    player.destroy?.();
+  }, [player]);
   const ps = usePlayerState(player);
 
   const [expanded, setExpanded] = useState(false);
