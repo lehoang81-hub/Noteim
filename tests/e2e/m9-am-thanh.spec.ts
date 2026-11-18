@@ -77,6 +77,69 @@ test('Cờ "Âm thanh giả": buổi chị Lan quay lại đồng hồ giả, kh
   expect(errors).toEqual([]);
 });
 
+/* ---------- Bước 3/6: Nghe sạch qua Web Audio ---------- */
+
+/** Bật Nghe sạch của người dùng mẫu (nhớ theo người dùng, M8-01). */
+async function enableClean(page: import("@playwright/test").Page) {
+  await page.evaluate(() => {
+    const raw = localStorage.getItem("noteim-mock-db-v1");
+    if (!raw) throw new Error("Kho dữ liệu mẫu chưa có");
+    const db = JSON.parse(raw);
+    db.user.listening_prefs = { enabled: true, denoise: true, level: true, skip_silence: true, skip_fillers: false };
+    localStorage.setItem("noteim-mock-db-v1", JSON.stringify(db));
+  });
+  await page.reload();
+}
+
+// Lượt nói của chị Lan (SPK_02) bắt đầu ở giây 17,01 và kéo dài tới 63,63 —
+// kim đặt ở 20 giây (4 nấc tua 5 giây) nằm giữa lượt nói, gain bản đồ là +5 dB
+test("Nghe sạch qua Web Audio: đoạn chị Lan áp đúng gain +5 dB theo người nói đang phát", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await enableClean(page);
+  await page.goto("/s/s-bds-lan");
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "on");
+
+  // Đặt kim vào lượt nói của chị Lan (chưa phát): gain bản đồ đã áp dụng
+  const slider = page.getByRole("slider", { name: "Vị trí phát" });
+  await slider.focus();
+  for (let i = 0; i < 4; i++) await page.keyboard.press("ArrowRight"); // 0 → 20 giây
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-gain-db", "5");
+
+  // Phát: tiếng thật đi qua GainNode, gain giữ đúng trong khi đang phát lượt chị Lan
+  await page.getByRole("button", { name: "Phát", exact: true }).click();
+  await page.waitForTimeout(1500);
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-gain-db", "5");
+  const now = Number(await slider.getAttribute("aria-valuenow"));
+  expect(now).toBeGreaterThanOrEqual(20);
+  expect(errors).toEqual([]);
+});
+
+test("Tắt Nghe sạch: tiếng đi thẳng (không cân âm lượng) và vẫn phát tiếp không giật", async ({ page }) => {
+  const errors = collectErrors(page);
+  await onboard(page);
+  await enableClean(page);
+  await page.goto("/s/s-bds-lan");
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "on");
+  const slider = page.getByRole("slider", { name: "Vị trí phát" });
+  await slider.focus();
+  for (let i = 0; i < 4; i++) await page.keyboard.press("ArrowRight"); // 0 → 20 giây
+  await page.getByRole("button", { name: "Phát", exact: true }).click();
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-gain-db", "5");
+
+  // Tắt Nghe sạch: gain về đi thẳng, bản đồ ngừng áp dụng, tiếng vẫn chạy
+  await page.getByRole("button", { name: "Mở rộng trình phát" }).click();
+  await page.getByRole("button", { name: "Nghe sạch đang bật" }).click();
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-gain-db", "");
+  await expect(page.locator(PLAYER)).toHaveAttribute("data-listening", "off");
+  const before = Number(await slider.getAttribute("aria-valuenow"));
+  await page.waitForTimeout(1500);
+  const after = Number(await slider.getAttribute("aria-valuenow"));
+  expect(after).toBeGreaterThan(before);
+  await expect(page.getByText("Không phát được âm thanh.")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test('Cờ "Lỗi tải âm thanh": hiện câu lỗi và Thử lại, tắt cờ thì phát được', async ({ page }) => {
   const errors = collectErrors(page);
   await onboard(page);

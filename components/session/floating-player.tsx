@@ -44,6 +44,7 @@ export function FloatingPlayer({
   heat,
   skips = [],
   listening,
+  gainDb,
   expanded,
   onExpandedChange,
   className,
@@ -55,6 +56,8 @@ export function FloatingPlayer({
   heat?: HeatSpan[];
   /** Khoảng đang bỏ qua trên dải giọng (nghe sạch bật, M8-01) */
   skips?: SkipRange[];
+  /** Gain Web Audio đang áp dụng (dB, M9-01); null là đi thẳng — ghi ra thuộc tính dữ liệu cho kiểm thử */
+  gainDb?: number | null;
   /** Điều khiển Nghe sạch; undefined khi buổi không phát được */
   listening?: ListeningControl;
   expanded: boolean;
@@ -197,6 +200,8 @@ export function FloatingPlayer({
       className={cn("overflow-hidden rounded-block border border-line bg-surface text-ink shadow-float", className)}
       // Trạng thái nghe sạch cho kiểm thử tự động: "on" khi bản đồ nghe đã áp dụng
       data-listening={cleanOn ? "on" : "off"}
+      // Gain Web Audio đang áp dụng (M9-01): rỗng là đi thẳng, không cân âm lượng
+      data-gain-db={gainDb != null ? String(gainDb) : ""}
     >
       {/* Lỗi tải âm thanh: câu lỗi và Thử lại (M9-01) */}
       {s.error === "load" ? (

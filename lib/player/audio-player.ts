@@ -1,6 +1,7 @@
 "use client";
 
 import { getFlags } from "@/lib/debug/flags";
+import type { CleanAudioChain } from "./clean-audio";
 import type { Player, PlayerState, SkipRange } from "./mock-player";
 
 /*
@@ -16,11 +17,12 @@ import type { Player, PlayerState, SkipRange } from "./mock-player";
  * - Đang đệm hiện trạng thái chờ trên nút (waiting); lỗi tải hiện câu lỗi
  *   và Thử lại (retry) — cờ thử nghiệm "Lỗi tải âm thanh" ép vào lỗi này.
  * - Nghe sạch (M8-01): kim nhảy qua các khoảng cần bỏ qua như đồng hồ giả;
- *   bộ lọc Web Audio nối ở lib/player/clean-audio.ts.
+ *   bộ lọc Web Audio nối qua CleanAudioChain (lib/player/clean-audio.ts):
+ *   thẻ audio vừa có là bind, bấm Phát là resume trong cử chỉ.
  */
 
-export function createAudioPlayer(url: string, duration: number, startAt = 0): Player {
-  let state: PlayerState = { currentTime: startAt, duration, playing: false, rate: 1, waiting: false, error: null };
+export function createAudioPlayer(url: string, duration: number, clean?: CleanAudioChain): Player {
+  let state: PlayerState = { currentTime: 0, duration, playing: false, rate: 1, waiting: false, error: null };
   const listeners = new Set<() => void>();
   let raf = 0;
   let skips: SkipRange[] = [];
@@ -49,6 +51,7 @@ export function createAudioPlayer(url: string, duration: number, startAt = 0): P
     el.style.display = "none";
     el.setAttribute("aria-hidden", "true");
     document.body.appendChild(el);
+    clean?.bind(el); // Nghe sạch: nối Web Audio ngay khi thẻ tồn tại
     el.addEventListener("waiting", () => set({ waiting: true }));
     el.addEventListener("playing", () => set({ waiting: false, error: null }));
     el.addEventListener("canplay", () => set({ waiting: false }));
@@ -93,9 +96,12 @@ export function createAudioPlayer(url: string, duration: number, startAt = 0): P
       if (state.playing || state.error) return;
       if (state.currentTime >= duration) state = { ...state, currentTime: 0 };
       const el = ensureAudio();
+      clean?.resume(); // AudioContext cần cử chỉ bấm (iPhone)
       // Bật phát từ trong khoảng bỏ qua: nhảy tới cuối khoảng ngay
       const jump = skipEndAt(state.currentTime);
       if (jump !== null) state = { ...state, currentTime: jump };
+      // Thẻ audio vừa tạo hoặc vừa nạp lại thì đưa về đúng vị trí kim
+      if (Math.abs(el.currentTime - state.currentTime) > 0.05) el.currentTime = state.currentTime;
       el.playbackRate = state.rate;
       set({ playing: true, waiting: true });
       // Lỗi tải ép bằng cờ thử nghiệm (bảng ?debug=1): báo lỗi ngay, không đợi mạng
@@ -156,6 +162,7 @@ export function createAudioPlayer(url: string, duration: number, startAt = 0): P
     },
     destroy() {
       cancelAnimationFrame(raf);
+      clean?.destroy();
       if (audio) {
         audio.pause();
         audio.remove();
