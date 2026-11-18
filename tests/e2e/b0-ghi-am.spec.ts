@@ -10,6 +10,8 @@ import { collectErrors } from "./helpers";
  */
 test.use({
   launchOptions: {
+    // Giữ PW_CHROMIUM_PATH như playwright.config.ts (test.use ghi đè cả launchOptions)
+    executablePath: process.env.PW_CHROMIUM_PATH || undefined,
     args: [
       "--disable-dev-shm-usage",
       // M9-01: trình phát cần phát được trong kiểm thử mà không có cử chỉ người dùng
