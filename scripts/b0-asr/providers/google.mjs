@@ -5,23 +5,23 @@
  * công khai https://cloud.google.com/speech-to-text/v2/docs, KHI CÓ KHÓA cần kiểm lại
  * tên trường trước khi tin số liệu.
  *
- * CÂU HỎI CỦA ISSUE: "tách người nói có chạy với tiếng Việt không" — tra tài liệu công
- * khai ngày 2026-11-18 CHƯA xác nhận được chirp_3 có tách người nói cho vi-VN hay không
- * (trang tài liệu không liệt kê ngôn ngữ cho diarization). Đã ghi trong docs/11-b0-ket-qua.md:
- * cần thử thật khi có khóa. Adapter luôn gửi diarization_config để kiểm được ngay.
+ * CÂU HỎI CỦA ISSUE: "tách người nói có chạy với tiếng Việt không" — TRẢ LỜI TỪ TÀI LIỆU
+ * CÔNG KHAI (https://cloud.google.com/speech-to-text/v2/docs/chirp_3, ngày xem 2026-11-18):
+ * "Language availability for diarization — Chirp 3 supports transcription and diarization only
+ * in BatchRecognize and Recognize in the following languages" — danh sách gồm cmn-Hans-CN,
+ * de-DE, en-GB, en-IN, en-US, es-ES, es-US, fr-CA, fr-FR, hi-IN, it-IT, ja-JP, ko-KR, pt-BR:
+ * KHÔNG có vi-VN (tiếng Hàn ko-KR thì CÓ). Tức là theo tài liệu, chirp_3 TÁCH NGƯỜI NÓI KHÔNG
+ * CHẠY VỚI TIẾNG VIỆT (vi-VN chỉ hỗ trợ nhận chữ, bảng ngôn ngữ tổng vi-VN mức GA); bảng tính
+ * năng lại ghi "Speaker Diarization … Available only in Speech.BatchRecognize" — hai chỗ lệch
+ * nhau, cần thử thật khi có khóa để chốt.
  *
- * Dòng chảy:
- * 1. Đọc file JSON tài khoản dịch vụ → ký JWT RS256 (node:crypto) đổi access token
- *    (scope cloud-platform) tại https://oauth2.googleapis.com/token.
- * 2. POST https://speech.googleapis.com/v2/projects/{project}/locations/global/recognizers/_:recognize
- *    body: { config: { model: "chirp_3", languageCodes: ["vi-VN"], diarizationConfig:
- *    { minSpeakerCount: 1, maxSpeakerCount: 4 } }, audio: { content: <base64> } }.
- * 3. Đọc results[].alternatives[].words (word, startOffset/endOffset theo giây, speakerLabel)
- *    ghép thành đoạn khi đổi người nói hoặc nghỉ quá 0,8 giây.
- *
- * GIỚI HẠN CẦN KIỂM KHI CÓ KHÓA: recognize (đồng bộ, gửi base64 inline) dùng cho 3 file
- * ngắn 01–03; file dài 04 (62 phút) vượt mức gửi inline, phải dùng batchRecognize
- * kèm file trên Cloud Storage (URI gs://) — adapter này CHƯA làm batchRecognize.
+ * GIỚI HẠN (cùng trang, 2026-11-18): Speech.Recognize cho âm thanh dưới 1 phút;
+ * Speech.BatchRecognize cho 1 phút đến 1 giờ (bật mốc từng chữ thì tối đa 20 phút);
+ * chirp_3 KHÔNG hỗ trợ mốc từng chữ (word-level timestamps) → adapter có nhánh dự phòng
+ * dựng đoạn từ transcript của từng result với mốc resultEndOffset.
+ * 3 file 01–03 (2,7 đến 8,5 phút) quá 1 phút → phải dùng BatchRecognize (file trên Cloud
+ * Storage, URI gs://) — adapter này chỉ cài Recognize (thử với file < 1 phút khi có khóa);
+ * file 04 (62 phút) VƯỢT giới hạn 1 giờ của BatchRecognize → phải cắt khúc, chưa cài.
  */
 import { readFileSync } from "node:fs";
 import crypto from "node:crypto";
@@ -90,7 +90,7 @@ export async function transcribe({ filePath, model = provider.modelDefault }) {
     config: {
       model,
       languageCodes: [provider.languageCode],
-      // luôn gửi để trả lời câu hỏi "tách người nói có chạy với tiếng Việt không"
+      // luôn gửi để kiểm "tách người nói có chạy với tiếng Việt không" (theo tài liệu: vi-VN không nằm trong danh sách diarization)
       diarizationConfig: { minSpeakerCount: 1, maxSpeakerCount: 4 },
     },
     audio: { content: audio },
@@ -103,18 +103,32 @@ export async function transcribe({ filePath, model = provider.modelDefault }) {
 
   const toks = [];
   let fileLang = null;
+  let cursor = 0;
   for (const r of res.results || []) {
     const alt = (r.alternatives || [])[0];
     if (!alt) continue;
-    for (const w of alt.words || []) {
+    const end = offsetToSec(r.resultEndOffset);
+    if (Array.isArray(alt.words) && alt.words.length) {
+      for (const w of alt.words) {
+        toks.push({
+          text: w.word,
+          start_sec: offsetToSec(w.startOffset),
+          end_sec: offsetToSec(w.endOffset),
+          speaker: w.speakerLabel === undefined ? null : String(w.speakerLabel),
+          lang: w.languageCode || r.languageCode,
+        });
+      }
+    } else if (alt.transcript) {
+      // chirp_3 không trả mốc từng chữ: dựng một đoạn cho từng result, mốc theo resultEndOffset
       toks.push({
-        text: w.word,
-        start_sec: offsetToSec(w.startOffset),
-        end_sec: offsetToSec(w.endOffset),
-        speaker: w.speakerLabel === undefined ? null : String(w.speakerLabel),
-        lang: w.languageCode || r.languageCode,
+        text: alt.transcript,
+        start_sec: cursor,
+        end_sec: end,
+        speaker: alt.speakerLabel === undefined ? null : String(alt.speakerLabel),
+        lang: r.languageCode,
       });
     }
+    if (end) cursor = end;
     if (!fileLang && r.languageCode) fileLang = r.languageCode;
   }
   return {

@@ -20,7 +20,9 @@ export const provider = {
   code: "soniox",
   name: "Soniox",
   env: ["SONIOX_API_KEY"],
-  modelDefault: "stt-async-v3",
+  // Tài liệu có badge "stt-v6" (mô hình STT mới nhất); trang giá nêu "stt-rt-v6" cho streaming.
+  // Tên model async chính xác cần kiểm khi có khóa (đổi bằng biến môi trường SONIOX_MODEL).
+  modelDefault: "stt-v6",
   docs: "https://soniox.com/docs",
 };
 

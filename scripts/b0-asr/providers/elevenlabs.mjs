@@ -21,7 +21,10 @@ export const provider = {
   code: "elevenlabs",
   name: "ElevenLabs Scribe",
   env: ["ELEVENLABS_API_KEY"],
-  modelDefault: "scribe_v1",
+  // Tài liệu (2026-11-18): "Use Scribe v3 for recorded audio" — tách người nói tới 32 người,
+  // mốc từng chữ, hỗ trợ âm thanh đa ngôn ngữ. Tên model_id chính xác cần kiểm khi có khóa
+  // (id đời trước đã biết: scribe_v1); đổi bằng biến môi trường ELEVENLABS_MODEL.
+  modelDefault: "scribe_v3",
   docs: "https://elevenlabs.io/docs/capabilities/speech-to-text",
 };
 
