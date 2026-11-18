@@ -311,3 +311,9 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 - **Bước 4 khớp nội dung**: bấm ý (20,2 s), việc (307,5 s), trích dẫn (145,0 s) lệch dưới 0,5 giây so với truth; bấm chữ trong đoạn g2 và dải giọng (giữa buổi 191,75 s) đúng câu đáp án; họp Hàn phát đúng đoạn tiếng Hàn (10,77–24,11) và tiếng Anh (25,09–32,84).
 - **Bước 5 bài cũ**: số cũ → mới ghi trong PR #67 (m8: khoảng lặng 40→45 thành 139,8→144,5, "nghe sạch còn 34:12" thành 06:00, bấm chữ 80→130 thành 17,01→27,79; m7-tong-quan: tuần 4 giờ 48 thành 3 giờ 31, tháng 5 giờ 04 thành 3 giờ 47, biểu đồ Họp điều hành 118 thành 76 phút, Gặp khách 76 thành 40 phút; nhóm và mức dùng theo người không đổi — chỉ tính buổi nhóm). `pnpm e2e` toàn bộ 2 project: 123 đạt, 7 skip, 0 lỗi.
 - **Bước 6 báo cáo**: `pnpm build` sạch; 07-handover.md thêm mục 9 (trình phát thật, bộ lọc tạm); LOG này; PR #67 chuyển sẵn sàng.
+
+## 2026-11-18, Claude, merge M9
+
+- M9 đã merge (PR #67, Hoang đồng ý). Ba buổi mẫu phát tiếng thật; bấm ý, việc, trích dẫn nghe đúng câu (lệch dưới 0,5 giây).
+- Claude sửa thêm: chỉ dựng Web Audio khi bật Nghe sạch (iPhone khóa màn hình vẫn nghe khi tắt), `timeupdate` dự phòng khi trang ẩn.
+- Còn thử ở B0: iPhone khóa màn hình khi đang bật Nghe sạch.
