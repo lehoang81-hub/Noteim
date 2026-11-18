@@ -147,6 +147,9 @@ export function GhiAmSpikeScreen() {
   const [recPlaying, setRecPlaying] = useState(false);
   const [copyState, setCopyState] = useState<"ok" | "fail" | null>(null);
   const [activeTask, setActiveTask] = useState<GuideCode | null>(null);
+  /* JSON kết quả chỉ hiển thị sau khi gắn xong: trên máy chủ không có thông tin
+   * thiết bị (window, screen) và để hai lần render đầu khớp nhau khi hydrate. */
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -560,6 +563,9 @@ export function GhiAmSpikeScreen() {
   /* Kết quả xuất ra: JSON mô tả thiết bị, trình duyệt, định dạng ghi, nhật ký,
    * khoảng trống và metadata từng khúc. */
   const jsonOut = useMemo(() => {
+    // Trên máy chủ không có window/screen: chưa có thiết bị để mô tả, trả chuỗi
+    // rỗng; trình duyệt mới dựng JSON kết quả.
+    if (typeof window === "undefined") return "";
     const nav = navigator as Navigator & { deviceMemory?: number };
     const payload = {
       schema: "noteim-spike-ghi-am-v1",
@@ -946,7 +952,7 @@ export function GhiAmSpikeScreen() {
           <textarea
             ref={jsonAreaRef}
             readOnly={true}
-            value={jsonOut}
+            value={mounted ? jsonOut : ""}
             rows={10}
             aria-label={t("sectionKetQua")}
             data-json-out="true"
