@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
 import { WorkspaceSwitcher } from "@/components/shell/workspace-switcher";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
+import { FolderList } from "@/components/library/folder-list";
 import { SwipeRow } from "@/components/library/swipe-row";
 import dynamic from "next/dynamic";
 
@@ -72,6 +73,8 @@ export function LibraryPane({ className }: { className?: string }) {
   const searchParams = useSearchParams();
   const dayParam = searchParams.get("day");
   const [filter, setFilter] = useState<FilterId>("all");
+  // Dải chuyển Buổi ghi / Hồ sơ (góp ý vòng 1, #75): hồ sơ gom các buổi cùng vụ việc, bệnh nhân, khách hàng, công trình
+  const [view, setView] = useState<"sessions" | "folders">("sessions");
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const recording = useRecording();
   const flags = useDebugFlags();
@@ -342,6 +345,19 @@ export function LibraryPane({ className }: { className?: string }) {
           có bộ chọn ở thanh bên rồi, không lặp lại */}
       {selecting ? null : <WorkspaceSwitcher className="px-page pt-2 lg:hidden" />}
 
+      {/* Dải chuyển Buổi ghi / Hồ sơ (góp ý vòng 1, #75) */}
+      {selecting ? null : (
+        <div role="tablist" aria-label={t("viewTabs")} className="flex gap-2 px-page pt-3">
+          <FilterChip selected={view === "sessions"} onClick={() => setView("sessions")}>
+            {t("viewSessions")}
+          </FilterChip>
+          <FilterChip selected={view === "folders"} onClick={() => setView("folders")}>
+            {t("viewFolders")}
+          </FilterChip>
+        </div>
+      )}
+
+      {view === "sessions" ? (
       <div className="px-page pb-4">
         <h1 className="font-display text-h1 font-semibold text-ink">
           {u
@@ -354,6 +370,7 @@ export function LibraryPane({ className }: { className?: string }) {
           {all.data ? (week.sessions ? t("week", week) : t("weekNone")) : null}
         </p>
       </div>
+      ) : null}
 
       {/* Chỉ hiện khi buổi ghi bị gián đoạn (tải lại/đóng trang), không hiện
           khi buổi ghi đang chạy trong tab hiện tại — khi đó chỉ có thanh sen
@@ -410,6 +427,8 @@ export function LibraryPane({ className }: { className?: string }) {
         <Banner kind="quota">{t("quotaLow", { minutes: quotaLeft })}</Banner>
       ) : null}
 
+      {view === "sessions" ? (
+        <>
       <div
         role="group"
         aria-label={t("filters")}
@@ -575,6 +594,10 @@ export function LibraryPane({ className }: { className?: string }) {
           ))
         )}
       </div>
+        </>
+      ) : (
+        <FolderList className="flex-1" />
+      )}
 
       {/* Menu ⋯ của một hàng trên máy tính: Chia sẻ, Xóa */}
       <Sheet

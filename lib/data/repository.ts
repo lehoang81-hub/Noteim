@@ -5,6 +5,9 @@ import type {
   ConsentReceipt,
   Contact,
   DashboardData,
+  Folder,
+  FolderChatMessage,
+  FolderKind,
   GlossaryTerm,
   Invoice,
   Lang,
@@ -168,6 +171,23 @@ export interface WorkspaceRepository {
   invoices(id: string): Promise<Invoice[]>;
 }
 
+/**
+ * Thư mục theo hồ sơ (góp ý vòng 1, #75): vụ việc, bệnh nhân, khách hàng,
+ * công trình. Hỏi AI của thư mục là tính năng Pro: trả lời ghép từ các buổi
+ * trong thư mục, dẫn chứng mang theo buổi và mốc giây.
+ */
+export interface FolderRepository {
+  list(): Promise<Folder[]>;
+  get(id: string): Promise<Folder>;
+  create(input: { kind: FolderKind; name: string; ref?: string; note?: string; session_ids?: string[] }): Promise<Folder>;
+  update(id: string, patch: Partial<Pick<Folder, "name" | "ref" | "note" | "session_ids">>): Promise<void>;
+  remove(id: string): Promise<void>;
+  /** Lịch sử hỏi đáp của thư mục, lưu theo thư mục */
+  history(folderId: string): Promise<FolderChatMessage[]>;
+  /** Hỏi AI xuyên các buổi của thư mục (Pro); onToken chạy chữ dần từng từ */
+  ask(folderId: string, question: string, onToken: (text: string) => void): Promise<FolderChatMessage>;
+}
+
 export interface TaskRepository {
   /** lang: hiển thị theo ngôn ngữ báo cáo của từng buổi (M6-03) */
   listAll(filter?: { mine?: boolean; lang?: Lang }): Promise<ActionItem[]>;
@@ -287,4 +307,6 @@ export interface DataSource {
   workspaces: WorkspaceRepository;
   /** Tổng quan cá nhân và nhóm (M7-02) */
   dashboard: DashboardRepository;
+  /** Thư mục theo hồ sơ (góp ý vòng 1, #75) */
+  folders: FolderRepository;
 }

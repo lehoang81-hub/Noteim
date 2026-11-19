@@ -148,6 +148,43 @@ export const ConsentReceipt = z.object({
 });
 export type ConsentReceipt = z.infer<typeof ConsentReceipt>;
 
+/* ---------- GY1 (#75): Thư mục theo hồ sơ ---------- */
+
+/**
+ * Loại thư mục theo hồ sơ (góp ý vòng 1, #75): tên gọi theo nghề của người
+ * dùng, nhãn hiển thị nằm trong messages (folders.kind.*).
+ */
+export const FolderKind = z.enum(["legal_case", "patient", "client", "project"]);
+export type FolderKind = z.infer<typeof FolderKind>;
+
+/** Thư mục gom các buổi ghi của cùng một hồ sơ: vụ việc, bệnh nhân, khách hàng, công trình. */
+export const Folder = z.object({
+  id: z.string(),
+  workspace_id: z.string().nullable().catch(null),
+  kind: FolderKind,
+  name: z.string(),
+  /** Mã hồ sơ: số vụ việc, mã bệnh nhân, mã bất động sản, mã công trình */
+  ref: z.string().optional().catch(undefined),
+  /** Ghi chú ngắn về hồ sơ, ví dụ mốc quan trọng tiếp theo */
+  note: z.string().optional().catch(undefined),
+  session_ids: z.array(z.string()).catch([]),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+export type Folder = z.infer<typeof Folder>;
+
+/**
+ * Một câu trong hội thoại Hỏi AI của thư mục (góp ý vòng 1, #75). Dẫn chứng
+ * mang theo buổi: bấm là nhảy tới đúng mốc giây trong buổi đó.
+ */
+export const FolderChatMessage = z.object({
+  id: z.string(),
+  role: z.enum(["user", "ai"]),
+  text: z.string(),
+  citations: z.array(z.object({ session_id: z.string(), timestamp_sec: z.number() })),
+});
+export type FolderChatMessage = z.infer<typeof FolderChatMessage>;
+
 export const Session = z.object({
   id: z.string(),
   user_id: z.string(),
