@@ -594,7 +594,26 @@
     "hours": "{h}시간",
     "minutes": "{m}분",
     "languageLabel": "언어",
-    "autoDetect": "다른 언어가 섞일 수 있어요"
+    "autoDetect": "다른 언어가 섞일 수 있어요",
+    "checkGaps": "빠진 항목 확인",
+    "checkGapsTitle": "빠진 항목 점검",
+    "gateTitle": "저장 전에 빠진 항목을 확인할까요?",
+    "gateSave": "그냥 저장",
+    "gateResume": "계속 녹음",
+    "checking": "빠진 항목 확인 중",
+    "skipWait": "건너뛰기",
+    "checkFailed": "확인하지 못했습니다. 다시 시도해 주세요",
+    "retryCheck": "다시 시도",
+    "rateLimited": "오늘 무료 확인 횟수를 모두 사용했습니다",
+    "readyBanner": "정보가 충분합니다. 세션을 마칠 수 있습니다",
+    "closeSession": "세션 마치기",
+    "recheckLater": "대화 후 다시 확인",
+    "missingCount": "{count, plural, other {#개의 정보가 부족합니다}}",
+    "noTranscript": "아직 인식된 대화가 없습니다. 조금 더 말한 뒤 다시 확인해 주세요.",
+    "copyToNote": "빠른 메모에 복사",
+    "copiedToNote": "메모에 복사했습니다",
+    "askAiFolder": "폴더에서 AI에게 질문",
+    "askAiLater": "세션을 저장하면 질문이 폴더의 AI 질문에 추가됩니다"
   },
   "debug": {
     "title": "테스트 패널",
@@ -632,7 +651,12 @@
     "translateSlow": "번역 지연 (10초)",
     "debugRole": "팀 역할",
     "inviteExpired": "초대 만료됨",
-    "seatsFull": "좌석 꽉 참"
+    "seatsFull": "좌석 꽉 참",
+    "gapCheckError": "빠진 항목 확인 강제 오류",
+    "gapCheckRateLimited": "무료 확인 한도 초과 강제",
+    "gapCheckSlow": "빠진 항목 확인 강제 지연 (4초)",
+    "audioMock": "가짜 오디오",
+    "audioFail": "오디오 로드 오류"
   },
   "library": {
     "greeting": "{name}{honorific}, 안녕하세요",

@@ -581,7 +581,10 @@
     "inviteExpired": "Invite expired",
     "seatsFull": "Seats full",
     "audioMock": "Mock audio",
-    "audioFail": "Audio load failure"
+    "audioFail": "Audio load failure",
+    "gapCheckError": "Force gap check error",
+    "gapCheckRateLimited": "Force daily limit reached",
+    "gapCheckSlow": "Force gap check slow (4s)"
   },
   "library": {
     "greeting": "Hi {name}",
@@ -998,7 +1001,26 @@
     "hours": "{h} h",
     "minutes": "{m} min",
     "languageLabel": "Language",
-    "autoDetect": "Other languages may be spoken"
+    "autoDetect": "Other languages may be spoken",
+    "checkGaps": "Check for missing info",
+    "checkGapsTitle": "Missing info review",
+    "gateTitle": "Check for missing info before saving?",
+    "gateSave": "Save anyway",
+    "gateResume": "Keep recording",
+    "checking": "Checking for missing info",
+    "skipWait": "Skip",
+    "checkFailed": "Could not check, try again",
+    "retryCheck": "Retry",
+    "rateLimited": "Daily free checks are used up",
+    "readyBanner": "All info found, ready to finish",
+    "closeSession": "Finish session",
+    "recheckLater": "Check again after talking",
+    "missingCount": "Missing {count, plural, one {# item} other {# items}}",
+    "noTranscript": "No speech captured yet. Talk a bit more, then check again.",
+    "copyToNote": "Copy to quick note",
+    "copiedToNote": "Copied to notes",
+    "askAiFolder": "Ask AI on the folder",
+    "askAiLater": "After saving, the question will be in the folder's Ask AI"
   },
   "processing": {
     "step1": "Recording saved",
