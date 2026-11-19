@@ -47,6 +47,7 @@ import {
   useRecording,
 } from "@/lib/record/recording-store";
 import { keepScreenAwake, letScreenSleep } from "@/lib/record/wake-lock";
+import { pushDemoTranscript, resetDemoTranscript } from "@/lib/record/demo-transcript";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 import { useOffline } from "@/components/shell/app-shell";
 import type { SemanticTag } from "@/components/ui/chips";
@@ -289,6 +290,21 @@ export function RecordScreen() {
     const id = window.setInterval(() => pushRecordingLevel(levelRef.current), 250);
     return () => window.clearInterval(id);
   }, []);
+
+  /* Transcript demo B4 (GC-03, đặc tả §3): mockup chưa có ASR sống, kịch bản
+   * chèn thầm câu nhận dạng theo đồng hồ ghi để nút "Kiểm tra thiếu" có dữ
+   * liệu rà. Không hiện gì lên màn hình; khi ASR sống nối vào bỏ effect này,
+   * gọi addRecordingTranscript từ ASR thay thế (xem lib/record/demo-transcript). */
+  useEffect(() => {
+    if (recording.status === "idle") return;
+    resetDemoTranscript();
+  }, [recording.startedAtClock]);
+  useEffect(() => {
+    if (recording.status !== "recording") return;
+    const id = window.setInterval(() => pushDemoTranscript(recordedSec()), 1000);
+    return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recording.status]);
 
   // Âm thanh mẫu (micro bị từ chối): dải giọng chạy bằng âm lượng giả
   useEffect(() => {
