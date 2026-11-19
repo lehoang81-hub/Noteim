@@ -84,3 +84,17 @@ export function getDefaultIntakeTemplate(): IntakeTemplate {
     catalog.templates[0]
   );
 }
+
+/** Ánh xạ nghề nghiệp của buổi ghi (trường profession của mẫu trong app) sang
+ * mẫu intake của Gap Check. Nghề chưa có mẫu riêng (chủ doanh nghiệp, công
+ * chứng viên) hoặc buổi không chọn mẫu dùng mẫu Tổng quát — đặc tả v1.1 §4.7. */
+const INTAKE_BY_PROFESSION: Record<string, string> = {
+  doctor: "doctor_clinical",
+  lawyer: "lawyer_consultation",
+  realestate_sales: "real_estate_sales",
+  architect: "architect_survey",
+};
+
+export function intakeTemplateIdForProfession(profession: string | null | undefined): string {
+  return (profession && INTAKE_BY_PROFESSION[profession]) || "general_meeting";
+}

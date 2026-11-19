@@ -30,6 +30,7 @@ import { templateName } from "@/lib/data/localize";
 import { markMicGranted, useMicGateSeed } from "@/lib/record/mic-permission";
 import { fileToDataUrl } from "@/lib/record/photo";
 import { transcriptTail, type GapCheckInput } from "@/lib/record/gap-check-client";
+import { intakeTemplateIdForProfession } from "@/lib/intake-templates";
 import { useStorageFull } from "@/lib/storage-full";
 import {
   addRecordingBookmark,
@@ -432,17 +433,21 @@ export function RecordScreen() {
 
   /* Mở sheet rà thiếu (GC-03): gửi transcript cắt 8.000 ký tự gần nhất theo
    * đồng hồ ghi tại lúc mở (đặc tả v1.1 §3). Buổi đang ghi chưa có id thật,
-   * dùng id tạm live-<mốc bắt đầu> để máy chủ gom lịch sử rà của buổi này. */
+   * dùng id tạm live-<mốc bắt đầu> để máy chủ gom lịch sử rà của buổi này.
+   * Mẫu ghi âm của app (tpl-...) ánh xạ sang mẫu intake theo nghề; nghề chưa
+   * có mẫu riêng (chủ doanh nghiệp, công chứng viên) dùng mẫu Tổng quát. */
   function openGapCheck(fromGate: boolean) {
     const templateId = recording.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id;
     if (!templateId) return;
+    const profession = templates.data?.find((tp) => tp.id === templateId)?.profession;
+    const intakeId = intakeTemplateIdForProfession(profession);
     setGapCheck((prev) => ({
       open: true,
       fromGate,
       seq: prev.seq + 1,
       input: {
         sessionId: `live-${recording.startedAtClock ?? Date.now()}`,
-        templateId,
+        templateId: intakeId,
         transcript: transcriptTail(recording.transcript),
         transcriptUntilMs: Math.round(recordedSec() * 1000),
       },
