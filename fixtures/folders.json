@@ -28,9 +28,20 @@
   "name": "Chị Lan, căn hộ Marina",
   "ref": "ML-C-091",
   "note": "Quan tâm căn 2PN hướng biển, chờ chốt phương án trả góp",
-  "session_ids": ["s-bds-lan", "s-nhom-marina-c"],
+  "session_ids": ["s-bds-lan"],
   "created_at": "2026-11-14T09:40:00+07:00",
   "updated_at": "2026-11-14T18:30:00+07:00"
+ },
+ {
+  "id": "f-khach-chot",
+  "workspace_id": null,
+  "kind": "client",
+  "name": "Khách cần chốt tháng 12",
+  "ref": "ML-T12",
+  "note": "Cần chốt trước 30/11 để kịp kế hoạch tháng 12",
+  "session_ids": ["s-bds-lan", "s-loi"],
+  "created_at": "2026-11-12T10:00:00+07:00",
+  "updated_at": "2026-11-14T18:35:00+07:00"
  },
  {
   "id": "f-cong-lachtray",

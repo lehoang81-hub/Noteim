@@ -1152,9 +1152,11 @@ export const mockSource: DataSource = {
       if (plan !== "pro") throw new DataError("quota_exceeded");
 
       const q = foldVi(question);
+      // Từ khóa từ 3 chữ trở lên: bỏ các từ tiếng Việt quá ngắn ("có", "hồ", "sơ")
+      // để không khớp bừa
       const tokens = q
         .split(/[^a-z0-9]+/)
-        .filter((w) => w.length >= 2);
+        .filter((w) => w.length >= 3);
       const sessions = folder.session_ids
         .map((id) => db.sessions.find((s) => (s.listDetail ?? s.detail).id === id))
         .filter((s): s is NonNullable<typeof s> => !!s)
@@ -1177,14 +1179,25 @@ export const mockSource: DataSource = {
           hits.push({ session: d, text: n.text, timestamp_sec: n.timestamp_sec, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
         }
       }
-      const best = hits
+      const scored = hits
         .filter((h) => h.score > 0)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
+        .sort((a, b) => b.score - a.score);
+      // Trả lời XUYÊN BUỔI: mỗi buổi tối đa 2 đoạn khớp, buổi có đoạn khớp
+      // mạnh nhất đứng trước, lấy tối đa 2 buổi và 4 đoạn — câu trả lời luôn
+      // đi từng buổi một để khác với hỏi AI trong một buổi
+      const perSession = new Map<string, Hit[]>();
+      for (const h of scored) {
+        const list = perSession.get(h.session.id) ?? [];
+        if (list.length >= 2) continue;
+        list.push(h);
+        perSession.set(h.session.id, list);
+      }
+      const ordered = [...perSession.values()].sort((a, b) => b[0].score - a[0].score).slice(0, 2);
+      const best = ordered.flat().slice(0, 4);
       const answer = best.length
-        ? `Trên ${sessions.length} buổi của hồ sơ "${folder.name}", tìm thấy ${best.length} đoạn khớp câu hỏi. ` +
-          best
-            .map((h) => `Buổi "${h.session.title}" ghi rằng: ${h.text}`)
+        ? `Trên ${sessions.length} buổi của hồ sơ "${folder.name}", tìm thấy ${best.length} đoạn khớp ở ${ordered.length} buổi. ` +
+          ordered
+            .map((list) => `Buổi "${list[0].session.title}" ghi rằng: ${list.map((h) => h.text).join("; ")}`)
             .join(" ")
         : `Chưa tìm thấy nội dung khớp câu hỏi trong ${sessions.length} buổi của hồ sơ này. Thử hỏi bằng từ khóa khác.`;
       const citations = best.map((h) => ({ session_id: h.session.id, timestamp_sec: h.timestamp_sec }));
