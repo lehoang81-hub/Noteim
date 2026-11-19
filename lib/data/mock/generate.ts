@@ -13,7 +13,11 @@ type SpeakerSpan = { speaker_id: string; start_sec: number; end_sec: number };
  *   lượt nói xen kẽ.
  * - executive_summary và chủ đề lấy theo mẫu đã chọn, mỗi phần đang bật của
  *   mẫu có một chủ đề với hai ý, mốc thời gian rải đều trên thời lượng.
- * - Ghi chú tay gắn vào ý có mốc gần nhất (note_ids).
+ *   Góp ý vòng 1 (#75): có điểm nóng thì mỗi điểm nóng chèn một ý tại đúng
+ *   mốc của nó vào chủ đề chứa mốc, chủ đề mang nhãn màu của điểm nóng —
+ *   điểm nóng và ghi chú nhanh làm khung cho tóm tắt.
+ * - Ghi chú tay gắn vào ý có mốc gần nhất (note_ids); ghi chú nhanh của
+ *   điểm nóng cũng là ghi chú tay.
  */
 
 type GeneratedProfession = {
@@ -193,6 +197,49 @@ export async function buildSessionContent(opts: {
     tag: (b.tag as SemanticTag | null) ?? null,
     note: b.note ?? "",
   }));
+
+  /* Góp ý vòng 1 (#75): điểm nóng và ghi chú nhanh làm khung tóm tắt.
+   * Mỗi điểm nóng gắn vào chủ đề chứa mốc của nó: chủ đề mang nhãn màu của
+   * điểm nóng, dải thời gian ôm cả mốc, và chữ ghi chú nhanh trở thành một ý
+   * tại đúng mốc đó (kèm ghi chú tay như ghi chú thường). Buổi không có
+   * điểm nóng thì tóm tắt giữ nguyên theo mẫu như trước. */
+  const markerNotes: Note[] = [];
+  draft.bookmarks.forEach((b, i) => {
+    const text = (b.note ?? "").trim();
+    if (text) markerNotes.push({ id: `n-m-${i}`, timestamp_sec: b.timestamp_sec, text });
+  });
+  for (const bookmark of bookmarks) {
+    let target = topics.find((tp) => bookmark.timestamp_sec >= tp.start_sec && bookmark.timestamp_sec <= tp.end_sec);
+    if (!target && topics.length) {
+      target = topics.reduce((best, tp) => {
+        const distOf = (topic: Topic) =>
+          Math.min(Math.abs(bookmark.timestamp_sec - topic.start_sec), Math.abs(bookmark.timestamp_sec - topic.end_sec));
+        return distOf(tp) < distOf(best) ? tp : best;
+      });
+    }
+    if (!target) continue;
+    if (bookmark.tag) target.tag = bookmark.tag;
+    target.start_sec = Math.min(target.start_sec, bookmark.timestamp_sec);
+    target.end_sec = Math.max(target.end_sec, bookmark.timestamp_sec);
+    const markerNote = markerNotes.find((n) => n.timestamp_sec === bookmark.timestamp_sec);
+    if (markerNote) {
+      const bullet = {
+        id: `b-m-${markerNote.id}`,
+        text: markerNote.text,
+        timestamp_sec: bookmark.timestamp_sec,
+        speaker_id: "SPK_01",
+        is_quote: false,
+        edited: false,
+        note_ids: [markerNote.id],
+      };
+      // Chèn đúng chỗ giữ các ý xếp theo mốc thời gian tăng dần
+      const at = target.bullets.findIndex((x) => x.timestamp_sec > bookmark.timestamp_sec);
+      if (at === -1) target.bullets.push(bullet);
+      else target.bullets.splice(at, 0, bullet);
+    }
+  }
+  // Ghi chú của điểm nóng cũng là ghi chú tay của buổi: hiện ở mọi chỗ ghi chú hiện
+  notes.push(...markerNotes);
   const photos: Photo[] = draft.photos.map((p) => ({ id: p.id, timestamp_sec: p.timestamp_sec, url: p.url }));
 
   /* Một đến hai việc cần làm, một việc "Chưa giao" */
