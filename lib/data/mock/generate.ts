@@ -186,11 +186,12 @@ export async function buildSessionContent(opts: {
     best?.bullet.note_ids.push(note.id);
   }
 
-  /* Điểm nóng và ảnh giữ nguyên mốc */
+  /* Điểm nóng và ảnh giữ nguyên mốc; ghi chú nhanh của điểm nóng đi cùng */
   const bookmarks: BookmarkData[] = draft.bookmarks.map((b, i) => ({
     id: `m-${i}`,
     timestamp_sec: b.timestamp_sec,
     tag: (b.tag as SemanticTag | null) ?? null,
+    note: b.note ?? "",
   }));
   const photos: Photo[] = draft.photos.map((p) => ({ id: p.id, timestamp_sec: p.timestamp_sec, url: p.url }));
 

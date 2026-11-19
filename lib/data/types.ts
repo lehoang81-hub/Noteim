@@ -247,7 +247,9 @@ export type ActionItem = z.infer<typeof ActionItem>;
 
 export const Note = z.object({ id: z.string(), timestamp_sec: z.number(), text: z.string() });
 export type Note = z.infer<typeof Note>;
-export const BookmarkData = z.object({ id: z.string(), timestamp_sec: z.number(), tag: SemanticTag.nullable() });
+/** note là ghi chú nhanh một dòng gắn vào điểm nóng (góp ý vòng 1, #75);
+ * dữ liệu cũ không có trường này thì coi như chưa có ghi chú */
+export const BookmarkData = z.object({ id: z.string(), timestamp_sec: z.number(), tag: SemanticTag.nullable(), note: z.string().catch("") });
 export type BookmarkData = z.infer<typeof BookmarkData>;
 export const Photo = z.object({ id: z.string(), timestamp_sec: z.number(), url: z.string(), caption: z.string().optional() });
 export type Photo = z.infer<typeof Photo>;

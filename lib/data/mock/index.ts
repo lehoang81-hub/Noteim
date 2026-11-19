@@ -721,7 +721,7 @@ export const mockSource: DataSource = {
           topics: [],
           action_items: [],
           notes: draft.notes.map((n, i) => ({ id: `n-${i}`, timestamp_sec: n.timestamp_sec, text: n.text })),
-          bookmarks: draft.bookmarks.map((b, i) => ({ id: `m-${i}`, timestamp_sec: b.timestamp_sec, tag: (b.tag as SessionDetail["bookmarks"][number]["tag"]) ?? null })),
+          bookmarks: draft.bookmarks.map((b, i) => ({ id: `m-${i}`, timestamp_sec: b.timestamp_sec, tag: (b.tag as SessionDetail["bookmarks"][number]["tag"]) ?? null, note: b.note ?? "" })),
           photos: draft.photos.map((p) => ({ id: p.id, timestamp_sec: p.timestamp_sec, url: "" })),
           peaks: [],
           speaker_spans: [],

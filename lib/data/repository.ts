@@ -57,7 +57,8 @@ export type RecordingDraft = {
   auto_detect_languages?: boolean;
   duration_sec: number;
   notes: { timestamp_sec: number; text: string }[];
-  bookmarks: { timestamp_sec: number; tag: string | null }[];
+  /** note là ghi chú nhanh một dòng gắn vào điểm nóng (góp ý vòng 1, #75) */
+  bookmarks: { timestamp_sec: number; tag: string | null; note?: string }[];
   /** Ảnh giữ id để tìm pixel trong IndexedDB (lib/record/photo-store.ts);
    * url chỉ có giá trị trong bộ nhớ của phiên ghi, localStorage giữ rỗng. */
   photos: { id: string; timestamp_sec: number; url: string }[];
