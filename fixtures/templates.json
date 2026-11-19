@@ -441,5 +441,74 @@
     "ko": "당사자에게 보낼 안내문을 작성해 주세요"
    }
   ]
+ },
+ {
+  "id": "tpl-doctor-soap",
+  "profession": "doctor",
+  "name": {
+   "vi": "Khám theo SOAP",
+   "en": "SOAP visit",
+   "ko": "SOAP 진료"
+  },
+  "sections": [
+   {
+    "id": "tpl-doctor-soap-s1",
+    "title": {
+     "vi": "S. Bệnh nhân kể (chủ quan)",
+     "en": "S. Patient's account (subjective)",
+     "ko": "S. 환자 호소 (주관)"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-doctor-soap-s2",
+    "title": {
+     "vi": "O. Thăm khám (khách quan)",
+     "en": "O. Examination (objective)",
+     "ko": "O. 진찰 (객관)"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-doctor-soap-s3",
+    "title": {
+     "vi": "A. Đánh giá",
+     "en": "A. Assessment",
+     "ko": "A. 평가"
+    },
+    "enabled": true
+   },
+   {
+    "id": "tpl-doctor-soap-s4",
+    "title": {
+     "vi": "P. Kế hoạch xử trí",
+     "en": "P. Plan",
+     "ko": "P. 처방 계획"
+    },
+    "enabled": true
+   }
+  ],
+  "suggested_questions": [
+   {
+    "vi": "Bệnh nhân kể triệu chứng gì mới so với lần trước?",
+    "en": "What new symptoms did the patient report?",
+    "ko": "환자가 이번에 새로 호소한 증상은 무엇인가요?"
+   },
+   {
+    "vi": "Chốt chẩn đoán và kế hoạch hôm nay",
+    "en": "Summarize assessment and plan for today",
+    "ko": "오늘 진단과 계획을 정리해 주세요"
+   },
+   {
+    "vi": "Soạn tờ dặn dò theo mục P",
+    "en": "Draft care instructions from the Plan section",
+    "ko": "P 항목 기준으로 처방 지시사항을 작성해 주세요"
+   }
+  ],
+  "footer_note": {
+   "vi": "SOAP là khung hồ sơ bệnh án: chủ quan, khách quan, đánh giá, kế hoạch.",
+   "en": "SOAP is the chart structure: subjective, objective, assessment, plan.",
+   "ko": "SOAP는 차트 구조입니다: 주관, 객관, 평가, 계획."
+  }
  }
 ]
