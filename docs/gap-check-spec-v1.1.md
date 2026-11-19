@@ -1,7 +1,7 @@
 # Đặc tả chốt v1.1 — Gap Check "Rà soát điểm thiếu" + Slot-Filling thầm lặng (B4–B5)
 
 Trạng thái: ĐÃ DUYỆT v1.1 (anh chốt toàn bộ 11 mục + 3 điểm mở ngày 19/11/2026).
-Chờ kết nối GitHub (repo URL + token) để clone repo Noteim và mở PR 01 — không commit lên repo local trống của sandbox.
+Đã mở PR 01 trên repo Noteim ngày 19/11/2026 (nhánh `b4/gc-01-templates`). Repo không có thư mục `src/` nên JSON đặt ở `config/`, loader đặt ở `lib/` — đúng ý `src/config` + `src/lib` trong đặc tả.
 Ngày soạn: 19/11/2026 (Hà Nội).
 Phạm vi: 11 mục đã chốt (mục 1–11), cập nhật theo 3 yêu cầu bổ sung của anh.
 
