@@ -12,6 +12,14 @@ import type { GapCheckResult } from "@/lib/gap-check/types";
 export const GAP_CHECK_TRANSCRIPT_CHARS = 8000;
 const GAP_CHECK_TIMEOUT_MS = 12000;
 
+/** Đầu vào của một lượt rà từ màn ghi âm (GC-03). */
+export type GapCheckInput = {
+  sessionId: string;
+  templateId: string;
+  transcript: string;
+  transcriptUntilMs: number;
+};
+
 export type GapCheckOutcome =
   | { ok: true; result: GapCheckResult; latencyMs: number; remaining: number | null }
   | { ok: false; error: string; message: string };
