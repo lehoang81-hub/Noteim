@@ -65,6 +65,9 @@ const zaiProvider: GapCheckProvider = {
     const { default: ZAI } = await import("z-ai-web-dev-sdk");
     const zai = await ZAI.create();
     const completion = await zai.chat.completions.create({
+      // GAP_CHECK_MODEL: đặt tên model nhanh nếu backend SDK hỗ trợ; bỏ trống thì
+      // backend tự chọn model mặc định.
+      model: process.env.GAP_CHECK_MODEL || undefined,
       messages: [
         { role: "assistant", content: system },
         { role: "user", content: user },

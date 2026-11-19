@@ -13,8 +13,7 @@ export type GapCheckParseErrorCode =
   | "duplicate_slot"
   | "missing_evidence"
   | "evidence_when_unfilled"
-  | "bad_missing_key"
-  | "close_mismatch";
+  | "bad_missing_key";
 
 export class GapCheckParseError extends Error {
   code: GapCheckParseErrorCode;
@@ -108,27 +107,24 @@ function crossValidateWithTemplate(
 
   const filledByKey = new Map(result.slots_status.map((status) => [status.key, status.filled]));
   for (const missing of result.missing_priorities) {
-    if (filledByKey.get(missing.key) !== false) {
+    if (!templateKeys.includes(missing.key)) {
       throw new GapCheckParseError(
         "bad_missing_key",
-        `missing_priorities có ô "${missing.key}" không thuộc nhóm filled=false`,
+        `missing_priorities có ô "${missing.key}" không có trong mẫu`,
       );
     }
   }
 
+  // Quy tắc 10 (đặc tả §2) áp dụng tất định khi kiểm chéo: mọi ô đã filled thì
+  // ready_to_close bắt buộc true và bỏ mục "thiếu" (quy tắc 8: không hỏi lại ô đã có);
+  // còn ô thiếu thì ready_to_close bắt buộc false. Chỉ hiệu chỉnh cờ suy ra và mục thiếu
+  // vô lý — không đụng evidence, không thêm/bớt ô, không bịa dữ liệu.
+  result.missing_priorities = result.missing_priorities.filter(
+    (missing) => filledByKey.get(missing.key) === false,
+  );
   const allFilled = templateKeys.every((key) => filledByKey.get(key) === true);
-  if (allFilled && (!result.ready_to_close || result.missing_priorities.length > 0)) {
-    throw new GapCheckParseError(
-      "close_mismatch",
-      "mọi ô đã filled nhưng ready_to_close sai luật (quy tắc 10)",
-    );
-  }
-  if (!allFilled && result.ready_to_close) {
-    throw new GapCheckParseError(
-      "close_mismatch",
-      "còn ô thiếu nhưng ready_to_close=true",
-    );
-  }
+  result.missing_priorities = allFilled ? [] : result.missing_priorities;
+  result.ready_to_close = allFilled;
 }
 
 /** Đầu ra thô của model → GapCheckResult tin được. Sai luật → GapCheckParseError. */
