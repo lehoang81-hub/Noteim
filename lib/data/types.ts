@@ -131,6 +131,23 @@ export const Contact = z.object({
 });
 export type Contact = z.infer<typeof Contact>;
 
+/**
+ * Biên nhận đồng ý ghi âm của một buổi (góp ý vòng 1, #75): trả lời ba câu
+ * ai đồng ý, lúc nào, cách nào (bấm nút "Đã đồng ý, ghi" hay hết 3 giây
+ * tự xác nhận) kèm câu thông báo đã phát trong buổi nếu có.
+ */
+export const ConsentReceipt = z.object({
+  id: z.string(),
+  /** Tên những người đã đồng ý (gõ nhanh ở bảng đồng ý); rỗng là chưa ghi tên */
+  who: z.array(z.string()).catch([]),
+  /** Thời điểm ghi nhận đồng ý (ISO) */
+  at: z.string(),
+  method: z.enum(["button", "auto"]),
+  /** Câu thông báo ghi âm đã phát trong buổi, nếu có */
+  announcement_text: z.string().optional(),
+});
+export type ConsentReceipt = z.infer<typeof ConsentReceipt>;
+
 export const Session = z.object({
   id: z.string(),
   user_id: z.string(),
@@ -159,7 +176,12 @@ export const Session = z.object({
   audio_url: z.string().nullable().optional().catch(undefined),
   created_at: z.string(),
   audio_expires_at: z.string().nullable(),
-  consent: z.object({ confirmed: z.boolean(), announced: z.boolean() }),
+  consent: z.object({
+    confirmed: z.boolean(),
+    announced: z.boolean(),
+    /** Biên nhận đồng ý (góp ý vòng 1, #75); dữ liệu cũ không có thì rỗng */
+    receipts: z.array(ConsentReceipt).catch([]),
+  }),
   participant_contact_ids: z.array(z.string()),
   peaks_thumb: z.array(z.number()).length(40),
   speaker_colors_thumb: z.array(z.number().int().min(0).max(5)).length(40),

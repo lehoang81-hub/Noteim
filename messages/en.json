@@ -737,7 +737,19 @@
     "keepFreeTitle": "Keeping originals is a Pro feature",
     "keepFreeConfirm": "See Pro",
     "keepFreeBody": "The Free plan auto-deletes audio after 7 days (summaries are kept). Pro keeps originals until you free them.",
-    "forbidden": "You don't have access to this session. Private sessions are only visible to the person who recorded them."
+    "forbidden": "You don't have access to this session. Private sessions are only visible to the person who recorded them.",
+    "receiptLine": "{who} agreed to recording at {time}, {method}",
+    "receiptLineNoWho": "Consent to recording recorded at {time}, {method}",
+    "receiptWhoEmpty": "Session participants",
+    "receiptMethodButton": "consent button tapped before recording",
+    "receiptMethodAuto": "auto-confirmed after the wait time",
+    "receiptTitle": "Recording consent receipt",
+    "receiptWho": "Who agreed",
+    "receiptWhen": "When",
+    "receiptHow": "How",
+    "receiptAnnounced": "Announcement played in the session",
+    "receiptNoAnnounce": "No announcement was played",
+    "receiptFootnote": "The receipt is captured by the app when recording starts, stored with the session."
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -1001,7 +1013,10 @@
     "hours": "{h} h",
     "minutes": "{m} min",
     "languageLabel": "Language",
-    "autoDetect": "Other languages may be spoken"
+    "autoDetect": "Other languages may be spoken",
+    "whoLabel": "Who agreed",
+    "whoPlaceholder": "Names, separated by commas",
+    "announcementText": "This meeting is being recorded to create minutes"
   },
   "processing": {
     "step1": "Recording saved",

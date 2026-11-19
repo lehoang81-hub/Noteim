@@ -69,7 +69,10 @@ export function MicPermissionSheet({
   );
 }
 
-/** Bảng hỏi đồng ý ghi âm: tự đóng sau 3 giây, đóng là coi như đồng ý. */
+/** Bảng hỏi đồng ý ghi âm: tự đóng sau 3 giây, đóng là coi như đồng ý.
+ * Góp ý vòng 1 (#75): thêm ô nhập nhanh tên người đã đồng ý (không bắt buộc,
+ * gõ chữ là hẹn giờ tự đóng chạy lại) và ghi biên nhận vào buổi: ai đồng ý,
+ * lúc nào (ghi ở record-screen khi bắt đầu), cách nào (bấm nút hay tự xác nhận). */
 export function ConsentSheet({
   open,
   defaultLanguage,
@@ -82,8 +85,9 @@ export function ConsentSheet({
   defaultLanguage: Lang;
   /** Công tắc "Có thể có tiếng khác" mặc định theo Cài đặt */
   defaultAutoDetect: boolean;
-  /** announced: có phát câu thông báo ghi âm hay không */
-  onConfirm: (announced: boolean, speech: SpeechChoice) => void;
+  /** announced: có phát câu thông báo ghi âm hay không; receipt: tên người
+   * đã đồng ý (tách sẵn) và cách đồng ý — bấm nút hay tự xác nhận */
+  onConfirm: (announced: boolean, speech: SpeechChoice, receipt: { who: string[]; method: "button" | "auto" }) => void;
   onCancel: () => void;
 }) {
   const t = useTranslations("record");
@@ -91,26 +95,47 @@ export function ConsentSheet({
   const [announce, setAnnounce] = useState(false);
   const [language, setLanguage] = useState<Lang>(defaultLanguage);
   const [autoDetect, setAutoDetect] = useState(defaultAutoDetect);
-  const latest = useRef({ announce, language, autoDetect });
+  const [who, setWho] = useState("");
+  const latest = useRef({ announce, language, autoDetect, who });
   useEffect(() => {
-    latest.current = { announce, language, autoDetect };
-  }, [announce, language, autoDetect]);
+    latest.current = { announce, language, autoDetect, who };
+  }, [announce, language, autoDetect, who]);
+
+  /** Gọi onConfirm với biên nhận: tên tách theo dấu phẩy, cách đồng ý do nơi gọi chỉ định */
+  function confirm(method: "button" | "auto") {
+    onConfirm(
+      latest.current.announce,
+      { primary_language: latest.current.language, auto_detect: latest.current.autoDetect },
+      { who: latest.current.who.split(",").map((s) => s.trim()).filter(Boolean), method },
+    );
+  }
 
   // Tự đóng sau 3 giây: đóng là coi như đồng ý (docs/03-screens.md mục 2).
-  // Bấm chip ngôn ngữ hay công tắc thì hẹn giờ chạy lại — người dùng đang
-  // tương tác thì không tự đóng giữa chừng.
+  // Bấm chip ngôn ngữ, công tắc hay gõ tên người đồng ý thì hẹn giờ chạy lại
+  // — người dùng đang tương tác thì không tự đóng giữa chừng.
   const [interactedAt, setInteractedAt] = useState(0);
   useEffect(() => {
     if (!open) return;
-    const id = window.setTimeout(() => onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect }), 3000);
+    const id = window.setTimeout(() => confirm("auto"), 3000);
     return () => window.clearTimeout(id);
-    // onConfirm đọc qua ref nên không cần vào deps
+    // confirm đọc qua ref nên không cần vào deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, interactedAt]);
 
   return (
-    <Sheet open={open} onOpenChange={(next) => !next && onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect })} title={t("consentTitle")} size="half">
+    <Sheet open={open} onOpenChange={(next) => !next && confirm("auto")} title={t("consentTitle")} size="half">
       <div className="flex flex-col gap-3 py-1">
+        {/* Biên nhận: ai đồng ý (góp ý vòng 1, #75) — không bắt buộc, không phá nhịp tự đóng */}
+        <fieldset>
+          <legend className="mb-1.5 text-small font-medium text-ink">{t("whoLabel")}</legend>
+          <input
+            value={who}
+            onChange={(e) => (setWho(e.target.value), setInteractedAt((n) => n + 1))}
+            aria-label={t("whoLabel")}
+            placeholder={t("whoPlaceholder")}
+            className="h-11 w-full rounded-control border border-line bg-surface px-3 text-body text-ink placeholder:text-ink-3 focus-visible:outline-none"
+          />
+        </fieldset>
         {/* Dòng Ngôn ngữ (M6-02): chip ngôn ngữ chính + công tắc tiếng khác */}
         <fieldset>
           <legend className="mb-1.5 text-small font-medium text-ink">{t("languageLabel")}</legend>
@@ -145,7 +170,7 @@ export function ConsentSheet({
         <Button variant="secondary" onClick={onCancel}>
           {t("consentCancel")}
         </Button>
-        <Button variant="primary" onClick={() => onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect })}>
+        <Button variant="primary" onClick={() => confirm("button")}>
           {t("consentConfirm")}
         </Button>
       </div>

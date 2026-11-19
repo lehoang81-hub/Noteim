@@ -2,6 +2,7 @@ import type {
   ActionItem,
   AuditEvent,
   ChatMessage,
+  ConsentReceipt,
   Contact,
   DashboardData,
   GlossaryTerm,
@@ -64,7 +65,8 @@ export type RecordingDraft = {
   photos: { id: string; timestamp_sec: number; url: string }[];
   /** Âm lượng lấy mẫu 4 giá trị mỗi giây, để dựng lại dải giọng */
   levels: number[];
-  consent?: { confirmed: boolean; announced: boolean };
+  /** Biên nhận đồng ý (góp ý vòng 1, #75): ai đồng ý, lúc nào, cách nào */
+  consent?: { confirmed: boolean; announced: boolean; receipts?: ConsentReceipt[] };
 };
 
 export interface SessionRepository {

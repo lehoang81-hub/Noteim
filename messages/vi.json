@@ -599,7 +599,10 @@
     "hours": "{h} giờ",
     "minutes": "{m} phút",
     "languageLabel": "Ngôn ngữ",
-    "autoDetect": "Có thể có tiếng khác"
+    "autoDetect": "Có thể có tiếng khác",
+    "whoLabel": "Người đã đồng ý",
+    "whoPlaceholder": "Tên người đồng ý, cách nhau bằng dấu phẩy",
+    "announcementText": "Buổi làm việc này được ghi âm để lập biên bản"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -795,7 +798,19 @@
     "keepFreeTitle": "Giữ bản gốc là tính năng Pro",
     "keepFreeConfirm": "Xem gói Pro",
     "keepFreeBody": "Gói Free tự xóa bản ghi âm sau 7 ngày (tóm tắt vẫn được giữ). Gói Pro giữ bản gốc đến khi bạn tự dọn.",
-    "forbidden": "Bạn không có quyền xem buổi ghi này. Buổi ghi riêng tư chỉ người ghi mở được."
+    "forbidden": "Bạn không có quyền xem buổi ghi này. Buổi ghi riêng tư chỉ người ghi mở được.",
+    "receiptLine": "{who} đồng ý ghi âm lúc {time}, {method}",
+    "receiptLineNoWho": "Đã ghi nhận đồng ý ghi âm lúc {time}, {method}",
+    "receiptWhoEmpty": "Người tham dự buổi ghi",
+    "receiptMethodButton": "bấm nút đồng ý trước khi ghi",
+    "receiptMethodAuto": "hết thời gian chờ, tự xác nhận",
+    "receiptTitle": "Biên nhận đồng ý ghi âm",
+    "receiptWho": "Ai đồng ý",
+    "receiptWhen": "Lúc nào",
+    "receiptHow": "Cách nào",
+    "receiptAnnounced": "Thông báo đã phát trong buổi",
+    "receiptNoAnnounce": "Không phát thông báo trong buổi",
+    "receiptFootnote": "Biên nhận do ứng dụng ghi lại lúc bắt đầu ghi, lưu cùng dữ liệu buổi ghi."
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",

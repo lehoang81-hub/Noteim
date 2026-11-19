@@ -178,13 +178,27 @@ export function RecordScreen() {
 
   /* ----- Luồng bắt đầu ghi (M2-01) ----- */
 
-  function beginRecording(announce: boolean, speech?: SpeechChoice) {
+  function beginRecording(announce: boolean, speech?: SpeechChoice, receipt?: { who: string[]; method: "button" | "auto" }) {
     if (recording.status !== "idle") return;
     const templateId =
       recording.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id ?? null;
+    // Biên nhận đồng ý (góp ý vòng 1, #75): ai đồng ý (ô nhập của bảng),
+    // lúc nào (mốc hiện tại), cách nào (bấm nút hay tự xác nhận sau 3 giây),
+    // kèm câu thông báo đã phát nếu bật
+    const receipts = receipt
+      ? [
+          {
+            id: `cr-${Date.now().toString(36)}`,
+            who: receipt.who,
+            at: new Date().toISOString(),
+            method: receipt.method,
+            ...(announce ? { announcement_text: me.data?.consent_announcement || t("announcementText") } : {}),
+          },
+        ]
+      : [];
     startRecording({
       templateId,
-      consent: { confirmed: true, announced: announce },
+      consent: { confirmed: true, announced: announce, receipts },
       speech: speech ?? {
         primary_language: me.data?.default_speech_language ?? (locale as Lang),
         auto_detect: me.data?.auto_detect_languages ?? true,
@@ -701,7 +715,7 @@ export function RecordScreen() {
         open={gate === "consent"}
         defaultLanguage={me.data?.default_speech_language ?? (locale as Lang)}
         defaultAutoDetect={me.data?.auto_detect_languages ?? true}
-        onConfirm={(announced, speech) => beginRecording(announced, speech)}
+        onConfirm={(announced, speech, receipt) => beginRecording(announced, speech, receipt)}
         onCancel={() => router.push("/")}
       />
       {/* Hết hạn mức tháng: nút ghi âm vẫn bấm được, bảng giải thích + gói Pro (M2-04) */}

@@ -597,7 +597,10 @@
     "hours": "{h}시간",
     "minutes": "{m}분",
     "languageLabel": "언어",
-    "autoDetect": "다른 언어가 섞일 수 있어요"
+    "autoDetect": "다른 언어가 섞일 수 있어요",
+    "whoLabel": "동의한 사람",
+    "whoPlaceholder": "동의한 사람 이름, 쉼표로 구분",
+    "announcementText": "이 회의는 회의록 작성을 위해 녹음됩니다"
   },
   "debug": {
     "title": "테스트 패널",
@@ -791,7 +794,19 @@
     "keepFreeTitle": "원본 유지는 Pro 기능입니다",
     "keepFreeConfirm": "Pro 플랜 보기",
     "keepFreeBody": "Free 플랜은 7일 후 원본 음성을 자동 삭제합니다(요약은 유지). Pro 플랜은 직접 정리할 때까지 원본을 유지합니다.",
-    "forbidden": "이 녹음을 볼 권한이 없어요. 비공개 녹음은 녹음한 사람만 열 수 있어요."
+    "forbidden": "이 녹음을 볼 권한이 없어요. 비공개 녹음은 녹음한 사람만 열 수 있어요.",
+    "receiptLine": "{who} 녹음 동의, {time}, {method}",
+    "receiptLineNoWho": "녹음 동의 기록, {time}, {method}",
+    "receiptWhoEmpty": "세션 참여자",
+    "receiptMethodButton": "녹음 전 동의 버튼 누름",
+    "receiptMethodAuto": "대기 시간 후 자동 확인",
+    "receiptTitle": "녹음 동의 확인서",
+    "receiptWho": "동의한 사람",
+    "receiptWhen": "시간",
+    "receiptHow": "방법",
+    "receiptAnnounced": "세션에서 재생된 안내 문구",
+    "receiptNoAnnounce": "안내 문구가 재생되지 않았습니다",
+    "receiptFootnote": "확인서는 녹음 시작 시 앱이 기록하며 세션 데이터와 함께 저장됩니다."
   },
   "transcript": {
     "searchLabel": "녹취록에서 검색",

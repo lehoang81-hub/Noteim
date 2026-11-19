@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, ArrowLeft, Check, Ellipsis, Pencil, Share2, Trash2, UserRoundPen, X } from "lucide-react";
+import { Archive, ArrowLeft, Check, Ellipsis, Pencil, Share2, ShieldCheck, Trash2, UserRoundPen, X } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -15,7 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/form";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { data, dataNow, DataError, useData, type ListeningPrefs, type ActionItem, type Lang, type SessionDetail, type SummaryVersion } from "@/lib/data";
-import { durationParts, shortDate } from "@/lib/format";
+import { durationParts, intlLocale, shortDate } from "@/lib/format";
 import { cleanDurationOf, skipsFromMap } from "@/lib/listening/skips";
 import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
 import { useDebugFlags } from "@/lib/debug/flags";
@@ -216,6 +216,7 @@ function Loaded({
   const [shareIntent, setShareIntent] = useState<ShareIntent>(null);
   const [moreOpen, setMoreOpen] = useState(false);
   const [reprocessOpen, setReprocessOpen] = useState(false);
+  const [receiptOpen, setReceiptOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [confirmPurge, setConfirmPurge] = useState(false);
   const [keepOpen, setKeepOpen] = useState(false);
@@ -347,6 +348,14 @@ function Loaded({
 
   const { h, m } = durationParts(detail.duration_sec);
   const durationLabel = h > 0 ? tlLib("hours", { h, m: String(m).padStart(2, "0") }) : tlLib("minutes", { m });
+  // Biên nhận đồng ý ghi âm (góp ý vòng 1, #75): buổi chỉ có một biên nhận
+  // ghi lúc bắt đầu; buổi cũ không có thì không hiện dòng này
+  const receipt = detail.consent.receipts?.[0] ?? null;
+  const receiptClock = receipt
+    ? new Intl.DateTimeFormat(intlLocale(locale), { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(receipt.at))
+    : "";
+  const receiptMethod = receipt ? t(receipt.method === "button" ? "receiptMethodButton" : "receiptMethodAuto") : "";
+  const receiptWho = receipt ? (receipt.who.length ? receipt.who.join(", ") : t("receiptWhoEmpty")) : "";
   const unnamed = detail.speakers.filter((s) => !s.contact_id && !s.is_me).length;
   const expiresSoon =
     detail.storage_status === "full" &&
@@ -421,6 +430,20 @@ function Loaded({
           {t("meta", { date: shortDate(detail.created_at, locale), duration: durationLabel, template: templateName })}
           {lastSent ? `, ${t("sentAt", { date: shortDate(lastSent.sent_at, locale) })}` : ""}
         </p>
+        {receipt ? (
+          <button
+            type="button"
+            onClick={() => setReceiptOpen(true)}
+            className="-mx-1 mt-2 inline-flex min-h-11 max-w-full items-center gap-2 rounded-control px-1 text-left text-small text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:text-ink"
+          >
+            <ShieldCheck aria-hidden={true} className="size-4 shrink-0 text-sen" strokeWidth={1.75} />
+            <span className="min-w-0 truncate">
+              {receipt.who.length
+                ? t("receiptLine", { who: receiptWho, time: receiptClock, method: receiptMethod })
+                : t("receiptLineNoWho", { time: receiptClock, method: receiptMethod })}
+            </span>
+          </button>
+        ) : null}
         {detail.speakers.length ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
             {detail.speakers.map((s) => (
@@ -636,6 +659,32 @@ function Loaded({
           ))}
         </ul>
       </Sheet>
+
+      {/* Biên nhận đồng ý ghi âm (góp ý vòng 1, #75): ai, lúc nào, cách nào,
+          câu thông báo đã phát. Buổi cũ không có biên nhận thì không mở được. */}
+      {receipt ? (
+        <Sheet open={receiptOpen} onOpenChange={setReceiptOpen} title={t("receiptTitle")} description={detail.title} size="half">
+          <dl className="flex flex-col gap-3 py-1">
+            <div>
+              <dt className="text-caption font-medium text-ink-3">{t("receiptWho")}</dt>
+              <dd className="text-body text-ink">{receiptWho}</dd>
+            </div>
+            <div>
+              <dt className="text-caption font-medium text-ink-3">{t("receiptWhen")}</dt>
+              <dd className="text-body text-ink">{shortDate(receipt.at, locale)}, {receiptClock}</dd>
+            </div>
+            <div>
+              <dt className="text-caption font-medium text-ink-3">{t("receiptHow")}</dt>
+              <dd className="text-body text-ink">{receiptMethod}</dd>
+            </div>
+            <div>
+              <dt className="text-caption font-medium text-ink-3">{t("receiptAnnounced")}</dt>
+              <dd className="text-body text-ink">{receipt.announcement_text ?? t("receiptNoAnnounce")}</dd>
+            </div>
+          </dl>
+          <p className="mt-3 text-caption text-ink-3">{t("receiptFootnote")}</p>
+        </Sheet>
+      ) : null}
 
       {/* Dọn bản gốc: nói rõ thứ gì mất và thứ gì giữ (docs mục 12) */}
       <ConfirmDialog
