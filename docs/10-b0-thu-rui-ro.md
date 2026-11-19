@@ -96,3 +96,28 @@ Bảng G1 đến N3 theo từng thiết bị trong `docs/11-b0-ket-qua.md`, và 
 - Nhà cung cấp nhận dạng chính và dự phòng, giá mỗi giờ, ảnh hưởng tới giá các gói.
 - Ghi âm trên web hay cần app điện thoại; nếu cần app, thêm vào lộ trình trước B2.
 - Những gì đổi trong `07-handover.md` và `04-data-contract.md` (ví dụ định dạng file ghi, độ dài khúc).
+
+---
+
+## Bổ sung từ góp ý vòng 1 (issue #75, ngày 2026-11-19): bộ thứ năm nói pha Việt, Anh
+
+Người dùng góp ý: ba bộ hiện có chưa có kiểu nói lẫn Việt, Anh trong cùng một câu của dân văn phòng ("em check lại KPI phase 2"), vốn phổ biến nhất và khó nhất cho nhận dạng giọng nói. Thêm bộ thứ năm:
+
+| Bộ | Nội dung | Cách sinh |
+| --- | --- | --- |
+| 05-vi-en-pha-le | 16 lượt thoại, hai người nói (trưởng nhóm và nhân viên), tiếng Việt pha từ và cụm tiếng Anh văn phòng: KPI phase 2, dashboard, merge, deadline, budget, Facebook Ads, Google Ads, breakdown, approve, feedback, report, format, vendor, scan, deck, present, slide, draft, message, ping, chat, out | `test-data/audio/05-vi-en-pha-le.dialogue.json` là lời gốc; sinh bằng `python3 scripts/gen-test-audio.py --only 05-vi-en-pha-le --engine elevenlabs --skip-long` |
+
+Ghi chú về bộ đọc: ngày 2026-11-19 edge-tts bị Microsoft chặn 403 từ máy làm việc (mọi giọng), nên bộ 05 đọc bằng ElevenLabs `eleven_turbo_v2_5`, giọng Adam (SPK_01) và Sarah (SPK_02). Kiểm trước bằng Soniox: cả Adam, Sarah, Laura, Josh đọc tiếng Việt pha tiếng Anh chuẩn, khớp 100% với lời gốc ở câu thử. Các bộ 01 đến 03 giữ nguyên cách sinh cũ.
+
+Chạy đo và chấm:
+
+```bash
+node scripts/b0-asr/run.mjs --provider soniox --file test-data/audio/05-vi-en-pha-le.ogg
+node scripts/b0-asr/score.mjs --hyp test-data/asr-results/soniox/05-vi-en-pha-le.json
+```
+
+Kết quả đã chạy thật ngày 2026-11-19 (chi tiết tổng hợp nằm ở `docs/11-b0-ket-qua.md`, ghép bảng khi PR #74 gộp):
+
+- WER theo âm tiết 4,26% (282 âm, sai 8 thay, 4 bỏ) — thấp nhất trong các bộ hiện có, tức nói pha Việt, Anh không phải điểm yếu của Soniox.
+- Ngôn ngữ đúng 16/16; đủ số liệu 10/10 (kể cả "KPI phase 2", "50 triệu", "tám giờ", "mười slide"); tách người nói 2/2, 270/270 khớp mốc.
+- Tốc độ 7,4 giây cho 84 giây âm thanh (0,089 lần thời gian thực); chi phí khoảng 0,005 đô la Mỹ.
