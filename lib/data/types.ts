@@ -179,8 +179,8 @@ export const Session = z.object({
   consent: z.object({
     confirmed: z.boolean(),
     announced: z.boolean(),
-    /** Biên nhận đồng ý (góp ý vòng 1, #75); dữ liệu cũ không có thì rỗng */
-    receipts: z.array(ConsentReceipt).catch([]),
+    /** Biên nhận đồng ý (góp ý vòng 1, #75); buổi cũ và buổi nhập file không có */
+    receipts: z.array(ConsentReceipt).optional(),
   }),
   participant_contact_ids: z.array(z.string()),
   peaks_thumb: z.array(z.number()).length(40),
