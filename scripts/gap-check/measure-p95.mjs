@@ -35,6 +35,9 @@ async function checkOnce(transcript) {
       headers: {
         "content-type": "application/json",
         "x-noteim-client": clientId,
+        // Đo tải là việc hạ tầng, không mô phỏng người dùng Free — tránh vướng
+        // rate limit 10 lượt/ngày giữa chừng (đã thấy hoạt động ở lần đo trước).
+        "x-noteim-plan": "pro",
       },
       body: JSON.stringify({ templateId, transcript, transcriptUntilMs: 0 }),
     });
