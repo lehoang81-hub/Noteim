@@ -38,6 +38,22 @@ export function transcriptTail(segments: Array<{ text: string }>, maxChars = GAP
   return tail.join("\n");
 }
 
+/** Mã client để giới hạn lượt rà Free/ngày (đặc tả §3). Mỗi tab một mã riêng
+ * lưu sessionStorage: người dùng thử ở tab khác nhau không ăn mất lượt của nhau. */
+function clientId(): string {
+  try {
+    const KEY = "noteim-gap-client";
+    let id = window.sessionStorage.getItem(KEY);
+    if (!id) {
+      id = `web-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      window.sessionStorage.setItem(KEY, id);
+    }
+    return id;
+  } catch {
+    return "anon";
+  }
+}
+
 export async function runGapCheck(input: {
   sessionId: string;
   templateId: string;
@@ -49,7 +65,7 @@ export async function runGapCheck(input: {
   try {
     const res = await fetch(`/api/sessions/${encodeURIComponent(input.sessionId)}/gap-check`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", "x-noteim-client": clientId() },
       signal: controller.signal,
       body: JSON.stringify({
         templateId: input.templateId,
