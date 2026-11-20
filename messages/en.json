@@ -868,6 +868,7 @@
     "quotaOut": "You've used all 10 questions for this session. Upgrade to Pro for unlimited questions.",
     "seePro": "See Pro plan",
     "scope": "Question scope",
+    "pendingFromGapCheck": "From this session's gap check, tap to send",
     "scopeThis": "This session",
     "scopeAll": "All sessions",
     "scopeLocked": "Cross-session questions come with Pro.",

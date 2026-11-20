@@ -581,6 +581,7 @@ function Loaded({
                 onSeek={seek}
                 autoQuestion={aiAsk}
                 onAutoQuestionConsumed={() => setAiAsk(null)}
+                pendingQuestions={detail.pending_ai_questions ?? []}
               />
             </TabsContent>
           </div>

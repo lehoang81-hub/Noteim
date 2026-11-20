@@ -942,6 +942,7 @@
     "quotaOut": "Bạn đã hết 10 câu hỏi cho buổi này. Nâng cấp gói Pro để hỏi không giới hạn.",
     "seePro": "Xem gói Pro",
     "scope": "Phạm vi câu hỏi",
+    "pendingFromGapCheck": "Chuyển từ rà thiếu của buổi này, bấm để gửi",
     "scopeThis": "Buổi này",
     "scopeAll": "Mọi buổi ghi",
     "scopeLocked": "Hỏi xuyên mọi buổi ghi có ở gói Pro.",
