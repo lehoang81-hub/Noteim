@@ -29,11 +29,17 @@ export function AiTab({
   template,
   canPlay,
   onSeek,
+  autoQuestion,
+  onAutoQuestionConsumed,
 }: {
   detail: SessionDetail;
   template?: Template;
   canPlay: boolean;
   onSeek: (time: number) => void;
+  /** Câu hỏi gửi thẳng khi mở tab (GC-04: checklist "Cần bổ sung sau buổi"
+   * bấm Hỏi AI trên thư mục): hỏi một lần rồi báo cha gỡ. */
+  autoQuestion?: string | null;
+  onAutoQuestionConsumed?: () => void;
 }) {
   const t = useTranslations("ai");
   const ts = useTranslations("session");
@@ -56,6 +62,15 @@ export function AiTab({
     // Hỏi xong một câu thì cuộn tới cuối
     listEndRef.current?.scrollIntoView({ block: "nearest", behavior: "instant" });
   }, [messages?.length, streamText]);
+
+  useEffect(() => {
+    if (!autoQuestion) return;
+    // Gỡ câu hỏi ở cha trước để quay lại tab không hỏi lại; lỗi có khối
+    // "Thử lại" giữ câu, không mất
+    onAutoQuestionConsumed?.();
+    void ask(autoQuestion);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoQuestion]);
 
   const plan = quota.data ? (quota.data.chat_questions_per_session === null ? "pro" : "free") : null;
   const total = quota.data?.chat_questions_per_session ?? null;

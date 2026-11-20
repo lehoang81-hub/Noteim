@@ -22,6 +22,7 @@ import { useDebugFlags } from "@/lib/debug/flags";
 import { createAudioPlayer } from "@/lib/player/audio-player";
 import { CleanAudioChain } from "@/lib/player/clean-audio";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
+import { GapChecklist } from "./gap-checklist";
 import { SummaryTab } from "./summary-tab";
 import type { ShareIntent } from "./share-sheet";
 
@@ -196,6 +197,8 @@ function Loaded({
   const ps = usePlayerState(player);
 
   const [expanded, setExpanded] = useState(false);
+  // Checklist "Cần bổ sung sau buổi" (GC-04): câu hỏi gửi thẳng sang Hỏi AI
+  const [aiAsk, setAiAsk] = useState<string | null>(null);
   // Mở sâu từ Tổng quan (?sheet=speakers, M7-02): vào trang là bảng đặt tên người nói
   const [naming, setNaming] = useState(() => search.get("sheet") === "speakers");
   // Các bảng nạp chậm chỉ dựng sau lần mở đầu tiên (M5-04): tránh tải chunk
@@ -474,7 +477,18 @@ function Loaded({
       {detail.status !== "ready" ? (
         <StatusBlock detail={detail} />
       ) : (
-        <Tabs value={tab} onValueChange={setTab} className="mt-4 flex-1">
+        <>
+          {/* Checklist "Cần bổ sung sau buổi" (GC-04, đặc tả v1.1 §4.5): đứng
+              ngay trên các tab để thấy được khi vừa vào buổi; không có kết quả
+              rà hoặc đã đủ dữ liệu thì tự ẩn. */}
+          <GapChecklist
+            detail={detail}
+            onAskAi={(question) => {
+              setAiAsk(question);
+              setTab("ai");
+            }}
+          />
+          <Tabs value={tab} onValueChange={setTab} className="mt-4 flex-1">
           <div className="sticky top-0 z-10 bg-bg px-page lg:px-8">
             <TabsList label={t("tabs")}>
               {TABS.map((id) => (
@@ -560,10 +574,18 @@ function Loaded({
               <VisualTab detail={detail} canPlay={canPlay} onSeek={seek} />
             </TabsContent>
             <TabsContent value="ai">
-              <AiTab detail={detail} template={template} canPlay={canPlay} onSeek={seek} />
+              <AiTab
+                detail={detail}
+                template={template}
+                canPlay={canPlay}
+                onSeek={seek}
+                autoQuestion={aiAsk}
+                onAutoQuestionConsumed={() => setAiAsk(null)}
+              />
             </TabsContent>
           </div>
         </Tabs>
+        </>
       )}
 
       {canPlay ? (
