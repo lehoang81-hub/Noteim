@@ -34,9 +34,9 @@ test("rà với transcript rỗng: thiếu hết, gợi ý nói thêm, chép đ�
   await page.getByRole("button", { name: "Chép vào ghi chú nhanh" }).first().click();
   await expect(page.getByRole("button", { name: "Đã chép vào ghi chú" })).toBeVisible();
   await expect(sheet.getByText("Căn này anh/chị ưu tiên để gia đình ở thực hay hướng tới cho thuê")).toBeVisible();
-  // Hỏi AI trên thư mục: giải thích nhẹ, không mở lớp mới (đặc tả §4.8)
+  // Hỏi AI trên thư mục (GC-04): câu hỏi vào hàng chờ, hiện trong Hỏi AI sau khi lưu
   await page.getByRole("button", { name: "Hỏi AI trên thư mục" }).first().click();
-  await expect(page.getByText("câu hỏi sẽ nằm trong Hỏi AI của thư mục")).toBeVisible();
+  await expect(page.getByText("Đã chuyển câu hỏi sang Hỏi AI")).toBeVisible();
   // "Rà lại sau khi nói tiếp": về màn ghi, không qua cổng chốt
   await page.getByRole("button", { name: "Rà lại sau khi nói tiếp" }).click();
   await expect(page.getByRole("heading", { name: "Rà soát điểm thiếu" })).toHaveCount(0);
