@@ -650,7 +650,31 @@
     "recordedBy": "Recorded by {name}",
     "makePrivate": "Set back to Private",
     "shareWithTeam": "Share with the team",
-    "visibilityChanged": "Sharing updated"
+    "visibilityChanged": "Sharing updated",
+    "folderManage": "Folders",
+    "folderEmpty": "No folders yet. Create one and pick a profession so new sessions inherit its template.",
+    "folderNew": "New folder",
+    "folderEdit": "Edit folder",
+    "folderDelete": "Delete folder",
+    "folderDeleteTitle": "Delete folder “{name}”?",
+    "folderDeleteBody": "Sessions in the folder are not deleted, only removed from it.",
+    "folderDeleteConfirm": "Delete",
+    "folderDeleteCancel": "Keep",
+    "folderInherits": "Inherits {template}",
+    "folderInheritsNone": "No profession picked, uses the default template",
+    "folderSessionCount": "{count, plural, one {# session} other {# sessions}}",
+    "folderSaved": "Folder saved",
+    "folderDeleted": "Folder deleted",
+    "folderSaveError": "Could not save, try again",
+    "folderName": "Folder name",
+    "folderNamePlaceholder": "e.g. Apartment A8.08 for Ms. Lan",
+    "folderRef": "Profile code (optional)",
+    "folderRefPlaceholder": "e.g. A8.08",
+    "folderTemplate": "Template inherited by new sessions",
+    "folderTemplateHint": "Pick the folder's profession once; recordings in this folder use it, and each session can still override.",
+    "folderTemplateNone": "None, use the default template",
+    "folderCancel": "Cancel",
+    "folderSave": "Save folder"
   },
   "session": {
     "back": "Back to library",
@@ -743,7 +767,8 @@
     "keepFreeTitle": "Keeping originals is a Pro feature",
     "keepFreeConfirm": "See Pro",
     "keepFreeBody": "The Free plan auto-deletes audio after 7 days (summaries are kept). Pro keeps originals until you free them.",
-    "forbidden": "You don't have access to this session. Private sessions are only visible to the person who recorded them."
+    "forbidden": "You don't have access to this session. Private sessions are only visible to the person who recorded them.",
+    "folderOf": "Folder: {name}"
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -1024,7 +1049,9 @@
     "copyToNote": "Copy to quick note",
     "copiedToNote": "Copied to notes",
     "askAiFolder": "Ask AI on the folder",
-    "askAiQueued": "Question moved to Ask AI, available after saving the session"
+    "askAiQueued": "Question moved to Ask AI, available after saving the session",
+    "folderLabel": "Folder",
+    "folderNone": "Not in a folder"
   },
   "processing": {
     "step1": "Recording saved",

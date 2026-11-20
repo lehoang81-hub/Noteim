@@ -31,6 +31,10 @@ export type RecordingConsent = { confirmed: boolean; announced: boolean };
 /** Ngôn ngữ chọn ở bảng "Bắt đầu ghi" (M6-02, issue #44) */
 export type RecordingSpeech = { primary_language: Lang; auto_detect: boolean };
 
+/** Thư mục chọn lúc bắt đầu ghi (GC-05, đặc tả v1.1 §4.7): buổi lưu xong
+ * được ghi vào session_ids của thư mục này. */
+type RecordingFolder = string | null;
+
 /** Đoạn lời thoại nhận dạng được gắn mốc thời gian của buổi đang ghi (GC-03).
  * Nguồn nối vào bằng addRecordingTranscript: hiện tại là kịch bản demo B4,
  * sau này là ASR sống (B0) — giao diện Gap Check không cần đổi. */
@@ -51,6 +55,8 @@ export type RecordingSnapshot = {
   consent: RecordingConsent;
   /** Ngôn ngữ chính và công tắc "Có thể có tiếng khác" chọn lúc bắt đầu (M6-02) */
   speech: RecordingSpeech;
+  /** Thư mục chọn lúc bắt đầu ghi (GC-05); null là không thuộc thư mục nào */
+  folderId: RecordingFolder;
   /** Epoch ms lúc bắt đầu ghi, để đặt tên "Buổi ghi lúc 14:05". */
   startedAtClock: number | null;
   notes: RecordingNote[];
@@ -78,6 +84,7 @@ const INITIAL: RecordingSnapshot = {
   templateId: null,
   consent: { confirmed: false, announced: false },
   speech: { primary_language: "vi", auto_detect: true },
+  folderId: null,
   startedAtClock: null,
   notes: [],
   bookmarks: [],
@@ -136,6 +143,7 @@ function load(): void {
       templateId: parsed.templateId ?? null,
       consent: parsed.consent ?? INITIAL.consent,
       speech: parsed.speech ?? { primary_language: "vi", auto_detect: true },
+      folderId: typeof parsed.folderId === "string" ? parsed.folderId : null,
       startedAtClock: parsed.startedAtClock ?? null,
       notes: Array.isArray(parsed.notes) ? parsed.notes : [],
       bookmarks: Array.isArray(parsed.bookmarks) ? parsed.bookmarks : [],
@@ -184,7 +192,13 @@ export function recordedSec(): number {
 
 /* ---------- Hành động ---------- */
 
-export function startRecording(opts: { templateId: string | null; consent: RecordingConsent; speech: RecordingSpeech }) {
+export function startRecording(opts: {
+  templateId: string | null;
+  consent: RecordingConsent;
+  speech: RecordingSpeech;
+  /** Thư mục chọn ở bảng bắt đầu ghi (GC-05) */
+  folderId?: string | null;
+}) {
   load();
   const now = nowMs();
   elapsedMs = 0;
@@ -195,6 +209,7 @@ export function startRecording(opts: { templateId: string | null; consent: Recor
     templateId: opts.templateId,
     consent: opts.consent,
     speech: opts.speech,
+    folderId: opts.folderId ?? null,
     startedAtClock: now,
     notes: [],
     bookmarks: [],

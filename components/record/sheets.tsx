@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Mic } from "lucide-react";
+import { ChevronDown, FolderOpen, Mic } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { MicDrawing } from "@/components/ui/feedback";
 import { Switch } from "@/components/ui/form";
 import { cn } from "@/lib/cn";
-import { data, useData } from "@/lib/data";
+import { data, useData, type Folder } from "@/lib/data";
 import { templateName } from "@/lib/data/localize";
 import type { Lang } from "@/lib/data/types";
 
@@ -69,7 +69,9 @@ export function MicPermissionSheet({
   );
 }
 
-/** Bảng hỏi đồng ý ghi âm: tự đóng sau 3 giây, đóng là coi như đồng ý. */
+/** Bảng hỏi đồng ý ghi âm: tự đóng sau 3 giây, đóng là coi như đồng ý.
+ * GC-05 (đặc tả v1.1 §4.7): thêm dòng Thư mục — chọn thư mục để buổi mới
+ * kế thừa mẫu của thư mục; không chọn thì dùng mẫu mặc định. */
 export function ConsentSheet({
   open,
   defaultLanguage,
@@ -82,19 +84,22 @@ export function ConsentSheet({
   defaultLanguage: Lang;
   /** Công tắc "Có thể có tiếng khác" mặc định theo Cài đặt */
   defaultAutoDetect: boolean;
-  /** announced: có phát câu thông báo ghi âm hay không */
-  onConfirm: (announced: boolean, speech: SpeechChoice) => void;
+  /** announced: có phát câu thông báo ghi âm hay không; folderId: thư mục
+   * chọn cho buổi mới (null là không thuộc thư mục nào) */
+  onConfirm: (announced: boolean, speech: SpeechChoice, folderId: string | null) => void;
   onCancel: () => void;
 }) {
   const t = useTranslations("record");
   const tr = useTranslations(); // tên ngôn ngữ ở namespace settings (M6-02)
+  const folders = useData(() => data.folders.list(), []);
   const [announce, setAnnounce] = useState(false);
   const [language, setLanguage] = useState<Lang>(defaultLanguage);
   const [autoDetect, setAutoDetect] = useState(defaultAutoDetect);
-  const latest = useRef({ announce, language, autoDetect });
+  const [folderId, setFolderId] = useState<string | null>(null);
+  const latest = useRef({ announce, language, autoDetect, folderId });
   useEffect(() => {
-    latest.current = { announce, language, autoDetect };
-  }, [announce, language, autoDetect]);
+    latest.current = { announce, language, autoDetect, folderId };
+  }, [announce, language, autoDetect, folderId]);
 
   // Tự đóng sau 3 giây: đóng là coi như đồng ý (docs/03-screens.md mục 2).
   // Bấm chip ngôn ngữ hay công tắc thì hẹn giờ chạy lại — người dùng đang
@@ -102,14 +107,34 @@ export function ConsentSheet({
   const [interactedAt, setInteractedAt] = useState(0);
   useEffect(() => {
     if (!open) return;
-    const id = window.setTimeout(() => onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect }), 3000);
+    const id = window.setTimeout(
+      () =>
+        onConfirm(
+          latest.current.announce,
+          { primary_language: latest.current.language, auto_detect: latest.current.autoDetect },
+          latest.current.folderId,
+        ),
+      3000,
+    );
     return () => window.clearTimeout(id);
     // onConfirm đọc qua ref nên không cần vào deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, interactedAt]);
 
   return (
-    <Sheet open={open} onOpenChange={(next) => !next && onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect })} title={t("consentTitle")} size="half">
+    <Sheet
+      open={open}
+      onOpenChange={(next) =>
+        !next &&
+        onConfirm(
+          latest.current.announce,
+          { primary_language: latest.current.language, auto_detect: latest.current.autoDetect },
+          latest.current.folderId,
+        )
+      }
+      title={t("consentTitle")}
+      size="half"
+    >
       <div className="flex flex-col gap-3 py-1">
         {/* Dòng Ngôn ngữ (M6-02): chip ngôn ngữ chính + công tắc tiếng khác */}
         <fieldset>
@@ -140,12 +165,55 @@ export function ConsentSheet({
           </div>
         </fieldset>
         <Switch checked={announce} onCheckedChange={setAnnounce} label={t("announce")} />
+        {/* Dòng Thư mục (GC-05): buổi mới kế thừa mẫu của thư mục chọn */}
+        <fieldset>
+          <legend className="mb-1.5 text-small font-medium text-ink">{t("folderLabel")}</legend>
+          <div role="radiogroup" aria-label={t("folderLabel")} className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              role="radio"
+              aria-checked={folderId === null}
+              onClick={() => (setFolderId(null), setInteractedAt((n) => n + 1))}
+              className={cn(
+                "h-11 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                folderId === null ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+              )}
+            >
+              {t("folderNone")}
+            </button>
+            {(folders.data ?? []).map((f: Folder) => (
+              <button
+                key={f.id}
+                type="button"
+                role="radio"
+                aria-checked={folderId === f.id}
+                onClick={() => (setFolderId(f.id), setInteractedAt((n) => n + 1))}
+                className={cn(
+                  "inline-flex h-11 max-w-full items-center gap-1.5 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                  folderId === f.id ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+                )}
+              >
+                <FolderOpen aria-hidden={true} className="size-3.5 shrink-0" strokeWidth={2} />
+                <span className="min-w-0 truncate">{f.name}</span>
+              </button>
+            ))}
+          </div>
+        </fieldset>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-2">
         <Button variant="secondary" onClick={onCancel}>
           {t("consentCancel")}
         </Button>
-        <Button variant="primary" onClick={() => onConfirm(latest.current.announce, { primary_language: latest.current.language, auto_detect: latest.current.autoDetect })}>
+        <Button
+          variant="primary"
+          onClick={() =>
+            onConfirm(
+              latest.current.announce,
+              { primary_language: latest.current.language, auto_detect: latest.current.autoDetect },
+              latest.current.folderId,
+            )
+          }
+        >
           {t("consentConfirm")}
         </Button>
       </div>
