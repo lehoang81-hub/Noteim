@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { getFlags } from "@/lib/debug/flags";
-import type { Lang, SemanticTag } from "@/lib/data/types";
+import type { ConsentReceipt, Lang, SemanticTag } from "@/lib/data/types";
 import { savePhoto } from "@/lib/record/photo-store";
 import { markStorageFull } from "@/lib/storage-full";
 import type { GapCheckResult } from "@/lib/gap-check/types";
@@ -26,7 +26,9 @@ export type RecordingNote = { id: string; timestamp_sec: number; text: string };
 export type RecordingBookmark = { id: string; timestamp_sec: number; tag: SemanticTag | null };
 export type RecordingPhoto = { id: string; timestamp_sec: number; url: string };
 
-export type RecordingConsent = { confirmed: boolean; announced: boolean };
+/** Biên nhận đồng ý ghi âm (GC-05, đặc tả v1.1 §4.6): buổi dùng mẫu nhạy cảm
+ * bắt buộc có biên nhận (ai đồng ý, lúc nào, bằng cách nào) trước khi ghi. */
+export type RecordingConsent = { confirmed: boolean; announced: boolean; receipts?: ConsentReceipt[] };
 
 /** Ngôn ngữ chọn ở bảng "Bắt đầu ghi" (M6-02, issue #44) */
 export type RecordingSpeech = { primary_language: Lang; auto_detect: boolean };

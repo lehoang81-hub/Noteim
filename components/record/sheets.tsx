@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, FolderOpen, Mic } from "lucide-react";
+import { ChevronDown, FolderOpen, Mic, TriangleAlert } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Sheet } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,8 @@ import { Switch } from "@/components/ui/form";
 import { cn } from "@/lib/cn";
 import { data, useData, type Folder } from "@/lib/data";
 import { templateName } from "@/lib/data/localize";
-import type { Lang } from "@/lib/data/types";
+import { professionRequiresConsent } from "@/lib/intake-templates";
+import type { ConsentReceipt, Lang } from "@/lib/data/types";
 
 /*
  * Các bảng trượt của màn hình ghi (docs/03-screens.md mục 2):
@@ -71,11 +72,15 @@ export function MicPermissionSheet({
 
 /** Bảng hỏi đồng ý ghi âm: tự đóng sau 3 giây, đóng là coi như đồng ý.
  * GC-05 (đặc tả v1.1 §4.7): thêm dòng Thư mục — chọn thư mục để buổi mới
- * kế thừa mẫu của thư mục; không chọn thì dùng mẫu mặc định. */
+ * kế thừa mẫu của thư mục; không chọn thì dùng mẫu mặc định.
+ * GC-05 (đặc tả v1.1 §4.6): mẫu nhạy cảm (requires_consent) thì bắt buộc biên
+ * nhận: nhập ai đồng ý, TẮT tự đóng (tự đóng là đồng ý mà không có biên nhận
+ * — sai luật), nút xác nhận khóa cho đến khi có tên. */
 export function ConsentSheet({
   open,
   defaultLanguage,
   defaultAutoDetect,
+  defaultTemplateId,
   onConfirm,
   onCancel,
 }: {
@@ -84,29 +89,42 @@ export function ConsentSheet({
   defaultLanguage: Lang;
   /** Công tắc "Có thể có tiếng khác" mặc định theo Cài đặt */
   defaultAutoDetect: boolean;
+  /** Mẫu sẽ dùng khi không chọn thư mục (GC-05): quyết định có cần biên nhận không */
+  defaultTemplateId: string | null;
   /** announced: có phát câu thông báo ghi âm hay không; folderId: thư mục
-   * chọn cho buổi mới (null là không thuộc thư mục nào) */
-  onConfirm: (announced: boolean, speech: SpeechChoice, folderId: string | null) => void;
+   * chọn cho buổi mới (null là không thuộc thư mục nào); receipts: biên nhận
+   * khi mẫu nhạy cảm (không có khi mẫu thường) */
+  onConfirm: (announced: boolean, speech: SpeechChoice, folderId: string | null, receipts?: ConsentReceipt[]) => void;
   onCancel: () => void;
 }) {
   const t = useTranslations("record");
   const tr = useTranslations(); // tên ngôn ngữ ở namespace settings (M6-02)
   const folders = useData(() => data.folders.list(), []);
+  const templates = useData(() => data.account.templates(), []);
   const [announce, setAnnounce] = useState(false);
   const [language, setLanguage] = useState<Lang>(defaultLanguage);
   const [autoDetect, setAutoDetect] = useState(defaultAutoDetect);
   const [folderId, setFolderId] = useState<string | null>(null);
-  const latest = useRef({ announce, language, autoDetect, folderId });
+  const [who, setWho] = useState("");
+  const latest = useRef({ announce, language, autoDetect, folderId, who });
   useEffect(() => {
-    latest.current = { announce, language, autoDetect, folderId };
-  }, [announce, language, autoDetect, folderId]);
+    latest.current = { announce, language, autoDetect, folderId, who };
+  }, [announce, language, autoDetect, folderId, who]);
+
+  // Mẫu sẽ dùng theo thư mục chọn (kế thừa, đặc tả §4.7); mẫu nhạy cảm cần
+  // biên nhận trước khi ghi (đặc tả §4.6)
+  const folder = folderId ? (folders.data ?? []).find((f) => f.id === folderId) : null;
+  const resolvedTemplateId = folder?.template_id ?? defaultTemplateId ?? (templates.data?.[0]?.id ?? null);
+  const resolvedProfession = templates.data?.find((tp) => tp.id === resolvedTemplateId)?.profession;
+  const needsReceipt = professionRequiresConsent(resolvedProfession);
+  const receiptReady = !needsReceipt || who.trim().length > 0;
 
   // Tự đóng sau 3 giây: đóng là coi như đồng ý (docs/03-screens.md mục 2).
   // Bấm chip ngôn ngữ hay công tắc thì hẹn giờ chạy lại — người dùng đang
-  // tương tác thì không tự đóng giữa chừng.
+  // tương tác thì không tự đóng giữa chừng. Mẫu nhạy cảm thì KHÔNG tự đóng.
   const [interactedAt, setInteractedAt] = useState(0);
   useEffect(() => {
-    if (!open) return;
+    if (!open || needsReceipt) return;
     const id = window.setTimeout(
       () =>
         onConfirm(
@@ -119,17 +137,33 @@ export function ConsentSheet({
     return () => window.clearTimeout(id);
     // onConfirm đọc qua ref nên không cần vào deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, interactedAt]);
+  }, [open, interactedAt, needsReceipt]);
+
+  /** Biên nhận khi mẫu nhạy cảm: ai đồng ý, lúc nào, bằng cách nào (đặc tả §4.6). */
+  function receipt(): ConsentReceipt[] | undefined {
+    if (!needsReceipt) return undefined;
+    return [
+      {
+        id: `cr-${Date.now().toString(36)}`,
+        who: latest.current.who.split(",").map((s) => s.trim()).filter(Boolean),
+        at: new Date().toISOString(),
+        method: "button",
+        announcement_text: latest.current.announce ? t("announceSentence") : undefined,
+      },
+    ];
+  }
 
   return (
     <Sheet
       open={open}
       onOpenChange={(next) =>
         !next &&
+        receiptReady &&
         onConfirm(
           latest.current.announce,
           { primary_language: latest.current.language, auto_detect: latest.current.autoDetect },
           latest.current.folderId,
+          receipt(),
         )
       }
       title={t("consentTitle")}
@@ -165,6 +199,24 @@ export function ConsentSheet({
           </div>
         </fieldset>
         <Switch checked={announce} onCheckedChange={setAnnounce} label={t("announce")} />
+        {/* Biên nhận đồng ý bắt buộc khi mẫu nhạy cảm (GC-05, đặc tả §4.6):
+            ai đồng ý — không có tên thì không ghi được */}
+        {needsReceipt ? (
+          <fieldset>
+            <legend className="mb-1.5 flex items-center gap-1.5 text-small font-medium text-ink">
+              <TriangleAlert aria-hidden={true} className="size-4 shrink-0 text-tag-pending" strokeWidth={2} />
+              {t("receiptWhoLabel")}
+            </legend>
+            <p className="mb-2 text-caption text-ink-3">{t("receiptRequiredHint")}</p>
+            <input
+              value={who}
+              onChange={(e) => setWho(e.target.value)}
+              aria-label={t("receiptWhoLabel")}
+              placeholder={t("receiptWhoPlaceholder")}
+              className="h-11 w-full rounded-control border border-line bg-surface px-3 text-body text-ink placeholder:text-ink-3 focus:border-dien focus-visible:outline-none"
+            />
+          </fieldset>
+        ) : null}
         {/* Dòng Thư mục (GC-05): buổi mới kế thừa mẫu của thư mục chọn */}
         <fieldset>
           <legend className="mb-1.5 text-small font-medium text-ink">{t("folderLabel")}</legend>
@@ -206,15 +258,82 @@ export function ConsentSheet({
         </Button>
         <Button
           variant="primary"
+          disabled={!receiptReady}
           onClick={() =>
             onConfirm(
               latest.current.announce,
               { primary_language: latest.current.language, auto_detect: latest.current.autoDetect },
               latest.current.folderId,
+              receipt(),
             )
           }
         >
           {t("consentConfirm")}
+        </Button>
+      </div>
+    </Sheet>
+  );
+}
+
+/** Bảng biên nhận khi đang ghi đổi sang mẫu nhạy cảm (GC-05, đặc tả v1.1
+ * §4.6): phải ghi ai đồng ý rồi mới được dùng mẫu này; Bỏ là giữ mẫu cũ. */
+export function ConsentReceiptSheet({
+  open,
+  templateName: switchingTo,
+  onConfirm,
+  onCancel,
+}: {
+  open: boolean;
+  /** Tên mẫu nhạy cảm đang chuyển sang */
+  templateName: string;
+  /** who: tên những người đồng ý; announced: có phát câu thông báo */
+  onConfirm: (who: string[], announced: boolean) => void;
+  onCancel: () => void;
+}) {
+  const t = useTranslations("record");
+  const [who, setWho] = useState("");
+  const [announce, setAnnounce] = useState(false);
+  const latest = useRef({ who, announce });
+  useEffect(() => {
+    latest.current = { who, announce };
+  }, [who, announce]);
+
+  return (
+    <Sheet
+      open={open}
+      onOpenChange={(next) => !next && onCancel()}
+      title={t("consentReceiptTitle")}
+      size="half"
+    >
+      <div className="flex flex-col gap-3 py-1">
+        <p className="text-body text-ink-2">{t("receiptSwitchHint", { template: switchingTo })}</p>
+        <fieldset>
+          <legend className="mb-1.5 text-small font-medium text-ink">{t("receiptWhoLabel")}</legend>
+          <input
+            value={who}
+            onChange={(e) => setWho(e.target.value)}
+            aria-label={t("receiptWhoLabel")}
+            placeholder={t("receiptWhoPlaceholder")}
+            className="h-11 w-full rounded-control border border-line bg-surface px-3 text-body text-ink placeholder:text-ink-3 focus:border-dien focus-visible:outline-none"
+          />
+        </fieldset>
+        <Switch checked={announce} onCheckedChange={setAnnounce} label={t("announce")} />
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <Button variant="secondary" onClick={onCancel}>
+          {t("receiptCancel")}
+        </Button>
+        <Button
+          variant="primary"
+          disabled={!who.trim()}
+          onClick={() =>
+            onConfirm(
+              latest.current.who.split(",").map((s) => s.trim()).filter(Boolean),
+              latest.current.announce,
+            )
+          }
+        >
+          {t("receiptMidConfirm")}
         </Button>
       </div>
     </Sheet>

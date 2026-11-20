@@ -615,7 +615,15 @@
     "askAiFolder": "폴더에서 AI에게 질문",
     "askAiQueued": "질문이 AI 질문으로 옮겨졌습니다. 세션 저장 후 표시됩니다",
     "folderLabel": "폴더",
-    "folderNone": "폴더 없음"
+    "folderNone": "폴더 없음",
+    "receiptWhoLabel": "동의한 사람",
+    "receiptWhoPlaceholder": "동의한 사람 이름을 쉼표로 구분해 입력하세요",
+    "receiptRequiredHint": "이 템플릿은 민감 직군용입니다. 녹음 시작 전에 동의자를 기록해야 합니다.",
+    "consentReceiptTitle": "녹음 동의 확인서",
+    "receiptSwitchHint": "“{template}” 템플릿은 민감 직군용이며 먼저 동의 확인이 필요합니다.",
+    "receiptMidConfirm": "동의하고 이 템플릿 사용",
+    "receiptCancel": "닫기",
+    "announceSentence": "이 회의는 회의록 작성을 위해 녹음됩니다"
   },
   "debug": {
     "title": "테스트 패널",
@@ -842,7 +850,11 @@
     "keepFreeConfirm": "Pro 플랜 보기",
     "keepFreeBody": "Free 플랜은 7일 후 원본 음성을 자동 삭제합니다(요약은 유지). Pro 플랜은 직접 정리할 때까지 원본을 유지합니다.",
     "forbidden": "이 녹음을 볼 권한이 없어요. 비공개 녹음은 녹음한 사람만 열 수 있어요.",
-    "folderOf": "폴더: {name}"
+    "folderOf": "폴더: {name}",
+    "receiptOf": "동의 확인서: {who}이(가) {when}에 동의({method}).",
+    "receiptMethodButton": "동의 버튼 누름",
+    "receiptMethodAuto": "시트 자동 닫힘 동의",
+    "receiptWhoEmpty": "동의자 미기록"
   },
   "transcript": {
     "searchLabel": "녹취록에서 검색",

@@ -617,7 +617,15 @@
     "askAiFolder": "Hỏi AI trên thư mục",
     "askAiQueued": "Đã chuyển câu hỏi sang Hỏi AI, sẽ có mặt sau khi lưu buổi",
     "folderLabel": "Thư mục",
-    "folderNone": "Không thuộc thư mục"
+    "folderNone": "Không thuộc thư mục",
+    "receiptWhoLabel": "Ai đồng ý",
+    "receiptWhoPlaceholder": "Tên những người đồng ý, cách nhau bằng dấu phẩy",
+    "receiptRequiredHint": "Mẫu này cho nghề nhạy cảm, cần ghi rõ ai đồng ý trước khi bắt đầu ghi.",
+    "consentReceiptTitle": "Biên nhận đồng ý ghi âm",
+    "receiptSwitchHint": "Mẫu “{template}” cho nghề nhạy cảm, cần biên nhận đồng ý trước khi dùng.",
+    "receiptMidConfirm": "Đồng ý và dùng mẫu này",
+    "receiptCancel": "Bỏ",
+    "announceSentence": "Buổi làm việc này được ghi âm để lập biên bản"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -844,7 +852,11 @@
     "keepFreeConfirm": "Xem gói Pro",
     "keepFreeBody": "Gói Free tự xóa bản ghi âm sau 7 ngày (tóm tắt vẫn được giữ). Gói Pro giữ bản gốc đến khi bạn tự dọn.",
     "forbidden": "Bạn không có quyền xem buổi ghi này. Buổi ghi riêng tư chỉ người ghi mở được.",
-    "folderOf": "Thư mục: {name}"
+    "folderOf": "Thư mục: {name}",
+    "receiptOf": "Biên nhận đồng ý: {who} đồng ý lúc {when}, {method}.",
+    "receiptMethodButton": "bấm nút đồng ý",
+    "receiptMethodAuto": "tự đóng bảng đồng ý",
+    "receiptWhoEmpty": "người đồng ý chưa ghi tên"
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",

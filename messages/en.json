@@ -768,7 +768,11 @@
     "keepFreeConfirm": "See Pro",
     "keepFreeBody": "The Free plan auto-deletes audio after 7 days (summaries are kept). Pro keeps originals until you free them.",
     "forbidden": "You don't have access to this session. Private sessions are only visible to the person who recorded them.",
-    "folderOf": "Folder: {name}"
+    "folderOf": "Folder: {name}",
+    "receiptOf": "Consent receipt: {who} agreed at {when}, {method}.",
+    "receiptMethodButton": "pressed the agree button",
+    "receiptMethodAuto": "closed the sheet as consent",
+    "receiptWhoEmpty": "who agreed was not recorded"
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -1051,7 +1055,15 @@
     "askAiFolder": "Ask AI on the folder",
     "askAiQueued": "Question moved to Ask AI, available after saving the session",
     "folderLabel": "Folder",
-    "folderNone": "Not in a folder"
+    "folderNone": "Not in a folder",
+    "receiptWhoLabel": "Who agreed",
+    "receiptWhoPlaceholder": "Names of those who agreed, comma separated",
+    "receiptRequiredHint": "This template is for a sensitive profession; record who agreed before recording starts.",
+    "consentReceiptTitle": "Recording consent receipt",
+    "receiptSwitchHint": "The “{template}” template is for a sensitive profession; a consent receipt is required first.",
+    "receiptMidConfirm": "Agree and use this template",
+    "receiptCancel": "Dismiss",
+    "announceSentence": "This meeting is being recorded to build the minutes"
   },
   "processing": {
     "step1": "Recording saved",
