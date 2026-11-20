@@ -101,3 +101,26 @@ test("cờ thử nghiệm: ép lỗi và ép hết lượt miễn phí đều c�
   await page.getByRole("button", { name: "Đóng" }).click();
   await expect(page.getByRole("button", { name: "Kiểm tra thiếu" })).toBeVisible();
 });
+
+test("bấm liên tiếp 3 lần vào Kiểm tra thiếu: chỉ gửi 1 lượt rà, nút khóa khi sheet mở (sửa sau dry-run B4)", async ({ page }) => {
+  await batDauGhi(page);
+  // Đếm lượt gọi API rà thiếu của buổi live
+  let gapRequests = 0;
+  page.on("request", (req) => {
+    if (req.method() === "POST" && /\/api\/sessions\/[^/]+\/gap-check$/.test(req.url())) gapRequests += 1;
+  });
+  const nut = page.getByRole("button", { name: "Kiểm tra thiếu" });
+  await nut.click(); // cú bấm đầu mở sheet và bắt đầu rà
+  // Sheet mở: phần nền bị aria-hidden nên định vị nút bằng CSS; 2 cú bấm còn
+  // lại của đợt đúp gửi sự kiện thẳng, không chờ giao diện kịp phản hồi — đúng
+  // kịch bản người dùng đập nút 3 lần/giây
+  const nutCss = page.locator("main button:has-text(\"Kiểm tra thiếu\")");
+  await nutCss.dispatchEvent("click");
+  await nutCss.dispatchEvent("click");
+  await expect(page.getByRole("heading", { name: "Rà soát điểm thiếu" })).toBeVisible();
+  // Nút nguồn bị khóa trong khi lượt rà đang chạy (aria-hidden không cản kiểm thuộc tính)
+  await expect(nutCss).toHaveAttribute("disabled", "");
+  await expect(page.getByText("Còn thiếu 4 thông tin")).toBeVisible({ timeout: 15_000 });
+  await page.waitForTimeout(1500); // nếu còn lỗ hổng, request trùng đã kịp bay ra
+  expect(gapRequests).toBe(1);
+});

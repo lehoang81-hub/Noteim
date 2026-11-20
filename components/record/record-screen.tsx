@@ -14,7 +14,11 @@ const BookmarkButton = dynamic(() => import("@/components/record/bookmark-button
 const RecordFeed = dynamic(() => import("@/components/record/record-feed").then((m) => m.RecordFeed), { ssr: false });
 const HoldToEndButton = dynamic(() => import("@/components/record/hold-to-end-button").then((m) => m.HoldToEndButton), { ssr: false });
 const TemplateSheet = dynamic(() => import("@/components/record/sheets").then((m) => m.TemplateSheet), { ssr: false });
-const GapCheckSheet = dynamic(() => import("@/components/record/gap-check").then((m) => m.GapCheckSheet), { ssr: false });
+// Sheet rà thiếu nạp chậm qua một hàm riêng để còn nạp trước (preload) sau khi
+// màn ghi mount — sửa sau dry-run B4: lần mở đầu tiên khi vừa mất mạng không
+// dính ChunkLoadError vì bundle đã nằm sẵn từ lúc còn mạng.
+const importGapCheckSheet = () => import("@/components/record/gap-check");
+const GapCheckSheet = dynamic(() => importGapCheckSheet().then((m) => m.GapCheckSheet), { ssr: false });
 import { ConsentSheet, ConsentReceiptSheet, MicPermissionSheet, type SpeechChoice } from "@/components/record/sheets";
 import { Button } from "@/components/ui/button";
 import { Banner, MicDrawing } from "@/components/ui/feedback";
@@ -174,6 +178,23 @@ export function RecordScreen() {
     fromGate: false,
     seq: 0,
   });
+  /* Khóa chống gọi trùng (sửa sau dry-run B4): sheet đang mở là lượt rà đang
+   * chạy — bấm thêm nút (kể cả 3 lần/giây) không được tạo lượt mới. ref chặn
+   * đồng bộ ngay từ cú bấm đầu, kể cả khi React chưa kịp vẽ lại sheet sau lần
+   * bấm trước; nút disabled bên dưới chỉ là lớp khóa hiển thị thêm. */
+  const gapCheckOpening = useRef(false);
+
+  /* Nạp trước bundle sheet rà thiếu khi màn ghi vừa mount và máy rảnh — sửa
+   * sau dry-run B4: lần mở đầu (kể cả vừa mất mạng) không chờ tải chunk. */
+  useEffect(() => {
+    const preload = () => { void importGapCheckSheet(); };
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(preload);
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(preload, 1200);
+    return () => window.clearTimeout(id);
+  }, []);
   /** Cổng chốt buổi (GC-03, đặc tả §4.2): giữ nút Dừng xong hiện thanh hỏi
    * "Kiểm tra thiếu thông tin trước khi lưu?" thay vì kết thúc ngay. */
   const [closeGate, setCloseGate] = useState(false);
@@ -480,8 +501,10 @@ export function RecordScreen() {
    * Mẫu ghi âm của app (tpl-...) ánh xạ sang mẫu intake theo nghề; nghề chưa
    * có mẫu riêng (chủ doanh nghiệp, công chứng viên) dùng mẫu Tổng quát. */
   function openGapCheck(fromGate: boolean) {
+    if (gapCheck.open || gapCheckOpening.current) return;
     const templateId = recording.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id;
     if (!templateId) return;
+    gapCheckOpening.current = true;
     const profession = templates.data?.find((tp) => tp.id === templateId)?.profession;
     const intakeId = intakeTemplateIdForProfession(profession);
     setGapCheck((prev) => ({
@@ -497,8 +520,10 @@ export function RecordScreen() {
     }));
   }
 
-  /** Đóng sheet rà thiếu; từ cổng chốt thì trở lại cổng, từ nút thì về ghi. */
+  /** Đóng sheet rà thiếu; từ cổng chốt thì trở lại cổng, từ nút thì về ghi.
+   * Mở khóa cho lượt rà sau (sửa sau dry-run B4). */
   function closeGapCheck() {
+    gapCheckOpening.current = false;
     setGapCheck((prev) => ({ open: false, input: null, fromGate: prev.fromGate, seq: prev.seq + 1 }));
   }
 
@@ -761,7 +786,7 @@ export function RecordScreen() {
             <div className="rounded-block border border-line bg-surface p-4">
               <p className="text-center text-body-strong font-semibold text-ink">{t("gateTitle")}</p>
               <div className="mt-3 grid grid-cols-2 gap-2">
-                <Button variant="primary" icon={ClipboardCheck} onClick={() => openGapCheck(true)}>
+                <Button variant="primary" icon={ClipboardCheck} onClick={() => openGapCheck(true)} disabled={gapCheck.open}>
                   {t("checkGaps")}
                 </Button>
                 <Button variant="secondary" onClick={() => void finishRecording()}>
@@ -777,9 +802,11 @@ export function RecordScreen() {
               <button
                 type="button"
                 onClick={() => openGapCheck(false)}
+                disabled={gapCheck.open}
                 className={cn(
                   "flex h-11 shrink-0 select-none items-center gap-1.5 rounded-pill border border-line bg-surface px-4",
                   "text-small font-semibold text-ink transition-[background-color,scale] ease-noteim duration-(--t-quick) active:bg-surface-2",
+                  "disabled:pointer-events-none disabled:opacity-50",
                 )}
               >
                 <ClipboardCheck aria-hidden={true} className="size-4" strokeWidth={1.75} />

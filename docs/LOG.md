@@ -360,6 +360,13 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 - Kiểm tay trên trình duyệt thật (dev + build, mobile 390px): cả 2 nhánh mở sheet (từ nút và từ cổng chốt), chép ghi chú, rà lại, chốt buổi. 1 lượt model thật (không stub): 4,87 s, model trả đúng luật — 3 mục thiếu thật ("Không đề cập mục đích sử dụng căn hộ"...), không bịa evidence; khớp p95 đã chấp nhận ở GC-02, UI có nút Bỏ qua sau 3 giây.
 - Lint + typecheck + build sạch từng bước. Chưa đụng PR #74 và các màn hiện có khác ngoài màn ghi âm + bảng thử nghiệm (3 cờ mới: ép lỗi, ép hết lượt, ép chậm 4 giây). Tổng tiền API đợt này: 1 lượt model thật trong đợt kiểm tay, còn lại stub 0 USD.
 
+## 2026-11-19, Claude, GC-03 sửa sau dry-run B4: khóa nút "Kiểm tra thiếu" (PR #79)
+
+- Dry-run B4 phát hiện đập nút 3 lần/giây vào "Kiểm tra thiếu" (từ nút lẻ lẫn cổng chốt) tạo nhiều lượt rà trùng: mỗi cú bấm tăng seq → sheet remount → effect gửi request mới. Đã khóa 2 lớp trên `components/record/record-screen.tsx`: ref `gapCheckOpening` chặn đồng bộ ngay cú bấm đầu (`openGapCheck` thoát sớm nếu `gapCheck.open || gapCheckOpening.current`, chỉ `closeGapCheck` mở khóa lại) và `disabled={gapCheck.open}` trên cả 2 nút nguồn.
+- Nạp trước bundle sheet rà thiếu khi màn ghi vừa mount (`requestIdleCallback`, fallback setTimeout): lần mở đầu tiên khi vừa mất mạng không dính ChunkLoadError — chunk đã nằm sẵn từ lúc còn mạng (phát hiện trong dry-run B4).
+- `lib/intake-templates.ts` thêm `getIntakeTemplateOrGeneral()`: id mẫu không còn trong kho (config đổi phiên bản giữa buổi) thì rơi về mẫu Tổng quát thay vì undefined — sheet/checklist không hiện khóa máy; `deriveMissing` ở màn ghi dùng hàm này (GC-04 gộp sau sẽ áp cùng cách vào `lib/gap-check/missing.ts`).
+- e2e thêm bài "đập nút 3 lần → chỉ 1 request + nút khóa khi sheet mở" (đếm POST gap-check, dùng dispatchEvent mô phỏng đúp giữa chừng).
+
 ## 2026-11-20, Claude, GC-04 checklist "Cần bổ sung sau buổi" + Hỏi AI trên thư mục (PR #80)
 
 - PR xếp chồng thứ 4: nhánh `b4/gc-04-session-detail` tách từ `b4/gc-03-ui-recording`, base trỏ vào nhánh GC-03 (merge #77 → #78 → #79 → #80 từ dưới lên). Đúng đặc tả v1.1 §4.5: checklist "Cần bổ sung sau buổi" ở màn chi tiết sinh từ kết quả rà gần nhất; từng mục chép vào ghi chú nhanh một dòng hoặc gửi thành câu hỏi cho Hỏi AI; tick hoàn thành thì mờ dần (token `--t-sheet`) và tự ẩn, tải lại trang vẫn ẩn.

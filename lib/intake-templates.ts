@@ -85,6 +85,13 @@ export function getDefaultIntakeTemplate(): IntakeTemplate {
   );
 }
 
+/** Mẫu intake dùng cho hiển thị (sửa sau dry-run B4): id không còn trong kho
+ * (config đổi phiên bản giữa buổi) thì rơi về mẫu Tổng quát thay vì undefined
+ * — nhãn ô, tên mẫu luôn giải thích được cho người dùng, không hiện khóa máy. */
+export function getIntakeTemplateOrGeneral(id: string): IntakeTemplate {
+  return getIntakeTemplate(id) ?? getDefaultIntakeTemplate();
+}
+
 /** Ánh xạ nghề nghiệp của buổi ghi (trường profession của mẫu trong app) sang
  * mẫu intake của Gap Check. Nghề chưa có mẫu riêng (chủ doanh nghiệp, công
  * chứng viên) hoặc buổi không chọn mẫu dùng mẫu Tổng quát — đặc tả v1.1 §4.7. */
