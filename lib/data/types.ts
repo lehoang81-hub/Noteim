@@ -254,6 +254,28 @@ export type Photo = z.infer<typeof Photo>;
 
 export const SpeakerSpanData = z.object({ speaker_id: z.string(), start_sec: z.number(), end_sec: z.number() });
 
+/**
+ * Kết quả rà thiếu gần nhất lưu kèm buổi (GC-04, đặc tả v1.1 §4.5). Cùng hình
+ * dạng với GapCheckResult của API (lib/gap-check/types.ts) nhưng đi qua zod
+ * để dữ liệu mẫu/kho hỏng không làm sập màn chi tiết.
+ */
+export const SavedGapCheck = z.object({
+  template_id: z.string(),
+  checked_at: z.string(),
+  ready_to_close: z.boolean(),
+  slots_status: z.array(
+    z.object({
+      key: z.string(),
+      filled: z.boolean(),
+      confidence: z.enum(["high", "medium", "low"]),
+      evidence: z.string(),
+    }),
+  ),
+  missing_priorities: z.array(z.object({ key: z.string(), why_missing: z.string(), question: z.string() })),
+  one_line_bridge: z.string(),
+});
+export type SavedGapCheck = z.infer<typeof SavedGapCheck>;
+
 export const SessionDetail = Session.extend({
   executive_summary: z.string(),
   speakers: z.array(Speaker),
@@ -267,6 +289,12 @@ export const SessionDetail = Session.extend({
   send_history: z.array(z.object({ sent_at: z.string(), recipient_count: z.number() })),
   /** Buổi ghi mẫu theo nghề (M4-04), không hiện trong thư viện chính */
   is_sample: z.boolean().optional().catch(undefined),
+  /** Kết quả rà thiếu gần nhất đi kèm buổi (GC-04); fixture cũ không có */
+  gap_check: SavedGapCheck.nullish().catch(undefined),
+  /** Các ô checklist đã tick xong (GC-04); tải lại trang vẫn ẩn */
+  gap_check_done: z.array(z.string()).nullish().catch(undefined),
+  /** Câu hỏi chờ gửi trong Hỏi AI, chuyển từ sheet rà thiếu khi đang ghi (GC-04) */
+  pending_ai_questions: z.array(z.string()).nullish().catch(undefined),
 });
 export type SessionDetail = z.infer<typeof SessionDetail>;
 

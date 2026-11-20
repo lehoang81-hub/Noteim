@@ -9,8 +9,8 @@ import { SkeletonParagraph } from "@/components/ui/feedback";
 import { useToast } from "@/components/ui/toast";
 import { Copy, Sparkles } from "lucide-react";
 import { useDebugFlags } from "@/lib/debug/flags";
-import { getIntakeTemplate } from "@/lib/intake-templates";
 import { runGapCheck, type GapCheckInput } from "@/lib/record/gap-check-client";
+import { deriveMissing, type MissingItem } from "@/lib/gap-check/missing";
 import type { GapCheckResult } from "@/lib/gap-check/types";
 
 /*
@@ -21,45 +21,13 @@ import type { GapCheckResult } from "@/lib/gap-check/types";
  * - Lỗi hoặc timeout của model tuyệt đối không hiện dữ liệu bịa (đặc tả §8).
  * - Mỗi lần mở sheet cha tăng key (lượt rà mới): trạng thái dựng sạch từ đầu,
  *   "Thử lại" chỉ đổi số lượt rà nội bộ — setState đều nằm ngoài effect thân.
+ * - GC-04: kết quả rà xong đẩy lên cha qua onResult để đi kèm buổi khi lưu;
+ *   "Hỏi AI trên thư mục" đưa câu hỏi vào hàng chờ qua onAskAi (không còn
+ *   chỉ hiện thông báo).
  */
 
 const SKIP_AFTER_SEC = 3;
 const SLOW_DEBUG_MS = 4000;
-
-type MissingItem = {
-  key: string;
-  label: string;
-  sensitive: boolean;
-  why: string;
-  question: string;
-};
-
-/** Ghép kết quả rà với nhãn ô của mẫu nghiệp vụ. missing_priorities rỗng mà
- * vẫn còn ô thiếu (model không chọn được) thì dùng gợi ý ô và câu hỏi gốc của
- * mẫu — nội dung đều có thật trong config, không phải dữ liệu bịa. */
-function deriveMissing(result: GapCheckResult, templateId: string): MissingItem[] {
-  const template = getIntakeTemplate(templateId);
-  const slots = new Map((template?.gap_slots ?? []).map((slot) => [slot.key, slot]));
-  if (result.missing_priorities.length > 0) {
-    return result.missing_priorities.map((m) => ({
-      key: m.key,
-      label: slots.get(m.key)?.label ?? m.key,
-      sensitive: slots.get(m.key)?.sensitive === true,
-      why: m.why_missing,
-      question: m.question,
-    }));
-  }
-  return result.slots_status
-    .filter((slot) => !slot.filled)
-    .slice(0, 3)
-    .map((slot) => ({
-      key: slot.key,
-      label: slots.get(slot.key)?.label ?? slot.key,
-      sensitive: slots.get(slot.key)?.sensitive === true,
-      why: slots.get(slot.key)?.extraction_hint ?? "",
-      question: slots.get(slot.key)?.fallback_question ?? "",
-    }));
-}
 
 export function GapCheckSheet({
   input,
@@ -67,6 +35,8 @@ export function GapCheckSheet({
   onClose,
   onResumeLater,
   onCopyToNote,
+  onAskAi,
+  onResult,
   onFinishSession,
 }: {
   input: GapCheckInput | null;
@@ -77,6 +47,10 @@ export function GapCheckSheet({
   onResumeLater: () => void;
   /** Chép câu hỏi vào ghi chú nhanh (record-screen tự thêm vào kho buổi ghi) */
   onCopyToNote: (text: string) => void;
+  /** Hỏi AI trên thư mục (GC-04): câu hỏi vào hàng chờ, hiện trong Hỏi AI sau khi lưu buổi */
+  onAskAi: (text: string) => void;
+  /** Một lượt rà xong (GC-04): kết quả gần nhất đi kèm buổi khi lưu, để màn chi tiết dựng checklist */
+  onResult: (result: GapCheckResult, templateId: string) => void;
   /** Chốt buổi ngay từ sheet (chỉ hiện khi đủ dữ liệu) */
   onFinishSession: () => void;
 }) {
@@ -100,6 +74,9 @@ export function GapCheckSheet({
         if (outcome.ok) {
           setResult(outcome.result);
           setPhase("done");
+          // Kết quả gần nhất đi kèm buổi khi lưu (GC-04); templateId là mẫu
+          // intake của nghề (khác với mẫu ghi âm của app)
+          onResult(outcome.result, input.templateId);
         } else {
           setPhase(outcome.error === "rate_limited" ? "rate_limited" : "error");
         }
@@ -107,6 +84,7 @@ export function GapCheckSheet({
     };
     const id = window.setTimeout(run, flags.gapCheckSlow ? SLOW_DEBUG_MS : 0);
     return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [input, attempt, flags.gapCheckError, flags.gapCheckRateLimited, flags.gapCheckSlow]);
 
   // Đồng hồ đếm thời gian chờ để hiện nút "Bỏ qua" sau 3 giây (đặc tả §4.3)
@@ -190,7 +168,10 @@ export function GapCheckSheet({
                   onCopyToNote(item.question);
                   toast.show({ tone: "success", message: t("copiedToNote") });
                 }}
-                onAskAi={() => toast.show({ tone: "success", message: t("askAiLater") })}
+                onAskAi={() => {
+                  onAskAi(item.question);
+                  toast.show({ tone: "success", message: t("askAiQueued") });
+                }}
               />
             ))}
           </div>

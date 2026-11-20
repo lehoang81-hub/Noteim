@@ -615,7 +615,7 @@
     "copyToNote": "Chép vào ghi chú nhanh",
     "copiedToNote": "Đã chép vào ghi chú",
     "askAiFolder": "Hỏi AI trên thư mục",
-    "askAiLater": "Sau khi lưu buổi, câu hỏi sẽ nằm trong Hỏi AI của thư mục"
+    "askAiQueued": "Đã chuyển câu hỏi sang Hỏi AI, sẽ có mặt sau khi lưu buổi"
   },
   "debug": {
     "title": "Bảng thử nghiệm",

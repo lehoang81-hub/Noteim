@@ -1020,7 +1020,7 @@
     "copyToNote": "Copy to quick note",
     "copiedToNote": "Copied to notes",
     "askAiFolder": "Ask AI on the folder",
-    "askAiLater": "After saving, the question will be in the folder's Ask AI"
+    "askAiQueued": "Question moved to Ask AI, available after saving the session"
   },
   "processing": {
     "step1": "Recording saved",

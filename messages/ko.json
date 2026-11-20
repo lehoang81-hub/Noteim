@@ -613,7 +613,7 @@
     "copyToNote": "빠른 메모에 복사",
     "copiedToNote": "메모에 복사했습니다",
     "askAiFolder": "폴더에서 AI에게 질문",
-    "askAiLater": "세션을 저장하면 질문이 폴더의 AI 질문에 추가됩니다"
+    "askAiQueued": "질문이 AI 질문으로 옮겨졌습니다. 세션 저장 후 표시됩니다"
   },
   "debug": {
     "title": "테스트 패널",

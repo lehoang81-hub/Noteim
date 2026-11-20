@@ -23,6 +23,7 @@ import type {
   Visibility,
   Workspace,
 } from "./types";
+import type { GapCheckResult } from "../gap-check/types";
 
 /*
  * Interface các repository. Giao diện chỉ biết các interface này.
@@ -64,6 +65,13 @@ export type RecordingDraft = {
   /** Âm lượng lấy mẫu 4 giá trị mỗi giây, để dựng lại dải giọng */
   levels: number[];
   consent?: { confirmed: boolean; announced: boolean };
+  /** Kết quả rà thiếu gần nhất của buổi (GC-04, đặc tả v1.1 §4.5): màn chi
+   * tiết dùng để dựng checklist "Cần bổ sung sau buổi". Chưa rà lần nào thì
+   * không có — checklist không hiện. */
+  gap_check?: { template_id: string; checked_at: string; result: GapCheckResult } | null;
+  /** Câu hỏi bấm "Hỏi AI trên thư mục" từ sheet rà thiếu khi đang ghi (GC-04):
+   * sau khi lưu buổi nằm chờ trong tab Hỏi AI để người dùng bấm gửi. */
+  pending_ai_questions?: string[];
 };
 
 export interface SessionRepository {
@@ -82,6 +90,15 @@ export interface SessionRepository {
   updateSegment(sessionId: string, segmentId: string, text: string, field?: "text" | "text_clean"): Promise<void>;
   /** Đổi người nói của một đoạn bản ghi (M3-01) */
   reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>;
+  /** Chép một dòng vào ghi chú nhanh của buổi đã lưu (GC-04, đặc tả v1.1
+   * §4.5): ghi chú gắn vào ý có mốc gần nhất để hiện trong Tóm tắt. */
+  addQuickNote(sessionId: string, text: string): Promise<void>;
+  /** Tick một mục trong checklist "Cần bổ sung sau buổi" (GC-04): mục mờ dần
+   * và tự ẩn; tải lại trang vẫn ẩn nhờ danh sách ô đã xong lưu kèm buổi. */
+  completeGapCheckItem(sessionId: string, key: string): Promise<void>;
+  /** Câu hỏi chuyển từ Gap Check đã bấm gửi trong Hỏi AI (GC-04): gỡ khỏi
+   * hàng chờ để tải lại trang không còn chip cũ. */
+  consumePendingAiQuestion(sessionId: string, question: string): Promise<void>;
   /** Dịch đoạn bản ghi lời sang ngôn ngữ `lang` (M6-02). Không truyền
    * segmentIds thì dịch mọi đoạn chưa có bản dịch ở `lang`. */
   translateSegments(sessionId: string, lang: Lang, segmentIds?: string[]): Promise<TranscriptSegment[]>;
