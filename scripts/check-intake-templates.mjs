@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 /**
- * Kiểm tra JSON 11 mẫu nghiệp vụ cho Gap Check "Kiểm tra thiếu" (GC-01, đặc tả v1.1).
+ * Kiểm tra JSON 12 mẫu nghiệp vụ cho Gap Check "Kiểm tra thiếu" (GC-01, đặc tả v1.1;
+ * cập nhật v1.2 nhịp 2).
  * Chạy riêng: `node scripts/check-intake-templates.mjs`.
  * Quy tắc theo docs/gap-check-spec-v1.1.md:
- * - Đúng 11 mẫu, id mẫu duy nhất.
+ * - Đúng 12 mẫu, id mẫu duy nhất.
  * - Mỗi mẫu: role_name, requires_consent (boolean), tone_guideline, summary_structure
  *   khác rỗng, đúng 4 ô dữ liệu (gap_slots), key ô duy nhất trong mẫu.
  * - Mỗi ô: key, label, extraction_hint, fallback_question khác rỗng; sensitive (nếu có) là boolean.
- * - Ba mẫu nhạy cảm bắt buộc requires_consent: doctor_clinical, psychologist_counselor,
- *   lawyer_consultation. Mẫu mặc định general_meeting phải có.
+ * - Bảy mẫu nhạy cảm bắt buộc requires_consent: doctor_clinical, psychologist_counselor,
+ *   lawyer_consultation, insurance_advisor, parent_meeting, center_advisor, notary_public
+ *   (v1.2 nhịp 2: ba mẫu bán hàng/tư vấn thêm biên nhận, thêm mẫu công chứng viên).
+ * - Mẫu mặc định general_meeting phải có.
  * - student_lecture dùng question_mode "takeaway" (câu hỏi mang về).
  */
 import { readFileSync } from "node:fs";
@@ -25,16 +28,21 @@ try {
   process.exit(1);
 }
 
-const EXPECTED_COUNT = 11;
+const EXPECTED_COUNT = 12;
 const CONSENT_REQUIRED = new Set([
   "doctor_clinical",
   "psychologist_counselor",
   "lawyer_consultation",
+  // v1.2 nhịp 2: bán hàng/tư vấn tiếp xúc dữ liệu cá nhân của khách — cần biên nhận
+  "insurance_advisor",
+  "parent_meeting",
+  "center_advisor",
+  "notary_public",
 ]);
 const templates = Array.isArray(catalog.templates) ? catalog.templates : [];
 
-if (catalog.version !== "1.1") {
-  problems.push(`version phải là "1.1" (thấy "${catalog.version}")`);
+if (catalog.version !== "1.2") {
+  problems.push(`version phải là "1.2" (thấy "${catalog.version}")`);
 }
 if (templates.length !== EXPECTED_COUNT) {
   problems.push(`số mẫu phải là ${EXPECTED_COUNT} (thấy ${templates.length})`);
@@ -109,7 +117,7 @@ const sensitiveSlots = templates.reduce(
   0,
 );
 console.log(
-  `intake-templates.json đạt: ${templates.length} mẫu v1.1, ` +
+  `intake-templates.json đạt: ${templates.length} mẫu v1.2, ` +
     `mỗi mẫu đúng 4 ô, ${CONSENT_REQUIRED.size} mẫu cần đồng ý ghi âm, ` +
     `${sensitiveSlots} ô sensitive, id và key ô đều duy nhất.`,
 );

@@ -142,9 +142,9 @@ const geminiProvider: GapCheckProvider = {
     const model = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
     let res: Response;
     try {
-      res = await fetch(`${base}/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key)}`, {
+      res = await fetch(`${base}/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
         body: JSON.stringify({
           system_instruction: { parts: [{ text: system }] },
           contents: [{ role: "user", parts: [{ text: user }] }],

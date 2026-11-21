@@ -93,13 +93,15 @@ export function getIntakeTemplateOrGeneral(id: string): IntakeTemplate {
 }
 
 /** Ánh xạ nghề nghiệp của buổi ghi (trường profession của mẫu trong app) sang
- * mẫu intake của Gap Check. Nghề chưa có mẫu riêng (chủ doanh nghiệp, công
- * chứng viên) hoặc buổi không chọn mẫu dùng mẫu Tổng quát — đặc tả v1.1 §4.7. */
+ * mẫu intake của Gap Check. Nghề chưa có mẫu riêng (chủ doanh nghiệp) hoặc
+ * buổi không chọn mẫu dùng mẫu Tổng quát — đặc tả v1.1 §4.7. Công chứng viên
+ * có mẫu riêng từ v1.2 (nhịp 2). */
 const INTAKE_BY_PROFESSION: Record<string, string> = {
   doctor: "doctor_clinical",
   lawyer: "lawyer_consultation",
   realestate_sales: "real_estate_sales",
   architect: "architect_survey",
+  notary: "notary_public",
 };
 
 export function intakeTemplateIdForProfession(profession: string | null | undefined): string {
@@ -107,8 +109,9 @@ export function intakeTemplateIdForProfession(profession: string | null | undefi
 }
 
 /** Mẫu của nghề có yêu cầu biên nhận đồng ý ghi âm không (GC-05, đặc tả v1.1
- * §4.6): bác sĩ và luật sư là true. Nghề chưa có mẫu riêng quy về Tổng quát
- * nên luôn false. */
+ * §4.6): v1.2 có 7 mẫu nhạy cảm — bác sĩ, luật sư, công chứng viên là true;
+ * công chứng là nghề dữ liệu giấy tờ nhạy cảm nhất. Nghề chưa có mẫu riêng
+ * (chủ doanh nghiệp) quy về Tổng quát nên luôn false. */
 export function professionRequiresConsent(profession: string | null | undefined): boolean {
   return getIntakeTemplate(intakeTemplateIdForProfession(profession))?.requires_consent === true;
 }
