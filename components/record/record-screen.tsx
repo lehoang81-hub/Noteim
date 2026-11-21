@@ -46,6 +46,7 @@ import {
   pushRecordingLevel,
   recordedSec,
   resumeRecording,
+  setRecordingBookmarkNote,
   setRecordingConsent,
   setRecordingGapCheck,
   setRecordingTemplate,
@@ -456,7 +457,7 @@ export function RecordScreen() {
           auto_detect_languages: snapshot.speech?.auto_detect ?? true,
           duration_sec: snapshot.duration_sec,
           notes: snapshot.notes.map(({ timestamp_sec, text }) => ({ timestamp_sec, text })),
-          bookmarks: snapshot.bookmarks.map(({ timestamp_sec, tag }) => ({ timestamp_sec, tag })),
+          bookmarks: snapshot.bookmarks.map(({ timestamp_sec, tag, note }) => ({ timestamp_sec, tag, note })),
           photos: snapshot.photos.map(({ id, timestamp_sec, url }) => ({ id, timestamp_sec, url })),
           levels: snapshot.levels,
           consent: snapshot.consent,
@@ -747,7 +748,7 @@ export function RecordScreen() {
 
         {/* Ô ghi chú và danh sách ghi chú, điểm nóng, ảnh (M2-02) */}
         {showControls ? (
-          <RecordFeed recording={recording} tagLabels={tagLabels} onAddNote={addRecordingNote} />
+          <RecordFeed recording={recording} tagLabels={tagLabels} onAddNote={addRecordingNote} onBookmarkNote={setRecordingBookmarkNote} />
         ) : (
           <div className="h-10" aria-hidden={true} />
         )}

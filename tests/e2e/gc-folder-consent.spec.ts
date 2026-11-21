@@ -41,28 +41,35 @@ async function luuBuoi(page: import("@playwright/test").Page) {
   await expect(page.getByRole("tab", { name: "Tóm tắt" })).toBeVisible({ timeout: 15_000 });
 }
 
-test("tạo thư mục chọn nghề: danh sách hiện mẫu kế thừa", async ({ page }) => {
+test("tạo hồ sơ chọn nghề: danh sách hiện mẫu kế thừa", async ({ page }) => {
   await lamQuen(page);
   await page.goto("/");
-  await page.getByRole("button", { name: "Thư mục" }).click();
-  await expect(page.getByRole("heading", { name: "Thư mục" })).toBeVisible();
-  // Thư mục mẫu có sẵn: gắn mẫu nghề, đếm buổi
+  // Nhịp 2 (PR #76 gộp GC): màn thư mục giữ luồng GY1 — tab "Hồ sơ" trong
+  // Thư viện, trang chi tiết /f/[id]; chọn mẫu kế thừa là một bước trong
+  // bảng tạo hồ sơ (khẳng định nghiệp vụ GC-05 giữ nguyên).
+  await page.getByRole("button", { name: "Hồ sơ" }).first().click();
+  await expect(page.getByRole("heading", { name: "Hồ sơ" })).toBeVisible();
+  // Hồ sơ mẫu có sẵn: gắn mẫu nghề, đếm buổi
   await expect(page.getByText("Kế thừa mẫu Buổi khám")).toBeVisible();
 
-  await page.getByRole("button", { name: "Tạo thư mục" }).click();
-  await page.getByRole("textbox", { name: "Tên thư mục" }).fill("Căn hộ 12A của anh Tú");
+  await page.getByRole("button", { name: "Tạo hồ sơ" }).click();
+  await page.getByRole("textbox", { name: "Tên hồ sơ" }).fill("Căn hộ 12A của anh Tú");
   await page.getByRole("textbox", { name: "Mã hồ sơ (không bắt buộc)" }).fill("12A");
   await page.getByRole("radio", { name: "Buổi khám" }).click();
-  await page.getByRole("button", { name: "Lưu thư mục" }).click();
-  await expect(page.getByText("Đã lưu thư mục")).toBeVisible();
+  await page.getByRole("button", { name: "Tạo hồ sơ" }).last().click();
+  await expect(page.getByText("Đã tạo hồ sơ")).toBeVisible();
+  // Quay về thư viện, mở lại tab Hồ sơ để đếm nhãn kế thừa
+  await page.goto("/");
+  await page.getByRole("button", { name: "Hồ sơ" }).first().click();
+  await expect(page.getByRole("heading", { name: "Hồ sơ" })).toBeVisible();
   await expect(page.getByText("Căn hộ 12A của anh Tú")).toBeVisible();
   await expect(page.getByText("Kế thừa mẫu Buổi khám")).toHaveCount(2);
 });
 
 test("mẫu nhạy cảm chặn ghi đến khi có biên nhận; biên nhận hiện ở chi tiết buổi", async ({ page }) => {
   await toiBangDongY(page);
-  // Chọn thư mục nghề bác sĩ: mẫu kế thừa là Buổi khám (requires_consent)
-  await page.getByRole("radio", { name: "Bệnh nhân Trần Văn B" }).click();
+  // Chọn hồ sơ nghề bác sĩ: mẫu kế thừa là Buổi khám (requires_consent)
+  await page.getByRole("radio", { name: "Bà Nguyễn Thị Hòa" }).click();
   await expect(page.getByText("Mẫu này cho nghề nhạy cảm")).toBeVisible();
   const batDau = page.getByRole("button", { name: "Đã đồng ý, ghi" });
   await expect(batDau).toBeDisabled(); // chưa ghi ai đồng ý
@@ -74,7 +81,8 @@ test("mẫu nhạy cảm chặn ghi đến khi có biên nhận; biên nhận hi
   // Đang ghi: mẫu kế thừa hiện ở đầu màn
   await expect(page.getByRole("button", { name: "Đổi mẫu ghi âm" })).toHaveText(/Buổi khám/);
   await luuBuoi(page);
-  await expect(page.getByText("Biên nhận đồng ý: bệnh nhân Trần Văn B")).toBeVisible();
+  // Dòng biên nhận ở chi tiết buổi (hình hiển thị của GY1 giữ lại khi gộp)
+  await expect(page.getByText(/bệnh nhân Trần Văn B đồng ý ghi âm lúc/)).toBeVisible();
 });
 
 test("đổi mẫu giữa buổi sang mẫu nhạy cảm: Bỏ giữ mẫu cũ, đồng ý là đổi", async ({ page }) => {

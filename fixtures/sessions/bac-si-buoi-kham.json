@@ -15,7 +15,17 @@
   "audio_expires_at": null,
   "consent": {
    "confirmed": true,
-   "announced": false
+   "announced": false,
+   "receipts": [
+    {
+     "id": "cr-bac-si-buoi-kham",
+     "who": [
+      "Bà Nguyễn Thị Hòa"
+     ],
+     "at": "2026-11-05T09:20:00+07:00",
+     "method": "button"
+    }
+   ]
   },
   "participant_contact_ids": [
    "c-me"

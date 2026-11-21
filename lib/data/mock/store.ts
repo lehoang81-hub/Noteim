@@ -5,7 +5,7 @@ import { applyAudioAttach } from "./audio-attach";
 import { migrateStored } from "./migrate";
 import { normalizeSpeakerNames } from "./normalize";
 import type { RecordingDraft } from "../repository";
-import type { AuditEvent, ChatMessage, Contact, Folder, GlossaryTerm, Invoice, Member, Quota, SessionFixture, ShareLink, Template, User, Workspace } from "../types";
+import type { AuditEvent, ChatMessage, Contact, Folder, FolderChatMessage, GlossaryTerm, Invoice, Member, Quota, SessionFixture, ShareLink, Template, User, Workspace } from "../types";
 import type { StoredSession } from "./seed-data";
 
 export type { StoredSession } from "./seed-data";
@@ -47,14 +47,16 @@ export type MockDb = {
       chat_log?: ChatMessage[];
     }
   >;
+  /** Thư mục theo hồ sơ (góp ý vòng 1, #75) */
+  folders: Folder[];
+  /** Lịch sử hỏi đáp của Hỏi AI thư mục, khóa theo id thư mục */
+  folder_chats: Record<string, FolderChatMessage[]>;
   /** Link chia sẻ đã tạo (M4-01). Mật khẩu lưu trong bản giả để trang công khai kiểm lại. */
   shares: Array<ShareLink & { password?: string }>;
   /** Buổi ghi vừa xóa, giữ để "Hoàn tác" (M4-01); dọn khi tải lại trang */
   removed: Array<SessionFixture & { chat_log?: ChatMessage[] }>;
   /** Buổi ghi mẫu theo nghề (M4-04), tách khỏi danh sách thư viện chính */
   samples: StoredSession[];
-  /** Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7) */
-  folders: Folder[];
 };
 
 /**
@@ -74,10 +76,11 @@ function emptyDb(): MockDb {
     audit: [],
     invoices: [],
     sessions: [],
+    folders: [],
+    folder_chats: {},
     samples: [],
     shares: [],
     removed: [],
-    folders: [],
   };
 }
 
@@ -151,7 +154,9 @@ export function ensureDb(): MockDb {
         if (!d.invoices.length) d.invoices = await mod.loadInvoices();
         // Buổi ghi thư viện: kho từ localStorage đã có sẵn, không ghi đè
         if (!d.sessions.length) d.sessions = await mod.loadSessions();
-        // Thư mục theo hồ sơ (GC-05): kho đã lưu vẫn giữ phần người dùng đã đổi
+        // Thư mục theo hồ sơ (GY1/PR #76 + GC-05): kho đã lưu mà chưa có thư mục
+        // (kho cũ trước GY1) thì nạp fixture một lần; kho đã lưu vẫn giữ phần
+        // người dùng đã đổi
         if (!d.folders.length) d.folders = await mod.loadFolders();
         // M9-01: kho lưu trước M9 còn mốc cũ của 3 buổi có âm thanh thật — tự cập nhật
         if (await applyAudioAttach(d)) commit();
