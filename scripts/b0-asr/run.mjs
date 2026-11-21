@@ -6,7 +6,7 @@
  * Cách dùng:
  *   node scripts/b0-asr/run.mjs --provider soniox --file test-data/audio/01-bds-gap-chi-lan.m4a [--force]
  *
- * - Kết quả thô:    test-data/asr-results/<mã>/<tên bộ>.raw.json   (commit, để không gọi lại tốn tiền)
+ * - Kết quả thô:    test-data/asr-results/<mã>/<tên bộ>.raw.json.gz (commit nén gzip, để không gọi lại tốn tiền)
  * - Đã chuẩn hóa:   test-data/asr-results/<mã>/<tên bộ>.json
  * - Đã có kết quả thì KHÔNG gọi lại; thêm --force để gọi lại.
  * - Thiếu khóa trong biến môi trường: in thông báo rõ và thoát mã 2, không gọi API.
@@ -15,6 +15,7 @@
  * Mã thoát: 0 xong hoặc đã có kết quả; 1 lỗi gọi API; 2 bỏ qua (thiếu khóa, sai đối số).
  */
 import { existsSync, mkdirSync, writeFileSync, readdirSync } from "node:fs";
+import { gzipSync } from "node:zlib";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
@@ -77,7 +78,8 @@ async function main() {
 
   const baseName = path.basename(filePath).replace(/\.[^.]+$/, "");
   const outDir = path.join(RESULTS_DIR, provider.code);
-  const rawPath = path.join(outDir, `${baseName}.raw.json`);
+  // Kết quả thô nén gzip để nhẹ kho (PR #74 nhịp 2): mở bằng `gunzip -k <file>` khi cần tái chấm
+  const rawPath = path.join(outDir, `${baseName}.raw.json.gz`);
   const normPath = path.join(outDir, `${baseName}.json`);
 
   if (!args.force && existsSync(normPath) && existsSync(rawPath)) {
@@ -103,7 +105,7 @@ async function main() {
   const processingMs = Math.round(performance.now() - t0); // gồm cả thời gian chờ việc hoàn thành
 
   mkdirSync(outDir, { recursive: true });
-  writeFileSync(rawPath, JSON.stringify(result.raw, null, 2) + "\n");
+  writeFileSync(rawPath, gzipSync(Buffer.from(JSON.stringify(result.raw, null, 2) + "\n"), { level: 9 }));
 
   const audioDurationSec = ffprobeDurationSec(filePath);
   const normalized = normalizeResult({

@@ -1,0 +1,4263 @@
+{
+  "provider": "soniox",
+  "file": "03-bac-si-kham",
+  "model": "stt-async-v6",
+  "processing_ms": 7720,
+  "audio_duration_sec": 148.598005,
+  "language": null,
+  "segments": [
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 1.47,
+      "end_sec": 9.21,
+      "text": "Chị ngồi xuống đây cho em. Tuần trước chị nói vẫn mỏi chân, dạo này thế nào ạ? Chị đo đường huyết lúc đói bao nhiêu sáng nay?",
+      "words": [
+        {
+          "text": "Ch",
+          "start_sec": 1.47,
+          "end_sec": 1.53
+        },
+        {
+          "text": "ị",
+          "start_sec": 1.53,
+          "end_sec": 1.59
+        },
+        {
+          "text": "ng",
+          "start_sec": 1.65,
+          "end_sec": 1.71
+        },
+        {
+          "text": "ồi",
+          "start_sec": 1.71,
+          "end_sec": 1.77
+        },
+        {
+          "text": "xu",
+          "start_sec": 1.83,
+          "end_sec": 1.89
+        },
+        {
+          "text": "ống",
+          "start_sec": 1.89,
+          "end_sec": 1.95
+        },
+        {
+          "text": "đ",
+          "start_sec": 2.01,
+          "end_sec": 2.07
+        },
+        {
+          "text": "ây",
+          "start_sec": 2.07,
+          "end_sec": 2.13
+        },
+        {
+          "text": "cho",
+          "start_sec": 2.25,
+          "end_sec": 2.31
+        },
+        {
+          "text": "em",
+          "start_sec": 2.43,
+          "end_sec": 2.49
+        },
+        {
+          "text": ".",
+          "start_sec": 2.73,
+          "end_sec": 2.79
+        },
+        {
+          "text": "Tu",
+          "start_sec": 3.57,
+          "end_sec": 3.63
+        },
+        {
+          "text": "ần",
+          "start_sec": 3.69,
+          "end_sec": 3.75
+        },
+        {
+          "text": "trước",
+          "start_sec": 3.81,
+          "end_sec": 3.87
+        },
+        {
+          "text": "ch",
+          "start_sec": 3.99,
+          "end_sec": 4.05
+        },
+        {
+          "text": "ị",
+          "start_sec": 4.05,
+          "end_sec": 4.11
+        },
+        {
+          "text": "nó",
+          "start_sec": 4.17,
+          "end_sec": 4.23
+        },
+        {
+          "text": "i",
+          "start_sec": 4.23,
+          "end_sec": 4.29
+        },
+        {
+          "text": "v",
+          "start_sec": 4.35,
+          "end_sec": 4.41
+        },
+        {
+          "text": "ẫn",
+          "start_sec": 4.41,
+          "end_sec": 4.47
+        },
+        {
+          "text": "m",
+          "start_sec": 4.53,
+          "end_sec": 4.59
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 4.65,
+          "end_sec": 4.71
+        },
+        {
+          "text": "i",
+          "start_sec": 4.71,
+          "end_sec": 4.77
+        },
+        {
+          "text": "ch",
+          "start_sec": 4.83,
+          "end_sec": 4.89
+        },
+        {
+          "text": "ân",
+          "start_sec": 4.89,
+          "end_sec": 4.95
+        },
+        {
+          "text": ",",
+          "start_sec": 5.13,
+          "end_sec": 5.19
+        },
+        {
+          "text": "d",
+          "start_sec": 5.37,
+          "end_sec": 5.43
+        },
+        {
+          "text": "ạo",
+          "start_sec": 5.43,
+          "end_sec": 5.49
+        },
+        {
+          "text": "này",
+          "start_sec": 5.61,
+          "end_sec": 5.67
+        },
+        {
+          "text": "thế",
+          "start_sec": 5.73,
+          "end_sec": 5.79
+        },
+        {
+          "text": "n",
+          "start_sec": 5.91,
+          "end_sec": 5.97
+        },
+        {
+          "text": "ào",
+          "start_sec": 5.97,
+          "end_sec": 6.03
+        },
+        {
+          "text": "ạ",
+          "start_sec": 6.21,
+          "end_sec": 6.27
+        },
+        {
+          "text": "?",
+          "start_sec": 6.33,
+          "end_sec": 6.39
+        },
+        {
+          "text": "Ch",
+          "start_sec": 6.87,
+          "end_sec": 6.93
+        },
+        {
+          "text": "ị",
+          "start_sec": 6.93,
+          "end_sec": 6.99
+        },
+        {
+          "text": "đo",
+          "start_sec": 7.11,
+          "end_sec": 7.17
+        },
+        {
+          "text": "đường",
+          "start_sec": 7.29,
+          "end_sec": 7.35
+        },
+        {
+          "text": "h",
+          "start_sec": 7.53,
+          "end_sec": 7.59
+        },
+        {
+          "text": "uy",
+          "start_sec": 7.59,
+          "end_sec": 7.65
+        },
+        {
+          "text": "ết",
+          "start_sec": 7.71,
+          "end_sec": 7.77
+        },
+        {
+          "text": "l",
+          "start_sec": 7.83,
+          "end_sec": 7.89
+        },
+        {
+          "text": "úc",
+          "start_sec": 7.89,
+          "end_sec": 7.95
+        },
+        {
+          "text": "đó",
+          "start_sec": 8.01,
+          "end_sec": 8.07
+        },
+        {
+          "text": "i",
+          "start_sec": 8.13,
+          "end_sec": 8.19
+        },
+        {
+          "text": "bao",
+          "start_sec": 8.25,
+          "end_sec": 8.31
+        },
+        {
+          "text": "nhi",
+          "start_sec": 8.37,
+          "end_sec": 8.43
+        },
+        {
+          "text": "êu",
+          "start_sec": 8.49,
+          "end_sec": 8.55
+        },
+        {
+          "text": "s",
+          "start_sec": 8.67,
+          "end_sec": 8.73
+        },
+        {
+          "text": "áng",
+          "start_sec": 8.73,
+          "end_sec": 8.79
+        },
+        {
+          "text": "na",
+          "start_sec": 8.91,
+          "end_sec": 8.97
+        },
+        {
+          "text": "y",
+          "start_sec": 9.03,
+          "end_sec": 9.09
+        },
+        {
+          "text": "?",
+          "start_sec": 9.15,
+          "end_sec": 9.21
+        }
+      ]
+    },
+    {
+      "speaker": "2",
+      "lang": "vi",
+      "start_sec": 10.23,
+      "end_sec": 17.31,
+      "text": "Vẫn mỏi ấy bác sĩ, nhất là từ 4 giờ chiều trở đi. Sáng nay em đo được 6,8 bác sĩ ạ.",
+      "words": [
+        {
+          "text": "V",
+          "start_sec": 10.23,
+          "end_sec": 10.29
+        },
+        {
+          "text": "ẫn",
+          "start_sec": 10.29,
+          "end_sec": 10.35
+        },
+        {
+          "text": "m",
+          "start_sec": 10.47,
+          "end_sec": 10.53
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 10.53,
+          "end_sec": 10.59
+        },
+        {
+          "text": "i",
+          "start_sec": 10.65,
+          "end_sec": 10.71
+        },
+        {
+          "text": "ấy",
+          "start_sec": 10.83,
+          "end_sec": 10.89
+        },
+        {
+          "text": "b",
+          "start_sec": 11.01,
+          "end_sec": 11.07
+        },
+        {
+          "text": "ác",
+          "start_sec": 11.07,
+          "end_sec": 11.13
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 11.25,
+          "end_sec": 11.31
+        },
+        {
+          "text": ",",
+          "start_sec": 11.61,
+          "end_sec": 11.67
+        },
+        {
+          "text": "nhất",
+          "start_sec": 11.97,
+          "end_sec": 12.03
+        },
+        {
+          "text": "là",
+          "start_sec": 12.15,
+          "end_sec": 12.21
+        },
+        {
+          "text": "từ",
+          "start_sec": 12.39,
+          "end_sec": 12.45
+        },
+        {
+          "text": "4",
+          "start_sec": 12.69,
+          "end_sec": 12.75
+        },
+        {
+          "text": "gi",
+          "start_sec": 12.99,
+          "end_sec": 13.05
+        },
+        {
+          "text": "ờ",
+          "start_sec": 13.11,
+          "end_sec": 13.17
+        },
+        {
+          "text": "chi",
+          "start_sec": 13.29,
+          "end_sec": 13.35
+        },
+        {
+          "text": "ều",
+          "start_sec": 13.41,
+          "end_sec": 13.47
+        },
+        {
+          "text": "trở",
+          "start_sec": 13.59,
+          "end_sec": 13.65
+        },
+        {
+          "text": "đ",
+          "start_sec": 13.77,
+          "end_sec": 13.83
+        },
+        {
+          "text": "i.",
+          "start_sec": 14.01,
+          "end_sec": 14.07
+        },
+        {
+          "text": "S",
+          "start_sec": 14.37,
+          "end_sec": 14.43
+        },
+        {
+          "text": "áng",
+          "start_sec": 14.43,
+          "end_sec": 14.49
+        },
+        {
+          "text": "na",
+          "start_sec": 14.55,
+          "end_sec": 14.61
+        },
+        {
+          "text": "y",
+          "start_sec": 14.67,
+          "end_sec": 14.73
+        },
+        {
+          "text": "em",
+          "start_sec": 14.85,
+          "end_sec": 14.91
+        },
+        {
+          "text": "đo",
+          "start_sec": 15.21,
+          "end_sec": 15.27
+        },
+        {
+          "text": "được",
+          "start_sec": 15.33,
+          "end_sec": 15.39
+        },
+        {
+          "text": "6",
+          "start_sec": 15.69,
+          "end_sec": 15.75
+        },
+        {
+          "text": ",",
+          "start_sec": 15.99,
+          "end_sec": 16.05
+        },
+        {
+          "text": "8",
+          "start_sec": 16.23,
+          "end_sec": 16.29
+        },
+        {
+          "text": "b",
+          "start_sec": 16.59,
+          "end_sec": 16.65
+        },
+        {
+          "text": "ác",
+          "start_sec": 16.65,
+          "end_sec": 16.71
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 16.77,
+          "end_sec": 16.83
+        },
+        {
+          "text": "ạ",
+          "start_sec": 17.07,
+          "end_sec": 17.13
+        },
+        {
+          "text": ".",
+          "start_sec": 17.25,
+          "end_sec": 17.31
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 18.21,
+      "end_sec": 26.49,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 18.21,
+          "end_sec": 18.27
+        },
+        {
+          "text": "ch",
+          "start_sec": 18.39,
+          "end_sec": 18.45
+        },
+        {
+          "text": "á",
+          "start_sec": 18.51,
+          "end_sec": 18.57
+        },
+        {
+          "text": "u",
+          "start_sec": 18.57,
+          "end_sec": 18.63
+        },
+        {
+          "text": "ch",
+          "start_sec": 18.69,
+          "end_sec": 18.75
+        },
+        {
+          "text": "ở",
+          "start_sec": 18.75,
+          "end_sec": 18.81
+        },
+        {
+          "text": "ch",
+          "start_sec": 18.93,
+          "end_sec": 18.99
+        },
+        {
+          "text": "ị",
+          "start_sec": 18.99,
+          "end_sec": 19.05
+        },
+        {
+          "text": "đi",
+          "start_sec": 19.11,
+          "end_sec": 19.17
+        },
+        {
+          "text": "kh",
+          "start_sec": 19.29,
+          "end_sec": 19.35
+        },
+        {
+          "text": "ám",
+          "start_sec": 19.41,
+          "end_sec": 19.47
+        },
+        {
+          "text": "m",
+          "start_sec": 19.53,
+          "end_sec": 19.59
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 19.59,
+          "end_sec": 19.65
+        },
+        {
+          "text": "i",
+          "start_sec": 19.65,
+          "end_sec": 19.71
+        },
+        {
+          "text": "s",
+          "start_sec": 19.77,
+          "end_sec": 19.83
+        },
+        {
+          "text": "áng",
+          "start_sec": 19.83,
+          "end_sec": 19.89
+        },
+        {
+          "text": ",",
+          "start_sec": 20.07,
+          "end_sec": 20.13
+        },
+        {
+          "text": "b",
+          "start_sec": 20.25,
+          "end_sec": 20.31
+        },
+        {
+          "text": "ác",
+          "start_sec": 20.31,
+          "end_sec": 20.37
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 20.49,
+          "end_sec": 20.55
+        },
+        {
+          "text": "cứ",
+          "start_sec": 20.67,
+          "end_sec": 20.73
+        },
+        {
+          "text": "d",
+          "start_sec": 20.97,
+          "end_sec": 21.03
+        },
+        {
+          "text": "ặ",
+          "start_sec": 21.03,
+          "end_sec": 21.09
+        },
+        {
+          "text": "n",
+          "start_sec": 21.09,
+          "end_sec": 21.15
+        },
+        {
+          "text": "r",
+          "start_sec": 21.15,
+          "end_sec": 21.21
+        },
+        {
+          "text": "ồi",
+          "start_sec": 21.27,
+          "end_sec": 21.33
+        },
+        {
+          "text": "con",
+          "start_sec": 21.45,
+          "end_sec": 21.51
+        },
+        {
+          "text": "nh",
+          "start_sec": 21.63,
+          "end_sec": 21.69
+        },
+        {
+          "text": "ớ",
+          "start_sec": 21.69,
+          "end_sec": 21.75
+        },
+        {
+          "text": "ch",
+          "start_sec": 21.87,
+          "end_sec": 21.93
+        },
+        {
+          "text": "o.",
+          "start_sec": 22.11,
+          "end_sec": 22.17
+        },
+        {
+          "text": "Con",
+          "start_sec": 22.59,
+          "end_sec": 22.65
+        },
+        {
+          "text": "ch",
+          "start_sec": 22.77,
+          "end_sec": 22.83
+        },
+        {
+          "text": "á",
+          "start_sec": 22.83,
+          "end_sec": 22.89
+        },
+        {
+          "text": "u",
+          "start_sec": 22.89,
+          "end_sec": 22.95
+        },
+        {
+          "text": "ch",
+          "start_sec": 23.07,
+          "end_sec": 23.13
+        },
+        {
+          "text": "ở",
+          "start_sec": 23.13,
+          "end_sec": 23.19
+        },
+        {
+          "text": "ch",
+          "start_sec": 23.31,
+          "end_sec": 23.37
+        },
+        {
+          "text": "ị",
+          "start_sec": 23.37,
+          "end_sec": 23.43
+        },
+        {
+          "text": "đi",
+          "start_sec": 23.43,
+          "end_sec": 23.49
+        },
+        {
+          "text": "kh",
+          "start_sec": 23.61,
+          "end_sec": 23.67
+        },
+        {
+          "text": "ám",
+          "start_sec": 23.73,
+          "end_sec": 23.79
+        },
+        {
+          "text": "m",
+          "start_sec": 23.85,
+          "end_sec": 23.91
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 23.91,
+          "end_sec": 23.97
+        },
+        {
+          "text": "i",
+          "start_sec": 24.03,
+          "end_sec": 24.09
+        },
+        {
+          "text": "s",
+          "start_sec": 24.09,
+          "end_sec": 24.15
+        },
+        {
+          "text": "áng",
+          "start_sec": 24.15,
+          "end_sec": 24.21
+        },
+        {
+          "text": ",",
+          "start_sec": 24.39,
+          "end_sec": 24.45
+        },
+        {
+          "text": "b",
+          "start_sec": 24.63,
+          "end_sec": 24.69
+        },
+        {
+          "text": "ác",
+          "start_sec": 24.69,
+          "end_sec": 24.75
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 24.81,
+          "end_sec": 24.87
+        },
+        {
+          "text": "cứ",
+          "start_sec": 25.05,
+          "end_sec": 25.11
+        },
+        {
+          "text": "d",
+          "start_sec": 25.29,
+          "end_sec": 25.35
+        },
+        {
+          "text": "ặ",
+          "start_sec": 25.35,
+          "end_sec": 25.41
+        },
+        {
+          "text": "n",
+          "start_sec": 25.41,
+          "end_sec": 25.47
+        },
+        {
+          "text": "r",
+          "start_sec": 25.53,
+          "end_sec": 25.59
+        },
+        {
+          "text": "ồi",
+          "start_sec": 25.59,
+          "end_sec": 25.65
+        },
+        {
+          "text": "con",
+          "start_sec": 25.77,
+          "end_sec": 25.83
+        },
+        {
+          "text": "nh",
+          "start_sec": 25.95,
+          "end_sec": 26.01
+        },
+        {
+          "text": "ớ",
+          "start_sec": 26.01,
+          "end_sec": 26.07
+        },
+        {
+          "text": "ch",
+          "start_sec": 26.25,
+          "end_sec": 26.31
+        },
+        {
+          "text": "o.",
+          "start_sec": 26.43,
+          "end_sec": 26.49
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 27.57,
+      "end_sec": 29.13,
+      "text": "Vậy tốt hơn tuần trước rồi.",
+      "words": [
+        {
+          "text": "V",
+          "start_sec": 27.57,
+          "end_sec": 27.63
+        },
+        {
+          "text": "ậ",
+          "start_sec": 27.63,
+          "end_sec": 27.69
+        },
+        {
+          "text": "y",
+          "start_sec": 27.69,
+          "end_sec": 27.75
+        },
+        {
+          "text": "t",
+          "start_sec": 27.81,
+          "end_sec": 27.87
+        },
+        {
+          "text": "ốt",
+          "start_sec": 27.93,
+          "end_sec": 27.99
+        },
+        {
+          "text": "hơn",
+          "start_sec": 28.11,
+          "end_sec": 28.17
+        },
+        {
+          "text": "tu",
+          "start_sec": 28.35,
+          "end_sec": 28.41
+        },
+        {
+          "text": "ần",
+          "start_sec": 28.47,
+          "end_sec": 28.53
+        },
+        {
+          "text": "trước",
+          "start_sec": 28.59,
+          "end_sec": 28.65
+        },
+        {
+          "text": "r",
+          "start_sec": 28.77,
+          "end_sec": 28.83
+        },
+        {
+          "text": "ồ",
+          "start_sec": 28.89,
+          "end_sec": 28.95
+        },
+        {
+          "text": "i.",
+          "start_sec": 29.07,
+          "end_sec": 29.13
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 29.97,
+      "end_sec": 34.53,
+      "text": "Chị có bỏ liều buổi trưa hôm nào không? Chân chị sưng không, hay chỉ mỏi thôi?",
+      "words": [
+        {
+          "text": "Ch",
+          "start_sec": 29.97,
+          "end_sec": 30.03
+        },
+        {
+          "text": "ị",
+          "start_sec": 30.09,
+          "end_sec": 30.15
+        },
+        {
+          "text": "có",
+          "start_sec": 30.15,
+          "end_sec": 30.21
+        },
+        {
+          "text": "b",
+          "start_sec": 30.33,
+          "end_sec": 30.39
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 30.39,
+          "end_sec": 30.45
+        },
+        {
+          "text": "li",
+          "start_sec": 30.63,
+          "end_sec": 30.69
+        },
+        {
+          "text": "ều",
+          "start_sec": 30.69,
+          "end_sec": 30.75
+        },
+        {
+          "text": "bu",
+          "start_sec": 30.87,
+          "end_sec": 30.93
+        },
+        {
+          "text": "ổi",
+          "start_sec": 30.93,
+          "end_sec": 30.99
+        },
+        {
+          "text": "tr",
+          "start_sec": 31.05,
+          "end_sec": 31.11
+        },
+        {
+          "text": "ưa",
+          "start_sec": 31.17,
+          "end_sec": 31.23
+        },
+        {
+          "text": "h",
+          "start_sec": 31.23,
+          "end_sec": 31.29
+        },
+        {
+          "text": "ô",
+          "start_sec": 31.29,
+          "end_sec": 31.35
+        },
+        {
+          "text": "m",
+          "start_sec": 31.41,
+          "end_sec": 31.47
+        },
+        {
+          "text": "n",
+          "start_sec": 31.47,
+          "end_sec": 31.53
+        },
+        {
+          "text": "ào",
+          "start_sec": 31.53,
+          "end_sec": 31.59
+        },
+        {
+          "text": "không",
+          "start_sec": 31.65,
+          "end_sec": 31.71
+        },
+        {
+          "text": "?",
+          "start_sec": 31.89,
+          "end_sec": 31.95
+        },
+        {
+          "text": "Ch",
+          "start_sec": 32.31,
+          "end_sec": 32.37
+        },
+        {
+          "text": "ân",
+          "start_sec": 32.37,
+          "end_sec": 32.43
+        },
+        {
+          "text": "ch",
+          "start_sec": 32.55,
+          "end_sec": 32.61
+        },
+        {
+          "text": "ị",
+          "start_sec": 32.61,
+          "end_sec": 32.67
+        },
+        {
+          "text": "s",
+          "start_sec": 32.79,
+          "end_sec": 32.85
+        },
+        {
+          "text": "ưng",
+          "start_sec": 32.91,
+          "end_sec": 32.97
+        },
+        {
+          "text": "không",
+          "start_sec": 33.03,
+          "end_sec": 33.09
+        },
+        {
+          "text": ",",
+          "start_sec": 33.33,
+          "end_sec": 33.39
+        },
+        {
+          "text": "hay",
+          "start_sec": 33.51,
+          "end_sec": 33.57
+        },
+        {
+          "text": "chỉ",
+          "start_sec": 33.75,
+          "end_sec": 33.81
+        },
+        {
+          "text": "m",
+          "start_sec": 33.93,
+          "end_sec": 33.99
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 33.99,
+          "end_sec": 34.05
+        },
+        {
+          "text": "i",
+          "start_sec": 34.05,
+          "end_sec": 34.11
+        },
+        {
+          "text": "th",
+          "start_sec": 34.17,
+          "end_sec": 34.23
+        },
+        {
+          "text": "ôi",
+          "start_sec": 34.29,
+          "end_sec": 34.35
+        },
+        {
+          "text": "?",
+          "start_sec": 34.47,
+          "end_sec": 34.53
+        }
+      ]
+    },
+    {
+      "speaker": "2",
+      "lang": "vi",
+      "start_sec": 35.31,
+      "end_sec": 40.77,
+      "text": "Dạ có 1 hôm em quên vì đi chợ về muộn. Chỉ mỏi thôi, không sưng ạ.",
+      "words": [
+        {
+          "text": "D",
+          "start_sec": 35.31,
+          "end_sec": 35.37
+        },
+        {
+          "text": "ạ",
+          "start_sec": 35.37,
+          "end_sec": 35.43
+        },
+        {
+          "text": "có",
+          "start_sec": 35.49,
+          "end_sec": 35.55
+        },
+        {
+          "text": "1",
+          "start_sec": 35.67,
+          "end_sec": 35.73
+        },
+        {
+          "text": "h",
+          "start_sec": 35.91,
+          "end_sec": 35.97
+        },
+        {
+          "text": "ô",
+          "start_sec": 35.97,
+          "end_sec": 36.03
+        },
+        {
+          "text": "m",
+          "start_sec": 36.03,
+          "end_sec": 36.09
+        },
+        {
+          "text": "em",
+          "start_sec": 36.21,
+          "end_sec": 36.27
+        },
+        {
+          "text": "qu",
+          "start_sec": 36.39,
+          "end_sec": 36.45
+        },
+        {
+          "text": "ên",
+          "start_sec": 36.51,
+          "end_sec": 36.57
+        },
+        {
+          "text": "vì",
+          "start_sec": 36.75,
+          "end_sec": 36.81
+        },
+        {
+          "text": "đi",
+          "start_sec": 36.99,
+          "end_sec": 37.05
+        },
+        {
+          "text": "ch",
+          "start_sec": 37.29,
+          "end_sec": 37.35
+        },
+        {
+          "text": "ợ",
+          "start_sec": 37.35,
+          "end_sec": 37.41
+        },
+        {
+          "text": "về",
+          "start_sec": 37.53,
+          "end_sec": 37.59
+        },
+        {
+          "text": "mu",
+          "start_sec": 37.89,
+          "end_sec": 37.95
+        },
+        {
+          "text": "ộ",
+          "start_sec": 37.95,
+          "end_sec": 38.01
+        },
+        {
+          "text": "n.",
+          "start_sec": 38.07,
+          "end_sec": 38.13
+        },
+        {
+          "text": "Ch",
+          "start_sec": 38.67,
+          "end_sec": 38.73
+        },
+        {
+          "text": "ỉ",
+          "start_sec": 38.73,
+          "end_sec": 38.79
+        },
+        {
+          "text": "m",
+          "start_sec": 38.85,
+          "end_sec": 38.91
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 38.97,
+          "end_sec": 39.03
+        },
+        {
+          "text": "i",
+          "start_sec": 39.03,
+          "end_sec": 39.09
+        },
+        {
+          "text": "th",
+          "start_sec": 39.21,
+          "end_sec": 39.27
+        },
+        {
+          "text": "ô",
+          "start_sec": 39.27,
+          "end_sec": 39.33
+        },
+        {
+          "text": "i,",
+          "start_sec": 39.51,
+          "end_sec": 39.57
+        },
+        {
+          "text": "không",
+          "start_sec": 39.81,
+          "end_sec": 39.87
+        },
+        {
+          "text": "s",
+          "start_sec": 40.17,
+          "end_sec": 40.23
+        },
+        {
+          "text": "ưng",
+          "start_sec": 40.29,
+          "end_sec": 40.35
+        },
+        {
+          "text": "ạ",
+          "start_sec": 40.53,
+          "end_sec": 40.59
+        },
+        {
+          "text": ".",
+          "start_sec": 40.71,
+          "end_sec": 40.77
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 41.37,
+      "end_sec": 58.05,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Em cho chị làm thêm xét nghiệm HbA1c để đánh giá 3 tháng qua. Chị uống metformin buổi tối sau ăn nhé, đừng uống lúc bụng đói.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 41.37,
+          "end_sec": 41.43
+        },
+        {
+          "text": "ch",
+          "start_sec": 41.55,
+          "end_sec": 41.61
+        },
+        {
+          "text": "á",
+          "start_sec": 41.61,
+          "end_sec": 41.67
+        },
+        {
+          "text": "u",
+          "start_sec": 41.67,
+          "end_sec": 41.73
+        },
+        {
+          "text": "ch",
+          "start_sec": 41.85,
+          "end_sec": 41.91
+        },
+        {
+          "text": "ở",
+          "start_sec": 41.91,
+          "end_sec": 41.97
+        },
+        {
+          "text": "ch",
+          "start_sec": 42.09,
+          "end_sec": 42.15
+        },
+        {
+          "text": "ị",
+          "start_sec": 42.15,
+          "end_sec": 42.21
+        },
+        {
+          "text": "đi",
+          "start_sec": 42.21,
+          "end_sec": 42.27
+        },
+        {
+          "text": "kh",
+          "start_sec": 42.39,
+          "end_sec": 42.45
+        },
+        {
+          "text": "ám",
+          "start_sec": 42.51,
+          "end_sec": 42.57
+        },
+        {
+          "text": "m",
+          "start_sec": 42.69,
+          "end_sec": 42.75
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 42.75,
+          "end_sec": 42.81
+        },
+        {
+          "text": "i",
+          "start_sec": 42.81,
+          "end_sec": 42.87
+        },
+        {
+          "text": "s",
+          "start_sec": 42.87,
+          "end_sec": 42.93
+        },
+        {
+          "text": "áng",
+          "start_sec": 42.93,
+          "end_sec": 42.99
+        },
+        {
+          "text": ",",
+          "start_sec": 43.17,
+          "end_sec": 43.23
+        },
+        {
+          "text": "b",
+          "start_sec": 43.41,
+          "end_sec": 43.47
+        },
+        {
+          "text": "ác",
+          "start_sec": 43.47,
+          "end_sec": 43.53
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 43.59,
+          "end_sec": 43.65
+        },
+        {
+          "text": "cứ",
+          "start_sec": 43.83,
+          "end_sec": 43.89
+        },
+        {
+          "text": "d",
+          "start_sec": 44.07,
+          "end_sec": 44.13
+        },
+        {
+          "text": "ặ",
+          "start_sec": 44.13,
+          "end_sec": 44.19
+        },
+        {
+          "text": "n",
+          "start_sec": 44.19,
+          "end_sec": 44.25
+        },
+        {
+          "text": "r",
+          "start_sec": 44.31,
+          "end_sec": 44.37
+        },
+        {
+          "text": "ồi",
+          "start_sec": 44.37,
+          "end_sec": 44.43
+        },
+        {
+          "text": "con",
+          "start_sec": 44.55,
+          "end_sec": 44.61
+        },
+        {
+          "text": "nh",
+          "start_sec": 44.73,
+          "end_sec": 44.79
+        },
+        {
+          "text": "ớ",
+          "start_sec": 44.79,
+          "end_sec": 44.85
+        },
+        {
+          "text": "ch",
+          "start_sec": 45.03,
+          "end_sec": 45.09
+        },
+        {
+          "text": "o.",
+          "start_sec": 45.21,
+          "end_sec": 45.27
+        },
+        {
+          "text": "Con",
+          "start_sec": 45.87,
+          "end_sec": 45.93
+        },
+        {
+          "text": "ch",
+          "start_sec": 46.05,
+          "end_sec": 46.11
+        },
+        {
+          "text": "á",
+          "start_sec": 46.11,
+          "end_sec": 46.17
+        },
+        {
+          "text": "u",
+          "start_sec": 46.23,
+          "end_sec": 46.29
+        },
+        {
+          "text": "ch",
+          "start_sec": 46.35,
+          "end_sec": 46.41
+        },
+        {
+          "text": "ở",
+          "start_sec": 46.41,
+          "end_sec": 46.47
+        },
+        {
+          "text": "ch",
+          "start_sec": 46.59,
+          "end_sec": 46.65
+        },
+        {
+          "text": "ị",
+          "start_sec": 46.65,
+          "end_sec": 46.71
+        },
+        {
+          "text": "đi",
+          "start_sec": 46.77,
+          "end_sec": 46.83
+        },
+        {
+          "text": "kh",
+          "start_sec": 46.95,
+          "end_sec": 47.01
+        },
+        {
+          "text": "ám",
+          "start_sec": 47.01,
+          "end_sec": 47.07
+        },
+        {
+          "text": "m",
+          "start_sec": 47.19,
+          "end_sec": 47.25
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 47.25,
+          "end_sec": 47.31
+        },
+        {
+          "text": "i",
+          "start_sec": 47.31,
+          "end_sec": 47.37
+        },
+        {
+          "text": "s",
+          "start_sec": 47.43,
+          "end_sec": 47.49
+        },
+        {
+          "text": "áng",
+          "start_sec": 47.49,
+          "end_sec": 47.55
+        },
+        {
+          "text": ",",
+          "start_sec": 47.73,
+          "end_sec": 47.79
+        },
+        {
+          "text": "b",
+          "start_sec": 47.91,
+          "end_sec": 47.97
+        },
+        {
+          "text": "ác",
+          "start_sec": 47.97,
+          "end_sec": 48.03
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 48.15,
+          "end_sec": 48.21
+        },
+        {
+          "text": "cứ",
+          "start_sec": 48.39,
+          "end_sec": 48.45
+        },
+        {
+          "text": "d",
+          "start_sec": 48.63,
+          "end_sec": 48.69
+        },
+        {
+          "text": "ặ",
+          "start_sec": 48.69,
+          "end_sec": 48.75
+        },
+        {
+          "text": "n",
+          "start_sec": 48.75,
+          "end_sec": 48.81
+        },
+        {
+          "text": "r",
+          "start_sec": 48.87,
+          "end_sec": 48.93
+        },
+        {
+          "text": "ồi",
+          "start_sec": 48.93,
+          "end_sec": 48.99
+        },
+        {
+          "text": "con",
+          "start_sec": 49.11,
+          "end_sec": 49.17
+        },
+        {
+          "text": "nh",
+          "start_sec": 49.29,
+          "end_sec": 49.35
+        },
+        {
+          "text": "ớ",
+          "start_sec": 49.35,
+          "end_sec": 49.41
+        },
+        {
+          "text": "ch",
+          "start_sec": 49.59,
+          "end_sec": 49.65
+        },
+        {
+          "text": "o.",
+          "start_sec": 49.77,
+          "end_sec": 49.83
+        },
+        {
+          "text": "Em",
+          "start_sec": 50.55,
+          "end_sec": 50.61
+        },
+        {
+          "text": "cho",
+          "start_sec": 50.73,
+          "end_sec": 50.79
+        },
+        {
+          "text": "ch",
+          "start_sec": 50.97,
+          "end_sec": 51.03
+        },
+        {
+          "text": "ị",
+          "start_sec": 51.03,
+          "end_sec": 51.09
+        },
+        {
+          "text": "làm",
+          "start_sec": 51.09,
+          "end_sec": 51.15
+        },
+        {
+          "text": "th",
+          "start_sec": 51.27,
+          "end_sec": 51.33
+        },
+        {
+          "text": "êm",
+          "start_sec": 51.39,
+          "end_sec": 51.45
+        },
+        {
+          "text": "x",
+          "start_sec": 51.57,
+          "end_sec": 51.63
+        },
+        {
+          "text": "ét",
+          "start_sec": 51.63,
+          "end_sec": 51.69
+        },
+        {
+          "text": "nghi",
+          "start_sec": 51.81,
+          "end_sec": 51.87
+        },
+        {
+          "text": "ệm",
+          "start_sec": 51.87,
+          "end_sec": 51.93
+        },
+        {
+          "text": "H",
+          "start_sec": 52.17,
+          "end_sec": 52.23
+        },
+        {
+          "text": "b",
+          "start_sec": 52.23,
+          "end_sec": 52.29
+        },
+        {
+          "text": "A",
+          "start_sec": 52.41,
+          "end_sec": 52.47
+        },
+        {
+          "text": "1",
+          "start_sec": 52.47,
+          "end_sec": 52.47
+        },
+        {
+          "text": "c",
+          "start_sec": 52.59,
+          "end_sec": 52.65
+        },
+        {
+          "text": "để",
+          "start_sec": 52.83,
+          "end_sec": 52.89
+        },
+        {
+          "text": "đánh",
+          "start_sec": 52.95,
+          "end_sec": 53.01
+        },
+        {
+          "text": "gi",
+          "start_sec": 53.13,
+          "end_sec": 53.19
+        },
+        {
+          "text": "á",
+          "start_sec": 53.19,
+          "end_sec": 53.25
+        },
+        {
+          "text": "3",
+          "start_sec": 53.43,
+          "end_sec": 53.49
+        },
+        {
+          "text": "tháng",
+          "start_sec": 53.61,
+          "end_sec": 53.67
+        },
+        {
+          "text": "qu",
+          "start_sec": 53.85,
+          "end_sec": 53.91
+        },
+        {
+          "text": "a.",
+          "start_sec": 54.03,
+          "end_sec": 54.09
+        },
+        {
+          "text": "Ch",
+          "start_sec": 54.63,
+          "end_sec": 54.69
+        },
+        {
+          "text": "ị",
+          "start_sec": 54.69,
+          "end_sec": 54.75
+        },
+        {
+          "text": "u",
+          "start_sec": 54.81,
+          "end_sec": 54.87
+        },
+        {
+          "text": "ống",
+          "start_sec": 54.93,
+          "end_sec": 54.99
+        },
+        {
+          "text": "met",
+          "start_sec": 55.17,
+          "end_sec": 55.23
+        },
+        {
+          "text": "form",
+          "start_sec": 55.35,
+          "end_sec": 55.41
+        },
+        {
+          "text": "in",
+          "start_sec": 55.53,
+          "end_sec": 55.59
+        },
+        {
+          "text": "bu",
+          "start_sec": 55.71,
+          "end_sec": 55.77
+        },
+        {
+          "text": "ổi",
+          "start_sec": 55.77,
+          "end_sec": 55.83
+        },
+        {
+          "text": "t",
+          "start_sec": 55.89,
+          "end_sec": 55.95
+        },
+        {
+          "text": "ối",
+          "start_sec": 55.95,
+          "end_sec": 56.01
+        },
+        {
+          "text": "sau",
+          "start_sec": 56.13,
+          "end_sec": 56.19
+        },
+        {
+          "text": "ăn",
+          "start_sec": 56.37,
+          "end_sec": 56.43
+        },
+        {
+          "text": "nh",
+          "start_sec": 56.55,
+          "end_sec": 56.61
+        },
+        {
+          "text": "é,",
+          "start_sec": 56.61,
+          "end_sec": 56.67
+        },
+        {
+          "text": "đ",
+          "start_sec": 56.97,
+          "end_sec": 57.03
+        },
+        {
+          "text": "ừ",
+          "start_sec": 57.03,
+          "end_sec": 57.09
+        },
+        {
+          "text": "ng",
+          "start_sec": 57.09,
+          "end_sec": 57.15
+        },
+        {
+          "text": "u",
+          "start_sec": 57.21,
+          "end_sec": 57.27
+        },
+        {
+          "text": "ống",
+          "start_sec": 57.27,
+          "end_sec": 57.33
+        },
+        {
+          "text": "l",
+          "start_sec": 57.39,
+          "end_sec": 57.45
+        },
+        {
+          "text": "úc",
+          "start_sec": 57.51,
+          "end_sec": 57.57
+        },
+        {
+          "text": "b",
+          "start_sec": 57.63,
+          "end_sec": 57.69
+        },
+        {
+          "text": "ụ",
+          "start_sec": 57.69,
+          "end_sec": 57.75
+        },
+        {
+          "text": "ng",
+          "start_sec": 57.75,
+          "end_sec": 57.81
+        },
+        {
+          "text": "đó",
+          "start_sec": 57.87,
+          "end_sec": 57.93
+        },
+        {
+          "text": "i.",
+          "start_sec": 57.99,
+          "end_sec": 58.05
+        }
+      ]
+    },
+    {
+      "speaker": "2",
+      "lang": "vi",
+      "start_sec": 59.01,
+      "end_sec": 66.03,
+      "text": "Em sợ làm máu nên hồi hộp lắm bác sĩ. Vẫn mỏi ấy bác sĩ, nhất là từ 4 giờ chiều trở đi.",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 59.01,
+          "end_sec": 59.07
+        },
+        {
+          "text": "s",
+          "start_sec": 59.25,
+          "end_sec": 59.31
+        },
+        {
+          "text": "ợ",
+          "start_sec": 59.31,
+          "end_sec": 59.37
+        },
+        {
+          "text": "làm",
+          "start_sec": 59.55,
+          "end_sec": 59.61
+        },
+        {
+          "text": "má",
+          "start_sec": 59.79,
+          "end_sec": 59.85
+        },
+        {
+          "text": "u",
+          "start_sec": 59.91,
+          "end_sec": 59.97
+        },
+        {
+          "text": "n",
+          "start_sec": 60.09,
+          "end_sec": 60.15
+        },
+        {
+          "text": "ên",
+          "start_sec": 60.15,
+          "end_sec": 60.21
+        },
+        {
+          "text": "h",
+          "start_sec": 60.39,
+          "end_sec": 60.45
+        },
+        {
+          "text": "ồi",
+          "start_sec": 60.51,
+          "end_sec": 60.57
+        },
+        {
+          "text": "h",
+          "start_sec": 60.63,
+          "end_sec": 60.69
+        },
+        {
+          "text": "ộ",
+          "start_sec": 60.75,
+          "end_sec": 60.81
+        },
+        {
+          "text": "p",
+          "start_sec": 60.81,
+          "end_sec": 60.87
+        },
+        {
+          "text": "l",
+          "start_sec": 60.87,
+          "end_sec": 60.93
+        },
+        {
+          "text": "ắ",
+          "start_sec": 60.99,
+          "end_sec": 61.05
+        },
+        {
+          "text": "m",
+          "start_sec": 61.05,
+          "end_sec": 61.11
+        },
+        {
+          "text": "b",
+          "start_sec": 61.17,
+          "end_sec": 61.23
+        },
+        {
+          "text": "ác",
+          "start_sec": 61.23,
+          "end_sec": 61.29
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 61.35,
+          "end_sec": 61.41
+        },
+        {
+          "text": ".",
+          "start_sec": 61.77,
+          "end_sec": 61.83
+        },
+        {
+          "text": "V",
+          "start_sec": 62.13,
+          "end_sec": 62.19
+        },
+        {
+          "text": "ẫn",
+          "start_sec": 62.19,
+          "end_sec": 62.25
+        },
+        {
+          "text": "m",
+          "start_sec": 62.37,
+          "end_sec": 62.43
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 62.49,
+          "end_sec": 62.55
+        },
+        {
+          "text": "i",
+          "start_sec": 62.55,
+          "end_sec": 62.61
+        },
+        {
+          "text": "ấy",
+          "start_sec": 62.73,
+          "end_sec": 62.79
+        },
+        {
+          "text": "b",
+          "start_sec": 62.97,
+          "end_sec": 63.03
+        },
+        {
+          "text": "ác",
+          "start_sec": 63.03,
+          "end_sec": 63.09
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 63.15,
+          "end_sec": 63.21
+        },
+        {
+          "text": ",",
+          "start_sec": 63.63,
+          "end_sec": 63.69
+        },
+        {
+          "text": "nhất",
+          "start_sec": 63.93,
+          "end_sec": 63.99
+        },
+        {
+          "text": "là",
+          "start_sec": 64.11,
+          "end_sec": 64.17
+        },
+        {
+          "text": "từ",
+          "start_sec": 64.35,
+          "end_sec": 64.41
+        },
+        {
+          "text": "4",
+          "start_sec": 64.71,
+          "end_sec": 64.77
+        },
+        {
+          "text": "gi",
+          "start_sec": 64.95,
+          "end_sec": 65.01
+        },
+        {
+          "text": "ờ",
+          "start_sec": 65.07,
+          "end_sec": 65.13
+        },
+        {
+          "text": "chi",
+          "start_sec": 65.31,
+          "end_sec": 65.37
+        },
+        {
+          "text": "ều",
+          "start_sec": 65.37,
+          "end_sec": 65.43
+        },
+        {
+          "text": "trở",
+          "start_sec": 65.55,
+          "end_sec": 65.61
+        },
+        {
+          "text": "đ",
+          "start_sec": 65.79,
+          "end_sec": 65.85
+        },
+        {
+          "text": "i.",
+          "start_sec": 65.97,
+          "end_sec": 66.03
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 66.51,
+      "end_sec": 74.85,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 66.51,
+          "end_sec": 66.57
+        },
+        {
+          "text": "ch",
+          "start_sec": 66.69,
+          "end_sec": 66.75
+        },
+        {
+          "text": "á",
+          "start_sec": 66.75,
+          "end_sec": 66.81
+        },
+        {
+          "text": "u",
+          "start_sec": 66.81,
+          "end_sec": 66.87
+        },
+        {
+          "text": "ch",
+          "start_sec": 66.99,
+          "end_sec": 67.05
+        },
+        {
+          "text": "ở",
+          "start_sec": 67.05,
+          "end_sec": 67.11
+        },
+        {
+          "text": "ch",
+          "start_sec": 67.23,
+          "end_sec": 67.29
+        },
+        {
+          "text": "ị",
+          "start_sec": 67.29,
+          "end_sec": 67.35
+        },
+        {
+          "text": "đi",
+          "start_sec": 67.41,
+          "end_sec": 67.47
+        },
+        {
+          "text": "kh",
+          "start_sec": 67.59,
+          "end_sec": 67.65
+        },
+        {
+          "text": "ám",
+          "start_sec": 67.65,
+          "end_sec": 67.71
+        },
+        {
+          "text": "m",
+          "start_sec": 67.83,
+          "end_sec": 67.89
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 67.89,
+          "end_sec": 67.95
+        },
+        {
+          "text": "i",
+          "start_sec": 67.95,
+          "end_sec": 68.01
+        },
+        {
+          "text": "s",
+          "start_sec": 68.01,
+          "end_sec": 68.07
+        },
+        {
+          "text": "áng",
+          "start_sec": 68.13,
+          "end_sec": 68.19
+        },
+        {
+          "text": ",",
+          "start_sec": 68.37,
+          "end_sec": 68.43
+        },
+        {
+          "text": "b",
+          "start_sec": 68.55,
+          "end_sec": 68.61
+        },
+        {
+          "text": "ác",
+          "start_sec": 68.61,
+          "end_sec": 68.67
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 68.73,
+          "end_sec": 68.79
+        },
+        {
+          "text": "cứ",
+          "start_sec": 68.97,
+          "end_sec": 69.03
+        },
+        {
+          "text": "d",
+          "start_sec": 69.21,
+          "end_sec": 69.27
+        },
+        {
+          "text": "ặ",
+          "start_sec": 69.27,
+          "end_sec": 69.33
+        },
+        {
+          "text": "n",
+          "start_sec": 69.39,
+          "end_sec": 69.45
+        },
+        {
+          "text": "r",
+          "start_sec": 69.45,
+          "end_sec": 69.51
+        },
+        {
+          "text": "ồi",
+          "start_sec": 69.51,
+          "end_sec": 69.57
+        },
+        {
+          "text": "con",
+          "start_sec": 69.69,
+          "end_sec": 69.75
+        },
+        {
+          "text": "nh",
+          "start_sec": 69.87,
+          "end_sec": 69.93
+        },
+        {
+          "text": "ớ",
+          "start_sec": 69.93,
+          "end_sec": 69.99
+        },
+        {
+          "text": "ch",
+          "start_sec": 70.17,
+          "end_sec": 70.23
+        },
+        {
+          "text": "o.",
+          "start_sec": 70.41,
+          "end_sec": 70.47
+        },
+        {
+          "text": "Con",
+          "start_sec": 70.89,
+          "end_sec": 70.95
+        },
+        {
+          "text": "ch",
+          "start_sec": 71.07,
+          "end_sec": 71.13
+        },
+        {
+          "text": "á",
+          "start_sec": 71.19,
+          "end_sec": 71.25
+        },
+        {
+          "text": "u",
+          "start_sec": 71.25,
+          "end_sec": 71.31
+        },
+        {
+          "text": "ch",
+          "start_sec": 71.37,
+          "end_sec": 71.43
+        },
+        {
+          "text": "ở",
+          "start_sec": 71.49,
+          "end_sec": 71.55
+        },
+        {
+          "text": "ch",
+          "start_sec": 71.61,
+          "end_sec": 71.67
+        },
+        {
+          "text": "ị",
+          "start_sec": 71.73,
+          "end_sec": 71.79
+        },
+        {
+          "text": "đi",
+          "start_sec": 71.79,
+          "end_sec": 71.85
+        },
+        {
+          "text": "kh",
+          "start_sec": 71.97,
+          "end_sec": 72.03
+        },
+        {
+          "text": "ám",
+          "start_sec": 72.09,
+          "end_sec": 72.15
+        },
+        {
+          "text": "m",
+          "start_sec": 72.21,
+          "end_sec": 72.27
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 72.27,
+          "end_sec": 72.33
+        },
+        {
+          "text": "i",
+          "start_sec": 72.39,
+          "end_sec": 72.45
+        },
+        {
+          "text": "s",
+          "start_sec": 72.45,
+          "end_sec": 72.51
+        },
+        {
+          "text": "áng",
+          "start_sec": 72.51,
+          "end_sec": 72.57
+        },
+        {
+          "text": ",",
+          "start_sec": 72.75,
+          "end_sec": 72.81
+        },
+        {
+          "text": "b",
+          "start_sec": 72.93,
+          "end_sec": 72.99
+        },
+        {
+          "text": "ác",
+          "start_sec": 73.05,
+          "end_sec": 73.11
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 73.17,
+          "end_sec": 73.23
+        },
+        {
+          "text": "cứ",
+          "start_sec": 73.41,
+          "end_sec": 73.47
+        },
+        {
+          "text": "d",
+          "start_sec": 73.65,
+          "end_sec": 73.71
+        },
+        {
+          "text": "ặ",
+          "start_sec": 73.71,
+          "end_sec": 73.77
+        },
+        {
+          "text": "n",
+          "start_sec": 73.77,
+          "end_sec": 73.83
+        },
+        {
+          "text": "r",
+          "start_sec": 73.89,
+          "end_sec": 73.95
+        },
+        {
+          "text": "ồi",
+          "start_sec": 73.95,
+          "end_sec": 74.01
+        },
+        {
+          "text": "con",
+          "start_sec": 74.13,
+          "end_sec": 74.19
+        },
+        {
+          "text": "nh",
+          "start_sec": 74.31,
+          "end_sec": 74.37
+        },
+        {
+          "text": "ớ",
+          "start_sec": 74.37,
+          "end_sec": 74.43
+        },
+        {
+          "text": "ch",
+          "start_sec": 74.61,
+          "end_sec": 74.67
+        },
+        {
+          "text": "o.",
+          "start_sec": 74.79,
+          "end_sec": 74.85
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 75.81,
+      "end_sec": 83.67,
+      "text": "Chị ngồi xuống đây cho em. Tuần trước chị nói vẫn mỏi chân, dạo này thế nào ạ? Chị đo đường huyết lúc đói bao nhiêu sáng nay?",
+      "words": [
+        {
+          "text": "Ch",
+          "start_sec": 75.81,
+          "end_sec": 75.87
+        },
+        {
+          "text": "ị",
+          "start_sec": 75.87,
+          "end_sec": 75.93
+        },
+        {
+          "text": "ng",
+          "start_sec": 75.99,
+          "end_sec": 76.05
+        },
+        {
+          "text": "ồi",
+          "start_sec": 76.05,
+          "end_sec": 76.11
+        },
+        {
+          "text": "xu",
+          "start_sec": 76.23,
+          "end_sec": 76.29
+        },
+        {
+          "text": "ống",
+          "start_sec": 76.29,
+          "end_sec": 76.35
+        },
+        {
+          "text": "đ",
+          "start_sec": 76.41,
+          "end_sec": 76.47
+        },
+        {
+          "text": "ây",
+          "start_sec": 76.53,
+          "end_sec": 76.59
+        },
+        {
+          "text": "cho",
+          "start_sec": 76.65,
+          "end_sec": 76.71
+        },
+        {
+          "text": "em",
+          "start_sec": 76.83,
+          "end_sec": 76.89
+        },
+        {
+          "text": ".",
+          "start_sec": 77.19,
+          "end_sec": 77.25
+        },
+        {
+          "text": "Tu",
+          "start_sec": 78.03,
+          "end_sec": 78.09
+        },
+        {
+          "text": "ần",
+          "start_sec": 78.15,
+          "end_sec": 78.21
+        },
+        {
+          "text": "trước",
+          "start_sec": 78.27,
+          "end_sec": 78.33
+        },
+        {
+          "text": "ch",
+          "start_sec": 78.45,
+          "end_sec": 78.51
+        },
+        {
+          "text": "ị",
+          "start_sec": 78.51,
+          "end_sec": 78.57
+        },
+        {
+          "text": "nó",
+          "start_sec": 78.63,
+          "end_sec": 78.69
+        },
+        {
+          "text": "i",
+          "start_sec": 78.69,
+          "end_sec": 78.75
+        },
+        {
+          "text": "v",
+          "start_sec": 78.81,
+          "end_sec": 78.87
+        },
+        {
+          "text": "ẫn",
+          "start_sec": 78.87,
+          "end_sec": 78.93
+        },
+        {
+          "text": "m",
+          "start_sec": 78.99,
+          "end_sec": 79.05
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 79.11,
+          "end_sec": 79.17
+        },
+        {
+          "text": "i",
+          "start_sec": 79.17,
+          "end_sec": 79.23
+        },
+        {
+          "text": "ch",
+          "start_sec": 79.29,
+          "end_sec": 79.35
+        },
+        {
+          "text": "ân",
+          "start_sec": 79.35,
+          "end_sec": 79.41
+        },
+        {
+          "text": ",",
+          "start_sec": 79.59,
+          "end_sec": 79.65
+        },
+        {
+          "text": "d",
+          "start_sec": 79.83,
+          "end_sec": 79.89
+        },
+        {
+          "text": "ạo",
+          "start_sec": 79.89,
+          "end_sec": 79.95
+        },
+        {
+          "text": "này",
+          "start_sec": 80.07,
+          "end_sec": 80.13
+        },
+        {
+          "text": "thế",
+          "start_sec": 80.25,
+          "end_sec": 80.31
+        },
+        {
+          "text": "n",
+          "start_sec": 80.37,
+          "end_sec": 80.43
+        },
+        {
+          "text": "ào",
+          "start_sec": 80.43,
+          "end_sec": 80.49
+        },
+        {
+          "text": "ạ",
+          "start_sec": 80.67,
+          "end_sec": 80.73
+        },
+        {
+          "text": "?",
+          "start_sec": 80.85,
+          "end_sec": 80.91
+        },
+        {
+          "text": "Ch",
+          "start_sec": 81.33,
+          "end_sec": 81.39
+        },
+        {
+          "text": "ị",
+          "start_sec": 81.39,
+          "end_sec": 81.45
+        },
+        {
+          "text": "đo",
+          "start_sec": 81.57,
+          "end_sec": 81.63
+        },
+        {
+          "text": "đường",
+          "start_sec": 81.75,
+          "end_sec": 81.81
+        },
+        {
+          "text": "h",
+          "start_sec": 81.99,
+          "end_sec": 82.05
+        },
+        {
+          "text": "uy",
+          "start_sec": 82.05,
+          "end_sec": 82.11
+        },
+        {
+          "text": "ết",
+          "start_sec": 82.11,
+          "end_sec": 82.17
+        },
+        {
+          "text": "l",
+          "start_sec": 82.23,
+          "end_sec": 82.29
+        },
+        {
+          "text": "úc",
+          "start_sec": 82.29,
+          "end_sec": 82.35
+        },
+        {
+          "text": "đó",
+          "start_sec": 82.41,
+          "end_sec": 82.47
+        },
+        {
+          "text": "i",
+          "start_sec": 82.53,
+          "end_sec": 82.59
+        },
+        {
+          "text": "bao",
+          "start_sec": 82.71,
+          "end_sec": 82.77
+        },
+        {
+          "text": "nhi",
+          "start_sec": 82.83,
+          "end_sec": 82.89
+        },
+        {
+          "text": "êu",
+          "start_sec": 82.95,
+          "end_sec": 83.01
+        },
+        {
+          "text": "s",
+          "start_sec": 83.13,
+          "end_sec": 83.19
+        },
+        {
+          "text": "áng",
+          "start_sec": 83.19,
+          "end_sec": 83.25
+        },
+        {
+          "text": "na",
+          "start_sec": 83.37,
+          "end_sec": 83.43
+        },
+        {
+          "text": "y",
+          "start_sec": 83.49,
+          "end_sec": 83.55
+        },
+        {
+          "text": "?",
+          "start_sec": 83.61,
+          "end_sec": 83.67
+        }
+      ]
+    },
+    {
+      "speaker": "2",
+      "lang": "vi",
+      "start_sec": 88.47,
+      "end_sec": 94.71,
+      "text": "Sáng nay em đo được 6,8 bác sĩ ạ. Dạ có 1 hôm em quên vì đi chợ về muộn.",
+      "words": [
+        {
+          "text": "S",
+          "start_sec": 88.47,
+          "end_sec": 88.53
+        },
+        {
+          "text": "áng",
+          "start_sec": 88.53,
+          "end_sec": 88.59
+        },
+        {
+          "text": "na",
+          "start_sec": 88.71,
+          "end_sec": 88.77
+        },
+        {
+          "text": "y",
+          "start_sec": 88.83,
+          "end_sec": 88.89
+        },
+        {
+          "text": "em",
+          "start_sec": 88.95,
+          "end_sec": 89.01
+        },
+        {
+          "text": "đo",
+          "start_sec": 89.31,
+          "end_sec": 89.37
+        },
+        {
+          "text": "được",
+          "start_sec": 89.49,
+          "end_sec": 89.55
+        },
+        {
+          "text": "6",
+          "start_sec": 89.79,
+          "end_sec": 89.85
+        },
+        {
+          "text": ",",
+          "start_sec": 90.09,
+          "end_sec": 90.15
+        },
+        {
+          "text": "8",
+          "start_sec": 90.33,
+          "end_sec": 90.39
+        },
+        {
+          "text": "b",
+          "start_sec": 90.69,
+          "end_sec": 90.75
+        },
+        {
+          "text": "ác",
+          "start_sec": 90.75,
+          "end_sec": 90.81
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 90.87,
+          "end_sec": 90.93
+        },
+        {
+          "text": "ạ",
+          "start_sec": 91.17,
+          "end_sec": 91.23
+        },
+        {
+          "text": ".",
+          "start_sec": 91.41,
+          "end_sec": 91.47
+        },
+        {
+          "text": "D",
+          "start_sec": 91.89,
+          "end_sec": 91.95
+        },
+        {
+          "text": "ạ",
+          "start_sec": 91.95,
+          "end_sec": 92.01
+        },
+        {
+          "text": "có",
+          "start_sec": 92.07,
+          "end_sec": 92.13
+        },
+        {
+          "text": "1",
+          "start_sec": 92.25,
+          "end_sec": 92.31
+        },
+        {
+          "text": "h",
+          "start_sec": 92.49,
+          "end_sec": 92.55
+        },
+        {
+          "text": "ô",
+          "start_sec": 92.55,
+          "end_sec": 92.61
+        },
+        {
+          "text": "m",
+          "start_sec": 92.61,
+          "end_sec": 92.67
+        },
+        {
+          "text": "em",
+          "start_sec": 92.73,
+          "end_sec": 92.79
+        },
+        {
+          "text": "qu",
+          "start_sec": 92.97,
+          "end_sec": 93.03
+        },
+        {
+          "text": "ên",
+          "start_sec": 93.09,
+          "end_sec": 93.15
+        },
+        {
+          "text": "vì",
+          "start_sec": 93.33,
+          "end_sec": 93.39
+        },
+        {
+          "text": "đi",
+          "start_sec": 93.51,
+          "end_sec": 93.57
+        },
+        {
+          "text": "ch",
+          "start_sec": 93.81,
+          "end_sec": 93.87
+        },
+        {
+          "text": "ợ",
+          "start_sec": 93.87,
+          "end_sec": 93.93
+        },
+        {
+          "text": "về",
+          "start_sec": 94.05,
+          "end_sec": 94.11
+        },
+        {
+          "text": "mu",
+          "start_sec": 94.47,
+          "end_sec": 94.53
+        },
+        {
+          "text": "ộ",
+          "start_sec": 94.53,
+          "end_sec": 94.59
+        },
+        {
+          "text": "n.",
+          "start_sec": 94.65,
+          "end_sec": 94.71
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 99.09,
+      "end_sec": 107.55,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 99.09,
+          "end_sec": 99.15
+        },
+        {
+          "text": "ch",
+          "start_sec": 99.27,
+          "end_sec": 99.33
+        },
+        {
+          "text": "á",
+          "start_sec": 99.33,
+          "end_sec": 99.39
+        },
+        {
+          "text": "u",
+          "start_sec": 99.39,
+          "end_sec": 99.45
+        },
+        {
+          "text": "ch",
+          "start_sec": 99.57,
+          "end_sec": 99.63
+        },
+        {
+          "text": "ở",
+          "start_sec": 99.63,
+          "end_sec": 99.69
+        },
+        {
+          "text": "ch",
+          "start_sec": 99.81,
+          "end_sec": 99.87
+        },
+        {
+          "text": "ị",
+          "start_sec": 99.87,
+          "end_sec": 99.93
+        },
+        {
+          "text": "đi",
+          "start_sec": 99.99,
+          "end_sec": 100.05
+        },
+        {
+          "text": "kh",
+          "start_sec": 100.17,
+          "end_sec": 100.23
+        },
+        {
+          "text": "ám",
+          "start_sec": 100.23,
+          "end_sec": 100.29
+        },
+        {
+          "text": "m",
+          "start_sec": 100.41,
+          "end_sec": 100.47
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 100.47,
+          "end_sec": 100.53
+        },
+        {
+          "text": "i",
+          "start_sec": 100.53,
+          "end_sec": 100.59
+        },
+        {
+          "text": "s",
+          "start_sec": 100.59,
+          "end_sec": 100.65
+        },
+        {
+          "text": "áng",
+          "start_sec": 100.65,
+          "end_sec": 100.71
+        },
+        {
+          "text": ",",
+          "start_sec": 100.89,
+          "end_sec": 100.95
+        },
+        {
+          "text": "b",
+          "start_sec": 101.13,
+          "end_sec": 101.19
+        },
+        {
+          "text": "ác",
+          "start_sec": 101.19,
+          "end_sec": 101.25
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 101.31,
+          "end_sec": 101.37
+        },
+        {
+          "text": "cứ",
+          "start_sec": 101.55,
+          "end_sec": 101.61
+        },
+        {
+          "text": "d",
+          "start_sec": 101.79,
+          "end_sec": 101.85
+        },
+        {
+          "text": "ặ",
+          "start_sec": 101.85,
+          "end_sec": 101.91
+        },
+        {
+          "text": "n",
+          "start_sec": 101.91,
+          "end_sec": 101.97
+        },
+        {
+          "text": "r",
+          "start_sec": 102.03,
+          "end_sec": 102.09
+        },
+        {
+          "text": "ồi",
+          "start_sec": 102.09,
+          "end_sec": 102.15
+        },
+        {
+          "text": "con",
+          "start_sec": 102.27,
+          "end_sec": 102.33
+        },
+        {
+          "text": "nh",
+          "start_sec": 102.45,
+          "end_sec": 102.51
+        },
+        {
+          "text": "ớ",
+          "start_sec": 102.51,
+          "end_sec": 102.57
+        },
+        {
+          "text": "ch",
+          "start_sec": 102.75,
+          "end_sec": 102.81
+        },
+        {
+          "text": "o.",
+          "start_sec": 102.93,
+          "end_sec": 102.99
+        },
+        {
+          "text": "Con",
+          "start_sec": 103.59,
+          "end_sec": 103.65
+        },
+        {
+          "text": "ch",
+          "start_sec": 103.77,
+          "end_sec": 103.83
+        },
+        {
+          "text": "á",
+          "start_sec": 103.83,
+          "end_sec": 103.89
+        },
+        {
+          "text": "u",
+          "start_sec": 103.89,
+          "end_sec": 103.95
+        },
+        {
+          "text": "ch",
+          "start_sec": 104.07,
+          "end_sec": 104.13
+        },
+        {
+          "text": "ở",
+          "start_sec": 104.13,
+          "end_sec": 104.19
+        },
+        {
+          "text": "ch",
+          "start_sec": 104.31,
+          "end_sec": 104.37
+        },
+        {
+          "text": "ị",
+          "start_sec": 104.37,
+          "end_sec": 104.43
+        },
+        {
+          "text": "đi",
+          "start_sec": 104.49,
+          "end_sec": 104.55
+        },
+        {
+          "text": "kh",
+          "start_sec": 104.67,
+          "end_sec": 104.73
+        },
+        {
+          "text": "ám",
+          "start_sec": 104.73,
+          "end_sec": 104.79
+        },
+        {
+          "text": "m",
+          "start_sec": 104.91,
+          "end_sec": 104.97
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 104.97,
+          "end_sec": 105.03
+        },
+        {
+          "text": "i",
+          "start_sec": 105.03,
+          "end_sec": 105.09
+        },
+        {
+          "text": "s",
+          "start_sec": 105.15,
+          "end_sec": 105.21
+        },
+        {
+          "text": "áng",
+          "start_sec": 105.21,
+          "end_sec": 105.27
+        },
+        {
+          "text": ",",
+          "start_sec": 105.45,
+          "end_sec": 105.51
+        },
+        {
+          "text": "b",
+          "start_sec": 105.63,
+          "end_sec": 105.69
+        },
+        {
+          "text": "ác",
+          "start_sec": 105.69,
+          "end_sec": 105.75
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 105.81,
+          "end_sec": 105.87
+        },
+        {
+          "text": "cứ",
+          "start_sec": 106.05,
+          "end_sec": 106.11
+        },
+        {
+          "text": "d",
+          "start_sec": 106.29,
+          "end_sec": 106.35
+        },
+        {
+          "text": "ặ",
+          "start_sec": 106.41,
+          "end_sec": 106.47
+        },
+        {
+          "text": "n",
+          "start_sec": 106.47,
+          "end_sec": 106.53
+        },
+        {
+          "text": "r",
+          "start_sec": 106.53,
+          "end_sec": 106.59
+        },
+        {
+          "text": "ồi",
+          "start_sec": 106.59,
+          "end_sec": 106.65
+        },
+        {
+          "text": "con",
+          "start_sec": 106.77,
+          "end_sec": 106.83
+        },
+        {
+          "text": "nh",
+          "start_sec": 106.95,
+          "end_sec": 107.01
+        },
+        {
+          "text": "ớ",
+          "start_sec": 107.07,
+          "end_sec": 107.13
+        },
+        {
+          "text": "ch",
+          "start_sec": 107.25,
+          "end_sec": 107.31
+        },
+        {
+          "text": "o.",
+          "start_sec": 107.49,
+          "end_sec": 107.55
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 108.45,
+      "end_sec": 110.01,
+      "text": "Vậy tốt hơn tuần trước rồi.",
+      "words": [
+        {
+          "text": "V",
+          "start_sec": 108.45,
+          "end_sec": 108.51
+        },
+        {
+          "text": "ậ",
+          "start_sec": 108.51,
+          "end_sec": 108.57
+        },
+        {
+          "text": "y",
+          "start_sec": 108.57,
+          "end_sec": 108.63
+        },
+        {
+          "text": "t",
+          "start_sec": 108.69,
+          "end_sec": 108.75
+        },
+        {
+          "text": "ốt",
+          "start_sec": 108.81,
+          "end_sec": 108.87
+        },
+        {
+          "text": "hơn",
+          "start_sec": 108.99,
+          "end_sec": 109.05
+        },
+        {
+          "text": "tu",
+          "start_sec": 109.23,
+          "end_sec": 109.29
+        },
+        {
+          "text": "ần",
+          "start_sec": 109.35,
+          "end_sec": 109.41
+        },
+        {
+          "text": "trước",
+          "start_sec": 109.47,
+          "end_sec": 109.53
+        },
+        {
+          "text": "r",
+          "start_sec": 109.65,
+          "end_sec": 109.71
+        },
+        {
+          "text": "ồ",
+          "start_sec": 109.77,
+          "end_sec": 109.83
+        },
+        {
+          "text": "i.",
+          "start_sec": 109.95,
+          "end_sec": 110.01
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 110.85,
+      "end_sec": 115.53,
+      "text": "Chị có bỏ liều buổi trưa hôm nào không? Chân chị sưng không, hay chỉ mỏi thôi?",
+      "words": [
+        {
+          "text": "Ch",
+          "start_sec": 110.85,
+          "end_sec": 110.91
+        },
+        {
+          "text": "ị",
+          "start_sec": 110.97,
+          "end_sec": 111.03
+        },
+        {
+          "text": "có",
+          "start_sec": 111.03,
+          "end_sec": 111.09
+        },
+        {
+          "text": "b",
+          "start_sec": 111.21,
+          "end_sec": 111.27
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 111.27,
+          "end_sec": 111.33
+        },
+        {
+          "text": "li",
+          "start_sec": 111.51,
+          "end_sec": 111.57
+        },
+        {
+          "text": "ều",
+          "start_sec": 111.57,
+          "end_sec": 111.63
+        },
+        {
+          "text": "bu",
+          "start_sec": 111.75,
+          "end_sec": 111.81
+        },
+        {
+          "text": "ổi",
+          "start_sec": 111.81,
+          "end_sec": 111.87
+        },
+        {
+          "text": "tr",
+          "start_sec": 111.93,
+          "end_sec": 111.99
+        },
+        {
+          "text": "ưa",
+          "start_sec": 111.99,
+          "end_sec": 112.05
+        },
+        {
+          "text": "h",
+          "start_sec": 112.11,
+          "end_sec": 112.17
+        },
+        {
+          "text": "ô",
+          "start_sec": 112.17,
+          "end_sec": 112.23
+        },
+        {
+          "text": "m",
+          "start_sec": 112.29,
+          "end_sec": 112.35
+        },
+        {
+          "text": "n",
+          "start_sec": 112.35,
+          "end_sec": 112.41
+        },
+        {
+          "text": "ào",
+          "start_sec": 112.41,
+          "end_sec": 112.47
+        },
+        {
+          "text": "không",
+          "start_sec": 112.47,
+          "end_sec": 112.53
+        },
+        {
+          "text": "?",
+          "start_sec": 112.77,
+          "end_sec": 112.83
+        },
+        {
+          "text": "Ch",
+          "start_sec": 113.37,
+          "end_sec": 113.43
+        },
+        {
+          "text": "ân",
+          "start_sec": 113.43,
+          "end_sec": 113.49
+        },
+        {
+          "text": "ch",
+          "start_sec": 113.61,
+          "end_sec": 113.67
+        },
+        {
+          "text": "ị",
+          "start_sec": 113.67,
+          "end_sec": 113.73
+        },
+        {
+          "text": "s",
+          "start_sec": 113.85,
+          "end_sec": 113.91
+        },
+        {
+          "text": "ưng",
+          "start_sec": 113.91,
+          "end_sec": 113.97
+        },
+        {
+          "text": "không",
+          "start_sec": 114.09,
+          "end_sec": 114.15
+        },
+        {
+          "text": ",",
+          "start_sec": 114.33,
+          "end_sec": 114.39
+        },
+        {
+          "text": "hay",
+          "start_sec": 114.57,
+          "end_sec": 114.63
+        },
+        {
+          "text": "chỉ",
+          "start_sec": 114.81,
+          "end_sec": 114.87
+        },
+        {
+          "text": "m",
+          "start_sec": 114.99,
+          "end_sec": 115.05
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 115.05,
+          "end_sec": 115.11
+        },
+        {
+          "text": "i",
+          "start_sec": 115.11,
+          "end_sec": 115.17
+        },
+        {
+          "text": "th",
+          "start_sec": 115.23,
+          "end_sec": 115.29
+        },
+        {
+          "text": "ôi",
+          "start_sec": 115.35,
+          "end_sec": 115.41
+        },
+        {
+          "text": "?",
+          "start_sec": 115.47,
+          "end_sec": 115.53
+        }
+      ]
+    },
+    {
+      "speaker": "2",
+      "lang": "vi",
+      "start_sec": 116.31,
+      "end_sec": 121.71,
+      "text": "Chỉ mỏi thôi, không sưng ạ. Em sợ làm máu nên hồi hộp lắm bác sĩ.",
+      "words": [
+        {
+          "text": "Ch",
+          "start_sec": 116.31,
+          "end_sec": 116.37
+        },
+        {
+          "text": "ỉ",
+          "start_sec": 116.37,
+          "end_sec": 116.43
+        },
+        {
+          "text": "m",
+          "start_sec": 116.55,
+          "end_sec": 116.61
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 116.61,
+          "end_sec": 116.67
+        },
+        {
+          "text": "i",
+          "start_sec": 116.73,
+          "end_sec": 116.79
+        },
+        {
+          "text": "th",
+          "start_sec": 116.85,
+          "end_sec": 116.91
+        },
+        {
+          "text": "ô",
+          "start_sec": 116.91,
+          "end_sec": 116.97
+        },
+        {
+          "text": "i,",
+          "start_sec": 117.15,
+          "end_sec": 117.21
+        },
+        {
+          "text": "không",
+          "start_sec": 117.45,
+          "end_sec": 117.51
+        },
+        {
+          "text": "s",
+          "start_sec": 117.81,
+          "end_sec": 117.87
+        },
+        {
+          "text": "ưng",
+          "start_sec": 117.93,
+          "end_sec": 117.99
+        },
+        {
+          "text": "ạ",
+          "start_sec": 118.17,
+          "end_sec": 118.23
+        },
+        {
+          "text": ".",
+          "start_sec": 118.35,
+          "end_sec": 118.41
+        },
+        {
+          "text": "Em",
+          "start_sec": 118.89,
+          "end_sec": 118.95
+        },
+        {
+          "text": "s",
+          "start_sec": 119.13,
+          "end_sec": 119.19
+        },
+        {
+          "text": "ợ",
+          "start_sec": 119.25,
+          "end_sec": 119.31
+        },
+        {
+          "text": "làm",
+          "start_sec": 119.43,
+          "end_sec": 119.49
+        },
+        {
+          "text": "má",
+          "start_sec": 119.73,
+          "end_sec": 119.79
+        },
+        {
+          "text": "u",
+          "start_sec": 119.85,
+          "end_sec": 119.91
+        },
+        {
+          "text": "n",
+          "start_sec": 119.97,
+          "end_sec": 120.03
+        },
+        {
+          "text": "ên",
+          "start_sec": 120.09,
+          "end_sec": 120.15
+        },
+        {
+          "text": "h",
+          "start_sec": 120.33,
+          "end_sec": 120.39
+        },
+        {
+          "text": "ồi",
+          "start_sec": 120.39,
+          "end_sec": 120.45
+        },
+        {
+          "text": "h",
+          "start_sec": 120.57,
+          "end_sec": 120.63
+        },
+        {
+          "text": "ộ",
+          "start_sec": 120.63,
+          "end_sec": 120.69
+        },
+        {
+          "text": "p",
+          "start_sec": 120.69,
+          "end_sec": 120.75
+        },
+        {
+          "text": "l",
+          "start_sec": 120.81,
+          "end_sec": 120.87
+        },
+        {
+          "text": "ắ",
+          "start_sec": 120.87,
+          "end_sec": 120.93
+        },
+        {
+          "text": "m",
+          "start_sec": 120.99,
+          "end_sec": 121.05
+        },
+        {
+          "text": "b",
+          "start_sec": 121.11,
+          "end_sec": 121.17
+        },
+        {
+          "text": "ác",
+          "start_sec": 121.17,
+          "end_sec": 121.23
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 121.35,
+          "end_sec": 121.41
+        },
+        {
+          "text": ".",
+          "start_sec": 121.65,
+          "end_sec": 121.71
+        }
+      ]
+    },
+    {
+      "speaker": "1",
+      "lang": "vi",
+      "start_sec": 122.61,
+      "end_sec": 139.23,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Em cho chị làm thêm xét nghiệm HbA1c để đánh giá 3 tháng qua. Chị uống metformin buổi tối sau ăn nhé, đừng uống lúc bụng đói.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 122.61,
+          "end_sec": 122.67
+        },
+        {
+          "text": "ch",
+          "start_sec": 122.79,
+          "end_sec": 122.85
+        },
+        {
+          "text": "á",
+          "start_sec": 122.91,
+          "end_sec": 122.97
+        },
+        {
+          "text": "u",
+          "start_sec": 122.97,
+          "end_sec": 123.03
+        },
+        {
+          "text": "ch",
+          "start_sec": 123.09,
+          "end_sec": 123.15
+        },
+        {
+          "text": "ở",
+          "start_sec": 123.15,
+          "end_sec": 123.21
+        },
+        {
+          "text": "ch",
+          "start_sec": 123.33,
+          "end_sec": 123.39
+        },
+        {
+          "text": "ị",
+          "start_sec": 123.39,
+          "end_sec": 123.45
+        },
+        {
+          "text": "đi",
+          "start_sec": 123.51,
+          "end_sec": 123.57
+        },
+        {
+          "text": "kh",
+          "start_sec": 123.69,
+          "end_sec": 123.75
+        },
+        {
+          "text": "ám",
+          "start_sec": 123.81,
+          "end_sec": 123.87
+        },
+        {
+          "text": "m",
+          "start_sec": 123.93,
+          "end_sec": 123.99
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 123.99,
+          "end_sec": 124.05
+        },
+        {
+          "text": "i",
+          "start_sec": 124.05,
+          "end_sec": 124.11
+        },
+        {
+          "text": "s",
+          "start_sec": 124.17,
+          "end_sec": 124.23
+        },
+        {
+          "text": "áng",
+          "start_sec": 124.23,
+          "end_sec": 124.29
+        },
+        {
+          "text": ",",
+          "start_sec": 124.47,
+          "end_sec": 124.53
+        },
+        {
+          "text": "b",
+          "start_sec": 124.65,
+          "end_sec": 124.71
+        },
+        {
+          "text": "ác",
+          "start_sec": 124.77,
+          "end_sec": 124.83
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 124.89,
+          "end_sec": 124.95
+        },
+        {
+          "text": "cứ",
+          "start_sec": 125.07,
+          "end_sec": 125.13
+        },
+        {
+          "text": "d",
+          "start_sec": 125.37,
+          "end_sec": 125.43
+        },
+        {
+          "text": "ặ",
+          "start_sec": 125.43,
+          "end_sec": 125.49
+        },
+        {
+          "text": "n",
+          "start_sec": 125.49,
+          "end_sec": 125.55
+        },
+        {
+          "text": "r",
+          "start_sec": 125.55,
+          "end_sec": 125.61
+        },
+        {
+          "text": "ồi",
+          "start_sec": 125.67,
+          "end_sec": 125.73
+        },
+        {
+          "text": "con",
+          "start_sec": 125.85,
+          "end_sec": 125.91
+        },
+        {
+          "text": "nh",
+          "start_sec": 126.03,
+          "end_sec": 126.09
+        },
+        {
+          "text": "ớ",
+          "start_sec": 126.09,
+          "end_sec": 126.15
+        },
+        {
+          "text": "ch",
+          "start_sec": 126.33,
+          "end_sec": 126.39
+        },
+        {
+          "text": "o.",
+          "start_sec": 126.51,
+          "end_sec": 126.57
+        },
+        {
+          "text": "Con",
+          "start_sec": 126.93,
+          "end_sec": 126.99
+        },
+        {
+          "text": "ch",
+          "start_sec": 127.11,
+          "end_sec": 127.17
+        },
+        {
+          "text": "á",
+          "start_sec": 127.17,
+          "end_sec": 127.23
+        },
+        {
+          "text": "u",
+          "start_sec": 127.23,
+          "end_sec": 127.29
+        },
+        {
+          "text": "ch",
+          "start_sec": 127.41,
+          "end_sec": 127.47
+        },
+        {
+          "text": "ở",
+          "start_sec": 127.47,
+          "end_sec": 127.53
+        },
+        {
+          "text": "ch",
+          "start_sec": 127.65,
+          "end_sec": 127.71
+        },
+        {
+          "text": "ị",
+          "start_sec": 127.71,
+          "end_sec": 127.77
+        },
+        {
+          "text": "đi",
+          "start_sec": 127.83,
+          "end_sec": 127.89
+        },
+        {
+          "text": "kh",
+          "start_sec": 127.95,
+          "end_sec": 128.01
+        },
+        {
+          "text": "ám",
+          "start_sec": 128.07,
+          "end_sec": 128.13
+        },
+        {
+          "text": "m",
+          "start_sec": 128.25,
+          "end_sec": 128.31
+        },
+        {
+          "text": "ỗ",
+          "start_sec": 128.31,
+          "end_sec": 128.37
+        },
+        {
+          "text": "i",
+          "start_sec": 128.37,
+          "end_sec": 128.43
+        },
+        {
+          "text": "s",
+          "start_sec": 128.43,
+          "end_sec": 128.49
+        },
+        {
+          "text": "áng",
+          "start_sec": 128.55,
+          "end_sec": 128.61
+        },
+        {
+          "text": ",",
+          "start_sec": 128.73,
+          "end_sec": 128.79
+        },
+        {
+          "text": "b",
+          "start_sec": 128.97,
+          "end_sec": 129.03
+        },
+        {
+          "text": "ác",
+          "start_sec": 129.03,
+          "end_sec": 129.09
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 129.15,
+          "end_sec": 129.21
+        },
+        {
+          "text": "cứ",
+          "start_sec": 129.39,
+          "end_sec": 129.45
+        },
+        {
+          "text": "d",
+          "start_sec": 129.63,
+          "end_sec": 129.69
+        },
+        {
+          "text": "ặ",
+          "start_sec": 129.69,
+          "end_sec": 129.75
+        },
+        {
+          "text": "n",
+          "start_sec": 129.75,
+          "end_sec": 129.81
+        },
+        {
+          "text": "r",
+          "start_sec": 129.87,
+          "end_sec": 129.93
+        },
+        {
+          "text": "ồi",
+          "start_sec": 129.93,
+          "end_sec": 129.99
+        },
+        {
+          "text": "con",
+          "start_sec": 130.11,
+          "end_sec": 130.17
+        },
+        {
+          "text": "nh",
+          "start_sec": 130.29,
+          "end_sec": 130.35
+        },
+        {
+          "text": "ớ",
+          "start_sec": 130.41,
+          "end_sec": 130.47
+        },
+        {
+          "text": "ch",
+          "start_sec": 130.59,
+          "end_sec": 130.65
+        },
+        {
+          "text": "o.",
+          "start_sec": 130.77,
+          "end_sec": 130.83
+        },
+        {
+          "text": "Em",
+          "start_sec": 131.61,
+          "end_sec": 131.67
+        },
+        {
+          "text": "cho",
+          "start_sec": 131.85,
+          "end_sec": 131.91
+        },
+        {
+          "text": "ch",
+          "start_sec": 132.03,
+          "end_sec": 132.09
+        },
+        {
+          "text": "ị",
+          "start_sec": 132.15,
+          "end_sec": 132.21
+        },
+        {
+          "text": "làm",
+          "start_sec": 132.21,
+          "end_sec": 132.27
+        },
+        {
+          "text": "th",
+          "start_sec": 132.39,
+          "end_sec": 132.45
+        },
+        {
+          "text": "êm",
+          "start_sec": 132.51,
+          "end_sec": 132.57
+        },
+        {
+          "text": "x",
+          "start_sec": 132.69,
+          "end_sec": 132.75
+        },
+        {
+          "text": "ét",
+          "start_sec": 132.75,
+          "end_sec": 132.81
+        },
+        {
+          "text": "nghi",
+          "start_sec": 132.93,
+          "end_sec": 132.99
+        },
+        {
+          "text": "ệm",
+          "start_sec": 132.99,
+          "end_sec": 133.05
+        },
+        {
+          "text": "H",
+          "start_sec": 133.17,
+          "end_sec": 133.23
+        },
+        {
+          "text": "b",
+          "start_sec": 133.29,
+          "end_sec": 133.35
+        },
+        {
+          "text": "A",
+          "start_sec": 133.41,
+          "end_sec": 133.47
+        },
+        {
+          "text": "1",
+          "start_sec": 133.53,
+          "end_sec": 133.59
+        },
+        {
+          "text": "c",
+          "start_sec": 133.71,
+          "end_sec": 133.77
+        },
+        {
+          "text": "để",
+          "start_sec": 133.95,
+          "end_sec": 134.01
+        },
+        {
+          "text": "đánh",
+          "start_sec": 134.07,
+          "end_sec": 134.13
+        },
+        {
+          "text": "gi",
+          "start_sec": 134.25,
+          "end_sec": 134.31
+        },
+        {
+          "text": "á",
+          "start_sec": 134.31,
+          "end_sec": 134.37
+        },
+        {
+          "text": "3",
+          "start_sec": 134.55,
+          "end_sec": 134.61
+        },
+        {
+          "text": "tháng",
+          "start_sec": 134.73,
+          "end_sec": 134.79
+        },
+        {
+          "text": "qu",
+          "start_sec": 134.97,
+          "end_sec": 135.03
+        },
+        {
+          "text": "a.",
+          "start_sec": 135.15,
+          "end_sec": 135.21
+        },
+        {
+          "text": "Ch",
+          "start_sec": 135.81,
+          "end_sec": 135.87
+        },
+        {
+          "text": "ị",
+          "start_sec": 135.87,
+          "end_sec": 135.93
+        },
+        {
+          "text": "u",
+          "start_sec": 135.99,
+          "end_sec": 136.05
+        },
+        {
+          "text": "ống",
+          "start_sec": 136.11,
+          "end_sec": 136.17
+        },
+        {
+          "text": "met",
+          "start_sec": 136.35,
+          "end_sec": 136.41
+        },
+        {
+          "text": "form",
+          "start_sec": 136.53,
+          "end_sec": 136.59
+        },
+        {
+          "text": "in",
+          "start_sec": 136.71,
+          "end_sec": 136.77
+        },
+        {
+          "text": "bu",
+          "start_sec": 136.89,
+          "end_sec": 136.95
+        },
+        {
+          "text": "ổi",
+          "start_sec": 136.95,
+          "end_sec": 137.01
+        },
+        {
+          "text": "t",
+          "start_sec": 137.07,
+          "end_sec": 137.13
+        },
+        {
+          "text": "ối",
+          "start_sec": 137.13,
+          "end_sec": 137.19
+        },
+        {
+          "text": "sau",
+          "start_sec": 137.31,
+          "end_sec": 137.37
+        },
+        {
+          "text": "ăn",
+          "start_sec": 137.55,
+          "end_sec": 137.61
+        },
+        {
+          "text": "nh",
+          "start_sec": 137.73,
+          "end_sec": 137.79
+        },
+        {
+          "text": "é,",
+          "start_sec": 137.85,
+          "end_sec": 137.91
+        },
+        {
+          "text": "đ",
+          "start_sec": 138.15,
+          "end_sec": 138.21
+        },
+        {
+          "text": "ừ",
+          "start_sec": 138.21,
+          "end_sec": 138.27
+        },
+        {
+          "text": "ng",
+          "start_sec": 138.27,
+          "end_sec": 138.33
+        },
+        {
+          "text": "u",
+          "start_sec": 138.39,
+          "end_sec": 138.45
+        },
+        {
+          "text": "ống",
+          "start_sec": 138.45,
+          "end_sec": 138.51
+        },
+        {
+          "text": "l",
+          "start_sec": 138.63,
+          "end_sec": 138.69
+        },
+        {
+          "text": "úc",
+          "start_sec": 138.69,
+          "end_sec": 138.75
+        },
+        {
+          "text": "b",
+          "start_sec": 138.81,
+          "end_sec": 138.87
+        },
+        {
+          "text": "ụ",
+          "start_sec": 138.87,
+          "end_sec": 138.93
+        },
+        {
+          "text": "ng",
+          "start_sec": 138.93,
+          "end_sec": 138.99
+        },
+        {
+          "text": "đó",
+          "start_sec": 139.05,
+          "end_sec": 139.11
+        },
+        {
+          "text": "i.",
+          "start_sec": 139.17,
+          "end_sec": 139.23
+        }
+      ]
+    },
+    {
+      "speaker": "2",
+      "lang": "vi",
+      "start_sec": 140.13,
+      "end_sec": 148.23,
+      "text": "Vẫn mỏi ấy bác sĩ, nhất là từ 4 giờ chiều trở đi. Sáng nay em đo được 6,8 bác sĩ ạ.",
+      "words": [
+        {
+          "text": "V",
+          "start_sec": 140.13,
+          "end_sec": 140.19
+        },
+        {
+          "text": "ẫn",
+          "start_sec": 140.19,
+          "end_sec": 140.25
+        },
+        {
+          "text": "m",
+          "start_sec": 140.37,
+          "end_sec": 140.43
+        },
+        {
+          "text": "ỏ",
+          "start_sec": 140.49,
+          "end_sec": 140.55
+        },
+        {
+          "text": "i",
+          "start_sec": 140.55,
+          "end_sec": 140.61
+        },
+        {
+          "text": "ấy",
+          "start_sec": 140.73,
+          "end_sec": 140.79
+        },
+        {
+          "text": "b",
+          "start_sec": 140.91,
+          "end_sec": 140.97
+        },
+        {
+          "text": "ác",
+          "start_sec": 140.97,
+          "end_sec": 141.03
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 141.15,
+          "end_sec": 141.21
+        },
+        {
+          "text": ",",
+          "start_sec": 141.57,
+          "end_sec": 141.63
+        },
+        {
+          "text": "nhất",
+          "start_sec": 141.93,
+          "end_sec": 141.99
+        },
+        {
+          "text": "là",
+          "start_sec": 142.05,
+          "end_sec": 142.11
+        },
+        {
+          "text": "từ",
+          "start_sec": 142.35,
+          "end_sec": 142.41
+        },
+        {
+          "text": "4",
+          "start_sec": 142.65,
+          "end_sec": 142.71
+        },
+        {
+          "text": "gi",
+          "start_sec": 142.89,
+          "end_sec": 142.95
+        },
+        {
+          "text": "ờ",
+          "start_sec": 143.01,
+          "end_sec": 143.07
+        },
+        {
+          "text": "chi",
+          "start_sec": 143.25,
+          "end_sec": 143.31
+        },
+        {
+          "text": "ều",
+          "start_sec": 143.31,
+          "end_sec": 143.37
+        },
+        {
+          "text": "trở",
+          "start_sec": 143.49,
+          "end_sec": 143.55
+        },
+        {
+          "text": "đ",
+          "start_sec": 143.73,
+          "end_sec": 143.79
+        },
+        {
+          "text": "i.",
+          "start_sec": 143.97,
+          "end_sec": 144.03
+        },
+        {
+          "text": "S",
+          "start_sec": 144.63,
+          "end_sec": 144.69
+        },
+        {
+          "text": "áng",
+          "start_sec": 144.69,
+          "end_sec": 144.75
+        },
+        {
+          "text": "na",
+          "start_sec": 144.87,
+          "end_sec": 144.93
+        },
+        {
+          "text": "y",
+          "start_sec": 144.93,
+          "end_sec": 144.99
+        },
+        {
+          "text": "em",
+          "start_sec": 145.11,
+          "end_sec": 145.17
+        },
+        {
+          "text": "đo",
+          "start_sec": 145.47,
+          "end_sec": 145.53
+        },
+        {
+          "text": "được",
+          "start_sec": 145.65,
+          "end_sec": 145.71
+        },
+        {
+          "text": "6",
+          "start_sec": 145.95,
+          "end_sec": 146.01
+        },
+        {
+          "text": ",",
+          "start_sec": 146.25,
+          "end_sec": 146.31
+        },
+        {
+          "text": "8",
+          "start_sec": 146.49,
+          "end_sec": 146.55
+        },
+        {
+          "text": "b",
+          "start_sec": 146.85,
+          "end_sec": 146.91
+        },
+        {
+          "text": "ác",
+          "start_sec": 146.91,
+          "end_sec": 146.97
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 146.97,
+          "end_sec": 147.03
+        },
+        {
+          "text": "ạ",
+          "start_sec": 147.33,
+          "end_sec": 147.39
+        },
+        {
+          "text": ".",
+          "start_sec": 148.17,
+          "end_sec": 148.23
+        }
+      ]
+    }
+  ]
+}
