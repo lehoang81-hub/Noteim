@@ -7,20 +7,19 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { getIntakeTemplate } from "@/lib/intake-templates";
 import { buildSystemPrompt, buildUserPrompt } from "@/lib/gap-check/prompt";
-import { GapCheckParseError, parseGapCheckOutput } from "@/lib/gap-check/parse";
+import { parseGapCheckOutput } from "@/lib/gap-check/parse";
 import {
   addSessionGapCheck,
   getLatestGapCheckResult,
   listSessionGapChecks,
 } from "@/lib/gap-check/store";
 import { consumeQuota, type GapCheckPlan } from "@/lib/gap-check/rate-limit";
-import { getGapCheckProvider } from "@/lib/gap-check/provider";
+import { runGapCheckChain, GapCheckChainError, parseFakePlanHeader, type GapCheckAttempt } from "@/lib/gap-check/provider";
 import type { GapCheckResult } from "@/lib/gap-check/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const REQUEST_TIMEOUT_MS = 15000;
 const TRANSCRIPT_INPUT_MAX_CHARS = 100000;
 
 const previousSchema = z.object({
@@ -33,26 +32,6 @@ const postBodySchema = z.object({
   previous: previousSchema.optional(),
   transcriptUntilMs: z.number().nonnegative().optional(),
 });
-
-class GapCheckTimeoutError extends Error {}
-
-function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-  return new Promise<T>((resolve, reject) => {
-    const timer = setTimeout(() => {
-      reject(new GapCheckTimeoutError("model vượt quá thời gian chờ"));
-    }, ms);
-    promise.then(
-      (value) => {
-        clearTimeout(timer);
-        resolve(value);
-      },
-      (error) => {
-        clearTimeout(timer);
-        reject(error);
-      },
-    );
-  });
-}
 
 function jsonError(status: number, error: string, message: string, extra?: Record<string, unknown>) {
   return NextResponse.json({ error, message, ...extra }, { status });
@@ -114,58 +93,49 @@ export async function POST(
     ? toPreviousResult(body.previous)
     : getLatestGapCheckResult(sessionId);
 
-  const provider = await getGapCheckProvider();
-  if (!provider) {
-    return jsonError(503, "ai_not_configured", "Chưa rà được, thử lại");
-  }
+  // Kế hoạch ép lỗi của stub (chỉ nhận khi GAP_CHECK_FAKE bật) để e2e giả lập
+  // chuyển bên: "gemini:500,anthropic:429"…
+  const fakePlan = trustPlanHeader ? parseFakePlanHeader(request.headers.get("x-noteim-fake-plan")) : null;
 
   const startedAt = Date.now();
-  let raw: string;
+  let outcome: { result: GapCheckResult; provider: string; attempts: GapCheckAttempt[] } | null = null;
   try {
-    raw = await withTimeout(
-      provider.run({
+    outcome = await runGapCheckChain<GapCheckResult>(
+      {
         system: buildSystemPrompt(template, body.transcript, previous),
         user: buildUserPrompt(),
         template,
         transcript: body.transcript,
-      }),
-      REQUEST_TIMEOUT_MS,
+        fakePlan,
+      },
+      (raw) => parseGapCheckOutput(raw, template),
     );
   } catch (error) {
+    if (!(error instanceof GapCheckChainError)) throw error;
     const latencyMs = Date.now() - startedAt;
-    const outcome = error instanceof GapCheckTimeoutError ? "timeout" : "provider_error";
+    const attempts = error.attempts;
+    const tried = attempts.filter((a) => a.outcome !== "unconfigured");
+    const outcomeName = tried.length === 0 ? "not_configured" : "chain_exhausted";
     logGapCheck({
       event: "gap_check",
       sessionId,
       templateId: body.templateId,
-      provider: provider.name,
+      attempts,
       latencyMs,
-      outcome,
+      outcome: outcomeName,
       ts: new Date().toISOString(),
     });
-    return jsonError(502, outcome, "Chưa rà được, thử lại");
+    // Toàn bộ bên chưa cấu hình → mã cũ ai_not_configured; có bên chạy nhưng hét
+    // chuỗi (429/5xx/timeout/parse sai) → provider_unavailable. Cả hai trả 503.
+    return jsonError(503, tried.length === 0 ? "ai_not_configured" : "provider_unavailable", "Chưa rà được, thử lại", {
+      attempts,
+    });
   }
-
+  if (!outcome) {
+    return jsonError(503, "ai_not_configured", "Chưa rà được, thử lại");
+  }
+  const { result, provider, attempts } = outcome;
   const latencyMs = Date.now() - startedAt;
-  let result: GapCheckResult;
-  try {
-    result = parseGapCheckOutput(raw, template);
-  } catch (error) {
-    if (error instanceof GapCheckParseError) {
-      logGapCheck({
-        event: "gap_check",
-        sessionId,
-        templateId: body.templateId,
-        provider: provider.name,
-        latencyMs,
-        outcome: "parse_error",
-        detail: error.code,
-        ts: new Date().toISOString(),
-      });
-      return jsonError(502, "bad_model_output", "Chưa rà được, thử lại", { detail: error.code });
-    }
-    throw error;
-  }
 
   const row = addSessionGapCheck({
     sessionId,
@@ -177,7 +147,8 @@ export async function POST(
     event: "gap_check",
     sessionId,
     templateId: body.templateId,
-    provider: provider.name,
+    provider,
+    attempts,
     latencyMs,
     outcome: "ok",
     ts: new Date().toISOString(),
@@ -189,7 +160,9 @@ export async function POST(
     templateId: body.templateId,
     result,
     meta: {
-      provider: provider.name,
+      // Tên bên đã dùng cho lượt rà này (zai | gemini | anthropic | stub).
+      provider,
+      attempts,
       latencyMs,
       checkedAt: row.checkedAt,
       remaining: quota.remaining,

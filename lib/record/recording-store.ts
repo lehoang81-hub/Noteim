@@ -23,7 +23,8 @@ import type { GapCheckResult } from "@/lib/gap-check/types";
 export type RecordingStatus = "idle" | "recording" | "paused";
 
 export type RecordingNote = { id: string; timestamp_sec: number; text: string };
-export type RecordingBookmark = { id: string; timestamp_sec: number; tag: SemanticTag | null };
+/** Góp ý vòng 1 (#75): điểm nóng gắn thêm ghi chú một dòng, rỗng là chưa gõ */
+export type RecordingBookmark = { id: string; timestamp_sec: number; tag: SemanticTag | null; note: string };
 export type RecordingPhoto = { id: string; timestamp_sec: number; url: string };
 
 /** Biên nhận đồng ý ghi âm (GC-05, đặc tả v1.1 §4.6): buổi dùng mẫu nhạy cảm
@@ -148,7 +149,10 @@ function load(): void {
       folderId: typeof parsed.folderId === "string" ? parsed.folderId : null,
       startedAtClock: parsed.startedAtClock ?? null,
       notes: Array.isArray(parsed.notes) ? parsed.notes : [],
-      bookmarks: Array.isArray(parsed.bookmarks) ? parsed.bookmarks : [],
+      // Buổi ghi lưu trước khi có ghi chú điểm nóng: điền rỗng cho phần thiếu
+      bookmarks: Array.isArray(parsed.bookmarks)
+        ? parsed.bookmarks.map((b) => ({ ...b, note: typeof b.note === "string" ? b.note : "" }))
+        : [],
       photos: Array.isArray(parsed.photos) ? parsed.photos : [],
       transcript: Array.isArray(parsed.transcript) ? parsed.transcript : [],
       gapCheck: parsed.gapCheck ?? null,
@@ -274,10 +278,21 @@ export function addRecordingBookmark(tag: SemanticTag | null) {
     id: `rb-${nowMs()}-${state.bookmarks.length}`,
     timestamp_sec: Math.round(recordedSec()),
     tag,
+    note: "",
   };
   setState({ bookmarks: [...state.bookmarks, bookmark] });
   persist();
   return bookmark;
+}
+
+/** Ghi chú nhanh một dòng vào điểm nóng (góp ý vòng 1, #75): Enter lưu,
+ * bấm vào chữ để sửa. Xóa hết chữ là bỏ ghi chú. */
+export function setRecordingBookmarkNote(id: string, text: string) {
+  load();
+  const note = text.trim();
+  if (!state.bookmarks.some((b) => b.id === id)) return;
+  setState({ bookmarks: state.bookmarks.map((b) => (b.id === id ? { ...b, note } : b)) });
+  persist();
 }
 
 export function addRecordingPhoto(url: string) {

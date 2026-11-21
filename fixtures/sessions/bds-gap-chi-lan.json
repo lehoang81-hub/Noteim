@@ -15,7 +15,17 @@
   "audio_expires_at": "2026-11-21T09:05:00+07:00",
   "consent": {
    "confirmed": true,
-   "announced": false
+   "announced": false,
+   "receipts": [
+    {
+     "id": "cr-bds-gap-chi-lan",
+     "who": [
+      "Chị Lan"
+     ],
+     "at": "2026-11-14T09:05:00+07:00",
+     "method": "button"
+    }
+   ]
   },
   "participant_contact_ids": [
    "c-me",
