@@ -13,6 +13,11 @@ Ba bộ ngắn (khoảng 11 MB) nằm ngay trong `test-data/audio/`. File dài 6
 Mỗi bộ có `.ogg` (Opus 32 kbps, như sẽ lưu thật) và `.m4a` (AAC, phát được trên mọi iPhone).
 `audio/<tên>.truth.json` là đáp án: từng đoạn với người nói, ngôn ngữ, chữ Nguyên văn, `start_sec` và `end_sec` **trong file âm thanh**, và `fixture_start_sec` (mốc của đoạn đó trong buổi mẫu).
 
+## Kết quả ASR (`asr-results/`)
+
+`asr-results/<mã hãng>/<tên bộ>.json` là kết quả đã chuẩn hóa và **đã chấm** — file dùng cho `score.mjs`, giữ nguyên dạng.
+`asr-results/<mã hãng>/<tên bộ>.raw.json.gz` là kết quả thô của hãng **nén gzip** (nhịp 2, PR #74): 4 file chiếm ~0,4 MB thay vì ~5,5 MB, giữ được dữ liệu gốc để tái chấm mà không gọi lại API tốn tiền. Mở bằng `gunzip -k <file>` (hoặc `zcat <file> | head`). `run.mjs` giờ ghi thẳng nén gzip; `score.mjs` tự bỏ qua file `.gz` khi liệt kê kết quả để chấm.
+
 ## Bảng giọng (giọng AI tự nhiên, bộ đọc edge-tts)
 
 Mỗi người nói một giọng, cao độ và tốc độ chỉnh khác nhau để phân biệt nghe được. `Cao độ` là lệch so với giọng gốc, `Tốc độ` là lệch tốc độ đọc, `Âm lượng` là gain dB áp sau khi chuẩn hóa (người có gain 0 dB là mức chuẩn).
