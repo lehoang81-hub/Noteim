@@ -204,7 +204,7 @@ export async function loadInvoices(): Promise<Invoice[]> {
   return z.array(Invoice).parse(m.default);
 }
 
-/** Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7). */
+/** Thư mục theo hồ sơ (GY1/PR #76 + GC-05, đặc tả v1.1 §4.7): bốn hồ sơ mẫu theo bốn loại. */
 export async function loadFolders(): Promise<Folder[]> {
   const m = await import("@/fixtures/folders.json");
   return z.array(Folder).parse(m.default);

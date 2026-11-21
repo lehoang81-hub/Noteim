@@ -1,0 +1,21 @@
+{
+  "detail": {"id": null},
+  "transcript": [
+    {"id": "s01", "speaker_id": "SPK_01", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Ok, vào việc luôn nhé. Em Nhi update giùm anh tình trạng KPI phase 2 xem tới đâu rồi."},
+    {"id": "s02", "speaker_id": "SPK_02", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Dạ em check lại rồi ạ. Hiện tại xong được khoảng tám mươi phần trăm, chỉ còn cái dashboard chưa merge."},
+    {"id": "s03", "speaker_id": "SPK_01", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Ừ. Cái dashboard đó quan trọng lắm, deadline là thứ Sáu tuần này, em nhớ nhé."},
+    {"id": "s04", "speaker_id": "SPK_02", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Dạ em sẽ push code xong trước thứ Năm để team review kịp ạ."},
+    {"id": "s05", "speaker_id": "SPK_01", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Còn phần budget marketing, em note lại giùm anh: tháng này chỉ còn năm mươi triệu cho phần ads."},
+    {"id": "s06", "speaker_id": "SPK_02", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Dạ vậy em xin phép đưa lại plan: giảm ngân sách Facebook Ads, chuyển sang Google Ads nhiều hơn."},
+    {"id": "s07", "speaker_id": "SPK_01", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Ok hướng đó được. Em gửi anh cái breakdown hôm nay nhé, anh approve nếu hợp lý."},
+    {"id": "s08", "speaker_id": "SPK_02", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Dạ. À anh ơi, bên đối tác feedback là báo cáo tuần mình gửi hơi muộn, họ đề nghị gửi sớm hơn."},
+    {"id": "s09", "speaker_id": "SPK_01", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Lỗi của em đó. Từ tuần sau anh sẽ gửi report trước tám giờ sáng thứ Hai."},
+    {"id": "s10", "speaker_id": "SPK_02", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Vậy em chuẩn bị số liệu trước chủ nhật, anh chỉ cần format lại thôi ạ."},
+    {"id": "s11", "speaker_id": "SPK_01", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Ừ. À mà cái hợp đồng với bên vendor đó ký xong chưa?"},
+    {"id": "s12", "speaker_id": "SPK_02", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Dạ xong rồi ạ. Hôm qua em đã gửi bản scan cho phòng pháp chế, bản gốc em lưu ở tủ file."},
+    {"id": "s13", "speaker_id": "SPK_01", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Tốt. Cuối tuần này anh cần một cái deck ngắn để present với ban giám đốc, khoảng mười slide."},
+    {"id": "s14", "speaker_id": "SPK_02", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Dạ để em draft slide trước, anh review rồi chỉnh lại message chính ạ."},
+    {"id": "s15", "speaker_id": "SPK_01", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Được. Có gì vướng em ping anh trong nhóm chat nhé, đừng để sát deadline mới báo."},
+    {"id": "s16", "speaker_id": "SPK_02", "start_sec": 0, "end_sec": 0, "lang": "vi", "text": "Dạ em cảm ơn anh. Em out đây ạ, chúc anh buổi họp với khách hiệu quả."}
+  ]
+}

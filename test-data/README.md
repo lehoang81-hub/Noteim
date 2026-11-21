@@ -56,3 +56,13 @@ python3 scripts/gen-test-audio.py --engine elevenlabs   # cần khóa ELEVENLABS
 ```
 
 Mỗi đoạn đọc thành file mp3 riêng trong thư mục tạm rồi mới ghép, nên chạy lại không mất công đọc lại phần đã xong. Bộ đọc lỗi (mạng, giới hạn) thì thử lại 3 lần, có chờ; vẫn lỗi thì dừng và báo, không lặng lẽ rơi về espeak. `start_sec`/`end_sec` trong .truth.json đo từ độ dài thật của từng đoạn đã đọc (sau khi cắt im lặng đầu/cuối file đọc ra).
+
+## Bộ thứ năm: 05-vi-en-pha-le (góp ý vòng 1, issue #75, ngày 2026-11-19)
+
+Nói lẫn Việt, Anh kiểu dân văn phòng trong cùng một câu ("em check lại KPI phase 2") — kiểu nói mà góp ý vòng 1 cho rằng ba bộ trên còn thiếu. Bộ nằm ngay trong `test-data/audio/` (ogg khoảng 0,3 MB, m4a khoảng 0,5 MB), lời gốc ở `05-vi-en-pha-le.dialogue.json`.
+
+| Bộ | Thời lượng | Nội dung | Phòng | Dùng để đo |
+| --- | --- | --- | --- | --- |
+| `05-vi-en-pha-le` | 1,4 phút | 16 đoạn, 2 người nói, Việt pha Anh văn phòng | Văn phòng yên | Nhận từ, cụm tiếng Anh pha trong câu Việt; đủ số liệu (KPI phase 2, năm mươi triệu) |
+
+Cách sinh: `python3 scripts/gen-test-audio.py --only 05-vi-en-pha-le --engine elevenlabs --skip-long`. Ngày 2026-11-19 edge-tts bị Microsoft chặn 403 từ máy làm việc (mọi giọng), nên bộ này đọc bằng ElevenLabs `eleven_turbo_v2_5`: Adam cho SPK_01, Sarah cho SPK_02. Kiểm trước bằng Soniox trên câu mẫu: Adam, Sarah, Laura, Josh đọc tiếng Việt pha tiếng Anh khớp 100% với lời gốc. Các bộ 01 đến 03 giữ nguyên cách sinh cũ.

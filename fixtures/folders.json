@@ -1,35 +1,62 @@
 [
   {
-    "id": "f-canho-a808",
+    "id": "f-vu-phuoc",
     "workspace_id": "w-hoang",
-    "kind": "client",
-    "name": "Căn hộ A8.08 của chị Lan",
-    "ref": "A8.08",
-    "template_id": "tpl-realestate",
-    "session_ids": ["s-bds-lan"],
-    "created_at": "2026-11-10T09:00:00+07:00",
-    "updated_at": "2026-11-12T09:00:00+07:00"
+    "kind": "legal_case",
+    "name": "Tranh chấp hợp đồng thuê, ông Phước",
+    "ref": "HS-2026-114",
+    "note": "Dự kiến khởi kiện tháng 12 nếu chưa dàn xếp xong",
+    "template_id": "tpl-lawyer",
+    "session_ids": ["s-luat-phuoc"],
+    "created_at": "2026-11-14T13:55:00+07:00",
+    "updated_at": "2026-11-14T14:10:00+07:00"
   },
   {
-    "id": "f-benh-nhan-tran",
+    "id": "f-benh-hoa",
     "workspace_id": "w-hoang",
     "kind": "patient",
-    "name": "Bệnh nhân Trần Văn B",
-    "ref": "BN-0312",
+    "name": "Bà Nguyễn Thị Hòa",
+    "ref": "BN-0872",
+    "note": "Tái khám sau 5 ngày, mang kết quả X-quang",
     "template_id": "tpl-doctor",
     "session_ids": ["s-bacsi-kham"],
-    "created_at": "2026-11-12T10:00:00+07:00",
-    "updated_at": "2026-11-12T10:00:00+07:00"
+    "created_at": "2026-11-05T09:45:00+07:00",
+    "updated_at": "2026-11-05T09:45:00+07:00"
   },
   {
-    "id": "f-ho-so-kts-villa",
+    "id": "f-khach-lan",
+    "workspace_id": "w-hoang",
+    "kind": "client",
+    "name": "Chị Lan, căn hộ Marina",
+    "ref": "ML-C-091",
+    "note": "Quan tâm căn 2PN hướng biển, chờ chốt phương án trả góp",
+    "template_id": "tpl-realestate",
+    "session_ids": ["s-bds-lan"],
+    "created_at": "2026-11-14T09:40:00+07:00",
+    "updated_at": "2026-11-14T18:30:00+07:00"
+  },
+  {
+    "id": "f-khach-chot",
+    "workspace_id": "w-hoang",
+    "kind": "client",
+    "name": "Khách cần chốt tháng 12",
+    "ref": "ML-T12",
+    "note": "Cần chốt trước 30/11 để kịp kế hoạch tháng 12",
+    "template_id": "tpl-realestate",
+    "session_ids": ["s-bds-lan", "s-loi"],
+    "created_at": "2026-11-12T10:00:00+07:00",
+    "updated_at": "2026-11-14T18:35:00+07:00"
+  },
+  {
+    "id": "f-cong-lachtray",
     "workspace_id": "w-hoang",
     "kind": "project",
-    "name": "Biệt thự Hòa Lạc",
-    "ref": "VT-HL03",
+    "name": "Nhà phố Lạch Tray",
+    "ref": "CT-LT-02",
+    "note": "Hạng mục hiện trường: vách tầng 2 và maronth",
     "template_id": null,
-    "session_ids": [],
-    "created_at": "2026-11-13T08:30:00+07:00",
-    "updated_at": "2026-11-13T08:30:00+07:00"
+    "session_ids": ["s-kts-lachtray"],
+    "created_at": "2026-11-13T16:30:00+07:00",
+    "updated_at": "2026-11-13T17:05:00+07:00"
   }
 ]

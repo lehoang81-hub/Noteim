@@ -6,6 +6,7 @@ import type {
   Contact,
   DashboardData,
   Folder,
+  FolderChatMessage,
   FolderKind,
   GlossaryTerm,
   Invoice,
@@ -61,7 +62,8 @@ export type RecordingDraft = {
   auto_detect_languages?: boolean;
   duration_sec: number;
   notes: { timestamp_sec: number; text: string }[];
-  bookmarks: { timestamp_sec: number; tag: string | null }[];
+  /** note là ghi chú nhanh một dòng gắn vào điểm nóng (góp ý vòng 1, #75) */
+  bookmarks: { timestamp_sec: number; tag: string | null; note?: string }[];
   /** Ảnh giữ id để tìm pixel trong IndexedDB (lib/record/photo-store.ts);
    * url chỉ có giá trị trong bộ nhớ của phiên ghi, localStorage giữ rỗng. */
   photos: { id: string; timestamp_sec: number; url: string }[];
@@ -189,9 +191,11 @@ export interface WorkspaceRepository {
 }
 
 /**
- * Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7): tạo/sửa thư mục chọn nghề một
- * lần, buổi mới gắn vào thư mục kế thừa mẫu; buổi vẫn đổi mẫu riêng được
- * (override từng buổi). Hình dạng và tên phương thức khớp nhánh GY1 (PR #76).
+ * Thư mục theo hồ sơ (GY1/PR #76 + GC-05, đặc tả v1.1 §4.7): tạo/sửa thư mục
+ * chọn nghề một lần, buổi mới gắn vào thư mục kế thừa mẫu; buổi vẫn đổi mẫu
+ * riêng được (override từng buổi). Hỏi AI của thư mục là tính năng riêng của
+ * GY1 giữ lại khi gộp: trả lời ghép từ các buổi trong thư mục, dẫn chứng mang
+ * theo buổi và mốc giây.
  */
 export interface FolderRepository {
   list(): Promise<Folder[]>;
@@ -208,6 +212,10 @@ export interface FolderRepository {
   update(id: string, patch: Partial<Pick<Folder, "name" | "ref" | "note" | "template_id" | "session_ids">>): Promise<void>;
   /** Xóa thư mục: các buổi ghi không bị xóa, chỉ gỡ khỏi thư mục */
   remove(id: string): Promise<void>;
+  /** Lịch sử hỏi đáp của thư mục, lưu theo thư mục (GY1 giữ lại khi gộp) */
+  history(folderId: string): Promise<FolderChatMessage[]>;
+  /** Hỏi AI xuyên các buổi của thư mục (GY1); onToken chạy chữ dần từng từ */
+  ask(folderId: string, question: string, onToken: (text: string) => void): Promise<FolderChatMessage>;
 }
 
 export interface TaskRepository {
@@ -329,6 +337,6 @@ export interface DataSource {
   workspaces: WorkspaceRepository;
   /** Tổng quan cá nhân và nhóm (M7-02) */
   dashboard: DashboardRepository;
-  /** Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7) */
+  /** Thư mục theo hồ sơ (GY1/PR #76 + GC-05, đặc tả v1.1 §4.7) */
   folders: FolderRepository;
 }

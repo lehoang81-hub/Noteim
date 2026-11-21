@@ -39,6 +39,38 @@
       "bullets": [
         "Tái khám sau 5 ngày, mang theo kết quả X-quang"
       ]
+    },
+    "tpl-doctor-soap-s1": {
+      "tag": "pending",
+      "title": "S. Bệnh nhân kể (chủ quan)",
+      "bullets": [
+        "Ho kèm đờm hai tuần, nặng hơn về đêm",
+        "Đã uống thuốc ngoài 4 ngày không bớt"
+      ]
+    },
+    "tpl-doctor-soap-s2": {
+      "tag": "figure",
+      "title": "O. Thăm khám (khách quan)",
+      "bullets": [
+        "Phổi trong, chưa nghe được ran",
+        "SpO2 97%, thân nhiệt 36,8 độ C"
+      ]
+    },
+    "tpl-doctor-soap-s3": {
+      "tag": "decided",
+      "title": "A. Đánh giá",
+      "bullets": [
+        "Nhiễm trùng đường hô hấp trên mức nhẹ",
+        "Chưa có dấu hiệu viêm phổi"
+      ]
+    },
+    "tpl-doctor-soap-s4": {
+      "tag": "decided",
+      "title": "P. Kế hoạch xử trí",
+      "bullets": [
+        "Kháng sinh Amoxicillin 500mg, 5 ngày",
+        "Tái khám sau 5 ngày nếu chưa đỡ"
+      ]
     }
   },
   "tasks": [

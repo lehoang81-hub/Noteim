@@ -132,10 +132,10 @@ export const Contact = z.object({
 export type Contact = z.infer<typeof Contact>;
 
 /**
- * Một dòng trong biên nhận đồng ý ghi âm (góp ý #4; GC-05, đặc tả v1.1 §4.6):
- * ai đồng ý (who), lúc nào (at), bằng cách nào (method: bấm nút hay bảng tự
- * đóng), kèm câu thông báo đã phát nếu có. Hình dạng khớp với nhánh GY1
- * (PR #76) để hai chuỗi PR gộp được vào nhau.
+ * Một dòng trong biên nhận đồng ý ghi âm (góp ý #4 của GY1/PR #76 và GC-05,
+ * đặc tả v1.1 §4.6): ai đồng ý (who), lúc nào (at), bằng cách nào (method:
+ * bấm nút hay bảng tự đóng), kèm câu thông báo đã phát nếu có. Hai chuỗi PR
+ * cùng vẽ một hình dạng; bản giữ lại là bản GC đã có e2e gc-* bảo vệ.
  */
 export const ConsentReceipt = z.object({
   id: z.string(),
@@ -148,6 +148,19 @@ export const ConsentReceipt = z.object({
   announcement_text: z.string().optional(),
 });
 export type ConsentReceipt = z.infer<typeof ConsentReceipt>;
+
+/**
+ * Một câu trong hội thoại Hỏi AI của thư mục (góp ý vòng 1, #75 — phần riêng
+ * của GY1, giữ lại khi gộp). Dẫn chứng mang theo buổi: bấm là nhảy tới đúng
+ * mốc giây trong buổi đó.
+ */
+export const FolderChatMessage = z.object({
+  id: z.string(),
+  role: z.enum(["user", "ai"]),
+  text: z.string(),
+  citations: z.array(z.object({ session_id: z.string(), timestamp_sec: z.number() })),
+});
+export type FolderChatMessage = z.infer<typeof FolderChatMessage>;
 
 export const Session = z.object({
   id: z.string(),
@@ -270,7 +283,9 @@ export type ActionItem = z.infer<typeof ActionItem>;
 
 export const Note = z.object({ id: z.string(), timestamp_sec: z.number(), text: z.string() });
 export type Note = z.infer<typeof Note>;
-export const BookmarkData = z.object({ id: z.string(), timestamp_sec: z.number(), tag: SemanticTag.nullable() });
+/** note là ghi chú nhanh một dòng gắn vào điểm nóng (góp ý vòng 1, #75);
+ * dữ liệu cũ không có trường này thì coi như chưa có ghi chú */
+export const BookmarkData = z.object({ id: z.string(), timestamp_sec: z.number(), tag: SemanticTag.nullable(), note: z.string().catch("") });
 export type BookmarkData = z.infer<typeof BookmarkData>;
 export const Photo = z.object({ id: z.string(), timestamp_sec: z.number(), url: z.string(), caption: z.string().optional() });
 export type Photo = z.infer<typeof Photo>;
