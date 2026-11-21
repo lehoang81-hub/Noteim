@@ -8,7 +8,8 @@ import { LibraryPane } from "./library-pane";
 
 export function LibrarySplit({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const onDetail = pathname.startsWith("/s/");
+  // Chi tiết buổi ghi (/s/) hay chi tiết hồ sơ (/f/) đều chiếm cột phải
+  const onDetail = pathname.startsWith("/s/") || pathname.startsWith("/f/");
   return (
     <div className="lg:grid lg:min-h-dvh lg:grid-cols-[360px_minmax(0,1fr)]">
       {/* Suspense: LibraryPane đọc ?day= (lọc theo ngày từ Tổng quan, M7-02) */}

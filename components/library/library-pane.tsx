@@ -1,14 +1,14 @@
 "use client";
 
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Archive, Ellipsis, FileClock, FolderOpen, HardDrive, Share2, Trash2, UsersRound } from "lucide-react";
+import { Archive, Ellipsis, FileClock, HardDrive, Share2, Trash2, UsersRound } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
 import { WorkspaceSwitcher } from "@/components/shell/workspace-switcher";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
+import { FolderList } from "@/components/library/folder-list";
 import { SwipeRow } from "@/components/library/swipe-row";
-import { FolderManageSheet } from "@/components/library/folder-sheet";
 import dynamic from "next/dynamic";
 
 // Bảng chia sẻ chứa canvas thẻ trích dẫn: nạp chậm khi mở (M5-04)
@@ -73,6 +73,8 @@ export function LibraryPane({ className }: { className?: string }) {
   const searchParams = useSearchParams();
   const dayParam = searchParams.get("day");
   const [filter, setFilter] = useState<FilterId>("all");
+  // Dải chuyển Buổi ghi / Hồ sơ (góp ý vòng 1, #75): hồ sơ gom các buổi cùng vụ việc, bệnh nhân, khách hàng, công trình
+  const [view, setView] = useState<"sessions" | "folders">("sessions");
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const recording = useRecording();
   const flags = useDebugFlags();
@@ -115,8 +117,6 @@ export function LibraryPane({ className }: { className?: string }) {
   const members = useData(() => (team ? data.workspaces.members(team.id) : Promise.resolve([])), [team?.id]);
   const [scope, setScope] = useState<null | "mine" | "workspace">(null);
   const all = useData(() => data.sessions.list(), []);
-  const folders = useData(() => data.folders.list(), []);
-  const [folderOpen, setFolderOpen] = useState(false);
   const list = useData(() => data.sessions.list({ ...toFilter(filter), mine: scope === "mine", shared: scope === "workspace" }), [filter, scope]);
   // Lọc thêm theo ngày (?day=): áp dụng sau mọi bộ lọc khác
   const listFiltered = useMemo(() => {
@@ -345,6 +345,19 @@ export function LibraryPane({ className }: { className?: string }) {
           có bộ chọn ở thanh bên rồi, không lặp lại */}
       {selecting ? null : <WorkspaceSwitcher className="px-page pt-2 lg:hidden" />}
 
+      {/* Dải chuyển Buổi ghi / Hồ sơ (góp ý vòng 1, #75) */}
+      {selecting ? null : (
+        <div role="tablist" aria-label={t("viewTabs")} className="flex gap-2 px-page pt-3">
+          <FilterChip selected={view === "sessions"} onClick={() => setView("sessions")}>
+            {t("viewSessions")}
+          </FilterChip>
+          <FilterChip selected={view === "folders"} onClick={() => setView("folders")}>
+            {t("viewFolders")}
+          </FilterChip>
+        </div>
+      )}
+
+      {view === "sessions" ? (
       <div className="px-page pb-4">
         <h1 className="font-display text-h1 font-semibold text-ink">
           {u
@@ -356,18 +369,8 @@ export function LibraryPane({ className }: { className?: string }) {
         <p className="mt-0.5 min-h-6 text-small text-ink-2">
           {all.data ? (week.sessions ? t("week", week) : t("weekNone")) : null}
         </p>
-        {/* Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7): quản lý và gắn mẫu
-            kế thừa; nhãn luôn có icon nên người mù màu vẫn đọc được */}
-        <button
-          type="button"
-          onClick={() => setFolderOpen(true)}
-          className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-control px-2 -mx-2 text-small font-semibold text-ink transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2"
-        >
-          <FolderOpen aria-hidden={true} className="size-4.5 text-ink-2" strokeWidth={1.75} />
-          {t("folderManage")}
-          {folders.data?.length ? <span className="font-normal text-ink-3">({folders.data.length})</span> : null}
-        </button>
       </div>
+      ) : null}
 
       {/* Chỉ hiện khi buổi ghi bị gián đoạn (tải lại/đóng trang), không hiện
           khi buổi ghi đang chạy trong tab hiện tại — khi đó chỉ có thanh sen
@@ -424,6 +427,8 @@ export function LibraryPane({ className }: { className?: string }) {
         <Banner kind="quota">{t("quotaLow", { minutes: quotaLeft })}</Banner>
       ) : null}
 
+      {view === "sessions" ? (
+        <>
       <div
         role="group"
         aria-label={t("filters")}
@@ -589,6 +594,10 @@ export function LibraryPane({ className }: { className?: string }) {
           ))
         )}
       </div>
+        </>
+      ) : (
+        <FolderList className="flex-1" />
+      )}
 
       {/* Menu ⋯ của một hàng trên máy tính: Chia sẻ, Xóa */}
       <Sheet
@@ -695,10 +704,6 @@ export function LibraryPane({ className }: { className?: string }) {
       >
         {t("discardBody")}
       </ConfirmDialog>
-
-      {/* Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7): tạo/sửa, chọn nghề để
-          buổi mới kế thừa mẫu */}
-      <FolderManageSheet open={folderOpen} onOpenChange={setFolderOpen} />
     </section>
   );
 }

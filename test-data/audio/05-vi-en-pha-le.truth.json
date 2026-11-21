@@ -1,0 +1,285 @@
+{
+  "audio": "05-vi-en-pha-le",
+  "from_fixture": "test-data/audio/05-vi-en-pha-le.dialogue.json",
+  "session_id": null,
+  "engine": "elevenlabs",
+  "duration_sec": 84.08,
+  "room": "van-phong",
+  "note": "Góp ý vòng 1 (#75): nói lẫn Việt, Anh kiểu dân văn phòng trong cùng một câu (KPI phase 2, dashboard, deadline, report). Văn phòng yên.",
+  "voices": {
+    "SPK_01": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "+0Hz",
+      "rate": "+0%",
+      "gain_db": 0,
+      "role": "Anh Minh (trưởng nhóm)",
+      "engine": "elevenlabs"
+    },
+    "SPK_02": {
+      "voice": "vi-VN-HoaiMyNeural",
+      "pitch": "+5Hz",
+      "rate": "+6%",
+      "gain_db": -2,
+      "role": "Em Nhi (nhân viên, nói nhanh hơn một chút)",
+      "engine": "elevenlabs"
+    }
+  },
+  "segments": [
+    {
+      "id": "s01",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 1.39,
+      "end_sec": 6.31,
+      "text": "Ok, vào việc luôn nhé. Em Nhi update giùm anh tình trạng KPI phase 2 xem tới đâu rồi.",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "pNInz6obpgDQGcFmaJgB",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s02",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 7.35,
+      "end_sec": 12.88,
+      "text": "Dạ em check lại rồi ạ. Hiện tại xong được khoảng tám mươi phần trăm, chỉ còn cái dashboard chưa merge.",
+      "fixture_start_sec": 0,
+      "gain_db": -2,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "EXAVITQu4vr4xnSDxMaL",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s03",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 13.85,
+      "end_sec": 17.9,
+      "text": "Ừ. Cái dashboard đó quan trọng lắm, deadline là thứ Sáu tuần này, em nhớ nhé.",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "pNInz6obpgDQGcFmaJgB",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s04",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 18.35,
+      "end_sec": 21.41,
+      "text": "Dạ em sẽ push code xong trước thứ Năm để team review kịp ạ.",
+      "fixture_start_sec": 0,
+      "gain_db": -2,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "EXAVITQu4vr4xnSDxMaL",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s05",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 22.39,
+      "end_sec": 27.45,
+      "text": "Còn phần budget marketing, em note lại giùm anh: tháng này chỉ còn năm mươi triệu cho phần ads.",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "pNInz6obpgDQGcFmaJgB",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s06",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 28.17,
+      "end_sec": 33.51,
+      "text": "Dạ vậy em xin phép đưa lại plan: giảm ngân sách Facebook Ads, chuyển sang Google Ads nhiều hơn.",
+      "fixture_start_sec": 0,
+      "gain_db": -2,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "EXAVITQu4vr4xnSDxMaL",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s07",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 34.5,
+      "end_sec": 38.96,
+      "text": "Ok hướng đó được. Em gửi anh cái breakdown hôm nay nhé, anh approve nếu hợp lý.",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "pNInz6obpgDQGcFmaJgB",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s08",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 39.78,
+      "end_sec": 44.8,
+      "text": "Dạ. À anh ơi, bên đối tác feedback là báo cáo tuần mình gửi hơi muộn, họ đề nghị gửi sớm hơn.",
+      "fixture_start_sec": 0,
+      "gain_db": -2,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "EXAVITQu4vr4xnSDxMaL",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s09",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 45.49,
+      "end_sec": 49.86,
+      "text": "Lỗi của em đó. Từ tuần sau anh sẽ gửi report trước tám giờ sáng thứ Hai.",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "pNInz6obpgDQGcFmaJgB",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s10",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 50.75,
+      "end_sec": 54.0,
+      "text": "Vậy em chuẩn bị số liệu trước chủ nhật, anh chỉ cần format lại thôi ạ.",
+      "fixture_start_sec": 0,
+      "gain_db": -2,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "EXAVITQu4vr4xnSDxMaL",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s11",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 54.69,
+      "end_sec": 57.8,
+      "text": "Ừ. À mà cái hợp đồng với bên vendor đó ký xong chưa?",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "pNInz6obpgDQGcFmaJgB",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s12",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 58.92,
+      "end_sec": 63.52,
+      "text": "Dạ xong rồi ạ. Hôm qua em đã gửi bản scan cho phòng pháp chế, bản gốc em lưu ở tủ file.",
+      "fixture_start_sec": 0,
+      "gain_db": -2,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "EXAVITQu4vr4xnSDxMaL",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s13",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 64.15,
+      "end_sec": 68.79,
+      "text": "Tốt. Cuối tuần này anh cần một cái deck ngắn để present với ban giám đốc, khoảng mười slide.",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "pNInz6obpgDQGcFmaJgB",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s14",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 69.85,
+      "end_sec": 73.38,
+      "text": "Dạ để em draft slide trước, anh review rồi chỉnh lại message chính ạ.",
+      "fixture_start_sec": 0,
+      "gain_db": -2,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "EXAVITQu4vr4xnSDxMaL",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s15",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 74.19,
+      "end_sec": 78.74,
+      "text": "Được. Có gì vướng em ping anh trong nhóm chat nhé, đừng để sát deadline mới báo.",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "pNInz6obpgDQGcFmaJgB",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    },
+    {
+      "id": "s16",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 79.55,
+      "end_sec": 83.08,
+      "text": "Dạ em cảm ơn anh. Em out đây ạ, chúc anh buổi họp với khách hiệu quả.",
+      "fixture_start_sec": 0,
+      "gain_db": -2,
+      "voice": {
+        "engine": "elevenlabs",
+        "voice": "EXAVITQu4vr4xnSDxMaL",
+        "pitch": "mặc định",
+        "rate": "mặc định"
+      }
+    }
+  ]
+}

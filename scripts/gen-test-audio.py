@@ -41,6 +41,12 @@ FPT_TTS_KEY = os.environ.get("FPT_TTS_KEY", "")
 EL_TTS_KEY = os.environ.get("ELEVENLABS_API_KEY", "")
 EL_VOICE_SPK3 = os.environ.get("ELEVEN_VOICE_SPK3", "5Q0t7uMcjvnagumLfvZi")      # Paul (mặc định, chưa đạt khi thử)
 EL_VOICE_CHI_HANG = os.environ.get("ELEVEN_VOICE_CHI_HANG", "pFZP5JQG7iQjIQuC4Bku")  # Lily (khá khi thử)
+# Góp ý vòng 1 (#75, bộ 05): kiểm lại ngày 2026-11-19 — Adam, Sarah, Laura,
+# Josh đọc tiếng Việt và tiếng Anh pha trong câu chuẩn (xác nhận bằng Soniox).
+EL_VOICE_05 = {
+    "SPK_01": os.environ.get("ELEVEN_VOICE_05_SPK1", "pNInz6obpgDQGcFmaJgB"),  # Adam (trưởng nhóm)
+    "SPK_02": os.environ.get("ELEVEN_VOICE_05_SPK2", "EXAVITQu4vr4xnSDxMaL"),  # Sarah (nhân viên)
+}
 
 CACHE = os.path.join(tempfile.gettempdir(), "noteim-audio-cache")
 
@@ -221,6 +227,10 @@ SETS = [
         "name": "03-bac-si-kham", "fixture": "fixtures/samples/doctor.json", "room": "phong-kham",
         "note": "Phòng khám ồn. Bệnh nhân nói chậm, nhỏ.",
     },
+    {
+        "name": "05-vi-en-pha-le", "fixture": "test-data/audio/05-vi-en-pha-le.dialogue.json", "room": "van-phong",
+        "note": "Góp ý vòng 1 (#75): nói lẫn Việt, Anh kiểu dân văn phòng trong cùng một câu (KPI phase 2, dashboard, deadline, report). Văn phòng yên.",
+    },
 ]
 
 # Bảng giọng dùng cho engine tự nhiên (edge / fpt / elevenlabs).
@@ -245,10 +255,18 @@ NAT_VOICES = {
         "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "-15%", "gain_db": -7, "role": "Chị Hằng (bệnh nhân, chậm và nhỏ)"},
         "SPK_03": {"voice": "vi-VN-NamMinhNeural", "pitch": "-10Hz", "rate": "-5%", "gain_db": 0, "role": "Người nhà (con chị Hằng)"},
     },
+    "05-vi-en-pha-le": {
+        "SPK_01": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Anh Minh (trưởng nhóm)"},
+        "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+5Hz", "rate": "+6%", "gain_db": -2, "role": "Em Nhi (nhân viên, nói nhanh hơn một chút)"},
+    },
 }
 
 # engine fpt / elevenlabs chỉ đổi những người nói này (còn lại vẫn dùng edge):
 SWAP = {"01-bds-gap-chi-lan": ["SPK_03"], "03-bac-si-kham": ["SPK_02"]}
+# engine elevenlabs có bảng riêng: bộ 05 đọc trọn hai người nói bằng ElevenLabs
+# vì giọng edge-tts tiếng Việt bị chặn 403 ở máy làm việc ngày 2026-11-19.
+EL_SWAP = dict(SWAP)
+EL_SWAP["05-vi-en-pha-le"] = ["SPK_01", "SPK_02"]
 FPT_VOICES = {"SPK_03": "giahung", "SPK_02": "thuminh"}   # giọng miền Nam; chưa chạy thử được vì chưa có khóa
 # Đoạn tiếng Anh của Park (SPK_02) và Kim (SPK_03) đọc bằng CHÍNH giọng Hàn của họ
 # (giọng Anh pha Hàn, như thật) — không đổi sang giọng tiếng Anh.
@@ -258,6 +276,7 @@ ESPEAK_SETS = {
     "01-bds-gap-chi-lan": {"voices": {"SPK_01": ("vi+m3", 45, 165, 0), "SPK_02": ("vi+f2", 62, 150, -9), "SPK_03": ("vi+m1", 35, 155, -3)}, "lang_voice": {}},
     "02-hop-doi-tac-han": {"voices": {"SPK_01": ("vi+m3", 45, 165, 0), "SPK_02": ("ko+m2", 40, 160, 2), "SPK_03": ("ko+f3", 65, 170, -4), "SPK_04": ("vi+f1", 58, 155, -6)}, "lang_voice": {"en": "en+m3"}},
     "03-bac-si-kham": {"voices": {"SPK_01": ("vi+m2", 42, 170, 0), "SPK_02": ("vi+f4", 60, 140, -7)}, "lang_voice": {}},
+    "05-vi-en-pha-le": {"voices": {"SPK_01": ("vi+m3", 45, 165, 0), "SPK_02": ("vi+f2", 55, 170, -2)}, "lang_voice": {}},
 }
 ESPEAK_FALLBACK = ("vi", 50, 155, 0)
 
@@ -271,13 +290,18 @@ def synth_segment(cfg, s, engine):
         return tts_espeak(text, voice, pitch, speed) * db(gain), gain, {"engine": "espeak", "voice": voice}
     v = NAT_VOICES[cfg["name"]][spk]
     eng = "edge"
-    if engine in ("fpt", "elevenlabs") and spk in SWAP.get(cfg["name"], []):
-        eng = engine
+    if engine == "fpt" and spk in SWAP.get(cfg["name"], []):
+        eng = "fpt"
+    if engine == "elevenlabs" and spk in EL_SWAP.get(cfg["name"], []):
+        eng = "elevenlabs"
     if eng == "fpt":
         pcm = with_retry(lambda: fpt_synth(text, FPT_VOICES[spk]), f"bộ đọc FPT đoạn {s['id']}")
         return pcm * db(v["gain_db"]), v["gain_db"], {"engine": "fpt", "voice": FPT_VOICES[spk], "pitch": "mặc định", "rate": "mặc định"}
     if eng == "elevenlabs":
-        vid = EL_VOICE_SPK3 if spk == "SPK_03" else EL_VOICE_CHI_HANG
+        if cfg["name"] == "05-vi-en-pha-le":
+            vid = EL_VOICE_05[spk]
+        else:
+            vid = EL_VOICE_SPK3 if spk == "SPK_03" else EL_VOICE_CHI_HANG
         pcm = with_retry(lambda: el_synth(text, vid), f"bộ đọc ElevenLabs đoạn {s['id']}")
         return pcm * db(v["gain_db"]), v["gain_db"], {"engine": "elevenlabs", "voice": vid, "pitch": "mặc định", "rate": "mặc định"}
     pcm = with_retry(lambda: edge_synth(text, v["voice"], v["rate"], v["pitch"]), f"edge-tts đoạn {s['id']}")
@@ -331,7 +355,7 @@ def write(cfg, x, truth, d, engine):
         voices_out = {k: {"voice": v[0], "pitch": v[1], "speed_wpm": v[2], "gain_db": v[3], "engine": "espeak"} for k, v in ev.items()}
     else:
         voices_out = {k: dict(v, engine="fpt" if (engine == "fpt" and k in SWAP.get(cfg["name"], [])) else
-                              "elevenlabs" if (engine == "elevenlabs" and k in SWAP.get(cfg["name"], [])) else "edge")
+                              "elevenlabs" if (engine == "elevenlabs" and k in EL_SWAP.get(cfg["name"], [])) else "edge")
                       for k, v in NAT_VOICES[cfg["name"]].items()}
     json.dump({
         "audio": cfg["name"], "from_fixture": cfg["fixture"], "session_id": det.get("id"),
