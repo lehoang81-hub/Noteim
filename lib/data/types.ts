@@ -131,6 +131,24 @@ export const Contact = z.object({
 });
 export type Contact = z.infer<typeof Contact>;
 
+/**
+ * Một dòng trong biên nhận đồng ý ghi âm (góp ý #4; GC-05, đặc tả v1.1 §4.6):
+ * ai đồng ý (who), lúc nào (at), bằng cách nào (method: bấm nút hay bảng tự
+ * đóng), kèm câu thông báo đã phát nếu có. Hình dạng khớp với nhánh GY1
+ * (PR #76) để hai chuỗi PR gộp được vào nhau.
+ */
+export const ConsentReceipt = z.object({
+  id: z.string(),
+  /** Tên những người đã đồng ý (gõ nhanh ở bảng đồng ý); rỗng là chưa ghi tên */
+  who: z.array(z.string()).catch([]),
+  /** Thời điểm ghi nhận đồng ý (ISO) */
+  at: z.string(),
+  method: z.enum(["button", "auto"]),
+  /** Câu thông báo ghi âm đã phát trong buổi, nếu có */
+  announcement_text: z.string().optional(),
+});
+export type ConsentReceipt = z.infer<typeof ConsentReceipt>;
+
 export const Session = z.object({
   id: z.string(),
   user_id: z.string(),
@@ -159,7 +177,12 @@ export const Session = z.object({
   audio_url: z.string().nullable().optional().catch(undefined),
   created_at: z.string(),
   audio_expires_at: z.string().nullable(),
-  consent: z.object({ confirmed: z.boolean(), announced: z.boolean() }),
+  consent: z.object({
+    confirmed: z.boolean(),
+    announced: z.boolean(),
+    /** Biên nhận đồng ý ghi âm (GC-05, đặc tả v1.1 §4.6); buổi cũ không có */
+    receipts: z.array(ConsentReceipt).optional().catch(undefined),
+  }),
   participant_contact_ids: z.array(z.string()),
   peaks_thumb: z.array(z.number()).length(40),
   speaker_colors_thumb: z.array(z.number().int().min(0).max(5)).length(40),
@@ -254,6 +277,59 @@ export type Photo = z.infer<typeof Photo>;
 
 export const SpeakerSpanData = z.object({ speaker_id: z.string(), start_sec: z.number(), end_sec: z.number() });
 
+/* ---------- GC-05: Thư mục và mẫu kế thừa ---------- */
+
+/**
+ * Loại thư mục theo hồ sơ (góp ý #3, đặc tả v1.1 §4.7): tên gọi theo nghề của
+ * người dùng, nhãn hiển thị nằm trong messages. Hình dạng khớp với nhánh GY1
+ * (PR #76); GC-05 thêm trường template_id để thư mục chọn nghề một lần,
+ * buổi mới kế thừa mẫu của thư mục.
+ */
+export const FolderKind = z.enum(["legal_case", "patient", "client", "project"]);
+export type FolderKind = z.infer<typeof FolderKind>;
+
+/** Thư mục gom các buổi ghi của cùng một hồ sơ: vụ việc, bệnh nhân, khách hàng, công trình. */
+export const Folder = z.object({
+  id: z.string(),
+  workspace_id: z.string().nullable().catch(null),
+  kind: FolderKind,
+  name: z.string(),
+  /** Mã hồ sơ: số vụ việc, mã bệnh nhân, mã bất động sản, mã công trình */
+  ref: z.string().optional().catch(undefined),
+  /** Ghi chú ngắn về hồ sơ, ví dụ mốc quan trọng tiếp theo */
+  note: z.string().optional().catch(undefined),
+  /** Mẫu ghi âm kế thừa cho buổi mới gắn vào thư mục (GC-05, đặc tả §4.7);
+   * null là thư mục chưa chọn nghề — buổi mới dùng mẫu mặc định */
+  template_id: z.string().nullish().catch(undefined),
+  session_ids: z.array(z.string()).catch([]),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+export type Folder = z.infer<typeof Folder>;
+
+
+/**
+ * Kết quả rà thiếu gần nhất lưu kèm buổi (GC-04, đặc tả v1.1 §4.5). Cùng hình
+ * dạng với GapCheckResult của API (lib/gap-check/types.ts) nhưng đi qua zod
+ * để dữ liệu mẫu/kho hỏng không làm sập màn chi tiết.
+ */
+export const SavedGapCheck = z.object({
+  template_id: z.string(),
+  checked_at: z.string(),
+  ready_to_close: z.boolean(),
+  slots_status: z.array(
+    z.object({
+      key: z.string(),
+      filled: z.boolean(),
+      confidence: z.enum(["high", "medium", "low"]),
+      evidence: z.string(),
+    }),
+  ),
+  missing_priorities: z.array(z.object({ key: z.string(), why_missing: z.string(), question: z.string() })),
+  one_line_bridge: z.string(),
+});
+export type SavedGapCheck = z.infer<typeof SavedGapCheck>;
+
 export const SessionDetail = Session.extend({
   executive_summary: z.string(),
   speakers: z.array(Speaker),
@@ -267,6 +343,12 @@ export const SessionDetail = Session.extend({
   send_history: z.array(z.object({ sent_at: z.string(), recipient_count: z.number() })),
   /** Buổi ghi mẫu theo nghề (M4-04), không hiện trong thư viện chính */
   is_sample: z.boolean().optional().catch(undefined),
+  /** Kết quả rà thiếu gần nhất đi kèm buổi (GC-04); fixture cũ không có */
+  gap_check: SavedGapCheck.nullish().catch(undefined),
+  /** Các ô checklist đã tick xong (GC-04); tải lại trang vẫn ẩn */
+  gap_check_done: z.array(z.string()).nullish().catch(undefined),
+  /** Câu hỏi chờ gửi trong Hỏi AI, chuyển từ sheet rà thiếu khi đang ghi (GC-04) */
+  pending_ai_questions: z.array(z.string()).nullish().catch(undefined),
 });
 export type SessionDetail = z.infer<typeof SessionDetail>;
 

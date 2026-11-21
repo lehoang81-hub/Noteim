@@ -4,6 +4,7 @@ import { z } from "zod";
 import {
   AuditEvent,
   Contact,
+  Folder,
   GlossaryTerm,
   Invoice,
   ListeningMap,
@@ -201,6 +202,12 @@ export async function loadAudit(): Promise<AuditEvent[]> {
 export async function loadInvoices(): Promise<Invoice[]> {
   const m = await import("@/fixtures/invoices.json");
   return z.array(Invoice).parse(m.default);
+}
+
+/** Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7). */
+export async function loadFolders(): Promise<Folder[]> {
+  const m = await import("@/fixtures/folders.json");
+  return z.array(Folder).parse(m.default);
 }
 
 /**

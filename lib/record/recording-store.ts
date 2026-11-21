@@ -2,9 +2,10 @@
 
 import { useSyncExternalStore } from "react";
 import { getFlags } from "@/lib/debug/flags";
-import type { Lang, SemanticTag } from "@/lib/data/types";
+import type { ConsentReceipt, Lang, SemanticTag } from "@/lib/data/types";
 import { savePhoto } from "@/lib/record/photo-store";
 import { markStorageFull } from "@/lib/storage-full";
+import type { GapCheckResult } from "@/lib/gap-check/types";
 
 /*
  * Kho buổi ghi đang diễn ra (docs/03-screens.md mục 2, 3; issue M2-01).
@@ -25,10 +26,26 @@ export type RecordingNote = { id: string; timestamp_sec: number; text: string };
 export type RecordingBookmark = { id: string; timestamp_sec: number; tag: SemanticTag | null };
 export type RecordingPhoto = { id: string; timestamp_sec: number; url: string };
 
-export type RecordingConsent = { confirmed: boolean; announced: boolean };
+/** Biên nhận đồng ý ghi âm (GC-05, đặc tả v1.1 §4.6): buổi dùng mẫu nhạy cảm
+ * bắt buộc có biên nhận (ai đồng ý, lúc nào, bằng cách nào) trước khi ghi. */
+export type RecordingConsent = { confirmed: boolean; announced: boolean; receipts?: ConsentReceipt[] };
 
 /** Ngôn ngữ chọn ở bảng "Bắt đầu ghi" (M6-02, issue #44) */
 export type RecordingSpeech = { primary_language: Lang; auto_detect: boolean };
+
+/** Thư mục chọn lúc bắt đầu ghi (GC-05, đặc tả v1.1 §4.7): buổi lưu xong
+ * được ghi vào session_ids của thư mục này. */
+type RecordingFolder = string | null;
+
+/** Đoạn lời thoại nhận dạng được gắn mốc thời gian của buổi đang ghi (GC-03).
+ * Nguồn nối vào bằng addRecordingTranscript: hiện tại là kịch bản demo B4,
+ * sau này là ASR sống (B0) — giao diện Gap Check không cần đổi. */
+export type RecordingTranscriptSegment = { id: string; timestamp_sec: number; text: string };
+
+/** Kết quả rà thiếu gần nhất của buổi đang ghi (GC-04, đặc tả v1.1 §4.5).
+ * Mỗi lượt rà mới đè kết quả cũ; kết thúc ghi đi kèm buổi để màn chi tiết
+ * dựng checklist "Cần bổ sung sau buổi". */
+export type RecordingGapCheck = { templateId: string; checkedAtMs: number; result: GapCheckResult };
 
 export type RecordingSnapshot = {
   status: RecordingStatus;
@@ -40,17 +57,28 @@ export type RecordingSnapshot = {
   consent: RecordingConsent;
   /** Ngôn ngữ chính và công tắc "Có thể có tiếng khác" chọn lúc bắt đầu (M6-02) */
   speech: RecordingSpeech;
+  /** Thư mục chọn lúc bắt đầu ghi (GC-05); null là không thuộc thư mục nào */
+  folderId: RecordingFolder;
   /** Epoch ms lúc bắt đầu ghi, để đặt tên "Buổi ghi lúc 14:05". */
   startedAtClock: number | null;
   notes: RecordingNote[];
   bookmarks: RecordingBookmark[];
   photos: RecordingPhoto[];
+  /** Lời thoại nhận dạng được trong buổi (GC-03 — Gap Check rà thiếu);
+   * không hiện lên màn hình ghi, chỉ phục vụ rà thiếu và lưu kèm buổi. */
+  transcript: RecordingTranscriptSegment[];
+  /** Kết quả rà thiếu gần nhất (GC-04) — lưu kèm buổi khi kết thúc ghi. */
+  gapCheck: RecordingGapCheck | null;
+  /** Câu hỏi bấm "Hỏi AI trên thư mục" từ sheet rà thiếu (GC-04, đặc tả
+   * v1.1 §4.3, §4.5); sau khi lưu buổi nằm chờ trong tab Hỏi AI của buổi. */
+  askAiQuestions: string[];
   /** Âm lượng lấy mẫu 4 giá trị mỗi giây, 0 đến 1. */
   levels: number[];
 };
 
 const STORAGE_KEY = "noteim-recording-v1";
 const LEVEL_CAP = 60_000; // khoảng 4 giờ 10 phút ở 4 mẫu/giây
+const TRANSCRIPT_CAP = 800; // đủ cho 8.000 ký tự gần nhất (đặc tả Gap Check §3)
 
 const INITIAL: RecordingSnapshot = {
   status: "idle",
@@ -58,10 +86,14 @@ const INITIAL: RecordingSnapshot = {
   templateId: null,
   consent: { confirmed: false, announced: false },
   speech: { primary_language: "vi", auto_detect: true },
+  folderId: null,
   startedAtClock: null,
   notes: [],
   bookmarks: [],
   photos: [],
+  transcript: [],
+  gapCheck: null,
+  askAiQuestions: [],
   levels: [],
 };
 
@@ -113,10 +145,14 @@ function load(): void {
       templateId: parsed.templateId ?? null,
       consent: parsed.consent ?? INITIAL.consent,
       speech: parsed.speech ?? { primary_language: "vi", auto_detect: true },
+      folderId: typeof parsed.folderId === "string" ? parsed.folderId : null,
       startedAtClock: parsed.startedAtClock ?? null,
       notes: Array.isArray(parsed.notes) ? parsed.notes : [],
       bookmarks: Array.isArray(parsed.bookmarks) ? parsed.bookmarks : [],
       photos: Array.isArray(parsed.photos) ? parsed.photos : [],
+      transcript: Array.isArray(parsed.transcript) ? parsed.transcript : [],
+      gapCheck: parsed.gapCheck ?? null,
+      askAiQuestions: Array.isArray(parsed.askAiQuestions) ? parsed.askAiQuestions : [],
       levels: Array.isArray(parsed.levels) ? parsed.levels : [],
     };
   } catch {
@@ -158,7 +194,13 @@ export function recordedSec(): number {
 
 /* ---------- Hành động ---------- */
 
-export function startRecording(opts: { templateId: string | null; consent: RecordingConsent; speech: RecordingSpeech }) {
+export function startRecording(opts: {
+  templateId: string | null;
+  consent: RecordingConsent;
+  speech: RecordingSpeech;
+  /** Thư mục chọn ở bảng bắt đầu ghi (GC-05) */
+  folderId?: string | null;
+}) {
   load();
   const now = nowMs();
   elapsedMs = 0;
@@ -169,10 +211,14 @@ export function startRecording(opts: { templateId: string | null; consent: Recor
     templateId: opts.templateId,
     consent: opts.consent,
     speech: opts.speech,
+    folderId: opts.folderId ?? null,
     startedAtClock: now,
     notes: [],
     bookmarks: [],
     photos: [],
+    transcript: [],
+    gapCheck: null,
+    askAiQuestions: [],
     levels: [],
   };
   persist();
@@ -245,6 +291,47 @@ export function addRecordingPhoto(url: string) {
   // Pixel của ảnh nằm ở IndexedDB theo id; localStorage chỉ giữ id
   // (PR #22, lỗi 3). Lưu xong hay lỗi đều không cản buổi ghi.
   void savePhoto(photo.id, url);
+  persist();
+}
+
+/** Nối đoạn lời thoại mới nhận dạng được (GC-03, đặc tả v1.1 §3).
+ * Mỗi đoạn gắn mốc thời gian của đồng hồ ghi lúc gọi; giữ tối đa 800 đoạn
+ * gần nhất để localStorage không phình to. Ghi chú, điểm nóng không đụng tới. */
+export function addRecordingTranscript(segments: string[]) {
+  load();
+  if (state.status === "idle") return;
+  const clean = segments.map((text) => text.trim()).filter(Boolean);
+  if (!clean.length) return;
+  const sec = Math.round(recordedSec());
+  const base = state.transcript.length;
+  const fresh: RecordingTranscriptSegment[] = clean.map((text, i) => ({
+    id: `rt-${nowMs()}-${base + i}`,
+    timestamp_sec: sec,
+    text,
+  }));
+  const next = [...state.transcript, ...fresh];
+  setState({ transcript: next.length > TRANSCRIPT_CAP ? next.slice(-TRANSCRIPT_CAP) : next });
+  persist();
+}
+
+/** Ghi nhận kết quả của một lượt rà vừa xong (GC-04); lượt rà mới đè lượt cũ
+ * — checklist ở màn chi tiết sinh từ lần rà gần nhất (đặc tả v1.1 §4.5). */
+export function setRecordingGapCheck(gc: RecordingGapCheck) {
+  load();
+  if (state.status === "idle") return;
+  setState({ gapCheck: gc });
+  persist();
+}
+
+/** Đưa một câu hỏi vào hàng chờ Hỏi AI trên thư mục (GC-04). Trùng thì bỏ
+ * qua; giữ tối đa 9 câu gần nhất để không phình localStorage. */
+export function addRecordingAskAiQuestion(question: string) {
+  load();
+  if (state.status === "idle") return;
+  const clean = question.trim();
+  if (!clean || state.askAiQuestions.includes(clean)) return;
+  const next = [...state.askAiQuestions, clean];
+  setState({ askAiQuestions: next.length > 9 ? next.slice(-9) : next });
   persist();
 }
 

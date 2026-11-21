@@ -1,0 +1,149 @@
+{
+  "version": "1.1",
+  "templates": [
+    {
+      "id": "doctor_clinical",
+      "role_name": "Bác sĩ khám lâm sàng",
+      "requires_consent": true,
+      "tone_guideline": "Điềm tĩnh, ân cần, chuyên môn y khoa rõ ràng, tránh gây hoang mang. Xưng hô 'anh/chị' với bệnh nhân.",
+      "summary_structure": ["Subjective — triệu chứng", "Objective — thăm khám", "Assessment — đánh giá", "Plan — hướng xử lý"],
+      "gap_slots": [
+        { "key": "chief_complaint", "label": "Triệu chứng chính", "extraction_hint": "Lý do khám, vị trí khó chịu, mức độ ảnh hưởng.", "fallback_question": "Hiện tại triệu chứng nào làm anh/chị khó chịu nhất và mức độ ảnh hưởng ra sao ạ?" },
+        { "key": "onset_duration", "label": "Thời gian & diễn tiến", "extraction_hint": "Bắt đầu từ bao giờ, đột ngột hay từ từ, tăng hay giảm.", "fallback_question": "Tình trạng này bắt đầu từ khi nào và có nặng lên theo thời gian không ạ?" },
+        { "key": "allergies_history", "label": "Tiền sử & Dị ứng", "sensitive": true, "extraction_hint": "Dị ứng thuốc/thức ăn, bệnh nền mãn tính (tim mạch, tiểu đường, huyết áp).", "fallback_question": "Trước giờ anh/chị có dị ứng với thuốc nào hay đang điều trị bệnh nền gì không ạ?" },
+        { "key": "current_medications", "label": "Thuốc đang dùng", "extraction_hint": "Thuốc tây, thực phẩm chức năng, thuốc nam đã tự dùng trước khi tới khám.", "fallback_question": "Từ lúc có triệu chứng, anh/chị đã tự mua thuốc hay dùng thực phẩm hỗ trợ nào chưa ạ?" }
+      ]
+    },
+    {
+      "id": "lawyer_consultation",
+      "role_name": "Luật sư tư vấn pháp lý",
+      "requires_consent": true,
+      "tone_guideline": "Chặt chẽ, khách quan, trung lập, tập trung sự kiện pháp lý và chứng cứ. Xưng hô 'anh/chị'.",
+      "summary_structure": ["Tóm tắt vụ việc", "Cơ sở pháp lý", "Đánh giá quyền lợi & rủi ro", "Các bước tiếp theo"],
+      "gap_slots": [
+        { "key": "dispute_parties", "label": "Chủ thể liên quan", "extraction_hint": "Danh tính, tư cách pháp lý các bên (cá nhân, doanh nghiệp, người đại diện).", "fallback_question": "Cho tôi xác nhận lại tư cách ký kết hoặc tham gia của các bên liên quan trực tiếp trong vụ việc này?" },
+        { "key": "timeline_statute", "label": "Mốc thời gian & Thời hiệu", "extraction_hint": "Ngày ký hợp đồng, ngày phát sinh vi phạm, ngày nhận thông báo (tính thời hiệu khởi kiện).", "fallback_question": "Sự việc phát sinh chính xác vào ngày tháng năm nào để tôi kiểm tra thời hiệu?" },
+        { "key": "existing_evidence", "label": "Chứng cứ hiện có", "extraction_hint": "Hợp đồng bản gốc, vi bằng, tin nhắn, email, sao kê chuyển khoản, nhân chứng.", "fallback_question": "Hiện anh/chị đang giữ những tài liệu gốc, tin nhắn hay chứng từ chuyển khoản nào chứng minh việc này?" },
+        { "key": "desired_outcome", "label": "Mục tiêu giải quyết", "extraction_hint": "Đòi bồi thường, hủy hợp đồng, hòa giải hay khởi kiện.", "fallback_question": "Mục tiêu anh/chị kỳ vọng nhất là thu hồi tiền, chấm dứt hợp đồng hay phương án nào khác?" }
+      ]
+    },
+    {
+      "id": "architect_survey",
+      "role_name": "Kiến trúc sư khảo sát thiết kế",
+      "requires_consent": false,
+      "tone_guideline": "Cởi mở, tinh tế, định hướng không gian và ngân sách thực tế, khéo kéo khách khỏi lan man. Xưng hô 'anh/chị' hoặc 'gia đình mình'.",
+      "summary_structure": ["Hiện trạng công trình", "Nhu cầu công năng", "Ngân sách & tiến độ", "Phương án đề xuất"],
+      "gap_slots": [
+        { "key": "site_specs", "label": "Diện tích & Hiện trạng", "extraction_hint": "Kích thước đất/căn hộ, số tầng, hướng nắng gió, xây mới hay cải tạo.", "fallback_question": "Diện tích khu đất/căn hộ chính xác bao nhiêu mét vuông và hiện trạng là đất trống hay nhà cải tạo ạ?" },
+        { "key": "budget_cap", "label": "Ngân sách dự trù", "extraction_hint": "Tổng mức đầu tư phần thô, hoàn thiện, nội thất.", "fallback_question": "Để em cân đối phương án vật liệu sát nhất, gia đình mình dự trù tổng ngân sách khoảng bao nhiêu ạ?" },
+        { "key": "functional_needs", "label": "Công năng & Thành viên", "extraction_hint": "Số phòng ngủ, không gian sinh hoạt chung, người già/trẻ nhỏ, nhu cầu đặc thù.", "fallback_question": "Nhà mình có bao nhiêu thành viên sinh sống thường xuyên và cần không gian đặc biệt nào không ạ?" },
+        { "key": "project_timeline", "label": "Tiến độ mong muốn", "extraction_hint": "Thời điểm dự kiến khởi công, hạn cần ở/khai thác.", "fallback_question": "Anh/chị dự kiến tháng mấy bắt đầu khởi công và cần hoàn thiện xong trước mốc nào ạ?" }
+      ]
+    },
+    {
+      "id": "real_estate_sales",
+      "role_name": "Chuyên viên tư vấn Bất động sản",
+      "requires_consent": false,
+      "tone_guideline": "Nhạy bén, lịch sự, tạo niềm tin, tập trung dòng tiền, pháp lý và khả năng ra quyết định. Xưng hô 'anh/chị'.",
+      "summary_structure": ["Nhu cầu & mục đích", "Tài chính", "Sản phẩm phù hợp", "Bước tiếp theo"],
+      "gap_slots": [
+        { "key": "buying_purpose", "label": "Mục đích mua", "extraction_hint": "Ở thực, cho thuê tạo dòng tiền, đầu tư lãi vốn, tích sản.", "fallback_question": "Căn này anh/chị ưu tiên để gia đình ở thực hay hướng tới cho thuê và đầu tư giữ tiền ạ?" },
+        { "key": "financial_capacity", "label": "Tài chính & Đòn bẩy", "extraction_hint": "Vốn tự có, nhu cầu vay ngân hàng, tiến độ thanh toán mong muốn.", "fallback_question": "Với tầm tài chính dự kiến, anh/chị dùng vốn tự có toàn bộ hay muốn tận dụng gói vay ngân hàng ạ?" },
+        { "key": "location_criteria", "label": "Tiêu chí vị trí & Tiện ích", "extraction_hint": "Khu vực ưu tiên, bán kính đi làm/trường học, hướng nhà, loại hình sản phẩm.", "fallback_question": "Ngoài yếu tố giá, đâu là 2 tiêu chí bắt buộc về vị trí hoặc tiện ích đối với anh/chị?" },
+        { "key": "decision_maker_timeline", "label": "Người chốt & Thời điểm", "extraction_hint": "Ai cùng đi xem và quyết định cuối cùng, dự định chốt khi nào.", "fallback_question": "Khi đi xem thực tế, anh/chị có cần sắp xếp để vợ/chồng hoặc người thân cùng đi quyết định luôn không ạ?" }
+      ]
+    },
+    {
+      "id": "insurance_advisor",
+      "role_name": "Tư vấn viên Bảo hiểm",
+      "requires_consent": false,
+      "tone_guideline": "Chân thành, thấu cảm, minh bạch quyền lợi và điều khoản loại trừ, không ép buộc. Xưng hô 'anh/chị'.",
+      "summary_structure": ["Tình hình gia đình", "Nhu cầu bảo vệ", "Phương án đề xuất", "Bước tiếp theo"],
+      "gap_slots": [
+        { "key": "dependents_breadwinner", "label": "Người phụ thuộc & Trụ cột", "extraction_hint": "Người tạo thu nhập chính, số con nhỏ, cha mẹ đang phụ thuộc tài chính.", "fallback_question": "Trong gia đình mình, ai đang là người tạo thu nhập chính và có bao nhiêu người phụ thuộc ạ?" },
+        { "key": "protection_priority", "label": "Ưu tiên bảo vệ", "extraction_hint": "Thẻ y tế/nằm viện, quỹ bệnh hiểm nghèo, quỹ học vấn/hưu trí.", "fallback_question": "Giữa quỹ dự phòng y tế nằm viện và quỹ bảo vệ thu nhập trước rủi ro lớn, anh/chị quan tâm mảng nào hơn?" },
+        { "key": "health_disclosure", "label": "Tình trạng sức khỏe", "sensitive": true, "extraction_hint": "Tiền sử nằm viện, phẫu thuật, bệnh có sẵn, thói quen hút thuốc/rượu bia (thẩm định).", "fallback_question": "Trong 5 năm gần đây, anh/chị có từng nằm viện hay chỉ số sức khỏe nào cần lưu ý khi kê khai không ạ?" },
+        { "key": "comfortable_premium", "label": "Ngân sách phí đóng", "extraction_hint": "Phí đóng hàng năm (10–15% thu nhập), duy trì đều đặn không áp lực.", "fallback_question": "Để hợp đồng bền vững 10–15 năm, mức trích lập mỗi năm khoảng bao nhiêu là thoải mái với anh/chị?" }
+      ]
+    },
+    {
+      "id": "psychologist_counselor",
+      "role_name": "Chuyên gia Tham vấn Tâm lý",
+      "requires_consent": true,
+      "tone_guideline": "Ấm áp, không phán xét, tôn trọng nhịp độ thân chủ, ngôn từ nhẹ nhàng nâng đỡ. Xưng hô theo cách thân chủ dùng ('anh/chị' hoặc 'mình-bạn').",
+      "summary_structure": ["Diễn biến chính của buổi", "Đánh giá", "Hướng can thiệp", "Hẹn lần sau"],
+      "gap_slots": [
+        { "key": "presenting_issue", "label": "Vấn đề cốt lõi", "extraction_hint": "Nỗi niềm/khó khăn tâm lý chính khiến thân chủ tìm đến buổi tham vấn.", "fallback_question": "Nếu chọn một điều đang đè nặng lên tâm trí anh/chị nhất lúc này để cùng gỡ trước, đó sẽ là điều gì?" },
+        { "key": "triggers_context", "label": "Tác nhân kích hoạt", "extraction_hint": "Tình huống, con người hoặc thời điểm cụ thể khiến cảm xúc tiêu cực bùng phát.", "fallback_question": "Anh/chị có nhận thấy cảm giác này thường trỗi dậy mạnh nhất vào những tình huống hay thời điểm nào không?" },
+        { "key": "daily_impact", "label": "Ảnh hưởng sinh hoạt", "extraction_hint": "Tác động đến giấc ngủ, ăn uống, hiệu suất công việc, các mối quan hệ.", "fallback_question": "Những cảm xúc này gần đây có làm xáo trộn giấc ngủ, bữa ăn hay công việc hàng ngày nhiều không?" },
+        { "key": "support_safety", "label": "Điểm tựa & An toàn", "sensitive": true, "extraction_hint": "Người thân/bạn bè để chia sẻ, cách tự xoa dịu, sàng lọc nguy cơ tự hại.", "fallback_question": "Những lúc căng thẳng lên cao điểm, xung quanh có ai để chia sẻ hoặc anh/chị thường làm gì để giữ an toàn cho bản thân?" }
+      ]
+    },
+    {
+      "id": "student_lecture",
+      "role_name": "Học sinh / Sinh viên nghe giảng",
+      "requires_consent": false,
+      "question_mode": "takeaway",
+      "tone_guideline": "Ngắn gọn, dễ hiểu, đúng lứa tuổi. Gọi người dùng là 'bạn'. Ô còn thiếu xuất 'câu hỏi mang về' viết theo ngôi 'em' hỏi 'thầy/cô' để cuối giờ hỏi lại thầy/cô hoặc mang về hỏi AI; không dùng để ngắt lời thầy.",
+      "summary_structure": ["Khái niệm chính", "Ví dụ minh họa", "Trọng tâm thi", "Bài tập & hạn nộp"],
+      "gap_slots": [
+        { "key": "core_concepts", "label": "Khái niệm/từ khóa mới", "extraction_hint": "Định nghĩa, công thức, thuật ngữ mới (kể cả tiếng Anh) giảng viên phân tích nhiều.", "fallback_question": "Hỏi thầy/cô: 'Thưa thầy/cô, phần khái niệm cốt lõi vừa rồi có thể tóm gọn trong 1 nguyên tắc chính nào ạ?'" },
+        { "key": "worked_examples", "label": "Ví dụ thực tế đã nêu", "extraction_hint": "Ví dụ, bài mẫu, tình huống giảng viên dùng minh họa.", "fallback_question": "Ghi thêm ví dụ: 'Thầy/cô cho em xin thêm 1 ví dụ khác về phần [chủ đề] để em tự luyện được không ạ?'" },
+        { "key": "exam_signals", "label": "Trọng tâm thi được nhắc", "extraction_hint": "Chỗ giảng viên nhắc 'cần lưu ý', 'hay ra thi', 'dễ nhầm lẫn'.", "fallback_question": "Hỏi thầy/cô: 'Phần này khi vào bài thi thường hỏi dạng nhận biết hay vận dụng ạ?'" },
+        { "key": "assignments_deadlines", "label": "Bài tập & hạn nộp", "extraction_hint": "Bài về nhà, tài liệu cần đọc trước buổi sau, hạn nộp chính xác.", "fallback_question": "Xác nhận cuối giờ: 'Bài tập và tài liệu chuẩn bị có hạn nộp chính xác vào ngày nào ạ?'" }
+      ]
+    },
+    {
+      "id": "teacher_educator",
+      "role_name": "Giáo viên / Giảng viên",
+      "requires_consent": false,
+      "tone_guideline": "Sư phạm, khích lệ, định hướng mục tiêu học tập, phối hợp hiệu quả với học sinh/phụ huynh. Xưng hô 'các em' với học sinh, 'anh/chị' với phụ huynh.",
+      "summary_structure": ["Mục tiêu đã chốt", "Lỗ hổng & lỗi ghi nhận", "Đánh giá tiếp thu", "Bài tập & phối hợp"],
+      "gap_slots": [
+        { "key": "learning_objectives", "label": "Mục tiêu bài học", "extraction_hint": "Kiến thức, kỹ năng cốt lõi học sinh cần nắm sau buổi học.", "fallback_question": "Chốt với lớp: 'Sau buổi hôm nay, các em nhắc lại 2 mục tiêu quan trọng nhất vừa giải quyết?'" },
+        { "key": "student_bottlenecks", "label": "Lỗ hổng / Lỗi hay gặp", "extraction_hint": "Điểm hổng kiến thức, hiểu sai bản chất, lỗi lặp lại nhiều lần.", "fallback_question": "Hỏi học sinh: 'Ở phần này, đoạn nào đang làm các em thấy vướng hoặc dễ nhầm nhất?'" },
+        { "key": "comprehension_check", "label": "Mức độ tiếp thu", "extraction_hint": "Phản hồi qua câu hỏi kiểm tra nhanh, bài thực hành tại lớp.", "fallback_question": "Kiểm tra nhanh: 'Bạn nào diễn đạt lại ý vừa rồi bằng cách hiểu của riêng mình cho cả lớp nghe?'" },
+        { "key": "next_action_homework", "label": "Bài tập & Phối hợp", "extraction_hint": "Nhiệm vụ luyện tập về nhà, cam kết phối hợp của phụ huynh/học viên.", "fallback_question": "Dặn dò cuối buổi: 'Về nhà hoàn thành bài tập trọng tâm nào và cần gia đình hỗ trợ thêm điều gì?'" }
+      ]
+    },
+    {
+      "id": "general_meeting",
+      "role_name": "Cuộc họp / Trao đổi tổng quát (mẫu mặc định)",
+      "requires_consent": false,
+      "tone_guideline": "Trung tính, lịch sự, đúng trọng tâm. Xưng hô 'anh/chị' mặc định.",
+      "summary_structure": ["Nội dung chính", "Quyết định", "Hẹn & mốc thời gian", "Việc còn treo"],
+      "gap_slots": [
+        { "key": "main_purpose", "label": "Mục đích chính của buổi", "extraction_hint": "Lý do cuộc gặp diễn ra, kết quả mong muốn cuối buổi.", "fallback_question": "Chốt lại với anh/chị: mục đích chính của buổi hôm nay là [nội dung], đúng không ạ?" },
+        { "key": "next_action", "label": "Quyết định / việc cần làm tiếp", "extraction_hint": "Ai làm gì, bắt đầu khi nào sau buổi.", "fallback_question": "Vậy phần việc tiếp theo do bên nào phụ trách và bắt đầu từ khi nào ạ?" },
+        { "key": "agreed_timeline", "label": "Hẹn & mốc thời gian", "extraction_hint": "Ngày giờ hẹn tiếp, deadline đã đề cập.", "fallback_question": "Mình chốt lại mốc thời gian đã hẹn chính xác là ngày nào ạ?" },
+        { "key": "open_items", "label": "Việc còn treo chưa xong", "extraction_hint": "Chủ đề nhắc tới nhưng chưa có kết luận, cần quay lại.", "fallback_question": "Còn phần [chủ đề] vừa nhắc nhưng chưa có kết luận, mình hẹn quay lại lúc nào ạ?" }
+      ]
+    },
+    {
+      "id": "center_advisor",
+      "role_name": "Tư vấn tuyển sinh trung tâm (ngoại ngữ / luyện thi / kỹ năng)",
+      "requires_consent": false,
+      "tone_guideline": "Thuyết phục có căn cứ, không hứa suông, tập trung lộ trình và kết quả học tập. Xưng hô 'anh/chị' với phụ huynh, gọi học viên là 'bé' hoặc nêu tên.",
+      "summary_structure": ["Trình độ hiện tại", "Mục tiêu khóa học", "Lịch học & học phí", "Cam kết hai bên"],
+      "gap_slots": [
+        { "key": "current_level", "label": "Trình độ hiện tại", "extraction_hint": "Điểm test xếp lớp, band điểm hiện tại, môn mạnh/yếu.", "fallback_question": "Bên mình đã làm bài test xếp lớp chưa, kết quả ra sao để em xếp lớp phù hợp ạ?" },
+        { "key": "target_deadline", "label": "Mục tiêu & thời hạn", "extraction_hint": "Điểm/chứng chỉ cần đạt (TOEIC/IELTS/điểm học kỳ) và mốc thời gian cần đạt.", "fallback_question": "Gia đình mình cần đạt mốc bao nhiêu và trước tháng nào để em lên lộ trình sát nhất ạ?" },
+        { "key": "schedule_budget", "label": "Lịch học & ngân sách", "extraction_hint": "Số buổi/tuần, khung giờ cố định, mức học phí gia đình thoải mái.", "fallback_question": "Trong tuần mấy buổi nào là lịch cố định của bé, và mức học phí thoải mái cho gia đình là khoảng bao nhiêu ạ?" },
+        { "key": "parent_commitment", "label": "Cam kết đồng hành", "extraction_hint": "Ai ở nhà kèm bé làm bài về nhà, kênh nhận báo cáo tiến độ.", "fallback_question": "Ở nhà ai sẽ kiểm tra việc về nhà của bé để bên em gửi báo cáo đúng người ạ?" }
+      ]
+    },
+    {
+      "id": "parent_meeting",
+      "role_name": "Trao đổi phụ huynh / Họp lớp (GV chủ nhiệm, gia sư)",
+      "requires_consent": false,
+      "tone_guideline": "Sư phạm, tôn trọng, nhấn mạnh điểm tiến bộ trước khi nói lỗ hổng. Xưng hô 'anh/chị' với phụ huynh, nhắc học sinh là 'con'.",
+      "summary_structure": ["Tình hình học tập", "Thói quen học ở nhà", "Điểm mạnh & lỗ hổng", "Kế hoạch hỗ trợ & hẹn lại"],
+      "gap_slots": [
+        { "key": "subject_progress", "label": "Tình hình các môn", "extraction_hint": "Tiến bộ/lùi bước từng môn, điểm kiểm tra gần nhất.", "fallback_question": "Qua thời gian vừa rồi, anh/chị thấy con tiến bộ rõ nhất ở môn nào so với đầu kỳ ạ?" },
+        { "key": "home_study_habits", "label": "Thói quen học ở nhà", "extraction_hint": "Tự học hay cần nhắc, thời gian tự học mỗi ngày, môi trường học.", "fallback_question": "Ở nhà con tự học được không hay cần người lớn ngồi cạnh nhắc ạ?" },
+        { "key": "strengths_gaps", "label": "Điểm mạnh & lỗ hổng", "extraction_hint": "Điểm mạnh cần giữ, phần kiến thức đang hổng, lỗi hay mắc.", "fallback_question": "Phần [chủ đề] các em đang hổng; bên nhà mình có nhận thấy con vướng chỗ này khi làm bài ở nhà không ạ?" },
+        { "key": "support_plan_followup", "label": "Kế hoạch hỗ trợ & hẹn lại", "extraction_hint": "Cam kết hỗ trợ ở nhà, mục tiêu ngắn hạn, hẹn trao đổi lần sau.", "fallback_question": "Hai bên mình thống nhất phần hỗ trợ ở nhà là gì, và hẹn trao đổi lại vào thời điểm nào ạ?" }
+      ]
+    }
+  ]
+}

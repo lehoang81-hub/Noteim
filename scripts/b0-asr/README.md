@@ -9,7 +9,7 @@ Script và ghi chú chạy cho phần A của `docs/10-b0-thu-rui-ro.md`. Nhãn 
 node scripts/b0-asr/score.mjs --selftest
 
 # gọi một nhà cung cấp trên một file; kết quả thô và đã chuẩn hóa lưu vào
-# test-data/asr-results/<mã>/<tên bộ>.raw.json và .json; đã có kết quả thì không gọi lại
+# test-data/asr-results/<mã>/<tên bộ>.raw.json.gz (nén gzip) và .json; đã có kết quả thì không gọi lại
 # (thêm --force để gọi lại). Thiếu khóa thì thoát mã 2, không gọi API.
 node scripts/b0-asr/run.mjs --provider soniox     --file test-data/audio/01-bds-gap-chi-lan.m4a
 node scripts/b0-asr/run.mjs --provider elevenlabs --file test-data/audio/02-hop-doi-tac-han.m4a

@@ -43,7 +43,7 @@ của đặc tả không bị vượt).
   chạy thử cả 4 hãng trên 3 file 01–03 và file dài 04: đều dừng đúng cách với thông báo
   "Thiếu <KHÓA> — bỏ qua nhà cung cấp <mã> (không gọi API)", thoát mã 2, không gọi API.
 - Sinh `04-dai-62-phut` (bên dưới). Kết quả thô của nhà cung cấp sẽ nằm ở
-  `test-data/asr-results/<mã>/<bộ>.raw.json` và `<bộ>.json` (chưa có file nào vì chưa gọi API).
+  `test-data/asr-results/<mã>/<bộ>.raw.json.gz` (nén gzip, nhịp 2 — nhẹ kho) và `<bộ>.json`.
 
 ### Bảng chỉ số giọng AI (đo thật ngày 2026-11-19)
 

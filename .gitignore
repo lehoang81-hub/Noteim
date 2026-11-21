@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Âm thanh thử dài: sinh lại bằng scripts/gen-test-audio.py, không commit
 /test-data/audio/04-*
+
+# Khóa SDK AI của máy agent, không bao giờ commit
+.z-ai-config

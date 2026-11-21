@@ -11,6 +11,7 @@ import type {
   ChatMessage,
   Contact,
   DashboardData,
+  Folder,
   GlossaryTerm,
   Lang,
   Member,
@@ -670,6 +671,42 @@ export const mockSource: DataSource = {
         d.topics.forEach((t) => t.bullets.forEach((b) => b.speaker_id === fromId && (b.speaker_id = intoId)));
         (await findFixture(sessionId)).transcript.forEach((g) => g.speaker_id === fromId && (g.speaker_id = intoId));
       }),
+    addQuickNote: (sessionId, text) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        const clean = text.trim();
+        if (!clean) return;
+        // Ghi chú nhanh một dòng (GC-04, đặc tả v1.1 §4.5): gắn vào ý có mốc
+        // gần nhất để hiện trong Tóm tắt, như ghi chú tay tạo khi đang ghi.
+        // Buổi chưa có ý tóm tắt thì ghi chú đứng độc lập trong detail.notes.
+        const note = { id: `n-user-${Date.now().toString(36)}`, timestamp_sec: 0, text: clean };
+        fx.detail.notes.push(note);
+        const bullets = fx.detail.topics.flatMap((tp) => tp.bullets);
+        if (bullets.length) {
+          const nearest = bullets.reduce((best, b) =>
+            Math.abs(b.timestamp_sec - note.timestamp_sec) < Math.abs(best.timestamp_sec - note.timestamp_sec) ? b : best,
+          );
+          nearest.note_ids.push(note.id);
+        }
+      }),
+    completeGapCheckItem: (sessionId, key) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        const done = fx.detail.gap_check_done ?? [];
+        if (!done.includes(key)) fx.detail.gap_check_done = [...done, key];
+      }),
+    consumePendingAiQuestion: (sessionId, question) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        const list = fx.detail.pending_ai_questions ?? [];
+        fx.detail.pending_ai_questions = list.filter((q) => q !== question);
+      }),
     createFromRecording: (draft) => {
       // Mất mạng: vẫn tạo buổi ghi trên máy, trạng thái chờ tải lên (M2-04);
       // có mạng lại thì tự chuyển sang xử lý (xem ProcessingWatcher)
@@ -711,7 +748,9 @@ export const mockSource: DataSource = {
           size_bytes: draft.duration_sec * 3000,
           created_at: now,
           audio_expires_at: null,
-          consent: draft.consent ?? { confirmed: true, announced: false },
+          consent: draft.consent
+            ? { confirmed: draft.consent.confirmed, announced: draft.consent.announced, receipts: draft.consent.receipts }
+            : { confirmed: true, announced: false },
           participant_contact_ids: [],
           peaks_thumb: thumb,
           speaker_colors_thumb: Array.from({ length: 40 }, () => 0),
@@ -726,8 +765,23 @@ export const mockSource: DataSource = {
           peaks: [],
           speaker_spans: [],
           send_history: [],
+          // Kết quả rà thiếu gần nhất và câu hỏi chờ Hỏi AI đi kèm buổi (GC-04):
+          // chưa rà lần nào thì không có, checklist ở màn chi tiết không hiện
+          gap_check: draft.gap_check
+            ? { template_id: draft.gap_check.template_id, checked_at: draft.gap_check.checked_at, ...draft.gap_check.result }
+            : undefined,
+          gap_check_done: [],
+          pending_ai_questions: draft.pending_ai_questions?.length ? [...draft.pending_ai_questions] : undefined,
         };
         db.sessions.unshift({ detail, transcript: [], chat: [], draft: storedDraft });
+        // Gắn buổi vào thư mục chọn lúc bắt đầu ghi (GC-05, đặc tả §4.7)
+        if (draft.folder_id) {
+          const folder = db.folders.find((f) => f.id === draft.folder_id);
+          if (folder && !folder.session_ids.includes(id)) {
+            folder.session_ids.push(id);
+            folder.updated_at = now;
+          }
+        }
         if (!offline) scheduleProcessing(id);
         return { id };
       };
@@ -1810,6 +1864,66 @@ export const mockSource: DataSource = {
           return { user_id: u.user_id, open, overdue };
         });
         return { usage, open_tasks_by_assignee };
+      }),
+  },
+
+  /* Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7). Xóa thư mục không đụng buổi;
+   * buổi mới gắn thư mục qua createFromRecording (draft.folder_id). */
+  folders: {
+    list: () =>
+      read(async () => {
+        await sessionsReady();
+        return getDb().folders;
+      }),
+    get: (id) =>
+      read(async () => {
+        await sessionsReady();
+        const folder = getDb().folders.find((f) => f.id === id);
+        if (!folder) throw new DataError("not_found");
+        return folder;
+      }),
+    create: (input) =>
+      write(async () => {
+        await sessionsReady();
+        const db = getDb();
+        const name = input.name.trim();
+        if (!name) throw new DataError("not_found");
+        const now = new Date().toISOString();
+        const folder: Folder = {
+          id: `f-${Date.now().toString(36)}`,
+          workspace_id: currentWorkspace().id,
+          kind: input.kind,
+          name,
+          ref: input.ref?.trim() || undefined,
+          note: input.note?.trim() || undefined,
+          // Nghề chọn một lần ở thư mục: buổi mới kế thừa mẫu này (đặc tả §4.7)
+          template_id: input.template_id ?? undefined,
+          session_ids: input.session_ids ? [...input.session_ids] : [],
+          created_at: now,
+          updated_at: now,
+        };
+        db.folders.push(folder);
+        return folder;
+      }),
+    update: (id, patch) =>
+      write(async () => {
+        await sessionsReady();
+        const folder = getDb().folders.find((f) => f.id === id);
+        if (!folder) throw new DataError("not_found");
+        if (patch.name !== undefined) folder.name = patch.name.trim();
+        if (patch.ref !== undefined) folder.ref = patch.ref?.trim() || undefined;
+        if (patch.note !== undefined) folder.note = patch.note?.trim() || undefined;
+        if (patch.template_id !== undefined) folder.template_id = patch.template_id ?? undefined;
+        if (patch.session_ids !== undefined) folder.session_ids = [...patch.session_ids];
+        folder.updated_at = new Date().toISOString();
+      }),
+    remove: (id) =>
+      write(async () => {
+        await sessionsReady();
+        const db = getDb();
+        const idx = db.folders.findIndex((f) => f.id === id);
+        if (idx === -1) throw new DataError("not_found");
+        db.folders.splice(idx, 1);
       }),
   },
 };

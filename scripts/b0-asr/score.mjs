@@ -792,7 +792,7 @@ function main() {
         const dir = path.join(RESULTS_DIR, provider);
         if (!statSync(dir).isDirectory()) continue;
         for (const name of readdirSync(dir).sort()) {
-          if (!name.endsWith(".json") || name.endsWith(".raw.json")) continue;
+          if (!name.endsWith(".json") || name.endsWith(".raw.json") || name.endsWith(".raw.json.gz")) continue;
           rows.push(scoreOneFile(path.join(dir, name)));
         }
       }
