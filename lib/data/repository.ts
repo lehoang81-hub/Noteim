@@ -27,6 +27,7 @@ import type {
   Visibility,
   Workspace,
 } from "./types";
+import type { GapCheckResult } from "../gap-check/types";
 
 /*
  * Interface các repository. Giao diện chỉ biết các interface này.
@@ -68,8 +69,17 @@ export type RecordingDraft = {
   photos: { id: string; timestamp_sec: number; url: string }[];
   /** Âm lượng lấy mẫu 4 giá trị mỗi giây, để dựng lại dải giọng */
   levels: number[];
-  /** Biên nhận đồng ý (góp ý vòng 1, #75): ai đồng ý, lúc nào, cách nào */
   consent?: { confirmed: boolean; announced: boolean; receipts?: ConsentReceipt[] };
+  /** Thư mục gắn cho buổi mới (GC-05, đặc tả v1.1 §4.7): buổi kế thừa mẫu
+   * của thư mục và được ghi vào session_ids của thư mục khi lưu. */
+  folder_id?: string;
+  /** Kết quả rà thiếu gần nhất của buổi (GC-04, đặc tả v1.1 §4.5): màn chi
+   * tiết dùng để dựng checklist "Cần bổ sung sau buổi". Chưa rà lần nào thì
+   * không có — checklist không hiện. */
+  gap_check?: { template_id: string; checked_at: string; result: GapCheckResult } | null;
+  /** Câu hỏi bấm "Hỏi AI trên thư mục" từ sheet rà thiếu khi đang ghi (GC-04):
+   * sau khi lưu buổi nằm chờ trong tab Hỏi AI để người dùng bấm gửi. */
+  pending_ai_questions?: string[];
 };
 
 export interface SessionRepository {
@@ -88,6 +98,15 @@ export interface SessionRepository {
   updateSegment(sessionId: string, segmentId: string, text: string, field?: "text" | "text_clean"): Promise<void>;
   /** Đổi người nói của một đoạn bản ghi (M3-01) */
   reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>;
+  /** Chép một dòng vào ghi chú nhanh của buổi đã lưu (GC-04, đặc tả v1.1
+   * §4.5): ghi chú gắn vào ý có mốc gần nhất để hiện trong Tóm tắt. */
+  addQuickNote(sessionId: string, text: string): Promise<void>;
+  /** Tick một mục trong checklist "Cần bổ sung sau buổi" (GC-04): mục mờ dần
+   * và tự ẩn; tải lại trang vẫn ẩn nhờ danh sách ô đã xong lưu kèm buổi. */
+  completeGapCheckItem(sessionId: string, key: string): Promise<void>;
+  /** Câu hỏi chuyển từ Gap Check đã bấm gửi trong Hỏi AI (GC-04): gỡ khỏi
+   * hàng chờ để tải lại trang không còn chip cũ. */
+  consumePendingAiQuestion(sessionId: string, question: string): Promise<void>;
   /** Dịch đoạn bản ghi lời sang ngôn ngữ `lang` (M6-02). Không truyền
    * segmentIds thì dịch mọi đoạn chưa có bản dịch ở `lang`. */
   translateSegments(sessionId: string, lang: Lang, segmentIds?: string[]): Promise<TranscriptSegment[]>;
@@ -172,19 +191,30 @@ export interface WorkspaceRepository {
 }
 
 /**
- * Thư mục theo hồ sơ (góp ý vòng 1, #75): vụ việc, bệnh nhân, khách hàng,
- * công trình. Hỏi AI của thư mục là tính năng Pro: trả lời ghép từ các buổi
- * trong thư mục, dẫn chứng mang theo buổi và mốc giây.
+ * Thư mục theo hồ sơ (GY1/PR #76 + GC-05, đặc tả v1.1 §4.7): tạo/sửa thư mục
+ * chọn nghề một lần, buổi mới gắn vào thư mục kế thừa mẫu; buổi vẫn đổi mẫu
+ * riêng được (override từng buổi). Hỏi AI của thư mục là tính năng riêng của
+ * GY1 giữ lại khi gộp: trả lời ghép từ các buổi trong thư mục, dẫn chứng mang
+ * theo buổi và mốc giây.
  */
 export interface FolderRepository {
   list(): Promise<Folder[]>;
   get(id: string): Promise<Folder>;
-  create(input: { kind: FolderKind; name: string; ref?: string; note?: string; session_ids?: string[] }): Promise<Folder>;
-  update(id: string, patch: Partial<Pick<Folder, "name" | "ref" | "note" | "session_ids">>): Promise<void>;
+  create(input: {
+    kind: FolderKind;
+    name: string;
+    ref?: string;
+    note?: string;
+    /** Mẫu kế thừa cho buổi mới; không chọn là null (mẫu mặc định "Tổng quát") */
+    template_id?: string | null;
+    session_ids?: string[];
+  }): Promise<Folder>;
+  update(id: string, patch: Partial<Pick<Folder, "name" | "ref" | "note" | "template_id" | "session_ids">>): Promise<void>;
+  /** Xóa thư mục: các buổi ghi không bị xóa, chỉ gỡ khỏi thư mục */
   remove(id: string): Promise<void>;
-  /** Lịch sử hỏi đáp của thư mục, lưu theo thư mục */
+  /** Lịch sử hỏi đáp của thư mục, lưu theo thư mục (GY1 giữ lại khi gộp) */
   history(folderId: string): Promise<FolderChatMessage[]>;
-  /** Hỏi AI xuyên các buổi của thư mục (Pro); onToken chạy chữ dần từng từ */
+  /** Hỏi AI xuyên các buổi của thư mục (GY1); onToken chạy chữ dần từng từ */
   ask(folderId: string, question: string, onToken: (text: string) => void): Promise<FolderChatMessage>;
 }
 
@@ -307,6 +337,6 @@ export interface DataSource {
   workspaces: WorkspaceRepository;
   /** Tổng quan cá nhân và nhóm (M7-02) */
   dashboard: DashboardRepository;
-  /** Thư mục theo hồ sơ (góp ý vòng 1, #75) */
+  /** Thư mục theo hồ sơ (GY1/PR #76 + GC-05, đặc tả v1.1 §4.7) */
   folders: FolderRepository;
 }

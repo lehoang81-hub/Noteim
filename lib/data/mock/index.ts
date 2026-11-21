@@ -672,6 +672,42 @@ export const mockSource: DataSource = {
         d.topics.forEach((t) => t.bullets.forEach((b) => b.speaker_id === fromId && (b.speaker_id = intoId)));
         (await findFixture(sessionId)).transcript.forEach((g) => g.speaker_id === fromId && (g.speaker_id = intoId));
       }),
+    addQuickNote: (sessionId, text) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        const clean = text.trim();
+        if (!clean) return;
+        // Ghi chú nhanh một dòng (GC-04, đặc tả v1.1 §4.5): gắn vào ý có mốc
+        // gần nhất để hiện trong Tóm tắt, như ghi chú tay tạo khi đang ghi.
+        // Buổi chưa có ý tóm tắt thì ghi chú đứng độc lập trong detail.notes.
+        const note = { id: `n-user-${Date.now().toString(36)}`, timestamp_sec: 0, text: clean };
+        fx.detail.notes.push(note);
+        const bullets = fx.detail.topics.flatMap((tp) => tp.bullets);
+        if (bullets.length) {
+          const nearest = bullets.reduce((best, b) =>
+            Math.abs(b.timestamp_sec - note.timestamp_sec) < Math.abs(best.timestamp_sec - note.timestamp_sec) ? b : best,
+          );
+          nearest.note_ids.push(note.id);
+        }
+      }),
+    completeGapCheckItem: (sessionId, key) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        const done = fx.detail.gap_check_done ?? [];
+        if (!done.includes(key)) fx.detail.gap_check_done = [...done, key];
+      }),
+    consumePendingAiQuestion: (sessionId, question) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        const list = fx.detail.pending_ai_questions ?? [];
+        fx.detail.pending_ai_questions = list.filter((q) => q !== question);
+      }),
     createFromRecording: (draft) => {
       // Mất mạng: vẫn tạo buổi ghi trên máy, trạng thái chờ tải lên (M2-04);
       // có mạng lại thì tự chuyển sang xử lý (xem ProcessingWatcher)
@@ -713,7 +749,9 @@ export const mockSource: DataSource = {
           size_bytes: draft.duration_sec * 3000,
           created_at: now,
           audio_expires_at: null,
-          consent: draft.consent ?? { confirmed: true, announced: false },
+          consent: draft.consent
+            ? { confirmed: draft.consent.confirmed, announced: draft.consent.announced, receipts: draft.consent.receipts }
+            : { confirmed: true, announced: false },
           participant_contact_ids: [],
           peaks_thumb: thumb,
           speaker_colors_thumb: Array.from({ length: 40 }, () => 0),
@@ -728,8 +766,23 @@ export const mockSource: DataSource = {
           peaks: [],
           speaker_spans: [],
           send_history: [],
+          // Kết quả rà thiếu gần nhất và câu hỏi chờ Hỏi AI đi kèm buổi (GC-04):
+          // chưa rà lần nào thì không có, checklist ở màn chi tiết không hiện
+          gap_check: draft.gap_check
+            ? { template_id: draft.gap_check.template_id, checked_at: draft.gap_check.checked_at, ...draft.gap_check.result }
+            : undefined,
+          gap_check_done: [],
+          pending_ai_questions: draft.pending_ai_questions?.length ? [...draft.pending_ai_questions] : undefined,
         };
         db.sessions.unshift({ detail, transcript: [], chat: [], draft: storedDraft });
+        // Gắn buổi vào thư mục chọn lúc bắt đầu ghi (GC-05, đặc tả §4.7)
+        if (draft.folder_id) {
+          const folder = db.folders.find((f) => f.id === draft.folder_id);
+          if (folder && !folder.session_ids.includes(id)) {
+            folder.session_ids.push(id);
+            folder.updated_at = now;
+          }
+        }
         if (!offline) scheduleProcessing(id);
         return { id };
       };
@@ -1077,141 +1130,6 @@ export const mockSource: DataSource = {
       };
       log.push(aiMessage);
       fx.chat_log = log;
-      commit();
-      const words = answer.split(" ");
-      for (let i = 1; i <= words.length; i++) {
-        onToken(words.slice(0, i).join(" "));
-        await new Promise((r) => setTimeout(r, 40));
-      }
-      return aiMessage;
-    },
-  },
-
-  folders: {
-    list: () =>
-      read(() =>
-        getDb()
-          .folders.slice()
-          .reverse(),
-      ),
-    get: (id) =>
-      read(() => {
-        const folder = getDb().folders.find((f) => f.id === id);
-        if (!folder) throw new DataError("not_found");
-        return folder;
-      }),
-    create: (input) =>
-      write(() => {
-        const db = getDb();
-        const now = new Date().toISOString();
-        const folder: Folder = {
-          id: `f-${Date.now().toString(36)}`,
-          workspace_id: currentWorkspace().kind === "team" ? currentWorkspace().id : null,
-          kind: input.kind,
-          name: input.name.trim(),
-          ref: input.ref?.trim() || undefined,
-          note: input.note?.trim() || undefined,
-          session_ids: [...(input.session_ids ?? [])],
-          created_at: now,
-          updated_at: now,
-        };
-        db.folders.unshift(folder);
-        return folder;
-      }),
-    update: (id, patch) =>
-      write(() => {
-        const folder = getDb().folders.find((f) => f.id === id);
-        if (!folder) throw new DataError("not_found");
-        if (patch.name !== undefined) folder.name = patch.name.trim() || folder.name;
-        if (patch.ref !== undefined) folder.ref = patch.ref.trim() || undefined;
-        if (patch.note !== undefined) folder.note = patch.note.trim() || undefined;
-        if (patch.session_ids !== undefined) folder.session_ids = [...patch.session_ids];
-        folder.updated_at = new Date().toISOString();
-      }),
-    remove: (id) =>
-      write(() => {
-        const db = getDb();
-        if (!db.folders.some((f) => f.id === id)) throw new DataError("not_found");
-        db.folders = db.folders.filter((f) => f.id !== id);
-        delete db.folder_chats[id];
-      }),
-    history: (folderId) =>
-      read(() => getDb().folder_chats[folderId] ?? []),
-    /* Hỏi AI xuyên các buổi của thư mục (góp ý vòng 1, #75): bản giả ghép
-     * câu trả lời từ ý tóm tắt, việc cần làm và ghi chú của các buổi trong
-     * thư mục, xếp theo mức khớp từ khóa của câu hỏi (so khớp bỏ dấu như
-     * tìm kiếm M4-02); dẫn chứng mang theo buổi và mốc giây. Gói Free ném
-     * quota_exceeded — giao diện khóa trước rồi, đây là chốt sau. */
-    ask: async (folderId, question, onToken) => {
-      await wait();
-      if (getFlags().failLoad) throw new DataError("server");
-      const db = getDb();
-      const folder = db.folders.find((f) => f.id === folderId);
-      if (!folder) throw new DataError("not_found");
-      const plan = getFlags().plan ?? db.user.plan;
-      if (plan !== "pro") throw new DataError("quota_exceeded");
-
-      const q = foldVi(question);
-      // Từ khóa từ 3 chữ trở lên: bỏ các từ tiếng Việt quá ngắn ("có", "hồ", "sơ")
-      // để không khớp bừa
-      const tokens = q
-        .split(/[^a-z0-9]+/)
-        .filter((w) => w.length >= 3);
-      const sessions = folder.session_ids
-        .map((id) => db.sessions.find((s) => (s.listDetail ?? s.detail).id === id))
-        .filter((s): s is NonNullable<typeof s> => !!s)
-        .map((s) => s.detail);
-      type Hit = { session: SessionDetail; text: string; timestamp_sec: number; score: number };
-      const hits: Hit[] = [];
-      for (const d of sessions) {
-        for (const topic of d.topics) {
-          for (const b of topic.bullets) {
-            const folded = foldVi(b.text);
-            hits.push({ session: d, text: b.text, timestamp_sec: b.timestamp_sec, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
-          }
-        }
-        for (const a of d.action_items) {
-          const folded = foldVi(a.task);
-          hits.push({ session: d, text: a.task, timestamp_sec: a.timestamp_sec ?? 0, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
-        }
-        for (const n of d.notes) {
-          const folded = foldVi(n.text);
-          hits.push({ session: d, text: n.text, timestamp_sec: n.timestamp_sec, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
-        }
-      }
-      const scored = hits
-        .filter((h) => h.score > 0)
-        .sort((a, b) => b.score - a.score);
-      // Trả lời XUYÊN BUỔI: mỗi buổi tối đa 2 đoạn khớp, buổi có đoạn khớp
-      // mạnh nhất đứng trước, lấy tối đa 2 buổi và 4 đoạn — câu trả lời luôn
-      // đi từng buổi một để khác với hỏi AI trong một buổi
-      const perSession = new Map<string, Hit[]>();
-      for (const h of scored) {
-        const list = perSession.get(h.session.id) ?? [];
-        if (list.length >= 2) continue;
-        list.push(h);
-        perSession.set(h.session.id, list);
-      }
-      const ordered = [...perSession.values()].sort((a, b) => b[0].score - a[0].score).slice(0, 2);
-      const best = ordered.flat().slice(0, 4);
-      const answer = best.length
-        ? `Trên ${sessions.length} buổi của hồ sơ "${folder.name}", tìm thấy ${best.length} đoạn khớp ở ${ordered.length} buổi. ` +
-          ordered
-            .map((list) => `Buổi "${list[0].session.title}" ghi rằng: ${list.map((h) => h.text).join("; ")}`)
-            .join(" ")
-        : `Chưa tìm thấy nội dung khớp câu hỏi trong ${sessions.length} buổi của hồ sơ này. Thử hỏi bằng từ khóa khác.`;
-      const citations = best.map((h) => ({ session_id: h.session.id, timestamp_sec: h.timestamp_sec }));
-
-      const log = db.folder_chats[folderId] ?? [];
-      log.push({ id: `fq-${Date.now().toString(36)}`, role: "user", text: question, citations: [] });
-      const aiMessage: FolderChatMessage = {
-        id: `fa-${Date.now().toString(36)}`,
-        role: "ai",
-        text: answer,
-        citations,
-      };
-      log.push(aiMessage);
-      db.folder_chats[folderId] = log;
       commit();
       const words = answer.split(" ");
       for (let i = 1; i <= words.length; i++) {
@@ -1948,6 +1866,154 @@ export const mockSource: DataSource = {
         });
         return { usage, open_tasks_by_assignee };
       }),
+  },
+
+  /* Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7). Xóa thư mục không đụng buổi;
+   * buổi mới gắn thư mục qua createFromRecording (draft.folder_id). */
+  folders: {
+    list: () =>
+      read(async () => {
+        await sessionsReady();
+        return getDb().folders;
+      }),
+    get: (id) =>
+      read(async () => {
+        await sessionsReady();
+        const folder = getDb().folders.find((f) => f.id === id);
+        if (!folder) throw new DataError("not_found");
+        return folder;
+      }),
+    create: (input) =>
+      write(async () => {
+        await sessionsReady();
+        const db = getDb();
+        const name = input.name.trim();
+        if (!name) throw new DataError("not_found");
+        const now = new Date().toISOString();
+        const folder: Folder = {
+          id: `f-${Date.now().toString(36)}`,
+          workspace_id: currentWorkspace().id,
+          kind: input.kind,
+          name,
+          ref: input.ref?.trim() || undefined,
+          note: input.note?.trim() || undefined,
+          // Nghề chọn một lần ở thư mục: buổi mới kế thừa mẫu này (đặc tả §4.7)
+          template_id: input.template_id ?? undefined,
+          session_ids: input.session_ids ? [...input.session_ids] : [],
+          created_at: now,
+          updated_at: now,
+        };
+        db.folders.push(folder);
+        return folder;
+      }),
+    update: (id, patch) =>
+      write(async () => {
+        await sessionsReady();
+        const folder = getDb().folders.find((f) => f.id === id);
+        if (!folder) throw new DataError("not_found");
+        if (patch.name !== undefined) folder.name = patch.name.trim();
+        if (patch.ref !== undefined) folder.ref = patch.ref?.trim() || undefined;
+        if (patch.note !== undefined) folder.note = patch.note?.trim() || undefined;
+        if (patch.template_id !== undefined) folder.template_id = patch.template_id ?? undefined;
+        if (patch.session_ids !== undefined) folder.session_ids = [...patch.session_ids];
+        folder.updated_at = new Date().toISOString();
+      }),
+    remove: (id) =>
+      write(async () => {
+        await sessionsReady();
+        const db = getDb();
+        const idx = db.folders.findIndex((f) => f.id === id);
+        if (idx === -1) throw new DataError("not_found");
+        db.folders.splice(idx, 1);
+        // Lịch sử Hỏi AI của thư mục cũng dọn theo (GY1 giữ lại khi gộp)
+        delete db.folder_chats[id];
+      }),
+    /** Lịch sử hỏi đáp của thư mục, lưu theo thư mục (GY1 giữ lại khi gộp) */
+    history: (folderId) => read(async () => getDb().folder_chats[folderId] ?? []),
+    /* Hỏi AI xuyên các buổi của thư mục (góp ý vòng 1, #75 — phần riêng của
+     * GY1 giữ lại khi gộp): bản giả ghép câu trả lời từ ý tóm tắt, việc cần
+     * làm và ghi chú của các buổi trong thư mục, xếp theo mức khớp từ khóa của
+     * câu hỏi (so khớp bỏ dấu như tìm kiếm M4-02); dẫn chứng mang theo buổi và
+     * mốc giây. Gói Free ném quota_exceeded — giao diện khóa trước rồi, đây là
+     * chốt sau. */
+    ask: async (folderId, question, onToken) => {
+      await wait();
+      if (getFlags().failLoad) throw new DataError("server");
+      const db = getDb();
+      const folder = db.folders.find((f) => f.id === folderId);
+      if (!folder) throw new DataError("not_found");
+      const plan = getFlags().plan ?? db.user.plan;
+      if (plan !== "pro") throw new DataError("quota_exceeded");
+
+      const q = foldVi(question);
+      // Từ khóa từ 3 chữ trở lên: bỏ các từ tiếng Việt quá ngắn ("có", "hồ", "sơ")
+      // để không khớp bừa
+      const tokens = q
+        .split(/[^a-z0-9]+/)
+        .filter((w) => w.length >= 3);
+      const sessions = folder.session_ids
+        .map((id) => db.sessions.find((s) => (s.listDetail ?? s.detail).id === id))
+        .filter((s): s is NonNullable<typeof s> => !!s)
+        .map((s) => s.detail);
+      type Hit = { session: SessionDetail; text: string; timestamp_sec: number; score: number };
+      const hits: Hit[] = [];
+      for (const d of sessions) {
+        for (const topic of d.topics) {
+          for (const b of topic.bullets) {
+            const folded = foldVi(b.text);
+            hits.push({ session: d, text: b.text, timestamp_sec: b.timestamp_sec, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
+          }
+        }
+        for (const a of d.action_items) {
+          const folded = foldVi(a.task);
+          hits.push({ session: d, text: a.task, timestamp_sec: a.timestamp_sec ?? 0, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
+        }
+        for (const n of d.notes) {
+          const folded = foldVi(n.text);
+          hits.push({ session: d, text: n.text, timestamp_sec: n.timestamp_sec, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
+        }
+      }
+      const scored = hits
+        .filter((h) => h.score > 0)
+        .sort((a, b) => b.score - a.score);
+      // Trả lời XUYÊN BUỔI: mỗi buổi tối đa 2 đoạn khớp, buổi có đoạn khớp
+      // mạnh nhất đứng trước, lấy tối đa 2 buổi và 4 đoạn — câu trả lời luôn
+      // đi từng buổi một để khác với hỏi AI trong một buổi
+      const perSession = new Map<string, Hit[]>();
+      for (const h of scored) {
+        const list = perSession.get(h.session.id) ?? [];
+        if (list.length >= 2) continue;
+        list.push(h);
+        perSession.set(h.session.id, list);
+      }
+      const ordered = [...perSession.values()].sort((a, b) => b[0].score - a[0].score).slice(0, 2);
+      const best = ordered.flat().slice(0, 4);
+      const answer = best.length
+        ? `Trên ${sessions.length} buổi của hồ sơ "${folder.name}", tìm thấy ${best.length} đoạn khớp ở ${ordered.length} buổi. ` +
+          ordered
+            .map((list) => `Buổi "${list[0].session.title}" ghi rằng: ${list.map((h) => h.text).join("; ")}`)
+            .join(" ")
+        : `Chưa tìm thấy nội dung khớp câu hỏi trong ${sessions.length} buổi của hồ sơ này. Thử hỏi bằng từ khóa khác.`;
+      const citations = best.map((h) => ({ session_id: h.session.id, timestamp_sec: h.timestamp_sec }));
+
+      const log = db.folder_chats[folderId] ?? [];
+      log.push({ id: `fq-${Date.now().toString(36)}`, role: "user", text: question, citations: [] });
+      const aiMessage: FolderChatMessage = {
+        id: `fa-${Date.now().toString(36)}`,
+        role: "ai",
+        text: answer,
+        citations,
+      };
+      log.push(aiMessage);
+      db.folder_chats[folderId] = log;
+      commit();
+      const words = answer.split(" ");
+      for (let i = 1; i <= words.length; i++) {
+        onToken(words.slice(0, i).join(" "));
+        await new Promise((r) => setTimeout(r, 40));
+      }
+      return aiMessage;
+    },
   },
 };
 

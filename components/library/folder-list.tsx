@@ -2,15 +2,16 @@
 
 import { HardHat, Handshake, Scale, Stethoscope } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EmptyState, SkeletonRow } from "@/components/ui/feedback";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
-import { data, useData, type Folder, type FolderKind, type Session } from "@/lib/data";
+import { data, useData, type Folder, type FolderKind, type Session, type Template } from "@/lib/data";
 import { durationParts } from "@/lib/format";
+import { templateName } from "@/lib/data/localize";
 
 /*
  * Danh sách hồ sơ trong Thư viện (góp ý vòng 1, #75): gom buổi ghi theo
@@ -40,15 +41,24 @@ export function defaultKindFor(profession: string | undefined): FolderKind {
 export function FolderList({ className }: { className?: string }) {
   const t = useTranslations("folders");
   const tl = useTranslations("library");
+  const locale = useLocale();
   const router = useRouter();
   const folders = useData(() => data.folders.list(), []);
   const sessions = useData(() => data.sessions.list(), []);
+  const templates = useData(() => data.account.templates(), []);
   const me = useData(() => data.account.me(), []);
   const [creating, setCreating] = useState(false);
   const [creatingOnce, setCreatingOnce] = useState(false);
   if (creating && !creatingOnce) setCreatingOnce(true);
 
   const sessionById = new Map<string, Session>((sessions.data ?? []).map((s) => [s.id, s]));
+
+  /** Nghề của hồ sơ suy từ mẫu kế thừa (GC-05, đặc tả §4.7); hiển thị trên hàng. */
+  function folderInherit(folder: Folder) {
+    const tp = (templates.data ?? []).find((x) => x.id === folder.template_id);
+    if (!tp) return t("inheritsNone");
+    return t("inherits", { template: templateName(tp, locale) });
+  }
 
   function folderMeta(folder: Folder) {
     const items = folder.session_ids.map((id) => sessionById.get(id)).filter(Boolean) as Session[];
@@ -113,6 +123,8 @@ export function FolderList({ className }: { className?: string }) {
                         {meta.tasks ? `, ${meta.tasks}` : ""}
                       </span>
                     </span>
+                    {/* Nghề chọn một lần ở hồ sơ: buổi mới kế thừa mẫu này (GC-05, đặc tả §4.7) */}
+                    <span className="mt-0.5 block text-caption text-ink-3">{folderInherit(f)}</span>
                   </span>
                 </button>
               </li>
@@ -143,9 +155,12 @@ export function CreateFolderSheet({
 }) {
   const t = useTranslations("folders");
   const ts = useTranslations("session");
+  const locale = useLocale();
   const toast = useToast();
   const router = useRouter();
+  const templates = useData(() => data.account.templates(), []);
   const [kind, setKind] = useState<FolderKind>(defaultKind);
+  const [templateId, setTemplateId] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [ref, setRef] = useState("");
   const [saving, setSaving] = useState(false);
@@ -155,7 +170,8 @@ export function CreateFolderSheet({
     if (!clean || saving) return;
     setSaving(true);
     try {
-      const created = await data.folders.create({ kind, name: clean, ref: ref.trim() || undefined });
+      // Nghề chọn một lần ở hồ sơ (GC-05, đặc tả §4.7): mẫu kế thừa đi kèm
+      const created = await data.folders.create({ kind, name: clean, ref: ref.trim() || undefined, template_id: templateId });
       onOpenChange(false);
       toast.show({ tone: "success", message: t("createdToast") });
       router.push(`/f/${created.id}`);
@@ -201,6 +217,39 @@ export function CreateFolderSheet({
                 )}
               >
                 {t(`kind.${k}`)}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend className="mb-1.5 text-small font-medium text-ink">{t("templateLabel")}</legend>
+          <p className="mb-2 text-caption text-ink-3">{t("templateHint")}</p>
+          <div role="radiogroup" aria-label={t("templateLabel")} className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              role="radio"
+              aria-checked={templateId === null}
+              onClick={() => setTemplateId(null)}
+              className={cn(
+                "h-11 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                templateId === null ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+              )}
+            >
+              {t("templateNone")}
+            </button>
+            {(templates.data ?? []).map((tp: Template) => (
+              <button
+                key={tp.id}
+                type="button"
+                role="radio"
+                aria-checked={templateId === tp.id}
+                onClick={() => setTemplateId(tp.id)}
+                className={cn(
+                  "h-11 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                  templateId === tp.id ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+                )}
+              >
+                {templateName(tp, locale)}
               </button>
             ))}
           </div>

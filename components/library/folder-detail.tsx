@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowUp, Check, Plus } from "lucide-react";
+import { ArrowLeft, ArrowUp, Check, FolderOpen, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -9,11 +9,12 @@ import { FolderKindIcon } from "@/components/library/folder-list";
 import { SessionRow } from "@/components/session/session-row";
 import { AiBlock } from "@/components/session/ai-block";
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { EmptyState, SkeletonParagraph } from "@/components/ui/feedback";
 import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
-import { data, useData, type Folder, type FolderChatMessage, type Session } from "@/lib/data";
+import { data, useData, type Folder, type FolderChatMessage, type Session, type Template } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { durationParts } from "@/lib/format";
 import { templateName } from "@/lib/data/localize";
@@ -31,6 +32,7 @@ const AI_SUGGESTIONS = ["aiSuggest1", "aiSuggest2", "aiSuggest3"] as const;
 
 export function FolderDetailScreen() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const t = useTranslations("folders");
   const tl = useTranslations("library");
   const locale = useLocale();
@@ -41,6 +43,32 @@ export function FolderDetailScreen() {
   const [adding, setAdding] = useState(false);
   const [addingOnce, setAddingOnce] = useState(false);
   if (adding && !addingOnce) setAddingOnce(true);
+  // Mẫu kế thừa của hồ sơ (GC-05, đặc tả §4.7): xem/đổi + xóa hồ sơ (luồng gộp)
+  const [templateOpen, setTemplateOpen] = useState(false);
+  const [templateOnce, setTemplateOnce] = useState(false);
+  if (templateOpen && !templateOnce) setTemplateOnce(true);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const toast = useToast();
+
+  async function saveTemplate(tid: string | null) {
+    try {
+      await data.folders.update(id, { template_id: tid });
+      setTemplateOpen(false);
+      folder.reload();
+    } catch {
+      toast.show({ tone: "error", message: t("saveError") });
+    }
+  }
+
+  async function removeFolder() {
+    try {
+      await data.folders.remove(id);
+      toast.show({ tone: "success", message: t("deletedToast") });
+      router.push("/");
+    } catch {
+      toast.show({ tone: "error", message: t("saveError") });
+    }
+  }
 
   const tplName = (tid: string) => {
     const tp = templates.data?.find((x) => x.id === tid);
@@ -95,12 +123,15 @@ export function FolderDetailScreen() {
   const { h, m } = durationParts(minutes);
   const duration = h > 0 ? tl("hours", { h, m: String(m).padStart(2, "0") }) : tl("minutes", { m });
   const openTasks = items.reduce((n, s) => n + s.open_task_count, 0);
+  const inheritTemplate = (templates.data ?? []).find((tp) => tp.id === f.template_id);
   return (
     <div className="flex min-h-dvh flex-col">
       <div className="px-page pt-2 lg:px-8 lg:pt-4">
         <div className="flex min-h-14 items-center gap-1">
           {back}
           <span className="flex-1" />
+          {/* Xóa hồ sơ (từ luồng GC khi gộp): các buổi không bị xóa, chỉ gỡ khỏi hồ sơ */}
+          <Button variant="ghost" icon={Trash2} iconOnly aria-label={t("deleteAction")} onClick={() => setDeleteOpen(true)} />
         </div>
         <p className="mt-1 flex items-center gap-2 text-caption font-medium text-ink-3">
           <FolderKindIcon kind={f.kind} className="size-4 shrink-0" />
@@ -114,6 +145,17 @@ export function FolderDetailScreen() {
           {t("meta", { sessions: t("sessionsCount", { count: items.length }), duration, tasks: openTasks > 0 ? t("openTasks", { count: openTasks }) : t("noOpenTasks") })}
         </p>
         {f.note ? <p className="mt-1 text-small text-ink-2">{f.note}</p> : null}
+        {/* Nghề chọn một lần ở hồ sơ (GC-05, đặc tả §4.7): bấm là đổi mẫu kế thừa */}
+        <button
+          type="button"
+          onClick={() => setTemplateOpen(true)}
+          className="-mx-1 mt-2 inline-flex min-h-11 items-center gap-2 rounded-control px-1 text-left text-small text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:text-ink"
+        >
+          <FolderOpen aria-hidden={true} className="size-4 shrink-0" strokeWidth={1.75} />
+          <span className="min-w-0 truncate">
+            {inheritTemplate ? t("inherits", { template: templateName(inheritTemplate, locale) }) : t("inheritsNone")}
+          </span>
+        </button>
       </div>
 
       <div className="sticky top-0 z-10 mt-4 bg-bg px-page lg:px-8">
@@ -173,7 +215,86 @@ export function FolderDetailScreen() {
       {addingOnce ? (
         <AddSessionsSheet folder={f} allSessions={sessions.data ?? []} open={adding} onOpenChange={setAdding} />
       ) : null}
+
+      {/* Đổi mẫu kế thừa của hồ sơ (GC-05, đặc tả §4.7 port sang luồng GY1) */}
+      {templateOnce ? <FolderTemplateSheet folder={f} templates={templates.data ?? []} open={templateOpen} onOpenChange={setTemplateOpen} onSave={saveTemplate} /> : null}
+
+      {/* Xóa hồ sơ: các buổi ghi không bị xóa, chỉ gỡ khỏi hồ sơ */}
+      <ConfirmDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title={t("deleteTitle", { name: f.name })}
+        cancelLabel={t("deleteCancel")}
+        confirmLabel={t("deleteConfirm")}
+        onConfirm={() => void removeFolder()}
+      >
+        {t("deleteBody")}
+      </ConfirmDialog>
     </div>
+  );
+}
+
+/** Sheet chọn mẫu kế thừa cho buổi mới của hồ sơ (port từ luồng GC khi gộp). */
+function FolderTemplateSheet({
+  folder,
+  templates,
+  open,
+  onOpenChange,
+  onSave,
+}: {
+  folder: Folder;
+  templates: Template[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSave: (templateId: string | null) => void;
+}) {
+  const t = useTranslations("folders");
+  const ts = useTranslations("session");
+  const locale = useLocale();
+  const [tid, setTid] = useState<string | null>(folder.template_id ?? null);
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange} title={t("templateLabel")} size="half">
+      <div className="flex flex-col gap-3 py-1">
+        <p className="text-caption text-ink-3">{t("templateHint")}</p>
+        <div role="radiogroup" aria-label={t("templateLabel")} className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={tid === null}
+            onClick={() => setTid(null)}
+            className={cn(
+              "h-11 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+              tid === null ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+            )}
+          >
+            {t("templateNone")}
+          </button>
+          {templates.map((tp) => (
+            <button
+              key={tp.id}
+              type="button"
+              role="radio"
+              aria-checked={tid === tp.id}
+              onClick={() => setTid(tp.id)}
+              className={cn(
+                "h-11 rounded-control border px-3 text-small font-medium transition-colors ease-noteim duration-(--t-quick)",
+                tid === tp.id ? "border-sen bg-sen/10 text-ink" : "border-line bg-surface text-ink-2 hover:bg-surface-2",
+              )}
+            >
+              {templateName(tp, locale)}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-2">
+        <Button variant="secondary" onClick={() => onOpenChange(false)}>
+          {t("deleteCancel")}
+        </Button>
+        <Button variant="primary" onClick={() => onSave(tid)}>
+          {ts("save")}
+        </Button>
+      </div>
+    </Sheet>
   );
 }
 

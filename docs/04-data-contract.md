@@ -13,6 +13,7 @@ Mục tiêu: giao diện viết một lần. Khi nối database, chỉ thay lớ
 | Ngôn ngữ | next-intl, file `messages/vi.json` và `messages/en.json` |
 | Biểu đồ, sơ đồ | Recharts, Mermaid (tải khi mở tab Hình ảnh hóa) |
 | Trạng thái phía máy khách | Zustand, chỉ cho trình phát và buổi đang ghi |
+| AI phía máy chủ (Gap Check B4, đặc tả `docs/gap-check-spec-v1.1.md` §3) | z-ai-web-dev-sdk, model tốc độ cao, thinking tắt, chỉ gọi trong route API |
 | Triển khai | Vercel, mỗi PR có link xem thử riêng |
 
 Chưa dùng ở giai đoạn mockup: Supabase, Drizzle, Dexie, Serwist, WaveSurfer, Resend, cổng thanh toán. Dải giọng tự vẽ bằng canvas theo đặc tả trong `02-design-system.md`.

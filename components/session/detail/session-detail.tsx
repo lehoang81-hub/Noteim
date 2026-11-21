@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, ArrowLeft, Check, Ellipsis, Pencil, Share2, ShieldCheck, Trash2, UserRoundPen, X } from "lucide-react";
+import { Archive, ArrowLeft, Check, Ellipsis, FolderOpen, Pencil, Share2, ShieldCheck, Trash2, UserRoundPen, X } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -22,6 +22,7 @@ import { useDebugFlags } from "@/lib/debug/flags";
 import { createAudioPlayer } from "@/lib/player/audio-player";
 import { CleanAudioChain } from "@/lib/player/clean-audio";
 import { createMockPlayer, usePlayerState, type Player } from "@/lib/player/mock-player";
+import { GapChecklist } from "./gap-checklist";
 import { SummaryTab } from "./summary-tab";
 import type { ShareIntent } from "./share-sheet";
 
@@ -62,6 +63,7 @@ export function SessionDetailScreen() {
   const detail = useData(() => data.sessions.get(id), [id]);
   const templates = useData(() => data.account.templates(), []);
   const contacts = useData(() => data.account.contacts(), []);
+  const folders = useData(() => data.folders.list(), []);
 
   const back = (
     <Link
@@ -112,12 +114,16 @@ export function SessionDetailScreen() {
   }
 
   const template = templates.data?.find((tp) => tp.id === detail.data!.template_id);
+  // Thư mục chứa buổi (GC-05, đặc tả v1.1 §4.7): buổi lưu xong được ghi vào
+  // session_ids của thư mục đã chọn lúc bắt đầu ghi
+  const folderOf = folders.data?.find((f) => f.session_ids.includes(detail.data!.id));
   return (
     <Loaded
       key={detail.data.id}
       detail={detail.data}
       templateName={template ? localizedTemplateName(template, locale) : ""}
       template={template}
+      folderName={folderOf?.name ?? null}
       templates={templates.data ?? []}
       contacts={contacts.data ?? []}
       back={back}
@@ -129,6 +135,7 @@ function Loaded({
   detail,
   template,
   templateName,
+  folderName,
   templates,
   contacts,
   back,
@@ -136,6 +143,7 @@ function Loaded({
   detail: SessionDetail;
   template: Parameters<typeof SummaryTab>[0]["template"];
   templateName: string;
+  folderName: string | null;
   templates: Awaited<ReturnType<typeof data.account.templates>>;
   contacts: NonNullable<ReturnType<typeof useData<Awaited<ReturnType<typeof data.account.contacts>>>>["data"]>;
   back: React.ReactNode;
@@ -196,6 +204,8 @@ function Loaded({
   const ps = usePlayerState(player);
 
   const [expanded, setExpanded] = useState(false);
+  // Checklist "Cần bổ sung sau buổi" (GC-04): câu hỏi gửi thẳng sang Hỏi AI
+  const [aiAsk, setAiAsk] = useState<string | null>(null);
   // Mở sâu từ Tổng quan (?sheet=speakers, M7-02): vào trang là bảng đặt tên người nói
   const [naming, setNaming] = useState(() => search.get("sheet") === "speakers");
   // Các bảng nạp chậm chỉ dựng sau lần mở đầu tiên (M5-04): tránh tải chunk
@@ -348,8 +358,8 @@ function Loaded({
 
   const { h, m } = durationParts(detail.duration_sec);
   const durationLabel = h > 0 ? tlLib("hours", { h, m: String(m).padStart(2, "0") }) : tlLib("minutes", { m });
-  // Biên nhận đồng ý ghi âm (góp ý vòng 1, #75): buổi chỉ có một biên nhận
-  // ghi lúc bắt đầu; buổi cũ không có thì không hiện dòng này
+  // Biên nhận đồng ý ghi âm (góp ý vòng 1, #75 + GC-05 §4.6): buổi chỉ có
+  // một biên nhận ghi lúc bắt đầu; buổi cũ không có thì không hiện dòng này
   const receipt = detail.consent.receipts?.[0] ?? null;
   const receiptClock = receipt
     ? new Intl.DateTimeFormat(intlLocale(locale), { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(receipt.at))
@@ -430,14 +440,20 @@ function Loaded({
           {t("meta", { date: shortDate(detail.created_at, locale), duration: durationLabel, template: templateName })}
           {lastSent ? `, ${t("sentAt", { date: shortDate(lastSent.sent_at, locale) })}` : ""}
         </p>
+        {folderName ? (
+          <p className="mt-1 flex items-center gap-1.5 text-small text-ink-2">
+            <FolderOpen aria-hidden={true} className="size-4 shrink-0" strokeWidth={1.75} />
+            {t("folderOf", { name: folderName })}
+          </p>
+        ) : null}
         {receipt ? (
           <button
             type="button"
             onClick={() => setReceiptOpen(true)}
-            className="-mx-1 mt-2 inline-flex min-h-11 max-w-full items-center gap-2 rounded-control px-1 text-left text-small text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:text-ink"
+            className="-mx-1 mt-2 inline-flex min-h-11 max-w-full items-start gap-2 rounded-control px-1 text-left text-small text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:text-ink"
           >
-            <ShieldCheck aria-hidden={true} className="size-4 shrink-0 text-sen" strokeWidth={1.75} />
-            <span className="min-w-0 truncate">
+            <ShieldCheck aria-hidden={true} className="mt-0.5 size-4 shrink-0 text-sen" strokeWidth={1.75} />
+            <span className="min-w-0">
               {receipt.who.length
                 ? t("receiptLine", { who: receiptWho, time: receiptClock, method: receiptMethod })
                 : t("receiptLineNoWho", { time: receiptClock, method: receiptMethod })}
@@ -497,7 +513,18 @@ function Loaded({
       {detail.status !== "ready" ? (
         <StatusBlock detail={detail} />
       ) : (
-        <Tabs value={tab} onValueChange={setTab} className="mt-4 flex-1">
+        <>
+          {/* Checklist "Cần bổ sung sau buổi" (GC-04, đặc tả v1.1 §4.5): đứng
+              ngay trên các tab để thấy được khi vừa vào buổi; không có kết quả
+              rà hoặc đã đủ dữ liệu thì tự ẩn. */}
+          <GapChecklist
+            detail={detail}
+            onAskAi={(question) => {
+              setAiAsk(question);
+              setTab("ai");
+            }}
+          />
+          <Tabs value={tab} onValueChange={setTab} className="mt-4 flex-1">
           <div className="sticky top-0 z-10 bg-bg px-page lg:px-8">
             <TabsList label={t("tabs")}>
               {TABS.map((id) => (
@@ -583,10 +610,19 @@ function Loaded({
               <VisualTab detail={detail} canPlay={canPlay} onSeek={seek} />
             </TabsContent>
             <TabsContent value="ai">
-              <AiTab detail={detail} template={template} canPlay={canPlay} onSeek={seek} />
+              <AiTab
+                detail={detail}
+                template={template}
+                canPlay={canPlay}
+                onSeek={seek}
+                autoQuestion={aiAsk}
+                onAutoQuestionConsumed={() => setAiAsk(null)}
+                pendingQuestions={detail.pending_ai_questions ?? []}
+              />
             </TabsContent>
           </div>
         </Tabs>
+        </>
       )}
 
       {canPlay ? (

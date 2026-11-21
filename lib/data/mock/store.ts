@@ -154,8 +154,9 @@ export function ensureDb(): MockDb {
         if (!d.invoices.length) d.invoices = await mod.loadInvoices();
         // Buổi ghi thư viện: kho từ localStorage đã có sẵn, không ghi đè
         if (!d.sessions.length) d.sessions = await mod.loadSessions();
-        // Thư mục theo hồ sơ (góp ý vòng 1, #75): kho đã lưu mà chưa có thư mục
-        // (kho cũ trước GY1) thì nạp fixture một lần
+        // Thư mục theo hồ sơ (GY1/PR #76 + GC-05): kho đã lưu mà chưa có thư mục
+        // (kho cũ trước GY1) thì nạp fixture một lần; kho đã lưu vẫn giữ phần
+        // người dùng đã đổi
         if (!d.folders.length) d.folders = await mod.loadFolders();
         // M9-01: kho lưu trước M9 còn mốc cũ của 3 buổi có âm thanh thật — tự cập nhật
         if (await applyAudioAttach(d)) commit();
