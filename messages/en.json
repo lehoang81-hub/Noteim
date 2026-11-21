@@ -1710,5 +1710,19 @@
     "idbBanner": "Cannot save to the device: {msg}",
     "durSec": "{s} s",
     "durMinSec": "{m} min {s} s"
+  },
+  "login": {
+    "title": "Sign in to sync your data",
+    "subtitle": "Sessions, folders and teams are stored safely and follow you across devices.",
+    "googleButton": "Continue with Google",
+    "demoButton": "Test sign-in (for automated checks)",
+    "anonymousContinue": "Use without signing in",
+    "anonymousNote": "You can record without an account: data stays on this device, limited to 3 sessions and 30 minutes total.",
+    "checking": "Checking your session",
+    "errorGeneric": "Sign-in did not complete. Please try again.",
+    "errorConfig": "Sign-in is being configured. Please try again in a few minutes.",
+    "signedInAs": "You are signed in as",
+    "continue": "Go to library",
+    "signOut": "Sign out"
   }
 }

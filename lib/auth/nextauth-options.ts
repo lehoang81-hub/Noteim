@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
 import { ensureUserAndAccount } from "@/lib/auth/persist";
+import { getSessionCookieName } from "@/lib/auth/session-cookie";
 
 // Bổ sung kiểu: session.user.id theo đặc tả C1 (users.id là khóa chính
 // mọi bảng về sau).
@@ -23,19 +24,7 @@ declare module "next-auth" {
  * `users` + `accounts` (lib/auth/persist.ts), không truy vấn mỗi
  * request.
  */
-export const SESSION_COOKIE_NAME = "noteim.session";
-
-const isProd = process.env.NODE_ENV === "production";
-// Quy ước next-auth: cookie Secure khi URL gốc là https. Chạy thử
-// localhost (NEXTAUTH_URL=http://…) dùng cookie thường để trình duyệt
-// nhận được.
-const baseUrl = process.env.NEXTAUTH_URL ?? "";
-const useSecureCookies = baseUrl
-  ? baseUrl.startsWith("https://")
-  : isProd;
-const sessionCookieName = useSecureCookies
-  ? `__Secure-${SESSION_COOKIE_NAME}`
-  : SESSION_COOKIE_NAME;
+const sessionCookieName = getSessionCookieName();
 
 /** Bật cho e2e: nhà cung cấp credentials cố định, không cần khóa Google. */
 export const isAuthFakeEnabled = () => process.env.AUTH_FAKE === "1";
@@ -75,7 +64,9 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        secure: useSecureCookies,
+        // Quy ước next-auth: cookie Secure khi URL gốc là https. Chạy thử
+        // localhost (NEXTAUTH_URL=http://…) dùng cookie thường.
+        secure: sessionCookieName.startsWith("__Secure-"),
       },
     },
   },
