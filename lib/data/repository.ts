@@ -2,8 +2,11 @@ import type {
   ActionItem,
   AuditEvent,
   ChatMessage,
+  ConsentReceipt,
   Contact,
   DashboardData,
+  Folder,
+  FolderKind,
   GlossaryTerm,
   Invoice,
   Lang,
@@ -64,7 +67,10 @@ export type RecordingDraft = {
   photos: { id: string; timestamp_sec: number; url: string }[];
   /** Âm lượng lấy mẫu 4 giá trị mỗi giây, để dựng lại dải giọng */
   levels: number[];
-  consent?: { confirmed: boolean; announced: boolean };
+  consent?: { confirmed: boolean; announced: boolean; receipts?: ConsentReceipt[] };
+  /** Thư mục gắn cho buổi mới (GC-05, đặc tả v1.1 §4.7): buổi kế thừa mẫu
+   * của thư mục và được ghi vào session_ids của thư mục khi lưu. */
+  folder_id?: string;
   /** Kết quả rà thiếu gần nhất của buổi (GC-04, đặc tả v1.1 §4.5): màn chi
    * tiết dùng để dựng checklist "Cần bổ sung sau buổi". Chưa rà lần nào thì
    * không có — checklist không hiện. */
@@ -180,6 +186,28 @@ export interface WorkspaceRepository {
   usage(id: string, month: string): Promise<UsageRow[]>;
   audit(id: string, filter?: { actor_user_id?: string; action?: AuditEvent["action"] }): Promise<AuditEvent[]>;
   invoices(id: string): Promise<Invoice[]>;
+}
+
+/**
+ * Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7): tạo/sửa thư mục chọn nghề một
+ * lần, buổi mới gắn vào thư mục kế thừa mẫu; buổi vẫn đổi mẫu riêng được
+ * (override từng buổi). Hình dạng và tên phương thức khớp nhánh GY1 (PR #76).
+ */
+export interface FolderRepository {
+  list(): Promise<Folder[]>;
+  get(id: string): Promise<Folder>;
+  create(input: {
+    kind: FolderKind;
+    name: string;
+    ref?: string;
+    note?: string;
+    /** Mẫu kế thừa cho buổi mới; không chọn là null (mẫu mặc định "Tổng quát") */
+    template_id?: string | null;
+    session_ids?: string[];
+  }): Promise<Folder>;
+  update(id: string, patch: Partial<Pick<Folder, "name" | "ref" | "note" | "template_id" | "session_ids">>): Promise<void>;
+  /** Xóa thư mục: các buổi ghi không bị xóa, chỉ gỡ khỏi thư mục */
+  remove(id: string): Promise<void>;
 }
 
 export interface TaskRepository {
@@ -301,4 +329,6 @@ export interface DataSource {
   workspaces: WorkspaceRepository;
   /** Tổng quan cá nhân và nhóm (M7-02) */
   dashboard: DashboardRepository;
+  /** Thư mục theo hồ sơ (GC-05, đặc tả v1.1 §4.7) */
+  folders: FolderRepository;
 }

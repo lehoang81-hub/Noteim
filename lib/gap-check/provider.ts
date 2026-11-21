@@ -69,7 +69,7 @@ const zaiProvider: GapCheckProvider = {
       // backend tự chọn model mặc định.
       model: process.env.GAP_CHECK_MODEL || undefined,
       messages: [
-        { role: "assistant", content: system },
+        { role: "system", content: system },
         { role: "user", content: user },
       ],
       temperature: 0.1,

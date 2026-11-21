@@ -19,7 +19,7 @@ const TemplateSheet = dynamic(() => import("@/components/record/sheets").then((m
 // dính ChunkLoadError vì bundle đã nằm sẵn từ lúc còn mạng.
 const importGapCheckSheet = () => import("@/components/record/gap-check");
 const GapCheckSheet = dynamic(() => importGapCheckSheet().then((m) => m.GapCheckSheet), { ssr: false });
-import { ConsentSheet, MicPermissionSheet, type SpeechChoice } from "@/components/record/sheets";
+import { ConsentSheet, ConsentReceiptSheet, MicPermissionSheet, type SpeechChoice } from "@/components/record/sheets";
 import { Button } from "@/components/ui/button";
 import { Banner, MicDrawing } from "@/components/ui/feedback";
 import { Sheet } from "@/components/ui/sheet";
@@ -34,7 +34,7 @@ import { templateName } from "@/lib/data/localize";
 import { markMicGranted, useMicGateSeed } from "@/lib/record/mic-permission";
 import { fileToDataUrl } from "@/lib/record/photo";
 import { transcriptTail, type GapCheckInput } from "@/lib/record/gap-check-client";
-import { intakeTemplateIdForProfession } from "@/lib/intake-templates";
+import { intakeTemplateIdForProfession, professionRequiresConsent } from "@/lib/intake-templates";
 import { useStorageFull } from "@/lib/storage-full";
 import {
   addRecordingAskAiQuestion,
@@ -46,12 +46,14 @@ import {
   pushRecordingLevel,
   recordedSec,
   resumeRecording,
+  setRecordingConsent,
   setRecordingGapCheck,
   setRecordingTemplate,
   snapshotRecording,
   startRecording,
   useRecording,
 } from "@/lib/record/recording-store";
+import type { ConsentReceipt } from "@/lib/data/types";
 import { keepScreenAwake, letScreenSleep } from "@/lib/record/wake-lock";
 import { pushDemoTranscript, resetDemoTranscript } from "@/lib/record/demo-transcript";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
@@ -119,6 +121,7 @@ export function RecordScreen() {
   const offline = useOffline();
   const recording = useRecording();
   const me = useData(() => data.account.me(), []);
+  const folders = useData(() => data.folders.list(), []);
   const quota = useData(() => data.account.quota(), []);
   const templates = useData(() => data.account.templates(), []);
   const reduce = useReducedMotionSafe();
@@ -147,6 +150,10 @@ export function RecordScreen() {
   const [folding, setFolding] = useState(false);
   const [showAnnounce, setShowAnnounce] = useState(false);
   const [templateSheet, setTemplateSheet] = useState(false);
+  // Đổi mẫu giữa buổi sang mẫu nhạy cảm (GC-05, đặc tả v1.1 §4.6): biên nhận
+  // trước khi dùng mẫu; Bỏ là giữ mẫu cũ
+  const [receiptOpen, setReceiptOpen] = useState(false);
+  const [pendingTemplateId, setPendingTemplateId] = useState<string | null>(null);
   const [ripple, setRipple] = useState(0);
   const [silence, setSilence] = useState(false);
   const [sampleVoice, setSampleVoice] = useState(false);
@@ -215,17 +222,24 @@ export function RecordScreen() {
 
   /* ----- Luồng bắt đầu ghi (M2-01) ----- */
 
-  function beginRecording(announce: boolean, speech?: SpeechChoice) {
+  function beginRecording(announce: boolean, speech?: SpeechChoice, folderId?: string | null, receipts?: ConsentReceipt[]) {
     if (recording.status !== "idle") return;
+    // Kế thừa mẫu theo thư mục (GC-05, đặc tả v1.1 §4.7): thư mục chọn nghề
+    // một lần thì buổi mới dùng mẫu đó; đổi mẫu riêng trên màn ghi vẫn được
+    // (override từng buổi). Thư mục không có mẫu hoặc không chọn thư mục thì
+    // theo mẫu mặc định của người dùng.
+    const folder = folderId ? folders.data?.find((f) => f.id === folderId) : null;
     const templateId =
-      recording.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id ?? null;
+      folder?.template_id ?? recording.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id ?? null;
     startRecording({
       templateId,
-      consent: { confirmed: true, announced: announce },
+      // Biên nhận đồng ý đi kèm khi mẫu nhạy cảm (GC-05, đặc tả §4.6)
+      consent: { confirmed: true, announced: announce, receipts },
       speech: speech ?? {
         primary_language: me.data?.default_speech_language ?? (locale as Lang),
         auto_detect: me.data?.auto_detect_languages ?? true,
       },
+      folderId: folderId ?? null,
     });
     keepScreenAwake();
     setGate(null);
@@ -456,6 +470,7 @@ export function RecordScreen() {
               }
             : undefined,
           pending_ai_questions: snapshot.askAiQuestions.length ? snapshot.askAiQuestions : undefined,
+          folder_id: snapshot.folderId ?? undefined,
         }),
         new Promise((r) => window.setTimeout(r, reduce ? 220 : 900)),
       ]);
@@ -829,7 +844,8 @@ export function RecordScreen() {
         open={gate === "consent"}
         defaultLanguage={me.data?.default_speech_language ?? (locale as Lang)}
         defaultAutoDetect={me.data?.auto_detect_languages ?? true}
-        onConfirm={(announced, speech) => beginRecording(announced, speech)}
+        defaultTemplateId={me.data?.default_template_id ?? templates.data?.[0]?.id ?? null}
+        onConfirm={(announced, speech, folderId, receipts) => beginRecording(announced, speech, folderId, receipts)}
         onCancel={() => router.push("/")}
       />
       {/* Hết hạn mức tháng: nút ghi âm vẫn bấm được, bảng giải thích + gói Pro (M2-04) */}
@@ -854,8 +870,45 @@ export function RecordScreen() {
         onOpenChange={setTemplateSheet}
         selectedId={recording.templateId}
         onSelect={(id) => {
+          // Buổi chọn mẫu nhạy cảm thủ công cũng kích hoạt biên nhận (GC-05,
+          // đặc tả v1.1 §4.6): chưa có biên nhận thì mở bảng trước khi đổi
+          const tpl = templates.data?.find((tp) => tp.id === id);
+          if (professionRequiresConsent(tpl?.profession) && !recording.consent.receipts?.length) {
+            setPendingTemplateId(id);
+            setReceiptOpen(true);
+            setTemplateSheet(false);
+            return;
+          }
           setRecordingTemplate(id);
           setTemplateSheet(false);
+        }}
+      />
+      {/* Biên nhận khi đổi sang mẫu nhạy cảm giữa buổi (GC-05) */}
+      <ConsentReceiptSheet
+        open={receiptOpen}
+        templateName={templates.data?.find((tp) => tp.id === pendingTemplateId) ? templateName(templates.data!.find((tp) => tp.id === pendingTemplateId)!, locale) : ""}
+        onConfirm={(who, announced) => {
+          setReceiptOpen(false);
+          if (!pendingTemplateId) return;
+          setRecordingConsent({
+            confirmed: true,
+            announced: recording.consent.announced || announced,
+            receipts: [
+              {
+                id: `cr-${Date.now().toString(36)}`,
+                who,
+                at: new Date().toISOString(),
+                method: "button",
+                announcement_text: announced ? t("announceSentence") : undefined,
+              },
+            ],
+          });
+          setRecordingTemplate(pendingTemplateId);
+          setPendingTemplateId(null);
+        }}
+        onCancel={() => {
+          setReceiptOpen(false);
+          setPendingTemplateId(null);
         }}
       />
       {/* Gap Check (GC-03, đặc tả v1.1 §4.1, §4.3): sheet kết quả rà thiếu;

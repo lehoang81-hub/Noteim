@@ -105,3 +105,10 @@ const INTAKE_BY_PROFESSION: Record<string, string> = {
 export function intakeTemplateIdForProfession(profession: string | null | undefined): string {
   return (profession && INTAKE_BY_PROFESSION[profession]) || "general_meeting";
 }
+
+/** Mẫu của nghề có yêu cầu biên nhận đồng ý ghi âm không (GC-05, đặc tả v1.1
+ * §4.6): bác sĩ và luật sư là true. Nghề chưa có mẫu riêng quy về Tổng quát
+ * nên luôn false. */
+export function professionRequiresConsent(profession: string | null | undefined): boolean {
+  return getIntakeTemplate(intakeTemplateIdForProfession(profession))?.requires_consent === true;
+}

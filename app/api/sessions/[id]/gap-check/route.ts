@@ -95,7 +95,11 @@ export async function POST(
     return jsonError(400, "template_not_found", `Không có mẫu nghiệp vụ "${body.templateId}"`);
   }
 
-  const plan: GapCheckPlan = request.headers.get("x-noteim-plan") === "pro" ? "pro" : "free";
+  // Chưa có đăng nhập thật: không tin gói do trình duyệt tự khai (ai cũng gửi được "pro").
+  // Chỉ chấp nhận header này khi chạy AI giả lập để kiểm thử. Khi có C1 thì lấy gói từ tài khoản.
+  const trustPlanHeader = process.env.GAP_CHECK_FAKE !== undefined && process.env.GAP_CHECK_FAKE !== "";
+  const plan: GapCheckPlan =
+    trustPlanHeader && request.headers.get("x-noteim-plan") === "pro" ? "pro" : "free";
   const clientId = request.headers.get("x-noteim-client") || "anon";
   const quota = consumeQuota(clientId, plan);
   if (!quota.ok) {

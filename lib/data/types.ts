@@ -131,6 +131,24 @@ export const Contact = z.object({
 });
 export type Contact = z.infer<typeof Contact>;
 
+/**
+ * Một dòng trong biên nhận đồng ý ghi âm (góp ý #4; GC-05, đặc tả v1.1 §4.6):
+ * ai đồng ý (who), lúc nào (at), bằng cách nào (method: bấm nút hay bảng tự
+ * đóng), kèm câu thông báo đã phát nếu có. Hình dạng khớp với nhánh GY1
+ * (PR #76) để hai chuỗi PR gộp được vào nhau.
+ */
+export const ConsentReceipt = z.object({
+  id: z.string(),
+  /** Tên những người đã đồng ý (gõ nhanh ở bảng đồng ý); rỗng là chưa ghi tên */
+  who: z.array(z.string()).catch([]),
+  /** Thời điểm ghi nhận đồng ý (ISO) */
+  at: z.string(),
+  method: z.enum(["button", "auto"]),
+  /** Câu thông báo ghi âm đã phát trong buổi, nếu có */
+  announcement_text: z.string().optional(),
+});
+export type ConsentReceipt = z.infer<typeof ConsentReceipt>;
+
 export const Session = z.object({
   id: z.string(),
   user_id: z.string(),
@@ -159,7 +177,12 @@ export const Session = z.object({
   audio_url: z.string().nullable().optional().catch(undefined),
   created_at: z.string(),
   audio_expires_at: z.string().nullable(),
-  consent: z.object({ confirmed: z.boolean(), announced: z.boolean() }),
+  consent: z.object({
+    confirmed: z.boolean(),
+    announced: z.boolean(),
+    /** Biên nhận đồng ý ghi âm (GC-05, đặc tả v1.1 §4.6); buổi cũ không có */
+    receipts: z.array(ConsentReceipt).optional().catch(undefined),
+  }),
   participant_contact_ids: z.array(z.string()),
   peaks_thumb: z.array(z.number()).length(40),
   speaker_colors_thumb: z.array(z.number().int().min(0).max(5)).length(40),
@@ -253,6 +276,37 @@ export const Photo = z.object({ id: z.string(), timestamp_sec: z.number(), url: 
 export type Photo = z.infer<typeof Photo>;
 
 export const SpeakerSpanData = z.object({ speaker_id: z.string(), start_sec: z.number(), end_sec: z.number() });
+
+/* ---------- GC-05: Thư mục và mẫu kế thừa ---------- */
+
+/**
+ * Loại thư mục theo hồ sơ (góp ý #3, đặc tả v1.1 §4.7): tên gọi theo nghề của
+ * người dùng, nhãn hiển thị nằm trong messages. Hình dạng khớp với nhánh GY1
+ * (PR #76); GC-05 thêm trường template_id để thư mục chọn nghề một lần,
+ * buổi mới kế thừa mẫu của thư mục.
+ */
+export const FolderKind = z.enum(["legal_case", "patient", "client", "project"]);
+export type FolderKind = z.infer<typeof FolderKind>;
+
+/** Thư mục gom các buổi ghi của cùng một hồ sơ: vụ việc, bệnh nhân, khách hàng, công trình. */
+export const Folder = z.object({
+  id: z.string(),
+  workspace_id: z.string().nullable().catch(null),
+  kind: FolderKind,
+  name: z.string(),
+  /** Mã hồ sơ: số vụ việc, mã bệnh nhân, mã bất động sản, mã công trình */
+  ref: z.string().optional().catch(undefined),
+  /** Ghi chú ngắn về hồ sơ, ví dụ mốc quan trọng tiếp theo */
+  note: z.string().optional().catch(undefined),
+  /** Mẫu ghi âm kế thừa cho buổi mới gắn vào thư mục (GC-05, đặc tả §4.7);
+   * null là thư mục chưa chọn nghề — buổi mới dùng mẫu mặc định */
+  template_id: z.string().nullish().catch(undefined),
+  session_ids: z.array(z.string()).catch([]),
+  created_at: z.string(),
+  updated_at: z.string(),
+});
+export type Folder = z.infer<typeof Folder>;
+
 
 /**
  * Kết quả rà thiếu gần nhất lưu kèm buổi (GC-04, đặc tả v1.1 §4.5). Cùng hình
