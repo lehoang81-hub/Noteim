@@ -15,7 +15,19 @@
   "audio_expires_at": "2026-11-20T16:10:00+07:00",
   "consent": {
    "confirmed": true,
-   "announced": false
+   "announced": true,
+   "receipts": [
+    {
+     "id": "cr-kts-hop-cong-truong",
+     "who": [
+      "Anh Hùng",
+      "Anh Nam"
+     ],
+     "at": "2026-11-13T16:10:00+07:00",
+     "method": "button",
+     "announcement_text": "Buổi làm việc này được ghi âm để lập biên bản"
+    }
+   ]
   },
   "participant_contact_ids": [
    "c-me",

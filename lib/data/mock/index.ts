@@ -12,6 +12,7 @@ import type {
   Contact,
   DashboardData,
   Folder,
+  FolderChatMessage,
   GlossaryTerm,
   Lang,
   Member,
@@ -760,7 +761,7 @@ export const mockSource: DataSource = {
           topics: [],
           action_items: [],
           notes: draft.notes.map((n, i) => ({ id: `n-${i}`, timestamp_sec: n.timestamp_sec, text: n.text })),
-          bookmarks: draft.bookmarks.map((b, i) => ({ id: `m-${i}`, timestamp_sec: b.timestamp_sec, tag: (b.tag as SessionDetail["bookmarks"][number]["tag"]) ?? null })),
+          bookmarks: draft.bookmarks.map((b, i) => ({ id: `m-${i}`, timestamp_sec: b.timestamp_sec, tag: (b.tag as SessionDetail["bookmarks"][number]["tag"]) ?? null, note: b.note ?? "" })),
           photos: draft.photos.map((p) => ({ id: p.id, timestamp_sec: p.timestamp_sec, url: "" })),
           peaks: [],
           speaker_spans: [],
@@ -1924,7 +1925,95 @@ export const mockSource: DataSource = {
         const idx = db.folders.findIndex((f) => f.id === id);
         if (idx === -1) throw new DataError("not_found");
         db.folders.splice(idx, 1);
+        // Lịch sử Hỏi AI của thư mục cũng dọn theo (GY1 giữ lại khi gộp)
+        delete db.folder_chats[id];
       }),
+    /** Lịch sử hỏi đáp của thư mục, lưu theo thư mục (GY1 giữ lại khi gộp) */
+    history: (folderId) => read(async () => getDb().folder_chats[folderId] ?? []),
+    /* Hỏi AI xuyên các buổi của thư mục (góp ý vòng 1, #75 — phần riêng của
+     * GY1 giữ lại khi gộp): bản giả ghép câu trả lời từ ý tóm tắt, việc cần
+     * làm và ghi chú của các buổi trong thư mục, xếp theo mức khớp từ khóa của
+     * câu hỏi (so khớp bỏ dấu như tìm kiếm M4-02); dẫn chứng mang theo buổi và
+     * mốc giây. Gói Free ném quota_exceeded — giao diện khóa trước rồi, đây là
+     * chốt sau. */
+    ask: async (folderId, question, onToken) => {
+      await wait();
+      if (getFlags().failLoad) throw new DataError("server");
+      const db = getDb();
+      const folder = db.folders.find((f) => f.id === folderId);
+      if (!folder) throw new DataError("not_found");
+      const plan = getFlags().plan ?? db.user.plan;
+      if (plan !== "pro") throw new DataError("quota_exceeded");
+
+      const q = foldVi(question);
+      // Từ khóa từ 3 chữ trở lên: bỏ các từ tiếng Việt quá ngắn ("có", "hồ", "sơ")
+      // để không khớp bừa
+      const tokens = q
+        .split(/[^a-z0-9]+/)
+        .filter((w) => w.length >= 3);
+      const sessions = folder.session_ids
+        .map((id) => db.sessions.find((s) => (s.listDetail ?? s.detail).id === id))
+        .filter((s): s is NonNullable<typeof s> => !!s)
+        .map((s) => s.detail);
+      type Hit = { session: SessionDetail; text: string; timestamp_sec: number; score: number };
+      const hits: Hit[] = [];
+      for (const d of sessions) {
+        for (const topic of d.topics) {
+          for (const b of topic.bullets) {
+            const folded = foldVi(b.text);
+            hits.push({ session: d, text: b.text, timestamp_sec: b.timestamp_sec, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
+          }
+        }
+        for (const a of d.action_items) {
+          const folded = foldVi(a.task);
+          hits.push({ session: d, text: a.task, timestamp_sec: a.timestamp_sec ?? 0, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
+        }
+        for (const n of d.notes) {
+          const folded = foldVi(n.text);
+          hits.push({ session: d, text: n.text, timestamp_sec: n.timestamp_sec, score: tokens.reduce((n, w) => n + (folded.includes(w) ? 1 : 0), 0) });
+        }
+      }
+      const scored = hits
+        .filter((h) => h.score > 0)
+        .sort((a, b) => b.score - a.score);
+      // Trả lời XUYÊN BUỔI: mỗi buổi tối đa 2 đoạn khớp, buổi có đoạn khớp
+      // mạnh nhất đứng trước, lấy tối đa 2 buổi và 4 đoạn — câu trả lời luôn
+      // đi từng buổi một để khác với hỏi AI trong một buổi
+      const perSession = new Map<string, Hit[]>();
+      for (const h of scored) {
+        const list = perSession.get(h.session.id) ?? [];
+        if (list.length >= 2) continue;
+        list.push(h);
+        perSession.set(h.session.id, list);
+      }
+      const ordered = [...perSession.values()].sort((a, b) => b[0].score - a[0].score).slice(0, 2);
+      const best = ordered.flat().slice(0, 4);
+      const answer = best.length
+        ? `Trên ${sessions.length} buổi của hồ sơ "${folder.name}", tìm thấy ${best.length} đoạn khớp ở ${ordered.length} buổi. ` +
+          ordered
+            .map((list) => `Buổi "${list[0].session.title}" ghi rằng: ${list.map((h) => h.text).join("; ")}`)
+            .join(" ")
+        : `Chưa tìm thấy nội dung khớp câu hỏi trong ${sessions.length} buổi của hồ sơ này. Thử hỏi bằng từ khóa khác.`;
+      const citations = best.map((h) => ({ session_id: h.session.id, timestamp_sec: h.timestamp_sec }));
+
+      const log = db.folder_chats[folderId] ?? [];
+      log.push({ id: `fq-${Date.now().toString(36)}`, role: "user", text: question, citations: [] });
+      const aiMessage: FolderChatMessage = {
+        id: `fa-${Date.now().toString(36)}`,
+        role: "ai",
+        text: answer,
+        citations,
+      };
+      log.push(aiMessage);
+      db.folder_chats[folderId] = log;
+      commit();
+      const words = answer.split(" ");
+      for (let i = 1; i <= words.length; i++) {
+        onToken(words.slice(0, i).join(" "));
+        await new Promise((r) => setTimeout(r, 40));
+      }
+      return aiMessage;
+    },
   },
 };
 

@@ -226,6 +226,7 @@ function Loaded({
   const [shareIntent, setShareIntent] = useState<ShareIntent>(null);
   const [moreOpen, setMoreOpen] = useState(false);
   const [reprocessOpen, setReprocessOpen] = useState(false);
+  const [receiptOpen, setReceiptOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [confirmPurge, setConfirmPurge] = useState(false);
   const [keepOpen, setKeepOpen] = useState(false);
@@ -357,25 +358,20 @@ function Loaded({
 
   const { h, m } = durationParts(detail.duration_sec);
   const durationLabel = h > 0 ? tlLib("hours", { h, m: String(m).padStart(2, "0") }) : tlLib("minutes", { m });
+  // Biên nhận đồng ý ghi âm (góp ý vòng 1, #75 + GC-05 §4.6): buổi chỉ có
+  // một biên nhận ghi lúc bắt đầu; buổi cũ không có thì không hiện dòng này
+  const receipt = detail.consent.receipts?.[0] ?? null;
+  const receiptClock = receipt
+    ? new Intl.DateTimeFormat(intlLocale(locale), { timeZone: "Asia/Ho_Chi_Minh", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date(receipt.at))
+    : "";
+  const receiptMethod = receipt ? t(receipt.method === "button" ? "receiptMethodButton" : "receiptMethodAuto") : "";
+  const receiptWho = receipt ? (receipt.who.length ? receipt.who.join(", ") : t("receiptWhoEmpty")) : "";
   const unnamed = detail.speakers.filter((s) => !s.contact_id && !s.is_me).length;
   const expiresSoon =
     detail.storage_status === "full" &&
     detail.audio_expires_at &&
     new Date(detail.audio_expires_at).getTime() - now.getTime() < 48 * 3600_000;
   const lastSent = detail.send_history.length ? detail.send_history[detail.send_history.length - 1] : null;
-  // Biên nhận đồng ý ghi âm (GC-05, đặc tả v1.1 §4.6): ai đồng ý, lúc nào,
-  // bằng cách nào — hiện ngay dưới dòng meta để thấy được lúc vừa vào buổi
-  const receipt = detail.consent.receipts?.[0] ?? null;
-  const receiptWhen = receipt
-    ? new Intl.DateTimeFormat(intlLocale(locale), {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-        timeZone: "Asia/Ho_Chi_Minh",
-      }).format(new Date(receipt.at))
-    : "";
-  const receiptWho = receipt ? (receipt.who.length ? receipt.who.join(", ") : t("receiptWhoEmpty")) : "";
-  const receiptMethod = receipt ? t(receipt.method === "button" ? "receiptMethodButton" : "receiptMethodAuto") : "";
 
   const tagLabels = { decided: tl("decided"), pending: tl("pending"), risk: tl("risk"), idea: tl("idea"), figure: tl("figure") };
 
@@ -451,10 +447,18 @@ function Loaded({
           </p>
         ) : null}
         {receipt ? (
-          <p className="mt-1 flex items-start gap-1.5 text-small text-ink-2">
-            <ShieldCheck aria-hidden={true} className="mt-0.5 size-4 shrink-0" strokeWidth={1.75} />
-            {t("receiptOf", { who: receiptWho, when: receiptWhen, method: receiptMethod })}
-          </p>
+          <button
+            type="button"
+            onClick={() => setReceiptOpen(true)}
+            className="-mx-1 mt-2 inline-flex min-h-11 max-w-full items-start gap-2 rounded-control px-1 text-left text-small text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:text-ink"
+          >
+            <ShieldCheck aria-hidden={true} className="mt-0.5 size-4 shrink-0 text-sen" strokeWidth={1.75} />
+            <span className="min-w-0">
+              {receipt.who.length
+                ? t("receiptLine", { who: receiptWho, time: receiptClock, method: receiptMethod })
+                : t("receiptLineNoWho", { time: receiptClock, method: receiptMethod })}
+            </span>
+          </button>
         ) : null}
         {detail.speakers.length ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
@@ -691,6 +695,32 @@ function Loaded({
           ))}
         </ul>
       </Sheet>
+
+      {/* Biên nhận đồng ý ghi âm (góp ý vòng 1, #75): ai, lúc nào, cách nào,
+          câu thông báo đã phát. Buổi cũ không có biên nhận thì không mở được. */}
+      {receipt ? (
+        <Sheet open={receiptOpen} onOpenChange={setReceiptOpen} title={t("receiptTitle")} description={detail.title} size="half">
+          <dl className="flex flex-col gap-3 py-1">
+            <div>
+              <dt className="text-caption font-medium text-ink-3">{t("receiptWho")}</dt>
+              <dd className="text-body text-ink">{receiptWho}</dd>
+            </div>
+            <div>
+              <dt className="text-caption font-medium text-ink-3">{t("receiptWhen")}</dt>
+              <dd className="text-body text-ink">{shortDate(receipt.at, locale)}, {receiptClock}</dd>
+            </div>
+            <div>
+              <dt className="text-caption font-medium text-ink-3">{t("receiptHow")}</dt>
+              <dd className="text-body text-ink">{receiptMethod}</dd>
+            </div>
+            <div>
+              <dt className="text-caption font-medium text-ink-3">{t("receiptAnnounced")}</dt>
+              <dd className="text-body text-ink">{receipt.announcement_text ?? t("receiptNoAnnounce")}</dd>
+            </div>
+          </dl>
+          <p className="mt-3 text-caption text-ink-3">{t("receiptFootnote")}</p>
+        </Sheet>
+      ) : null}
 
       {/* Dọn bản gốc: nói rõ thứ gì mất và thứ gì giữ (docs mục 12) */}
       <ConfirmDialog

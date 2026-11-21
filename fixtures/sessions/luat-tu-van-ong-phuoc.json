@@ -15,7 +15,17 @@
   "audio_expires_at": "2026-11-21T13:40:00+07:00",
   "consent": {
    "confirmed": true,
-   "announced": false
+   "announced": false,
+   "receipts": [
+    {
+     "id": "cr-luat-tu-van-ong-phuoc",
+     "who": [
+      "Ông Phước"
+     ],
+     "at": "2026-11-14T13:40:00+07:00",
+     "method": "button"
+    }
+   ]
   },
   "participant_contact_ids": [
    "c-me",

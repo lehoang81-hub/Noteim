@@ -75,7 +75,8 @@ export function MicPermissionSheet({
  * kế thừa mẫu của thư mục; không chọn thì dùng mẫu mặc định.
  * GC-05 (đặc tả v1.1 §4.6): mẫu nhạy cảm (requires_consent) thì bắt buộc biên
  * nhận: nhập ai đồng ý, TẮT tự đóng (tự đóng là đồng ý mà không có biên nhận
- * — sai luật), nút xác nhận khóa cho đến khi có tên. */
+ * — sai luật), nút xác nhận khóa cho đến khi có tên. Luồng biên nhận giữ bản
+ * GC khi gộp với GY1 (PR #76): ô "ai đồng ý" chỉ hiện với mẫu nhạy cảm. */
 export function ConsentSheet({
   open,
   defaultLanguage,
@@ -135,7 +136,7 @@ export function ConsentSheet({
       3000,
     );
     return () => window.clearTimeout(id);
-    // onConfirm đọc qua ref nên không cần vào deps
+    // confirm đọc qua ref nên không cần vào deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, interactedAt, needsReceipt]);
 
