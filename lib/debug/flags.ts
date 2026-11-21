@@ -42,6 +42,12 @@ export type DebugFlags = {
   audioMock: boolean;
   /** Ép tải âm thanh lỗi, hiện "Không phát được âm thanh" và Thử lại (M9-01) */
   audioFail: boolean;
+  /** Ép rà thiếu (Gap Check) bị lỗi, hiện "Chưa rà được, thử lại" (GC-03) */
+  gapCheckError: boolean;
+  /** Ép hết lượt rà miễn phí, hiện thông báo 429 (GC-03) */
+  gapCheckRateLimited: boolean;
+  /** Ép rà thiếu chậm 4 giây để thấy nút Bỏ qua sau 3 giây (GC-03, đặc tả §4.3) */
+  gapCheckSlow: boolean;
   /** Ép vai trò của tôi trong không gian Nhóm để kiểm bảng quyền (M7-01); null là theo dữ liệu */
   debugRole: WorkspaceRole | null;
   /** Ép lời mời hết hạn khi mở /join/[token] (M7-01) */
@@ -71,6 +77,9 @@ const DEFAULTS: DebugFlags = {
   noListeningMap: false,
   audioMock: false,
   audioFail: false,
+  gapCheckError: false,
+  gapCheckRateLimited: false,
+  gapCheckSlow: false,
   debugRole: null,
   inviteExpired: false,
   seatsFull: false,

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUp, Lock, Sparkles } from "lucide-react";
+import { ArrowUp, ClipboardList, Lock, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -29,11 +29,21 @@ export function AiTab({
   template,
   canPlay,
   onSeek,
+  autoQuestion,
+  onAutoQuestionConsumed,
+  pendingQuestions = [],
 }: {
   detail: SessionDetail;
   template?: Template;
   canPlay: boolean;
   onSeek: (time: number) => void;
+  /** Câu hỏi gửi thẳng khi mở tab (GC-04: checklist "Cần bổ sung sau buổi"
+   * bấm Hỏi AI trên thư mục): hỏi một lần rồi báo cha gỡ. */
+  autoQuestion?: string | null;
+  onAutoQuestionConsumed?: () => void;
+  /** Câu hỏi chuyển từ sheet rà thiếu khi đang ghi (GC-04, đặc tả v1.1
+   * §4.3, §4.5): hiện thành chip, bấm để gửi; đã gửi thì gỡ khỏi kho. */
+  pendingQuestions?: string[];
 }) {
   const t = useTranslations("ai");
   const ts = useTranslations("session");
@@ -56,6 +66,15 @@ export function AiTab({
     // Hỏi xong một câu thì cuộn tới cuối
     listEndRef.current?.scrollIntoView({ block: "nearest", behavior: "instant" });
   }, [messages?.length, streamText]);
+
+  useEffect(() => {
+    if (!autoQuestion) return;
+    // Gỡ câu hỏi ở cha trước để quay lại tab không hỏi lại; lỗi có khối
+    // "Thử lại" giữ câu, không mất
+    onAutoQuestionConsumed?.();
+    void ask(autoQuestion);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoQuestion]);
 
   const plan = quota.data ? (quota.data.chat_questions_per_session === null ? "pro" : "free") : null;
   const total = quota.data?.chat_questions_per_session ?? null;
@@ -222,6 +241,32 @@ export function AiTab({
           <Link href="/upgrade" className="mt-2 inline-flex min-h-11 items-center rounded-control bg-ink px-3 text-small font-semibold text-bg">
             {t("seePro")}
           </Link>
+        </div>
+      ) : null}
+
+      {/* Câu hỏi chuyển từ Gap Check (GC-04): bấm chip là gửi; gỡ khỏi kho
+          ngay khi bấm để tải lại trang không còn chip cũ, lỗi hỏi thì khối
+          "Thử lại" vẫn giữ câu */}
+      {pendingQuestions.length ? (
+        <div className="rounded-block border border-line bg-surface-2 p-3">
+          <p className="text-caption font-medium text-ink-3">{t("pendingFromGapCheck")}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {pendingQuestions.map((q) => (
+              <button
+                key={q}
+                type="button"
+                onClick={() => {
+                  void data.sessions.consumePendingAiQuestion(detail.id, q).catch(() => undefined);
+                  void ask(q);
+                }}
+                disabled={asking}
+                className="inline-flex min-h-9 max-w-full items-center gap-1.5 rounded-pill border border-line bg-surface px-3 text-small text-ink transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2 disabled:opacity-50"
+              >
+                <ClipboardList aria-hidden={true} className="size-3.5 shrink-0 text-ink-3" strokeWidth={2} />
+                <span className="truncate">{q}</span>
+              </button>
+            ))}
+          </div>
         </div>
       ) : null}
 
