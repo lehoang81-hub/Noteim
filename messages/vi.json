@@ -596,7 +596,26 @@
     "hours": "{h} giờ",
     "minutes": "{m} phút",
     "languageLabel": "Ngôn ngữ",
-    "autoDetect": "Có thể có tiếng khác"
+    "autoDetect": "Có thể có tiếng khác",
+    "checkGaps": "Kiểm tra thiếu",
+    "checkGapsTitle": "Rà soát điểm thiếu",
+    "gateTitle": "Kiểm tra thiếu thông tin trước khi lưu?",
+    "gateSave": "Lưu luôn",
+    "gateResume": "Ghi tiếp",
+    "checking": "Đang rà thiếu thông tin",
+    "skipWait": "Bỏ qua",
+    "checkFailed": "Chưa rà được, thử lại",
+    "retryCheck": "Thử lại",
+    "rateLimited": "Đã hết lượt rà miễn phí trong ngày",
+    "readyBanner": "Đủ dữ liệu, có thể chốt buổi",
+    "closeSession": "Chốt buổi",
+    "recheckLater": "Rà lại sau khi nói tiếp",
+    "missingCount": "Còn thiếu {count, plural, other {# thông tin}}",
+    "noTranscript": "Chưa nhận được lời thoại nào để rà. Hãy nói thêm rồi rà lại.",
+    "copyToNote": "Chép vào ghi chú nhanh",
+    "copiedToNote": "Đã chép vào ghi chú",
+    "askAiFolder": "Hỏi AI trên thư mục",
+    "askAiLater": "Sau khi lưu buổi, câu hỏi sẽ nằm trong Hỏi AI của thư mục"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -636,7 +655,10 @@
     "inviteExpired": "Lời mời hết hạn",
     "seatsFull": "Nhóm hết chỗ",
     "audioMock": "Âm thanh giả",
-    "audioFail": "Lỗi tải âm thanh"
+    "audioFail": "Lỗi tải âm thanh",
+    "gapCheckError": "Ép rà thiếu bị lỗi",
+    "gapCheckRateLimited": "Ép hết lượt rà miễn phí",
+    "gapCheckSlow": "Ép rà thiếu chậm 4 giây"
   },
   "library": {
     "greeting": "Chào {honorific} {name}",

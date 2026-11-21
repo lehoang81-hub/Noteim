@@ -30,6 +30,11 @@ export type RecordingConsent = { confirmed: boolean; announced: boolean };
 /** Ngôn ngữ chọn ở bảng "Bắt đầu ghi" (M6-02, issue #44) */
 export type RecordingSpeech = { primary_language: Lang; auto_detect: boolean };
 
+/** Đoạn lời thoại nhận dạng được gắn mốc thời gian của buổi đang ghi (GC-03).
+ * Nguồn nối vào bằng addRecordingTranscript: hiện tại là kịch bản demo B4,
+ * sau này là ASR sống (B0) — giao diện Gap Check không cần đổi. */
+export type RecordingTranscriptSegment = { id: string; timestamp_sec: number; text: string };
+
 export type RecordingSnapshot = {
   status: RecordingStatus;
   /** Buổi ghi bị gián đoạn (tải lại hoặc đóng trang). Chỉ hiện dải báo
@@ -45,12 +50,16 @@ export type RecordingSnapshot = {
   notes: RecordingNote[];
   bookmarks: RecordingBookmark[];
   photos: RecordingPhoto[];
+  /** Lời thoại nhận dạng được trong buổi (GC-03 — Gap Check rà thiếu);
+   * không hiện lên màn hình ghi, chỉ phục vụ rà thiếu và lưu kèm buổi. */
+  transcript: RecordingTranscriptSegment[];
   /** Âm lượng lấy mẫu 4 giá trị mỗi giây, 0 đến 1. */
   levels: number[];
 };
 
 const STORAGE_KEY = "noteim-recording-v1";
 const LEVEL_CAP = 60_000; // khoảng 4 giờ 10 phút ở 4 mẫu/giây
+const TRANSCRIPT_CAP = 800; // đủ cho 8.000 ký tự gần nhất (đặc tả Gap Check §3)
 
 const INITIAL: RecordingSnapshot = {
   status: "idle",
@@ -62,6 +71,7 @@ const INITIAL: RecordingSnapshot = {
   notes: [],
   bookmarks: [],
   photos: [],
+  transcript: [],
   levels: [],
 };
 
@@ -117,6 +127,7 @@ function load(): void {
       notes: Array.isArray(parsed.notes) ? parsed.notes : [],
       bookmarks: Array.isArray(parsed.bookmarks) ? parsed.bookmarks : [],
       photos: Array.isArray(parsed.photos) ? parsed.photos : [],
+      transcript: Array.isArray(parsed.transcript) ? parsed.transcript : [],
       levels: Array.isArray(parsed.levels) ? parsed.levels : [],
     };
   } catch {
@@ -173,6 +184,7 @@ export function startRecording(opts: { templateId: string | null; consent: Recor
     notes: [],
     bookmarks: [],
     photos: [],
+    transcript: [],
     levels: [],
   };
   persist();
@@ -245,6 +257,26 @@ export function addRecordingPhoto(url: string) {
   // Pixel của ảnh nằm ở IndexedDB theo id; localStorage chỉ giữ id
   // (PR #22, lỗi 3). Lưu xong hay lỗi đều không cản buổi ghi.
   void savePhoto(photo.id, url);
+  persist();
+}
+
+/** Nối đoạn lời thoại mới nhận dạng được (GC-03, đặc tả v1.1 §3).
+ * Mỗi đoạn gắn mốc thời gian của đồng hồ ghi lúc gọi; giữ tối đa 800 đoạn
+ * gần nhất để localStorage không phình to. Ghi chú, điểm nóng không đụng tới. */
+export function addRecordingTranscript(segments: string[]) {
+  load();
+  if (state.status === "idle") return;
+  const clean = segments.map((text) => text.trim()).filter(Boolean);
+  if (!clean.length) return;
+  const sec = Math.round(recordedSec());
+  const base = state.transcript.length;
+  const fresh: RecordingTranscriptSegment[] = clean.map((text, i) => ({
+    id: `rt-${nowMs()}-${base + i}`,
+    timestamp_sec: sec,
+    text,
+  }));
+  const next = [...state.transcript, ...fresh];
+  setState({ transcript: next.length > TRANSCRIPT_CAP ? next.slice(-TRANSCRIPT_CAP) : next });
   persist();
 }
 

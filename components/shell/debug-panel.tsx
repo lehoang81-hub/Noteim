@@ -18,8 +18,8 @@ import { resetFlags, setFlags, useDebugFlags, type DebugFlags } from "@/lib/debu
 
 const PROFESSIONS: Profession[] = ["business_owner", "doctor", "lawyer", "realestate_sales", "architect", "notary"];
 const TOGGLES: Array<
-  keyof Pick<DebugFlags, "offline" | "slow" | "failLoad" | "quotaOut" | "emptyLibrary" | "recordSpeed30" | "micDenied" | "micTaken" | "storageFull" | "mailFailOne" | "shareExpired" | "translateFail" | "translateSlow" | "noListeningMap" | "audioMock" | "audioFail" | "inviteExpired" | "seatsFull">
-> = ["offline", "slow", "failLoad", "quotaOut", "emptyLibrary", "recordSpeed30", "micDenied", "micTaken", "storageFull", "mailFailOne", "shareExpired", "translateFail", "translateSlow", "noListeningMap", "audioMock", "audioFail", "inviteExpired", "seatsFull"];
+  keyof Pick<DebugFlags, "offline" | "slow" | "failLoad" | "quotaOut" | "emptyLibrary" | "recordSpeed30" | "micDenied" | "micTaken" | "storageFull" | "mailFailOne" | "shareExpired" | "translateFail" | "translateSlow" | "noListeningMap" | "audioMock" | "audioFail" | "gapCheckError" | "gapCheckRateLimited" | "gapCheckSlow" | "inviteExpired" | "seatsFull">
+> = ["offline", "slow", "failLoad", "quotaOut", "emptyLibrary", "recordSpeed30", "micDenied", "micTaken", "storageFull", "mailFailOne", "shareExpired", "translateFail", "translateSlow", "noListeningMap", "audioMock", "audioFail", "gapCheckError", "gapCheckRateLimited", "gapCheckSlow", "inviteExpired", "seatsFull"];
 
 export function DebugPanel() {
   const t = useTranslations("debug");

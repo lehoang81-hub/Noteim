@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState } from "react";
-import { Camera, ChevronDown, HardDrive, Mic, MicVocal } from "lucide-react";
+import { Camera, ChevronDown, ClipboardCheck, HardDrive, Mic, MicVocal } from "lucide-react";
 import { AnimatePresence, LayoutGroup, m } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,11 @@ const BookmarkButton = dynamic(() => import("@/components/record/bookmark-button
 const RecordFeed = dynamic(() => import("@/components/record/record-feed").then((m) => m.RecordFeed), { ssr: false });
 const HoldToEndButton = dynamic(() => import("@/components/record/hold-to-end-button").then((m) => m.HoldToEndButton), { ssr: false });
 const TemplateSheet = dynamic(() => import("@/components/record/sheets").then((m) => m.TemplateSheet), { ssr: false });
+// Sheet rà thiếu nạp chậm qua một hàm riêng để còn nạp trước (preload) sau khi
+// màn ghi mount — sửa sau dry-run B4: lần mở đầu tiên khi vừa mất mạng không
+// dính ChunkLoadError vì bundle đã nằm sẵn từ lúc còn mạng.
+const importGapCheckSheet = () => import("@/components/record/gap-check");
+const GapCheckSheet = dynamic(() => importGapCheckSheet().then((m) => m.GapCheckSheet), { ssr: false });
 import { ConsentSheet, MicPermissionSheet, type SpeechChoice } from "@/components/record/sheets";
 import { Button } from "@/components/ui/button";
 import { Banner, MicDrawing } from "@/components/ui/feedback";
@@ -28,6 +33,8 @@ import { shortDate } from "@/lib/format";
 import { templateName } from "@/lib/data/localize";
 import { markMicGranted, useMicGateSeed } from "@/lib/record/mic-permission";
 import { fileToDataUrl } from "@/lib/record/photo";
+import { transcriptTail, type GapCheckInput } from "@/lib/record/gap-check-client";
+import { intakeTemplateIdForProfession } from "@/lib/intake-templates";
 import { useStorageFull } from "@/lib/storage-full";
 import {
   addRecordingBookmark,
@@ -44,6 +51,7 @@ import {
   useRecording,
 } from "@/lib/record/recording-store";
 import { keepScreenAwake, letScreenSleep } from "@/lib/record/wake-lock";
+import { pushDemoTranscript, resetDemoTranscript } from "@/lib/record/demo-transcript";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
 import { useOffline } from "@/components/shell/app-shell";
 import type { SemanticTag } from "@/components/ui/chips";
@@ -153,6 +161,34 @@ export function RecordScreen() {
   const lastVoiceRef = useRef(0);
   const photoInputRef = useRef<HTMLInputElement>(null);
   const autoEnded = useRef(false);
+  /* Gap Check (GC-03): sheet kết quả rà thiếu. seq tăng mỗi lần mở để remount
+   * sạch (key), fromGate nhớ nguồn mở để đóng về đúng chỗ (cổng chốt hay nút). */
+  const [gapCheck, setGapCheck] = useState<{ open: boolean; input: GapCheckInput | null; fromGate: boolean; seq: number }>({
+    open: false,
+    input: null,
+    fromGate: false,
+    seq: 0,
+  });
+  /* Khóa chống gọi trùng (sửa sau dry-run B4): sheet đang mở là lượt rà đang
+   * chạy — bấm thêm nút (kể cả 3 lần/giây) không được tạo lượt mới. ref chặn
+   * đồng bộ ngay từ cú bấm đầu, kể cả khi React chưa kịp vẽ lại sheet sau lần
+   * bấm trước; nút disabled bên dưới chỉ là lớp khóa hiển thị thêm. */
+  const gapCheckOpening = useRef(false);
+
+  /* Nạp trước bundle sheet rà thiếu khi màn ghi vừa mount và máy rảnh — sửa
+   * sau dry-run B4: lần mở đầu (kể cả vừa mất mạng) không chờ tải chunk. */
+  useEffect(() => {
+    const preload = () => { void importGapCheckSheet(); };
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(preload);
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(preload, 1200);
+    return () => window.clearTimeout(id);
+  }, []);
+  /** Cổng chốt buổi (GC-03, đặc tả §4.2): giữ nút Dừng xong hiện thanh hỏi
+   * "Kiểm tra thiếu thông tin trước khi lưu?" thay vì kết thúc ngay. */
+  const [closeGate, setCloseGate] = useState(false);
 
   const active = recording.status !== "idle";
   const paused = recording.status === "paused";
@@ -275,6 +311,21 @@ export function RecordScreen() {
     const id = window.setInterval(() => pushRecordingLevel(levelRef.current), 250);
     return () => window.clearInterval(id);
   }, []);
+
+  /* Transcript demo B4 (GC-03, đặc tả §3): mockup chưa có ASR sống, kịch bản
+   * chèn thầm câu nhận dạng theo đồng hồ ghi để nút "Kiểm tra thiếu" có dữ
+   * liệu rà. Không hiện gì lên màn hình; khi ASR sống nối vào bỏ effect này,
+   * gọi addRecordingTranscript từ ASR thay thế (xem lib/record/demo-transcript). */
+  useEffect(() => {
+    if (recording.status === "idle") return;
+    resetDemoTranscript();
+  }, [recording.startedAtClock]);
+  useEffect(() => {
+    if (recording.status !== "recording") return;
+    const id = window.setInterval(() => pushDemoTranscript(recordedSec()), 1000);
+    return () => window.clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recording.status]);
 
   // Âm thanh mẫu (micro bị từ chối): dải giọng chạy bằng âm lượng giả
   useEffect(() => {
@@ -415,6 +466,38 @@ export function RecordScreen() {
   function onBookmark(tag: SemanticTag | null) {
     addRecordingBookmark(tag);
     bookmarkFeedback();
+  }
+
+  /* Mở sheet rà thiếu (GC-03): gửi transcript cắt 8.000 ký tự gần nhất theo
+   * đồng hồ ghi tại lúc mở (đặc tả v1.1 §3). Buổi đang ghi chưa có id thật,
+   * dùng id tạm live-<mốc bắt đầu> để máy chủ gom lịch sử rà của buổi này.
+   * Mẫu ghi âm của app (tpl-...) ánh xạ sang mẫu intake theo nghề; nghề chưa
+   * có mẫu riêng (chủ doanh nghiệp, công chứng viên) dùng mẫu Tổng quát. */
+  function openGapCheck(fromGate: boolean) {
+    if (gapCheck.open || gapCheckOpening.current) return;
+    const templateId = recording.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id;
+    if (!templateId) return;
+    gapCheckOpening.current = true;
+    const profession = templates.data?.find((tp) => tp.id === templateId)?.profession;
+    const intakeId = intakeTemplateIdForProfession(profession);
+    setGapCheck((prev) => ({
+      open: true,
+      fromGate,
+      seq: prev.seq + 1,
+      input: {
+        sessionId: `live-${recording.startedAtClock ?? Date.now()}`,
+        templateId: intakeId,
+        transcript: transcriptTail(recording.transcript),
+        transcriptUntilMs: Math.round(recordedSec() * 1000),
+      },
+    }));
+  }
+
+  /** Đóng sheet rà thiếu; từ cổng chốt thì trở lại cổng, từ nút thì về ghi.
+   * Mở khóa cho lượt rà sau (sửa sau dry-run B4). */
+  function closeGapCheck() {
+    gapCheckOpening.current = false;
+    setGapCheck((prev) => ({ open: false, input: null, fromGate: prev.fromGate, seq: prev.seq + 1 }));
   }
 
   async function onPhotoPicked(file: File | undefined) {
@@ -670,7 +753,41 @@ export function RecordScreen() {
         </div>
 
         <div className={cn("w-full max-w-sm pb-[max(24px,env(safe-area-inset-bottom))] pt-2", !showControls && "invisible")}>
-          {showControls ? <HoldToEndButton label={t("end")} onHold={finishRecording} className="w-full" /> : null}
+          {showControls && closeGate ? (
+            /* Cổng chốt buổi (đặc tả §4.2): một thanh duy nhất thay hàng nút Dừng.
+               Thêm nút "Ghi tiếp" làm lối hủy, tránh kẹt người dùng. */
+            <div className="rounded-block border border-line bg-surface p-4">
+              <p className="text-center text-body-strong font-semibold text-ink">{t("gateTitle")}</p>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <Button variant="primary" icon={ClipboardCheck} onClick={() => openGapCheck(true)} disabled={gapCheck.open}>
+                  {t("checkGaps")}
+                </Button>
+                <Button variant="secondary" onClick={() => void finishRecording()}>
+                  {t("gateSave")}
+                </Button>
+              </div>
+              <Button variant="ghost" block onClick={() => setCloseGate(false)} className="mt-2">
+                {t("gateResume")}
+              </Button>
+            </div>
+          ) : showControls ? (
+            <div className="flex w-full items-center gap-3">
+              <button
+                type="button"
+                onClick={() => openGapCheck(false)}
+                disabled={gapCheck.open}
+                className={cn(
+                  "flex h-11 shrink-0 select-none items-center gap-1.5 rounded-pill border border-line bg-surface px-4",
+                  "text-small font-semibold text-ink transition-[background-color,scale] ease-noteim duration-(--t-quick) active:bg-surface-2",
+                  "disabled:pointer-events-none disabled:opacity-50",
+                )}
+              >
+                <ClipboardCheck aria-hidden={true} className="size-4" strokeWidth={1.75} />
+                {t("checkGaps")}
+              </button>
+              <HoldToEndButton label={t("end")} onHold={() => setCloseGate(true)} className="min-w-0 flex-1" />
+            </div>
+          ) : null}
         </div>
         </main>
       )}
@@ -729,6 +846,27 @@ export function RecordScreen() {
           setTemplateSheet(false);
         }}
       />
+      {/* Gap Check (GC-03, đặc tả v1.1 §4.1, §4.3): sheet kết quả rà thiếu;
+          chép câu hỏi vào ghi chú nhanh nằm ngay trong buổi ghi (góp ý #2).
+          key = seq: mỗi lần mở là một lượt rà mới, trạng thái dựng sạch. */}
+      {gapCheck.open && gapCheck.input ? (
+        <GapCheckSheet
+          key={gapCheck.seq}
+          input={gapCheck.input}
+          transcriptEmpty={recording.transcript.length === 0}
+          onClose={closeGapCheck}
+          onResumeLater={() => {
+            closeGapCheck();
+            setCloseGate(false);
+          }}
+          onCopyToNote={(text) => addRecordingNote(text)}
+          onFinishSession={() => {
+            closeGapCheck();
+            setCloseGate(false);
+            void finishRecording();
+          }}
+        />
+      ) : null}
     </div>
   );
 }
