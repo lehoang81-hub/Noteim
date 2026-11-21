@@ -613,7 +613,7 @@
     "copyToNote": "빠른 메모에 복사",
     "copiedToNote": "메모에 복사했습니다",
     "askAiFolder": "폴더에서 AI에게 질문",
-    "askAiLater": "세션을 저장하면 질문이 폴더의 AI 질문에 추가됩니다"
+    "askAiQueued": "질문이 AI 질문으로 옮겨졌습니다. 세션 저장 후 표시됩니다"
   },
   "debug": {
     "title": "테스트 패널",
@@ -770,6 +770,9 @@
     "taskUndone": "할 일 1개를 다시 열었습니다",
     "undo": "실행 취소",
     "saveError": "저장하지 못했습니다. 네트워크를 확인하고 다시 시도해 주세요.",
+    "gapCheckTitle": "세션 후 보완할 항목",
+    "gapCheckCaption": "최근 검토 결과입니다. 노트에 복사하거나 AI에게 물어보고, 완료되면 체크하세요",
+    "gapCheckDone": "완료로 표시",
     "notFound": "이 세션을 찾을 수 없습니다. 삭제되었을 수 있습니다.",
     "loadError": "이 세션을 불러오지 못했습니다.",
     "retry": "다시 시도",
@@ -937,6 +940,7 @@
     "quotaOut": "이 세션의 질문 10개를 모두 사용했습니다. Pro 플랜으로 업그레이드하면 무제한으로 질문할 수 있습니다.",
     "seePro": "Pro 플랜 보기",
     "scope": "질문 범위",
+    "pendingFromGapCheck": "이 세션 검토에서 온 질문입니다. 눌러서 보내세요",
     "scopeThis": "이 세션",
     "scopeAll": "모든 세션",
     "scopeLocked": "전체 세션 대상 질문은 Pro 플랜에서 제공됩니다.",

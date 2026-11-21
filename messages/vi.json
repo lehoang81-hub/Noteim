@@ -615,7 +615,7 @@
     "copyToNote": "Chép vào ghi chú nhanh",
     "copiedToNote": "Đã chép vào ghi chú",
     "askAiFolder": "Hỏi AI trên thư mục",
-    "askAiLater": "Sau khi lưu buổi, câu hỏi sẽ nằm trong Hỏi AI của thư mục"
+    "askAiQueued": "Đã chuyển câu hỏi sang Hỏi AI, sẽ có mặt sau khi lưu buổi"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -772,6 +772,9 @@
     "taskUndone": "Đã mở lại 1 việc",
     "undo": "Hoàn tác",
     "saveError": "Chưa lưu được. Kiểm tra mạng rồi thử lại.",
+    "gapCheckTitle": "Cần bổ sung sau buổi",
+    "gapCheckCaption": "Từ lần rà thiếu gần nhất. Chép vào ghi chú, hỏi AI, hoặc bấm dấu kiểm khi đã bổ sung xong",
+    "gapCheckDone": "Đã bổ sung xong",
     "notFound": "Không tìm thấy buổi ghi này. Có thể nó đã bị xóa.",
     "loadError": "Chưa tải được buổi ghi này.",
     "retry": "Thử lại",
@@ -939,6 +942,7 @@
     "quotaOut": "Bạn đã hết 10 câu hỏi cho buổi này. Nâng cấp gói Pro để hỏi không giới hạn.",
     "seePro": "Xem gói Pro",
     "scope": "Phạm vi câu hỏi",
+    "pendingFromGapCheck": "Chuyển từ rà thiếu của buổi này, bấm để gửi",
     "scopeThis": "Buổi này",
     "scopeAll": "Mọi buổi ghi",
     "scopeLocked": "Hỏi xuyên mọi buổi ghi có ở gói Pro.",

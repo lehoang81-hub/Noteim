@@ -698,6 +698,9 @@
     "taskUndone": "1 task reopened",
     "undo": "Undo",
     "saveError": "Couldn't save. Check your connection and try again.",
+    "gapCheckTitle": "To add after the session",
+    "gapCheckCaption": "From the latest gap check. Copy to a note, ask AI, or tick when done",
+    "gapCheckDone": "Mark as done",
     "notFound": "Couldn't find this session. It may have been deleted.",
     "loadError": "Couldn't load this session.",
     "retry": "Try again",
@@ -865,6 +868,7 @@
     "quotaOut": "You've used all 10 questions for this session. Upgrade to Pro for unlimited questions.",
     "seePro": "See Pro plan",
     "scope": "Question scope",
+    "pendingFromGapCheck": "From this session's gap check, tap to send",
     "scopeThis": "This session",
     "scopeAll": "All sessions",
     "scopeLocked": "Cross-session questions come with Pro.",
@@ -1020,7 +1024,7 @@
     "copyToNote": "Copy to quick note",
     "copiedToNote": "Copied to notes",
     "askAiFolder": "Ask AI on the folder",
-    "askAiLater": "After saving, the question will be in the folder's Ask AI"
+    "askAiQueued": "Question moved to Ask AI, available after saving the session"
   },
   "processing": {
     "step1": "Recording saved",

@@ -37,6 +37,7 @@ import { transcriptTail, type GapCheckInput } from "@/lib/record/gap-check-clien
 import { intakeTemplateIdForProfession } from "@/lib/intake-templates";
 import { useStorageFull } from "@/lib/storage-full";
 import {
+  addRecordingAskAiQuestion,
   addRecordingBookmark,
   addRecordingNote,
   addRecordingPhoto,
@@ -45,6 +46,7 @@ import {
   pushRecordingLevel,
   recordedSec,
   resumeRecording,
+  setRecordingGapCheck,
   setRecordingTemplate,
   snapshotRecording,
   startRecording,
@@ -444,6 +446,16 @@ export function RecordScreen() {
           photos: snapshot.photos.map(({ id, timestamp_sec, url }) => ({ id, timestamp_sec, url })),
           levels: snapshot.levels,
           consent: snapshot.consent,
+          // Kết quả rà thiếu gần nhất và câu hỏi chờ Hỏi AI đi kèm buổi (GC-04,
+          // đặc tả v1.1 §4.5): chưa rà/bấm Hỏi AI lần nào thì không có
+          gap_check: snapshot.gapCheck
+            ? {
+                template_id: snapshot.gapCheck.templateId,
+                checked_at: new Date(snapshot.gapCheck.checkedAtMs).toISOString(),
+                result: snapshot.gapCheck.result,
+              }
+            : undefined,
+          pending_ai_questions: snapshot.askAiQuestions.length ? snapshot.askAiQuestions : undefined,
         }),
         new Promise((r) => window.setTimeout(r, reduce ? 220 : 900)),
       ]);
@@ -848,6 +860,8 @@ export function RecordScreen() {
       />
       {/* Gap Check (GC-03, đặc tả v1.1 §4.1, §4.3): sheet kết quả rà thiếu;
           chép câu hỏi vào ghi chú nhanh nằm ngay trong buổi ghi (góp ý #2).
+          GC-04: kết quả rà gần nhất đi kèm buổi khi lưu (checklist màn chi tiết);
+          "Hỏi AI trên thư mục" đưa câu hỏi vào hàng chờ của tab Hỏi AI.
           key = seq: mỗi lần mở là một lượt rà mới, trạng thái dựng sạch. */}
       {gapCheck.open && gapCheck.input ? (
         <GapCheckSheet
@@ -860,6 +874,10 @@ export function RecordScreen() {
             setCloseGate(false);
           }}
           onCopyToNote={(text) => addRecordingNote(text)}
+          onAskAi={(text) => addRecordingAskAiQuestion(text)}
+          onResult={(result, templateId) =>
+            setRecordingGapCheck({ templateId, checkedAtMs: Date.now(), result })
+          }
           onFinishSession={() => {
             closeGapCheck();
             setCloseGate(false);
