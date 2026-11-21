@@ -430,7 +430,7 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
   1. **Khóa Supabase không ra trình duyệt** (§1.3): `DATABASE_URL` chỉ chạy máy chủ; cấm `NEXT_PUBLIC_*`, cấm gọi Supabase/Postgres từ client — trình duyệt chỉ nói chuyện với API Route; e2e quét bundle không chứa khóa.
   2. **DB và R2 vùng Singapore** (§1.3, §1.5): Supabase region `ap-southeast-1` (chọn lúc tạo project, không đổi được sau); R2 bucket location APAC–Singapore; lý do người dùng chính ở Việt Nam, độ trễ thấp nhất.
   3. **`lib/gap-check/store.ts` (Map bộ nhớ) sang bảng `session_gap_checks`** làm rõ là việc bắt buộc của PR 04 (§1.4, §4) — serverless nhiều instance không dùng chung Map; giữ 6 cột và hạn 10 dòng/buổi.
-  4. **Nhà cung cấp AI Gap Check** (§5): `z-ai-web-dev-sdk` giữ làm bên chính và **dùng được cho chạy thật** (không cần khóa riêng, đã đo p95 thật ở GC-02); thêm chuỗi dự phòng `GAP_CHECK_PROVIDERS` (zai,gemini,anthropic) — thiếu khóa / 429/5xx / quá 8 giây chuyển bên kế tiếp; Gemini `GEMINI_API_KEY` Flash-Lite, Anthropic `ANTHROPIC_API_KEY` claude-haiku-5-5; hết chuỗi 503; log + `meta.provider` ghi tên bên đã dùng, không ghi transcript. Env secrets thêm các khóa dự phòng.
+  4. **Nhà cung cấp AI Gap Check** (§5): `z-ai-web-dev-sdk` giữ ở đầu chuỗi, chỉ cho dữ liệu giả (Claude sửa 21/11); thêm chuỗi dự phòng `GAP_CHECK_PROVIDERS` (zai,gemini,anthropic) — thiếu khóa / 429/5xx / quá 8 giây chuyển bên kế tiếp; Gemini `GEMINI_API_KEY` Flash-Lite, Anthropic `ANTHROPIC_API_KEY` claude-haiku-5-5; hết chuỗi 503; log + `meta.provider` ghi tên bên đã dùng, không ghi transcript. Env secrets thêm các khóa dự phòng.
 - PR chỉ thêm docs, không đụng code — lint sạch, không cần build/e2e.
 ## 2026-11-21, Claude, GC chuỗi nhà cung cấp GAP_CHECK_PROVIDERS (nhịp 2)
 
