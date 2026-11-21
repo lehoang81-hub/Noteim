@@ -342,6 +342,14 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 - Bộ đo B0 thêm `05-vi-en-pha-le` (Việt pha Anh văn phòng, 16 đoạn, 84 giây): edge-tts bị Microsoft chặn 403 ngày 19/11 nên đọc bằng ElevenLabs `eleven_turbo_v2_5` (Adam, Sarah; kiểm bằng Soniox trước, khớp 100% câu thử). Soniox: WER âm tiết 4,26% (thấp nhất các bộ), ngôn ngữ 16/16, số liệu 10/10, tách người nói 2/2, 0,089 lần thời gian thực. File âm thanh, lời gốc, đáp án và kết quả thô commit; bảng tổng hợp `docs/11` ghép sau khi PR #74 gộp (tránh xung đột).
 - e2e: bộ mới 10 bài đạt (tab Hồ sơ, khóa Free, hỏi AI Pro + dẫn chứng nhảy mốc, biên nhận, SOAP × 2 khổ); bộ cũ chạy hồi quy 141 bài đạt, 0 lỗi. lint + typecheck + build sạch.
 
+## 2026-11-19, Claude, B0-01b đo ASR — Soniox thật, ElevenLabs chờ quyền (PR #74)
+
+- Có khóa Soniox (đã nạp tiền) và ElevenLabs. Chạy thật được **Soniox** trên 3 file ngắn và file dài; **ElevenLabs bị chặn**: gọi file 03 trả HTTP 401 `missing_permissions` — khóa thiếu quyền `speech_to_text` (chủ tài khoản chưa tìm được chỗ cấp quyền ở gói free) → chờ cấp quyền chạy lại, không tốn tiền nào của ElevenLabs. Google/FPT không có khóa.
+- Sửa adapter soniox theo API thật (khung PR #72 viết theo docs cũ, chưa gọi lần nào): mô hình async hiện hành `stt-async-v6` (liệt kê từ `/v1/models`), flow upload qua Files API → tạo việc JSON body → poll tới `completed` → transcript token có `end_ms`; token tự mang dấu cách nên ghép đoạn bằng nối chuỗi trực tiếp; adapter tự xóa file + việc nhận dạng sau khi lấy kết quả (dọn lưu trữ 30 ngày).
+- Số đo Soniox `stt-async-v6` (chấm bằng score.mjs, tự kiểm vẫn 10/10): WER vi 7,55% (01), 4,36% (03, sai số liệu 0/9), 13,79% + CER Hàn 31,91% (02 Việt–Hàn–Anh); tách người nói 100% (3/3 và 4/4), 65,95% ở 03 (máy gộp 2 người ít tiếng); ngôn ngữ đúng 100% mọi file. File dài 62 phút xử lý 48,9 giây = 0,013x realtime (nhanh hơn realtime ~76 lần), trả 460 đoạn.
+- Giá xác thực trả theo dùng (ngày xem 2026-11-19): Soniox công bố ≈0,10 USD/giờ async — hóa đơn thật 4 lần gọi 1,310 giờ = 0,1389 USD (0,106 USD/giờ, khớp); ElevenLabs Scribe v3 = 0,20 USD/giờ API trả theo dùng (elevenlabs.io/pricing/api). Tổng tiền đã gọi: **0,1389 USD** — giới hạn 10 USD không vượt.
+- Đề xuất: chính Soniox (WER tốt, giá rẻ nhất có phân vai, nhanh, giới hạn 300 phút/file, dữ liệu không huấn luyện không lưu); dự phòng ElevenLabs Scribe v3 (phải đo lại khi được cấp quyền trước khi kết luận); Google loại cho luồng chính (chirp_3 không tách người nói tiếng Việt); FPT không phân vai.
+- Kết quả thô commit ngay sau mỗi lần gọi (`test-data/asr-results/soniox/`, PR #74); bảng chỉ số + giá + đề xuất điền trong `docs/11-b0-ket-qua.md` phần A. `test-data/human/` vẫn trống — chờ bản ghi người thật.
 ## 2026-11-20, Claude, Docs: đặc tả chặng C1 — Tài khoản, Database bền vững, Quản lý nhóm (PR #82)
 
 - Bản đặc tả chi tiết `docs/12-auth-db-group-spec.md` là căn cứ cho 12 PR của chặng C1, chốt từ bản đề xuất anh duyệt ngày 20/11/2026: Supabase Postgres + Drizzle (không Auth/RLS của Supabase); Google OAuth mở màn (next-auth v4 nếu tương thích Next 16, vướng thì module Google OAuth + cookie httpOnly tối giản); giữ chế độ ẩn danh 3 buổi/30 phút; di trú dữ liệu ẩn danh append theo id; audit log 12 tháng.
@@ -410,6 +418,12 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 - **Luồng biên nhận giữ bản GC**: bảng đồng ý GC (tự đóng 3 giây; mẫu nhạy cảm thì TẮT tự đóng và bắt buộc nhập "ai đồng ý"; đổi mẫu giữa buổi mở `ConsentReceiptSheet`; receipts chỉ với mẫu nhạy cảm) đã có e2e gc-folder-consent bảo vệ; ô "ai đồng ý" của GY1 trùng chức năng nên bỏ khỏi bảng đồng ý. Phần hiển thị của GY1 giữ lại: chi tiết buổi hiện dòng biên nhận bấm mở bảng xem đủ ai/lúc nào/cách nào/câu thông báo.
 - **Màn thư mục giữ bản GY1** (tab "Hồ sơ" + trang `/f/[id]` + Hỏi AI xuyên buổi) vì GC không có màn chi tiết hồ sơ; gỡ bảng quản lý thư mục của GC (folder-sheet); port 2 tính năng của GC sang luồng GY1: chọn "mẫu kế thừa cho buổi mới" khi tạo hồ sơ và trong chi tiết hồ sơ, cùng tính năng xóa hồ sơ; tab "Buổi ghi" ở màn ghi chọn thư mục và kế thừa mẫu vẫn dùng dữ liệu GC nguyên vẹn.
 - e2e gc-folder-consent chuyển sang mở thư mục qua tab "Hồ sơ" (giữ nguyên khẳng định nghiệp vụ); e2e gy-gop-y giữ nguyên. `pnpm lint` + typecheck + build + e2e gy-*/gc-* xanh.
+## 2026-11-21, Claude, B0-01b dọn kho: kết quả thô nén gzip (PR #74, nhịp 2)
+
+- `test-data/asr-results/soniox/*.raw.json` (4 file, ~5,5 MB JSON dạng lòng vòng) nén thành `.raw.json.gz` mức 9, còn ~0,4 MB tổng — nhẹ kho ~95% mà vẫn giữ nguyên dữ liệu thô của Soniox để tái chấm không phải gọi lại API tốn tiền. File đã chấm `<bộ>.json` (chuẩn hóa) giữ nguyên dạng không nén.
+- `scripts/b0-asr/run.mjs`: từ nay ghi kết quả thô thẳng nén gzip (`node:zlib` `gzipSync` mức 9) — lần chạy sau không tạo lại file raw.json to; `score.mjs` bỏ qua cả `.raw.json` lẫn `.raw.json.gz` khi liệt kê kết quả để chấm (trước chỉ bỏ `.raw.json`).
+- Tài liệu cập nhật: `test-data/README.md` thêm mục "Kết quả ASR" (giải thích 2 dạng file + lệnh `gunzip -k` để mở), `scripts/b0-asr/README.md`, `docs/11-b0-ket-qua.md` đổi tên file raw theo `.gz`.
+- `score.mjs --selftest` vẫn 10/10 đạt. Không đụng app nên không chạy lại e2e màn hình; lint + typecheck + build sạch.
 ## 2026-11-21, Claude, Đặc tả C1 — cập nhật nhịp 2 (PR #82)
 
 - Gộp main (chuỗi GC + GY1 gộp) vào nhánh đặc tả. Bổ sung 4 yêu cầu của anh vào `docs/12-auth-db-group-spec.md`:

@@ -9,7 +9,7 @@ Script và ghi chú chạy cho phần A của `docs/10-b0-thu-rui-ro.md`. Nhãn 
 node scripts/b0-asr/score.mjs --selftest
 
 # gọi một nhà cung cấp trên một file; kết quả thô và đã chuẩn hóa lưu vào
-# test-data/asr-results/<mã>/<tên bộ>.raw.json và .json; đã có kết quả thì không gọi lại
+# test-data/asr-results/<mã>/<tên bộ>.raw.json.gz (nén gzip) và .json; đã có kết quả thì không gọi lại
 # (thêm --force để gọi lại). Thiếu khóa thì thoát mã 2, không gọi API.
 node scripts/b0-asr/run.mjs --provider soniox     --file test-data/audio/01-bds-gap-chi-lan.m4a
 node scripts/b0-asr/run.mjs --provider elevenlabs --file test-data/audio/02-hop-doi-tac-han.m4a
@@ -73,3 +73,15 @@ node scripts/b0-asr/run.mjs --provider fpt --file test-data/audio/04-dai-62-phut
 node scripts/b0-asr/run.mjs --provider <mã> --file test-data/human/<tên file>.m4a
 node scripts/b0-asr/score.mjs --hyp test-data/asr-results/<mã>/<tên file>.json --truth test-data/human/<tên file>.truth.json --md
 ```
+
+## Đã chạy thật (cập nhật ngày 2026-11-19, PR #74)
+
+- **soniox**: gọi được API thật. Adapter đã sửa theo API hiện hành: mô hình async
+  `stt-async-v6` (liệt kê từ `GET /v1/models`), flow là `POST /v1/files` (multipart) →
+  `POST /v1/transcriptions` (JSON: `file_id`, `language_hints`, `enable_speaker_diarization`,
+  `enable_language_identification`) → poll tới `completed` → `GET /v1/transcriptions/{id}/transcript`
+  (token có `text, start_ms, end_ms, speaker, language`, text tự mang dấu cách). Kết quả đo
+  và đề xuất xem `docs/11-b0-ket-qua.md` phần A.
+- **elevenlabs**: khóa chưa có quyền `speech_to_text` — API trả HTTP 401 `missing_permissions`,
+  chưa gọi được lần nào; chờ chủ tài khoản cấp quyền (Console ElevenLabs) rồi chạy lại lệnh ở trên.
+- **google, fpt**: vẫn chưa có khóa.
