@@ -11,7 +11,7 @@
  * cấp credentials cố định trả người dùng demo — e2e đăng nhập/đăng
  * xuất chạy không cần khóa Google và không cần DB.
  */
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { getDb, isDatabaseConfigured } from "@/lib/db";
 import { accounts, users } from "@/lib/db/schema";
@@ -35,7 +35,11 @@ export async function ensureUserAndAccount(
 ): Promise<string | null> {
   // Chế độ giả: không đụng DB, trả id cố định cho e2e.
   // (credentials provider có type "credentials"; id provider là "demo".)
-  if (process.env.AUTH_FAKE === "1" && account.type === "credentials") {
+  if (
+    process.env.AUTH_FAKE === "1" &&
+    process.env.VERCEL_ENV !== "production" &&
+    account.type === "credentials"
+  ) {
     return FAKE_USER_ID;
   }
 
@@ -61,7 +65,8 @@ export async function ensureUserAndAccount(
     .onConflictDoUpdate({
       target: users.email,
       set: {
-        displayName,
+        // Giữ tên người dùng đã tự đặt trong app; chỉ lấy tên Google khi còn trống.
+        displayName: sql`coalesce(${users.displayName}, excluded.display_name)`,
         updatedAt: new Date(),
       },
     })

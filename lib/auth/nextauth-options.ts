@@ -27,7 +27,10 @@ declare module "next-auth" {
 const sessionCookieName = getSessionCookieName();
 
 /** Bật cho e2e: nhà cung cấp credentials cố định, không cần khóa Google. */
-export const isAuthFakeEnabled = () => process.env.AUTH_FAKE === "1";
+// Không bao giờ bật trên bản production của Vercel, kể cả khi lỡ đặt AUTH_FAKE=1
+// (nếu không, ai cũng đăng nhập được bằng người dùng thử).
+export const isAuthFakeEnabled = () =>
+  process.env.AUTH_FAKE === "1" && process.env.VERCEL_ENV !== "production";
 
 export const authOptions: NextAuthOptions = {
   providers: [
