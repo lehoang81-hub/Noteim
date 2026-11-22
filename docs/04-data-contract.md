@@ -587,3 +587,16 @@ Bảng nền đã có: `users`, `accounts`, `auth_sessions`, `verification_token
 Nguồn dữ liệu: chưa đổi — app vẫn chạy mock (`lib/data`). Chế độ remote bật ở PR 03 bằng `NEXT_PUBLIC_DATA_SOURCE=remote` cho người đăng nhập; chế độ ẩn danh luôn dùng dữ liệu trên máy.
 
 Biến môi trường mới (chỉ tên — không commit khóa, xem `.env.example`): `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `AUTH_SECRET`, `NEXTAUTH_URL`, `DATABASE_URL`; cờ kiểm thử `AUTH_FAKE`, `NEXT_PUBLIC_AUTH_FAKE` (chỉ máy e2e).
+
+## Bổ sung C1 (PR 02 — schema toàn bộ §1.4)
+
+Đặc tả nguồn sự thật: `docs/12-auth-db-group-spec.md` §1.4. Mục này chỉ thêm, không đụng nội dung cũ ở trên.
+
+- **Nền DB**: Supabase Postgres (vùng ap-southeast-1) qua connection pooler transaction; driver `postgres` đặt `prepare: false` (`lib/db/index.ts`). Supabase chỉ dùng như một Postgres: không Auth, không RLS — quyền kiểm nằm ở repository phía máy chủ.
+- **Bảng theo §1.4** (`lib/db/schema.ts`, migration `drizzle/`): `users` (bổ sung các công tắc ghi/ngôn ngữ còn thiếu theo kiểu `User`), `accounts`, `auth_sessions`, `verification_tokens` (từ PR 01); thêm `workspaces`, `workspace_members`, `invites`, `folders`, `folder_sessions`, `sessions`, `session_details`, `transcript_segments`, `summary_versions`, `action_items`, `contacts`, `glossary_terms`, `chat_messages`, `share_links`, `session_gap_checks`, `consent_receipts`, `audit_log`, `usage_counters`, `promo_codes`.
+- **Quy tắc id**: id các bảng mà client sinh (session, folder, contact, glossary, action item, thư mục nối…) giữ kiểu **text** để di trú giữ nguyên mọi id (§1.2); id người dùng là uuid do máy chủ sinh (`users.id`).
+- **Phần linh hoạt** (peaks, speaker_spans, translations, words, listening_map, topics, consent, result_json…) để JSONB thay vì dựng bảng con — khớp hình dạng repository hiện tại.
+- `session_gap_checks` có **ràng buộc tối đa 10 dòng/buổi** bằng trigger trong migration (đúng §1.4); `usage_counters` dùng chuỗi rỗng thay NULL cho phần ẩn danh để chỉ mục duy nhất chặn trùng đúng luật.
+- **Chạy thật** theo thứ tự: `pnpm db:check` (kiểm nối, không cần migration) → `pnpm db:migrate` → `pnpm db:seed` (dữ liệu demo cho môi trường thử, có chế độ `--dry`). `DATABASE_URL` chỉ đọc từ biến môi trường — trên máy làm việc hiện chưa có giá trị Supabase nên migration thật **đang chờ**.
+- **`dataNow()`** (§1.3): bản mock giữ `MOCK_NOW` cố định để e2e ổn định; bản remote trả giờ máy chủ, ngày tính theo múi giờ `Asia/Ho_Chi_Minh` (trợ giúp `lib/data/vn-time.ts`).
+- Nguồn dữ liệu app vẫn chưa đổi — chọn nguồn remote là việc của PR 03.
