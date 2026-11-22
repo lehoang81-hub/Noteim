@@ -573,3 +573,17 @@ Khi mockup đã duyệt, việc nối dữ liệu gồm đúng các bước sau,
 5. Thay phần ghi âm giả bằng bản ghi thật theo kết quả bài thử kỹ thuật.
 
 Khác biệt cố ý so với bản đặc tả 1.0: thêm `status`, `consent`, `participant_contact_ids`, `output_language`, tách `action_items` ra bảng riêng, đổi nhãn `breakthrough` thành `idea` và `formula` thành `figure`, thêm bảng `contacts`, `glossary_terms`, `share_links`.
+
+## Bổ sung C1 (PR 01 — nền đăng nhập)
+
+Thư viện đã duyệt và đang dùng ở PR 01 (đặc tả `docs/12-auth-db-group-spec.md` §1.1, §1.3):
+
+- `next-auth` v4 (4.24.15): đăng nhập Google OAuth là cửa chính; phiên JWT trong cookie `noteim.session` (httpOnly, SameSite=Lax, 30 ngày), không cần bảng phiên trong DB. Chỉ lần đăng nhập là ghi DB.
+- `drizzle-orm` + `drizzle-kit`: schema và migration cho Postgres (Supabase). Migration chạy bằng `pnpm db:migrate` khi triển khai.
+- `postgres` (postgres.js): driver nối Postgres qua connection pooler của Supabase (`prepare: false`).
+
+Bảng nền đã có: `users`, `accounts`, `auth_sessions`, `verification_tokens` (`lib/db/schema.ts`, migration `drizzle/`). Schema toàn bộ §1.4 là việc của PR 02.
+
+Nguồn dữ liệu: chưa đổi — app vẫn chạy mock (`lib/data`). Chế độ remote bật ở PR 03 bằng `NEXT_PUBLIC_DATA_SOURCE=remote` cho người đăng nhập; chế độ ẩn danh luôn dùng dữ liệu trên máy.
+
+Biến môi trường mới (chỉ tên — không commit khóa, xem `.env.example`): `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `AUTH_SECRET`, `NEXTAUTH_URL`, `DATABASE_URL`; cờ kiểm thử `AUTH_FAKE`, `NEXT_PUBLIC_AUTH_FAKE` (chỉ máy e2e).
