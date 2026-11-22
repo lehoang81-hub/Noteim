@@ -3,10 +3,11 @@
 import { SessionProvider as NextAuthSessionProvider } from "next-auth/react";
 
 /*
- * Cung cấp phiên cho toàn app (đặc tả C1 §1.1). Bọc ở root layout:
- * màn hình chỉ cần `useNoteimSession()` từ lib/auth/use-session.
- * Không tự hỏi lại khi cửa sổ lấy lại nét để giảm lọc lặp request;
- * sau đăng nhập/đăng xuất next-auth tự làm mới.
+ * Cung cấp phiên cho các màn hình cần nó (đặc tả C1 §1.1). Ở PR 01
+ * chỉ trang đăng nhập bọc provider này: bọc toàn app làm mọi trang
+ * đều hỏi /api/auth/session khi mở, và reload nhanh (hồi quy) bị hủy
+ * giữa chừng thành lỗi console nhiễu. Trang cần phiên bọc riêng,
+ * dùng `useNoteimSession()` từ lib/auth/use-session.
  */
 export function NoteimSessionProvider({
   children,

@@ -7,6 +7,11 @@ import { signIn, signOut, useSession } from "next-auth/react";
  * hook này thay vì `useSession` trực tiếp để sau này đổi cấu hình
  * phiên (thêm vai trò, gói, không gian) chỉ sửa một chỗ.
  *
+ * Màn hình dùng hook phải nằm trong `NoteimSessionProvider`
+ * (components/auth/session-provider.tsx). Ở PR 01 chỉ trang đăng
+ * nhập bọc provider; PR sau cần phiên ở trang khác thì bọc riêng
+ * trang đó.
+ *
  * Triết lý "bấm 2 lần là ghi": chưa đăng nhập vẫn dùng app ẩn danh,
  * dữ liệu trên máy. `isSignedIn` để màn hình bật tính năng cần tài
  * khoản (nhóm, hạn mức, gói trả phí).
