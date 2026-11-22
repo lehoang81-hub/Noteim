@@ -157,6 +157,35 @@ Kết quả cần ghi vào `docs/DECISIONS.md`:
 - Wake Lock có giữ được màn hình không
 - Kết luận: PWA đủ dùng, hay phải bọc thành app (ví dụ Capacitor) cho iPhone
 
+## Lộ trình mở rộng ngành (chốt 22/11/2026)
+
+Một động cơ dùng chung (ghi âm → bản ghi lời → biên bản/tóm tắt tra cứu được) phục vụ nhiều ngành; mỗi ngành chỉ đổi mẫu và tham số, không dựng lại sản phẩm. Thứ tự ba giai đoạn dưới đây là quyết định của Hoang.
+
+### Giai đoạn 1 — 6 nghề đã có mẫu
+
+Bác sĩ, luật sư, công chứng, bất động sản, kiến trúc sư, chủ doanh nghiệp — sáu nghề đã có mẫu trong `fixtures/templates.json`. Mở cửa cho khách thật sau chặng C1; mở rộng chỉ là thêm mẫu nghề mới vào danh sách làm quen.
+
+### Giai đoạn 2 — gói Học tập
+
+Bán cho trung tâm và trường học: bài giảng, họp phụ huynh, sinh hoạt lớp → giáo án, mục lục có mốc thời gian, ghi chú ôn tập, tìm kiếm theo lớp. Điểm bắt buộc: **dữ liệu trẻ em là dữ liệu nhạy cảm — phải có biên nhận đồng ý của cha mẹ**, lưu giữ ngắn hơn mặc định, không gửi định danh ra ngoài khi gọi AI.
+
+### Giai đoạn 3 — bản cài riêng cho tổ chức lớn
+
+Triển khai riêng cho một tổ chức: dữ liệu nằm ở Việt Nam (ASR và model chạy trong nước), hợp đồng theo tổ chức, cấu hình tuân thủ riêng.
+
+### Khối điều tra và tòa án — sản phẩm riêng, chưa làm
+
+Không nằm trong lộ trình Noteim hiện tại: yêu cầu tố tụng, mức mật dữ liệu và hình thức triển khai on-prem khác bản SaaS. Khi có quyết định làm sẽ là một sản phẩm/đường dây riêng, không gắn vào các giai đoạn trên.
+
+### Backlog mở rộng
+
+- **Nút xuất "Biên bản nguyên văn" có mốc giây** — tách khỏi tóm tắt: mỗi dòng của biên bản gắn mốc thời gian (giây) trong file ghi âm để bấm vào là nghe đúng chỗ đó, đối chiếu nhanh khi có tranh chấp.
+- **Cấu hình thời gian lưu và mẫu đồng ý theo tổ chức** — làm ở chặng C1-B: mỗi tổ chức đặt riêng thời hạn giữ dữ liệu và nội dung biên nhận đồng ý.
+
+### Ranh giới — không làm
+
+Không làm tính năng chấm độ tin cậy hay phát hiện nói dối. Sản phẩm chỉ làm biên bản và tóm tắt trung thực theo đúng những gì ghi được.
+
 ## Sau mockup
 
 Sau M7. Thứ tự đề xuất, sẽ viết đặc tả riêng khi tới lúc: đăng nhập và database, ghi âm và tải lên thật, đường ống AI (model đặt trong cấu hình, chia đoạn cho buổi dài), email, thanh toán, rồi mới tới podcast tóm tắt, sketchnote, tính năng cho sinh viên.
