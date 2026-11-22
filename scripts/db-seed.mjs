@@ -19,6 +19,7 @@
  */
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
+import { createHash } from "node:crypto";
 import postgres from "postgres";
 
 const ROOT = join(import.meta.dirname, "..");
@@ -75,7 +76,26 @@ const sessionFixtures = sessionFiles.map((f) => ({
 
 // Ánh xạ id người dùng fixture (chuỗi như "u-...") → uuid máy sinh (§1.4: users.id là uuid)
 const userIdMap = new Map(); // fixture user id -> uuid
-const userUuid = crypto.randomUUID();
+// Chạy lại phải ra cùng một id, nếu không các bảng con trỏ tới user không tồn tại
+// (lỗi khóa ngoại workspace_members_user_id ở lần chạy thứ hai). Có sẵn user cùng
+// email trong DB thì dùng lại id đó; chưa có thì sinh uuid cố định từ email.
+function stableUuid(seed) {
+  const h = createHash("sha1").update(`noteim-seed:${seed}`).digest("hex");
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-5${h.slice(13, 16)}-${((parseInt(h[16], 16) & 3) | 8).toString(16)}${h.slice(17, 20)}-${h.slice(20, 32)}`;
+}
+let existingUserId = null;
+if (!dryRun && url) {
+  const probe = postgres(url, { prepare: false, max: 1, connect_timeout: 15 });
+  try {
+    const [row] = await probe`select id from "users" where email = ${user.email.toLowerCase()} limit 1`;
+    existingUserId = row?.id ?? null;
+  } catch {
+    existingUserId = null; // bảng chưa có: để bước ghi báo lỗi rõ ràng
+  } finally {
+    await probe.end({ timeout: 5 });
+  }
+}
+const userUuid = existingUserId ?? stableUuid(user.email.toLowerCase());
 userIdMap.set(user.id, userUuid);
 
 // Ánh xạ id thành viên khác trong members (nếu trùng user fixture) → null khi không biết
@@ -86,7 +106,7 @@ for (const m of members) {
 const usersRows = [
   {
     id: userUuid,
-    email: user.email,
+    email: user.email.toLowerCase(),
     display_name: user.display_name ?? null,
     honorific: user.honorific ?? null,
     profession: user.profession ?? null,
@@ -370,6 +390,11 @@ try {
     return n;
   });
   const sum = inserted.reduce((a, b) => a + b, 0);
+  PLAN.forEach(([table, rows], i) => {
+    if (inserted[i] !== rows.length || process.env.SEED_VERBOSE) {
+      console.log(`  ${table}: ghi ${inserted[i]}/${rows.length} (bỏ qua ${rows.length - inserted[i]})`);
+    }
+  });
   console.log(`Đã ghi ${sum}/${total} dòng (trùng id bị bỏ qua: ${total - sum}).`);
 } catch (error) {
   exitWith(3, `Ghi seed thất bại: ${error instanceof Error ? error.message : String(error)}`);
