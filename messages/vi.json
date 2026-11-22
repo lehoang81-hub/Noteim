@@ -1710,5 +1710,19 @@
     "idbBanner": "Không lưu được vào máy: {msg}",
     "durSec": "{s} giây",
     "durMinSec": "{m} phút {s} giây"
+  },
+  "login": {
+    "title": "Đăng nhập để đồng bộ dữ liệu",
+    "subtitle": "Buổi ghi, thư mục và nhóm của bạn được lưu an toàn, theo lại trên mọi máy.",
+    "googleButton": "Tiếp tục bằng Google",
+    "demoButton": "Đăng nhập thử (dành cho kiểm thử)",
+    "anonymousContinue": "Dùng không đăng nhập",
+    "anonymousNote": "Chưa đăng nhập vẫn ghi được: dữ liệu nằm trên máy, giới hạn 3 buổi và 30 phút tổng ghi.",
+    "checking": "Đang kiểm tra phiên đăng nhập",
+    "errorGeneric": "Đăng nhập chưa thành công. Vui lòng thử lại.",
+    "errorConfig": "Đăng nhập đang được cấu hình. Vui lòng thử lại sau ít phút.",
+    "signedInAs": "Bạn đang đăng nhập bằng",
+    "continue": "Vào thư viện",
+    "signOut": "Đăng xuất"
   }
 }
