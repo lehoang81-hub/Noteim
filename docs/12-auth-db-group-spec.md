@@ -129,7 +129,12 @@ Biên:
 - **Vùng Singapore**: tạo project Supabase ở **region `ap-southeast-1` (Singapore)** — người dùng chính ở Việt Nam nên đây là vùng có độ trễ thấp nhất trong các vùng Supabase; chọn ngay lúc tạo project, không đổi được sau. Mọi môi trường (dev, preview, production) trỏ cùng vùng.
 - **Khóa Supabase không bao giờ ra trình duyệt**: `DATABASE_URL` (và mọi khóa Postgres) chỉ tồn tại ở máy chủ — API Route / middleware Node runtime của Next.js. Cấm đặt khóa vào biến `NEXT_PUBLIC_*`, cấm import trực tiếp thư viện Postgres/Drizzle trong component hoặc client bundle, cấm gọi thẳng Supabase từ trình duyệt (không dùng `@supabase/supabase-js` ở client). Trình duyệt chỉ nói chuyện với API Route nội bộ của app; API Route dùng khóa ở máy chủ và tự kiểm quyền trước khi truy DB. Bài e2e chốt: nội dung JS chạy trên trình duyệt không chứa chuỗi khóa (quét bundle khi build).
 - **Drizzle ORM + drizzle-kit** sinh migration; driver `postgres` (postgres.js) qua connection pooler của Supabase (chuẩn cho serverless Vercel).
-- Migration chạy bằng `drizzle-kit migrate` trong bước triển khai; script seed dữ liệu demo từ fixture giữ cho môi trường thử.
+- Migration chạy bằng `pnpm db:migrate` (script riêng `scripts/db-migrate.mjs`, KHÔNG dùng `drizzle-kit migrate`):
+  đọc `drizzle/meta/_journal.json`, chạy từng file SQL theo thứ tự trong 1 giao dịch, ghi hash vào bảng sổ
+  `noteim.__drizzle_migrations` (tự tạo bảng sổ, không tạo schema). Schema `noteim` do DBA tạo sẵn — role
+  `noteim_app` không có quyền CREATE trên database (project Supabase dùng chung với app khác), nên migration
+  không được phát sinh `CREATE SCHEMA` (`pnpm db:generate` tự gỡ qua `scripts/db-generate-clean.mjs`).
+- Script seed dữ liệu demo từ fixture giữ cho môi trường thử.
 - `dataNow()` ở bản remote trả giờ máy chủ theo múi giờ `Asia/Ho_Chi_Minh`; bản mock giữ `MOCK_NOW` cố định để e2e ổn định (điểm này chỉ đụng `lib/data/index.ts`, không đụng màn hình).
 
 ### 1.4 Schema cơ sở dữ liệu
@@ -412,7 +417,12 @@ Biên:
 
 - **Supabase Postgres**, dùng đúng như một Postgres: không Auth, không RLS của Supabase. Auth nằm ở lớp NextAuth/module tự dựng; quyền kiểm ở lớp repository phía máy chủ.
 - **Drizzle ORM + drizzle-kit** sinh migration; driver `postgres` (postgres.js) qua connection pooler của Supabase (chuẩn cho serverless Vercel).
-- Migration chạy bằng `drizzle-kit migrate` trong bước triển khai; script seed dữ liệu demo từ fixture giữ cho môi trường thử.
+- Migration chạy bằng `pnpm db:migrate` (script riêng `scripts/db-migrate.mjs`, KHÔNG dùng `drizzle-kit migrate`):
+  đọc `drizzle/meta/_journal.json`, chạy từng file SQL theo thứ tự trong 1 giao dịch, ghi hash vào bảng sổ
+  `noteim.__drizzle_migrations` (tự tạo bảng sổ, không tạo schema). Schema `noteim` do DBA tạo sẵn — role
+  `noteim_app` không có quyền CREATE trên database (project Supabase dùng chung với app khác), nên migration
+  không được phát sinh `CREATE SCHEMA` (`pnpm db:generate` tự gỡ qua `scripts/db-generate-clean.mjs`).
+- Script seed dữ liệu demo từ fixture giữ cho môi trường thử.
 - `dataNow()` ở bản remote trả giờ máy chủ theo múi giờ `Asia/Ho_Chi_Minh`; bản mock giữ `MOCK_NOW` cố định để e2e ổn định (điểm này chỉ đụng `lib/data/index.ts`, không đụng màn hình).
 
 ### 1.4 Schema cơ sở dữ liệu

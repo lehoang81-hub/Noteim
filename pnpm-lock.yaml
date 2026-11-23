@@ -180,7 +180,7 @@ importers:
         version: 1.2.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       drizzle-orm:
         specifier: ^0.45.4
-        version: 0.45.4(@opentelemetry/api@1.10.0)(@types/pg@8.6.1)(postgres@4.1.1)
+        version: 0.45.4(@electric-sql/pglite@0.5.17)(@opentelemetry/api@1.10.0)(@types/pg@8.6.1)(postgres@4.1.1)
       lucide-react:
         specifier: ^1.72.0
         version: 1.72.0(@types/react@19.3.0)(react@19.3.0)
@@ -218,6 +218,9 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
+      '@electric-sql/pglite':
+        specifier: ^0.5.17
+        version: 0.5.17
       '@playwright/test':
         specifier: 1.57.0
         version: 1.57.0
@@ -355,6 +358,9 @@ packages:
 
   '@drizzle-team/brocli@0.10.2':
     resolution: {integrity: sha512-z33Il7l5dKjUgGULTqBsQBQwckHh5AbIuxhdsIxDDiZAzBOrZO6q9ogcWC65kU382AfynTfgNumVcNIjuIua6w==}
+
+  '@electric-sql/pglite@0.5.17':
+    resolution: {integrity: sha512-8SvKjiUjaU+0O0dbxjOfN+jXz14TEqDWbwDkYOW1aQ11y/ph2JvFVI27ABBo5nfw+ZfSqy4hKCNlbnbB1TDE+g==}
 
   '@eloqnt/config@0.1.1':
     resolution: {integrity: sha512-YRDigSaiJEzKDfzTth5kG+L/PKfB3mo8h7yNzpXExPfvQmcD05WoZT57PdhJE0jI+Vva6eb0OCU8hnHHgdME3g==}
@@ -4836,6 +4842,8 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
+  '@electric-sql/pglite@0.5.17': {}
+
   '@eloqnt/config@0.1.1': {}
 
   '@eloqnt/format-json@0.1.0':
@@ -7066,8 +7074,9 @@ snapshots:
       esbuild: 0.25.12
       tsx: 4.23.15
 
-  drizzle-orm@0.45.4(@opentelemetry/api@1.10.0)(@types/pg@8.6.1)(postgres@4.1.1):
+  drizzle-orm@0.45.4(@electric-sql/pglite@0.5.17)(@opentelemetry/api@1.10.0)(@types/pg@8.6.1)(postgres@4.1.1):
     optionalDependencies:
+      '@electric-sql/pglite': 0.5.17
       '@opentelemetry/api': 1.10.0
       '@types/pg': 8.6.1
       postgres: 4.1.1

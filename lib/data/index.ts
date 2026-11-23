@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { mockSource, MOCK_NOW } from "./mock";
+import { serverNow } from "./vn-time";
 import { subscribeFlags } from "@/lib/debug/flags";
 import { resetDb, subscribeDb } from "./mock/store";
 import type { DataSource } from "./repository";
@@ -12,12 +13,24 @@ import { DataError } from "./errors";
  * Giao diện import { data, useData, ... } từ "@/lib/data", không import lib/data/mock
  * hay fixtures (luật ESLint chặn). Khi có database: thêm lib/data/supabase,
  * chọn theo NEXT_PUBLIC_DATA_SOURCE ở đây.
+ *
+ * PR 02: chỉ bật sẵn nguồn chọn cho dataNow() — nguồn đọc/ghi remote là việc
+ * của PR 03; DATA_SOURCE khác "mock" thì dataNow() trả giờ máy chủ (§1.3).
  */
+
+export const DATA_SOURCE: "mock" | "remote" =
+  process.env.NEXT_PUBLIC_DATA_SOURCE === "remote" ? "remote" : "mock";
 
 export const data: DataSource = mockSource;
 
-/** "Bây giờ" theo nguồn dữ liệu. Bản giả cố định ngày để khớp dữ liệu mẫu. */
+/**
+ * "Bây giờ" theo nguồn dữ liệu.
+ * - mock: cố định ngày để khớp dữ liệu mẫu và e2e (MOCK_NOW).
+ * - remote: giờ máy chủ; ngày cắt theo múi giờ Asia/Ho_Chi_Minh qua
+ *   vnDayKey() (lib/data/vn-time.ts) — đúng §1.3.
+ */
 export function dataNow(): Date {
+  if (DATA_SOURCE === "remote") return serverNow();
   return MOCK_NOW;
 }
 
