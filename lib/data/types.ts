@@ -188,6 +188,10 @@ export const Session = z.object({
   size_bytes: z.number(),
   /** File âm thanh thật của buổi (M9-01); thiếu/null là chưa có — trình phát dùng đồng hồ giả như cũ */
   audio_url: z.string().nullable().optional().catch(undefined),
+  /** Buổi ghi mẫu theo nghề (M4-04) — huy hiệu "Mẫu" nơi liệt kê, không lẫn với buổi thật */
+  is_sample: z.boolean().optional().catch(undefined),
+  /** Buổi tạo từ màn ghi âm hiện tại: chưa thu tiếng thật, không lưu âm thanh (chờ PR 04) */
+  trial_recording: z.boolean().optional().catch(undefined),
   created_at: z.string(),
   audio_expires_at: z.string().nullable(),
   consent: z.object({
@@ -356,8 +360,6 @@ export const SessionDetail = Session.extend({
   peaks: z.array(z.number()),
   speaker_spans: z.array(SpeakerSpanData),
   send_history: z.array(z.object({ sent_at: z.string(), recipient_count: z.number() })),
-  /** Buổi ghi mẫu theo nghề (M4-04), không hiện trong thư viện chính */
-  is_sample: z.boolean().optional().catch(undefined),
   /** Kết quả rà thiếu gần nhất đi kèm buổi (GC-04); fixture cũ không có */
   gap_check: SavedGapCheck.nullish().catch(undefined),
   /** Các ô checklist đã tick xong (GC-04); tải lại trang vẫn ẩn */

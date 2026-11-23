@@ -1,6 +1,6 @@
 "use client";
 
-import { BookA, Building2, ContactRound, Gem, HardDriveDownload, Languages, LayoutTemplate, Mic, Palette, ShieldCheck, Users } from "lucide-react";
+import { BookA, Building2, ContactRound, Gem, HardDriveDownload, Languages, LayoutTemplate, Mic, Palette, ShieldCheck, UserRound, Users } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -16,6 +16,7 @@ import { PlanSection } from "./plan-section";
 import { ReportLanguageSection } from "./report-language-section";
 import { TeamSection } from "./team-section";
 import { useTeamWorkspace } from "@/components/team/use-team";
+import { AccountEntry } from "@/components/auth/account-entry";
 import { cn } from "@/lib/cn";
 
 /*
@@ -25,6 +26,7 @@ import { cn } from "@/lib/cn";
  */
 
 export const SECTION_IDS = [
+  "tai-khoan",
   "ho-so",
   "mau-tom-tat",
   "tu-dien",
@@ -44,6 +46,7 @@ export type SectionId = (typeof SECTION_IDS)[number];
 const TEAM_ONLY_SECTIONS: SectionId[] = ["nhom"];
 
 export const SECTION_ICONS: Record<SectionId, typeof Users> = {
+  "tai-khoan": UserRound,
   "ho-so": Users,
   "mau-tom-tat": LayoutTemplate,
   "tu-dien": BookA,
@@ -63,6 +66,9 @@ function isSection(v: string | undefined): v is SectionId {
 
 function SectionBody({ id }: { id: SectionId }) {
   switch (id) {
+    case "tai-khoan":
+      // Lối vào đăng nhập/đăng xuất (sau PR #87): bọc phiên riêng trong AccountEntry
+      return <AccountEntry variant="settings" />;
     case "ho-so":
       return <ProfileSection />;
     case "mau-tom-tat":

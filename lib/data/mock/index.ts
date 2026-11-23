@@ -749,6 +749,10 @@ export const mockSource: DataSource = {
           size_bytes: draft.duration_sec * 3000,
           created_at: now,
           audio_expires_at: null,
+          // Màn ghi âm hiện tại chưa thu tiếng thật (chờ PR 04): buổi tạo ra
+          // đánh dấu để nơi liệt kê/chi tiết hiện nhãn "Bản ghi thử: chưa lưu
+          // âm thanh", không nhầm với buổi có file âm thanh thật.
+          trial_recording: true,
           consent: draft.consent
             ? { confirmed: draft.consent.confirmed, announced: draft.consent.announced, receipts: draft.consent.receipts }
             : { confirmed: true, announced: false },

@@ -35,6 +35,7 @@ export function FolderDetailScreen() {
   const router = useRouter();
   const t = useTranslations("folders");
   const tl = useTranslations("library");
+  const ts = useTranslations("session");
   const locale = useLocale();
   const folder = useData(() => data.folders.get(id), [id]);
   const sessions = useData(() => data.sessions.list(), []);
@@ -192,6 +193,16 @@ export function FolderDetailScreen() {
                     title={s.title || tl("untitled")}
                     duration={duration}
                     template={tplName(s.template_id)}
+                    badge={s.is_sample ? ts("sampleBadge") : undefined}
+                    noAudio={
+                      s.status === "ready"
+                        ? s.trial_recording
+                          ? ts("trialRecording")
+                          : !s.audio_url
+                            ? ts("noAudio")
+                            : undefined
+                        : undefined
+                    }
                     peaks={s.peaks_thumb}
                     speakers={s.speaker_colors_thumb}
                     status={s.status === "ready" ? "ready" : s.status === "failed" ? "failed" : s.status === "unsynced" ? "unsynced" : "processing"}

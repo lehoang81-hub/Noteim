@@ -628,7 +628,8 @@
     "receiptSwitchHint": "Mẫu “{template}” cho nghề nhạy cảm, cần biên nhận đồng ý trước khi dùng.",
     "receiptMidConfirm": "Đồng ý và dùng mẫu này",
     "receiptCancel": "Bỏ",
-    "announceSentence": "Buổi làm việc này được ghi âm để lập biên bản"
+    "announceSentence": "Buổi làm việc này được ghi âm để lập biên bản",
+    "trialNote": "Bản ghi thử: chưa lưu âm thanh"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
@@ -907,7 +908,10 @@
     "receiptHow": "Cách nào",
     "receiptAnnounced": "Thông báo đã phát trong buổi",
     "receiptNoAnnounce": "Không phát thông báo trong buổi",
-    "receiptFootnote": "Biên nhận do ứng dụng ghi lại lúc bắt đầu ghi, lưu cùng dữ liệu buổi ghi."
+    "receiptFootnote": "Biên nhận do ứng dụng ghi lại lúc bắt đầu ghi, lưu cùng dữ liệu buổi ghi.",
+    "sampleBadge": "Mẫu",
+    "noAudio": "Chưa có âm thanh",
+    "trialRecording": "Bản ghi thử: chưa lưu âm thanh"
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",
@@ -1273,6 +1277,7 @@
     "saveError": "Chưa lưu được. Thử lại.",
     "savedProfile": "Đã lưu",
     "sections": {
+      "tai-khoan": "Tài khoản",
       "ho-so": "Hồ sơ",
       "mau-tom-tat": "Mẫu tóm tắt",
       "tu-dien": "Từ điển tên riêng",
@@ -1723,6 +1728,9 @@
     "errorConfig": "Đăng nhập đang được cấu hình. Vui lòng thử lại sau ít phút.",
     "signedInAs": "Bạn đang đăng nhập bằng",
     "continue": "Vào thư viện",
-    "signOut": "Đăng xuất"
+    "signOut": "Đăng xuất",
+    "entryInvite": "Đăng nhập để lưu buổi ghi và đồng bộ theo lại mọi máy.",
+    "entryGo": "Đăng nhập",
+    "entrySignedIn": "Đang dùng tài khoản {name}"
   }
 }

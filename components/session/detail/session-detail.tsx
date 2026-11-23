@@ -235,7 +235,12 @@ function Loaded({
   const [tourDone, setTourDone] = useState(false);
   const touched = useRef(false);
 
-  const canPlay = detail.storage_status === "full" && detail.status === "ready";
+  // Buổi không có file âm thanh (audio_url thiếu/null — sau PR #87): ẩn trình
+  // phát và mọi nút nghe/tua (canPlay), hiện dòng "Chưa có âm thanh". Cờ
+  // "Âm thanh giả" chỉ đổi loại trình phát của buổi CÓ file, không coi là thiếu.
+  const hasAudio = !!detail.audio_url;
+  const isTrialRecording = detail.trial_recording === true;
+  const canPlay = detail.storage_status === "full" && detail.status === "ready" && hasAudio;
   function seek(time: number) {
     touched.current = true;
     player.seek(time);
@@ -440,6 +445,20 @@ function Loaded({
           {t("meta", { date: shortDate(detail.created_at, locale), duration: durationLabel, template: templateName })}
           {lastSent ? `, ${t("sentAt", { date: shortDate(lastSent.sent_at, locale) })}` : ""}
         </p>
+        {/* Huy hiệu "Mẫu" và dòng thiếu âm thanh (sau PR #87, hết nhầm buổi mẫu/
+            buổi thử với buổi thật): đặt ngay dưới dòng meta của buổi. */}
+        {detail.is_sample ? (
+          <p className="mt-2">
+            <span className="inline-flex items-center rounded-pill border border-line bg-surface px-2.5 py-0.5 text-caption font-medium text-ink-2">
+              {t("sampleBadge")}
+            </span>
+          </p>
+        ) : null}
+        {detail.status === "ready" && !hasAudio ? (
+          <p className="mt-2 text-small text-ink-3" data-testid="no-audio-note">
+            {isTrialRecording ? t("trialRecording") : t("noAudio")}
+          </p>
+        ) : null}
         {folderName ? (
           <p className="mt-1 flex items-center gap-1.5 text-small text-ink-2">
             <FolderOpen aria-hidden={true} className="size-4 shrink-0" strokeWidth={1.75} />
