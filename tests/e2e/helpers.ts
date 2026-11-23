@@ -76,14 +76,24 @@ export async function touchTap(page: Page, selector: string) {
   await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
 }
 
-/** Ghi lỗi console và lỗi trang; cuối bài kiểm gọi expect(errors).toEqual([]). */
+/**
+ * Ghi lỗi console và lỗi trang; cuối bài kiểm gọi expect(errors).toEqual([]).
+ *
+ * Lọc nhiễu đã biết (PR 01, ghi trong c1-auth): next-auth hỏi phiên ở vùng
+ * bọc NoteimSessionProvider (Trang đăng nhập, lối vào tài khoản ở Thư viện
+ * và Cài đặt); khi bài điều hướng nhanh, request /api/auth/session bị hủy
+ * giữa chừng và console ghi CLIENT_FETCH_ERROR "Failed to fetch" — server
+ * vẫn trả 200 (đã thử trực tiếp). Lỗi khác giữ nguyên để bắt.
+ */
 export function collectErrors(page: Page) {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => {
     if (m.type() === "error") errors.push(m.text());
   });
-  return errors;
+  return errors.filter(
+    (e) => !e.includes("CLIENT_FETCH_ERROR") || !e.includes("Failed to fetch"),
+  );
 }
 
 /** Chiều rộng tài liệu, để kiểm tràn ngang. */

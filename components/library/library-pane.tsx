@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { TopBar } from "@/components/shell/app-shell";
 import { WorkspaceSwitcher } from "@/components/shell/workspace-switcher";
+import { AccountEntry } from "@/components/auth/account-entry";
 import { SessionRow, type SessionRowStatus } from "@/components/session/session-row";
 import { FolderList } from "@/components/library/folder-list";
 import { SwipeRow } from "@/components/library/swipe-row";
@@ -372,6 +373,15 @@ export function LibraryPane({ className }: { className?: string }) {
       </div>
       ) : null}
 
+      {/* Lối vào tài khoản ở đầu trang chủ (sau PR #87): ẩn danh hiện lời mời
+          đăng nhập, đã đăng nhập hiện tên + Đăng xuất. Giữ nguyên luồng ẩn danh —
+          chỉ thêm lời mời, không chặn thao tác nào. */}
+      {view === "sessions" && !selecting ? (
+        <div className="px-page pb-2">
+          <AccountEntry variant="home" />
+        </div>
+      ) : null}
+
       {/* Chỉ hiện khi buổi ghi bị gián đoạn (tải lại/đóng trang), không hiện
           khi buổi ghi đang chạy trong tab hiện tại — khi đó chỉ có thanh sen
           "Đang ghi" (PR #22, lỗi 2). Không nhận className của cột thư viện. */}
@@ -536,6 +546,19 @@ export function LibraryPane({ className }: { className?: string }) {
                     }
                     duration={durationLabel(s.duration_sec)}
                     template={tplName[s.template_id] ?? ""}
+                    badge={s.is_sample ? ts("sampleBadge") : undefined}
+                    /* Buổi ready không có file âm thanh: hiện dòng giải thích
+                       thay vì để người dùng vào rồi mới biết (sau PR #87).
+                       Buổi thử từ màn ghi âm hiện nhãn riêng. */
+                    noAudio={
+                      s.status === "ready"
+                        ? s.trial_recording
+                          ? ts("trialRecording")
+                          : !s.audio_url
+                            ? ts("noAudio")
+                            : undefined
+                        : undefined
+                    }
                     peaks={s.peaks_thumb}
                     speakers={s.speaker_colors_thumb}
                     status={essence ? "essence" : status}

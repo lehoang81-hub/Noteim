@@ -649,6 +649,14 @@ export function RecordScreen() {
           {showControls ? <RecordClock paused={paused} /> : null}
         </div>
 
+        {/* Màn ghi âm hiện tại chưa thu tiếng thật (chờ PR 04): nói rõ cho
+            người dùng biết buổi sẽ không có âm thanh để nghe lại (sau PR #87). */}
+        {showControls ? (
+          <p className="-mt-3 text-center text-caption text-ink-3" data-testid="trial-recording-note">
+            {t("trialNote")}
+          </p>
+        ) : null}
+
         {showAnnounce && showControls ? (
           <p role="status" className="mt-2 text-center text-small font-medium text-ink-2">
             {t("announcing")}

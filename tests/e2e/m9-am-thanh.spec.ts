@@ -50,15 +50,15 @@ test("Phát 5 giây: thẻ audio có currentTime tăng, chữ đang đọc đổ
   expect(errors).toEqual([]);
 });
 
-test("Buổi không có âm thanh (họp điều hành s-hop-t11) vẫn phát giả: không có thẻ audio, kim chạy", async ({ page }) => {
+test("Buổi không có âm thanh (họp điều hành s-hop-t11): hiện \"Chưa có âm thanh\", không có trình phát (sau PR #87)", async ({ page }) => {
   const errors = collectErrors(page);
   await onboard(page);
   await page.goto("/s/s-hop-t11");
-  await expect(page.locator(PLAYER)).toBeVisible();
-  await expect(page.locator("audio")).toHaveCount(0);
-  await page.getByRole("button", { name: "Phát", exact: true }).click();
-  const slider = page.getByRole("slider", { name: "Vị trí phát" });
-  await expect.poll(async () => Number(await slider.getAttribute("aria-valuenow")), { timeout: 8000 }).toBeGreaterThan(2);
+  // Yêu cầu mới sau PR #87: buổi không có audio_url thì ẩn nút nghe, hiện
+  // dòng giải thích — không còn phát giả khiến người dùng nhầm có âm thanh.
+  // Lấy đúng dòng ở trang chi tiết (các hàng trong Thư viện cũng có dòng này).
+  await expect(page.getByTestId("no-audio-note")).toBeVisible();
+  await expect(page.locator(PLAYER)).toHaveCount(0);
   await expect(page.locator("audio")).toHaveCount(0);
   expect(errors).toEqual([]);
 });

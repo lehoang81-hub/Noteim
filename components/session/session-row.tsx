@@ -34,6 +34,10 @@ export interface SessionRowProps {
   statusText?: string;
   /** Nhãn quan trọng nhất khi "ready" */
   tag?: { tag: SemanticTag; label: string };
+  /** Huy hiệu tròn cạnh tên mẫu, ví dụ "Mẫu" cho buổi ghi mẫu (sau PR #87) */
+  badge?: string;
+  /** Dòng thiếu âm thanh khi "ready": "Chưa có âm thanh" hoặc "Bản ghi thử: chưa lưu âm thanh" */
+  noAudio?: string;
   /** Nút hành động khi lỗi, ví dụ "Thử lại" */
   action?: React.ReactNode;
   /** Đang mở ở cột bên phải (máy tính) */
@@ -64,6 +68,8 @@ export function SessionRow({
   status = "ready",
   statusText,
   tag,
+  badge,
+  noAudio,
   action,
   selected,
   selecting,
@@ -133,6 +139,10 @@ export function SessionRow({
               {tag ? <TagChip size="sm" tag={tag.tag} label={tag.label} /> : null}
               <span className="text-small text-ink-2">{template}</span>
               {recordedBy}
+              {badge ? (
+                <span className="rounded-pill border border-line bg-surface px-2 py-0.5 text-caption font-medium text-ink-2">{badge}</span>
+              ) : null}
+              {noAudio ? <span className="text-small text-ink-3">{noAudio}</span> : null}
             </>
           ) : (
             <span
@@ -167,7 +177,7 @@ export function SessionRow({
     // "Thử lại" ẩn trong chế độ chọn vì thanh chọn đã đủ thao tác; bấm vào
     // bất kỳ đâu trên hàng vẫn tích nhờ hành vi label gốc.
     return (
-      <div className={rowClass}>
+      <div className={rowClass} data-session-row={href}>
         <label className="flex w-full cursor-pointer items-start gap-3 text-left">
           {checkboxInput}
           {content}
@@ -177,7 +187,7 @@ export function SessionRow({
   }
 
   return (
-    <div className={cn(rowClass, "group/row")}>
+    <div className={cn(rowClass, "group/row")} data-session-row={href}>
       <div className="flex items-start gap-3">
         {checkbox}
         <Link
@@ -199,6 +209,10 @@ export function SessionRow({
             {tag ? <TagChip size="sm" tag={tag.tag} label={tag.label} /> : null}
             <span className="text-small text-ink-2">{template}</span>
             {recordedBy}
+            {badge ? (
+              <span className="rounded-pill border border-line bg-surface px-2 py-0.5 text-caption font-medium text-ink-2">{badge}</span>
+            ) : null}
+            {noAudio ? <span className="text-small text-ink-3">{noAudio}</span> : null}
           </>
         ) : (
           <span

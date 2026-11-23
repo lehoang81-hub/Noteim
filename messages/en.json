@@ -820,7 +820,10 @@
     "receiptHow": "How",
     "receiptAnnounced": "Announcement played in the session",
     "receiptNoAnnounce": "No announcement was played",
-    "receiptFootnote": "The receipt is captured by the app when recording starts, stored with the session."
+    "receiptFootnote": "The receipt is captured by the app when recording starts, stored with the session.",
+    "sampleBadge": "Sample",
+    "noAudio": "No audio yet",
+    "trialRecording": "Trial recording: audio not saved"
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -1114,7 +1117,8 @@
     "receiptSwitchHint": "The “{template}” template is for a sensitive profession; a consent receipt is required first.",
     "receiptMidConfirm": "Agree and use this template",
     "receiptCancel": "Dismiss",
-    "announceSentence": "This meeting is being recorded to build the minutes"
+    "announceSentence": "This meeting is being recorded to build the minutes",
+    "trialNote": "Trial recording: audio not saved"
   },
   "processing": {
     "step1": "Recording saved",
@@ -1273,6 +1277,7 @@
     "saveError": "Could not save. Try again.",
     "savedProfile": "Saved",
     "sections": {
+      "tai-khoan": "Account",
       "ho-so": "Profile",
       "mau-tom-tat": "Summary templates",
       "tu-dien": "Glossary",
@@ -1723,6 +1728,9 @@
     "errorConfig": "Sign-in is being configured. Please try again in a few minutes.",
     "signedInAs": "You are signed in as",
     "continue": "Go to library",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "entryInvite": "Sign in to keep your sessions and sync them across devices.",
+    "entryGo": "Sign in",
+    "entrySignedIn": "Signed in as {name}"
   }
 }
