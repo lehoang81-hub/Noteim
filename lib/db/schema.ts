@@ -1,6 +1,11 @@
 /**
  * Schema Drizzle — toàn bộ §1.4 (PR 02, đặc tả C1 `docs/12-auth-db-group-spec.md`).
  *
+ * **Schema Postgres `noteim`**: dự án dùng chung project Supabase với app khác,
+ * mọi bảng nằm trong schema `noteim` (không đụng `public`). Xác thực trên
+ * Supabase bằng role `noteim_app` (DATABASE_URL trên máy chủ trỏ tới role này;
+ * chỉ đọc từ biến môi trường, không ghi khóa vào code).
+ *
  * Quy ước:
  * - Tên bảng trùng 1-1 §1.4; cột snake_case trùng trường Zod trong
  *   `lib/data/types.ts` (nguồn sự thật hình dạng dữ liệu).
@@ -12,6 +17,17 @@
  *   repository hiện tại, ít rủi ro di trú (đúng ghi chú §1.4).
  * - Thời điểm dùng timestamptz; thời lượng/giây dùng integer/doublePrecision;
  *   ngày dạng chuỗi ISO (due_date) giữ text đúng kiểu Zod hiện có.
+ * - Ràng buộc chống trùng cho seed chạy lại (`scripts/db-seed.mjs` dùng
+ *   `ON CONFLICT … DO NOTHING` nhắm đúng các khóa này):
+ *   + `action_items` khóa chính composite (session_id, id) — id "a1"… trong
+ *     fixture lặp giữa các buổi nên id một mình không đủ.
+ *   + `workspace_members` unique (workspace_id, lower(email)) — thành viên
+ *     còn lời mời chưa có user_id vẫn phải bị chặn trùng.
+ *   + `chat_messages` unique (session_id, role, created_at, md5(text)) —
+ *     chặn bản sao tin nhắn y hệt; md5 giữ chỉ mục gọn với lời dài.
+ *   + `audit_log` unique (workspace_id, actor_user_id, action, target_type,
+ *     target_id, at) — chặn bản sao nhật ký y hệt cùng thời điểm; log cùng
+ *     action/target ở thời điểm khác vẫn ghi bình thường.
  *
  * Phiên đăng nhập dùng JWT trong cookie (`noteim.session`) nên
  * `auth_sessions` không nằm trên đường nóng — vẫn giữ đúng §1.4 cho cửa
@@ -25,7 +41,7 @@ import {
   index,
   integer,
   jsonb,
-  pgTable,
+  pgSchema,
   primaryKey,
   text,
   timestamp,
@@ -33,13 +49,16 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
+/** Tất cả bảng của Noteim nằm trong schema này — không dùng `public`. */
+export const noteimSchema = pgSchema("noteim");
+
 /* ---------- Nền đăng nhập (PR 01) + bổ sung công tắc (PR 02) ---------- */
 
 /**
  * Bảng users — người dùng của app. §1.4: gói (free/pro/edu), ngôn ngữ,
  * giao diện, các công tắc ghi/ngôn ngữ, đếm hạn mức ẩn danh.
  */
-export const users = pgTable(
+export const users = noteimSchema.table(
   "users",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -80,7 +99,7 @@ export const users = pgTable(
 );
 
 /** Bảng accounts — liên kết nhà cung cấp OAuth (chuẩn next-auth). */
-export const accounts = pgTable(
+export const accounts = noteimSchema.table(
   "accounts",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -108,7 +127,7 @@ export const accounts = pgTable(
 );
 
 /** Bảng auth_sessions — phiên kiểu DB, nằm chờ cho cửa Email OTP. */
-export const authSessions = pgTable(
+export const authSessions = noteimSchema.table(
   "auth_sessions",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -122,7 +141,7 @@ export const authSessions = pgTable(
 );
 
 /** Bảng verification_tokens — mã xác thực một lần (chuẩn next-auth). */
-export const verificationTokens = pgTable(
+export const verificationTokens = noteimSchema.table(
   "verification_tokens",
   {
     identifier: text("identifier").notNull(),
@@ -138,7 +157,7 @@ export const verificationTokens = pgTable(
  * workspaces — mỗi người một không gian Cá nhân (kind "personal") và có thể
  * có không gian Nhóm (kind "team"). Id giữ text theo fixture (di trú giữ id).
  */
-export const workspaces = pgTable(
+export const workspaces = noteimSchema.table(
   "workspaces",
   {
     id: text("id").primaryKey(),
@@ -162,8 +181,11 @@ export const workspaces = pgTable(
  * workspace_members — thành viên không gian; user_id null khi còn lời mời.
  * Vai trò 4 giá trị theo §3.1: owner/admin/member/assistant (assistant thêm
  * giá trị ở PR 09, cột để text để không phải migration khi thêm).
+ *
+ * Unique (workspace_id, lower(email)): một email trong một không gian chỉ
+ * có một dòng — thành viên còn mời (user_id null) cũng bị chặn trùng.
  */
-export const workspaceMembers = pgTable(
+export const workspaceMembers = noteimSchema.table(
   "workspace_members",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -181,6 +203,10 @@ export const workspaceMembers = pgTable(
     inviteExpiresAt: timestamp("invite_expires_at", { withTimezone: true }),
   },
   (table) => [
+    uniqueIndex("workspace_members_workspace_email_key").on(
+      table.workspaceId,
+      sql`lower(${table.email})`,
+    ),
     uniqueIndex("workspace_members_workspace_user_key").on(
       table.workspaceId,
       table.userId,
@@ -190,7 +216,7 @@ export const workspaceMembers = pgTable(
 );
 
 /** invites — lời mời bằng token (lib/team/invite-token.ts dùng sau). */
-export const invites = pgTable(
+export const invites = noteimSchema.table(
   "invites",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -218,7 +244,7 @@ export const invites = pgTable(
 /* ---------- Thư mục hồ sơ (GC-05) ---------- */
 
 /** folders — gom buổi ghi của cùng một hồ sơ (vụ việc, bệnh nhân, khách…). */
-export const folders = pgTable(
+export const folders = noteimSchema.table(
   "folders",
   {
     id: text("id").primaryKey(),
@@ -247,7 +273,7 @@ export const folders = pgTable(
  * folder_sessions — bảng nối (folder_id, session_id) thay `Folder.session_ids`
  * (§1.4); repository phía remote ghép lại thành session_ids để khớp interface.
  */
-export const folderSessions = pgTable(
+export const folderSessions = noteimSchema.table(
   "folder_sessions",
   {
     folderId: text("folder_id")
@@ -273,7 +299,7 @@ export const folderSessions = pgTable(
  * `intake_template_id` (ánh xạ 11 mẫu intake), `audio_path` (key R2 — PR 04),
  * `deleted_at` (xóa mềm cho Hoàn tác), `is_sample` (lọc buổi mẫu khỏi thư viện).
  */
-export const sessions = pgTable(
+export const sessions = noteimSchema.table(
   "sessions",
   {
     id: text("id").primaryKey(),
@@ -339,7 +365,7 @@ export const sessions = pgTable(
  * `speakers`, `listening_map`, `flow_mermaid` theo nguyên tắc JSONB của
  * §1.4 (bảng liệt kê "trường chính", các phần linh hoạt để JSONB).
  */
-export const sessionDetails = pgTable("session_details", {
+export const sessionDetails = noteimSchema.table("session_details", {
   sessionId: text("session_id")
     .primaryKey()
     .references(() => sessions.id, { onDelete: "cascade" }),
@@ -366,7 +392,7 @@ export const sessionDetails = pgTable("session_details", {
 });
 
 /** transcript_segments — bản ghi lời từng đoạn; khóa (session_id, id) của đoạn. */
-export const transcriptSegments = pgTable(
+export const transcriptSegments = noteimSchema.table(
   "transcript_segments",
   {
     sessionId: text("session_id")
@@ -393,7 +419,7 @@ export const transcriptSegments = pgTable(
 );
 
 /** summary_versions — một bản tóm tắt theo ngôn ngữ (M6-03). */
-export const summaryVersions = pgTable(
+export const summaryVersions = noteimSchema.table(
   "summary_versions",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -420,11 +446,15 @@ export const summaryVersions = pgTable(
   ],
 );
 
-/** action_items — việc cần làm, truy vấn xuyên buổi (TaskRepository). */
-export const actionItems = pgTable(
+/**
+ * action_items — việc cần làm, truy vấn xuyên buổi (TaskRepository).
+ * Khóa chính composite (session_id, id): id "a1"… của fixture/client chỉ
+ * duy nhất trong từng buổi — id một mình bị trùng giữa các buổi.
+ */
+export const actionItems = noteimSchema.table(
   "action_items",
   {
-    id: text("id").primaryKey(),
+    id: text("id").notNull(),
     sessionId: text("session_id")
       .notNull()
       .references(() => sessions.id, { onDelete: "cascade" }),
@@ -442,6 +472,7 @@ export const actionItems = pgTable(
     timestampSec: doublePrecision("timestamp_sec"),
   },
   (table) => [
+    primaryKey({ columns: [table.sessionId, table.id] }),
     index("action_items_session_idx").on(table.sessionId),
     index("action_items_assignee_idx").on(table.assigneeUserId),
   ],
@@ -450,7 +481,7 @@ export const actionItems = pgTable(
 /* ---------- Liên hệ, từ điển, hỏi AI, chia sẻ ---------- */
 
 /** contacts — liên hệ gửi biên bản (M6-04). */
-export const contacts = pgTable(
+export const contacts = noteimSchema.table(
   "contacts",
   {
     id: text("id").primaryKey(),
@@ -466,7 +497,7 @@ export const contacts = pgTable(
 );
 
 /** glossary_terms — từ điển tên riêng/thuật ngữ (M3-01, M6-02). */
-export const glossaryTerms = pgTable(
+export const glossaryTerms = noteimSchema.table(
   "glossary_terms",
   {
     id: text("id").primaryKey(),
@@ -480,8 +511,13 @@ export const glossaryTerms = pgTable(
   (table) => [index("glossary_terms_user_idx").on(table.userId)],
 );
 
-/** chat_messages — hội thoại Hỏi AI của một buổi (MockDb.chat_log). */
-export const chatMessages = pgTable(
+/**
+ * chat_messages — hội thoại Hỏi AI của một buổi (MockDb.chat_log).
+ * Unique (session_id, role, created_at, md5(text)): seed đặt created_at/id
+ * cố định theo nội dung nên chạy lại không sinh trùng; runtime vẫn dùng id
+ * uuid máy sinh (default), chỉ bị chặn khi hai tin nhắn y hệt cùng thời điểm.
+ */
+export const chatMessages = noteimSchema.table(
   "chat_messages",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -495,11 +531,19 @@ export const chatMessages = pgTable(
       .notNull()
       .defaultNow(),
   },
-  (table) => [index("chat_messages_session_idx").on(table.sessionId)],
+  (table) => [
+    uniqueIndex("chat_messages_session_role_created_key").on(
+      table.sessionId,
+      table.role,
+      table.createdAt,
+      sql`md5(${table.text})`,
+    ),
+    index("chat_messages_session_idx").on(table.sessionId),
+  ],
 );
 
 /** share_links — link chia sẻ công khai; mật khẩu lưu dạng hash (§1.4). */
-export const shareLinks = pgTable(
+export const shareLinks = noteimSchema.table(
   "share_links",
   {
     id: text("id").primaryKey(),
@@ -529,7 +573,7 @@ export const shareLinks = pgTable(
  * session_gap_checks — lịch sử rà thiếu (GC-02/04). Ràng buộc tối đa 10 dòng
  * mỗi buổi (§1.4) bằng trigger `noteim_gap_check_max10` trong migration.
  */
-export const sessionGapChecks = pgTable(
+export const sessionGapChecks = noteimSchema.table(
   "session_gap_checks",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -555,7 +599,7 @@ export const sessionGapChecks = pgTable(
  * consent_receipts — biên nhận đồng ý tách thành bảng thật (GC-05, §3.2):
  * bằng chứng pháp lý, giữ kể cả khi băng gốc đã purge.
  */
-export const consentReceipts = pgTable(
+export const consentReceipts = noteimSchema.table(
   "consent_receipts",
   {
     id: text("id").primaryKey(),
@@ -577,8 +621,11 @@ export const consentReceipts = pgTable(
  * audit_log — nhật ký truy cập (§3.3, 14 loại hành động). Cột action/target
  * để text (không ràng buộc enum trong DB) để thêm loại mới không phải
  * migration; tuyệt đối không ghi transcript/evidence vào meta.
+ * Unique (workspace_id, actor_user_id, action, target_type, target_id, at):
+ * chặn bản sao y hệt cùng thời điểm (seed dùng id ổn định theo fixture id,
+ * nên chạy lại không sinh trùng ngay cả khi workspace/actor để null).
  */
-export const auditLog = pgTable(
+export const auditLog = noteimSchema.table(
   "audit_log",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -594,6 +641,14 @@ export const auditLog = pgTable(
     meta: jsonb("meta").notNull().default(sql`'{}'::jsonb`),
   },
   (table) => [
+    uniqueIndex("audit_log_dedup_key").on(
+      table.workspaceId,
+      table.actorUserId,
+      table.action,
+      table.targetType,
+      table.targetId,
+      table.at,
+    ),
     index("audit_log_workspace_at_idx").on(table.workspaceId, table.at),
     index("audit_log_target_idx").on(table.targetType, table.targetId),
     index("audit_log_actor_idx").on(table.actorUserId, table.at),
@@ -605,7 +660,7 @@ export const auditLog = pgTable(
  * không có user: dùng chuỗi rỗng thay NULL để chỉ mục duy nhất chặn trùng
  * đúng luật (NULL trong Postgres không so sánh bằng nên sẽ sinh dòng trùng).
  */
-export const usageCounters = pgTable(
+export const usageCounters = noteimSchema.table(
   "usage_counters",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -628,7 +683,7 @@ export const usageCounters = pgTable(
 );
 
 /** promo_codes — mã kích hoạt gói thủ công (§3.5, dùng ở PR 07). */
-export const promoCodes = pgTable(
+export const promoCodes = noteimSchema.table(
   "promo_codes",
   {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
