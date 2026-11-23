@@ -11,9 +11,16 @@ import { defineConfig } from "drizzle-kit";
  *   schema `noteim` thay vì schema mặc định `drizzle`.
  *
  * Lệnh:
- * - `pnpm db:generate` — sinh SQL migration từ `lib/db/schema.ts` (không cần DB)
- * - `pnpm db:migrate`  — chạy migration vào DATABASE_URL (bước triển khai)
- * - `pnpm db:test`     — migration + seed hai lần trên PGlite, kiểm idempotent
+ * - `pnpm db:generate` — sinh SQL migration từ `lib/db/schema.ts` rồi gỡ
+ *   `CREATE SCHEMA` (scripts/db-generate-clean.mjs): schema `noteim` do
+ *   DBA tạo sẵn trên Supabase, role `noteim_app` không có quyền CREATE
+ *   trên database nên migration không được phát sinh CREATE SCHEMA.
+ * - `pnpm db:migrate`  — scripts/db-migrate.mjs: đọc journal, chạy từng
+ *   file SQL trong 1 giao dịch, bảng sổ `noteim.__drizzle_migrations`,
+ *   không tạo schema. KHÔNG dùng `drizzle-kit migrate` vì nó tự chạy
+ *   CREATE SCHEMA → lỗi 42501 với role `noteim_app`.
+ * - `pnpm db:test`     — migration (bằng script trên) + seed hai lần trên
+ *   PGlite với role giới hạn, kiểm idempotent
  */
 export default defineConfig({
   dialect: "postgresql",

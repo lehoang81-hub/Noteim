@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit",
     "e2e": "playwright test",
     "lh": "node scripts/lighthouse.mjs",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
+    "db:generate": "drizzle-kit generate && node scripts/db-generate-clean.mjs",
+    "db:migrate": "node scripts/db-migrate.mjs",
     "db:check": "node scripts/db-check.mjs",
     "db:seed": "node scripts/db-seed.mjs",
     "db:test": "node scripts/db-test.mjs"

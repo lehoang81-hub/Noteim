@@ -2,8 +2,13 @@
  * db:test — kiểm end-to-end migration + seed trên PGlite (Postgres chạy
  * dưới dạng WASM, không cần DB thật) — yêu cầu của PR 02:
  *
- * 1) Chạy toàn bộ migration trong `drizzle/` vào DB trong bộ nhớ;
- *    schema `noteim` phải được tạo, bảng không rơi vào `public`.
+ * 1) Giả lập đúng tình huống Supabase thật (góp ý test 22/11):
+ *    - DBA tạo sẵn schema `noteim`; role `noteim_app` KHÔNG có quyền
+ *      CREATE trên database (tạo schema bị từ chối — lỗi 42501 thật).
+ *    - Chạy migration đúng bằng `scripts/db-migrate.mjs` (bảng sổ
+ *      noteim.__drizzle_migrations, không CREATE SCHEMA) dưới role đó.
+ *    - Migration phải sạch; chạy lần 2 bỏ qua toàn bộ (idempotent).
+ *    - Bảng không rơi vào `public`.
  * 2) Seed lần 1 — ghi mới toàn bộ; seed lần 2 — phải bỏ qua toàn bộ
  *    (idempotent). Báo cáo số dòng ghi/bỏ qua theo từng bảng, mỗi lần.
  * 3) Kiểm số dòng cuối khớp ánh xạ fixture; không trùng khóa mềm
@@ -12,13 +17,17 @@
  *
  * Dùng: `node scripts/db-test.mjs` (hoặc `pnpm db:test`). Mã thoát 0/1.
  * Không cần DATABASE_URL — PGlite chạy trong bộ nhớ.
+ *
+ * Giới hạn ghi rõ: PGlite là một connection duy nhất nên dùng `SET ROLE`
+ * để mô phỏng quyền `noteim_app` trong instance (không tách process).
+ * Quyền đã đúng mô hình: role không superuser, không quyền CREATE trên
+ * database, chỉ có USAGE/CREATE trong schema `noteim` đã có sẵn (giống
+ * DBA đã grant trên Supabase — phần bảng/index/trigger test bằng
+ * `noteim_app` chạy được, còn CREATE SCHEMA thì bị từ chối).
  */
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import { PGlite } from "@electric-sql/pglite";
+import { migrateWith } from "./db-migrate.mjs";
 import { buildPlan, seedInto } from "./db-seed.mjs";
-
-const ROOT = join(import.meta.dirname, "..");
 
 let failures = 0;
 function check(cond, okMsg, failMsg) {
@@ -32,38 +41,103 @@ function check(cond, okMsg, failMsg) {
 
 const db = new PGlite();
 
-/* ---------- 1. Migration ---------- */
+/* ---------- 1. Migration qua scripts/db-migrate.mjs, role giới hạn ---------- */
 
-console.log("== 1. Chạy migration drizzle/ trên PGlite ==");
-const journal = JSON.parse(
-  readFileSync(join(ROOT, "drizzle", "meta", "_journal.json"), "utf8"),
+console.log(
+  "== 1. Migration qua scripts/db-migrate.mjs với role không có quyền tạo schema ==",
 );
-let migrationError = null;
+
+// (a) Giả lập DBA Supabase: schema `noteim` tạo sẵn; role `noteim_app`
+//     không superuser — không có quyền CREATE trên database. Chỉ grant
+//     USAGE/CREATE TRONG schema noteim (quyền cấp-schema, giống DBA đã
+//     grant trên Supabase; đây là DB test trong bộ nhớ, không phải
+//     cấp quyền thật trên Supabase).
+await db.exec(`CREATE SCHEMA "noteim"`);
+await db.exec(`CREATE ROLE "noteim_app"`);
+await db.exec(`GRANT USAGE, CREATE ON SCHEMA "noteim" TO "noteim_app"`);
+await db.exec(`SET ROLE "noteim_app"`);
+
+// (b) Chứng minh role không có quyền CREATE trên database: tạo schema
+//     phải bị từ chối (như lỗi 42501 trên Supabase thật ngày 22/11).
+let probeError = null;
 try {
-  for (const entry of journal.entries) {
-    const file = join(ROOT, "drizzle", `${entry.tag}.sql`);
-    const chunks = readFileSync(file, "utf8").split("--> statement-breakpoint");
-    for (const chunk of chunks) {
-      const sql = chunk.trim();
-      if (!sql) continue;
-      await db.exec(sql);
-    }
-  }
+  await db.query(`CREATE SCHEMA "noteim_probe_42501"`);
+} catch (error) {
+  probeError = error;
+}
+check(
+  probeError !== null,
+  "Role test không có quyền CREATE trên database (tạo schema bị từ chối) — mô phỏng đúng noteim_app trên Supabase",
+  "Role test vẫn tạo được schema mới — mô phỏng quyền không đúng, bài test không có giá trị chứng minh",
+);
+
+// (c) Chạy migration đúng bằng script db:migrate (không CREATE SCHEMA).
+//     Runtime gói giao dịch của PGlite theo hợp đồng migrateWith().
+const pgliteRuntime = {
+  begin: (fn) =>
+    db.transaction(async (tx) =>
+      fn({
+        q: async (text, params = []) => (await tx.query(text, params)).rows,
+        exec: (text) => tx.exec(text),
+      }),
+    ),
+};
+let migrationError = null;
+let firstRun = null;
+try {
+  firstRun = await migrateWith(pgliteRuntime, {
+    log: (message) => console.log(`  ${message}`),
+  });
 } catch (error) {
   migrationError = error;
 }
 check(
   migrationError === null,
-  "Toàn bộ migration chạy sạch",
+  `Toàn bộ migration chạy sạch bằng scripts/db-migrate.mjs (áp dụng ${firstRun?.applied ?? "?"}/${firstRun?.total ?? "?"}, không tạo schema)`,
   `Migration lỗi: ${migrationError instanceof Error ? migrationError.message : migrationError}`,
 );
 
 const pgVersion = (await db.query("select version() as v")).rows[0].v;
 console.log(`  Postgres: ${pgVersion}`);
 
+// Bảng sổ ghi đủ hash của từng file migration.
+const ledgerCount = (
+  await db.query(
+    'select count(*)::int as n from "noteim"."__drizzle_migrations"',
+  )
+).rows[0].n;
+check(
+  firstRun !== null && ledgerCount === firstRun.total,
+  `Bảng sổ noteim.__drizzle_migrations ghi đủ hash (${ledgerCount}/${firstRun?.total ?? "?"} file)`,
+  `Bảng sổ có ${ledgerCount} dòng nhưng journal có ${firstRun?.total ?? "?"} file migration`,
+);
+
+// Migrate lần 2 phải bỏ qua toàn bộ (idempotent theo hash).
+let secondRun = null;
+let secondError = null;
+try {
+  secondRun = await migrateWith(pgliteRuntime);
+} catch (error) {
+  secondError = error;
+}
+check(
+  secondError === null && secondRun?.applied === 0,
+  "Chạy migrate lần 2 bỏ qua toàn bộ file (idempotent theo hash)",
+  `Migrate lần 2 lỗi hoặc còn áp dụng mới (${secondRun?.applied ?? "?"}): ${secondError instanceof Error ? secondError.message : ""}`,
+);
+
+// Toàn bộ bước dưới vẫn chạy dưới role giới hạn (SET ROLE còn hiệu lực).
+const currentRole = (await db.query("select current_user as u")).rows[0].u;
+check(
+  currentRole === "noteim_app",
+  "Toàn bộ migrate + seed + kiểm tra chạy dưới role noteim_app (không superuser)",
+  `Đang chạy dưới role ${currentRole} — không phải noteim_app`,
+);
+
+// 23 bảng Noteim nằm trong schema noteim (trừ bảng sổ migration).
 const tableCount = (
   await db.query(
-    "select count(*)::int as n from information_schema.tables where table_schema = 'noteim' and table_type = 'BASE TABLE'",
+    "select count(*)::int as n from information_schema.tables where table_schema = 'noteim' and table_type = 'BASE TABLE' and table_name <> '__drizzle_migrations'",
   )
 ).rows[0].n;
 check(
@@ -87,7 +161,9 @@ check(
 
 /* ---------- 2. Seed hai lần ---------- */
 
-console.log("== 2. Seed lần 1 (ghi mới) và lần 2 (phải bỏ qua hết) ==");
+console.log(
+  "== 2. Seed lần 1 (ghi mới) và lần 2 (phải bỏ qua hết) — vẫn dưới role noteim_app ==",
+);
 const { plan } = buildPlan();
 const run = (text, params) => db.query(text, params);
 const expected = {};
@@ -195,5 +271,7 @@ if (failures > 0) {
   console.error(`\npnpm db:test THẤT BẠI: ${failures} kiểm tra không đạt.`);
   process.exit(1);
 }
-console.log("\npnpm db:test đạt: migration + seed hai lần + không trùng + trigger hoạt động.");
+console.log(
+  "\npnpm db:test đạt: migration bằng scripts/db-migrate.mjs (không CREATE SCHEMA, role noteim_app giới hạn) + migrate idempotent + seed hai lần + không trùng + trigger hoạt động.",
+);
 process.exit(0);
