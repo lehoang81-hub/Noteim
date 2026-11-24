@@ -1,0 +1,581 @@
+{
+  "audio": "09-mau-kien-truc-lach-tray",
+  "from_fixture": "fixtures/samples/architect.json",
+  "session_id": "s-sample-architect",
+  "engine": "edge",
+  "duration_sec": 155.55,
+  "room": "phong-hop-may",
+  "note": "Buổi mẫu kiến trúc sư (s-sample-architect, M9-02). Họp hiện trường cạnh xưởng: điều hòa, tiếng máy.",
+  "voices": {
+    "SPK_01": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "+0Hz",
+      "rate": "+0%",
+      "gain_db": 0,
+      "role": "Bạn (kiến trúc sư)",
+      "engine": "edge"
+    },
+    "SPK_02": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "+20Hz",
+      "rate": "+8%",
+      "gain_db": -4,
+      "role": "Anh chủ nhà (sáng và nhanh hơn)",
+      "engine": "edge"
+    },
+    "SPK_03": {
+      "voice": "vi-VN-HoaiMyNeural",
+      "pitch": "+5Hz",
+      "rate": "-5%",
+      "gain_db": -2,
+      "role": "Chị quản lý thi công (chậm hơn một chút)",
+      "engine": "edge"
+    }
+  },
+  "segments": [
+    {
+      "id": "seg-00",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 1.39,
+      "end_sec": 3.82,
+      "text": "Mình đi quanh nhà một vòng rồi chốt từng hạng mục nhé.",
+      "fixture_start_sec": 4,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-01",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 4.34,
+      "end_sec": 8.66,
+      "text": "Sân sau mở rộng 1,2 mét thì mình phải làm lại mái che, anh Quân đồng ý chứ?",
+      "fixture_start_sec": 14,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-02",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 9.64,
+      "end_sec": 13.42,
+      "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
+      "fixture_start_sec": 25,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-03",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 13.64,
+      "end_sec": 17.21,
+      "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
+      "fixture_start_sec": 54,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-04",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 18.19,
+      "end_sec": 22.71,
+      "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
+      "fixture_start_sec": 84,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-05",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 23.07,
+      "end_sec": 26.88,
+      "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
+      "fixture_start_sec": 111,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-06",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 27.87,
+      "end_sec": 32.66,
+      "text": "Gạch phòng khách đổi sang gạch 60x60 vân đá, mình gửi ba mẫu cho chị chủ chọn.",
+      "fixture_start_sec": 141,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-07",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 33.07,
+      "end_sec": 37.5,
+      "text": "Tủ bếp dời sang tường đông thì đường nước phải đi lại, anh Hùng xem giá thêm bao nhiêu.",
+      "fixture_start_sec": 167,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-08",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 38.19,
+      "end_sec": 40.63,
+      "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
+      "fixture_start_sec": 193,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-09",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 41.08,
+      "end_sec": 44.86,
+      "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
+      "fixture_start_sec": 217,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-10",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 45.55,
+      "end_sec": 50.07,
+      "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
+      "fixture_start_sec": 243,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-11",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 50.63,
+      "end_sec": 54.44,
+      "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
+      "fixture_start_sec": 266,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-12",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 55.07,
+      "end_sec": 57.3,
+      "text": "Trần thạch bao tồn kho còn bao nhiêu mét vuông?",
+      "fixture_start_sec": 291,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-13",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 57.83,
+      "end_sec": 61.74,
+      "text": "Vậy tuần này mình chốt xong ba hạng mục, thứ Sáu mình gửi biên bản hiện trường.",
+      "fixture_start_sec": 312,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-14",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 62.55,
+      "end_sec": 66.12,
+      "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
+      "fixture_start_sec": 334,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-15",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 66.52,
+      "end_sec": 68.97,
+      "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
+      "fixture_start_sec": 354,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-16",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 69.47,
+      "end_sec": 73.99,
+      "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
+      "fixture_start_sec": 375,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-17",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 74.42,
+      "end_sec": 78.23,
+      "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
+      "fixture_start_sec": 393,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-18",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 79.06,
+      "end_sec": 81.49,
+      "text": "Mình đi quanh nhà một vòng rồi chốt từng hạng mục nhé.",
+      "fixture_start_sec": 414,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-19",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 81.99,
+      "end_sec": 86.31,
+      "text": "Sân sau mở rộng 1,2 mét thì mình phải làm lại mái che, anh Quân đồng ý chứ?",
+      "fixture_start_sec": 431,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-20",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 91.02,
+      "end_sec": 94.8,
+      "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
+      "fixture_start_sec": 448,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-21",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 95.19,
+      "end_sec": 98.76,
+      "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
+      "fixture_start_sec": 463,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-22",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 103.08,
+      "end_sec": 107.6,
+      "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
+      "fixture_start_sec": 480,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-23",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 108.14,
+      "end_sec": 111.95,
+      "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
+      "fixture_start_sec": 494,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-24",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 112.8,
+      "end_sec": 117.59,
+      "text": "Gạch phòng khách đổi sang gạch 60x60 vân đá, mình gửi ba mẫu cho chị chủ chọn.",
+      "fixture_start_sec": 510,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-25",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 118.19,
+      "end_sec": 122.61,
+      "text": "Tủ bếp dời sang tường đông thì đường nước phải đi lại, anh Hùng xem giá thêm bao nhiêu.",
+      "fixture_start_sec": 522,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-26",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 123.35,
+      "end_sec": 125.8,
+      "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
+      "fixture_start_sec": 535,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-27",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 126.39,
+      "end_sec": 130.17,
+      "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
+      "fixture_start_sec": 546,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-28",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 131.16,
+      "end_sec": 135.68,
+      "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
+      "fixture_start_sec": 558,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-29",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 135.99,
+      "end_sec": 139.8,
+      "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
+      "fixture_start_sec": 587,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+5Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-30",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 140.53,
+      "end_sec": 142.76,
+      "text": "Trần thạch bao tồn kho còn bao nhiêu mét vuông?",
+      "fixture_start_sec": 619,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-31",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 143.34,
+      "end_sec": 147.26,
+      "text": "Vậy tuần này mình chốt xong ba hạng mục, thứ Sáu mình gửi biên bản hiện trường.",
+      "fixture_start_sec": 647,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-32",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 147.99,
+      "end_sec": 151.56,
+      "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
+      "fixture_start_sec": 675,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    },
+    {
+      "id": "seg-33",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 152.1,
+      "end_sec": 154.55,
+      "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
+      "fixture_start_sec": 701,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+20Hz",
+        "rate": "+8%"
+      }
+    }
+  ]
+}

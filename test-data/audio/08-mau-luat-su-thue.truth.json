@@ -1,0 +1,581 @@
+{
+  "audio": "08-mau-luat-su-thue",
+  "from_fixture": "fixtures/samples/lawyer.json",
+  "session_id": "s-sample-lawyer",
+  "engine": "edge",
+  "duration_sec": 171.81,
+  "room": "van-phong",
+  "note": "Buổi mẫu luật sư (s-sample-lawyer, M9-02). Văn phòng luật yên, ông Phước kể chậm.",
+  "voices": {
+    "SPK_01": {
+      "voice": "vi-VN-HoaiMyNeural",
+      "pitch": "+0Hz",
+      "rate": "+0%",
+      "gain_db": 0,
+      "role": "Bạn (luật sư)",
+      "engine": "edge"
+    },
+    "SPK_02": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "-8Hz",
+      "rate": "-8%",
+      "gain_db": -2,
+      "role": "Ông Phước (bên thuê, kể chậm)",
+      "engine": "edge"
+    },
+    "SPK_03": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "+15Hz",
+      "rate": "+5%",
+      "gain_db": -5,
+      "role": "Người viết hợp đồng (sáng, nhỏ hơn 5 dB)",
+      "engine": "edge"
+    }
+  },
+  "segments": [
+    {
+      "id": "seg-00",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 1.39,
+      "end_sec": 5.35,
+      "text": "Ông kể em nghe từ đầu nhé, hợp đồng ký tháng nào và thời hạn bao lâu?",
+      "fixture_start_sec": 4,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-01",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 5.87,
+      "end_sec": 9.15,
+      "text": "Điều khoản chốt giá trong hợp đồng viết thế nào, ông đọc giúp em?",
+      "fixture_start_sec": 14,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-02",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 10.13,
+      "end_sec": 15.86,
+      "text": "Hợp đồng em ký tháng 3 năm 2024, thuê 24 tháng, trả mỗi quý.",
+      "fixture_start_sec": 25,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-03",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 16.08,
+      "end_sec": 19.74,
+      "text": "Điều 5 ghi giá cố định suốt thời hạn, không phụ thuộc thị trường.",
+      "fixture_start_sec": 54,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-04",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 20.71,
+      "end_sec": 24.38,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 84,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-05",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 24.74,
+      "end_sec": 28.41,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 111,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-06",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 29.4,
+      "end_sec": 35.23,
+      "text": "Như vậy thì điều 5 ghi rõ giá cố định 24 tháng. Việc tăng giữa chừng là trái hợp đồng.",
+      "fixture_start_sec": 141,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-07",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 35.64,
+      "end_sec": 39.82,
+      "text": "Bước đầu em đề nghị gửi thư thương lượng, nêu căn cứ và đề xuất phương án.",
+      "fixture_start_sec": 167,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-08",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 40.51,
+      "end_sec": 44.69,
+      "text": "Tháng trước chủ nhà nhắn tin bảo tăng 30% vì hàng xóm tăng theo.",
+      "fixture_start_sec": 193,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-09",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 45.14,
+      "end_sec": 49.0,
+      "text": "Em lo lắm, cửa hàng đang kinh doanh ổn, chuyển chỗ là mất khách.",
+      "fixture_start_sec": 217,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-10",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 49.69,
+      "end_sec": 53.36,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 243,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-11",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 53.92,
+      "end_sec": 57.59,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 266,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-12",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 58.22,
+      "end_sec": 62.23,
+      "text": "Nếu chủ nhà không phản hồi trong 10 ngày, mình chuẩn bị hồ sơ khởi kiện.",
+      "fixture_start_sec": 291,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-13",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 62.76,
+      "end_sec": 67.98,
+      "text": "Ông chuẩn bị giúp: hợp đồng bản gốc, biên lai trả tiền 12 tháng gần nhất và tin nhắn trao đổi.",
+      "fixture_start_sec": 312,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-14",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 68.78,
+      "end_sec": 72.49,
+      "text": "Vậy em gom giấy tờ, mấy ngày nữa gửi lại bác luật sư xem.",
+      "fixture_start_sec": 334,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-15",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 72.9,
+      "end_sec": 78.63,
+      "text": "Hợp đồng em ký tháng 3 năm 2024, thuê 24 tháng, trả mỗi quý.",
+      "fixture_start_sec": 354,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-16",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 79.13,
+      "end_sec": 82.8,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 375,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-17",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 83.24,
+      "end_sec": 86.91,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 393,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-18",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 87.73,
+      "end_sec": 91.69,
+      "text": "Ông kể em nghe từ đầu nhé, hợp đồng ký tháng nào và thời hạn bao lâu?",
+      "fixture_start_sec": 414,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-19",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 92.19,
+      "end_sec": 95.47,
+      "text": "Điều khoản chốt giá trong hợp đồng viết thế nào, ông đọc giúp em?",
+      "fixture_start_sec": 431,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-20",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 100.19,
+      "end_sec": 103.84,
+      "text": "Điều 5 ghi giá cố định suốt thời hạn, không phụ thuộc thị trường.",
+      "fixture_start_sec": 448,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-21",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 104.23,
+      "end_sec": 108.4,
+      "text": "Tháng trước chủ nhà nhắn tin bảo tăng 30% vì hàng xóm tăng theo.",
+      "fixture_start_sec": 463,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-22",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 112.73,
+      "end_sec": 116.4,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 480,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-23",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 116.93,
+      "end_sec": 120.6,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 494,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-24",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 121.45,
+      "end_sec": 127.27,
+      "text": "Như vậy thì điều 5 ghi rõ giá cố định 24 tháng. Việc tăng giữa chừng là trái hợp đồng.",
+      "fixture_start_sec": 510,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-25",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 127.87,
+      "end_sec": 132.05,
+      "text": "Bước đầu em đề nghị gửi thư thương lượng, nêu căn cứ và đề xuất phương án.",
+      "fixture_start_sec": 522,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-26",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 132.8,
+      "end_sec": 136.66,
+      "text": "Em lo lắm, cửa hàng đang kinh doanh ổn, chuyển chỗ là mất khách.",
+      "fixture_start_sec": 535,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-27",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 137.26,
+      "end_sec": 140.97,
+      "text": "Vậy em gom giấy tờ, mấy ngày nữa gửi lại bác luật sư xem.",
+      "fixture_start_sec": 546,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-28",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 141.95,
+      "end_sec": 145.62,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 558,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-29",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 145.93,
+      "end_sec": 149.6,
+      "text": "Em là người viết hợp đồng giúp hai bên, cần em bổ sung gì bác bảo em.",
+      "fixture_start_sec": 587,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+15Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-30",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 150.33,
+      "end_sec": 154.35,
+      "text": "Nếu chủ nhà không phản hồi trong 10 ngày, mình chuẩn bị hồ sơ khởi kiện.",
+      "fixture_start_sec": 619,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-31",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 154.93,
+      "end_sec": 160.15,
+      "text": "Ông chuẩn bị giúp: hợp đồng bản gốc, biên lai trả tiền 12 tháng gần nhất và tin nhắn trao đổi.",
+      "fixture_start_sec": 647,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-32",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 160.88,
+      "end_sec": 166.61,
+      "text": "Hợp đồng em ký tháng 3 năm 2024, thuê 24 tháng, trả mỗi quý.",
+      "fixture_start_sec": 675,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    },
+    {
+      "id": "seg-33",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 167.16,
+      "end_sec": 170.81,
+      "text": "Điều 5 ghi giá cố định suốt thời hạn, không phụ thuộc thị trường.",
+      "fixture_start_sec": 701,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-8Hz",
+        "rate": "-8%"
+      }
+    }
+  ]
+}

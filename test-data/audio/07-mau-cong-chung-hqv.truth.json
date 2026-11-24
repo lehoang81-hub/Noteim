@@ -1,0 +1,581 @@
+{
+  "audio": "07-mau-cong-chung-hqv",
+  "from_fixture": "fixtures/samples/notary.json",
+  "session_id": "s-sample-notary",
+  "engine": "edge",
+  "duration_sec": 155.32,
+  "room": "van-phong",
+  "note": "Buổi mẫu công chứng (s-sample-notary, M9-02). Văn phòng công chứng yên, bên bán nói chậm và trầm.",
+  "voices": {
+    "SPK_01": {
+      "voice": "vi-VN-HoaiMyNeural",
+      "pitch": "+0Hz",
+      "rate": "+0%",
+      "gain_db": 0,
+      "role": "Bạn (công chứng viên)",
+      "engine": "edge"
+    },
+    "SPK_02": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "-10Hz",
+      "rate": "-5%",
+      "gain_db": -2,
+      "role": "Chủ hộ bên bán (trầm, chậm)",
+      "engine": "edge"
+    },
+    "SPK_03": {
+      "voice": "vi-VN-HoaiMyNeural",
+      "pitch": "+12Hz",
+      "rate": "+5%",
+      "gain_db": -4,
+      "role": "Em bên mua (cao, nhanh hơn)",
+      "engine": "edge"
+    }
+  },
+  "segments": [
+    {
+      "id": "seg-00",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 1.39,
+      "end_sec": 4.83,
+      "text": "Hai bên ngồi đây, mình kiểm tra giấy tờ rồi so hợp đồng nhé.",
+      "fixture_start_sec": 4,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-01",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 5.35,
+      "end_sec": 10.58,
+      "text": "Sổ đỏ nguyên bản, quy hoạch không vướng. Bên mua xuất trình giấy tờ tùy thân nào?",
+      "fixture_start_sec": 14,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-02",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 11.56,
+      "end_sec": 14.64,
+      "text": "Tôi là bên bán, sổ đỏ tôi mang bản gốc đầy đủ đây.",
+      "fixture_start_sec": 25,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-03",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 14.86,
+      "end_sec": 19.25,
+      "text": "Đúng giá 3,2 tỷ, hai bên tự thỏa thuận, không ai ép buộc gì.",
+      "fixture_start_sec": 54,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-04",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 20.22,
+      "end_sec": 22.95,
+      "text": "Em là bên mua, giấy tờ tùy thân em mang rồi.",
+      "fixture_start_sec": 84,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-05",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 23.31,
+      "end_sec": 26.16,
+      "text": "Giấy xác nhận hôn nhân em xin buổi mai gửi lại văn phòng.",
+      "fixture_start_sec": 111,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-06",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 27.15,
+      "end_sec": 33.24,
+      "text": "Chuyển nhượng 62 mét vuông, giá 3,2 tỷ. Hai bên xác nhận đúng giá thỏa thuận chứ?",
+      "fixture_start_sec": 141,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-07",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 33.65,
+      "end_sec": 37.77,
+      "text": "Bên mua còn thiếu giấy xác nhận tình trạng hôn nhân, bổ sung trước ngày ký nhé.",
+      "fixture_start_sec": 167,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-08",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 38.46,
+      "end_sec": 41.67,
+      "text": "Tôi cam kết căn hộ không tranh chấp, không thế chấp ngân hàng.",
+      "fixture_start_sec": 193,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-09",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 42.12,
+      "end_sec": 45.2,
+      "text": "Tôi là bên bán, sổ đỏ tôi mang bản gốc đầy đủ đây.",
+      "fixture_start_sec": 217,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-10",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 45.89,
+      "end_sec": 49.31,
+      "text": "Em muốn thanh toán qua escrow cho chắc, bên mình hỗ trợ chứ ạ?",
+      "fixture_start_sec": 243,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-11",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 49.87,
+      "end_sec": 52.59,
+      "text": "Em là bên mua, giấy tờ tùy thân em mang rồi.",
+      "fixture_start_sec": 266,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-12",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 53.23,
+      "end_sec": 57.28,
+      "text": "Nội dung mình đã giải thích quyền và nghĩa vụ của hai bên như điều 3 và điều 5.",
+      "fixture_start_sec": 291,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-13",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 57.81,
+      "end_sec": 61.08,
+      "text": "Mình hẹn 9 giờ thứ Ba tuần sau làm thủ tục ký và chứng thực.",
+      "fixture_start_sec": 312,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-14",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 61.89,
+      "end_sec": 66.27,
+      "text": "Đúng giá 3,2 tỷ, hai bên tự thỏa thuận, không ai ép buộc gì.",
+      "fixture_start_sec": 334,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-15",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 66.68,
+      "end_sec": 69.88,
+      "text": "Tôi cam kết căn hộ không tranh chấp, không thế chấp ngân hàng.",
+      "fixture_start_sec": 354,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-16",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 70.38,
+      "end_sec": 73.24,
+      "text": "Giấy xác nhận hôn nhân em xin buổi mai gửi lại văn phòng.",
+      "fixture_start_sec": 375,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-17",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 73.67,
+      "end_sec": 77.09,
+      "text": "Em muốn thanh toán qua escrow cho chắc, bên mình hỗ trợ chứ ạ?",
+      "fixture_start_sec": 393,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-18",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 77.92,
+      "end_sec": 81.36,
+      "text": "Hai bên ngồi đây, mình kiểm tra giấy tờ rồi so hợp đồng nhé.",
+      "fixture_start_sec": 414,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-19",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 81.86,
+      "end_sec": 87.09,
+      "text": "Sổ đỏ nguyên bản, quy hoạch không vướng. Bên mua xuất trình giấy tờ tùy thân nào?",
+      "fixture_start_sec": 431,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-20",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 91.8,
+      "end_sec": 94.88,
+      "text": "Tôi là bên bán, sổ đỏ tôi mang bản gốc đầy đủ đây.",
+      "fixture_start_sec": 448,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-21",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 95.27,
+      "end_sec": 99.65,
+      "text": "Đúng giá 3,2 tỷ, hai bên tự thỏa thuận, không ai ép buộc gì.",
+      "fixture_start_sec": 463,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-22",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 103.97,
+      "end_sec": 106.7,
+      "text": "Em là bên mua, giấy tờ tùy thân em mang rồi.",
+      "fixture_start_sec": 480,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-23",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 107.24,
+      "end_sec": 110.09,
+      "text": "Giấy xác nhận hôn nhân em xin buổi mai gửi lại văn phòng.",
+      "fixture_start_sec": 494,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-24",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 110.94,
+      "end_sec": 117.02,
+      "text": "Chuyển nhượng 62 mét vuông, giá 3,2 tỷ. Hai bên xác nhận đúng giá thỏa thuận chứ?",
+      "fixture_start_sec": 510,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-25",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 117.62,
+      "end_sec": 121.74,
+      "text": "Bên mua còn thiếu giấy xác nhận tình trạng hôn nhân, bổ sung trước ngày ký nhé.",
+      "fixture_start_sec": 522,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-26",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 122.49,
+      "end_sec": 125.69,
+      "text": "Tôi cam kết căn hộ không tranh chấp, không thế chấp ngân hàng.",
+      "fixture_start_sec": 535,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-27",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 126.29,
+      "end_sec": 129.37,
+      "text": "Tôi là bên bán, sổ đỏ tôi mang bản gốc đầy đủ đây.",
+      "fixture_start_sec": 546,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-28",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 130.35,
+      "end_sec": 133.78,
+      "text": "Em muốn thanh toán qua escrow cho chắc, bên mình hỗ trợ chứ ạ?",
+      "fixture_start_sec": 558,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-29",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 134.09,
+      "end_sec": 136.81,
+      "text": "Em là bên mua, giấy tờ tùy thân em mang rồi.",
+      "fixture_start_sec": 587,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+5%"
+      }
+    },
+    {
+      "id": "seg-30",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 137.54,
+      "end_sec": 141.6,
+      "text": "Nội dung mình đã giải thích quyền và nghĩa vụ của hai bên như điều 3 và điều 5.",
+      "fixture_start_sec": 619,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-31",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 142.18,
+      "end_sec": 145.46,
+      "text": "Mình hẹn 9 giờ thứ Ba tuần sau làm thủ tục ký và chứng thực.",
+      "fixture_start_sec": 647,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+0%"
+      }
+    },
+    {
+      "id": "seg-32",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 146.19,
+      "end_sec": 150.57,
+      "text": "Đúng giá 3,2 tỷ, hai bên tự thỏa thuận, không ai ép buộc gì.",
+      "fixture_start_sec": 675,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    },
+    {
+      "id": "seg-33",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 151.12,
+      "end_sec": 154.32,
+      "text": "Tôi cam kết căn hộ không tranh chấp, không thế chấp ngân hàng.",
+      "fixture_start_sec": 701,
+      "gain_db": -2,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-10Hz",
+        "rate": "-5%"
+      }
+    }
+  ]
+}

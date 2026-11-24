@@ -20,6 +20,10 @@ Sinh bộ âm thanh thử cho chặng B0 (Noteim) từ lời của buổi ghi m�
   dài thật của từng đoạn đã đọc.
 - Xuất: <tên>.ogg (Opus 32 kbps), <tên>.m4a (AAC, cho iPhone), <tên>.truth.json
   (đáp án: từng đoạn, người nói, ngôn ngữ, chữ Nguyên văn, mốc thời gian).
+- Bộ 06 đến 10 (M9-02): âm thanh cho 5 buổi mẫu theo nghề còn thiếu
+  (fixtures/samples, gắn bằng scripts/attach-test-audio.mjs) — đọc đủ mọi
+  câu trong fixture nên buổi dài (bất động sản, chủ doanh nghiệp) đọc nhanh
+  hơn và nghỉ ngắn hơn để nhẹ dung lượng.
 
 Cách chạy:
   pip install edge-tts numpy && python3 scripts/gen-test-audio.py
@@ -231,6 +235,28 @@ SETS = [
         "name": "05-vi-en-pha-le", "fixture": "test-data/audio/05-vi-en-pha-le.dialogue.json", "room": "van-phong",
         "note": "Góp ý vòng 1 (#75): nói lẫn Việt, Anh kiểu dân văn phòng trong cùng một câu (KPI phase 2, dashboard, deadline, report). Văn phòng yên.",
     },
+    {
+        "name": "06-mau-bds-vinhomes-marina", "fixture": "fixtures/samples/realestate_sales.json", "room": "van-phong",
+        "note": "Buổi mẫu bất động sản (s-sample-realestate_sales, M9-02). 60 đoạn nên đọc nhanh hơn, nghỉ ngắn để nhẹ dung lượng.",
+        "gap_change": (0.3, 0.7), "gap_same": (0.15, 0.4), "long_gap_p": 0.06, "long_gap": (2.0, 3.5),
+    },
+    {
+        "name": "07-mau-cong-chung-hqv", "fixture": "fixtures/samples/notary.json", "room": "van-phong",
+        "note": "Buổi mẫu công chứng (s-sample-notary, M9-02). Văn phòng công chứng yên, bên bán nói chậm và trầm.",
+    },
+    {
+        "name": "08-mau-luat-su-thue", "fixture": "fixtures/samples/lawyer.json", "room": "van-phong",
+        "note": "Buổi mẫu luật sư (s-sample-lawyer, M9-02). Văn phòng luật yên, ông Phước kể chậm.",
+    },
+    {
+        "name": "09-mau-kien-truc-lach-tray", "fixture": "fixtures/samples/architect.json", "room": "phong-hop-may",
+        "note": "Buổi mẫu kiến trúc sư (s-sample-architect, M9-02). Họp hiện trường cạnh xưởng: điều hòa, tiếng máy.",
+    },
+    {
+        "name": "10-mau-dieu-hanh-noi-that", "fixture": "fixtures/samples/business_owner.json", "room": "phong-hop-may",
+        "note": "Buổi mẫu chủ doanh nghiệp (s-sample-business_owner, M9-02). Họp 5 người ở phòng cạnh xưởng, 69 đoạn nên đọc nhanh, nghỉ ngắn.",
+        "gap_change": (0.3, 0.7), "gap_same": (0.15, 0.4), "long_gap_p": 0.06, "long_gap": (2.0, 3.5),
+    },
 ]
 
 # Bảng giọng dùng cho engine tự nhiên (edge / fpt / elevenlabs).
@@ -259,6 +285,33 @@ NAT_VOICES = {
         "SPK_01": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Anh Minh (trưởng nhóm)"},
         "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+5Hz", "rate": "+6%", "gain_db": -2, "role": "Em Nhi (nhân viên, nói nhanh hơn một chút)"},
     },
+    "06-mau-bds-vinhomes-marina": {
+        "SPK_01": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+20%", "gain_db": 0, "role": "Bạn (môi giới, dẫn buổi)"},
+        "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "+18%", "gain_db": -3, "role": "Chị Lan (khách, nhỏ hơn 3 dB)"},
+        "SPK_03": {"voice": "vi-VN-NamMinhNeural", "pitch": "-20Hz", "rate": "+18%", "gain_db": -5, "role": "Anh đi cùng chị Lan (trầm, nhỏ hơn 5 dB)"},
+    },
+    "07-mau-cong-chung-hqv": {
+        "SPK_01": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Bạn (công chứng viên)"},
+        "SPK_02": {"voice": "vi-VN-NamMinhNeural", "pitch": "-10Hz", "rate": "-5%", "gain_db": -2, "role": "Chủ hộ bên bán (trầm, chậm)"},
+        "SPK_03": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+12Hz", "rate": "+5%", "gain_db": -4, "role": "Em bên mua (cao, nhanh hơn)"},
+    },
+    "08-mau-luat-su-thue": {
+        "SPK_01": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Bạn (luật sư)"},
+        "SPK_02": {"voice": "vi-VN-NamMinhNeural", "pitch": "-8Hz", "rate": "-8%", "gain_db": -2, "role": "Ông Phước (bên thuê, kể chậm)"},
+        "SPK_03": {"voice": "vi-VN-NamMinhNeural", "pitch": "+15Hz", "rate": "+5%", "gain_db": -5, "role": "Người viết hợp đồng (sáng, nhỏ hơn 5 dB)"},
+    },
+    "09-mau-kien-truc-lach-tray": {
+        "SPK_01": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+0%", "gain_db": 0, "role": "Bạn (kiến trúc sư)"},
+        "SPK_02": {"voice": "vi-VN-NamMinhNeural", "pitch": "+20Hz", "rate": "+8%", "gain_db": -4, "role": "Anh chủ nhà (sáng và nhanh hơn)"},
+        "SPK_03": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+5Hz", "rate": "-5%", "gain_db": -2, "role": "Chị quản lý thi công (chậm hơn một chút)"},
+    },
+    "10-mau-dieu-hanh-noi-that": {
+        "SPK_01": {"voice": "vi-VN-NamMinhNeural", "pitch": "+0Hz", "rate": "+20%", "gain_db": 0, "role": "Bạn (chủ doanh nghiệp, dẫn họp)"},
+        "SPK_02": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+0Hz", "rate": "+20%", "gain_db": -3, "role": "Kế toán (báo số liệu)"},
+        "SPK_03": {"voice": "vi-VN-NamMinhNeural", "pitch": "-15Hz", "rate": "+25%", "gain_db": -5, "role": "Trưởng xưởng (trầm, nói nhanh)"},
+        "SPK_04": {"voice": "vi-VN-HoaiMyNeural", "pitch": "+12Hz", "rate": "+22%", "gain_db": -4, "role": "Marketing (cao và nhanh)"},
+        "SPK_05": {"voice": "vi-VN-NamMinhNeural", "pitch": "+10Hz", "rate": "+20%", "gain_db": -6, "role": "Bán hàng (nhỏ nhất phòng)"},
+    },
 }
 
 # engine fpt / elevenlabs chỉ đổi những người nói này (còn lại vẫn dùng edge):
@@ -277,6 +330,11 @@ ESPEAK_SETS = {
     "02-hop-doi-tac-han": {"voices": {"SPK_01": ("vi+m3", 45, 165, 0), "SPK_02": ("ko+m2", 40, 160, 2), "SPK_03": ("ko+f3", 65, 170, -4), "SPK_04": ("vi+f1", 58, 155, -6)}, "lang_voice": {"en": "en+m3"}},
     "03-bac-si-kham": {"voices": {"SPK_01": ("vi+m2", 42, 170, 0), "SPK_02": ("vi+f4", 60, 140, -7)}, "lang_voice": {}},
     "05-vi-en-pha-le": {"voices": {"SPK_01": ("vi+m3", 45, 165, 0), "SPK_02": ("vi+f2", 55, 170, -2)}, "lang_voice": {}},
+    "06-mau-bds-vinhomes-marina": {"voices": {"SPK_01": ("vi+m3", 45, 180, 0), "SPK_02": ("vi+f2", 62, 175, -3), "SPK_03": ("vi+m1", 35, 175, -5)}, "lang_voice": {}},
+    "07-mau-cong-chung-hqv": {"voices": {"SPK_01": ("vi+f4", 58, 155, 0), "SPK_02": ("vi+m2", 42, 150, -2), "SPK_03": ("vi+f1", 65, 165, -4)}, "lang_voice": {}},
+    "08-mau-luat-su-thue": {"voices": {"SPK_01": ("vi+f4", 55, 160, 0), "SPK_02": ("vi+m2", 45, 145, -2), "SPK_03": ("vi+m1", 40, 165, -5)}, "lang_voice": {}},
+    "09-mau-kien-truc-lach-tray": {"voices": {"SPK_01": ("vi+m3", 45, 160, 0), "SPK_02": ("vi+m2", 50, 170, -4), "SPK_03": ("vi+f2", 58, 150, -2)}, "lang_voice": {}},
+    "10-mau-dieu-hanh-noi-that": {"voices": {"SPK_01": ("vi+m3", 45, 180, 0), "SPK_02": ("vi+f2", 58, 180, -3), "SPK_03": ("vi+m1", 35, 185, -5), "SPK_04": ("vi+f1", 65, 180, -4), "SPK_05": ("vi+m2", 50, 180, -6)}, "lang_voice": {}},
 }
 ESPEAK_FALLBACK = ("vi", 50, 155, 0)
 
@@ -316,6 +374,12 @@ def build(cfg, rng, engine):
     parts, truth, cur = [], [], 0.8
     parts.append(np.zeros(int(0.8 * SR), np.float32))
     prev = None
+    # khoảng nghỉ theo từng bộ (mặc định như bộ B0): đổi người, cùng người,
+    # xác suất và độ dài "nghĩ lâu". Bộ mẫu dài (06, 10) nghỉ ngắn hơn để nhẹ.
+    gap_change = cfg.get("gap_change", (0.4, 1.2))
+    gap_same = cfg.get("gap_same", (0.2, 0.6))
+    long_gap_p = cfg.get("long_gap_p", 0.12)
+    long_gap = cfg.get("long_gap", (3.0, 6.0))
     for i, s in enumerate(segs, 1):
         a, gain, voice_used = synth_segment(cfg, s, engine)
         if i % 10 == 0 or i == len(segs):
@@ -324,9 +388,9 @@ def build(cfg, rng, engine):
             print(f"DỪNG: đoạn {s['id']} đọc ra file rỗng.", file=sys.stderr)
             raise SystemExit(1)
         # khoảng nghỉ: đổi người 0,4 đến 1,2 giây; cùng người 0,2 đến 0,6; thỉnh thoảng nghĩ lâu 3 đến 6 giây
-        gap = rng.uniform(0.4, 1.2) if s["speaker_id"] != prev else rng.uniform(0.2, 0.6)
-        if rng.random() < 0.12:
-            gap = rng.uniform(3.0, 6.0)
+        gap = rng.uniform(*gap_change) if s["speaker_id"] != prev else rng.uniform(*gap_same)
+        if rng.random() < long_gap_p:
+            gap = rng.uniform(*long_gap)
         parts.append(np.zeros(int(gap * SR), np.float32)); cur += gap
         start = cur
         parts.append(a); cur += len(a) / SR
