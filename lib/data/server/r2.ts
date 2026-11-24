@@ -74,7 +74,8 @@ export function audioExpiryDaysForPlan(plan: string): number {
 export type R2Mode = "fake" | "real";
 
 export function r2Mode(): R2Mode | null {
-  if (process.env.R2_FAKE === "1") return "fake";
+  // Kho giả tuyệt đối không bật trên production, dù biến R2_FAKE có bị đặt nhầm.
+  if (process.env.R2_FAKE === "1" && process.env.VERCEL_ENV !== "production") return "fake";
   const { R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET } = process.env;
   if (R2_ACCOUNT_ID && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY && R2_BUCKET) return "real";
   return null;
