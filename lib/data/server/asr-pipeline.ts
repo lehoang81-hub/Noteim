@@ -151,8 +151,15 @@ async function stepQueued(row: SessionRec, detail: DetailRec): Promise<void> {
   }
 
   if (sonioxFakeActive()) {
-    // Kho giả: id nội bộ; marker "[fail]" trong tiêu đề → lần thử ĐẦU lỗi để
-    // e2e kiểm nút "Thử lại" (thử lại lần sau thì thành công).
+    // Kho giả: id nội bộ. Marker "[quota]" trong tiêu đề → mô phỏng vượt trần
+    // phút (trần thật bị chặn ở presign 413 — e2e c1-audio kiểm; gate này là
+    // lưới phòng thủ của pipeline, bài e2e quota dùng marker để chạm được).
+    if (row.title.includes("[quota]")) {
+      await markFailed(row, "quota_exceeded");
+      return;
+    }
+    // Marker "[fail]" trong tiêu đề → lần thử ĐẦU lỗi để e2e kiểm nút
+    // "Thử lại" (thử lại lần sau thì thành công).
     const failOnce = row.title.includes("[fail]") && row.asrAttempts === 0;
     if (failOnce) {
       await markFailed(row, "fake_fail_once");

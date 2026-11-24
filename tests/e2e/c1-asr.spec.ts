@@ -154,10 +154,12 @@ test.describe("kho giả ASR + Gemini — luồng nội dung thật qua API", ()
     const stateA = (await pushA.json()) as ProcessState;
     expect(stateA.asr_stage).toBeTruthy();
 
+    // Dọn buổi TRƯỚC khi đóng context (dùng request của A)
+    const del = await pageA.request.delete(`/api/data/sessions/${sessionA}`);
+    expect(del.status()).toBe(200);
     await ctxA.close();
     await ctxB.close();
     await anon.close();
-    await pageA.request.delete(`/api/data/sessions/${sessionA}`);
   });
 
   test("complete → process từng bước → done: bản chữ + tóm tắt đúng cấu trúc, số liệu khớp bản chữ giả", async ({ page }) => {
@@ -222,19 +224,39 @@ test.describe("kho giả ASR + Gemini — luồng nội dung thật qua API", ()
     await page.request.delete(`/api/data/sessions/${sessionId}`);
   });
 
-  test("quota: buổi 91 phút với gói Free bị chặn rõ, không gọi nhận dạng", async ({ page }) => {
+  test("quota: buổi vượt trần phút gói Free bị chặn rõ, không gọi nhận dạng", async ({ page }) => {
     await dangNhapDemo(page);
-    const sessionId = await taoBuoi(page.request, "Buổi vượt trần phút", 5460);
+    // Trần thật bị chặn NGAY Ở presign (413 — e2e c1-audio kiểm); gate phút
+    // của pipeline là lưới phòng thủ. Kho giả mô phỏng đường đó bằng marker
+    // "[quota]" trong tiêu đề (chỉ hiệu lực khi SONIOX_FAKE bật).
+    const sessionId = await taoBuoi(page.request, "Buổi [quota] vượt trần");
     await taiLen(page.request, sessionId);
 
-    const state = await dayLuong(page.request, sessionId);
-    expect(state.status).toBe("failed");
-    expect(state.asr_error).toBe("quota_exceeded");
+    // complete đã kích luồng lần đầu — chờ tới khi failed
+    let state: ProcessState | null = null;
+    for (let i = 0; i < 20; i++) {
+      const res = await page.request.get(`/api/data/sessions/${sessionId}/processing`);
+      const s = (await res.json()) as ProcessState;
+      if (s.status !== "processing") {
+        state = s;
+        break;
+      }
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    expect(state?.status).toBe("failed");
+    expect(state?.asr_error).toBe("quota_exceeded");
 
-    // Bản chữ không hề được sinh (không gọi nhà cung cấp)
+    // Bản chữ không hề được sinh (không gọi nhà cung cấp); thử lại vẫn failed
     const trRes = await page.request.get(`/api/data/sessions/${sessionId}/transcript`);
     const transcript = (await trRes.json()) as { transcript: unknown[] };
     expect(transcript.transcript.length).toBe(0);
+    const retry = await page.request.post(`/api/data/sessions/${sessionId}/processing`, {
+      data: { action: "retry" },
+    });
+    expect(retry.status()).toBe(200);
+    const after = await dayLuong(page.request, sessionId);
+    expect(after.status).toBe("failed");
+    expect(after.asr_error).toBe("quota_exceeded");
 
     await page.request.delete(`/api/data/sessions/${sessionId}`);
   });
@@ -244,10 +266,19 @@ test.describe("kho giả ASR + Gemini — luồng nội dung thật qua API", ()
     const sessionId = await taoBuoi(page.request, "Buổi [fail] thử lại");
     await taiLen(page.request, sessionId);
 
-    // Lần đầu: lỗi giả (fake_fail_once)
-    const first = await dayLuong(page.request, sessionId);
-    expect(first.status).toBe("failed");
-    expect(first.asr_error).toBe("fake_fail_once");
+    // Lần đầu: complete đã kích luồng (fire-and-forget) — chờ tới khi failed
+    let first: ProcessState | null = null;
+    for (let i = 0; i < 20; i++) {
+      const res = await page.request.get(`/api/data/sessions/${sessionId}/processing`);
+      const s = (await res.json()) as ProcessState;
+      if (s.status !== "processing") {
+        first = s;
+        break;
+      }
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    expect(first?.status).toBe("failed");
+    expect(first?.asr_error).toBe("fake_fail_once");
 
     // Nút Thử lại gọi đúng retryProcessing (POST processing action retry)
     const retry = await page.request.post(`/api/data/sessions/${sessionId}/processing`, {
