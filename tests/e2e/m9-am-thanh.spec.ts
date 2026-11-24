@@ -305,6 +305,7 @@ const SAMPLE_SESSIONS: Array<{ id: string; file: RegExp }> = [
 
 test("6 buổi mẫu theo nghề: có trình phát, bấm Phát currentTime tăng, đoạn đang đọc đổi theo (M9-02)", async ({ page }, info) => {
   test.skip(info.project.name !== "phone", "trình phát một code cho cả hai bề ngang — chạy một project cho gọn lô (bài đầu file đã chạy cả hai)");
+  test.setTimeout(180_000); // vòng lặp 6 buổi, mỗi buổi phát thật vài giây
   const errors = collectErrors(page);
   await onboard(page);
   for (const { id, file } of SAMPLE_SESSIONS) {
@@ -325,19 +326,33 @@ test("6 buổi mẫu theo nghề: có trình phát, bấm Phát currentTime tăn
       })
       .toBeGreaterThan(1.5);
 
-    // Tab Lời: đoạn đang đọc đổi theo tiếng — chờ vào lời rồi ghi 2 lần cách 3 giây
+    // Tab Lời: đoạn đang đọc đổi theo tiếng (xem expectReadingFollowsAudio)
     await page.goto(`/s/${id}?tab=transcript`);
     await expect(page.locator("[data-seg]").first()).toBeVisible();
     await page.getByRole("button", { name: "Phát", exact: true }).click();
-    await expect
-      .poll(async () => (await page.locator('[data-state="reading"]').first().textContent()) ?? "", {
-        timeout: 10000,
-      })
-      .not.toBe("");
-    const reading1 = (await page.locator('[data-state="reading"]').first().textContent()) ?? "";
-    await page.waitForTimeout(3000);
-    const reading2 = (await page.locator('[data-state="reading"]').first().textContent()) ?? "";
-    expect(reading2).not.toBe(reading1);
+    await expectReadingFollowsAudio(page);
   }
   expect(errors).toEqual([]);
 });
+
+/**
+ * Chữ đang đọc phải đổi theo tiếng thật: đo 2 lần cách nhau 3 giây, giữa hai
+ * lần kim thẻ audio phải tăng trên 1 giây (chứng tỏ tiếng đang chạy) và chữ
+ * đang đọc phải khác lần trước. Lần nào không đạt thì đo lại (tối đa 4 lần)
+ * — file vừa nạp đôi lúc dừng gắp để đệm tiếp, đo một lần như vậy gây nhầm
+ * trình phát đứng yên.
+ */
+async function expectReadingFollowsAudio(page: import("@playwright/test").Page) {
+  const snap = async () =>
+    page.evaluate(() => ({
+      t: (document.querySelector("audio") as HTMLAudioElement | null)?.currentTime ?? 0,
+      w: document.querySelector('[data-state="reading"]')?.textContent ?? "",
+    }));
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const { t: t1, w: w1 } = await snap();
+    await page.waitForTimeout(3000);
+    const { t: t2, w: w2 } = await snap();
+    if (t2 > t1 + 1 && w1 !== "" && w2 !== "" && w1 !== w2) return;
+  }
+  throw new Error("Đoạn đang đọc không đổi theo tiếng sau 4 lần đo");
+}

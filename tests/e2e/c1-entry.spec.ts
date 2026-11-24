@@ -146,23 +146,22 @@ test.describe("B — huy hiệu Mẫu và buổi không có âm thanh", () => {
     expect(errors).toEqual([]);
   });
 
-  test("thư viện: hàng buổi không âm thanh có dòng Chưa có âm thanh, hàng có âm thanh thì không (gồm buổi mẫu đã gắn M9-02)", async ({ page }) => {
+  test("thư viện: hàng buổi không âm thanh có dòng Chưa có âm thanh, hàng có âm thanh thì không", async ({ page }) => {
     const errors = collectErrors(page);
     await onboard(page);
     await page.locator("a[href^='/s/']").first().waitFor();
 
     // Buổi "Họp điều hành T11" không có file âm thanh — lấy cả hàng
-    // (data-session-row), dòng giải thích nằm ngoài phần liên kết tiêu đề
+    // (data-session-row), dòng giải thích nằm ngoài phần liên kết tiêu đề.
+    // Buổi mẫu theo nghề không nằm trong danh sách Thư viện (kiểm ở bài trên
+    // và ở bài 6 buổi mẫu của m9-am-thanh).
     const rowNoAudio = page.locator('[data-session-row="/s/s-hop-t11"]');
     await expect(rowNoAudio).toBeVisible();
     await expect(rowNoAudio.getByText("Chưa có âm thanh")).toBeVisible();
-    // Buổi chị Lan và buổi mẫu BĐS (gắn âm thanh ở M9-02) có file: không hiện dòng
+    // Buổi chị Lan có file âm thanh: không hiện dòng
     const rowAudio = page.locator('[data-session-row="/s/s-bds-lan"]');
     await expect(rowAudio).toBeVisible();
     await expect(rowAudio.getByText("Chưa có âm thanh")).toHaveCount(0);
-    const rowSample = page.locator('[data-session-row="/s/s-sample-realestate_sales"]');
-    await expect(rowSample).toBeVisible();
-    await expect(rowSample.getByText("Chưa có âm thanh")).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 
