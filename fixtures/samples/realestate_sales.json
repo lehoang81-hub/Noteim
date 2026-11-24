@@ -7,8 +7,8 @@
   "template_id": "tpl-realestate",
   "status": "ready",
   "storage_status": "full",
-  "duration_sec": 2530,
-  "size_bytes": 7590000,
+  "duration_sec": 297.7,
+  "size_bytes": 1851710,
   "created_at": "2026-11-14T09:05:00+07:00",
   "audio_expires_at": "2026-11-21T09:05:00+07:00",
   "consent": {
@@ -112,8 +112,8 @@
     "display_name": "Bạn",
     "is_me": true,
     "color_index": 0,
-    "talk_ratio_percent": 52,
-    "sample_start_sec": 40
+    "talk_ratio_percent": 45,
+    "sample_start_sec": 7.8
    },
    {
     "id": "SPK_02",
@@ -121,8 +121,8 @@
     "display_name": "Chị Lan",
     "is_me": false,
     "color_index": 1,
-    "talk_ratio_percent": 39,
-    "sample_start_sec": 95
+    "talk_ratio_percent": 46,
+    "sample_start_sec": 16.4
    },
    {
     "id": "SPK_03",
@@ -131,7 +131,7 @@
     "is_me": false,
     "color_index": 2,
     "talk_ratio_percent": 9,
-    "sample_start_sec": 705
+    "sample_start_sec": 100.1
    }
   ],
   "topics": [
@@ -139,14 +139,14 @@
     "id": "t1",
     "section_id": "tpl-realestate-s1",
     "title": "Nhu cầu của gia đình chị Lan",
-    "start_sec": 60,
-    "end_sec": 420,
+    "start_sec": 10.7,
+    "end_sec": 63.4,
     "tag": "pending",
     "bullets": [
      {
       "id": "b1",
       "text": "Cần căn 2 phòng ngủ cho gia đình 4 người, hai con đang học cấp 1",
-      "timestamp_sec": 95,
+      "timestamp_sec": 16.4,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -155,7 +155,7 @@
      {
       "id": "b2",
       "text": "Ưu tiên gần trường Lê Văn Tám, đi bộ được",
-      "timestamp_sec": 125,
+      "timestamp_sec": 21.5,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -164,7 +164,7 @@
      {
       "id": "b3",
       "text": "Muốn tầng trung, từ tầng 12 đến 20, ban công hướng Đông Nam",
-      "timestamp_sec": 310,
+      "timestamp_sec": 48,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -176,14 +176,14 @@
     "id": "t2",
     "section_id": "tpl-realestate-s2",
     "title": "Ngân sách và phương án vay",
-    "start_sec": 420,
-    "end_sec": 780,
+    "start_sec": 63.4,
+    "end_sec": 107.9,
     "tag": "figure",
     "bullets": [
      {
       "id": "b4",
       "text": "Ngân sách tối đa 4,2 tỷ, đã có sẵn khoảng 2,1 tỷ",
-      "timestamp_sec": 450,
+      "timestamp_sec": 68.6,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -192,7 +192,7 @@
      {
       "id": "b5",
       "text": "Dự kiến vay 50%, cần ân hạn nợ gốc ít nhất 12 tháng",
-      "timestamp_sec": 540,
+      "timestamp_sec": 79.1,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -201,7 +201,7 @@
      {
       "id": "b6",
       "text": "Lãi suất ưu đãi 6,5% trong 18 tháng, sau đó thả nổi",
-      "timestamp_sec": 630,
+      "timestamp_sec": 88.8,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -213,14 +213,14 @@
     "id": "t3",
     "section_id": "tpl-realestate-s3",
     "title": "Băn khoăn về giá",
-    "start_sec": 780,
-    "end_sec": 1100,
+    "start_sec": 107.9,
+    "end_sec": 147.8,
     "tag": "risk",
     "bullets": [
      {
       "id": "b7",
       "text": "\"Giá này cao hơn bên Imperia khoảng 300 triệu\"",
-      "timestamp_sec": 815,
+      "timestamp_sec": 116.2,
       "speaker_id": "SPK_02",
       "is_quote": true,
       "edited": false,
@@ -231,7 +231,7 @@
      {
       "id": "b8",
       "text": "Lo lãi suất tăng mạnh sau thời gian ưu đãi",
-      "timestamp_sec": 905,
+      "timestamp_sec": 125.6,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -240,7 +240,7 @@
      {
       "id": "b9",
       "text": "Đồng nghiệp của chị cho rằng phí quản lý ở đây cao",
-      "timestamp_sec": 712,
+      "timestamp_sec": 100.8,
       "speaker_id": "SPK_03",
       "is_quote": false,
       "edited": false,
@@ -261,21 +261,21 @@
       3.95,
       3.85
      ],
-     "source_timestamp_sec": 830
+     "source_timestamp_sec": 117.4
     }
    },
    {
     "id": "t4",
     "section_id": "tpl-realestate-s4",
     "title": "Căn 18.06 Vinhomes Marina",
-    "start_sec": 1100,
-    "end_sec": 1560,
+    "start_sec": 147.8,
+    "end_sec": 192.6,
     "tag": "idea",
     "bullets": [
      {
       "id": "b10",
       "text": "Căn 18.06, 2 phòng ngủ, 72 m², ban công Đông Nam đúng ý chị",
-      "timestamp_sec": 1150,
+      "timestamp_sec": 152.4,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -284,7 +284,7 @@
      {
       "id": "b11",
       "text": "Chị thích bố cục bếp tách riêng, phòng ngủ phụ hơi nhỏ",
-      "timestamp_sec": 1380,
+      "timestamp_sec": 178,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -298,14 +298,14 @@
     "id": "t5",
     "section_id": "tpl-realestate-s5",
     "title": "Cam kết hai bên",
-    "start_sec": 1560,
-    "end_sec": 1940,
+    "start_sec": 192.6,
+    "end_sec": 232.9,
     "tag": "decided",
     "bullets": [
      {
       "id": "b12",
       "text": "Bên bán giữ căn 18.06 đến hết thứ Bảy 16/11",
-      "timestamp_sec": 1600,
+      "timestamp_sec": 197,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -314,7 +314,7 @@
      {
       "id": "b13",
       "text": "Chị Lan sẽ quyết định sau khi chồng xem nhà",
-      "timestamp_sec": 1790,
+      "timestamp_sec": 218.7,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -326,14 +326,14 @@
     "id": "t6",
     "section_id": "tpl-realestate-s6",
     "title": "Bước tiếp theo",
-    "start_sec": 1940,
-    "end_sec": 2530,
+    "start_sec": 232.9,
+    "end_sec": 297.7,
     "tag": "pending",
     "bullets": [
      {
       "id": "b14",
       "text": "Gửi bảng tính vay 50% trước tối 13/11",
-      "timestamp_sec": 1975,
+      "timestamp_sec": 237.8,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -344,7 +344,7 @@
      {
       "id": "b15",
       "text": "Hẹn chồng chị Lan xem nhà mẫu, chưa chốt ngày",
-      "timestamp_sec": 2210,
+      "timestamp_sec": 266.5,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -353,7 +353,7 @@
      {
       "id": "b16",
       "text": "Xin anh Tuấn chính sách chiết khấu cho khách thanh toán nhanh",
-      "timestamp_sec": 2400,
+      "timestamp_sec": 282.7,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -373,7 +373,7 @@
     "done": false,
     "done_at": null,
     "source_quote": "Em gửi chị bảng tính trước tối mai nhé",
-    "timestamp_sec": 1975
+    "timestamp_sec": 237.8
    },
    {
     "id": "a2",
@@ -385,7 +385,7 @@
     "done": false,
     "done_at": null,
     "source_quote": "Để chị hỏi anh nhà xem hôm nào rảnh",
-    "timestamp_sec": 2210
+    "timestamp_sec": 266.5
    },
    {
     "id": "a3",
@@ -397,53 +397,53 @@
     "done": true,
     "done_at": "2026-11-14T10:20:00+07:00",
     "source_quote": "Em xin anh Tuấn chính sách cho chị",
-    "timestamp_sec": 2400
+    "timestamp_sec": 282.7
    }
   ],
   "notes": [
    {
     "id": "n1",
-    "timestamp_sec": 820,
+    "timestamp_sec": 116.6,
     "text": "Khách chê giá cao"
    },
    {
     "id": "n2",
-    "timestamp_sec": 1385,
+    "timestamp_sec": 178.4,
     "text": "Phòng ngủ phụ nhỏ, gợi ý căn góc"
    },
    {
     "id": "n3",
-    "timestamp_sec": 1980,
+    "timestamp_sec": 238.4,
     "text": "Gửi bảng tính tối nay"
    }
   ],
   "bookmarks": [
    {
     "id": "m1",
-    "timestamp_sec": 540,
+    "timestamp_sec": 79.1,
     "tag": "figure"
    },
    {
     "id": "m2",
-    "timestamp_sec": 815,
+    "timestamp_sec": 116.2,
     "tag": "risk"
    },
    {
     "id": "m3",
-    "timestamp_sec": 1600,
+    "timestamp_sec": 197,
     "tag": "decided"
    }
   ],
   "photos": [
    {
     "id": "p1",
-    "timestamp_sec": 1160,
+    "timestamp_sec": 153.5,
     "url": "/photos/mat-bang-1806.svg",
     "caption": "Mặt bằng căn 18.06"
    },
    {
     "id": "p2",
-    "timestamp_sec": 1420,
+    "timestamp_sec": 180.5,
     "url": "/photos/view-ban-cong.svg",
     "caption": "View ban công"
    }
@@ -1053,78 +1053,153 @@
   "speaker_spans": [
    {
     "speaker_id": "SPK_01",
-    "start_sec": 0,
-    "end_sec": 80
+    "start_sec": 1.19,
+    "end_sec": 13.31
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 80,
-    "end_sec": 310
+    "start_sec": 13.9,
+    "end_sec": 50.12
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 310,
-    "end_sec": 420
+    "start_sec": 50.57,
+    "end_sec": 66.45
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 420,
-    "end_sec": 570
+    "start_sec": 67.1,
+    "end_sec": 82.14
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 570,
-    "end_sec": 630
+    "start_sec": 82.65,
+    "end_sec": 92.75
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 630,
-    "end_sec": 790
+    "start_sec": 93.1,
+    "end_sec": 108.78
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 790,
-    "end_sec": 980
+    "start_sec": 109.38,
+    "end_sec": 112.92
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 980,
-    "end_sec": 1240
+    "start_sec": 115.78,
+    "end_sec": 128.54
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 1240,
-    "end_sec": 1480
+    "start_sec": 129.02,
+    "end_sec": 133.92
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 1480,
-    "end_sec": 1660
+    "start_sec": 134.62,
+    "end_sec": 150.8
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 1660,
-    "end_sec": 1870
+    "start_sec": 151.36,
+    "end_sec": 176.6
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 177.16,
+    "end_sec": 180.37
+   },
+   {
+    "speaker_id": "SPK_01",
+    "start_sec": 180.83,
+    "end_sec": 183.21
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 183.68,
+    "end_sec": 195.71
+   },
+   {
+    "speaker_id": "SPK_01",
+    "start_sec": 196.04,
+    "end_sec": 199.88
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 200.41,
+    "end_sec": 203.84
+   },
+   {
+    "speaker_id": "SPK_01",
+    "start_sec": 204.23,
+    "end_sec": 217.43
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 218.12,
+    "end_sec": 220.24
+   },
+   {
+    "speaker_id": "SPK_01",
+    "start_sec": 220.71,
+    "end_sec": 224.55
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 1870,
-    "end_sec": 1940
+    "start_sec": 225.09,
+    "end_sec": 232.71
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 1940,
-    "end_sec": 2090
+    "start_sec": 233.24,
+    "end_sec": 236.68
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 2090,
-    "end_sec": 2340
+    "start_sec": 237.27,
+    "end_sec": 240.68
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 2340,
-    "end_sec": 2530
+    "start_sec": 241.2,
+    "end_sec": 244.9
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 248,
+    "end_sec": 251.01
+   },
+   {
+    "speaker_id": "SPK_01",
+    "start_sec": 251.33,
+    "end_sec": 265.34
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 265.88,
+    "end_sec": 268.46
+   },
+   {
+    "speaker_id": "SPK_01",
+    "start_sec": 268.89,
+    "end_sec": 277.12
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 277.61,
+    "end_sec": 281.34
+   },
+   {
+    "speaker_id": "SPK_01",
+    "start_sec": 282.02,
+    "end_sec": 284.7
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 288.1,
+    "end_sec": 296.68
    }
   ],
   "send_history": [],
@@ -1140,14 +1215,15 @@
   ],
   "report_languages": [
    "vi"
-  ]
+  ],
+  "audio_url": "/audio/06-mau-bds-vinhomes-marina.m4a"
  },
  "transcript": [
   {
    "id": "g1",
    "speaker_id": "SPK_01",
-   "start_sec": 0,
-   "end_sec": 40,
+   "start_sec": 1.19,
+   "end_sec": 7.79,
    "text": "Dạ em chào chị Lan, cảm ơn chị đã qua văn phòng sáng nay. Hôm nay em muốn hiểu kỹ nhu cầu của gia đình mình trước rồi mới giới thiệu căn.",
    "lang": "vi",
    "translations": {},
@@ -1157,8 +1233,8 @@
   {
    "id": "g17",
    "speaker_id": "SPK_01",
-   "start_sec": 45,
-   "end_sec": 75,
+   "start_sec": 8.14,
+   "end_sec": 13.31,
    "text": "Buổi trao đổi hôm nay chị cứ nói thật nhu cầu và ngân sách, căn nào hợp em gửi thông tin sau, chị không bị ép mua đâu ạ.",
    "lang": "vi",
    "translations": {},
@@ -1168,8 +1244,8 @@
   {
    "id": "g2",
    "speaker_id": "SPK_02",
-   "start_sec": 80,
-   "end_sec": 130,
+   "start_sec": 13.9,
+   "end_sec": 22.31,
    "text": "Ờ... ừ em, nhà chị là bốn người, hai bé đang học cấp 1. Chị cần hai phòng ngủ là đủ, là đủ, quan trọng là gần trường Lê Văn Tám cho bọn trẻ đi bộ được.",
    "lang": "vi",
    "translations": {},
@@ -1179,8 +1255,8 @@
   {
    "id": "g18",
    "speaker_id": "SPK_02",
-   "start_sec": 135,
-   "end_sec": 168,
+   "start_sec": 22.47,
+   "end_sec": 27.63,
    "text": "Nhà chị giờ ở Lê Chân, sáng đưa đón hai bé sang Lê Văn Tám, thì là, chạy xe máy gần hai mươi phút.",
    "lang": "vi",
    "translations": {},
@@ -1190,8 +1266,8 @@
   {
    "id": "g19",
    "speaker_id": "SPK_02",
-   "start_sec": 175,
-   "end_sec": 205,
+   "start_sec": 27.96,
+   "end_sec": 34.79,
    "text": "Bé lớn học lớp ba, bé nhỏ mới mẫu giáo bốn tuổi. Sáng bà nội đưa, chiều chị đón, nên chỗ nào cũng phải gần mới được.",
    "lang": "vi",
    "translations": {},
@@ -1201,8 +1277,8 @@
   {
    "id": "g20",
    "speaker_id": "SPK_02",
-   "start_sec": 212,
-   "end_sec": 245,
+   "start_sec": 35.04,
+   "end_sec": 40.25,
    "text": "Chị nghe chị hàng xóm giới thiệu khu Marina, bảo trường liên cấp nằm ngay trong dự án, học xong chạy xuống nhà là được.",
    "lang": "vi",
    "translations": {},
@@ -1212,8 +1288,8 @@
   {
    "id": "g21",
    "speaker_id": "SPK_02",
-   "start_sec": 252,
-   "end_sec": 283,
+   "start_sec": 40.58,
+   "end_sec": 45.5,
    "text": "Cuối tuần chị cũng muốn có chỗ cho hai bé chạy nhảy, kiểu có công viên nước, có chợ đi bộ mười phút tới nơi.",
    "lang": "vi",
    "translations": {},
@@ -1223,8 +1299,8 @@
   {
    "id": "g3",
    "speaker_id": "SPK_02",
-   "start_sec": 290,
-   "end_sec": 330,
+   "start_sec": 45.78,
+   "end_sec": 50.12,
    "text": "Chị thích tầng trung thôi, à, khoảng tầng 12 đến 20, ban công hướng Đông Nam cho mát.",
    "lang": "vi",
    "translations": {},
@@ -1234,8 +1310,8 @@
   {
    "id": "g22",
    "speaker_id": "SPK_01",
-   "start_sec": 336,
-   "end_sec": 368,
+   "start_sec": 50.57,
+   "end_sec": 57.17,
    "text": "Dạ để em ghi lại cho đúng: hai phòng ngủ, gần trường, tầng trung, ban công hướng Đông Nam. Chị xem có thiếu gì không ạ.",
    "lang": "vi",
    "translations": {},
@@ -1245,8 +1321,8 @@
   {
    "id": "g23",
    "speaker_id": "SPK_01",
-   "start_sec": 375,
-   "end_sec": 408,
+   "start_sec": 57.48,
+   "end_sec": 63.2,
    "text": "Khu Marina đang mở bán tháp B, đúng tầm tiêu chí của mình. Chiều nay em gửi chị mặt bằng và giá từng căn.",
    "lang": "vi",
    "translations": {},
@@ -1256,8 +1332,8 @@
   {
    "id": "g57",
    "speaker_id": "SPK_01",
-   "start_sec": 422,
-   "end_sec": 438,
+   "start_sec": 63.44,
+   "end_sec": 66.45,
    "text": "Mùa này người đi xem đông lắm, căn nào vừa ra là có người giữ ngay.",
    "lang": "vi",
    "translations": {},
@@ -1267,8 +1343,8 @@
   {
    "id": "g4",
    "speaker_id": "SPK_02",
-   "start_sec": 440,
-   "end_sec": 470,
+   "start_sec": 67.1,
+   "end_sec": 71.46,
    "text": "Ngân sách thì là tối đa 4,2 tỷ em ạ. Chị có sẵn khoảng 2,1 tỷ, ừ.",
    "lang": "vi",
    "translations": {},
@@ -1278,8 +1354,8 @@
   {
    "id": "g24",
    "speaker_id": "SPK_02",
-   "start_sec": 475,
-   "end_sec": 515,
+   "start_sec": 71.68,
+   "end_sec": 77.22,
    "text": "Hai phẩy một tỷ đó là chị để dành, để dành ba năm nay đấy em, phần còn lại là đất vay, nên chị tính rất kỹ.",
    "lang": "vi",
    "translations": {},
@@ -1289,8 +1365,8 @@
   {
    "id": "g5",
    "speaker_id": "SPK_02",
-   "start_sec": 530,
-   "end_sec": 560,
+   "start_sec": 77.58,
+   "end_sec": 82.14,
    "text": "Còn lại chị định vay, ừm, vay một nửa, nhưng cần ân hạn nợ gốc ít nhất 12 tháng.",
    "lang": "vi",
    "translations": {},
@@ -1300,8 +1376,8 @@
   {
    "id": "g25",
    "speaker_id": "SPK_01",
-   "start_sec": 572,
-   "end_sec": 612,
+   "start_sec": 82.65,
+   "end_sec": 87.16,
    "text": "Vay một nửa giá trị căn thì tháng đầu chị trả khoảng hai mươi bốn triệu, em tính theo lãi suất ưu đãi đang có.",
    "lang": "vi",
    "translations": {},
@@ -1311,8 +1387,8 @@
   {
    "id": "g6",
    "speaker_id": "SPK_01",
-   "start_sec": 620,
-   "end_sec": 660,
+   "start_sec": 87.44,
+   "end_sec": 92.75,
    "text": "Dạ hiện ngân hàng đối tác đang ưu đãi 6,5% trong 18 tháng đầu, sau đó thả nổi theo lãi cơ sở cộng biên độ.",
    "lang": "vi",
    "translations": {},
@@ -1322,8 +1398,8 @@
   {
    "id": "g26",
    "speaker_id": "SPK_03",
-   "start_sec": 665,
-   "end_sec": 692,
+   "start_sec": 93.1,
+   "end_sec": 99.31,
    "text": "Tôi với chị Lan đi xem ba dự án rồi, bên nào người bán cũng nói dự án mình là nhất. Hôm nay tôi đi cùng để nghe cho khách quan.",
    "lang": "vi",
    "translations": {},
@@ -1333,8 +1409,8 @@
   {
    "id": "g7",
    "speaker_id": "SPK_03",
-   "start_sec": 700,
-   "end_sec": 740,
+   "start_sec": 99.61,
+   "end_sec": 103.43,
    "text": "Em nghe bên, à, đồng nghiệp nói phí quản lý chỗ này hơi cao so với mặt bằng chung.",
    "lang": "vi",
    "translations": {},
@@ -1344,8 +1420,8 @@
   {
    "id": "g27",
    "speaker_id": "SPK_03",
-   "start_sec": 752,
-   "end_sec": 786,
+   "start_sec": 103.71,
+   "end_sec": 108.78,
    "text": "Bên dự án khác người ta thu mười hai nghìn một mét, chỗ này nghe nói mười lăm nghìn, chênh nhau cả chục triệu một năm đấy.",
    "lang": "vi",
    "translations": {},
@@ -1355,8 +1431,8 @@
   {
    "id": "g28",
    "speaker_id": "SPK_01",
-   "start_sec": 790,
-   "end_sec": 808,
+   "start_sec": 109.38,
+   "end_sec": 112.92,
    "text": "Chuyện phí quản lý em ghi nhận ạ, để em kiểm lại hợp đồng dịch vụ cho chính xác.",
    "lang": "vi",
    "translations": {},
@@ -1366,8 +1442,8 @@
   {
    "id": "g8",
    "speaker_id": "SPK_02",
-   "start_sec": 810,
-   "end_sec": 850,
+   "start_sec": 115.78,
+   "end_sec": 118.98,
    "text": "Nói thật là giá này cao hơn bên Imperia khoảng 300 triệu em ạ.",
    "lang": "vi",
    "translations": {},
@@ -1377,8 +1453,8 @@
   {
    "id": "g29",
    "speaker_id": "SPK_02",
-   "start_sec": 855,
-   "end_sec": 895,
+   "start_sec": 119.25,
+   "end_sec": 125.01,
    "text": "Căn mười hai ơi ba tỷ chín trăm năm mươi, rẻ hơn nhưng nhìn ra đường. Chị thấy căn mười tám ơi đáng tiền hơn.",
    "lang": "vi",
    "translations": {},
@@ -1388,8 +1464,8 @@
   {
    "id": "g9",
    "speaker_id": "SPK_02",
-   "start_sec": 900,
-   "end_sec": 940,
+   "start_sec": 125.19,
+   "end_sec": 128.54,
    "text": "Chị lo nhất là sau 18 tháng lãi suất tăng lên thì áp lực trả nợ lớn.",
    "lang": "vi",
    "translations": {},
@@ -1399,8 +1475,8 @@
   {
    "id": "g30",
    "speaker_id": "SPK_01",
-   "start_sec": 945,
-   "end_sec": 978,
+   "start_sec": 129.02,
+   "end_sec": 133.92,
    "text": "Về lãi suất, em sẽ nhờ anh Tuấn bên ngân hàng đối tác tính giúp chị kịch bản xấu nhất, tức sau khi hết ưu đãi.",
    "lang": "vi",
    "translations": {},
@@ -1410,8 +1486,8 @@
   {
    "id": "g31",
    "speaker_id": "SPK_02",
-   "start_sec": 985,
-   "end_sec": 1022,
+   "start_sec": 134.62,
+   "end_sec": 139.96,
    "text": "Chị giữ tiền không phải để ăn lãi đâu em, chị giữ để có nhà cho con cháu sau này, nên lần này chị chọn rất kỹ.",
    "lang": "vi",
    "translations": {},
@@ -1421,8 +1497,8 @@
   {
    "id": "g32",
    "speaker_id": "SPK_02",
-   "start_sec": 1030,
-   "end_sec": 1072,
+   "start_sec": 140.32,
+   "end_sec": 145.14,
    "text": "Nhà chị mua lần trước năm mười hai, lúc đó giấy tờ gì chị cũng đi kiểm tra hết, mất cả tháng mới xong.",
    "lang": "vi",
    "translations": {},
@@ -1432,8 +1508,8 @@
   {
    "id": "g33",
    "speaker_id": "SPK_02",
-   "start_sec": 1080,
-   "end_sec": 1125,
+   "start_sec": 145.36,
+   "end_sec": 150.8,
    "text": "Lần này chị có người bạn làm ngành pháp lý nhờ xem giúp, sổ hồng, hợp đồng đặt cọc, phạt vi phạm gì cũng phải rõ ràng.",
    "lang": "vi",
    "translations": {},
@@ -1443,8 +1519,8 @@
   {
    "id": "g10",
    "speaker_id": "SPK_01",
-   "start_sec": 1140,
-   "end_sec": 1190,
+   "start_sec": 151.36,
+   "end_sec": 156.8,
    "text": "Em giới thiệu chị căn 18.06, hai phòng ngủ, 72 mét vuông, ban công đúng hướng Đông Nam chị muốn.",
    "lang": "vi",
    "translations": {},
@@ -1454,8 +1530,8 @@
   {
    "id": "g34",
    "speaker_id": "SPK_01",
-   "start_sec": 1198,
-   "end_sec": 1238,
+   "start_sec": 157.16,
+   "end_sec": 162.53,
    "text": "Giá căn mười tám ơ sáu là bốn phẩy mười lăm tỷ, đã gồm thuế và nội thất cơ bản, chốt được em làm thủ tục ngay.",
    "lang": "vi",
    "translations": {},
@@ -1465,8 +1541,8 @@
   {
    "id": "g35",
    "speaker_id": "SPK_01",
-   "start_sec": 1245,
-   "end_sec": 1285,
+   "start_sec": 162.85,
+   "end_sec": 167.53,
    "text": "Tháp B bàn giao quý hai năm sau, chủ đầu tư bên này giao đúng hạn ba năm nay rồi, chị cứ yên tâm.",
    "lang": "vi",
    "translations": {},
@@ -1476,8 +1552,8 @@
   {
    "id": "g36",
    "speaker_id": "SPK_01",
-   "start_sec": 1295,
-   "end_sec": 1330,
+   "start_sec": 167.89,
+   "end_sec": 172.75,
    "text": "Nhà bếp tách riêng, phòng ngủ master có nhà vệ sinh riêng, phòng khách cửa kính trọn, chị thích kiểu đó không ạ.",
    "lang": "vi",
    "translations": {},
@@ -1487,8 +1563,8 @@
   {
    "id": "g37",
    "speaker_id": "SPK_01",
-   "start_sec": 1340,
-   "end_sec": 1365,
+   "start_sec": 173.05,
+   "end_sec": 176.6,
    "text": "Anh chị mai thu xếp qua xem nhà mẫu với em nhé, đứng trong căn mới cảm nhận hết được.",
    "lang": "vi",
    "translations": {},
@@ -1498,8 +1574,8 @@
   {
    "id": "g11",
    "speaker_id": "SPK_02",
-   "start_sec": 1370,
-   "end_sec": 1410,
+   "start_sec": 177.16,
+   "end_sec": 180.37,
    "text": "Bếp tách riêng chị thích. Có điều phòng ngủ phụ hơi nhỏ.",
    "lang": "vi",
    "translations": {},
@@ -1509,8 +1585,8 @@
   {
    "id": "g58",
    "speaker_id": "SPK_01",
-   "start_sec": 1462,
-   "end_sec": 1478,
+   "start_sec": 180.83,
+   "end_sec": 183.21,
    "text": "Chị để ý giúp em chỗ để xe với trạm sạc xe điện nhé.",
    "lang": "vi",
    "translations": {},
@@ -1520,8 +1596,8 @@
   {
    "id": "g38",
    "speaker_id": "SPK_02",
-   "start_sec": 1485,
-   "end_sec": 1525,
+   "start_sec": 183.68,
+   "end_sec": 188.77,
    "text": "Phòng khách kính trọn thì sáng quá, chị chỉ sợ nắng trưa. Để mai chị xem tận nơi rồi tính.",
    "lang": "vi",
    "translations": {},
@@ -1531,8 +1607,8 @@
   {
    "id": "g39",
    "speaker_id": "SPK_02",
-   "start_sec": 1530,
-   "end_sec": 1565,
+   "start_sec": 189.01,
+   "end_sec": 193.25,
    "text": "Chị sợ nhất là cọc xong chủ đầu tư làm lỡ hẹn, mấy vụ trên báo chí chị đọc thấy lo lắm.",
    "lang": "vi",
    "translations": {},
@@ -1542,8 +1618,8 @@
   {
    "id": "g40",
    "speaker_id": "SPK_02",
-   "start_sec": 1570,
-   "end_sec": 1585,
+   "start_sec": 193.48,
+   "end_sec": 195.71,
    "text": "Em cho chị xin chính sách bảo hành chi tiết được không?",
    "lang": "vi",
    "translations": {},
@@ -1553,8 +1629,8 @@
   {
    "id": "g12",
    "speaker_id": "SPK_01",
-   "start_sec": 1590,
-   "end_sec": 1630,
+   "start_sec": 196.04,
+   "end_sec": 199.88,
    "text": "Bên em giữ căn 18.06 cho chị đến hết thứ Bảy 16/11 nhé.",
    "lang": "vi",
    "translations": {},
@@ -1564,8 +1640,8 @@
   {
    "id": "g59",
    "speaker_id": "SPK_02",
-   "start_sec": 1632,
-   "end_sec": 1658,
+   "start_sec": 200.41,
+   "end_sec": 203.84,
    "text": "Em cứ tính giúp chị tổng tiền phải đóng trước khi nhận nhà, đừng để phát sinh.",
    "lang": "vi",
    "translations": {},
@@ -1575,8 +1651,8 @@
   {
    "id": "g41",
    "speaker_id": "SPK_01",
-   "start_sec": 1665,
-   "end_sec": 1700,
+   "start_sec": 204.23,
+   "end_sec": 209.15,
    "text": "Giữ căn mình làm giấy đặt cọc năm mươi triệu, tiền này sau đó trừ vào đợt thanh toán đầu tiên, không mất đi đâu cả.",
    "lang": "vi",
    "translations": {},
@@ -1586,8 +1662,8 @@
   {
    "id": "g42",
    "speaker_id": "SPK_01",
-   "start_sec": 1710,
-   "end_sec": 1745,
+   "start_sec": 209.32,
+   "end_sec": 213.52,
    "text": "Nếu đổi ý, mình hoàn lại chín mươi phần trăm trong vòng mười lăm ngày, điều khoản ghi thẳng vào phụ lục.",
    "lang": "vi",
    "translations": {},
@@ -1597,8 +1673,8 @@
   {
    "id": "g43",
    "speaker_id": "SPK_01",
-   "start_sec": 1750,
-   "end_sec": 1775,
+   "start_sec": 213.79,
+   "end_sec": 217.43,
    "text": "Tới hết thứ Bảy là hết hạn giữ căn, em phải báo bên dự án để họ mở bán lại.",
    "lang": "vi",
    "translations": {},
@@ -1608,8 +1684,8 @@
   {
    "id": "g13",
    "speaker_id": "SPK_02",
-   "start_sec": 1780,
-   "end_sec": 1820,
+   "start_sec": 218.12,
+   "end_sec": 220.24,
    "text": "Chị phải để anh nhà xem đã rồi mới quyết được.",
    "lang": "vi",
    "translations": {},
@@ -1619,8 +1695,8 @@
   {
    "id": "g60",
    "speaker_id": "SPK_01",
-   "start_sec": 1830,
-   "end_sec": 1865,
+   "start_sec": 220.71,
+   "end_sec": 224.55,
    "text": "Em ghi lại đây: giữ căn đến hết ngày mười sáu tháng mười một, chị trả lời trước thứ Bảy.",
    "lang": "vi",
    "translations": {},
@@ -1630,8 +1706,8 @@
   {
    "id": "g44",
    "speaker_id": "SPK_03",
-   "start_sec": 1875,
-   "end_sec": 1910,
+   "start_sec": 225.09,
+   "end_sec": 229.08,
    "text": "Theo tôi thì căn này hợp với chị đó, tiện cho hai cháu đi học hết, đi làm về cũng tiện.",
    "lang": "vi",
    "translations": {},
@@ -1641,8 +1717,8 @@
   {
    "id": "g45",
    "speaker_id": "SPK_03",
-   "start_sec": 1915,
-   "end_sec": 1938,
+   "start_sec": 229.25,
+   "end_sec": 232.71,
    "text": "Mà lỡ căn này thì tiếc lắm đấy, tôi thấy giá khu này đầu năm tới còn tăng.",
    "lang": "vi",
    "translations": {},
@@ -1652,8 +1728,8 @@
   {
    "id": "g46",
    "speaker_id": "SPK_02",
-   "start_sec": 1945,
-   "end_sec": 1968,
+   "start_sec": 233.24,
+   "end_sec": 236.68,
    "text": "Chị phải về bàn với anh nhà đã, chuyện tiền tỷ đâu có quyết trong một buổi được.",
    "lang": "vi",
    "translations": {},
@@ -1663,8 +1739,8 @@
   {
    "id": "g14",
    "speaker_id": "SPK_01",
-   "start_sec": 1970,
-   "end_sec": 2000,
+   "start_sec": 237.27,
+   "end_sec": 240.68,
    "text": "Em gửi chị bảng tính trước tối mai nhé, có cả phương án vay 50%.",
    "lang": "vi",
    "translations": {},
@@ -1674,8 +1750,8 @@
   {
    "id": "g47",
    "speaker_id": "SPK_02",
-   "start_sec": 2005,
-   "end_sec": 2040,
+   "start_sec": 241.2,
+   "end_sec": 244.9,
    "text": "Cuối tuần cho chị xin lịch xem nhà mẫu với, hai bé đi cùng cho chúng nó chạy chơi.",
    "lang": "vi",
    "translations": {},
@@ -1685,8 +1761,8 @@
   {
    "id": "g48",
    "speaker_id": "SPK_02",
-   "start_sec": 2048,
-   "end_sec": 2082,
+   "start_sec": 248,
+   "end_sec": 251.01,
    "text": "Nếu căn này không lấy được thì bên em còn căn nào tương tự không em?",
    "lang": "vi",
    "translations": {},
@@ -1696,8 +1772,8 @@
   {
    "id": "g49",
    "speaker_id": "SPK_01",
-   "start_sec": 2092,
-   "end_sec": 2128,
+   "start_sec": 251.33,
+   "end_sec": 257.42,
    "text": "Chị cứ thoải mái, căn hợp thì mình tiến, không hợp em tìm căn khác cho. Khách mua nhà mà bị giục là khó chịu lắm.",
    "lang": "vi",
    "translations": {},
@@ -1707,8 +1783,8 @@
   {
    "id": "g50",
    "speaker_id": "SPK_01",
-   "start_sec": 2135,
-   "end_sec": 2175,
+   "start_sec": 257.78,
+   "end_sec": 262.54,
    "text": "Bảng tính em làm hai kịch bản: một là trả đều từ đầu, hai là ân hạn gốc mười hai tháng rồi trả sau.",
    "lang": "vi",
    "translations": {},
@@ -1718,8 +1794,8 @@
   {
    "id": "g51",
    "speaker_id": "SPK_01",
-   "start_sec": 2182,
-   "end_sec": 2198,
+   "start_sec": 262.78,
+   "end_sec": 265.34,
    "text": "Chị xem xong góp ý, em sửa ngay trong hôm đó luôn.",
    "lang": "vi",
    "translations": {},
@@ -1729,8 +1805,8 @@
   {
    "id": "g15",
    "speaker_id": "SPK_02",
-   "start_sec": 2200,
-   "end_sec": 2240,
+   "start_sec": 265.88,
+   "end_sec": 268.46,
    "text": "Để chị hỏi anh nhà xem hôm nào rảnh rồi chị báo em.",
    "lang": "vi",
    "translations": {},
@@ -1740,8 +1816,8 @@
   {
    "id": "g52",
    "speaker_id": "SPK_01",
-   "start_sec": 2245,
-   "end_sec": 2280,
+   "start_sec": 268.89,
+   "end_sec": 272.89,
    "text": "Chiết khấu thanh toán nhanh thì em phải hỏi anh Tuấn, anh ấy phụ trách chính sách bán hàng của dự án.",
    "lang": "vi",
    "translations": {},
@@ -1751,8 +1827,8 @@
   {
    "id": "g53",
    "speaker_id": "SPK_01",
-   "start_sec": 2288,
-   "end_sec": 2320,
+   "start_sec": 273.23,
+   "end_sec": 277.12,
    "text": "Trước chiều thứ Sáu em có câu trả lời cho chị, kể cả phần quà gửi đỡng khai trương nếu còn.",
    "lang": "vi",
    "translations": {},
@@ -1762,8 +1838,8 @@
   {
    "id": "g54",
    "speaker_id": "SPK_02",
-   "start_sec": 2345,
-   "end_sec": 2380,
+   "start_sec": 277.61,
+   "end_sec": 281.34,
    "text": "Chị cảm ơn em, hôm nay chị nắm rõ hơn nhiều so với lần trước đi xem một mình.",
    "lang": "vi",
    "translations": {},
@@ -1773,8 +1849,8 @@
   {
    "id": "g16",
    "speaker_id": "SPK_01",
-   "start_sec": 2390,
-   "end_sec": 2430,
+   "start_sec": 282.02,
+   "end_sec": 284.7,
    "text": "Em xin anh Tuấn chính sách chiết khấu cho chị nếu mình thanh toán nhanh.",
    "lang": "vi",
    "translations": {},
@@ -1784,8 +1860,8 @@
   {
    "id": "g55",
    "speaker_id": "SPK_02",
-   "start_sec": 2440,
-   "end_sec": 2472,
+   "start_sec": 288.1,
+   "end_sec": 291.58,
    "text": "Đầu tuần sau nếu mọi thứ ổn thì chị với anh nhà qua làm hợp đồng đặt cọc luôn.",
    "lang": "vi",
    "translations": {},
@@ -1795,8 +1871,8 @@
   {
    "id": "g56",
    "speaker_id": "SPK_02",
-   "start_sec": 2480,
-   "end_sec": 2515,
+   "start_sec": 291.93,
+   "end_sec": 296.68,
    "text": "Có gì chị gọi em số cũ nhé. Cảm ơn hai em nhiều, hôm nay mệt mấy cũng đáng.",
    "lang": "vi",
    "translations": {},
@@ -1809,43 +1885,43 @@
    "question": "Khách còn băn khoăn gì?",
    "answer": "Chị Lan còn ba băn khoăn: giá cao hơn Imperia khoảng 300 triệu, lãi suất sau 18 tháng ưu đãi, và phòng ngủ phụ hơi nhỏ.",
    "citations": [
-    815,
-    905,
-    1380
+    116.2,
+    125.6,
+    178
    ]
   },
   {
    "question": "Soạn tin nhắn Zalo cảm ơn",
    "answer": "Dạ em cảm ơn chị Lan đã dành thời gian sáng nay. Em gửi chị bảng tính vay 50% cho căn 18.06 trước tối mai. Bên em giữ căn đến hết thứ Bảy 16/11, chị và anh sắp xếp qua xem nhà mẫu giúp em nhé.",
    "citations": [
-    1600,
-    1975
+    197,
+    237.8
    ]
   },
   {
    "question": "Lần gặp tới cần chuẩn bị gì?",
    "answer": "Chuẩn bị bảng so sánh tổng chi phí với Imperia gồm phí quản lý, phương án vay có ân hạn 12 tháng, và gợi ý một căn góc có phòng ngủ phụ rộng hơn.",
    "citations": [
-    712,
-    540,
-    1385
+    100.8,
+    79.1,
+    178.4
    ]
   },
   {
    "question": "Chị Lan nói gì về chuyện vay?",
    "answer": "Chị Lan định vay 50%, cần ân hạn nợ gốc ít nhất 12 tháng và lo lãi suất tăng sau thời gian ưu đãi.",
    "citations": [
-    540,
-    905
+    79.1,
+    125.6
    ]
   },
   {
    "question": "Bên mình đã cam kết những gì?",
    "answer": "Bên bán giữ căn 18.06 đến hết thứ Bảy 16/11, gửi bảng tính vay trước tối 13/11 và xin chính sách chiết khấu cho thanh toán nhanh.",
    "citations": [
-    1600,
-    1975,
-    2400
+    197,
+    237.8,
+    282.7
    ]
   }
  ],
@@ -1853,295 +1929,56 @@
   "session_id": "s-sample-realestate_sales",
   "silences": [
    {
-    "start_sec": 40,
-    "end_sec": 45
+    "start_sec": 112.9,
+    "end_sec": 115.8
    },
    {
-    "start_sec": 75,
-    "end_sec": 80
+    "start_sec": 244.9,
+    "end_sec": 248
    },
    {
-    "start_sec": 130,
-    "end_sec": 135
-   },
-   {
-    "start_sec": 168,
-    "end_sec": 175
-   },
-   {
-    "start_sec": 205,
-    "end_sec": 212
-   },
-   {
-    "start_sec": 245,
-    "end_sec": 252
-   },
-   {
-    "start_sec": 283,
-    "end_sec": 290
-   },
-   {
-    "start_sec": 330,
-    "end_sec": 336
-   },
-   {
-    "start_sec": 368,
-    "end_sec": 375
-   },
-   {
-    "start_sec": 408,
-    "end_sec": 422
-   },
-   {
-    "start_sec": 438,
-    "end_sec": 440
-   },
-   {
-    "start_sec": 470,
-    "end_sec": 475
-   },
-   {
-    "start_sec": 515,
-    "end_sec": 530
-   },
-   {
-    "start_sec": 560,
-    "end_sec": 572
-   },
-   {
-    "start_sec": 612,
-    "end_sec": 620
-   },
-   {
-    "start_sec": 660,
-    "end_sec": 665
-   },
-   {
-    "start_sec": 692,
-    "end_sec": 700
-   },
-   {
-    "start_sec": 740,
-    "end_sec": 752
-   },
-   {
-    "start_sec": 786,
-    "end_sec": 790
-   },
-   {
-    "start_sec": 808,
-    "end_sec": 810
-   },
-   {
-    "start_sec": 850,
-    "end_sec": 855
-   },
-   {
-    "start_sec": 895,
-    "end_sec": 900
-   },
-   {
-    "start_sec": 940,
-    "end_sec": 945
-   },
-   {
-    "start_sec": 978,
-    "end_sec": 985
-   },
-   {
-    "start_sec": 1022,
-    "end_sec": 1030
-   },
-   {
-    "start_sec": 1072,
-    "end_sec": 1080
-   },
-   {
-    "start_sec": 1125,
-    "end_sec": 1140
-   },
-   {
-    "start_sec": 1190,
-    "end_sec": 1198
-   },
-   {
-    "start_sec": 1238,
-    "end_sec": 1245
-   },
-   {
-    "start_sec": 1285,
-    "end_sec": 1295
-   },
-   {
-    "start_sec": 1330,
-    "end_sec": 1340
-   },
-   {
-    "start_sec": 1365,
-    "end_sec": 1370
-   },
-   {
-    "start_sec": 1410,
-    "end_sec": 1462
-   },
-   {
-    "start_sec": 1478,
-    "end_sec": 1485
-   },
-   {
-    "start_sec": 1525,
-    "end_sec": 1530
-   },
-   {
-    "start_sec": 1565,
-    "end_sec": 1570
-   },
-   {
-    "start_sec": 1585,
-    "end_sec": 1590
-   },
-   {
-    "start_sec": 1630,
-    "end_sec": 1632
-   },
-   {
-    "start_sec": 1658,
-    "end_sec": 1665
-   },
-   {
-    "start_sec": 1700,
-    "end_sec": 1710
-   },
-   {
-    "start_sec": 1745,
-    "end_sec": 1750
-   },
-   {
-    "start_sec": 1775,
-    "end_sec": 1780
-   },
-   {
-    "start_sec": 1820,
-    "end_sec": 1830
-   },
-   {
-    "start_sec": 1865,
-    "end_sec": 1875
-   },
-   {
-    "start_sec": 1910,
-    "end_sec": 1915
-   },
-   {
-    "start_sec": 1938,
-    "end_sec": 1945
-   },
-   {
-    "start_sec": 1968,
-    "end_sec": 1970
-   },
-   {
-    "start_sec": 2000,
-    "end_sec": 2005
-   },
-   {
-    "start_sec": 2040,
-    "end_sec": 2048
-   },
-   {
-    "start_sec": 2082,
-    "end_sec": 2092
-   },
-   {
-    "start_sec": 2128,
-    "end_sec": 2135
-   },
-   {
-    "start_sec": 2175,
-    "end_sec": 2182
-   },
-   {
-    "start_sec": 2198,
-    "end_sec": 2200
-   },
-   {
-    "start_sec": 2240,
-    "end_sec": 2245
-   },
-   {
-    "start_sec": 2280,
-    "end_sec": 2288
-   },
-   {
-    "start_sec": 2320,
-    "end_sec": 2345
-   },
-   {
-    "start_sec": 2380,
-    "end_sec": 2390
-   },
-   {
-    "start_sec": 2430,
-    "end_sec": 2440
-   },
-   {
-    "start_sec": 2472,
-    "end_sec": 2480
+    "start_sec": 284.7,
+    "end_sec": 288.1
    }
   ],
   "fillers": [
    {
-    "start_sec": 80,
-    "end_sec": 81.3,
+    "start_sec": 13.9,
+    "end_sec": 14.1,
     "text": "Ờ..."
    },
    {
-    "start_sec": 81.7,
-    "end_sec": 82,
+    "start_sec": 14.2,
+    "end_sec": 14.2,
     "text": "ừ"
    },
    {
-    "start_sec": 155.2,
-    "end_sec": 157.2,
-    "text": "thì là"
-   },
-   {
-    "start_sec": 267.2,
-    "end_sec": 268.4,
-    "text": "kiểu"
-   },
-   {
-    "start_sec": 302.7,
-    "end_sec": 303.6,
+    "start_sec": 47.2,
+    "end_sec": 47.3,
     "text": "à,"
    },
    {
-    "start_sec": 444.6,
-    "end_sec": 447.4,
-    "text": "thì là"
-   },
-   {
-    "start_sec": 469.1,
-    "end_sec": 470,
+    "start_sec": 71.3,
+    "end_sec": 71.5,
     "text": "ừ."
    },
    {
-    "start_sec": 538.3,
-    "end_sec": 539.4,
+    "start_sec": 78.8,
+    "end_sec": 79,
     "text": "ừm,"
    },
    {
-    "start_sec": 706.3,
-    "end_sec": 707.3,
+    "start_sec": 100.2,
+    "end_sec": 100.3,
     "text": "à,"
    }
   ],
   "speaker_gain_db": {
-   "SPK_01": 2,
+   "SPK_01": -3,
    "SPK_02": 0,
-   "SPK_03": -2
+   "SPK_03": 2
   },
-  "noise_level": "high",
-  "clean_duration_sec": 2052
+  "noise_level": "low",
+  "clean_duration_sec": 288
  }
 }

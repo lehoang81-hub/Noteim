@@ -7,8 +7,8 @@
   "template_id": "tpl-business",
   "status": "ready",
   "storage_status": "full",
-  "duration_sec": 4080,
-  "size_bytes": 12240000,
+  "duration_sec": 275.5,
+  "size_bytes": 1695526,
   "created_at": "2026-11-11T08:30:00+07:00",
   "audio_expires_at": "2026-11-18T08:30:00+07:00",
   "consent": {
@@ -115,8 +115,8 @@
     "display_name": "Anh Minh",
     "is_me": false,
     "color_index": 0,
-    "talk_ratio_percent": 34,
-    "sample_start_sec": 30
+    "talk_ratio_percent": 29,
+    "sample_start_sec": 5.6
    },
    {
     "id": "SPK_02",
@@ -124,8 +124,8 @@
     "display_name": "Chị Thảo",
     "is_me": false,
     "color_index": 1,
-    "talk_ratio_percent": 22,
-    "sample_start_sec": 610
+    "talk_ratio_percent": 24,
+    "sample_start_sec": 19.8
    },
    {
     "id": "SPK_03",
@@ -133,8 +133,8 @@
     "display_name": "Anh Đức",
     "is_me": false,
     "color_index": 2,
-    "talk_ratio_percent": 18,
-    "sample_start_sec": 1520
+    "talk_ratio_percent": 20,
+    "sample_start_sec": 92
    },
    {
     "id": "SPK_04",
@@ -142,8 +142,8 @@
     "display_name": "Chị Hà",
     "is_me": false,
     "color_index": 3,
-    "talk_ratio_percent": 14,
-    "sample_start_sec": 2410
+    "talk_ratio_percent": 16,
+    "sample_start_sec": 156.9
    },
    {
     "id": "SPK_05",
@@ -152,7 +152,7 @@
     "is_me": true,
     "color_index": 4,
     "talk_ratio_percent": 12,
-    "sample_start_sec": 3300
+    "sample_start_sec": 223.6
    }
   ],
   "topics": [
@@ -160,14 +160,14 @@
     "id": "u1",
     "section_id": "tpl-business-s2",
     "title": "Doanh thu tháng 10",
-    "start_sec": 600,
-    "end_sec": 1140,
+    "start_sec": 19.8,
+    "end_sec": 60.4,
     "tag": "figure",
     "bullets": [
      {
       "id": "c1",
       "text": "Doanh thu tháng 10 đạt 3,8 tỷ, tăng 12% so với tháng 9",
-      "timestamp_sec": 640,
+      "timestamp_sec": 20.6,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -176,7 +176,7 @@
      {
       "id": "c2",
       "text": "Mảng nội thất văn phòng chiếm 55%, lần đầu vượt nội thất gia đình",
-      "timestamp_sec": 760,
+      "timestamp_sec": 27.9,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -185,7 +185,7 @@
      {
       "id": "c3",
       "text": "Công nợ quá 60 ngày còn 620 triệu, chủ yếu từ hai công trình",
-      "timestamp_sec": 980,
+      "timestamp_sec": 45.7,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -208,21 +208,21 @@
       3.4,
       3.8
      ],
-     "source_timestamp_sec": 640
+     "source_timestamp_sec": 20.6
     }
    },
    {
     "id": "u2",
     "section_id": "tpl-business-s1",
     "title": "Chốt nhà cung cấp gỗ mới",
-    "start_sec": 1140,
-    "end_sec": 1440,
+    "start_sec": 60.4,
+    "end_sec": 85.1,
     "tag": "decided",
     "bullets": [
      {
       "id": "c4",
       "text": "Chuyển sang nhà cung cấp gỗ An Phát từ tháng 12, giá thấp hơn 8%",
-      "timestamp_sec": 1180,
+      "timestamp_sec": 65.1,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -231,7 +231,7 @@
      {
       "id": "c5",
       "text": "Ký hợp đồng thử 3 tháng trước khi cam kết cả năm",
-      "timestamp_sec": 1320,
+      "timestamp_sec": 76.8,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -243,14 +243,14 @@
     "id": "u3",
     "section_id": "tpl-business-s3",
     "title": "Xưởng quá tải đơn tháng 12",
-    "start_sec": 1440,
-    "end_sec": 1940,
+    "start_sec": 85.1,
+    "end_sec": 122.3,
     "tag": "risk",
     "bullets": [
      {
       "id": "c6",
       "text": "Xưởng đang chạy 115% công suất, 3 đơn có nguy cơ trễ hạn",
-      "timestamp_sec": 1500,
+      "timestamp_sec": 90.3,
       "speaker_id": "SPK_03",
       "is_quote": false,
       "edited": false,
@@ -259,7 +259,7 @@
      {
       "id": "c7",
       "text": "\"Nếu không thêm ca tối thì đơn Hoàng Huy chắc chắn trễ\"",
-      "timestamp_sec": 1610,
+      "timestamp_sec": 101.5,
       "speaker_id": "SPK_03",
       "is_quote": true,
       "edited": false,
@@ -268,7 +268,7 @@
      {
       "id": "c8",
       "text": "Đề xuất thuê thêm 4 thợ thời vụ trong 6 tuần",
-      "timestamp_sec": 1800,
+      "timestamp_sec": 112,
       "speaker_id": "SPK_03",
       "is_quote": false,
       "edited": false,
@@ -280,14 +280,14 @@
     "id": "u4",
     "section_id": "tpl-business-s1",
     "title": "Chiến dịch Tết",
-    "start_sec": 1940,
-    "end_sec": 2360,
+    "start_sec": 122.3,
+    "end_sec": 153.1,
     "tag": "idea",
     "bullets": [
      {
       "id": "c9",
       "text": "Chạy gói \"Đón Tết nhà mới\" giảm 7% cho đơn trên 50 triệu",
-      "timestamp_sec": 1990,
+      "timestamp_sec": 125.3,
       "speaker_id": "SPK_04",
       "is_quote": false,
       "edited": false,
@@ -296,7 +296,7 @@
      {
       "id": "c10",
       "text": "Dùng ảnh công trình thật thay ảnh mẫu, quay video khách nhận nhà",
-      "timestamp_sec": 2150,
+      "timestamp_sec": 139,
       "speaker_id": "SPK_04",
       "is_quote": false,
       "edited": false,
@@ -308,14 +308,14 @@
     "id": "u5",
     "section_id": "tpl-business-s3",
     "title": "Tuyển dụng thiết kế",
-    "start_sec": 2360,
-    "end_sec": 2850,
+    "start_sec": 153.1,
+    "end_sec": 184.7,
     "tag": "pending",
     "bullets": [
      {
       "id": "c11",
       "text": "Cần thêm 1 kiến trúc sư nội thất, chưa chốt mức lương",
-      "timestamp_sec": 2420,
+      "timestamp_sec": 157.8,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -324,7 +324,7 @@
      {
       "id": "c12",
       "text": "Cân nhắc giữa tuyển chính thức và thuê theo dự án",
-      "timestamp_sec": 2700,
+      "timestamp_sec": 173.6,
       "speaker_id": "SPK_03",
       "is_quote": false,
       "edited": false,
@@ -336,14 +336,14 @@
     "id": "u6",
     "section_id": "tpl-business-s4",
     "title": "Báo cáo bán hàng của Hoàng",
-    "start_sec": 2850,
-    "end_sec": 3400,
+    "start_sec": 184.7,
+    "end_sec": 231.3,
     "tag": "figure",
     "bullets": [
      {
       "id": "c13",
       "text": "Đã gặp 14 khách trong tháng, chốt 3 hợp đồng",
-      "timestamp_sec": 2880,
+      "timestamp_sec": 187.4,
       "speaker_id": "SPK_05",
       "is_quote": false,
       "edited": false,
@@ -352,7 +352,7 @@
      {
       "id": "c14",
       "text": "Tỷ lệ chốt ở khách giới thiệu cao gấp đôi khách quảng cáo",
-      "timestamp_sec": 3050,
+      "timestamp_sec": 200.6,
       "speaker_id": "SPK_05",
       "is_quote": false,
       "edited": false,
@@ -364,14 +364,14 @@
     "id": "u7",
     "section_id": "tpl-business-s4",
     "title": "Phân công tuần tới",
-    "start_sec": 3400,
-    "end_sec": 4080,
+    "start_sec": 231.3,
+    "end_sec": 275.5,
     "tag": "decided",
     "bullets": [
      {
       "id": "c15",
       "text": "Chị Thảo gửi danh sách công nợ cho từng phụ trách công trình",
-      "timestamp_sec": 3450,
+      "timestamp_sec": 234.2,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -380,7 +380,7 @@
      {
       "id": "c16",
       "text": "Anh Đức lập kế hoạch ca tối trước thứ Hai",
-      "timestamp_sec": 3800,
+      "timestamp_sec": 259.3,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -389,7 +389,7 @@
      {
       "id": "c17",
       "text": "Chị Hà gửi bản nháp chiến dịch Tết trước ngày 20/11",
-      "timestamp_sec": 3950,
+      "timestamp_sec": 268.1,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -409,7 +409,7 @@
     "done": false,
     "done_at": null,
     "source_quote": "Chị gửi mọi người danh sách trong thứ Bảy",
-    "timestamp_sec": 3450
+    "timestamp_sec": 234.2
    },
    {
     "id": "h2",
@@ -421,7 +421,7 @@
     "done": false,
     "done_at": null,
     "source_quote": "Thứ Hai anh Đức phải có kế hoạch ca tối",
-    "timestamp_sec": 3800
+    "timestamp_sec": 259.3
    },
    {
     "id": "h3",
@@ -433,7 +433,7 @@
     "done": false,
     "done_at": null,
     "source_quote": "Hà gửi bản nháp trước 20 nhé",
-    "timestamp_sec": 3950
+    "timestamp_sec": 268.1
    },
    {
     "id": "h4",
@@ -445,7 +445,7 @@
     "done": false,
     "done_at": null,
     "source_quote": null,
-    "timestamp_sec": 1320
+    "timestamp_sec": 76.8
    },
    {
     "id": "h5",
@@ -457,7 +457,7 @@
     "done": false,
     "done_at": null,
     "source_quote": null,
-    "timestamp_sec": 2420
+    "timestamp_sec": 157.8
    },
    {
     "id": "h6",
@@ -469,7 +469,7 @@
     "done": false,
     "done_at": null,
     "source_quote": null,
-    "timestamp_sec": 3050
+    "timestamp_sec": 200.6
    },
    {
     "id": "h7",
@@ -481,7 +481,7 @@
     "done": true,
     "done_at": "2026-11-13T16:00:00+07:00",
     "source_quote": null,
-    "timestamp_sec": 980
+    "timestamp_sec": 45.7
    },
    {
     "id": "h8",
@@ -493,25 +493,25 @@
     "done": true,
     "done_at": "2026-11-12T11:30:00+07:00",
     "source_quote": null,
-    "timestamp_sec": 1800
+    "timestamp_sec": 112
    }
   ],
   "notes": [
    {
     "id": "n1",
-    "timestamp_sec": 1615,
+    "timestamp_sec": 101.8,
     "text": "Đơn Hoàng Huy là ưu tiên số một"
    }
   ],
   "bookmarks": [
    {
     "id": "m1",
-    "timestamp_sec": 640,
+    "timestamp_sec": 20.6,
     "tag": "figure"
    },
    {
     "id": "m2",
-    "timestamp_sec": 1610,
+    "timestamp_sec": 101.5,
     "tag": "risk"
    }
   ],
@@ -1121,58 +1121,73 @@
   "speaker_spans": [
    {
     "speaker_id": "SPK_01",
-    "start_sec": 0,
-    "end_sec": 600
+    "start_sec": 1.19,
+    "end_sec": 19.52
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 600,
-    "end_sec": 1140
+    "start_sec": 19.85,
+    "end_sec": 60.04
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 1140,
-    "end_sec": 1440
+    "start_sec": 60.7,
+    "end_sec": 84.68
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 1440,
-    "end_sec": 1940
+    "start_sec": 85.21,
+    "end_sec": 98.05
+   },
+   {
+    "speaker_id": "SPK_03",
+    "start_sec": 100.91,
+    "end_sec": 122.19
    },
    {
     "speaker_id": "SPK_04",
-    "start_sec": 1940,
-    "end_sec": 2360
+    "start_sec": 122.6,
+    "end_sec": 152.62
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 2360,
-    "end_sec": 2620
+    "start_sec": 153.1,
+    "end_sec": 167.23
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 2620,
-    "end_sec": 2850
+    "start_sec": 167.76,
+    "end_sec": 184.39
    },
    {
     "speaker_id": "SPK_05",
-    "start_sec": 2850,
-    "end_sec": 3250
+    "start_sec": 184.87,
+    "end_sec": 204.67
+   },
+   {
+    "speaker_id": "SPK_05",
+    "start_sec": 207.78,
+    "end_sec": 219.21
    },
    {
     "speaker_id": "SPK_04",
-    "start_sec": 3250,
-    "end_sec": 3400
+    "start_sec": 219.65,
+    "end_sec": 231.03
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 3400,
-    "end_sec": 3760
+    "start_sec": 231.63,
+    "end_sec": 238.64
+   },
+   {
+    "speaker_id": "SPK_02",
+    "start_sec": 242.05,
+    "end_sec": 256.1
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 3760,
-    "end_sec": 4080
+    "start_sec": 256.5,
+    "end_sec": 274.47
    }
   ],
   "send_history": [],
@@ -1188,14 +1203,15 @@
   ],
   "report_languages": [
    "vi"
-  ]
+  ],
+  "audio_url": "/audio/10-mau-dieu-hanh-noi-that.m4a"
  },
  "transcript": [
   {
    "id": "g1",
    "speaker_id": "SPK_01",
-   "start_sec": 0,
-   "end_sec": 40,
+   "start_sec": 1.19,
+   "end_sec": 7.08,
    "text": "Mình bắt đầu nhé. Hôm nay có bốn việc: số liệu tháng 10, nhà cung cấp gỗ, tình hình xưởng và kế hoạch Tết.",
    "lang": "vi",
    "translations": {},
@@ -1205,8 +1221,8 @@
   {
    "id": "g11",
    "speaker_id": "SPK_01",
-   "start_sec": 50,
-   "end_sec": 95,
+   "start_sec": 7.43,
+   "end_sec": 12.02,
    "text": "Mình có đúng sáu mươi tám phút, ai phát biểu ngắn gọn giúp, việc nào vướng thì nói thẳng, đừng nói vòng.",
    "lang": "vi",
    "translations": {},
@@ -1216,8 +1232,8 @@
   {
    "id": "g12",
    "speaker_id": "SPK_01",
-   "start_sec": 110,
-   "end_sec": 165,
+   "start_sec": 12.35,
+   "end_sec": 19.52,
    "text": "Chương trình hôm nay: số liệu tháng mười, chuyện nhà cung cấp gỗ, tình hình xưởng, và chiến dịch Tết. Bắt đầu là số liệu, Thảo trình bày.",
    "lang": "vi",
    "translations": {},
@@ -1227,8 +1243,8 @@
   {
    "id": "g2",
    "speaker_id": "SPK_02",
-   "start_sec": 630,
-   "end_sec": 680,
+   "start_sec": 19.85,
+   "end_sec": 23.38,
    "text": "Doanh thu tháng 10 là 3,8 tỷ, tăng 12% so với tháng 9.",
    "lang": "vi",
    "translations": {},
@@ -1238,8 +1254,8 @@
   {
    "id": "g13",
    "speaker_id": "SPK_02",
-   "start_sec": 700,
-   "end_sec": 760,
+   "start_sec": 23.71,
+   "end_sec": 27.92,
    "text": "Doanh thu mảng nội thất văn phòng chiếm năm mươi lăm phần trăm, lần đầu tiên vượt mảng nội thất gia đình.",
    "lang": "vi",
    "translations": {},
@@ -1249,8 +1265,8 @@
   {
    "id": "g14",
    "speaker_id": "SPK_02",
-   "start_sec": 775,
-   "end_sec": 830,
+   "start_sec": 28.17,
+   "end_sec": 34.1,
    "text": "Bộ phận thiết kế ký chín hợp đồng mới, cao nhất từ đầu năm. Khách doanh nghiệp quay lại đặt đơn lần hai có bốn bên.",
    "lang": "vi",
    "translations": {},
@@ -1260,8 +1276,8 @@
   {
    "id": "g15",
    "speaker_id": "SPK_02",
-   "start_sec": 845,
-   "end_sec": 905,
+   "start_sec": 34.43,
+   "end_sec": 40.89,
    "text": "Chi nguyên vật liệu tăng sáu phần trăm, chủ yếu do giá gỗ tự nhiên lên. May là mình chốt giá bán từ quý trước nên kịp điều chỉnh.",
    "lang": "vi",
    "translations": {},
@@ -1271,8 +1287,8 @@
   {
    "id": "g16",
    "speaker_id": "SPK_02",
-   "start_sec": 915,
-   "end_sec": 960,
+   "start_sec": 41.18,
+   "end_sec": 44.49,
    "text": "Lợi nhuận gộp vẫn giữ hai tám phần trăm, mình chấp nhận được với mùa này.",
    "lang": "vi",
    "translations": {},
@@ -1282,8 +1298,8 @@
   {
    "id": "g3",
    "speaker_id": "SPK_02",
-   "start_sec": 970,
-   "end_sec": 1010,
+   "start_sec": 44.73,
+   "end_sec": 48.62,
    "text": "Công nợ quá 60 ngày còn 620 triệu, chủ yếu ở hai công trình bên Kiến An.",
    "lang": "vi",
    "translations": {},
@@ -1293,8 +1309,8 @@
   {
    "id": "g17",
    "speaker_id": "SPK_02",
-   "start_sec": 1020,
-   "end_sec": 1075,
+   "start_sec": 48.93,
+   "end_sec": 55.17,
    "text": "Sáu trăm hai mươi triệu công nợ quá sáu mươi ngày, phần lớn là hai công trình bên Kiến An. Em đã gửi thư nhắc hai lượt rồi.",
    "lang": "vi",
    "translations": {},
@@ -1304,8 +1320,8 @@
   {
    "id": "g18",
    "speaker_id": "SPK_02",
-   "start_sec": 1085,
-   "end_sec": 1135,
+   "start_sec": 55.41,
+   "end_sec": 60.04,
    "text": "Em đề xuất từ tháng mười hai dừng nhận đơn của khách có lịch sử chậm trả, ai muốn nhận thì anh Minh duyệt lại.",
    "lang": "vi",
    "translations": {},
@@ -1315,8 +1331,8 @@
   {
    "id": "g19",
    "speaker_id": "SPK_01",
-   "start_sec": 1145,
-   "end_sec": 1165,
+   "start_sec": 60.7,
+   "end_sec": 63.94,
    "text": "Phần gỗ, anh Đức với em đã nói chuyện sơ trước họp, giờ chốt luôn.",
    "lang": "vi",
    "translations": {},
@@ -1326,8 +1342,8 @@
   {
    "id": "g4",
    "speaker_id": "SPK_01",
-   "start_sec": 1170,
-   "end_sec": 1210,
+   "start_sec": 64.16,
+   "end_sec": 67.81,
    "text": "Anh chốt chuyển sang gỗ An Phát từ tháng 12, giá họ thấp hơn 8%.",
    "lang": "vi",
    "translations": {},
@@ -1337,8 +1353,8 @@
   {
    "id": "g20",
    "speaker_id": "SPK_01",
-   "start_sec": 1220,
-   "end_sec": 1265,
+   "start_sec": 68.16,
+   "end_sec": 72.67,
    "text": "Giá bên An Phát thấp hơn nhà cung cấp đang dùng tám phần trăm, cùng loại dầm bo, cùng keo dán.",
    "lang": "vi",
    "translations": {},
@@ -1348,8 +1364,8 @@
   {
    "id": "g21",
    "speaker_id": "SPK_01",
-   "start_sec": 1275,
-   "end_sec": 1310,
+   "start_sec": 72.94,
+   "end_sec": 76.52,
    "text": "Chất lượng họ gửi mẫu cắt thử rồi, về cơ bản đạt, em với trưởng xưởng đều gật.",
    "lang": "vi",
    "translations": {},
@@ -1359,8 +1375,8 @@
   {
    "id": "g22",
    "speaker_id": "SPK_01",
-   "start_sec": 1320,
-   "end_sec": 1355,
+   "start_sec": 76.8,
+   "end_sec": 80.96,
    "text": "Mình ký hợp đồng thử ba tháng, tháng mười hai chạy song song hai bên, ai rớt chất lượng thì dừng.",
    "lang": "vi",
    "translations": {},
@@ -1370,8 +1386,8 @@
   {
    "id": "g23",
    "speaker_id": "SPK_01",
-   "start_sec": 1365,
-   "end_sec": 1400,
+   "start_sec": 81.14,
+   "end_sec": 84.68,
    "text": "Ai có ý kiến gì về nhà cung cấp thì nói ngay hôm nay, đừng để ký rồi mới nói.",
    "lang": "vi",
    "translations": {},
@@ -1381,8 +1397,8 @@
   {
    "id": "g24",
    "speaker_id": "SPK_03",
-   "start_sec": 1450,
-   "end_sec": 1492,
+   "start_sec": 85.21,
+   "end_sec": 89.58,
    "text": "Bên xưởng em báo thẳng: tháng mười hai mình nhận ba mươi mốt đơn, mà công suất cho phép mới hai mươi bảy.",
    "lang": "vi",
    "translations": {},
@@ -1392,8 +1408,8 @@
   {
    "id": "g25",
    "speaker_id": "SPK_03",
-   "start_sec": 1495,
-   "end_sec": 1540,
+   "start_sec": 89.87,
+   "end_sec": 93.77,
    "text": "Xưởng đang chạy một trăm mười lăm phần trăm công suất, ba đơn có nguy cơ trễ hạn nếu không thay đổi gì.",
    "lang": "vi",
    "translations": {},
@@ -1403,8 +1419,8 @@
   {
    "id": "g26",
    "speaker_id": "SPK_03",
-   "start_sec": 1550,
-   "end_sec": 1595,
+   "start_sec": 94.11,
+   "end_sec": 98.05,
    "text": "Bốn thợ chính thì hai người nghỉ việc, người thay vào tay nghề chưa đều, khâu dầm bo là chậm nhất.",
    "lang": "vi",
    "translations": {},
@@ -1414,8 +1430,8 @@
   {
    "id": "g5",
    "speaker_id": "SPK_03",
-   "start_sec": 1600,
-   "end_sec": 1640,
+   "start_sec": 100.91,
+   "end_sec": 103.29,
    "text": "Nếu không thêm ca tối thì đơn Hoàng Huy chắc chắn trễ.",
    "lang": "vi",
    "translations": {},
@@ -1425,8 +1441,8 @@
   {
    "id": "g27",
    "speaker_id": "SPK_03",
-   "start_sec": 1650,
-   "end_sec": 1695,
+   "start_sec": 103.55,
+   "end_sec": 107.73,
    "text": "Đơn Hoàng Huy Commerce giao ngày hai mươi tháng mười hai, trễ là mất khách bên đó luôn, họ dặn trước rồi.",
    "lang": "vi",
    "translations": {},
@@ -1436,8 +1452,8 @@
   {
    "id": "g28",
    "speaker_id": "SPK_03",
-   "start_sec": 1705,
-   "end_sec": 1750,
+   "start_sec": 107.91,
+   "end_sec": 111.26,
    "text": "Em cần thêm bốn thợ thời vụ, làm sáu tuần, được thì gánh được ca tối.",
    "lang": "vi",
    "translations": {},
@@ -1447,8 +1463,8 @@
   {
    "id": "g29",
    "speaker_id": "SPK_03",
-   "start_sec": 1795,
-   "end_sec": 1830,
+   "start_sec": 111.52,
+   "end_sec": 115.04,
    "text": "Chi phí ước khoảng sáu mươi triệu, so với bị phạt hợp đồng và mất khách thì rẻ hơn nhiều.",
    "lang": "vi",
    "translations": {},
@@ -1458,8 +1474,8 @@
   {
    "id": "g30",
    "speaker_id": "SPK_03",
-   "start_sec": 1840,
-   "end_sec": 1880,
+   "start_sec": 115.44,
+   "end_sec": 118.07,
    "text": "Tuyển người chính thức thì không kịp, thời vụ chỉ thuê ngoài được thôi.",
    "lang": "vi",
    "translations": {},
@@ -1469,8 +1485,8 @@
   {
    "id": "g31",
    "speaker_id": "SPK_03",
-   "start_sec": 1890,
-   "end_sec": 1935,
+   "start_sec": 118.43,
+   "end_sec": 122.19,
    "text": "Có thêm ca tối là em cam kết đơn tháng mười hai giữ trọn, trễ một đơn em chịu trách nhiệm.",
    "lang": "vi",
    "translations": {},
@@ -1480,8 +1496,8 @@
   {
    "id": "g32",
    "speaker_id": "SPK_04",
-   "start_sec": 1950,
-   "end_sec": 1975,
+   "start_sec": 122.6,
+   "end_sec": 124.11,
    "text": "Đến phần em, chiến dịch Tết.",
    "lang": "vi",
    "translations": {},
@@ -1491,8 +1507,8 @@
   {
    "id": "g6",
    "speaker_id": "SPK_04",
-   "start_sec": 1980,
-   "end_sec": 2020,
+   "start_sec": 124.43,
+   "end_sec": 127.85,
    "text": "Em đề xuất gói Đón Tết nhà mới, giảm 7% cho đơn trên 50 triệu.",
    "lang": "vi",
    "translations": {},
@@ -1502,8 +1518,8 @@
   {
    "id": "g33",
    "speaker_id": "SPK_04",
-   "start_sec": 2030,
-   "end_sec": 2070,
+   "start_sec": 128.21,
+   "end_sec": 132.08,
    "text": "Giảm bảy phần trăm cho đơn trên năm mươi triệu, dự kiến doanh thu mùa Tết tăng hai mươi phần trăm.",
    "lang": "vi",
    "translations": {},
@@ -1513,8 +1529,8 @@
   {
    "id": "g34",
    "speaker_id": "SPK_04",
-   "start_sec": 2080,
-   "end_sec": 2120,
+   "start_sec": 132.41,
+   "end_sec": 136.54,
    "text": "Ngân sách quảng cáo em cần thêm tám mươi triệu cho đợt này, riêng video thì quay nội bộ là được.",
    "lang": "vi",
    "translations": {},
@@ -1524,8 +1540,8 @@
   {
    "id": "g35",
    "speaker_id": "SPK_04",
-   "start_sec": 2130,
-   "end_sec": 2160,
+   "start_sec": 136.91,
+   "end_sec": 140.01,
    "text": "Hình ảnh em đổi sang ảnh công trình thật, không dùng ảnh mẫu trên mạng nữa.",
    "lang": "vi",
    "translations": {},
@@ -1535,8 +1551,8 @@
   {
    "id": "g36",
    "speaker_id": "SPK_04",
-   "start_sec": 2165,
-   "end_sec": 2200,
+   "start_sec": 140.31,
+   "end_sec": 143.95,
    "text": "Em quay video ba khách nhận nhà cũ làm chuỗi nội dung, khách tin người thật kể hơn.",
    "lang": "vi",
    "translations": {},
@@ -1546,8 +1562,8 @@
   {
    "id": "g37",
    "speaker_id": "SPK_04",
-   "start_sec": 2210,
-   "end_sec": 2245,
+   "start_sec": 144.26,
+   "end_sec": 148.38,
    "text": "Chạy từ mùng một tháng mười hai, dồn dập hai tuần cuối tháng vì đó là lúc khách bắt đầu đóng tiền.",
    "lang": "vi",
    "translations": {},
@@ -1557,8 +1573,8 @@
   {
    "id": "g38",
    "speaker_id": "SPK_04",
-   "start_sec": 2255,
-   "end_sec": 2290,
+   "start_sec": 148.63,
+   "end_sec": 152.62,
    "text": "Em cần danh sách khách cũ từ bộ phận bán hàng để gọi mời, cả khách đã nhận nhà lẫn khách hủy.",
    "lang": "vi",
    "translations": {},
@@ -1568,8 +1584,8 @@
   {
    "id": "g39",
    "speaker_id": "SPK_01",
-   "start_sec": 2365,
-   "end_sec": 2400,
+   "start_sec": 153.1,
+   "end_sec": 156.62,
    "text": "Chiến dịch em duyệt về nguyên tắc, còn ngân sách thì chị Hà lập bảng chi tiết anh ký.",
    "lang": "vi",
    "translations": {},
@@ -1579,8 +1595,8 @@
   {
    "id": "g40",
    "speaker_id": "SPK_01",
-   "start_sec": 2410,
-   "end_sec": 2445,
+   "start_sec": 156.87,
+   "end_sec": 159.99,
    "text": "Nhân sự: bên thiết kế mình thiếu người rồi, việc mới về liên tục.",
    "lang": "vi",
    "translations": {},
@@ -1590,8 +1606,8 @@
   {
    "id": "g41",
    "speaker_id": "SPK_01",
-   "start_sec": 2450,
-   "end_sec": 2485,
+   "start_sec": 160.22,
+   "end_sec": 164.18,
    "text": "Cần thêm một kiến trúc sư nội thất, mức lương để bộ phận đề xuất, anh không chốt ngay hôm nay.",
    "lang": "vi",
    "translations": {},
@@ -1601,8 +1617,8 @@
   {
    "id": "g42",
    "speaker_id": "SPK_01",
-   "start_sec": 2495,
-   "end_sec": 2530,
+   "start_sec": 164.35,
+   "end_sec": 167.23,
    "text": "Đăng tuyển từ tuần sau, em với anh Đức cùng phỏng vấn cho nhanh.",
    "lang": "vi",
    "translations": {},
@@ -1612,8 +1628,8 @@
   {
    "id": "g43",
    "speaker_id": "SPK_03",
-   "start_sec": 2625,
-   "end_sec": 2665,
+   "start_sec": 167.76,
+   "end_sec": 170.97,
    "text": "Phòng thiết kế mình đang có ba người, một bạn sắp nghỉ sinh quý một năm sau.",
    "lang": "vi",
    "translations": {},
@@ -1623,8 +1639,8 @@
   {
    "id": "g44",
    "speaker_id": "SPK_03",
-   "start_sec": 2670,
-   "end_sec": 2710,
+   "start_sec": 171.17,
+   "end_sec": 174.39,
    "text": "Em tính hai phương án: tuyển chính thức, hoặc thuê theo dự án từng hợp đồng.",
    "lang": "vi",
    "translations": {},
@@ -1634,8 +1650,8 @@
   {
    "id": "g45",
    "speaker_id": "SPK_03",
-   "start_sec": 2715,
-   "end_sec": 2755,
+   "start_sec": 174.56,
+   "end_sec": 177.94,
    "text": "Thuê theo dự án thì nhanh nhưng đắt hơn, mà người lạ không nắm phong cách vẽ của mình.",
    "lang": "vi",
    "translations": {},
@@ -1645,8 +1661,8 @@
   {
    "id": "g46",
    "speaker_id": "SPK_03",
-   "start_sec": 2760,
-   "end_sec": 2800,
+   "start_sec": 178.21,
+   "end_sec": 180.96,
    "text": "Em nghiêng về tuyển chính thức một người, chỗ thiếu đột xuất thì thuê ngoài.",
    "lang": "vi",
    "translations": {},
@@ -1656,8 +1672,8 @@
   {
    "id": "g47",
    "speaker_id": "SPK_03",
-   "start_sec": 2805,
-   "end_sec": 2845,
+   "start_sec": 181.36,
+   "end_sec": 184.39,
    "text": "Tuần sau em gửi bảng so sánh chi phí hai phương án cho anh xem rồi họp chốt.",
    "lang": "vi",
    "translations": {},
@@ -1667,8 +1683,8 @@
   {
    "id": "g48",
    "speaker_id": "SPK_05",
-   "start_sec": 2852,
-   "end_sec": 2868,
+   "start_sec": 184.87,
+   "end_sec": 186.44,
    "text": "Em xin ba phút báo phần bán hàng.",
    "lang": "vi",
    "translations": {},
@@ -1678,8 +1694,8 @@
   {
    "id": "g7",
    "speaker_id": "SPK_05",
-   "start_sec": 2870,
-   "end_sec": 2910,
+   "start_sec": 186.74,
+   "end_sec": 189.2,
    "text": "Tháng này em gặp 14 khách, chốt được 3 hợp đồng.",
    "lang": "vi",
    "translations": {},
@@ -1689,8 +1705,8 @@
   {
    "id": "g49",
    "speaker_id": "SPK_05",
-   "start_sec": 2915,
-   "end_sec": 2955,
+   "start_sec": 189.37,
+   "end_sec": 193.27,
    "text": "Ba hợp đồng chốt đều là nội thất trọn gói, giá trung bình ba trăm tám mươi triệu một công trình.",
    "lang": "vi",
    "translations": {},
@@ -1700,8 +1716,8 @@
   {
    "id": "g50",
    "speaker_id": "SPK_05",
-   "start_sec": 2960,
-   "end_sec": 3000,
+   "start_sec": 193.57,
+   "end_sec": 196.72,
    "text": "Khách chủ yếu đến từ giới thiệu của khách cũ, hai trên ba hợp đồng là vậy.",
    "lang": "vi",
    "translations": {},
@@ -1711,8 +1727,8 @@
   {
    "id": "g51",
    "speaker_id": "SPK_05",
-   "start_sec": 3008,
-   "end_sec": 3048,
+   "start_sec": 197.05,
+   "end_sec": 200.47,
    "text": "Quảng cáo mạng xã hội em chạy bốn mươi lăm triệu cả tháng nhưng chỉ ra một đơn nhỏ.",
    "lang": "vi",
    "translations": {},
@@ -1722,8 +1738,8 @@
   {
    "id": "g52",
    "speaker_id": "SPK_05",
-   "start_sec": 3052,
-   "end_sec": 3095,
+   "start_sec": 200.76,
+   "end_sec": 204.67,
    "text": "Tỷ lệ chốt của khách giới thiệu cao gấp đôi khách từ quảng cáo, con số ba tháng liền như vậy.",
    "lang": "vi",
    "translations": {},
@@ -1733,8 +1749,8 @@
   {
    "id": "g53",
    "speaker_id": "SPK_05",
-   "start_sec": 3105,
-   "end_sec": 3150,
+   "start_sec": 207.78,
+   "end_sec": 211.65,
    "text": "Em đề xuất chi quảng cáo giảm còn ba mươi triệu, phần tiền dư chuyển sang chăm khách cũ.",
    "lang": "vi",
    "translations": {},
@@ -1744,8 +1760,8 @@
   {
    "id": "g54",
    "speaker_id": "SPK_05",
-   "start_sec": 3155,
-   "end_sec": 3195,
+   "start_sec": 211.81,
+   "end_sec": 215.64,
    "text": "Mỗi khách cũ em đề xuất tặng gói bảo trì năm đầu, chi khoảng hai triệu nhưng giữ được khách.",
    "lang": "vi",
    "translations": {},
@@ -1755,8 +1771,8 @@
   {
    "id": "g55",
    "speaker_id": "SPK_05",
-   "start_sec": 3200,
-   "end_sec": 3245,
+   "start_sec": 215.99,
+   "end_sec": 219.21,
    "text": "Danh sách khách cũ em xin nhận từ chị Hà trước ngày hai mươi lăm để kịp gọi.",
    "lang": "vi",
    "translations": {},
@@ -1766,8 +1782,8 @@
   {
    "id": "g56",
    "speaker_id": "SPK_04",
-   "start_sec": 3255,
-   "end_sec": 3295,
+   "start_sec": 219.65,
+   "end_sec": 223.33,
    "text": "Phần em, chiến dịch Tết em đã gửi nhóm chat sáng nay, ai xem qua cho ý kiến.",
    "lang": "vi",
    "translations": {},
@@ -1777,8 +1793,8 @@
   {
    "id": "g57",
    "speaker_id": "SPK_04",
-   "start_sec": 3300,
-   "end_sec": 3340,
+   "start_sec": 223.63,
+   "end_sec": 226.61,
    "text": "Kế hoạch cần tám mươi triệu ngân sách, em xin anh duyệt trước ngày hai mươi.",
    "lang": "vi",
    "translations": {},
@@ -1788,8 +1804,8 @@
   {
    "id": "g58",
    "speaker_id": "SPK_04",
-   "start_sec": 3345,
-   "end_sec": 3395,
+   "start_sec": 226.84,
+   "end_sec": 231.03,
    "text": "Nếu duyệt chậm hơn thì đợt quảng cáo đầu tháng mười hai bị trễ, mất đúng tuần khách bắt đầu chi tiền.",
    "lang": "vi",
    "translations": {},
@@ -1799,8 +1815,8 @@
   {
    "id": "g59",
    "speaker_id": "SPK_02",
-   "start_sec": 3405,
-   "end_sec": 3435,
+   "start_sec": 231.63,
+   "end_sec": 233.48,
    "text": "Phần công nợ em xin nói gọn cuối cùng.",
    "lang": "vi",
    "translations": {},
@@ -1810,8 +1826,8 @@
   {
    "id": "g8",
    "speaker_id": "SPK_02",
-   "start_sec": 3440,
-   "end_sec": 3480,
+   "start_sec": 233.75,
+   "end_sec": 235.5,
    "text": "Chị gửi mọi người danh sách trong thứ Bảy.",
    "lang": "vi",
    "translations": {},
@@ -1821,8 +1837,8 @@
   {
    "id": "g60",
    "speaker_id": "SPK_02",
-   "start_sec": 3490,
-   "end_sec": 3530,
+   "start_sec": 235.89,
+   "end_sec": 238.64,
    "text": "Danh sách công nợ em gửi từng phụ trách công trình trong thứ Bảy này.",
    "lang": "vi",
    "translations": {},
@@ -1832,8 +1848,8 @@
   {
    "id": "g61",
    "speaker_id": "SPK_02",
-   "start_sec": 3540,
-   "end_sec": 3580,
+   "start_sec": 242.05,
+   "end_sec": 245.42,
    "text": "Công trình Kiến An em đề xuất dừng thi công phần bổ sung cho đến khi thu được tiền.",
    "lang": "vi",
    "translations": {},
@@ -1843,8 +1859,8 @@
   {
    "id": "g62",
    "speaker_id": "SPK_02",
-   "start_sec": 3590,
-   "end_sec": 3630,
+   "start_sec": 245.77,
+   "end_sec": 248.36,
    "text": "Hai công trình còn lại em đôn đốc thu trước ba mươi tháng mười một.",
    "lang": "vi",
    "translations": {},
@@ -1854,8 +1870,8 @@
   {
    "id": "g63",
    "speaker_id": "SPK_02",
-   "start_sec": 3640,
-   "end_sec": 3680,
+   "start_sec": 248.76,
+   "end_sec": 252.53,
    "text": "Quá ngày đó mà chưa xong, em báo anh Minh đưa vào biên bản để anh xử lý với khách.",
    "lang": "vi",
    "translations": {},
@@ -1865,8 +1881,8 @@
   {
    "id": "g64",
    "speaker_id": "SPK_02",
-   "start_sec": 3690,
-   "end_sec": 3735,
+   "start_sec": 252.85,
+   "end_sec": 256.1,
    "text": "Em cũng rà lại hạn mức tín dụng quý một để chuẩn bị tiền mua gỗ đợt Tết.",
    "lang": "vi",
    "translations": {},
@@ -1876,8 +1892,8 @@
   {
    "id": "g65",
    "speaker_id": "SPK_01",
-   "start_sec": 3765,
-   "end_sec": 3788,
+   "start_sec": 256.5,
+   "end_sec": 258.59,
    "text": "Nghe rõ chưa nào, giờ chốt việc từng người.",
    "lang": "vi",
    "translations": {},
@@ -1887,8 +1903,8 @@
   {
    "id": "g9",
    "speaker_id": "SPK_01",
-   "start_sec": 3790,
-   "end_sec": 3830,
+   "start_sec": 258.84,
+   "end_sec": 260.56,
    "text": "Thứ Hai anh Đức phải có kế hoạch ca tối.",
    "lang": "vi",
    "translations": {},
@@ -1898,8 +1914,8 @@
   {
    "id": "g66",
    "speaker_id": "SPK_01",
-   "start_sec": 3840,
-   "end_sec": 3875,
+   "start_sec": 260.88,
+   "end_sec": 264.1,
    "text": "Việc nào ai nhận thì ghi ngay vào biên bản, đừng để ra khỏi phòng lại quên.",
    "lang": "vi",
    "translations": {},
@@ -1909,8 +1925,8 @@
   {
    "id": "g67",
    "speaker_id": "SPK_01",
-   "start_sec": 3885,
-   "end_sec": 3925,
+   "start_sec": 264.35,
+   "end_sec": 267.51,
    "text": "Tình hình xưởng là ưu tiên số một, anh Đức chủ trì và báo anh hàng ngày.",
    "lang": "vi",
    "translations": {},
@@ -1920,8 +1936,8 @@
   {
    "id": "g10",
    "speaker_id": "SPK_01",
-   "start_sec": 3940,
-   "end_sec": 3980,
+   "start_sec": 267.68,
+   "end_sec": 269.17,
    "text": "Hà gửi bản nháp trước 20 nhé.",
    "lang": "vi",
    "translations": {},
@@ -1931,8 +1947,8 @@
   {
    "id": "g68",
    "speaker_id": "SPK_01",
-   "start_sec": 3990,
-   "end_sec": 4030,
+   "start_sec": 269.35,
+   "end_sec": 272.47,
    "text": "Họp tuần sau vẫn giờ cũ, ai vướng phát sinh thì báo trước cho thư ký.",
    "lang": "vi",
    "translations": {},
@@ -1942,8 +1958,8 @@
   {
    "id": "g69",
    "speaker_id": "SPK_01",
-   "start_sec": 4035,
-   "end_sec": 4075,
+   "start_sec": 272.71,
+   "end_sec": 274.47,
    "text": "Cảm ơn mọi người, mình kết thúc ở đây.",
    "lang": "vi",
    "translations": {},
@@ -1956,24 +1972,24 @@
    "question": "Ai đang quá tải?",
    "answer": "Xưởng của anh Đức đang chạy 115% công suất, ba đơn tháng 12 có nguy cơ trễ.",
    "citations": [
-    1500,
-    1610
+    90.3,
+    101.5
    ]
   },
   {
    "question": "Điều gì chưa có người nhận?",
    "answer": "Việc đăng tin tuyển kiến trúc sư nội thất chưa có người phụ trách và chưa chốt mức lương.",
    "citations": [
-    2420
+    157.8
    ]
   },
   {
    "question": "Soạn thông báo cho toàn công ty",
    "answer": "Thông báo: từ tháng 12 công ty chuyển sang nhà cung cấp gỗ An Phát. Xưởng sẽ chạy thêm ca tối trong 6 tuần để kịp các đơn cuối năm. Chiến dịch Đón Tết nhà mới bắt đầu sau ngày 20/11.",
    "citations": [
-    1180,
-    1800,
-    1990
+    65.1,
+    112,
+    125.3
    ]
   }
  ],
@@ -1982,287 +1998,27 @@
   "session_id": "s-sample-business_owner",
   "silences": [
    {
-    "start_sec": 40,
-    "end_sec": 50
+    "start_sec": 98.1,
+    "end_sec": 100.9
    },
    {
-    "start_sec": 95,
-    "end_sec": 110
+    "start_sec": 204.7,
+    "end_sec": 207.8
    },
    {
-    "start_sec": 165,
-    "end_sec": 630
-   },
-   {
-    "start_sec": 680,
-    "end_sec": 700
-   },
-   {
-    "start_sec": 760,
-    "end_sec": 775
-   },
-   {
-    "start_sec": 830,
-    "end_sec": 845
-   },
-   {
-    "start_sec": 905,
-    "end_sec": 915
-   },
-   {
-    "start_sec": 960,
-    "end_sec": 970
-   },
-   {
-    "start_sec": 1010,
-    "end_sec": 1020
-   },
-   {
-    "start_sec": 1075,
-    "end_sec": 1085
-   },
-   {
-    "start_sec": 1135,
-    "end_sec": 1145
-   },
-   {
-    "start_sec": 1165,
-    "end_sec": 1170
-   },
-   {
-    "start_sec": 1210,
-    "end_sec": 1220
-   },
-   {
-    "start_sec": 1265,
-    "end_sec": 1275
-   },
-   {
-    "start_sec": 1310,
-    "end_sec": 1320
-   },
-   {
-    "start_sec": 1355,
-    "end_sec": 1365
-   },
-   {
-    "start_sec": 1400,
-    "end_sec": 1450
-   },
-   {
-    "start_sec": 1492,
-    "end_sec": 1495
-   },
-   {
-    "start_sec": 1540,
-    "end_sec": 1550
-   },
-   {
-    "start_sec": 1595,
-    "end_sec": 1600
-   },
-   {
-    "start_sec": 1640,
-    "end_sec": 1650
-   },
-   {
-    "start_sec": 1695,
-    "end_sec": 1705
-   },
-   {
-    "start_sec": 1750,
-    "end_sec": 1795
-   },
-   {
-    "start_sec": 1830,
-    "end_sec": 1840
-   },
-   {
-    "start_sec": 1880,
-    "end_sec": 1890
-   },
-   {
-    "start_sec": 1935,
-    "end_sec": 1950
-   },
-   {
-    "start_sec": 1975,
-    "end_sec": 1980
-   },
-   {
-    "start_sec": 2020,
-    "end_sec": 2030
-   },
-   {
-    "start_sec": 2070,
-    "end_sec": 2080
-   },
-   {
-    "start_sec": 2120,
-    "end_sec": 2130
-   },
-   {
-    "start_sec": 2160,
-    "end_sec": 2165
-   },
-   {
-    "start_sec": 2200,
-    "end_sec": 2210
-   },
-   {
-    "start_sec": 2245,
-    "end_sec": 2255
-   },
-   {
-    "start_sec": 2290,
-    "end_sec": 2365
-   },
-   {
-    "start_sec": 2400,
-    "end_sec": 2410
-   },
-   {
-    "start_sec": 2445,
-    "end_sec": 2450
-   },
-   {
-    "start_sec": 2485,
-    "end_sec": 2495
-   },
-   {
-    "start_sec": 2530,
-    "end_sec": 2625
-   },
-   {
-    "start_sec": 2665,
-    "end_sec": 2670
-   },
-   {
-    "start_sec": 2710,
-    "end_sec": 2715
-   },
-   {
-    "start_sec": 2755,
-    "end_sec": 2760
-   },
-   {
-    "start_sec": 2800,
-    "end_sec": 2805
-   },
-   {
-    "start_sec": 2845,
-    "end_sec": 2852
-   },
-   {
-    "start_sec": 2868,
-    "end_sec": 2870
-   },
-   {
-    "start_sec": 2910,
-    "end_sec": 2915
-   },
-   {
-    "start_sec": 2955,
-    "end_sec": 2960
-   },
-   {
-    "start_sec": 3000,
-    "end_sec": 3008
-   },
-   {
-    "start_sec": 3048,
-    "end_sec": 3052
-   },
-   {
-    "start_sec": 3095,
-    "end_sec": 3105
-   },
-   {
-    "start_sec": 3150,
-    "end_sec": 3155
-   },
-   {
-    "start_sec": 3195,
-    "end_sec": 3200
-   },
-   {
-    "start_sec": 3245,
-    "end_sec": 3255
-   },
-   {
-    "start_sec": 3295,
-    "end_sec": 3300
-   },
-   {
-    "start_sec": 3340,
-    "end_sec": 3345
-   },
-   {
-    "start_sec": 3395,
-    "end_sec": 3405
-   },
-   {
-    "start_sec": 3435,
-    "end_sec": 3440
-   },
-   {
-    "start_sec": 3480,
-    "end_sec": 3490
-   },
-   {
-    "start_sec": 3530,
-    "end_sec": 3540
-   },
-   {
-    "start_sec": 3580,
-    "end_sec": 3590
-   },
-   {
-    "start_sec": 3630,
-    "end_sec": 3640
-   },
-   {
-    "start_sec": 3680,
-    "end_sec": 3690
-   },
-   {
-    "start_sec": 3735,
-    "end_sec": 3765
-   },
-   {
-    "start_sec": 3788,
-    "end_sec": 3790
-   },
-   {
-    "start_sec": 3830,
-    "end_sec": 3840
-   },
-   {
-    "start_sec": 3875,
-    "end_sec": 3885
-   },
-   {
-    "start_sec": 3925,
-    "end_sec": 3940
-   },
-   {
-    "start_sec": 3980,
-    "end_sec": 3990
-   },
-   {
-    "start_sec": 4030,
-    "end_sec": 4035
+    "start_sec": 238.6,
+    "end_sec": 242.1
    }
   ],
   "fillers": [],
   "speaker_gain_db": {
-   "SPK_01": 1,
-   "SPK_02": 1,
-   "SPK_03": -1,
-   "SPK_04": -4,
+   "SPK_01": -4,
+   "SPK_02": -1,
+   "SPK_03": 1,
+   "SPK_04": 0,
    "SPK_05": 2
   },
-  "noise_level": "medium",
-  "clean_duration_sec": 2784
+  "noise_level": "high",
+  "clean_duration_sec": 266
  }
 }
