@@ -289,3 +289,55 @@ test("Nghe sạch tắt thì không dựng Web Audio (iPhone khóa màn hình v�
   const prefs = await page.evaluate(() => JSON.parse(localStorage.getItem("noteim-mock-db-v1")!).user.listening_prefs?.enabled);
   if (!prefs) expect(await count()).toBe(0);
 });
+
+/* ---------- M9-02: đủ 6 buổi mẫu theo nghề đều có âm thanh thật ---------- */
+
+// Sáu buổi mẫu (fixtures/samples) với file âm thanh tương ứng sau khi gắn
+// (bộ 03 + 06-10 của scripts/gen-test-audio.py).
+const SAMPLE_SESSIONS: Array<{ id: string; file: RegExp }> = [
+  { id: "s-sample-doctor", file: /03-bac-si-kham\.m4a$/ },
+  { id: "s-sample-realestate_sales", file: /06-mau-bds-vinhomes-marina\.m4a$/ },
+  { id: "s-sample-notary", file: /07-mau-cong-chung-hqv\.m4a$/ },
+  { id: "s-sample-lawyer", file: /08-mau-luat-su-thue\.m4a$/ },
+  { id: "s-sample-architect", file: /09-mau-kien-truc-lach-tray\.m4a$/ },
+  { id: "s-sample-business_owner", file: /10-mau-dieu-hanh-noi-that\.m4a$/ },
+];
+
+test("6 buổi mẫu theo nghề: có trình phát, bấm Phát currentTime tăng, đoạn đang đọc đổi theo (M9-02)", async ({ page }, info) => {
+  test.skip(info.project.name !== "phone", "trình phát một code cho cả hai bề ngang — chạy một project cho gọn lô (bài đầu file đã chạy cả hai)");
+  const errors = collectErrors(page);
+  await onboard(page);
+  for (const { id, file } of SAMPLE_SESSIONS) {
+    // Mỗi buổi mẫu có trình phát, không còn dòng "Chưa có âm thanh", thẻ audio
+    // trỏ đúng file của buổi (bấm Phát mới nạp — không tự phát)
+    await page.goto(`/s/${id}`);
+    await expect(page.locator(PLAYER)).toBeVisible();
+    await expect(page.getByTestId("no-audio-note")).toHaveCount(0);
+    await page.getByRole("button", { name: "Phát", exact: true }).click();
+    const audio = page.locator("audio");
+    await expect(audio).toHaveCount(1);
+    await expect(audio).toHaveAttribute("src", file);
+
+    // Kim và thẻ audio cùng chạy: currentTime tăng thật (thời gian thực)
+    await expect
+      .poll(async () => page.evaluate(() => (document.querySelector("audio") as HTMLAudioElement)?.currentTime ?? 0), {
+        timeout: 8000,
+      })
+      .toBeGreaterThan(1.5);
+
+    // Tab Lời: đoạn đang đọc đổi theo tiếng — chờ vào lời rồi ghi 2 lần cách 3 giây
+    await page.goto(`/s/${id}?tab=transcript`);
+    await expect(page.locator("[data-seg]").first()).toBeVisible();
+    await page.getByRole("button", { name: "Phát", exact: true }).click();
+    await expect
+      .poll(async () => (await page.locator('[data-state="reading"]').first().textContent()) ?? "", {
+        timeout: 10000,
+      })
+      .not.toBe("");
+    const reading1 = (await page.locator('[data-state="reading"]').first().textContent()) ?? "";
+    await page.waitForTimeout(3000);
+    const reading2 = (await page.locator('[data-state="reading"]').first().textContent()) ?? "";
+    expect(reading2).not.toBe(reading1);
+  }
+  expect(errors).toEqual([]);
+});
