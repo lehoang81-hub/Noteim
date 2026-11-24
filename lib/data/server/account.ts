@@ -13,13 +13,16 @@ import { sessions, users } from "@/lib/db/schema";
 import type { Lang, ListeningPrefs, Profession, Quota, User } from "../types";
 
 import { ApiError, type ServerContext } from "./context";
-import { templatesOfProfession } from "./templates";
+import { templatesOfProfession, ALL_TEMPLATES } from "./templates";
 
 type UserRow = typeof users.$inferSelect;
 
 function defaultTemplateFor(profession: Profession | null): string {
   const tpl = templatesOfProfession(profession);
-  return tpl?.id ?? "tpl-general";
+  // Nghề "other" (chưa chọn nghề) không có mẫu riêng: theo mẫu mặc định của
+  // bản giả (fixture user — tpl-realestate). Trả id mẫu KHÔNG TỒN TẠI làm
+  // buổi tạo sau không sinh được ý tóm tắt (templateById trượt → sections rỗng).
+  return tpl?.id ?? templatesOfProfession("realestate_sales")?.id ?? ALL_TEMPLATES[0]?.id ?? "";
 }
 
 /** Dòng users → hình dạng User (lib/data/types.ts). */

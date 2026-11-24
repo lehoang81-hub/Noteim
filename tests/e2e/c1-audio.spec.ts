@@ -91,7 +91,7 @@ async function taoBuoi(request: APIRequestContext, title: string): Promise<strin
   const res = await request.post("/api/data/sessions", {
     data: {
       kind: "import",
-      input: { file_name: `${title}.m4a`, duration_sec: 65, template_id: "tpl-general", language: "vi" },
+      input: { file_name: `${title}.m4a`, duration_sec: 65, template_id: "tpl-realestate", language: "vi" },
     },
   });
   expect(res.status()).toBe(200);
@@ -161,7 +161,7 @@ test.describe("kho giả R2 — quyền và luồng API", () => {
       data: {
         kind: "import",
         // 91 phút — vượt trần 90 phút/buổi của Free
-        input: { file_name: "dai.m4a", duration_sec: 5460, template_id: "tpl-general", language: "vi" },
+        input: { file_name: "dai.m4a", duration_sec: 5460, template_id: "tpl-realestate", language: "vi" },
       },
     });
     expect(tooLong.status()).toBe(200);
