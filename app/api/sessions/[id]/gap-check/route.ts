@@ -15,7 +15,8 @@ import {
 } from "@/lib/gap-check/store";
 import { consumeQuota, type GapCheckPlan } from "@/lib/gap-check/rate-limit";
 import { runGapCheckChain, GapCheckChainError, parseFakePlanHeader, type GapCheckAttempt } from "@/lib/gap-check/provider";
-import type { GapCheckResult } from "@/lib/gap-check/types";
+import { DataError } from "@/lib/data/errors";
+import type { GapCheckResult, SessionGapCheckRow } from "@/lib/gap-check/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -89,9 +90,21 @@ export async function POST(
     });
   }
 
-  const previous = body.previous
-    ? toPreviousResult(body.previous)
-    : getLatestGapCheckResult(sessionId);
+  let previous: GapCheckResult | undefined;
+  if (body.previous) {
+    previous = toPreviousResult(body.previous);
+  } else {
+    // Kết quả gần nhất: bảng DB cho người đăng nhập (buổi là của mình),
+    // Map bộ nhớ cho ẩn danh; buổi người khác bị chặn 403 (C1-03b)
+    try {
+      previous = (await getLatestGapCheckResult(sessionId)) ?? undefined;
+    } catch (error) {
+      if (error instanceof DataError) {
+        return jsonError(error.code === "forbidden" ? 403 : 500, error.code, "Không đọc được lịch sử rà của buổi này");
+      }
+      throw error;
+    }
+  }
 
   // Kế hoạch ép lỗi của stub (chỉ nhận khi GAP_CHECK_FAKE bật) để e2e giả lập
   // chuyển bên: "gemini:500,anthropic:429"…
@@ -102,7 +115,7 @@ export async function POST(
   try {
     outcome = await runGapCheckChain<GapCheckResult>(
       {
-        system: buildSystemPrompt(template, body.transcript, previous),
+        system: buildSystemPrompt(template, body.transcript, previous ?? null),
         user: buildUserPrompt(),
         template,
         transcript: body.transcript,
@@ -137,12 +150,20 @@ export async function POST(
   const { result, provider, attempts } = outcome;
   const latencyMs = Date.now() - startedAt;
 
-  const row = addSessionGapCheck({
-    sessionId,
-    templateId: body.templateId,
-    transcriptUntilMs: body.transcriptUntilMs ?? 0,
-    result,
-  });
+  let row: SessionGapCheckRow;
+  try {
+    row = await addSessionGapCheck({
+      sessionId,
+      templateId: body.templateId,
+      transcriptUntilMs: body.transcriptUntilMs ?? 0,
+      result,
+    });
+  } catch (error) {
+    if (error instanceof DataError) {
+      return jsonError(error.code === "forbidden" ? 403 : 500, error.code, "Không ghi được lịch sử rà thiếu");
+    }
+    throw error;
+  }
   logGapCheck({
     event: "gap_check",
     sessionId,
@@ -176,7 +197,15 @@ export async function GET(
   context: { params: Promise<{ id: string }> },
 ) {
   const { id: sessionId } = await context.params;
-  const rows = listSessionGapChecks(sessionId);
+  let rows;
+  try {
+    rows = await listSessionGapChecks(sessionId);
+  } catch (error) {
+    if (error instanceof DataError) {
+      return jsonError(403, error.code, "Không có quyền xem lịch sử rà của buổi này");
+    }
+    throw error;
+  }
   const latest = rows.at(-1) ?? null;
   return NextResponse.json({
     sessionId,

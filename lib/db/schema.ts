@@ -334,7 +334,11 @@ export const sessions = noteimSchema.table(
     storageStatus: text("storage_status").notNull().default("full"),
     durationSec: integer("duration_sec").notNull().default(0),
     sizeBytes: integer("size_bytes").notNull().default(0),
-    /** Key object trên R2 (PR 04 đặt khi upload); null là chưa có băng */
+    /** Buổi tạo từ màn ghi âm chưa thu tiếng thật (chờ PR 04 lưu R2):
+     * nơi liệt kê/chi tiết hiện nhãn "Bản ghi thử: chưa lưu âm thanh". */
+    trialRecording: boolean("trial_recording").notNull().default(false),
+    /** Key object trên R2 (PR 04 đặt khi upload); null là chưa có băng.
+     * Buổi mẫu nhập từ fixture giữ đường dẫn file công khai (/audio/…). */
     audioPath: text("audio_path"),
     audioExpiresAt: timestamp("audio_expires_at", { withTimezone: true }),
     /** { confirmed, announced, receipts? } — hình dạng session.consent */
@@ -389,6 +393,9 @@ export const sessionDetails = noteimSchema.table("session_details", {
     .array()
     .notNull()
     .default(sql`'{}'::text[]`),
+  /** Bản nháp của buổi đang xử lý (RecordingDraft từ màn ghi âm/nhập file):
+   * xử lý xong sinh nội dung từ bản nháp rồi xóa (null) — khớp MockDb.draft. */
+  draft: jsonb("draft"),
 });
 
 /** transcript_segments — bản ghi lời từng đoạn; khóa (session_id, id) của đoạn. */
@@ -539,6 +546,38 @@ export const chatMessages = noteimSchema.table(
       sql`md5(${table.text})`,
     ),
     index("chat_messages_session_idx").on(table.sessionId),
+  ],
+);
+
+/**
+ * folder_chat_messages — hội thoại Hỏi AI của một thư mục (GY1/PR #76).
+ * Cùng hình dạng chat_messages nhưng khóa theo thư mục: chat_messages khóa
+ * bằng FK tới sessions nên không giữ được lịch sử của thư mục. C1-03b thêm
+ * để Hỏi AI thư mục còn lịch sử sau khi tải lại trang (bản giả giữ trong
+ * localStorage — lib/data/mock MockDb.folder_chats).
+ */
+export const folderChatMessages = noteimSchema.table(
+  "folder_chat_messages",
+  {
+    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    folderId: text("folder_id")
+      .notNull()
+      .references(() => folders.id, { onDelete: "cascade" }),
+    role: text("role").notNull(),
+    text: text("text").notNull(),
+    citations: jsonb("citations").notNull().default(sql`'[]'::jsonb`),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("folder_chat_messages_folder_role_created_key").on(
+      table.folderId,
+      table.role,
+      table.createdAt,
+      sql`md5(${table.text})`,
+    ),
+    index("folder_chat_messages_folder_idx").on(table.folderId),
   ],
 );
 

@@ -19,6 +19,9 @@ import { accounts, users } from "@/lib/db/schema";
 /** Người dùng demo của chế độ AUTH_FAKE (chỉ dùng cho e2e). */
 export const FAKE_USER_ID = "11111111-1111-4111-8111-111111111111";
 export const FAKE_USER_EMAIL = "demo@noteim.app";
+/** Người dùng demo thứ hai — bài e2e quyền: người A không đọc/ghi được dữ liệu người B. */
+export const FAKE_USER_B_ID = "22222222-2222-4222-8222-222222222222";
+export const FAKE_USER_B_EMAIL = "demo-b@noteim.app";
 
 type SignInUser = { id?: string | null; name?: string | null; email?: string | null };
 type SignInAccount = { provider: string; providerAccountId: string; type?: string };
@@ -34,13 +37,13 @@ export async function ensureUserAndAccount(
   account: SignInAccount,
 ): Promise<string | null> {
   // Chế độ giả: không đụng DB, trả id cố định cho e2e.
-  // (credentials provider có type "credentials"; id provider là "demo".)
+  // (credentials provider có type "credentials"; id provider là "demo" / "demo-b".)
   if (
     process.env.AUTH_FAKE === "1" &&
     process.env.VERCEL_ENV !== "production" &&
     account.type === "credentials"
   ) {
-    return FAKE_USER_ID;
+    return account.provider === "demo-b" ? FAKE_USER_B_ID : FAKE_USER_ID;
   }
 
   const email = user.email?.toLowerCase();
