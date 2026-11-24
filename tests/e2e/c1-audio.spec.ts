@@ -30,6 +30,21 @@ type Mode = {
 
 const CRON_SECRET = process.env.E2E_CRON_SECRET || "cron-thu-e2e";
 
+/* Micro giả của Chromium cho luồng ghi thật (nhóm cuối file); đặt cấp đầu
+ * file vì Playwright không cho test.use trong describe có test.skip(). Các
+ * bài API không dùng micro nên không ảnh hưởng. */
+test.use({
+  launchOptions: {
+    executablePath: process.env.PW_CHROMIUM_PATH || undefined,
+    args: [
+      "--disable-dev-shm-usage",
+      "--autoplay-policy=no-user-gesture-required",
+      "--use-fake-ui-for-media-stream",
+      "--use-fake-device-for-media-stream",
+    ],
+  },
+});
+
 let mode: Mode;
 
 test.beforeAll(async ({ request }) => {
@@ -155,6 +170,9 @@ test.describe("kho giả R2 — quyền và luồng API", () => {
       data: { session_id: longId, content_type: "audio/webm", size: 1000 },
     });
     expect(presignLong.status()).toBe(413);
+    // Xóa buổi dài ngay: 91 phút còn tính vào hạn mức tháng (180 phút) của
+    // người A — nếu không, các bài sau bị cổng "Hết hạn mức tháng này" chặn.
+    await page.request.delete(`/api/data/sessions/${longId}`);
   });
 
   test("presign → PUT thẳng → complete → nghe lại 302 có Range; khóa là u/{user}/{session}/original.webm", async ({ page }) => {
@@ -286,18 +304,6 @@ test.describe("kho giả R2 — luồng ghi trên màn ghi âm", () => {
     "Cần R2_FAKE=1 + micro giả của Chromium (chạy trên máy có Playwright chromium)",
   );
 
-  test.use({
-    launchOptions: {
-      executablePath: process.env.PW_CHROMIUM_PATH || undefined,
-      args: [
-        "--disable-dev-shm-usage",
-        "--autoplay-policy=no-user-gesture-required",
-        "--use-fake-ui-for-media-stream",
-        "--use-fake-device-for-media-stream",
-      ],
-    },
-  });
-
   test("ghi vài giây rồi lưu: buổi không còn nhãn Bản ghi thử, trình phát dùng /api/audio", async ({ page }) => {
     test.info().setTimeout(90_000);
     await dangNhapDemo(page);
@@ -324,12 +330,27 @@ test.describe("kho giả R2 — luồng ghi trên màn ghi âm", () => {
     await expect(page.getByText(/Đang tải lên \d+%|Đã lưu băng ghi an toàn/)).toBeVisible({ timeout: 15_000 });
     await expect(page.getByText(/Đang tải lên \d+%|Đã lưu băng ghi an toàn/)).toHaveCount(0, { timeout: 30_000 });
 
-    // Chi tiết buổi: nhãn "Bản ghi thử" biến mất, trình phát dùng lối kiểm quyền
+    // Xử lý xong màn hình TỰ chuyển tới chi tiết (máy chủ hoàn tất lười khi
+    // có người hỏi — dò /processing mỗi 1,6 giây): ở lại tới khi URL là
+    // /s/{id} không còn đuôi /processing.
+    await page.waitForURL((u) => /\/s\/[^/]+$/.test(u.pathname), { timeout: 60_000 });
     const sessionId = new URL(page.url()).pathname.split("/")[2];
-    await page.goto(`/s/${sessionId}`);
+
+    // Chi tiết buổi: nhãn "Bản ghi thử" và "Chưa có âm thanh" không xuất hiện;
+    // trình phát dùng lối kiểm quyền /api/audio/{id}
     await expect(page.getByText("Bản ghi thử: chưa lưu âm thanh")).toHaveCount(0);
     await expect(page.getByText("Chưa có âm thanh")).toHaveCount(0);
-    const src = await page.evaluate(() => (document.querySelector("audio") as HTMLAudioElement | null)?.src ?? "");
-    expect(src).toContain(`/api/audio/${sessionId}`);
+    // Trình phát thật dựng thẻ audio muộn khi bấm Phát lần đầu (preload none);
+    // thẻ gắn data-noteim-audio = lối /api/audio/{id} để kiểm thử đọc được.
+    const play = page.getByRole("button", { name: "Phát", exact: true }).first();
+    await expect(play).toBeVisible({ timeout: 15_000 });
+    // Bắt request nghe lại TRƯỚC khi bấm: preload none nghĩa là thẻ chỉ nạp
+    // khi bấm Phát — request tới lối kiểm quyền phải xảy ra ngay sau click.
+    const audioRequest = page.waitForRequest((req) => req.url().includes(`/api/audio/${sessionId}`), { timeout: 15_000 });
+    await play.click();
+    const audioEl = page.locator("[data-noteim-audio]");
+    await expect(audioEl).toBeAttached({ timeout: 15_000 });
+    await expect(audioEl).toHaveAttribute("data-noteim-audio", `/api/audio/${sessionId}`);
+    await audioRequest; // lối nghe lại được gọi (302 sang signed URL bên dưới)
   });
 });
