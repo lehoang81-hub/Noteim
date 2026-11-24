@@ -290,7 +290,26 @@ const draftCol = (
 ).rows[0].n;
 check(draftCol === 1, "session_details.draft giữ bản nháp của buổi đang xử lý (khớp MockDb.draft)", "Thiếu cột session_details.draft");
 
-// (b) Hai người dùng A/B + không gian cá nhân + một buổi mỗi người
+// (a2) C1-04: bộ cột lưu băng trên R2 mà presign/complete/cron phụ thuộc
+const audioColumns = (
+  await db.query(
+    "select column_name, data_type, column_default from information_schema.columns where table_schema = 'noteim' and table_name = 'sessions' and column_name in ('audio_path','audio_expires_at','storage_status','size_bytes')",
+  )
+).rows;
+const have = (name, type) => audioColumns.some((c) => c.column_name === name && (!type || c.data_type === type));
+check(have("audio_path"), "sessions.audio_path chứa khóa đối tượng R2 (u/{user}/{session}/…)", "Thiếu cột sessions.audio_path");
+check(have("audio_expires_at", "timestamp with time zone"), "sessions.audio_expires_at là timestamptz — cron quét đúng hạn", "sessions.audio_expires_at sai kiểu (cần timestamptz)");
+check(have("storage_status"), "sessions.storage_status phân biệt full / essence_only khi cron xóa băng", "Thiếu cột sessions.storage_status");
+check(have("size_bytes"), "sessions.size_bytes chứa kích thước băng thật sau khi complete", "Thiếu cột sessions.size_bytes");
+const defaultStorage = audioColumns.find((c) => c.column_name === "storage_status")?.column_default;
+check(
+  defaultStorage === "'full'::character varying" || defaultStorage === "'full'::text",
+  "sessions.storage_status mặc định 'full' (buổi mới coi như có băng)",
+  `sessions.storage_status mặc định sai: ${String(defaultStorage)}`,
+);
+
+// (a3) Mô phỏng đúng vòng đời băng C1-04: complete ghi đủ bộ trường, cron
+//      hết hạn xóa băng về essence_only nhưng KHÔNG đụng bản chữ.
 const USER_A = "11111111-1111-4111-8111-111111111111";
 const USER_B = "22222222-2222-4222-8222-222222222222";
 await db.query(
@@ -301,6 +320,50 @@ await db.query(
   'insert into "noteim"."workspaces" (id, kind, name, owner_user_id) values ($1, \'personal\', \'\', $2), ($3, \'personal\', \'\', $4) on conflict (id) do nothing',
   ["w-c1-a", USER_A, "w-c1-b", USER_B],
 );
+await db.query(
+  'insert into "noteim"."sessions" (id, user_id, workspace_id, owner_user_id, title, template_id, status, trial_recording, audio_path, size_bytes, storage_status, audio_expires_at, created_at) values ($1, $2, $3, $2, $4, \'tpl-general\', \'ready\', true, $5, 0, \'full\', now() + interval \'90 days\', now()) on conflict (id) do nothing',
+  ["c1-audio-1", USER_A, "w-c1-a", "Buổi băng thử vòng đời", "u/" + USER_A + "/c1-audio-1/original.webm"],
+);
+await db.query(
+  'insert into "noteim"."session_details" (session_id, executive_summary) values ($1, $2) on conflict (session_id) do nothing',
+  ["c1-audio-1", "Tóm tắt giữ lại khi băng hết hạn"],
+);
+await db.query(
+  'update "noteim"."sessions" set audio_expires_at = now() - interval \'1 day\' where id = $1',
+  ["c1-audio-1"],
+);
+const dueRows = (
+  await db.query(
+    "select id from \"noteim\".\"sessions\" where storage_status = 'full' and audio_path like 'u/%' and audio_expires_at is not null and audio_expires_at < now()",
+  )
+).rows.map((r) => r.id);
+check(
+  dueRows.includes("c1-audio-1"),
+  "Truy vấn cron chọn đúng buổi băng quá hạn (điều kiện như /api/cron/audio-expiry)",
+  "Truy vấn cron không bắt được buổi quá hạn",
+);
+await db.query(
+  "update \"noteim\".\"sessions\" set storage_status = 'essence_only', audio_path = null, audio_expires_at = null, size_bytes = 0 where id = $1",
+  ["c1-audio-1"],
+);
+const afterCron = (
+  await db.query(
+    'select s.storage_status, s.audio_path, d.executive_summary from "noteim"."sessions" s join "noteim"."session_details" d on d.session_id = s.id where s.id = $1',
+    ["c1-audio-1"],
+  )
+).rows[0];
+check(
+  afterCron.storage_status === "essence_only" && afterCron.audio_path === null,
+  "Sau cron: buổi về essence_only, khóa băng dọn sạch",
+  "Cron mô phỏng không dọn đúng trường băng",
+);
+check(
+  afterCron.executive_summary === "Tóm tắt giữ lại khi băng hết hạn",
+  "Sau cron: bản chữ (tóm tắt) giữ nguyên — chỉ mất băng",
+  "Cron mô phỏng làm mất bản chữ — sai hợp đồng C1-04",
+);
+
+// (b) Hai người dùng A/B + không gian cá nhân + một buổi mỗi người
 await db.query(
   'insert into "noteim"."workspace_members" (workspace_id, user_id, email, display_name, role, status) values ($1, $2, $3, $4, \'owner\', \'active\'), ($5, $6, $7, $8, \'owner\', \'active\') on conflict do nothing',
   ["w-c1-a", USER_A, "c1a@test.local", "Người A", "w-c1-b", USER_B, "c1b@test.local", "Người B"],
