@@ -4,6 +4,10 @@
     {
       "path": "/api/cron/audio-expiry",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/asr-retry",
+      "schedule": "*/10 * * * *"
     }
   ]
 }
