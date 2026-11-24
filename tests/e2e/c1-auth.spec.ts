@@ -92,6 +92,9 @@ test.describe("đăng nhập bằng nhà cung cấp demo", () => {
       page.waitForURL((u) => u.pathname === "/"),
       page.getByRole("button", { name: "Đăng xuất" }).click(),
     ]);
+    // Nguồn remote không ghi cờ làm quen trên máy như bản giả: sau đăng xuất
+    // người ẩn danh được đưa qua /welcome — bỏ qua để về thư viện ẩn danh.
+    await onboard(page);
     await page.locator("a[href^='/s/']").first().waitFor();
 
     const probe = await page.evaluate(async () => {
