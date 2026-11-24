@@ -363,12 +363,15 @@ export function RecordScreen() {
   useEffect(() => {
     if (recording.status === "idle") return;
     resetDemoTranscript();
+    // Chỉ reset khi bắt đầu một lượt ghi mới (startedAtClock đổi); status chỉ
+    // dùng để bỏ qua lần gắn đầu — thêm status vào deps sẽ xóa sạch lời đã
+    // chèn mỗi lần tạm dừng/tiếp tục.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recording.startedAtClock]);
   useEffect(() => {
     if (recording.status !== "recording") return;
     const id = window.setInterval(() => pushDemoTranscript(recordedSec()), 1000);
     return () => window.clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recording.status]);
 
   // Âm thanh mẫu (micro bị từ chối): dải giọng chạy bằng âm lượng giả

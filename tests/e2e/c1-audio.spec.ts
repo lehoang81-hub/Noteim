@@ -79,13 +79,6 @@ async function dangNhapNguoiB(page: Page) {
   await Promise.all([page.waitForURL((u) => u.pathname === "/"), skip.click()]);
 }
 
-async function dangXuat(page: Page) {
-  await page.goto("/");
-  const out = page.getByRole("button", { name: /Đăng xuất/ }).first();
-  await expect(out).toBeVisible();
-  await Promise.all([page.waitForURL((u) => u.pathname === "/"), out.click()]);
-}
-
 /** Tạo buổi qua API (kiểu nhập file, 65 giây — đủ nhỏ so với trần gói). */
 async function taoBuoi(request: APIRequestContext, title: string): Promise<string> {
   const res = await request.post("/api/data/sessions", {
