@@ -1135,7 +1135,11 @@
     "doneToast": "Summary ready: {title}",
     "view": "View",
     "ribbonLabel": "Voice ribbon of the recording being processed",
-    "backOnline": "Back online. Uploading {count} recording(s)."
+    "backOnline": "Back online. Uploading {count} recording(s).",
+    "uploading": "Uploading {percent}%",
+    "uploadDone": "Recording saved safely",
+    "uploadFailed": "Couldn't upload the recording. Interrupted network? Try again, the audio is still on this device",
+    "uploadRetry": "Retry upload"
   },
   "share": {
     "title": "Share",

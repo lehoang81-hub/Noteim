@@ -26,6 +26,9 @@ import { Sheet } from "@/components/ui/sheet";
 import { RecordButton } from "@/components/ui/record-button";
 import { useToast } from "@/components/ui/toast";
 import { useMicLevel } from "@/lib/audio/use-mic-level";
+import { MeetingRecorder } from "@/lib/audio/recorder";
+import { schedulePendingUpload } from "@/lib/audio/upload-manager";
+import { moveLiveTo } from "@/lib/audio/chunk-store";
 import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
 import { useDebugFlags } from "@/lib/debug/flags";
@@ -129,7 +132,22 @@ export function RecordScreen() {
   const storageReallyFull = useStorageFull();
   const storageAlert = storageReallyFull || flags.storageFull;
   const micTakenRef = useRef<() => void>(() => {});
-  const mic = useMicLevel({ onEnded: () => micTakenRef.current() });
+  /* Bộ thu tiếng thật (C1-04): MediaRecorder bọc quanh stream micro; từng
+   * đoạn 5 giây nằm ngay IndexedDB nên mất mạng/đóng tab không mất băng.
+   * Máy không thu được (trình duyệt cũ) thì buổi ghi vẫn là "Bản ghi thử". */
+  const recorderRef = useRef<MeetingRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  function recorder(): MeetingRecorder {
+    if (!recorderRef.current) recorderRef.current = new MeetingRecorder();
+    return recorderRef.current;
+  }
+  const mic = useMicLevel({
+    onEnded: () => micTakenRef.current(),
+    onStream: (stream) => {
+      streamRef.current = stream;
+      recorder().start(stream);
+    },
+  });
   /* Ba nhánh dải giọng (khoảnh khắc bắt đầu, thẻ gấp, dải sống) cùng là
    * m.div ở cùng một vị trí: nếu không có key, React giữ nguyên instance
    * khi đổi nhánh và hộp dải sống thừa hưởng trạng thái width/height đang dở
@@ -232,6 +250,15 @@ export function RecordScreen() {
     const folder = folderId ? folders.data?.find((f) => f.id === folderId) : null;
     const templateId =
       folder?.template_id ?? recording.templateId ?? me.data?.default_template_id ?? templates.data?.[0]?.id ?? null;
+    // Băng thu trước lúc bấm (giai đoạn xin quyền/xác nhận) không thuộc buổi
+    // mới: dừng bộ thu, xóa phần đã có rồi thu lại từ đầu (C1-04). Không có
+    // stream thì cũng xóa phần cũ cho sạch.
+    const rec = recorder();
+    void rec
+      .stop()
+      .then(() => import("@/lib/audio/chunk-store").then((m) => m.clearLive()))
+      .then(() => rec.start(streamRef.current))
+      .catch(() => undefined);
     startRecording({
       templateId,
       // Biên nhận đồng ý đi kèm khi mẫu nhạy cảm (GC-05, đặc tả §4.6)
@@ -399,6 +426,7 @@ export function RecordScreen() {
     micTakenRef.current = () => {
       if (recording.status !== "recording") return;
       pauseRecording();
+      recorderRef.current?.pause(); // băng dừng cùng đồng hồ
       setMicTaken(true);
     };
   });
@@ -419,9 +447,12 @@ export function RecordScreen() {
   /* ----- Hành động ----- */
 
   function togglePause() {
-    if (recording.status === "recording") pauseRecording();
-    else if (recording.status === "paused") {
+    if (recording.status === "recording") {
+      pauseRecording();
+      recorderRef.current?.pause(); // băng dừng cùng đồng hồ, tua lại khớp mốc
+    } else if (recording.status === "paused") {
       resumeRecording();
+      recorderRef.current?.resume();
       setMicTaken(false); // ghi tiếp sau khi micro bị chiếm: xóa dải báo
     }
   }
@@ -475,8 +506,14 @@ export function RecordScreen() {
         }),
         new Promise((r) => window.setTimeout(r, reduce ? 220 : 900)),
       ]);
+      // C1-04: dừng bộ thu (đoạn cuối được đẩy vào IndexedDB), rồi chuyển băng
+      // từ khóa "live" sang khóa theo id buổi — băng nằm lại IndexedDB kể cả
+      // khi tải lỗi/đóng tab, chỉ xóa khi complete thành công.
+      await recorderRef.current?.stop();
+      await moveLiveTo(created.id);
       mic.stop();
       letScreenSleep();
+      if (recorderRef.current) schedulePendingUpload(created.id);
       endRecording();
       router.push(`/s/${created.id}/processing`);
     } catch {

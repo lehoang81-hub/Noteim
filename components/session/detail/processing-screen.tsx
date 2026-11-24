@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, Check, Circle, LoaderCircle, Plus, UserRoundPlus } from "lucide-react";
+import { ArrowLeft, Check, Circle, LoaderCircle, Plus, UploadCloud, UserRoundPlus } from "lucide-react";
 import { animate } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
@@ -14,6 +14,8 @@ import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
 import { useReducedMotionSafe } from "@/lib/use-reduced-motion";
+import { useAudioUpload } from "@/lib/audio/upload-store";
+import { retryPendingUploads } from "@/lib/audio/upload-manager";
 
 /*
  * Màn hình đang xử lý /s/[id]/processing (docs/03-screens.md mục 4; issue M2-03).
@@ -184,6 +186,8 @@ export function ProcessingScreen() {
         label={t("ribbonLabel")}
       />
 
+      <UploadBanner sessionId={id} onRetry={() => void retryPendingUploads()} />
+
       <ol className="mt-6 flex flex-col gap-3">
         {STEP_LABELS.map((label, i) => {
           const n = i + 1;
@@ -289,6 +293,49 @@ export function ProcessingScreen() {
           {t("pickHint")}
         </p>
       </Sheet>
+    </div>
+  );
+}
+
+/* Dải trạng thái tải băng lên kho (C1-04 yêu cầu 2c): băng ghi đang PUT thẳng
+ * lên R2 thì hiện "Đang tải lên NN%"; hỏng thì hiện nút thử lại — băng nằm
+ * trong IndexedDB nên thử lại vẫn còn nguyên. Xong tự ẩn; buổi bên thư viện
+ * gỡ nhãn "Bản ghi thử" nhờ useDataVersion nhận báo thay đổi từ upload. */
+function UploadBanner({ sessionId, onRetry }: { sessionId: string; onRetry: () => void }) {
+  const t = useTranslations("processing");
+  const upload = useAudioUpload();
+  if (!upload || upload.sessionId !== sessionId) return null;
+
+  if (upload.status === "failed") {
+    return (
+      <div className="mt-4 flex items-center justify-between gap-3 rounded-block border border-line bg-surface-2 p-4" role="status">
+        <p className="flex items-center gap-2 text-small text-ink-2">
+          <UploadCloud aria-hidden={true} className="size-4 shrink-0" strokeWidth={1.75} />
+          {t("uploadFailed")}
+        </p>
+        <Button variant="secondary" className="h-9 shrink-0" onClick={onRetry}>
+          {t("uploadRetry")}
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="mt-4 rounded-block border border-line bg-surface-2 p-4"
+      role="status"
+      aria-live="polite"
+    >
+      <p className="flex items-center gap-2 text-small text-ink-2">
+        <UploadCloud aria-hidden={true} className="size-4 shrink-0" strokeWidth={1.75} />
+        {upload.status === "complete" ? t("uploadDone") : t("uploading", { percent: upload.percent })}
+      </p>
+      <div className="mt-2 h-1.5 overflow-hidden rounded-pill bg-surface" aria-hidden={true}>
+        <div
+          className="h-full rounded-pill bg-sen transition-[width] duration-300 ease-noteim"
+          style={{ width: `${upload.status === "complete" ? 100 : upload.percent}%` }}
+        />
+      </div>
     </div>
   );
 }

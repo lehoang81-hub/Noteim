@@ -4,22 +4,30 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 /*
  * Đọc âm lượng micro (0 đến 1) để vẽ dải giọng sống.
- * Chỉ đo âm lượng: không ghi, không lưu, không gửi đi đâu.
+ * Chỉ đo âm lượng: không ghi, không lưu, không gửi đi đâu — trừ khi caller
+ * đăng ký onStream: stream thô được đưa cho bộ thu MediaRecorder (C1-04).
  * status: "idle" | "asking" | "on" | "denied" | "unsupported"
  * onEnded: micro bị nơi khác chiếm hoặc ngắt đột ngột (sự kiện ended của track).
+ * onStream: stream đã mở thành công — mỗi lần mở lại (khôi phục buổi ghi dở)
+ * cũng gọi, để bộ thu nối tiếp phần băng đã có trong IndexedDB.
  */
 
 export type MicStatus = "idle" | "asking" | "on" | "denied" | "unsupported";
 
-export function useMicLevel(opts?: { onEnded?: () => void }) {
+export function useMicLevel(opts?: { onEnded?: () => void; onStream?: (stream: MediaStream) => void }) {
   const [status, setStatus] = useState<MicStatus>("idle");
   const [level, setLevel] = useState(0);
   const cleanup = useRef<() => void>(() => {});
   const onEndedRef = useRef(opts?.onEnded);
+  const onStreamRef = useRef(opts?.onStream);
 
   useEffect(() => {
     onEndedRef.current = opts?.onEnded;
   }, [opts?.onEnded]);
+
+  useEffect(() => {
+    onStreamRef.current = opts?.onStream;
+  }, [opts?.onStream]);
 
   const stop = useCallback(() => {
     cleanup.current();
@@ -36,6 +44,7 @@ export function useMicLevel(opts?: { onEnded?: () => void }) {
     setStatus("asking");
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      onStreamRef.current?.(stream); // C1-04: bộ thu MediaRecorder đón stream
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       const ctx = new AudioCtx();
       const source = ctx.createMediaStreamSource(stream);
