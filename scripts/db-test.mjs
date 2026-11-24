@@ -14,6 +14,10 @@
  * 3) Kiểm số dòng cuối khớp ánh xạ fixture; không trùng khóa mềm
  *    (thành viên theo email, chat y hệt, audit y hệt, việc theo buổi).
  * 4) Kiểm trigger giới hạn 10 dòng gap-check mỗi buổi hoạt động.
+ * 5) C1-03b: cột/bảng mới (sessions.trial_recording, session_details.draft,
+ *    folder_chat_messages) và ĐÚNG MẪU TRUY VẤN phân quyền của repository
+ *    remote: người A không đọc/ghi được dữ liệu người B khi mọi truy vấn
+ *    đều gắn `WHERE user_id = phiên` (id lấy từ phiên, không tin client).
  *
  * Dùng: `node scripts/db-test.mjs` (hoặc `pnpm db:test`). Mã thoát 0/1.
  * Không cần DATABASE_URL — PGlite chạy trong bộ nhớ.
@@ -134,23 +138,24 @@ check(
   `Đang chạy dưới role ${currentRole} — không phải noteim_app`,
 );
 
-// 23 bảng Noteim nằm trong schema noteim (trừ bảng sổ migration).
+// 24 bảng Noteim nằm trong schema noteim (trừ bảng sổ migration) — C1-03b
+// thêm folder_chat_messages (lịch sử Hỏi AI thư mục, GY1).
 const tableCount = (
   await db.query(
     "select count(*)::int as n from information_schema.tables where table_schema = 'noteim' and table_type = 'BASE TABLE' and table_name <> '__drizzle_migrations'",
   )
 ).rows[0].n;
 check(
-  tableCount === 23,
-  `Schema noteim có đúng ${tableCount}/23 bảng`,
-  `Schema noteim có ${tableCount}/23 bảng`,
+  tableCount === 24,
+  `Schema noteim có đúng ${tableCount}/24 bảng`,
+  `Schema noteim có ${tableCount}/24 bảng`,
 );
 
 // Không bảng nào rơi vào public
 const publicTables = (
   await db.query(
     "select count(*)::int as n from information_schema.tables where table_schema = 'public' and table_type = 'BASE TABLE' and table_name = any(string_to_array($1, ','))",
-    ["accounts,action_items,audit_log,auth_sessions,chat_messages,consent_receipts,contacts,folder_sessions,folders,glossary_terms,invites,promo_codes,session_details,session_gap_checks,sessions,share_links,summary_versions,transcript_segments,usage_counters,users,verification_tokens,workspace_members,workspaces"],
+    ["accounts,action_items,audit_log,auth_sessions,chat_messages,consent_receipts,contacts,folder_chat_messages,folder_sessions,folders,glossary_terms,invites,promo_codes,session_details,session_gap_checks,sessions,share_links,summary_versions,transcript_segments,usage_counters,users,verification_tokens,workspace_members,workspaces"],
   )
 ).rows[0].n;
 check(
@@ -265,6 +270,193 @@ check(
   `Chèn 11 lần nhưng bảng còn ${gapCount} dòng — trigger không hoạt động`,
 );
 
+
+/* ---------- 5. C1-03b: bảng/cột mới và mẫu truy vấn phân quyền ---------- */
+
+console.log("== 5. C1-03b: bảng/cột mới + tách dữ liệu giữa hai người (A/B) ==");
+
+// (a) Cột mới từ migration 0001
+const trialCol = (
+  await db.query(
+    "select count(*)::int as n from information_schema.columns where table_schema = 'noteim' and table_name = 'sessions' and column_name = 'trial_recording' and column_default = 'false'",
+  )
+).rows[0].n;
+check(trialCol === 1, "sessions.trial_recording có mặc định false (bản ghi thử — PR 04 mới lưu R2)", "Thiếu cột sessions.trial_recording");
+
+const draftCol = (
+  await db.query(
+    "select count(*)::int as n from information_schema.columns where table_schema = 'noteim' and table_name = 'session_details' and column_name = 'draft'",
+  )
+).rows[0].n;
+check(draftCol === 1, "session_details.draft giữ bản nháp của buổi đang xử lý (khớp MockDb.draft)", "Thiếu cột session_details.draft");
+
+// (b) Hai người dùng A/B + không gian cá nhân + một buổi mỗi người
+const USER_A = "11111111-1111-4111-8111-111111111111";
+const USER_B = "22222222-2222-4222-8222-222222222222";
+await db.query(
+  'insert into "noteim"."users" (id, email, display_name) values ($1, $2, $3), ($4, $5, $6) on conflict (id) do nothing',
+  [USER_A, "c1a@test.local", "Người A", USER_B, "c1b@test.local", "Người B"],
+);
+await db.query(
+  'insert into "noteim"."workspaces" (id, kind, name, owner_user_id) values ($1, \'personal\', \'\', $2), ($3, \'personal\', \'\', $4) on conflict (id) do nothing',
+  ["w-c1-a", USER_A, "w-c1-b", USER_B],
+);
+await db.query(
+  'insert into "noteim"."workspace_members" (workspace_id, user_id, email, display_name, role, status) values ($1, $2, $3, $4, \'owner\', \'active\'), ($5, $6, $7, $8, \'owner\', \'active\') on conflict do nothing',
+  ["w-c1-a", USER_A, "c1a@test.local", "Người A", "w-c1-b", USER_B, "c1b@test.local", "Người B"],
+);
+await db.query(
+  'insert into "noteim"."sessions" (id, user_id, workspace_id, owner_user_id, title, template_id, status, created_at) values ($1, $2, $3, $2, $4, \'tpl-general\', \'ready\', now()), ($5, $6, $7, $6, $8, \'tpl-general\', \'ready\', now()) on conflict (id) do nothing',
+  ["c1-a-1", USER_A, "w-c1-a", "Buổi của A", "c1-b-1", USER_B, "w-c1-b", "Buổi của B"],
+);
+await db.query(
+  'insert into "noteim"."session_details" (session_id, executive_summary) values ($1, $2), ($3, $4) on conflict (session_id) do nothing',
+  ["c1-a-1", "Tóm tắt của A", "c1-b-1", "Tóm tắt của B"],
+);
+await db.query(
+  'insert into "noteim"."transcript_segments" (session_id, id, speaker_id, start_sec, end_sec, text) values ($1, \'g1\', \'SPK_01\', 0, 2, $2), ($3, \'g1\', \'SPK_01\', 0, 2, $4) on conflict (session_id, id) do nothing',
+  ["c1-a-1", "Lời của A", "c1-b-1", "Lời của B"],
+);
+await db.query(
+  'insert into "noteim"."action_items" (id, session_id, task) values ($1, $2, $3), ($1, $4, $5) on conflict (session_id, id) do nothing',
+  ["x1", "c1-a-1", "Việc của A", "c1-b-1", "Việc của B"],
+);
+await db.query(
+  'insert into "noteim"."folders" (id, owner_user_id, workspace_id, kind, name, created_at, updated_at) values ($1, $2, $3, \'legal_case\', $4, now(), now()) on conflict (id) do nothing',
+  ["f-c1-a", USER_A, "w-c1-a", "Hồ sơ của A"],
+);
+await db.query(
+  'insert into "noteim"."folder_chat_messages" (folder_id, role, text) values ($1, \'user\', $2) on conflict do nothing',
+  ["f-c1-a", "Câu hỏi của A"],
+);
+
+// (c) Danh sách buổi của A chỉ có buổi của A — đúng mẫu truy vấn repository
+const listA = (
+  await db.query(
+    'select id from "noteim"."sessions" where user_id = $1 and deleted_at is null',
+    [USER_A],
+  )
+).rows.map((r) => r.id);
+check(
+  listA.includes("c1-a-1") && !listA.includes("c1-b-1"),
+  "Danh sách buổi lọc theo user_id của PHIÊN: người A chỉ thấy buổi của A",
+  `Danh sách của A lọt buổi người khác: ${listA.join(", ")}`,
+);
+
+// (d) Sửa buổi người khác: truy vấn gắn AND user_id = phiên → 0 dòng
+const sneakyUpdate = (
+  await db.query(
+    'update "noteim"."sessions" set title = $2 where id = $1 and user_id = $3 returning id',
+    ["c1-b-1", "Đổi trộm tiêu đề", USER_A],
+  )
+).rows.length;
+check(
+  sneakyUpdate === 0,
+  "Cập nhật buổi người khác bị chặn (AND user_id = phiên → 0 dòng)",
+  `Người A sửa được buổi của B (${sneakyUpdate} dòng)`,
+);
+const titleB = (
+  await db.query('select title from "noteim"."sessions" where id = $1', ["c1-b-1"])
+).rows[0].title;
+check(titleB === "Buổi của B", "Buổi của B nguyên vẹn sau lần sửa trộm", `Buổi của B bị đổi thành "${titleB}"`);
+
+// (e) Đọc bản ghi lời người khác qua join theo chủ → rỗng
+const leakTranscript = (
+  await db.query(
+    'select t.text from "noteim"."transcript_segments" t join "noteim"."sessions" s on s.id = t.session_id where s.user_id = $1 and t.session_id = $2',
+    [USER_A, "c1-b-1"],
+  )
+).rows.length;
+check(leakTranscript === 0, "Đọc bản ghi lời buổi người khác (join lọc user_id) → rỗng", `Người A đọc được lời của B (${leakTranscript} dòng)`);
+
+// (f) Sửa/xóa việc người khác: repository chỉ đụng việc của buổi mình là chủ
+const sneakTask = (
+  await db.query(
+    'update "noteim"."action_items" set done = true where id = $1 and session_id = $2 and session_id in (select id from "noteim"."sessions" where user_id = $3) returning id',
+    ["x1", "c1-b-1", USER_A],
+  )
+).rows.length;
+const taskB = (
+  await db.query('select done from "noteim"."action_items" where session_id = $1 and id = $2', ["c1-b-1", "x1"])
+).rows[0].done;
+check(
+  sneakTask === 0 && taskB === false,
+  "Tick việc người khác bị chặn (session chỉ trong các buổi của mình)",
+  `Người A tick được việc của B (${sneakTask} dòng, done=${taskB})`,
+);
+
+// (g) Sửa thư mục và Hỏi AI thư mục của người khác → 0 dòng
+const sneakFolder = (
+  await db.query(
+    'update "noteim"."folders" set name = $2 where id = $1 and owner_user_id = $3 returning id',
+    ["f-c1-a", "Đổi trộm", USER_B],
+  )
+).rows.length;
+check(sneakFolder === 0, "Sửa thư mục người khác bị chặn (owner_user_id = phiên)", "Người B sửa được thư mục của A");
+const sneakFolderChat = (
+  await db.query(
+    'select m.text from "noteim"."folder_chat_messages" m join "noteim"."folders" f on f.id = m.folder_id where f.owner_user_id = $1 and f.id = $2',
+    [USER_B, "f-c1-a"],
+  )
+).rows.length;
+check(sneakFolderChat === 0, "Đọc lịch sử Hỏi AI thư mục người khác → rỗng", "Người B đọc được hội thoại thư mục của A");
+
+// (h) Danh bạ/từ điển lọc theo user_id
+await db.query(
+  'insert into "noteim"."contacts" (id, user_id, name) values ($1, $2, $3), ($4, $5, $6) on conflict (id) do nothing',
+  ["ct-c1-a", USER_A, "Liên hệ A", "ct-c1-b", USER_B, "Liên hệ B"],
+);
+const contactsA = (
+  await db.query('select name from "noteim"."contacts" where user_id = $1', [USER_A])
+).rows.map((r) => r.name);
+check(
+  contactsA.includes("Liên hệ A") && !contactsA.includes("Liên hệ B"),
+  "Danh bạ lọc theo user_id của phiên: người A không thấy liên hệ của B",
+  `Danh bạ của A lọt dữ liệu người khác: ${contactsA.join(", ")}`,
+);
+
+// (i) Gap check gắn FK buổi — không rà được buổi người khác/lạ
+let fkGapError = null;
+try {
+  await db.query(
+    'insert into "noteim"."session_gap_checks" (session_id, template_id, checked_at, transcript_until_ms, result_json) values ($1, \'t\', now(), 0, \'{}\'::jsonb)',
+    ["c1-b-1"],
+  );
+} catch (error) {
+  fkGapError = error;
+}
+// Buổi của B tồn tại nên dòng chèn hợp lệ về FK; bắt đúng lỗi là khi rà buổi KHÔNG tồn tại
+check(fkGapError === null, "Gap check gắn đúng FK buổi (buổi tồn tại chèn được)", `Chèn gap check cho buổi tồn tại lại lỗi: ${fkGapError instanceof Error ? fkGapError.message : ""}`);
+
+let fkGapMissing = null;
+try {
+  await db.query(
+    'insert into "noteim"."session_gap_checks" (session_id, template_id, checked_at, transcript_until_ms, result_json) values ($1, \'t\', now(), 0, \'{}\'::jsonb)',
+    ["khong-ton-tai"],
+  );
+} catch (error) {
+  fkGapMissing = error;
+}
+check(
+  fkGapMissing !== null,
+  "Gap check cho buổi không tồn tại bị FK chặn (không rà buổi lạ)",
+  "Chèn gap check cho buổi lạ lại thành công — thiếu FK",
+);
+
+// (j) Xóa thư mục dọn cả hội thoại Hỏi AI (cascade)
+await db.query('delete from "noteim"."folders" where id = $1', ["f-c1-a"]);
+const leftMessages = (
+  await db.query('select count(*)::int as n from "noteim"."folder_chat_messages" where folder_id = $1', ["f-c1-a"])
+).rows[0].n;
+check(leftMessages === 0, "Xóa thư mục dọn cả hội thoại Hỏi AI (cascade)", `Xóa thư mục còn ${leftMessages} tin nhắn thừa`);
+
+// Dọn dữ liệu A/B để phần đếm ở trên không lệch phần lặp lại sau này
+await db.query('delete from "noteim"."sessions" where user_id = any($1)', [[USER_A, USER_B]]);
+await db.query('delete from "noteim"."workspace_members" where user_id = any($1)', [[USER_A, USER_B]]);
+await db.query('delete from "noteim"."workspaces" where owner_user_id = any($1)', [[USER_A, USER_B]]);
+await db.query('delete from "noteim"."contacts" where user_id = any($1)', [[USER_A, USER_B]]);
+await db.query('delete from "noteim"."users" where id = any($1)', [[USER_A, USER_B]]);
+
 /* ---------- Kết luận ---------- */
 
 if (failures > 0) {
@@ -272,6 +464,6 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\npnpm db:test đạt: migration bằng scripts/db-migrate.mjs (không CREATE SCHEMA, role noteim_app giới hạn) + migrate idempotent + seed hai lần + không trùng + trigger hoạt động.",
+  "\npnpm db:test đạt: migration bằng scripts/db-migrate.mjs (không CREATE SCHEMA, role noteim_app giới hạn) + migrate idempotent + seed hai lần + không trùng + trigger hoạt động + bảng/cột C1-03b + tách dữ liệu A/B đúng mẫu truy vấn phân quyền.",
 );
 process.exit(0);
