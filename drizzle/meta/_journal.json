@@ -15,6 +15,13 @@
       "when": 1795503904086,
       "tag": "0001_gifted_felicia_hardy",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795550070432,
+      "tag": "0002_outstanding_romulus",
+      "breakpoints": true
     }
   ]
 }

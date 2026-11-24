@@ -341,6 +341,19 @@ export const sessions = noteimSchema.table(
      * Buổi mẫu nhập từ fixture giữ đường dẫn file công khai (/audio/…). */
     audioPath: text("audio_path"),
     audioExpiresAt: timestamp("audio_expires_at", { withTimezone: true }),
+    /* Trạng thái luồng nội dung thật (C1-05): băng trên R2 → Soniox chữ →
+     * Gemini tóm tắt. null = chưa vào luồng (buổi mẫu, bản ghi thử, nhập file
+     * không băng — giữ luồng mockup cũ). Mỗi lần POST process đẩy MỘT bước:
+     * queued → transcribing → summarizing → done | failed. */
+    asrStage: text("asr_stage"),
+    /** Id việc nhận dạng phía Soniox (fake: id nội bộ) đang chờ kết quả. */
+    asrTranscriptionId: text("asr_transcription_id"),
+    /** Lỗi ngắn của lần thử hiện tại (mã an toàn, không mang nội dung buổi). */
+    asrError: text("asr_error"),
+    /** Số lần đã đẩy luồng cho buổi (không reset — cron chốt hạn theo đây). */
+    asrAttempts: integer("asr_attempts").notNull().default(0),
+    /** Lần cuối trạng thái đổi/có người đẩy — cron quét kẹt > 10 phút theo đây. */
+    asrUpdatedAt: timestamp("asr_updated_at", { withTimezone: true }),
     /** { confirmed, announced, receipts? } — hình dạng session.consent */
     consent: jsonb("consent")
       .notNull()
@@ -361,6 +374,8 @@ export const sessions = noteimSchema.table(
   (table) => [
     index("sessions_user_created_idx").on(table.userId, table.createdAt),
     index("sessions_workspace_idx").on(table.workspaceId),
+    // Cron asr-retry quét theo stage + thời điểm cập nhật (C1-05)
+    index("sessions_asr_stage_idx").on(table.asrStage, table.asrUpdatedAt),
   ],
 );
 
