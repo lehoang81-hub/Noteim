@@ -181,6 +181,14 @@ Mẫu ghi âm app (`fixtures/templates.json`) và 11 mẫu intake (`config/intak
 | Giữ băng theo gói | Free 90 ngày, Pro 12 tháng (điểm chốt số 6); `audio_expires_at` đặt lúc lưu buổi theo plan |
 | Thư viện | `@aws-sdk/client-s3` + `@aws-sdk/s3-request-presigner` (đã duyệt, điểm chốt số 9) |
 
+**Cập nhật khi làm PR 04 (C1-04, anh chốt bằng đề bài ngày 24/11):**
+
+- **Cấu trúc key băng ghi**: `u/{userId}/{sessionId}/original.{ext}` (chốt riêng của PR 04 — ảnh giữ `photos/{session_id}/{photo_id}.{ext}` cho PR 05). Key luôn do máy chủ sinh, client không chỉ định.
+- **Tên route upload**: dùng `POST /api/audio/presign` {session_id, content_type, size} và `POST /api/audio/complete` {session_id} thay cho `/api/uploads` + `/api/uploads/confirm` trong bảng trên — cùng một hợp đồng (presigned PUT sống 10 phút, HeadObject xác nhận kích thước trước khi ghi `audio_path`/`size_bytes`/`storage_status`/`audio_expires_at` và gỡ nhãn bản ghi thử). Đọc phát lại là `GET /api/audio/{sessionId}` (302 sang signed GET 15 phút, hỗ trợ Range) thay cho `/api/sessions/[id]/audio-url`.
+- **Nhịp dọn dẹp**: cron chạy **hằng ngày** (`vercel.json` crons, 02:00 UTC) thay vì hằng tuần; route `/api/cron/audio-expiry` bảo vệ bằng `Authorization: Bearer ${CRON_SECRET}`. R2 Lifecycle vẫn là lưới an toàn.
+- **Cài đặt một lần**: `node scripts/r2-setup.mjs` (idempotent) — tạo bucket riêng tư `noteim-audio` (location hint apac), đặt CORS cho https://noteim-seven.vercel.app và http://localhost:3000 (PUT/GET/HEAD; Content-Type, Range, ETag), không bật truy cập công khai; suy khóa S3 từ API token (Access Key ID = ID token, Secret = SHA-256 giá trị token) và ghi `.env.local`, không in giá trị. `node scripts/r2-smoke.mjs` kiểm R2 thật: presign → PUT → HEAD → GET Range → xóa.
+- **e2e không cần R2 thật**: `R2_FAKE=1` — kho giả trong bộ nhớ, URL presign trỏ vào `/api/audio/fake/…` của chính app (PUT/GET/HEAD, GET hỗ trợ Range). Chỉ máy kiểm thử; production thiếu biến này thì lối fake luôn 404.
+
 ### 1.6 Hai lỗi nền bắt buộc sửa khi lên serverless
 
 1. **Rate limit Map trong bộ nhớ** (`lib/gap-check/rate-limit.ts`): nhiều instance thì mỗi instance đếm riêng — người dùng được nhân lượt. Chuyển sang `usage_counters` ở PR 06; giữ `GAP_CHECK_FREE_DAILY=10` cho ẩn danh, theo `user_id` cho người đăng nhập.
@@ -467,6 +475,14 @@ Mẫu ghi âm app (`fixtures/templates.json`) và 11 mẫu intake (`config/intak
 | Dọn dẹp | Cron Vercel hằng tuần: quét `sessions.audio_expires_at` quá hạn → `DeleteObjects` trên R2 + đặt `storage_status = essence_only`, giữ transcript, tóm tắt, biên nhận. **R2 Lifecycle làm lưới an toàn**: xóa object prefix `audio/` quá 400 ngày (12 tháng Pro + đệm) |
 | Giữ băng theo gói | Free 90 ngày, Pro 12 tháng (điểm chốt số 6); `audio_expires_at` đặt lúc lưu buổi theo plan |
 | Thư viện | `@aws-sdk/client-s3` + `@aws-sdk/s3-request-presigner` (đã duyệt, điểm chốt số 9) |
+
+**Cập nhật khi làm PR 04 (C1-04, anh chốt bằng đề bài ngày 24/11):**
+
+- **Cấu trúc key băng ghi**: `u/{userId}/{sessionId}/original.{ext}` (chốt riêng của PR 04 — ảnh giữ `photos/{session_id}/{photo_id}.{ext}` cho PR 05). Key luôn do máy chủ sinh, client không chỉ định.
+- **Tên route upload**: dùng `POST /api/audio/presign` {session_id, content_type, size} và `POST /api/audio/complete` {session_id} thay cho `/api/uploads` + `/api/uploads/confirm` trong bảng trên — cùng một hợp đồng (presigned PUT sống 10 phút, HeadObject xác nhận kích thước trước khi ghi `audio_path`/`size_bytes`/`storage_status`/`audio_expires_at` và gỡ nhãn bản ghi thử). Đọc phát lại là `GET /api/audio/{sessionId}` (302 sang signed GET 15 phút, hỗ trợ Range) thay cho `/api/sessions/[id]/audio-url`.
+- **Nhịp dọn dẹp**: cron chạy **hằng ngày** (`vercel.json` crons, 02:00 UTC) thay vì hằng tuần; route `/api/cron/audio-expiry` bảo vệ bằng `Authorization: Bearer ${CRON_SECRET}`. R2 Lifecycle vẫn là lưới an toàn.
+- **Cài đặt một lần**: `node scripts/r2-setup.mjs` (idempotent) — tạo bucket riêng tư `noteim-audio` (location hint apac), đặt CORS cho https://noteim-seven.vercel.app và http://localhost:3000 (PUT/GET/HEAD; Content-Type, Range, ETag), không bật truy cập công khai; suy khóa S3 từ API token (Access Key ID = ID token, Secret = SHA-256 giá trị token) và ghi `.env.local`, không in giá trị. `node scripts/r2-smoke.mjs` kiểm R2 thật: presign → PUT → HEAD → GET Range → xóa.
+- **e2e không cần R2 thật**: `R2_FAKE=1` — kho giả trong bộ nhớ, URL presign trỏ vào `/api/audio/fake/…` của chính app (PUT/GET/HEAD, GET hỗ trợ Range). Chỉ máy kiểm thử; production thiếu biến này thì lối fake luôn 404.
 
 ### 1.6 Hai lỗi nền bắt buộc sửa khi lên serverless
 

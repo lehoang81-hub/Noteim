@@ -634,3 +634,30 @@ Bật đúng như đã hẹn ở PR 01/02: người ĐÃ đăng nhập dùng d�
 - `pnpm db:test` mở rộng (PGlite, role `noteim_app` giới hạn): 24 bảng, cột mới `sessions.trial_recording` + `session_details.draft`, bảng `folder_chat_messages` (cascade khi xóa thư mục), và **đúng mẫu truy vấn phân quyền A/B**: danh sách lọc theo `user_id` của phiên, sửa/đọc/xóa chéo người bị chặn (0 dòng), FK chặn rà thiếu buổi lạ.
 - e2e `tests/e2e/c1-remote.spec.ts` tự đọc `/api/data/mode`: lô mock chạy hồi quy (đăng nhập vẫn dữ liệu trên máy, ẩn danh gọi API dữ liệu bị 401); lô remote (cần server build `NEXT_PUBLIC_DATA_SOURCE=remote NEXT_PUBLIC_AUTH_FAKE=1` và chạy `AUTH_FAKE=1 DATABASE_URL=…`) kiểm toàn bộ quyền A/B: người B không đọc/ghi/xóa được dữ liệu người A, việc và danh bạ không lọt, buổi mẫu nhập vào tài khoản không lẫn thư viện, lịch sử rà thiếu nằm DB. Máy không có DATABASE_URL thì các bài remote tự bỏ qua kèm lý do — kết quả thật chờ chạy trên Supabase.
 - Người dùng thử thứ hai cho e2e quyền: provider `demo-b` + nút "Đăng nhập người dùng B (kiểm thử)" trên trang đăng nhập (chỉ hiện khi build `NEXT_PUBLIC_AUTH_FAKE=1`).
+
+## Bổ sung C1 (PR 04 — thu và lưu âm thanh thật lên Cloudflare R2)
+
+Băng ghi thật lần đầu được lưu bền vững (docs/12 §0.2 yêu cầu bổ sung 2 + §1.5): trình duyệt thu bằng MediaRecorder, giữ từng đoạn trong IndexedDB, rồi tải **thẳng lên Cloudflare R2** qua Presigned PUT — không một byte băng nào đi qua API Route (trần thân yêu cầu ~4,5 MB của Vercel). Người ẩn danh ghi như cũ, buổi vẫn là "Bản ghi thử" (mock không có kho).
+
+### Luồng tải lên (trình duyệt → R2)
+
+1. **Thu**: màn ghi âm bọc stream micro bằng `MeetingRecorder` (lib/audio/recorder.ts) — iOS chọn `audio/mp4`, nơi khác `audio/webm` (isTypeSupported); mỗi đoạn 5 giây đẩy ngay vào IndexedDB (`noteim-audio`, lib/audio/chunk-store.ts) nên mất mạng/đóng tab không mất băng. Tạm dừng ghi thì recorder tạm dừng cùng đồng hồ.
+2. **Tạo buổi**: kết thúc ghi gọi `data.sessions.createFromRecording` như cũ — buổi sinh ra vẫn là bản ghi thử cho tới khi băng chốt.
+3. **Presign**: `POST /api/audio/presign` {session_id, content_type, size} → máy chủ kiểm phiên + quyền CHỦ buổi, loại file trong danh sách cho phép (audio/mp4, audio/webm, audio/ogg, audio/mpeg, audio/wav), trần dung lượng theo gói (Free 90 phút/buổi), rồi trả `upload_url` (presigned PUT sống 10 phút) + `key`. **Khóa do máy chủ đặt**: `u/{userId}/{sessionId}/original.{ext}` — client không chọn được khóa, không tải hộ người khác (403).
+4. **PUT thẳng**: trình duyệt PUT theo `upload_url` với tiến độ phần trăm (XHR — lib/audio/upload-manager.ts). Lỗi mạng thì chờ sự kiện online rồi thử lại (tối đa 4 lượt); hết lượt giữ băng trong IndexedDB + danh sách chờ, mở lại app hoặc có mạng lại tự tải tiếp.
+5. **Complete**: `POST /api/audio/complete` {session_id, content_type, size} → máy chủ HEAD đối tượng, so kích thước (lệch → 409), ghi `audio_path` + `size_bytes` + `audio_expires_at` theo gói (Free 90 ngày, Pro 12 tháng) và **gỡ nhãn "Bản ghi thử"** — chỉ khi xong bước này buổi mới có băng nghe lại.
+
+### Nghe lại và quyền
+
+- `GET /api/audio/[sessionId]`: kiểm quyền theo phiên (chủ buổi, hoặc thành viên của không gian nhóm khi buổi chia sẻ cho nhóm) rồi **302** tới signed GET sống 15 phút. Range để tua hoạt động vì chữ ký nằm trên URL; trình phát hiện có (`createAudioPlayer`) dùng src này cho buổi thật, **buổi mẫu vẫn dùng file tĩnh /audio/…**.
+- `sessions.audio_url` không bao giờ lộ khóa R2 thô: bản server ánh xạ khóa dạng `u/…` thành `/api/audio/{id}` (lib/data/server/sessions.ts).
+- Xóa buổi (xóa mềm còn Hoàn tác) xóa đối tượng R2 ngay và dọn trường băng; "Xóa băng gốc" (purgeRaw) cũng xóa đối tượng. Xóa tài khoản xóa hết băng — việc của PR 12 (privacy tools), cascade tự nhiên qua buổi.
+- Cron `/api/cron/audio-expiry` (bảo vệ `Authorization: Bearer CRON_SECRET`, khai báo trong vercel.json chạy hằng ngày 02:00 UTC): xóa băng quá `audio_expires_at`, đặt `storage_status = essence_only`, **giữ nguyên bản chữ** (bản ghi lời, tóm tắt, biên bản, việc cần làm). R2 Lifecycle là lưới an toàn thêm một lớp.
+
+### Chế độ thử nghiệm và kiểm
+
+- `R2_FAKE=1` (chỉ máy kiểm thử/e2e): kho giả trong bộ nhớ của process, URL presign trỏ vào `/api/audio/fake/…` của chính app — nhận PUT/GET/HEAD, GET hỗ trợ Range. Build production không có biến này thì mọi lối `/api/audio/fake` trả 404.
+- `/api/data/mode` thêm cờ `r2`/`r2Fake` cho e2e tự bỏ qua bài cần kho khi máy chủ chưa cấu hình.
+- e2e `tests/e2e/c1-audio.spec.ts` (14 bài × 2 project): quyền A/B (người B không presign/nghe được băng của người A — 403; ẩn danh 401), chặn loại file (400) và trần dung lượng/thời lượng gói (413), luồng presign → PUT → complete → nghe lại 302 + Range, complete lệch kích thước 409, xóa buổi là mất băng, cron sai/đúng bí mật, và **luồng ghi thật bằng micro giả của Chromium**: ghi vài giây, dải "Đang tải lên NN%", nhãn bản ghi thử biến mất, trình phát dùng `/api/audio/{id}`.
+- `pnpm db:test` thêm bộ kiểm C1-04: 4 cột băng (`audio_path`, `audio_expires_at` timestamptz, `storage_status` mặc định 'full', `size_bytes`) + vòng đời complete→cron giữ bản chữ trên PGlite.
+- Lỗi sản phẩm bắt được khi chạy e2e remote lần đầu (PR 03b trước giờ chỉ skip): `defaultTemplateFor` trả id mẫu không tồn tại cho nghề "other" → buổi không sinh được ý tóm tắt; `dataNow()` trả giờ thật cho người ẩn danh trên build remote → dải ngày Tổng quan lệch; hạn mức tháng đếm cả buổi đã xóa. Cả ba đã sửa.
