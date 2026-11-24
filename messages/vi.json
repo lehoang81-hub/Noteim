@@ -1721,6 +1721,7 @@
     "subtitle": "Buổi ghi, thư mục và nhóm của bạn được lưu an toàn, theo lại trên mọi máy.",
     "googleButton": "Tiếp tục bằng Google",
     "demoButton": "Đăng nhập thử (dành cho kiểm thử)",
+    "demoButtonB": "Đăng nhập người dùng B (kiểm thử)",
     "anonymousContinue": "Dùng không đăng nhập",
     "anonymousNote": "Chưa đăng nhập vẫn ghi được: dữ liệu nằm trên máy, giới hạn 3 buổi và 30 phút tổng ghi.",
     "checking": "Đang kiểm tra phiên đăng nhập",
@@ -1733,4 +1734,4 @@
     "entryGo": "Đăng nhập",
     "entrySignedIn": "Đang dùng tài khoản {name}"
   }
-}
+}\n

@@ -1011,6 +1011,16 @@ export const mockSource: DataSource = {
         if (!sample) throw new DataError("not_found");
         return sample.detail;
       }),
+    // Bản giả: buổi mẫu đã có sẵn trong kho, "nhập" chỉ trả id để màn làm quen mở
+    importSample: (profession) =>
+      read(async () => {
+        await samplesReady();
+        const db = getDb();
+        const tpl = db.templates.find((t) => t.profession === profession);
+        const sample = db.samples.find((s) => s.detail.template_id === tpl?.id) ?? db.samples[0];
+        if (!sample) throw new DataError("not_found");
+        return { id: sample.detail.id };
+      }),
     setVisibility: (id, visibility) =>
       write(async () => {
         await sessionsReady();

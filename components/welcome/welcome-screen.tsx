@@ -285,9 +285,14 @@ function SampleStep({
 
   function openSample() {
     if (!sample.data) return;
+    // Lưu tên + xưng hô + cờ làm quen như bấm "Hoàn tất", xong mới mở buổi mẫu.
+    // Chế độ remote: chép buổi mẫu vào tài khoản trước (is_sample, riêng cho
+    // từng người) — bản giả trả lại id mẫu có sẵn.
     const sid = sample.data.id;
-    // Lưu tên + xưng hô + cờ làm quen như bấm "Hoàn tất", xong mới mở buổi mẫu
-    void onOpenSample().then(() => router.push(`/s/${sid}?tour=1`));
+    void onOpenSample()
+      .then(() => data.sessions.importSample(profession ?? "realestate_sales"))
+      .then((r) => router.push(`/s/${r.id}?tour=1`))
+      .catch(() => router.push(`/s/${sid}?tour=1`));
   }
 
   return (

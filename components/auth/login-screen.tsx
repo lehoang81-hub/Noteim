@@ -31,7 +31,7 @@ export function LoginScreen({ initialError }: { initialError?: string }) {
   const router = useRouter();
   const [busy, setBusy] = useState<string | null>(null);
 
-  async function enter(provider: "google" | "demo") {
+  async function enter(provider: "google" | "demo" | "demo-b") {
     setBusy(provider);
     try {
       await signInWith(provider, "/");
@@ -111,6 +111,19 @@ export function LoginScreen({ initialError }: { initialError?: string }) {
                   }}
                 >
                   {t("demoButton")}
+                </Button>
+              ) : null}
+              {isAuthFake ? (
+                <Button
+                  variant="ghost"
+                  loading={busy === "demo-b"}
+                  disabled={busy !== null}
+                  data-testid="login-demo-b"
+                  onClick={() => {
+                    void enter("demo-b");
+                  }}
+                >
+                  {t("demoButtonB")}
                 </Button>
               ) : null}
               <Button variant="ghost" onClick={() => router.push("/")}>

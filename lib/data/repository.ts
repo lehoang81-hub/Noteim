@@ -141,6 +141,10 @@ export interface SessionRepository {
   createFromImport(input: { file_name: string; duration_sec: number; template_id: string; language: Lang; auto_detect_languages?: boolean }): Promise<{ id: string }>;
   /** Buổi ghi mẫu theo nghề (M4-04): dùng ở màn làm quen và Cài đặt > Hồ sơ */
   getSample(profession: Profession): Promise<SessionDetail>;
+  /** Nhập buổi mẫu theo nghề vào tài khoản (C1-03b, yêu cầu 4): chép fixture
+   * mẫu thành buổi is_sample riêng của người dùng khi họ bấm mở — không nạp
+   * khi không yêu cầu, không lẫn với buổi thật. Bản giả trả id mẫu có sẵn. */
+  importSample(profession: Profession): Promise<{ id: string }>;
   /** Đổi Riêng tư / Cả nhóm (M7-01). Chỉ người ghi buổi được đổi; buổi cá
    * nhân luôn riêng tư. Đổi sang "workspace" chỉ có tác dụng trong không gian Nhóm. */
   setVisibility(id: string, visibility: Visibility): Promise<void>;

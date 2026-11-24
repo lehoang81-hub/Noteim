@@ -53,6 +53,19 @@ export const authOptions: NextAuthOptions = {
               };
             },
           }),
+          CredentialsProvider({
+            id: "demo-b",
+            name: "Người dùng thử B",
+            credentials: {},
+            async authorize() {
+              // Người dùng demo thứ hai — bài e2e quyền dữ liệu giữa hai người.
+              return {
+                id: "22222222-2222-4222-8222-222222222222",
+                email: "demo-b@noteim.app",
+                name: "Người dùng thử B",
+              };
+            },
+          }),
         ]
       : []),
   ],
