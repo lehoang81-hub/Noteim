@@ -6,20 +6,23 @@
  * (users.profession null) — trả "other" và mẫu tương ứng để màn hình làm
  * quen tự điền khi người dùng bấm chọn; không ghi đè giá trị null trong DB.
  */
-import { eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 
 import { getDb } from "@/lib/db";
 import { sessions, users } from "@/lib/db/schema";
 import type { Lang, ListeningPrefs, Profession, Quota, User } from "../types";
 
 import { ApiError, type ServerContext } from "./context";
-import { templatesOfProfession } from "./templates";
+import { templatesOfProfession, ALL_TEMPLATES } from "./templates";
 
 type UserRow = typeof users.$inferSelect;
 
 function defaultTemplateFor(profession: Profession | null): string {
   const tpl = templatesOfProfession(profession);
-  return tpl?.id ?? "tpl-general";
+  // Nghề "other" (chưa chọn nghề) không có mẫu riêng: theo mẫu mặc định của
+  // bản giả (fixture user — tpl-realestate). Trả id mẫu KHÔNG TỒN TẠI làm
+  // buổi tạo sau không sinh được ý tóm tắt (templateById trượt → sections rỗng).
+  return tpl?.id ?? templatesOfProfession("realestate_sales")?.id ?? ALL_TEMPLATES[0]?.id ?? "";
 }
 
 /** Dòng users → hình dạng User (lib/data/types.ts). */
@@ -122,10 +125,12 @@ export async function getQuota(ctx: ServerContext): Promise<Quota> {
     month: "2-digit",
   });
   const monthKey = monthFmt.format(now);
+  // Buổi ĐÃ XÓA (xóa mềm còn Hoàn tác) không còn chiếm hạn mức — xóa là
+  // trả lại phần đã dùng (khớp nghĩa "mức dùng tháng này").
   const rows = await db
     .select({ durationSec: sessions.durationSec, createdAt: sessions.createdAt })
     .from(sessions)
-    .where(eq(sessions.userId, ctx.userId));
+    .where(and(eq(sessions.userId, ctx.userId), isNull(sessions.deletedAt)));
   const minutesUsed =
     rows.filter((r) => monthFmt.format(r.createdAt) === monthKey).reduce((n, r) => n + r.durationSec, 0) / 60;
   const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);

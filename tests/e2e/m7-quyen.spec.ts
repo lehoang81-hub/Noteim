@@ -16,6 +16,9 @@ const TEAM_ONLY = ["s-nhom-chu-dau-tu-le-hong", "s-nhom-van-phong-song-hong", "s
 test("không gian cá nhân: chỉ còn buổi của mình sau khi dữ liệu tự chuyển", async ({ page }) => {
   const errors = collectErrors(page);
   await onboard(page);
+  // onboard chỉ chờ khung ứng dụng (thư viện remote tài khoản mới rỗng);
+  // bản giả có sẵn dữ liệu mẫu — chờ hàng hiện rồi mới đếm.
+  await page.locator("a[href^='/s/']").first().waitFor({ timeout: 15_000 });
   const hrefs = await page.locator("a[href^='/s/']").evaluateAll((els) => els.map((el) => el.getAttribute("href")));
   // Chín buổi cá nhân giữ nguyên; không buổi nhóm nào lẫn vào
   expect(hrefs.length).toBe(9);

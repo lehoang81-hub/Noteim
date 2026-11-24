@@ -18,7 +18,10 @@ export async function onboard(page: Page) {
   await page.goto("/welcome");
   await page.getByRole("button", { name: /^(Bỏ qua|Skip|건너뛰기)$/ }).first().click();
   await page.waitForURL((u) => u.pathname === "/");
-  await page.locator("a[href^='/s/']").first().waitFor();
+  // Chờ khung ứng dụng thay vì đợi hàng buổi ghi: thư viện nguồn remote của
+  // tài khoản mới là RỖNG (không nạp dữ liệu mẫu khi không yêu cầu — yêu cầu
+  // 4 của C1-03b). Spec nào cần hàng buổi thì tự khẳng định thêm phần đó.
+  await page.getByRole("navigation", { name: /Điều hướng chính/ }).waitFor({ timeout: 15_000 });
 }
 
 /** Bật cờ thử nghiệm (giống bảng ?debug=1) rồi tải lại. */

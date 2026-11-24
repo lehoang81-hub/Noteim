@@ -1135,7 +1135,11 @@
     "doneToast": "Đã tóm tắt xong: {title}",
     "view": "Xem",
     "ribbonLabel": "Dải giọng buổi ghi đang xử lý",
-    "backOnline": "Đã có mạng. Đang tải lên {count} buổi ghi."
+    "backOnline": "Đã có mạng. Đang tải lên {count} buổi ghi.",
+    "uploading": "Đang tải lên {percent}%",
+    "uploadDone": "Đã lưu băng ghi an toàn",
+    "uploadFailed": "Chưa tải được băng ghi. Mạng gián đoạn? Thử lại, băng vẫn còn trên máy",
+    "uploadRetry": "Thử tải lại"
   },
   "share": {
     "title": "Chia sẻ",

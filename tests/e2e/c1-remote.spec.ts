@@ -24,8 +24,22 @@ test.beforeAll(async ({ request }) => {
   mode = (await res.json()) as Mode;
 });
 
+/** Điều hướng an toàn: redirect sau đăng xuất (sang host NEXTAUTH_URL) có thể
+ * chen ngang goto đầu tiên — bị gián đoạn thì chờ chút rồi thử lại. */
+async function moTrangAnToan(page: Page, path: string) {
+  for (let i = 0; i < 3; i++) {
+    try {
+      await page.goto(path, { waitUntil: "load" });
+      return;
+    } catch {
+      await page.waitForTimeout(300);
+    }
+  }
+  await page.goto(path); // lần cuối để lỗi nổi lên đúng chỗ
+}
+
 async function dangNhapDemo(page: Page, opts?: { waitLibrary?: boolean }) {
-  await page.goto("/login");
+  await moTrangAnToan(page, "/login");
   await expect(page.getByRole("button", { name: /Đăng nhập thử/ })).toBeVisible();
   await Promise.all([
     page.waitForURL((u) => u.pathname === "/"),
@@ -39,7 +53,7 @@ async function dangNhapDemo(page: Page, opts?: { waitLibrary?: boolean }) {
 }
 
 async function dangNhapNguoiB(page: Page) {
-  await page.goto("/login");
+  await moTrangAnToan(page, "/login");
   const btn = page.getByTestId("login-demo-b");
   await expect(btn).toBeVisible();
   await Promise.all([page.waitForURL((u) => u.pathname === "/"), btn.click()]);
@@ -59,14 +73,31 @@ async function dangXuat(page: Page) {
   await page.goto("/");
   const out = page.getByRole("button", { name: /Đăng xuất/ }).first();
   await expect(out).toBeVisible();
-  await Promise.all([page.waitForURL((u) => u.pathname === "/"), out.click()]);
+  await Promise.all([
+    page.waitForResponse((r) => r.url().includes("/api/auth/signout") && r.request().method() === "POST"),
+    out.click(),
+  ]);
+  // Đăng xuất là bất đồng bộ: chờ phiên THỰC SỰ bị gỡ rồi mới sang bước tiếp
+  // theo — trước đây chỉ chờ URL "/" (đã đứng đó sẵn) nên bài đăng nhập người
+  // kế tiếp nhiều khi vẫn còn cookie của người cũ.
+  await expect
+    .poll(
+      async () => {
+        const s = (await (await page.request.get("/api/auth/session")).json()) as { user?: { id?: string } } | null;
+        return Boolean(s?.user?.id);
+      },
+      { timeout: 15_000 },
+    )
+    .toBe(false);
+  // redirect sau đăng xuất có thể đang bay: chờ load chốt để goto kế tiếp không bị chen
+  await page.waitForLoadState("load").catch(() => undefined);
 }
 
 async function taoBuoiQuaApi(page: Page, title: string): Promise<string> {
   const res = await page.request.post("/api/data/sessions", {
     data: {
       kind: "import",
-      input: { file_name: `${title}.m4a`, duration_sec: 65, template_id: "tpl-general", language: "vi" },
+      input: { file_name: `${title}.m4a`, duration_sec: 65, template_id: "tpl-realestate", language: "vi" },
     },
   });
   expect(res.status()).toBe(200);
@@ -234,7 +265,7 @@ test.describe("chế độ remote — quyền dữ liệu giữa hai người (A
     const sessionId = await taoBuoiQuaApi(page, "Buổi rà thiếu của A");
     const longTranscript = "Anh chị thấy đề xuất hợp tác căn hộ hai phòng ngủ vị trí Marina thế nào ".repeat(6);
     const post = await page.request.post(`/api/sessions/${sessionId}/gap-check`, {
-      data: { templateId: "tpl-general", transcript: longTranscript },
+      data: { templateId: "general_meeting", transcript: longTranscript },
     });
     expect(post.status()).toBe(200);
     const posted = (await post.json()) as { checkId: string; result: unknown };
@@ -249,7 +280,7 @@ test.describe("chế độ remote — quyền dữ liệu giữa hai người (A
     const readB = await page.request.get(`/api/sessions/${sessionId}/gap-check`);
     expect(readB.status()).toBe(403);
     const postB = await page.request.post(`/api/sessions/${sessionId}/gap-check`, {
-      data: { templateId: "tpl-general", transcript: longTranscript },
+      data: { templateId: "general_meeting", transcript: longTranscript },
     });
     expect(postB.status()).toBe(403);
     await dangXuat(page);

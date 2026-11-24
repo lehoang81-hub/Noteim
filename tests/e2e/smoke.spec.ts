@@ -27,6 +27,9 @@ test("điện thoại: vuốt xóa rồi hoàn tác", async ({ page }, info) => 
   test.skip(info.project.name !== "phone", "cử chỉ chạm chỉ trên điện thoại");
   await onboard(page);
   const rows = page.locator("a[href^='/s/']");
+  // onboard chỉ chờ khung ứng dụng (thư viện remote của tài khoản mới rỗng);
+  // bản giả có sẵn dữ liệu mẫu — chờ hàng hiện rồi mới đếm.
+  await rows.first().waitFor({ timeout: 15_000 });
   const before = await rows.count();
   const row = page.locator("a[href='/s/s-hop-t11']");
   await row.scrollIntoViewIfNeeded();

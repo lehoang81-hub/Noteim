@@ -32,9 +32,14 @@ export const DATA_SOURCE: "mock" | "remote" =
  * - mock: cố định ngày để khớp dữ liệu mẫu và e2e (MOCK_NOW).
  * - remote: giờ máy chủ; ngày cắt theo múi giờ Asia/Ho_Chi_Minh qua
  *   vnDayKey() (lib/data/vn-time.ts) — đúng §1.3.
+ *
+ * Chú ý: quyết định theo NGUỒN ĐANG DÙNG chứ không chỉ theo chế độ build.
+ * Người ẨN DANH trên build remote vẫn dùng mock (buổi mẫu có ngày cố định)
+ * nên phải trả MOCK_NOW — nếu trả giờ thật, dải ngày ở Tổng quan tính lệch
+ * hết (m7-tong-quan: không còn nút "Hôm nay"/"Hôm qua").
  */
 export function dataNow(): Date {
-  if (DATA_SOURCE === "remote") return serverNow();
+  if (DATA_SOURCE === "remote" && remoteActive) return serverNow();
   return MOCK_NOW;
 }
 
