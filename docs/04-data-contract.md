@@ -600,3 +600,37 @@ Biến môi trường mới (chỉ tên — không commit khóa, xem `.env.examp
 - **Chạy thật** theo thứ tự: `pnpm db:check` (kiểm nối, không cần migration) → `pnpm db:migrate` (script riêng, schema `noteim` phải có sẵn trước — DBA tạo, không tạo schema) → `pnpm db:seed` (dữ liệu demo cho môi trường thử, có chế độ `--dry`). `DATABASE_URL` chỉ đọc từ biến môi trường — trên máy làm việc hiện chưa có giá trị Supabase nên migration thật **đang chờ**; test migration + seed chạy trên PGlite bằng `pnpm db:test` với role giới hạn không có quyền tạo schema.
 - **`dataNow()`** (§1.3): bản mock giữ `MOCK_NOW` cố định để e2e ổn định; bản remote trả giờ máy chủ, ngày tính theo múi giờ `Asia/Ho_Chi_Minh` (trợ giúp `lib/data/vn-time.ts`).
 - Nguồn dữ liệu app vẫn chưa đổi — chọn nguồn remote là việc của PR 03.
+
+## Bổ sung C1 (PR 03b — nguồn dữ liệu remote cho người đã đăng nhập)
+
+Bật đúng như đã hẹn ở PR 01/02: người ĐÃ đăng nhập dùng dữ liệu tài khoản qua API route khi server đặt `NEXT_PUBLIC_DATA_SOURCE=remote`; **người ẩn danh luôn dùng mock trên máy, không đổi**. Giao diện `DataSource` (lib/data/repository.ts) giữ nguyên — màn hình không sửa.
+
+### Chọn nguồn theo phiên
+
+- `lib/data/index.ts` bọc từng repository một lớp chọn: lúc gọi hàm, người đã đăng nhập → bản remote (`lib/data/remote/` — gọi API route của app), ngược lại → bản giả trên máy. Phát hiện phiên bằng `GET /api/auth/session` lúc nạp module; đăng nhập/đăng xuất đều điều hướng lại trang nên phần mềm nhận được thay đổi.
+- Ghi thành công ở nguồn remote gọi `notifyDataChanged()` (lib/data/changes.ts) để các màn hình đang mở tải lại — tương đương `commit()` của kho mock; bộ đếm phiên bản dùng chung, mock/cờ cũng phải tăng phiên bản trước khi báo.
+
+### Quyền kiểm ở máy chủ (không tin client)
+
+- Mọi route `/api/data/**` lấy `user_id`/`workspace_id` từ PHIÊN (`getServerSession`, lib/data/server/context.ts); **không bao giờ tin id do client gửi**. Thiếu phiên → 401 `unauthorized`; có phiên nhưng không phải chủ dữ liệu → 403 `forbidden`; không thấy → 404; vượt hạn mức → 429.
+- Lần đầu gọi API dữ liệu sau đăng nhập: tự tạo `users` (người dùng thử của e2e cũng chèn được dòng với id cố định) + **không gian Cá nhân** `w-<8 ký tự đầu của user id>` + dòng thành viên Chủ (`ensureUserWorkspace`) — đúng nhóm (a).
+- Repository phía máy chủ nằm ở `lib/data/server/` (account, workspaces, sessions, tasks, folders, contacts, glossary, export); các thao tác nhỏ trên buổi đi qua một điểm gom có schema Zod dùng chung client + máy chủ (lib/data/session-actions.ts).
+
+### Phạm vi remote của PR này và phần chưa nối
+
+| Repository | Nguồn remote | Ghi chú |
+| --- | --- | --- |
+| account.me/updateMe/quota | API | quota tính thật từ các buổi của tháng (Free 180 phút/tháng, buổi ≤ 45 phút; Pro 1200/240); templates vẫn đọc fixture tĩnh (không có bảng templates trong §1.4) |
+| workspaces.list/members/switchTo | API | chỉ không gian Cá nhân; tạo nhóm/mời/vai trò là việc của C1-08 — gọi trả lỗi rõ ràng, không giả dữ liệu |
+| sessions (list/get/transcript/visuals/listening map/update/sửa ý/sửa lời/đổi người nói/đặt tên/gộp/ghi chú nhanh/checklist bổ sung/câu hỏi chờ/dịch/tóm tắt theo ngôn ngữ/hỏi đáp/xóa mềm + hoàn tác/chạy lại/tóm tắt lại/dọn bản gốc/tìm kiếm) | API | buổi tạo từ màn ghi âm là **bản ghi thử** (`trial_recording`), âm thanh thật là việc của PR 04 (R2) |
+| Xử lý buổi mới | API | máy serverless không có timer nền: tạo buổi lưu bản nháp vào `session_details.draft` (migration 0001), hoàn tất **lười** khi có người hỏi trạng thái/nội dung sau 5 bước × 1,6 giây, dùng đúng bộ sinh nội dung của bản giả (lib/data/mock/generate.ts) |
+| Nhập buổi mẫu | API | màn làm quen bấm "Mở buổi mẫu" mới chép fixture thành buổi `is_sample` riêng (id `s-sample-<nghề>-<8 ký tự user id>`) — không yêu cầu thì không nạp; không lẫn với buổi thật vì mọi danh sách lọc `is_sample` |
+| tasks, folders (kèm lịch sử + Hỏi AI thư mục), contacts, glossary, xuất toàn bộ dữ liệu | API | Hỏi AI thư mục lưu bảng `folder_chat_messages` (migration 0001); gói Free trả quota_exceeded như bản giả |
+| gap-check (GC-02) | DB | lịch sử rà của người đăng nhập chuyển sang bảng `session_gap_checks` (bắt buộc — serverless nhiều instance); người ẩn danh và buổi không có trong DB giữ Map bộ nhớ như cũ; buổi người khác bị chặn 403 |
+| share, mail, dashboard, các thao tác nhóm | chưa nối | gọi trả `DataError` với lời nhắn "PR sau" — không trả dữ liệu giả, không trộn dữ liệu |
+
+### Kiểm thử
+
+- `pnpm db:test` mở rộng (PGlite, role `noteim_app` giới hạn): 24 bảng, cột mới `sessions.trial_recording` + `session_details.draft`, bảng `folder_chat_messages` (cascade khi xóa thư mục), và **đúng mẫu truy vấn phân quyền A/B**: danh sách lọc theo `user_id` của phiên, sửa/đọc/xóa chéo người bị chặn (0 dòng), FK chặn rà thiếu buổi lạ.
+- e2e `tests/e2e/c1-remote.spec.ts` tự đọc `/api/data/mode`: lô mock chạy hồi quy (đăng nhập vẫn dữ liệu trên máy, ẩn danh gọi API dữ liệu bị 401); lô remote (cần server build `NEXT_PUBLIC_DATA_SOURCE=remote NEXT_PUBLIC_AUTH_FAKE=1` và chạy `AUTH_FAKE=1 DATABASE_URL=…`) kiểm toàn bộ quyền A/B: người B không đọc/ghi/xóa được dữ liệu người A, việc và danh bạ không lọt, buổi mẫu nhập vào tài khoản không lẫn thư viện, lịch sử rà thiếu nằm DB. Máy không có DATABASE_URL thì các bài remote tự bỏ qua kèm lý do — kết quả thật chờ chạy trên Supabase.
+- Người dùng thử thứ hai cho e2e quyền: provider `demo-b` + nút "Đăng nhập người dùng B (kiểm thử)" trên trang đăng nhập (chỉ hiện khi build `NEXT_PUBLIC_AUTH_FAKE=1`).
