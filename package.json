@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint && node scripts/check-rules.mjs",
     "typecheck": "tsc --noEmit",
+    "i18n:check": "node scripts/check-i18n.mjs",
     "e2e": "playwright test",
     "lh": "node scripts/lighthouse.mjs",
     "db:generate": "drizzle-kit generate && node scripts/db-generate-clean.mjs",
