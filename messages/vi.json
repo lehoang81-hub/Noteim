@@ -1141,7 +1141,7 @@
     "uploadFailed": "Chưa tải được băng ghi. Mạng gián đoạn? Thử lại, băng vẫn còn trên máy",
     "uploadRetry": "Thử tải lại",
     "asrFailed": "Xử lý chưa thành công (mã: {code}). Bấm thử lại, hoặc để Noteim tự thử lại sau",
-    "asrQuota": "Buổi ghi dài hơn hạn mức của gói hiện tại — nâng gói để xử lý được buổi dài hơn",
+    "asrQuota": "Buổi ghi dài hơn hạn mức của gói hiện tại, nâng gói để xử lý được buổi dài hơn",
     "asrRetry": "Thử lại"
   },
   "share": {

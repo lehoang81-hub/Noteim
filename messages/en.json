@@ -1141,7 +1141,7 @@
     "uploadFailed": "Couldn't upload the recording. Interrupted network? Try again, the audio is still on this device",
     "uploadRetry": "Retry upload",
     "asrFailed": "Processing did not finish (code: {code}). Tap retry, or Noteim will try again later",
-    "asrQuota": "This recording is longer than your current plan allows — upgrade to process longer sessions",
+    "asrQuota": "This recording is longer than your current plan allows; upgrade to process longer sessions",
     "asrRetry": "Retry"
   },
   "share": {
