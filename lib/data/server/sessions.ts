@@ -54,6 +54,7 @@ import { loadSampleFixture } from "./sample-fixtures";
 import { foldVi } from "./fold";
 import { templateById, templatesOfProfession } from "./templates";
 import { ApiError, type ServerContext } from "./context";
+import { deleteObjectSafe, isAudioObjectKey } from "./r2";
 
 type SessionRow = typeof sessions.$inferSelect;
 type DetailRow = typeof sessionDetails.$inferSelect;
@@ -89,7 +90,10 @@ export function toSession(row: SessionRow): Session {
     storage_status: row.storageStatus === "essence_only" ? "essence_only" : "full",
     duration_sec: row.durationSec,
     size_bytes: row.sizeBytes,
-    audio_url: row.audioPath ?? null,
+    // Băng trên R2 (khóa u/…) không bao giờ lộ khóa thô: client nhận lối
+    // /api/audio/{id} — route kiểm quyền theo phiên rồi 302 sang signed GET
+    // 15 phút (C1-04 yêu cầu 3). Buổi mẫu giữ đường dẫn tĩnh /audio/….
+    audio_url: isAudioObjectKey(row.audioPath) ? `/api/audio/${row.id}` : (row.audioPath ?? null),
     is_sample: row.isSample || undefined,
     trial_recording: row.trialRecording || undefined,
     created_at: row.createdAt.toISOString(),
@@ -598,9 +602,18 @@ export async function reprocessSession(ctx: ServerContext, id: string, templateI
 
 export async function removeSession(ctx: ServerContext, id: string): Promise<void> {
   const db = getDb();
-  await getOwnedSessionRow(ctx, id);
+  const row = await getOwnedSessionRow(ctx, id);
+  // Xóa băng trên kho (C1-04 yêu cầu 4): xóa buổi là băng cũng mất — khôi
+  // phục được buổi nhưng không còn âm thanh. Chỉ đụng khóa u/… (buổi mẫu
+  // giữ file tĩnh, không xóa).
+  if (isAudioObjectKey(row.audioPath)) {
+    await deleteObjectSafe(row.audioPath as string);
+  }
   // Xóa mềm: còn "Hoàn tác" (M4-01)
-  await db.update(sessions).set({ deletedAt: new Date() }).where(and(eq(sessions.id, id), eq(sessions.userId, ctx.userId)));
+  await db
+    .update(sessions)
+    .set({ deletedAt: new Date(), audioPath: null, audioExpiresAt: null, sizeBytes: 0 })
+    .where(and(eq(sessions.id, id), eq(sessions.userId, ctx.userId)));
 }
 
 export async function restoreSession(ctx: ServerContext, id: string): Promise<void> {
@@ -615,9 +628,18 @@ export async function purgeRaw(ctx: ServerContext, ids: string[]): Promise<{ fre
   for (const id of ids) {
     const row = await getOwnedSessionRow(ctx, id);
     freed += row.sizeBytes;
+    // Băng thật trên R2 cũng bị xóa để chép chỗ (C1-04); buổi mẫu giữ file tĩnh.
+    if (isAudioObjectKey(row.audioPath)) {
+      await deleteObjectSafe(row.audioPath as string);
+    }
     await db
       .update(sessions)
-      .set({ storageStatus: "essence_only", sizeBytes: 0, audioExpiresAt: null })
+      .set({
+        storageStatus: "essence_only",
+        sizeBytes: 0,
+        audioExpiresAt: null,
+        audioPath: isAudioObjectKey(row.audioPath) ? null : row.audioPath,
+      })
       .where(and(eq(sessions.id, id), eq(sessions.userId, ctx.userId)));
     await db.delete(transcriptSegments).where(eq(transcriptSegments.sessionId, id));
   }
