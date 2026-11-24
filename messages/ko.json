@@ -1139,7 +1139,10 @@
     "uploading": "업로드 중 {percent}%",
     "uploadDone": "녹음이 안전하게 저장되었습니다",
     "uploadFailed": "녹음 파일을 업로드하지 못했습니다. 네트워크가 끊겼나요? 다시 시도하세요. 오디오는 이 기기에 남아 있습니다",
-    "uploadRetry": "다시 업로드"
+    "uploadRetry": "다시 업로드",
+    "asrFailed": "처리가 완료되지 않았어요 (코드: {code}). 다시 시도하거나, Noteim이 나중에 자동으로 재시도해요",
+    "asrQuota": "녹음이 현재 플랜 한도보다 길어요 — 더 긴 녹음을 처리하려면 플랜을 업그레이드하세요",
+    "asrRetry": "다시 시도"
   },
   "share": {
     "title": "공유",
