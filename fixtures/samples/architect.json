@@ -7,8 +7,8 @@
   "template_id": "tpl-architect",
   "status": "ready",
   "storage_status": "full",
-  "duration_sec": 1680,
-  "size_bytes": 26880000,
+  "duration_sec": 155.5,
+  "size_bytes": 958352,
   "created_at": "2026-11-11T09:00:00+07:00",
   "audio_expires_at": null,
   "consent": {
@@ -113,8 +113,8 @@
     "display_name": "Bạn",
     "is_me": true,
     "color_index": 0,
-    "talk_ratio_percent": 46,
-    "sample_start_sec": 40
+    "talk_ratio_percent": 36,
+    "sample_start_sec": 11.9
    },
    {
     "id": "SPK_02",
@@ -122,8 +122,8 @@
     "display_name": "Anh Quân",
     "is_me": false,
     "color_index": 1,
-    "talk_ratio_percent": 34,
-    "sample_start_sec": 180
+    "talk_ratio_percent": 31,
+    "sample_start_sec": 35.7
    },
    {
     "id": "SPK_03",
@@ -131,8 +131,8 @@
     "display_name": "Anh Hùng",
     "is_me": false,
     "color_index": 2,
-    "talk_ratio_percent": 20,
-    "sample_start_sec": 400
+    "talk_ratio_percent": 33,
+    "sample_start_sec": 76.2
    }
   ],
   "topics": [
@@ -140,14 +140,14 @@
     "id": "t-0",
     "section_id": "tpl-architect-s1",
     "title": "Yêu cầu thay đổi",
-    "start_sec": 60,
-    "end_sec": 710,
+    "start_sec": 14.5,
+    "end_sec": 153.1,
     "tag": "pending",
     "bullets": [
      {
       "id": "b-0-0",
       "text": "Mở rộng sân sau 1,2 mét, làm lại mái che",
-      "timestamp_sec": 60,
+      "timestamp_sec": 14.5,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -156,7 +156,7 @@
      {
       "id": "b-0-1",
       "text": "Dời tủ bếp sang tường đông, làm kệ ở chỗ cũ",
-      "timestamp_sec": 620,
+      "timestamp_sec": 140.6,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -168,14 +168,14 @@
     "id": "t-1",
     "section_id": "tpl-architect-s2",
     "title": "Số đo và vật liệu được nhắc",
-    "start_sec": 380,
-    "end_sec": 990,
+    "start_sec": 71,
+    "end_sec": 154.8,
     "tag": "figure",
     "bullets": [
      {
       "id": "b-1-0",
       "text": "Gạch phòng khách đổi gạch 60x60 vân đá xám, ba mẫu chờ chọn",
-      "timestamp_sec": 380,
+      "timestamp_sec": 71,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -184,7 +184,7 @@
      {
       "id": "b-1-1",
       "text": "Trần thạch cao tồn kho 42 mét vuông, tầng ba đặt thêm",
-      "timestamp_sec": 900,
+      "timestamp_sec": 154.7,
       "speaker_id": "SPK_03",
       "is_quote": false,
       "edited": false,
@@ -196,14 +196,14 @@
     "id": "t-2",
     "section_id": "tpl-architect-s3",
     "title": "Hạng mục tồn tại",
-    "start_sec": 980,
-    "end_sec": 1070,
+    "start_sec": 154.8,
+    "end_sec": 154.9,
     "tag": "risk",
     "bullets": [
      {
       "id": "b-2-0",
       "text": "Tiến độ thạch cao tầng ba cần chốt lại trong tuần",
-      "timestamp_sec": 980,
+      "timestamp_sec": 154.8,
       "speaker_id": "SPK_03",
       "is_quote": false,
       "edited": false,
@@ -215,14 +215,14 @@
     "id": "t-3",
     "section_id": "tpl-architect-s4",
     "title": "Việc theo từng bên",
-    "start_sec": 1180,
-    "end_sec": 1350,
+    "start_sec": 155,
+    "end_sec": 155.2,
     "tag": "decided",
     "bullets": [
      {
       "id": "b-3-0",
       "text": "Thiết kế: gửi ba mẫu gạch và biên bản hiện trường thứ Sáu",
-      "timestamp_sec": 1180,
+      "timestamp_sec": 155,
       "speaker_id": "SPK_01",
       "is_quote": false,
       "edited": false,
@@ -231,7 +231,7 @@
      {
       "id": "b-3-1",
       "text": "Thi công: báo giá dời đường nước, đặt thêm trần tầng ba",
-      "timestamp_sec": 1260,
+      "timestamp_sec": 155.1,
       "speaker_id": "SPK_02",
       "is_quote": false,
       "edited": false,
@@ -251,7 +251,7 @@
     "done": false,
     "done_at": null,
     "source_quote": null,
-    "timestamp_sec": 380
+    "timestamp_sec": 71
    },
    {
     "id": "a-1",
@@ -263,7 +263,7 @@
     "done": false,
     "done_at": null,
     "source_quote": null,
-    "timestamp_sec": 1260
+    "timestamp_sec": 155.1
    },
    {
     "id": "a-2",
@@ -275,19 +275,19 @@
     "done": false,
     "done_at": null,
     "source_quote": null,
-    "timestamp_sec": 900
+    "timestamp_sec": 154.7
    }
   ],
   "notes": [],
   "bookmarks": [
    {
     "id": "m-0",
-    "timestamp_sec": 380,
+    "timestamp_sec": 71,
     "tag": "idea"
    },
    {
     "id": "m-1",
-    "timestamp_sec": 1180,
+    "timestamp_sec": 155,
     "tag": "figure"
    }
   ],
@@ -897,208 +897,88 @@
   "speaker_spans": [
    {
     "speaker_id": "SPK_01",
-    "start_sec": 4,
-    "end_sec": 24
+    "start_sec": 1.39,
+    "end_sec": 8.66
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 25,
-    "end_sec": 82
+    "start_sec": 9.64,
+    "end_sec": 17.21
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 84,
-    "end_sec": 138
+    "start_sec": 18.19,
+    "end_sec": 26.88
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 141,
-    "end_sec": 192
+    "start_sec": 27.87,
+    "end_sec": 37.5
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 193,
-    "end_sec": 241
+    "start_sec": 38.19,
+    "end_sec": 44.86
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 243,
-    "end_sec": 288
+    "start_sec": 45.55,
+    "end_sec": 54.44
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 291,
-    "end_sec": 333
+    "start_sec": 55.07,
+    "end_sec": 61.74
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 334,
-    "end_sec": 373
+    "start_sec": 62.55,
+    "end_sec": 68.97
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 375,
-    "end_sec": 411
+    "start_sec": 69.47,
+    "end_sec": 78.23
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 414,
-    "end_sec": 447
+    "start_sec": 79.06,
+    "end_sec": 86.31
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 448,
-    "end_sec": 478
+    "start_sec": 91.02,
+    "end_sec": 98.76
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 480,
-    "end_sec": 507
+    "start_sec": 103.08,
+    "end_sec": 111.95
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 510,
-    "end_sec": 534
+    "start_sec": 112.8,
+    "end_sec": 122.61
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 535,
-    "end_sec": 556
+    "start_sec": 123.35,
+    "end_sec": 130.17
    },
    {
     "speaker_id": "SPK_03",
-    "start_sec": 558,
-    "end_sec": 616
+    "start_sec": 131.16,
+    "end_sec": 139.8
    },
    {
     "speaker_id": "SPK_01",
-    "start_sec": 619,
-    "end_sec": 674
+    "start_sec": 140.53,
+    "end_sec": 147.26
    },
    {
     "speaker_id": "SPK_02",
-    "start_sec": 675,
-    "end_sec": 727
-   },
-   {
-    "speaker_id": "SPK_03",
-    "start_sec": 729,
-    "end_sec": 778
-   },
-   {
-    "speaker_id": "SPK_01",
-    "start_sec": 781,
-    "end_sec": 827
-   },
-   {
-    "speaker_id": "SPK_02",
-    "start_sec": 828,
-    "end_sec": 871
-   },
-   {
-    "speaker_id": "SPK_03",
-    "start_sec": 873,
-    "end_sec": 913
-   },
-   {
-    "speaker_id": "SPK_01",
-    "start_sec": 916,
-    "end_sec": 953
-   },
-   {
-    "speaker_id": "SPK_02",
-    "start_sec": 954,
-    "end_sec": 988
-   },
-   {
-    "speaker_id": "SPK_03",
-    "start_sec": 990,
-    "end_sec": 1021
-   },
-   {
-    "speaker_id": "SPK_01",
-    "start_sec": 1024,
-    "end_sec": 1052
-   },
-   {
-    "speaker_id": "SPK_02",
-    "start_sec": 1053,
-    "end_sec": 1078
-   },
-   {
-    "speaker_id": "SPK_03",
-    "start_sec": 1080,
-    "end_sec": 1102
-   },
-   {
-    "speaker_id": "SPK_01",
-    "start_sec": 1105,
-    "end_sec": 1164
-   },
-   {
-    "speaker_id": "SPK_02",
-    "start_sec": 1165,
-    "end_sec": 1221
-   },
-   {
-    "speaker_id": "SPK_03",
-    "start_sec": 1223,
-    "end_sec": 1276
-   },
-   {
-    "speaker_id": "SPK_01",
-    "start_sec": 1279,
-    "end_sec": 1329
-   },
-   {
-    "speaker_id": "SPK_02",
-    "start_sec": 1330,
-    "end_sec": 1377
-   },
-   {
-    "speaker_id": "SPK_03",
-    "start_sec": 1379,
-    "end_sec": 1423
-   },
-   {
-    "speaker_id": "SPK_01",
-    "start_sec": 1426,
-    "end_sec": 1467
-   },
-   {
-    "speaker_id": "SPK_02",
-    "start_sec": 1468,
-    "end_sec": 1506
-   },
-   {
-    "speaker_id": "SPK_03",
-    "start_sec": 1508,
-    "end_sec": 1543
-   },
-   {
-    "speaker_id": "SPK_01",
-    "start_sec": 1546,
-    "end_sec": 1578
-   },
-   {
-    "speaker_id": "SPK_02",
-    "start_sec": 1579,
-    "end_sec": 1608
-   },
-   {
-    "speaker_id": "SPK_03",
-    "start_sec": 1610,
-    "end_sec": 1636
-   },
-   {
-    "speaker_id": "SPK_01",
-    "start_sec": 1639,
-    "end_sec": 1662
-   },
-   {
-    "speaker_id": "SPK_02",
-    "start_sec": 1663,
-    "end_sec": 1677
+    "start_sec": 147.99,
+    "end_sec": 154.55
    }
   ],
   "send_history": [],
@@ -1110,14 +990,15 @@
   ],
   "report_languages": [
    "vi"
-  ]
+  ],
+  "audio_url": "/audio/09-mau-kien-truc-lach-tray.m4a"
  },
  "transcript": [
   {
    "id": "seg-00",
    "speaker_id": "SPK_01",
-   "start_sec": 4,
-   "end_sec": 13,
+   "start_sec": 1.39,
+   "end_sec": 3.82,
    "text": "Mình đi quanh nhà một vòng rồi chốt từng hạng mục nhé.",
    "lang": "vi",
    "translations": {},
@@ -1127,8 +1008,8 @@
   {
    "id": "seg-01",
    "speaker_id": "SPK_01",
-   "start_sec": 14,
-   "end_sec": 23,
+   "start_sec": 4.34,
+   "end_sec": 8.66,
    "text": "Sân sau mở rộng 1,2 mét thì mình phải làm lại mái che, anh Quân đồng ý chứ?",
    "lang": "vi",
    "translations": {},
@@ -1138,8 +1019,8 @@
   {
    "id": "seg-02",
    "speaker_id": "SPK_02",
-   "start_sec": 25,
-   "end_sec": 50,
+   "start_sec": 9.64,
+   "end_sec": 13.42,
    "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
    "lang": "vi",
    "translations": {},
@@ -1149,8 +1030,8 @@
   {
    "id": "seg-03",
    "speaker_id": "SPK_02",
-   "start_sec": 54,
-   "end_sec": 79,
+   "start_sec": 13.64,
+   "end_sec": 17.21,
    "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
    "lang": "vi",
    "translations": {},
@@ -1160,8 +1041,8 @@
   {
    "id": "seg-04",
    "speaker_id": "SPK_03",
-   "start_sec": 84,
-   "end_sec": 107,
+   "start_sec": 18.19,
+   "end_sec": 22.71,
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
@@ -1171,8 +1052,8 @@
   {
    "id": "seg-05",
    "speaker_id": "SPK_03",
-   "start_sec": 111,
-   "end_sec": 134,
+   "start_sec": 23.07,
+   "end_sec": 26.88,
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
@@ -1182,8 +1063,8 @@
   {
    "id": "seg-06",
    "speaker_id": "SPK_01",
-   "start_sec": 141,
-   "end_sec": 163,
+   "start_sec": 27.87,
+   "end_sec": 32.66,
    "text": "Gạch phòng khách đổi sang gạch 60x60 vân đá, mình gửi ba mẫu cho chị chủ chọn.",
    "lang": "vi",
    "translations": {},
@@ -1193,8 +1074,8 @@
   {
    "id": "seg-07",
    "speaker_id": "SPK_01",
-   "start_sec": 167,
-   "end_sec": 189,
+   "start_sec": 33.07,
+   "end_sec": 37.5,
    "text": "Tủ bếp dời sang tường đông thì đường nước phải đi lại, anh Hùng xem giá thêm bao nhiêu.",
    "lang": "vi",
    "translations": {},
@@ -1204,8 +1085,8 @@
   {
    "id": "seg-08",
    "speaker_id": "SPK_02",
-   "start_sec": 193,
-   "end_sec": 214,
+   "start_sec": 38.19,
+   "end_sec": 40.63,
    "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
    "lang": "vi",
    "translations": {},
@@ -1215,8 +1096,8 @@
   {
    "id": "seg-09",
    "speaker_id": "SPK_02",
-   "start_sec": 217,
-   "end_sec": 238,
+   "start_sec": 41.08,
+   "end_sec": 44.86,
    "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
    "lang": "vi",
    "translations": {},
@@ -1226,8 +1107,8 @@
   {
    "id": "seg-10",
    "speaker_id": "SPK_03",
-   "start_sec": 243,
-   "end_sec": 262,
+   "start_sec": 45.55,
+   "end_sec": 50.07,
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
@@ -1237,8 +1118,8 @@
   {
    "id": "seg-11",
    "speaker_id": "SPK_03",
-   "start_sec": 266,
-   "end_sec": 285,
+   "start_sec": 50.63,
+   "end_sec": 54.44,
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
@@ -1248,8 +1129,8 @@
   {
    "id": "seg-12",
    "speaker_id": "SPK_01",
-   "start_sec": 291,
-   "end_sec": 309,
+   "start_sec": 55.07,
+   "end_sec": 57.3,
    "text": "Trần thạch bao tồn kho còn bao nhiêu mét vuông?",
    "lang": "vi",
    "translations": {},
@@ -1259,8 +1140,8 @@
   {
    "id": "seg-13",
    "speaker_id": "SPK_01",
-   "start_sec": 312,
-   "end_sec": 330,
+   "start_sec": 57.83,
+   "end_sec": 61.74,
    "text": "Vậy tuần này mình chốt xong ba hạng mục, thứ Sáu mình gửi biên bản hiện trường.",
    "lang": "vi",
    "translations": {},
@@ -1270,8 +1151,8 @@
   {
    "id": "seg-14",
    "speaker_id": "SPK_02",
-   "start_sec": 334,
-   "end_sec": 351,
+   "start_sec": 62.55,
+   "end_sec": 66.12,
    "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
    "lang": "vi",
    "translations": {},
@@ -1281,8 +1162,8 @@
   {
    "id": "seg-15",
    "speaker_id": "SPK_02",
-   "start_sec": 354,
-   "end_sec": 371,
+   "start_sec": 66.52,
+   "end_sec": 68.97,
    "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
    "lang": "vi",
    "translations": {},
@@ -1292,8 +1173,8 @@
   {
    "id": "seg-16",
    "speaker_id": "SPK_03",
-   "start_sec": 375,
-   "end_sec": 390,
+   "start_sec": 69.47,
+   "end_sec": 73.99,
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
@@ -1303,8 +1184,8 @@
   {
    "id": "seg-17",
    "speaker_id": "SPK_03",
-   "start_sec": 393,
-   "end_sec": 408,
+   "start_sec": 74.42,
+   "end_sec": 78.23,
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
@@ -1314,8 +1195,8 @@
   {
    "id": "seg-18",
    "speaker_id": "SPK_01",
-   "start_sec": 414,
-   "end_sec": 428,
+   "start_sec": 79.06,
+   "end_sec": 81.49,
    "text": "Mình đi quanh nhà một vòng rồi chốt từng hạng mục nhé.",
    "lang": "vi",
    "translations": {},
@@ -1325,8 +1206,8 @@
   {
    "id": "seg-19",
    "speaker_id": "SPK_01",
-   "start_sec": 431,
-   "end_sec": 445,
+   "start_sec": 81.99,
+   "end_sec": 86.31,
    "text": "Sân sau mở rộng 1,2 mét thì mình phải làm lại mái che, anh Quân đồng ý chứ?",
    "lang": "vi",
    "translations": {},
@@ -1336,8 +1217,8 @@
   {
    "id": "seg-20",
    "speaker_id": "SPK_02",
-   "start_sec": 448,
-   "end_sec": 461,
+   "start_sec": 91.02,
+   "end_sec": 94.8,
    "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
    "lang": "vi",
    "translations": {},
@@ -1347,8 +1228,8 @@
   {
    "id": "seg-21",
    "speaker_id": "SPK_02",
-   "start_sec": 463,
-   "end_sec": 476,
+   "start_sec": 95.19,
+   "end_sec": 98.76,
    "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
    "lang": "vi",
    "translations": {},
@@ -1358,8 +1239,8 @@
   {
    "id": "seg-22",
    "speaker_id": "SPK_03",
-   "start_sec": 480,
-   "end_sec": 492,
+   "start_sec": 103.08,
+   "end_sec": 107.6,
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
@@ -1369,8 +1250,8 @@
   {
    "id": "seg-23",
    "speaker_id": "SPK_03",
-   "start_sec": 494,
-   "end_sec": 506,
+   "start_sec": 108.14,
+   "end_sec": 111.95,
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
@@ -1380,8 +1261,8 @@
   {
    "id": "seg-24",
    "speaker_id": "SPK_01",
-   "start_sec": 510,
-   "end_sec": 520,
+   "start_sec": 112.8,
+   "end_sec": 117.59,
    "text": "Gạch phòng khách đổi sang gạch 60x60 vân đá, mình gửi ba mẫu cho chị chủ chọn.",
    "lang": "vi",
    "translations": {},
@@ -1391,8 +1272,8 @@
   {
    "id": "seg-25",
    "speaker_id": "SPK_01",
-   "start_sec": 522,
-   "end_sec": 532,
+   "start_sec": 118.19,
+   "end_sec": 122.61,
    "text": "Tủ bếp dời sang tường đông thì đường nước phải đi lại, anh Hùng xem giá thêm bao nhiêu.",
    "lang": "vi",
    "translations": {},
@@ -1402,8 +1283,8 @@
   {
    "id": "seg-26",
    "speaker_id": "SPK_02",
-   "start_sec": 535,
-   "end_sec": 544,
+   "start_sec": 123.35,
+   "end_sec": 125.8,
    "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
    "lang": "vi",
    "translations": {},
@@ -1413,8 +1294,8 @@
   {
    "id": "seg-27",
    "speaker_id": "SPK_02",
-   "start_sec": 546,
-   "end_sec": 555,
+   "start_sec": 126.39,
+   "end_sec": 130.17,
    "text": "Mình muốn sân sau rộng ra để dựng giàn hoa, chi phí bao nhiêu anh báo sớm.",
    "lang": "vi",
    "translations": {},
@@ -1424,8 +1305,8 @@
   {
    "id": "seg-28",
    "speaker_id": "SPK_03",
-   "start_sec": 558,
-   "end_sec": 583,
+   "start_sec": 131.16,
+   "end_sec": 135.68,
    "text": "Trần thạch cao còn 42 mét, đủ cho tầng hai, tầng ba phải đặt thêm.",
    "lang": "vi",
    "translations": {},
@@ -1435,8 +1316,8 @@
   {
    "id": "seg-29",
    "speaker_id": "SPK_03",
-   "start_sec": 587,
-   "end_sec": 612,
+   "start_sec": 135.99,
+   "end_sec": 139.8,
    "text": "Đường nước dời tủ bếp phát sinh khoảng ba triệu, tuần sau mình làm được.",
    "lang": "vi",
    "translations": {},
@@ -1446,8 +1327,8 @@
   {
    "id": "seg-30",
    "speaker_id": "SPK_01",
-   "start_sec": 619,
-   "end_sec": 643,
+   "start_sec": 140.53,
+   "end_sec": 142.76,
    "text": "Trần thạch bao tồn kho còn bao nhiêu mét vuông?",
    "lang": "vi",
    "translations": {},
@@ -1457,8 +1338,8 @@
   {
    "id": "seg-31",
    "speaker_id": "SPK_01",
-   "start_sec": 647,
-   "end_sec": 671,
+   "start_sec": 143.34,
+   "end_sec": 147.26,
    "text": "Vậy tuần này mình chốt xong ba hạng mục, thứ Sáu mình gửi biên bản hiện trường.",
    "lang": "vi",
    "translations": {},
@@ -1468,8 +1349,8 @@
   {
    "id": "seg-32",
    "speaker_id": "SPK_02",
-   "start_sec": 675,
-   "end_sec": 697,
+   "start_sec": 147.99,
+   "end_sec": 151.56,
    "text": "Gạch 60x60 sáng hơn, chị nhà em thích mẫu vân đá xám.",
    "lang": "vi",
    "translations": {},
@@ -1479,8 +1360,8 @@
   {
    "id": "seg-33",
    "speaker_id": "SPK_02",
-   "start_sec": 701,
-   "end_sec": 723,
+   "start_sec": 152.1,
+   "end_sec": 154.55,
    "text": "Tủ bếp dời thì chỗ cũ mình làm kệ trang trí nhé.",
    "lang": "vi",
    "translations": {},
@@ -1493,18 +1374,18 @@
    "question": "Chủ nhà đổi ý những gì so với lần trước?",
    "answer": "So với lần trước: thêm mở rộng sân sau 1,2 mét, đổi gạch phòng khách sang 60x60 vân đá và dời tủ bếp sang tường đông.",
    "citations": [
-    60,
-    380,
-    620
+    14.5,
+    71,
+    140.6
    ]
   },
   {
    "question": "Liệt kê số đo.",
    "answer": "Sân sau mở rộng 1,2 mét; gạch phòng khách 60x60; trần thạch cao tồn kho 42 mét vuông.",
    "citations": [
-    60,
-    380,
-    900
+    14.5,
+    71,
+    154.7
    ]
   }
  ],
@@ -1512,145 +1393,21 @@
   "session_id": "s-sample-architect",
   "silences": [
    {
-    "start_sec": 0,
-    "end_sec": 4
+    "start_sec": 86.3,
+    "end_sec": 91
    },
    {
-    "start_sec": 23,
-    "end_sec": 25
-   },
-   {
-    "start_sec": 50,
-    "end_sec": 54
-   },
-   {
-    "start_sec": 79,
-    "end_sec": 84
-   },
-   {
-    "start_sec": 107,
-    "end_sec": 111
-   },
-   {
-    "start_sec": 134,
-    "end_sec": 141
-   },
-   {
-    "start_sec": 163,
-    "end_sec": 167
-   },
-   {
-    "start_sec": 189,
-    "end_sec": 193
-   },
-   {
-    "start_sec": 214,
-    "end_sec": 217
-   },
-   {
-    "start_sec": 238,
-    "end_sec": 243
-   },
-   {
-    "start_sec": 262,
-    "end_sec": 266
-   },
-   {
-    "start_sec": 285,
-    "end_sec": 291
-   },
-   {
-    "start_sec": 309,
-    "end_sec": 312
-   },
-   {
-    "start_sec": 330,
-    "end_sec": 334
-   },
-   {
-    "start_sec": 351,
-    "end_sec": 354
-   },
-   {
-    "start_sec": 371,
-    "end_sec": 375
-   },
-   {
-    "start_sec": 390,
-    "end_sec": 393
-   },
-   {
-    "start_sec": 408,
-    "end_sec": 414
-   },
-   {
-    "start_sec": 428,
-    "end_sec": 431
-   },
-   {
-    "start_sec": 445,
-    "end_sec": 448
-   },
-   {
-    "start_sec": 461,
-    "end_sec": 463
-   },
-   {
-    "start_sec": 476,
-    "end_sec": 480
-   },
-   {
-    "start_sec": 492,
-    "end_sec": 494
-   },
-   {
-    "start_sec": 506,
-    "end_sec": 510
-   },
-   {
-    "start_sec": 520,
-    "end_sec": 522
-   },
-   {
-    "start_sec": 532,
-    "end_sec": 535
-   },
-   {
-    "start_sec": 544,
-    "end_sec": 546
-   },
-   {
-    "start_sec": 555,
-    "end_sec": 558
-   },
-   {
-    "start_sec": 583,
-    "end_sec": 587
-   },
-   {
-    "start_sec": 612,
-    "end_sec": 619
-   },
-   {
-    "start_sec": 643,
-    "end_sec": 647
-   },
-   {
-    "start_sec": 671,
-    "end_sec": 675
-   },
-   {
-    "start_sec": 697,
-    "end_sec": 701
+    "start_sec": 98.8,
+    "end_sec": 103.1
    }
   ],
   "fillers": [],
   "speaker_gain_db": {
-   "SPK_01": 4,
-   "SPK_02": 1,
-   "SPK_03": -6
+   "SPK_01": -2,
+   "SPK_02": 2,
+   "SPK_03": 0
   },
-  "noise_level": "high",
-  "clean_duration_sec": 1554
+  "noise_level": "medium",
+  "clean_duration_sec": 147
  }
 }

@@ -13,6 +13,10 @@ import { collectErrors, onboard } from "./helpers";
  *    "Mẫu"; buổi không có audio_url ẩn nút nghe và hiện "Chưa có âm
  *    thanh"; buổi tạo từ màn ghi âm hiện nhãn "Bản ghi thử: chưa lưu
  *    âm thanh" (chưa thu tiếng thật, chờ PR 04).
+ *    M9-02: đủ 6 buổi mẫu theo nghề đã có âm thanh thật (bộ 06-10) —
+ *    bài "buổi mẫu không có âm thanh" cũ của BĐS đổi thành bài xác nhận
+ *    có trình phát; buổi không âm thanh còn lại (s-hop-t11) kiểm ở bài
+ *    thư viện.
  *
  * Server phải chạy như spec c1-auth (AUTH_FAKE=1 + NEXT_PUBLIC_AUTH_FAKE=1
  * khi build, GAP_CHECK_FAKE=1 khi start). Bài giao diện chạy cả phone lẫn
@@ -128,14 +132,17 @@ test.describe("B — huy hiệu Mẫu và buổi không có âm thanh", () => {
     expect(errors).toEqual([]);
   });
 
-  test("buổi mẫu không có âm thanh hiện huy hiệu Mẫu kèm dòng Chưa có âm thanh, không có trình phát", async ({ page }) => {
+  test("buổi mẫu BĐS có huy hiệu Mẫu và vẫn nghe được — đã gắn âm thanh thật (M9-02)", async ({ page }) => {
     const errors = collectErrors(page);
     await onboard(page);
     await page.goto("/s/s-sample-realestate_sales");
 
+    // Trước M9-02 buổi này chưa có file: hiện "Chưa có âm thanh", không trình
+    // phát. Giờ đã gắn âm thanh (bộ 06, /audio/06-mau-bds-vinhomes-marina.m4a):
+    // huy hiệu "Mẫu" giữ nguyên, trình phát hiện, dòng giải thích biến mất.
     await expect(page.getByText("Mẫu", { exact: true })).toBeVisible();
-    await expect(page.getByTestId("no-audio-note")).toBeVisible();
-    await expect(page.locator("[data-listening]")).toHaveCount(0);
+    await expect(page.locator("[data-listening]")).toBeVisible();
+    await expect(page.getByTestId("no-audio-note")).toHaveCount(0);
     expect(errors).toEqual([]);
   });
 
@@ -145,7 +152,9 @@ test.describe("B — huy hiệu Mẫu và buổi không có âm thanh", () => {
     await page.locator("a[href^='/s/']").first().waitFor();
 
     // Buổi "Họp điều hành T11" không có file âm thanh — lấy cả hàng
-    // (data-session-row), dòng giải thích nằm ngoài phần liên kết tiêu đề
+    // (data-session-row), dòng giải thích nằm ngoài phần liên kết tiêu đề.
+    // Buổi mẫu theo nghề không nằm trong danh sách Thư viện (kiểm ở bài trên
+    // và ở bài 6 buổi mẫu của m9-am-thanh).
     const rowNoAudio = page.locator('[data-session-row="/s/s-hop-t11"]');
     await expect(rowNoAudio).toBeVisible();
     await expect(rowNoAudio.getByText("Chưa có âm thanh")).toBeVisible();

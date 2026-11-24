@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 /*
- * Gắn âm thanh thật (M9-01, issue #65) vào 3 buổi mẫu — đọc thời lượng và năng
+ * Gắn âm thanh thật (M9-01, issue #65 cho 3 buổi; M9-02 cho 5 buổi mẫu theo
+ * nghề — đủ 6 buổi mẫu đều nghe được) vào các buổi — đọc thời lượng và năng
  * lượng từ chính file .m4a trong test-data/audio (PR #64), đổi mốc mọi dữ liệu
  * của fixture theo đáp án .truth.json rồi ghi lại:
+ *
+ * - Chạy lại an toàn: buổi đã có audio_url được bỏ qua, mục cũ trong
+ *   fixtures/audio-attach.json (mốc giả trước M9 dùng để chuyển kho localStorage
+ *   cũ) được giữ nguyên — không ánh xạ lại mốc đã là mốc thật.
  *
  * - `duration_sec` = độ dài file, `size_bytes` = dung lượng file, thêm
  *   `audio_url` ("/audio/<tên>.m4a"); chép .m4a vào public/audio/.
@@ -29,7 +34,7 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { copyFileSync, mkdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -41,6 +46,14 @@ const FIXTURES = [
   { fixture: "fixtures/sessions/bds-gap-chi-lan.json", base: "01-bds-gap-chi-lan" },
   { fixture: "fixtures/sessions/hop-doi-tac-han.json", base: "02-hop-doi-tac-han" },
   { fixture: "fixtures/samples/doctor.json", base: "03-bac-si-kham" },
+  // M9-02: 5 buổi mẫu theo nghề còn thiếu âm thanh (giọng edge-tts, bộ 06-10
+  // trong scripts/gen-test-audio.py). old_duration của 5 buổi này là con số
+  // giả trước M9 — ánh xạ keyframes chuyển kho localStorage cũ vẫn chạy đúng.
+  { fixture: "fixtures/samples/realestate_sales.json", base: "06-mau-bds-vinhomes-marina" },
+  { fixture: "fixtures/samples/notary.json", base: "07-mau-cong-chung-hqv" },
+  { fixture: "fixtures/samples/lawyer.json", base: "08-mau-luat-su-thue" },
+  { fixture: "fixtures/samples/architect.json", base: "09-mau-kien-truc-lach-tray" },
+  { fixture: "fixtures/samples/business_owner.json", base: "10-mau-dieu-hanh-noi-that" },
 ];
 
 /** Luật tiếng đệm trùng với scripts/gen-listening-map.mjs (M8-01). */
@@ -157,6 +170,14 @@ function processOne({ fixture, base }) {
   const truth = JSON.parse(readFileSync(path.join(AUDIO_DIR, `${base}.truth.json`), "utf8"));
   const fx = JSON.parse(readFileSync(filePath, "utf8"));
   const det = fx.detail;
+  // Idempotent (M9-02): buổi đã gắn âm thanh thì bỏ qua — chạy lại không được
+  // ghi đè old_duration/keyframes (đó là mốc giả trước M9 dùng để chuyển kho
+  // localStorage cũ trong lib/data/mock/audio-attach.ts) và không được ánh xạ
+  // lại mốc fixture (đã là mốc thật của file âm thanh).
+  if (det.audio_url) {
+    console.log(`${path.basename(fixture)} (${det.id}): đã gắn ${det.audio_url} — bỏ qua, giữ nguyên mục cũ trong fixtures/audio-attach.json`);
+    return null;
+  }
   const oldDuration = det.duration_sec;
   const oldTranscript = fx.transcript;
 
@@ -349,12 +370,25 @@ function processOne({ fixture, base }) {
 }
 
 mkdirSync(PUB_DIR, { recursive: true });
-const attachOut = {};
-for (const job of FIXTURES) {
-  const [id, attach] = processOne(job);
-  attachOut[id] = attach;
-  copyFileSync(path.join(AUDIO_DIR, `${job.base}.m4a`), path.join(PUB_DIR, `${job.base}.m4a`));
-}
+// Mục của các buổi đã gắn trước đó giữ nguyên trong audio-attach.json (mốc giả
+// trước M9 của chúng là dữ liệu migrate kho cũ); mục mới ghi đè lên nếu có.
 const attachPath = path.join(ROOT, "fixtures", "audio-attach.json");
+let attachOut = {};
+if (existsSync(attachPath)) {
+  try {
+    attachOut = JSON.parse(readFileSync(attachPath, "utf8"));
+  } catch {
+    attachOut = {};
+  }
+}
+let copied = 0;
+for (const job of FIXTURES) {
+  const attach = processOne(job);
+  if (!attach) continue;
+  const [id, data] = attach;
+  attachOut[id] = data;
+  copyFileSync(path.join(AUDIO_DIR, `${job.base}.m4a`), path.join(PUB_DIR, `${job.base}.m4a`));
+  copied += 1;
+}
 writeFileSync(attachPath, JSON.stringify(attachOut, null, 2) + "\n");
-console.log(`Đã ghi ${path.relative(ROOT, attachPath)} và chép ${FIXTURES.length} file .m4a vào public/audio/`);
+console.log(`Đã ghi ${path.relative(ROOT, attachPath)} (${Object.keys(attachOut).length} buổi) và chép ${copied} file .m4a mới vào public/audio/`);

@@ -1,0 +1,1157 @@
+{
+  "audio": "10-mau-dieu-hanh-noi-that",
+  "from_fixture": "fixtures/samples/business_owner.json",
+  "session_id": "s-sample-business_owner",
+  "engine": "edge",
+  "duration_sec": 275.47,
+  "room": "phong-hop-may",
+  "note": "Buổi mẫu chủ doanh nghiệp (s-sample-business_owner, M9-02). Họp 5 người ở phòng cạnh xưởng, 69 đoạn nên đọc nhanh, nghỉ ngắn.",
+  "voices": {
+    "SPK_01": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "+0Hz",
+      "rate": "+20%",
+      "gain_db": 0,
+      "role": "Bạn (chủ doanh nghiệp, dẫn họp)",
+      "engine": "edge"
+    },
+    "SPK_02": {
+      "voice": "vi-VN-HoaiMyNeural",
+      "pitch": "+0Hz",
+      "rate": "+20%",
+      "gain_db": -3,
+      "role": "Kế toán (báo số liệu)",
+      "engine": "edge"
+    },
+    "SPK_03": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "-15Hz",
+      "rate": "+25%",
+      "gain_db": -5,
+      "role": "Trưởng xưởng (trầm, nói nhanh)",
+      "engine": "edge"
+    },
+    "SPK_04": {
+      "voice": "vi-VN-HoaiMyNeural",
+      "pitch": "+12Hz",
+      "rate": "+22%",
+      "gain_db": -4,
+      "role": "Marketing (cao và nhanh)",
+      "engine": "edge"
+    },
+    "SPK_05": {
+      "voice": "vi-VN-NamMinhNeural",
+      "pitch": "+10Hz",
+      "rate": "+20%",
+      "gain_db": -6,
+      "role": "Bán hàng (nhỏ nhất phòng)",
+      "engine": "edge"
+    }
+  },
+  "segments": [
+    {
+      "id": "g1",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 1.19,
+      "end_sec": 7.08,
+      "text": "Mình bắt đầu nhé. Hôm nay có bốn việc: số liệu tháng 10, nhà cung cấp gỗ, tình hình xưởng và kế hoạch Tết.",
+      "fixture_start_sec": 0,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g11",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 7.43,
+      "end_sec": 12.02,
+      "text": "Mình có đúng sáu mươi tám phút, ai phát biểu ngắn gọn giúp, việc nào vướng thì nói thẳng, đừng nói vòng.",
+      "fixture_start_sec": 50,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g12",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 12.35,
+      "end_sec": 19.52,
+      "text": "Chương trình hôm nay: số liệu tháng mười, chuyện nhà cung cấp gỗ, tình hình xưởng, và chiến dịch Tết. Bắt đầu là số liệu, Thảo trình bày.",
+      "fixture_start_sec": 110,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g2",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 19.85,
+      "end_sec": 23.38,
+      "text": "Doanh thu tháng 10 là 3,8 tỷ, tăng 12% so với tháng 9.",
+      "fixture_start_sec": 630,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g13",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 23.71,
+      "end_sec": 27.92,
+      "text": "Doanh thu mảng nội thất văn phòng chiếm năm mươi lăm phần trăm, lần đầu tiên vượt mảng nội thất gia đình.",
+      "fixture_start_sec": 700,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g14",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 28.17,
+      "end_sec": 34.1,
+      "text": "Bộ phận thiết kế ký chín hợp đồng mới, cao nhất từ đầu năm. Khách doanh nghiệp quay lại đặt đơn lần hai có bốn bên.",
+      "fixture_start_sec": 775,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g15",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 34.43,
+      "end_sec": 40.89,
+      "text": "Chi nguyên vật liệu tăng sáu phần trăm, chủ yếu do giá gỗ tự nhiên lên. May là mình chốt giá bán từ quý trước nên kịp điều chỉnh.",
+      "fixture_start_sec": 845,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g16",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 41.18,
+      "end_sec": 44.49,
+      "text": "Lợi nhuận gộp vẫn giữ hai tám phần trăm, mình chấp nhận được với mùa này.",
+      "fixture_start_sec": 915,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g3",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 44.73,
+      "end_sec": 48.62,
+      "text": "Công nợ quá 60 ngày còn 620 triệu, chủ yếu ở hai công trình bên Kiến An.",
+      "fixture_start_sec": 970,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g17",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 48.93,
+      "end_sec": 55.17,
+      "text": "Sáu trăm hai mươi triệu công nợ quá sáu mươi ngày, phần lớn là hai công trình bên Kiến An. Em đã gửi thư nhắc hai lượt rồi.",
+      "fixture_start_sec": 1020,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g18",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 55.41,
+      "end_sec": 60.04,
+      "text": "Em đề xuất từ tháng mười hai dừng nhận đơn của khách có lịch sử chậm trả, ai muốn nhận thì anh Minh duyệt lại.",
+      "fixture_start_sec": 1085,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g19",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 60.7,
+      "end_sec": 63.94,
+      "text": "Phần gỗ, anh Đức với em đã nói chuyện sơ trước họp, giờ chốt luôn.",
+      "fixture_start_sec": 1145,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g4",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 64.16,
+      "end_sec": 67.81,
+      "text": "Anh chốt chuyển sang gỗ An Phát từ tháng 12, giá họ thấp hơn 8%.",
+      "fixture_start_sec": 1170,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g20",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 68.16,
+      "end_sec": 72.67,
+      "text": "Giá bên An Phát thấp hơn nhà cung cấp đang dùng tám phần trăm, cùng loại dầm bo, cùng keo dán.",
+      "fixture_start_sec": 1220,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g21",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 72.94,
+      "end_sec": 76.52,
+      "text": "Chất lượng họ gửi mẫu cắt thử rồi, về cơ bản đạt, em với trưởng xưởng đều gật.",
+      "fixture_start_sec": 1275,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g22",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 76.8,
+      "end_sec": 80.96,
+      "text": "Mình ký hợp đồng thử ba tháng, tháng mười hai chạy song song hai bên, ai rớt chất lượng thì dừng.",
+      "fixture_start_sec": 1320,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g23",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 81.14,
+      "end_sec": 84.68,
+      "text": "Ai có ý kiến gì về nhà cung cấp thì nói ngay hôm nay, đừng để ký rồi mới nói.",
+      "fixture_start_sec": 1365,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g24",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 85.21,
+      "end_sec": 89.58,
+      "text": "Bên xưởng em báo thẳng: tháng mười hai mình nhận ba mươi mốt đơn, mà công suất cho phép mới hai mươi bảy.",
+      "fixture_start_sec": 1450,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g25",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 89.87,
+      "end_sec": 93.77,
+      "text": "Xưởng đang chạy một trăm mười lăm phần trăm công suất, ba đơn có nguy cơ trễ hạn nếu không thay đổi gì.",
+      "fixture_start_sec": 1495,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g26",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 94.11,
+      "end_sec": 98.05,
+      "text": "Bốn thợ chính thì hai người nghỉ việc, người thay vào tay nghề chưa đều, khâu dầm bo là chậm nhất.",
+      "fixture_start_sec": 1550,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g5",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 100.91,
+      "end_sec": 103.29,
+      "text": "Nếu không thêm ca tối thì đơn Hoàng Huy chắc chắn trễ.",
+      "fixture_start_sec": 1600,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g27",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 103.55,
+      "end_sec": 107.73,
+      "text": "Đơn Hoàng Huy Commerce giao ngày hai mươi tháng mười hai, trễ là mất khách bên đó luôn, họ dặn trước rồi.",
+      "fixture_start_sec": 1650,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g28",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 107.91,
+      "end_sec": 111.26,
+      "text": "Em cần thêm bốn thợ thời vụ, làm sáu tuần, được thì gánh được ca tối.",
+      "fixture_start_sec": 1705,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g29",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 111.52,
+      "end_sec": 115.04,
+      "text": "Chi phí ước khoảng sáu mươi triệu, so với bị phạt hợp đồng và mất khách thì rẻ hơn nhiều.",
+      "fixture_start_sec": 1795,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g30",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 115.44,
+      "end_sec": 118.07,
+      "text": "Tuyển người chính thức thì không kịp, thời vụ chỉ thuê ngoài được thôi.",
+      "fixture_start_sec": 1840,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g31",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 118.43,
+      "end_sec": 122.19,
+      "text": "Có thêm ca tối là em cam kết đơn tháng mười hai giữ trọn, trễ một đơn em chịu trách nhiệm.",
+      "fixture_start_sec": 1890,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g32",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 122.6,
+      "end_sec": 124.11,
+      "text": "Đến phần em, chiến dịch Tết.",
+      "fixture_start_sec": 1950,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g6",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 124.43,
+      "end_sec": 127.85,
+      "text": "Em đề xuất gói Đón Tết nhà mới, giảm 7% cho đơn trên 50 triệu.",
+      "fixture_start_sec": 1980,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g33",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 128.21,
+      "end_sec": 132.08,
+      "text": "Giảm bảy phần trăm cho đơn trên năm mươi triệu, dự kiến doanh thu mùa Tết tăng hai mươi phần trăm.",
+      "fixture_start_sec": 2030,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g34",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 132.41,
+      "end_sec": 136.54,
+      "text": "Ngân sách quảng cáo em cần thêm tám mươi triệu cho đợt này, riêng video thì quay nội bộ là được.",
+      "fixture_start_sec": 2080,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g35",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 136.91,
+      "end_sec": 140.01,
+      "text": "Hình ảnh em đổi sang ảnh công trình thật, không dùng ảnh mẫu trên mạng nữa.",
+      "fixture_start_sec": 2130,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g36",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 140.31,
+      "end_sec": 143.95,
+      "text": "Em quay video ba khách nhận nhà cũ làm chuỗi nội dung, khách tin người thật kể hơn.",
+      "fixture_start_sec": 2165,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g37",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 144.26,
+      "end_sec": 148.38,
+      "text": "Chạy từ mùng một tháng mười hai, dồn dập hai tuần cuối tháng vì đó là lúc khách bắt đầu đóng tiền.",
+      "fixture_start_sec": 2210,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g38",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 148.63,
+      "end_sec": 152.62,
+      "text": "Em cần danh sách khách cũ từ bộ phận bán hàng để gọi mời, cả khách đã nhận nhà lẫn khách hủy.",
+      "fixture_start_sec": 2255,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g39",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 153.1,
+      "end_sec": 156.62,
+      "text": "Chiến dịch em duyệt về nguyên tắc, còn ngân sách thì chị Hà lập bảng chi tiết anh ký.",
+      "fixture_start_sec": 2365,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g40",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 156.87,
+      "end_sec": 159.99,
+      "text": "Nhân sự: bên thiết kế mình thiếu người rồi, việc mới về liên tục.",
+      "fixture_start_sec": 2410,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g41",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 160.22,
+      "end_sec": 164.18,
+      "text": "Cần thêm một kiến trúc sư nội thất, mức lương để bộ phận đề xuất, anh không chốt ngay hôm nay.",
+      "fixture_start_sec": 2450,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g42",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 164.35,
+      "end_sec": 167.23,
+      "text": "Đăng tuyển từ tuần sau, em với anh Đức cùng phỏng vấn cho nhanh.",
+      "fixture_start_sec": 2495,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g43",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 167.76,
+      "end_sec": 170.97,
+      "text": "Phòng thiết kế mình đang có ba người, một bạn sắp nghỉ sinh quý một năm sau.",
+      "fixture_start_sec": 2625,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g44",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 171.17,
+      "end_sec": 174.39,
+      "text": "Em tính hai phương án: tuyển chính thức, hoặc thuê theo dự án từng hợp đồng.",
+      "fixture_start_sec": 2670,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g45",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 174.56,
+      "end_sec": 177.94,
+      "text": "Thuê theo dự án thì nhanh nhưng đắt hơn, mà người lạ không nắm phong cách vẽ của mình.",
+      "fixture_start_sec": 2715,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g46",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 178.21,
+      "end_sec": 180.96,
+      "text": "Em nghiêng về tuyển chính thức một người, chỗ thiếu đột xuất thì thuê ngoài.",
+      "fixture_start_sec": 2760,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g47",
+      "speaker_id": "SPK_03",
+      "lang": "vi",
+      "start_sec": 181.36,
+      "end_sec": 184.39,
+      "text": "Tuần sau em gửi bảng so sánh chi phí hai phương án cho anh xem rồi họp chốt.",
+      "fixture_start_sec": 2805,
+      "gain_db": -5,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "-15Hz",
+        "rate": "+25%"
+      }
+    },
+    {
+      "id": "g48",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 184.87,
+      "end_sec": 186.44,
+      "text": "Em xin ba phút báo phần bán hàng.",
+      "fixture_start_sec": 2852,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g7",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 186.74,
+      "end_sec": 189.2,
+      "text": "Tháng này em gặp 14 khách, chốt được 3 hợp đồng.",
+      "fixture_start_sec": 2870,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g49",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 189.37,
+      "end_sec": 193.27,
+      "text": "Ba hợp đồng chốt đều là nội thất trọn gói, giá trung bình ba trăm tám mươi triệu một công trình.",
+      "fixture_start_sec": 2915,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g50",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 193.57,
+      "end_sec": 196.72,
+      "text": "Khách chủ yếu đến từ giới thiệu của khách cũ, hai trên ba hợp đồng là vậy.",
+      "fixture_start_sec": 2960,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g51",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 197.05,
+      "end_sec": 200.47,
+      "text": "Quảng cáo mạng xã hội em chạy bốn mươi lăm triệu cả tháng nhưng chỉ ra một đơn nhỏ.",
+      "fixture_start_sec": 3008,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g52",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 200.76,
+      "end_sec": 204.67,
+      "text": "Tỷ lệ chốt của khách giới thiệu cao gấp đôi khách từ quảng cáo, con số ba tháng liền như vậy.",
+      "fixture_start_sec": 3052,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g53",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 207.78,
+      "end_sec": 211.65,
+      "text": "Em đề xuất chi quảng cáo giảm còn ba mươi triệu, phần tiền dư chuyển sang chăm khách cũ.",
+      "fixture_start_sec": 3105,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g54",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 211.81,
+      "end_sec": 215.64,
+      "text": "Mỗi khách cũ em đề xuất tặng gói bảo trì năm đầu, chi khoảng hai triệu nhưng giữ được khách.",
+      "fixture_start_sec": 3155,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g55",
+      "speaker_id": "SPK_05",
+      "lang": "vi",
+      "start_sec": 215.99,
+      "end_sec": 219.21,
+      "text": "Danh sách khách cũ em xin nhận từ chị Hà trước ngày hai mươi lăm để kịp gọi.",
+      "fixture_start_sec": 3200,
+      "gain_db": -6,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+10Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g56",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 219.65,
+      "end_sec": 223.33,
+      "text": "Phần em, chiến dịch Tết em đã gửi nhóm chat sáng nay, ai xem qua cho ý kiến.",
+      "fixture_start_sec": 3255,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g57",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 223.63,
+      "end_sec": 226.61,
+      "text": "Kế hoạch cần tám mươi triệu ngân sách, em xin anh duyệt trước ngày hai mươi.",
+      "fixture_start_sec": 3300,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g58",
+      "speaker_id": "SPK_04",
+      "lang": "vi",
+      "start_sec": 226.84,
+      "end_sec": 231.03,
+      "text": "Nếu duyệt chậm hơn thì đợt quảng cáo đầu tháng mười hai bị trễ, mất đúng tuần khách bắt đầu chi tiền.",
+      "fixture_start_sec": 3345,
+      "gain_db": -4,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+12Hz",
+        "rate": "+22%"
+      }
+    },
+    {
+      "id": "g59",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 231.63,
+      "end_sec": 233.48,
+      "text": "Phần công nợ em xin nói gọn cuối cùng.",
+      "fixture_start_sec": 3405,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g8",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 233.75,
+      "end_sec": 235.5,
+      "text": "Chị gửi mọi người danh sách trong thứ Bảy.",
+      "fixture_start_sec": 3440,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g60",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 235.89,
+      "end_sec": 238.64,
+      "text": "Danh sách công nợ em gửi từng phụ trách công trình trong thứ Bảy này.",
+      "fixture_start_sec": 3490,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g61",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 242.05,
+      "end_sec": 245.42,
+      "text": "Công trình Kiến An em đề xuất dừng thi công phần bổ sung cho đến khi thu được tiền.",
+      "fixture_start_sec": 3540,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g62",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 245.77,
+      "end_sec": 248.36,
+      "text": "Hai công trình còn lại em đôn đốc thu trước ba mươi tháng mười một.",
+      "fixture_start_sec": 3590,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g63",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 248.76,
+      "end_sec": 252.53,
+      "text": "Quá ngày đó mà chưa xong, em báo anh Minh đưa vào biên bản để anh xử lý với khách.",
+      "fixture_start_sec": 3640,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g64",
+      "speaker_id": "SPK_02",
+      "lang": "vi",
+      "start_sec": 252.85,
+      "end_sec": 256.1,
+      "text": "Em cũng rà lại hạn mức tín dụng quý một để chuẩn bị tiền mua gỗ đợt Tết.",
+      "fixture_start_sec": 3690,
+      "gain_db": -3,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-HoaiMyNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g65",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 256.5,
+      "end_sec": 258.59,
+      "text": "Nghe rõ chưa nào, giờ chốt việc từng người.",
+      "fixture_start_sec": 3765,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g9",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 258.84,
+      "end_sec": 260.56,
+      "text": "Thứ Hai anh Đức phải có kế hoạch ca tối.",
+      "fixture_start_sec": 3790,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g66",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 260.88,
+      "end_sec": 264.1,
+      "text": "Việc nào ai nhận thì ghi ngay vào biên bản, đừng để ra khỏi phòng lại quên.",
+      "fixture_start_sec": 3840,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g67",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 264.35,
+      "end_sec": 267.51,
+      "text": "Tình hình xưởng là ưu tiên số một, anh Đức chủ trì và báo anh hàng ngày.",
+      "fixture_start_sec": 3885,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g10",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 267.68,
+      "end_sec": 269.17,
+      "text": "Hà gửi bản nháp trước 20 nhé.",
+      "fixture_start_sec": 3940,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g68",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 269.35,
+      "end_sec": 272.47,
+      "text": "Họp tuần sau vẫn giờ cũ, ai vướng phát sinh thì báo trước cho thư ký.",
+      "fixture_start_sec": 3990,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    },
+    {
+      "id": "g69",
+      "speaker_id": "SPK_01",
+      "lang": "vi",
+      "start_sec": 272.71,
+      "end_sec": 274.47,
+      "text": "Cảm ơn mọi người, mình kết thúc ở đây.",
+      "fixture_start_sec": 4035,
+      "gain_db": 0,
+      "voice": {
+        "engine": "edge",
+        "voice": "vi-VN-NamMinhNeural",
+        "pitch": "+0Hz",
+        "rate": "+20%"
+      }
+    }
+  ]
+}
