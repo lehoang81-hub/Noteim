@@ -573,6 +573,9 @@ Làm theo 6 bước trong #65, mỗi bước lint (gồm Bốn điều cấm) + 
 - **Chưa kiểm chứng** (ghi rõ, không bịa): (1) **Soniox thật** — `scripts/asr-smoke.mjs` sẵn sàng nhưng máy không có `SONIOX_API_KEY`/`GEMINI_API_KEY` trong env nên luồng audio_url → presigned GET R2 → chữ thật → tóm tắt thật chưa từng chạy; cần chạy lại khi có khóa (một file ngắn tốn ≈ 0,005 USD Soniox). (2) **Supabase thật** — migration 0002 chưa chạy trên Supabase (máy không có DATABASE_URL thật). (3) **Vercel Cron thật** — khai báo `*/10 * * * *` trong vercel.json; nhịp cron của gói Vercel đang dùng cần Hoang xác nhận trên dashboard (gói Hobby giới hạn nhịp cron). (4) Bản chữ dài thật (> 1 giờ, map-reduce) chưa có dữ liệu thật để chạy — logic được kiểm bằng mã + kho giả. (5) Tách người nói trên giọng người thật — docs/11 đã cảnh báo file 03 gộp 2 người nói ít tiếng (65,95%); cần đánh giá lại khi có băng thật.
 - **Không merge** — chờ Hoang duyệt.
 
+## 25/11 — Ghi đề xuất vào backlog
+
+Chỉ sửa tài liệu: thêm 4 mục vào "Backlog mở rộng" của `docs/06-roadmap.md` (kho tri thức hai tầng, Zalo và lịch, định vị cạnh tranh, nhịp cron theo gói Vercel). Không đổi code, không đổi hành vi app.
 ## 2026-11-25, Claude, C1-06 — Dọn việc treo sau C1-05 (PR #93, nhánh c1/06-cleanup)
 
 - **(1) Nút "Hủy buổi ghi"** trên màn /record: icon X cạnh hàng điều khiển (hiện cả lúc đang ghi và tạm dừng) + dòng "Hủy buổi ghi" trong cổng chốt; ConfirmDialog "Bỏ buổi ghi này? Âm thanh đang ghi sẽ mất." — không xác nhận thì ghi tiếp; xác nhận thì `MeetingRecorder.discard` (dừng bộ thu, xóa băng live trong IndexedDB), tắt micro, KHÔNG tạo buổi, về thư viện. Khóa vi/en/ko (1564). e2e c1-audio thêm bài hủy (16/16 đạt).
