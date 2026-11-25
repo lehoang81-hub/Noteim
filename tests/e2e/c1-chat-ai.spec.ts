@@ -300,9 +300,9 @@ test.describe("C1-08 mục 2 — hỏi AI thật (kho giả Gemini)", () => {
     await expect(page.getByRole("tab", { name: "Hỏi AI" })).toHaveAttribute("aria-selected", "true", { timeout: 15_000 });
     await expect(page.getByText("Còn 10/10 câu hỏi cho buổi này")).toBeVisible({ timeout: 15_000 });
 
-    // Bấm một câu gợi ý của mẫu bất động sản (chip phạm vi "Buổi này" nằm
-    // riêng ở trên, không phải câu gợi ý)
-    await page.getByRole("button", { name: "Khách còn băn khoăn gì?" }).click();
+    // Bấm một câu gợi ý theo nội dung buổi (chủ đề/việc cần làm/số liệu); chip
+    // phạm vi "Buổi này" nằm riêng ở trên, không phải câu gợi ý
+    await page.getByRole("button", { name: /^(Chi tiết về “|Tôi cần làm gì sau buổi này|Có số liệu hay mốc thời gian)/ }).first().click();
 
     // Đáp án giả hiện dần rồi đủ chữ; có chip dẫn chứng mốc giây
     await expect(page.getByText(FAKE_ANSWER_VI, { exact: true })).toBeVisible({ timeout: 20_000 });
