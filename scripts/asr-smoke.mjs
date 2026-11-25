@@ -143,7 +143,7 @@ say(`[asr-smoke]    → ${tokens.length} token, ${segments.length} đoạn, ${re
 const g0 = Date.now();
 say(`[asr-smoke] 4) Gemini tóm tắt (model ${GEMINI_MODEL})…`);
 const transcriptText = segments
-  .map((s, i) => {
+  .map((s) => {
     const order = [...new Set(segments.map((x) => x.speaker ?? "?"))];
     return `[${String(Math.floor(s.start_sec / 60)).padStart(2, "0")}:${String(Math.floor(s.start_sec % 60)).padStart(2, "0")}] Người nói ${(order.indexOf(s.speaker ?? "?") ?? 0) + 1}: ${s.text}`;
   })
