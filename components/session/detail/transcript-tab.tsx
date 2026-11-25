@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowDown, ArrowUp, Check, ClipboardCopy, Ellipsis, Languages, Pencil, Quote, TriangleAlert, UserRoundCog, X } from "lucide-react";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { formatClock } from "@/components/ribbon/draw";
@@ -28,10 +29,18 @@ import { cn } from "@/lib/cn";
  *   nút "Xem bản dịch" bật dịch cho mọi đoạn khác ngôn ngữ giao diện — bản
  *   dịch nằm dưới câu gốc, chữ nhỏ, màu phụ; từng đoạn có "Dịch đoạn này";
  *   sửa câu gốc thì bản dịch hiện "Cần dịch lại".
- * - Tìm trong lời: tô sáng, đếm "2/5", tới và lùi. Nhấn giữ (hoặc nút ⋯ trên
- *   máy tính): sao chép, sửa lời, đổi người nói, tạo thẻ trích dẫn.
+ * - Tìm trong lời: tô sáng, đếm "2/5", tới và lùi. Nhấn giữ HOẶC nút ⋯ (C1-09:
+ *   nút hiện trên mọi màn hình, vùng chạm 44px, điện thoại đỡ lơ ngơ): sửa lời,
+ *   đổi người nói, sao chép, tạo thẻ trích dẫn.
+ * - Lần đầu mở tab Lời của buổi thật: dòng gợi ý "Lời hoặc người nói chưa
+ *   đúng?" đóng được, lưu localStorage (try/catch), có link tới /help.
  * - Từ trong từ điển gạch chân chấm; bôi đen một từ hoặc cụm từ để thêm vào từ điển.
  */
+
+/** Lưu trạng thái đã đóng dòng gợi ý sửa lời (C1-09): đóng một lần là ẩn
+ * vĩnh viễn. localStorage có try/catch theo AGENTS.md (chế độ riêng tư,
+ * đầy bộ nhớ thì không được làm sập tab). */
+const EDIT_HINT_KEY = "noteim-transcript-edit-hint-dismissed";
 
 type Range = { start: number; end: number };
 type Piece = { text: string; kind: "plain" | "match" | "term"; matchIndex?: number; start: number; end: number };
@@ -222,8 +231,28 @@ export function TranscriptTab({
     }
   }
 
+  // Dòng gợi ý sửa lời (C1-09): đọc trạng thái đã đóng ngay lúc khởi tạo —
+  // tab chỉ vẽ sau khi tải xong bản chữ (client) nên không lệch hydrate;
+  // không đọc được bộ nhớ thì coi như đã đóng, không hiện gợi ý.
+  const [editHintDismissed, setEditHintDismissed] = useState(() => {
+    try {
+      return window.localStorage.getItem(EDIT_HINT_KEY) === "1";
+    } catch {
+      return true;
+    }
+  });
+  function dismissEditHint() {
+    setEditHintDismissed(true);
+    try {
+      window.localStorage.setItem(EDIT_HINT_KEY, "1");
+    } catch {
+      // ghi không được thì chỉ ẩn trong phiên này, không báo lỗi
+    }
+  }
+
   const menuSeg = menuSegId ? segById[menuSegId] : null;
   const reassignSeg = reassignSegId ? segById[reassignSegId] : null;
+  const showEditHint = !editHintDismissed && !detail.is_sample && !!transcript.data;
 
   return (
     <div className="max-w-[68ch]">
@@ -286,6 +315,27 @@ export function TranscriptTab({
           </div>
         ) : null}
       </div>
+
+      {/* Gợi ý sửa lời (C1-09): lần đầu mở tab Lời của buổi thật, đóng là
+          ẩn vĩnh viễn; link "Xem mẹo" tới trang /help */}
+      {showEditHint ? (
+        <div data-testid="edit-hint" className="mt-3 flex items-start gap-2 rounded-control border border-line bg-surface-2 px-3 py-2">
+          <p className="min-w-0 flex-1 text-small text-ink-2">
+            {t("editHintFirst")}{" "}
+            <Link href="/help" className="font-medium text-dien underline underline-offset-2">
+              {t("viewTips")}
+            </Link>
+          </p>
+          <button
+            type="button"
+            onClick={dismissEditHint}
+            aria-label={t("editHintDismiss")}
+            className="-my-1 -mr-1 flex size-9 shrink-0 items-center justify-center rounded-control text-ink-3 hover:text-ink"
+          >
+            <X aria-hidden={true} className="size-4" strokeWidth={2} />
+          </button>
+        </div>
+      ) : null}
 
       {q && matchIndex && matchIndex.length === 0 ? (
         <p role="status" className="mt-4 text-body text-ink-2">
@@ -404,14 +454,8 @@ export function TranscriptTab({
       >
         {menuSeg ? (
           <ul className="divide-y divide-line">
-            <ActionRow
-              icon={ClipboardCopy}
-              label={t("copy")}
-              onClick={() => {
-                setMenuSegId(null);
-                void copySegment(menuSeg);
-              }}
-            />
+            {/* Thứ tự (C1-09): Sửa lời, Đổi người nói trước, rồi các mục cũ,
+                vì hai việc đầu là việc người dùng cần nhất khi lời sai */}
             <ActionRow
               icon={Pencil}
               label={t("edit")}
@@ -419,6 +463,22 @@ export function TranscriptTab({
                 setEditingSegId(menuSeg.id);
                 setEditValue(displayText(menuSeg));
                 setMenuSegId(null);
+              }}
+            />
+            <ActionRow
+              icon={UserRoundCog}
+              label={t("reassign")}
+              onClick={() => {
+                setReassignSegId(menuSeg.id);
+                setMenuSegId(null);
+              }}
+            />
+            <ActionRow
+              icon={ClipboardCopy}
+              label={t("copy")}
+              onClick={() => {
+                setMenuSegId(null);
+                void copySegment(menuSeg);
               }}
             />
             {menuSeg.lang !== locale || menuSeg.translations[locale] ? (
@@ -433,14 +493,6 @@ export function TranscriptTab({
                 }}
               />
             ) : null}
-            <ActionRow
-              icon={UserRoundCog}
-              label={t("reassign")}
-              onClick={() => {
-                setReassignSegId(menuSeg.id);
-                setMenuSegId(null);
-              }}
-            />
             <ActionRow
               icon={Quote}
               label={t("quoteCard")}
@@ -852,12 +904,13 @@ function TranscriptList(props: ListProps) {
                 </div>
               )}
 
-              {/* Nút ⋯ cho máy tính; điện thoại dùng nhấn giữ */}
+              {/* Nút ⋯ hiện trên MỌI màn hình (C1-09, bỏ hidden lg:flex):
+                  điện thoại dùng nhấn giữ hoặc bấm ⋯, vùng chạm tối thiểu 44px */}
               <button
                 type="button"
                 onClick={() => onOpenMenu(seg.id)}
                 aria-label={t("actions", { time: formatClock(seg.start_sec) })}
-                className="hidden h-9 w-9 shrink-0 self-center items-center justify-center rounded-control text-ink-3 hover:bg-surface-2 hover:text-ink lg:flex"
+                className="flex h-11 w-11 shrink-0 self-center items-center justify-center rounded-control text-ink-3 hover:bg-surface-2 hover:text-ink"
               >
                 <Ellipsis aria-hidden={true} className="size-4" strokeWidth={2} />
               </button>

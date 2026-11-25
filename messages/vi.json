@@ -963,6 +963,9 @@
     "translationStale": "Cần dịch lại",
     "sampleTranslation": "Bản dịch mẫu",
     "playingBadge": "Đang phát",
+    "editHintFirst": "Lời hoặc người nói chưa đúng? Bấm ⋯ ở đoạn đó để sửa.",
+    "viewTips": "Xem mẹo",
+    "editHintDismiss": "Đóng gợi ý",
     "modeLabel": "Chế độ xem bản ghi lời",
     "modeClean": "Bản gọn",
     "modeVerbatim": "Nguyên văn"

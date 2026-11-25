@@ -871,6 +871,9 @@
     "translationStale": "Needs re-translation",
     "sampleTranslation": "Sample translation",
     "playingBadge": "Playing",
+    "editHintFirst": "Words or speaker not right? Tap ⋯ on that segment to fix it.",
+    "viewTips": "See tips",
+    "editHintDismiss": "Dismiss tip",
     "modeLabel": "Transcript view mode",
     "modeClean": "Concise",
     "modeVerbatim": "Verbatim"
