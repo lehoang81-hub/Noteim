@@ -10,6 +10,7 @@ import { SpeakerName } from "@/components/ui/chips";
 import { EmptyState } from "@/components/ui/feedback";
 import { Button } from "@/components/ui/button";
 import { Sheet } from "@/components/ui/sheet";
+import { asrErrorKey } from "@/lib/data/localize";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { data, useData } from "@/lib/data";
@@ -215,7 +216,8 @@ export function ProcessingScreen() {
       {asrFail ? (
         <div className="mt-4 rounded-block border border-line bg-surface-2 p-4" role="alert">
           <p className="text-small text-ink-2">
-            {asrFail === "quota_exceeded" ? t("asrQuota") : t("asrFailed", { code: asrFail })}
+            {/* Lỗi nói bằng tiếng Việt dễ hiểu theo mã — không bao giờ lộ mã kỹ thuật (C1-06) */}
+            {asrFail === "quota_exceeded" ? t("asrQuota") : ts(asrErrorKey(asrFail))}
           </p>
           <Button variant="secondary" className="mt-3 h-9" onClick={() => void retryAsr()}>
             {t("asrRetry")}

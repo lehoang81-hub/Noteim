@@ -23,7 +23,7 @@
  * Quy tắc nhật ký: chỉ ghi sessionId, bước, độ trễ, mã lỗi — KHÔNG ghi
  * transcript, nội dung tóm tắt, URL presigned hay khóa.
  */
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, eq, isNull, notInArray, sql } from "drizzle-orm";
 
 import { getDb } from "@/lib/db";
 import { actionItems, sessionDetails, sessions, transcriptSegments, users } from "@/lib/db/schema";
@@ -241,20 +241,39 @@ async function saveTranscript(row: SessionRec, detail: DetailRec, segments: Soni
   const built = buildSpeakersAndSpans(row.id, segments, durationSec, draft?.levels ?? []);
   const order = speakerOrder(segments);
   const segs = segments.slice().sort((a, b) => a.start_sec - b.start_sec);
-  await db.delete(transcriptSegments).where(eq(transcriptSegments.sessionId, row.id));
-  if (segs.length) {
-    await db.insert(transcriptSegments).values(
-      segs.map((s, i) => ({
-        sessionId: row.id,
-        id: `sg-${i + 1}`,
-        speakerId: `SPK_${String(speakerNum(s.speaker, order)).padStart(2, "0")}`,
-        startSec: Math.max(0, s.start_sec),
-        endSec: Math.max(s.start_sec + 0.1, s.end_sec),
-        text: s.text,
-        textClean: s.text,
-        lang: s.lang ?? "vi",
-      })),
-    );
+  const segRows = segs.map((s, i) => ({
+    sessionId: row.id,
+    id: `sg-${i + 1}`,
+    speakerId: `SPK_${String(speakerNum(s.speaker, order)).padStart(2, "0")}`,
+    startSec: Math.max(0, s.start_sec),
+    endSec: Math.max(s.start_sec + 0.1, s.end_sec),
+    text: s.text,
+    textClean: s.text,
+    lang: s.lang ?? "vi",
+  }));
+  // UPSERT thay delete+insert: hai luồng đẩy có thể đua nhau cùng lúc (người
+  // dùng bấm Xử lý lại trong khi cron gọi tiếp) — lần sau ghi đè lần trước,
+  // dọn đoạn thừa bằng notInArray; không cần giao dịch (PGlite chốt từng lệnh).
+  if (segRows.length) {
+    await db
+      .insert(transcriptSegments)
+      .values(segRows)
+      .onConflictDoUpdate({
+        target: [transcriptSegments.sessionId, transcriptSegments.id],
+        set: {
+          speakerId: sql`excluded.speaker_id`,
+          startSec: sql`excluded.start_sec`,
+          endSec: sql`excluded.end_sec`,
+          text: sql`excluded.text`,
+          textClean: sql`excluded.text_clean`,
+          lang: sql`excluded.lang`,
+        },
+      });
+    await db
+      .delete(transcriptSegments)
+      .where(and(eq(transcriptSegments.sessionId, row.id), notInArray(transcriptSegments.id, segRows.map((s) => s.id))));
+  } else {
+    await db.delete(transcriptSegments).where(eq(transcriptSegments.sessionId, row.id));
   }
   await db
     .update(sessionDetails)
@@ -377,24 +396,44 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
     }
   }
 
-  // Việc cần làm: người nói đầu (SPK_01, là "Bạn") gán cho chủ buổi
-  await db.delete(actionItems).where(eq(actionItems.sessionId, row.id));
-  if (plan.action_items.length) {
-    await db.insert(actionItems).values(
-      plan.action_items.map((a, i) => ({
-        id: `a-${i + 1}`,
-        sessionId: row.id,
-        task: a.task,
-        assigneeContactId: a.speaker_index === 0 ? "c-me" : null,
-        assigneeUserId: null,
-        dueDate: a.due_date,
-        priority: a.priority,
-        done: false,
-        doneAt: null,
-        sourceQuote: a.source_quote,
-        timestampSec: a.timestamp_sec,
-      })),
-    );
+  // Việc cần làm: người nói đầu (SPK_01, là "Bạn") gán cho chủ buổi.
+  // UPSERT thay delete+insert (lý do như saveTranscript): hai luồng đẩy đua
+  // nhau cùng lúc thì lần sau ghi đè lần trước, dọn dòng thừa bằng notInArray.
+  const taskRows = plan.action_items.map((a, i) => ({
+    id: `a-${i + 1}`,
+    sessionId: row.id,
+    task: a.task,
+    assigneeContactId: a.speaker_index === 0 ? "c-me" : null,
+    assigneeUserId: null,
+    dueDate: a.due_date,
+    priority: a.priority,
+    done: false,
+    doneAt: null,
+    sourceQuote: a.source_quote,
+    timestampSec: a.timestamp_sec,
+  }));
+  if (taskRows.length) {
+    await db
+      .insert(actionItems)
+      .values(taskRows)
+      .onConflictDoUpdate({
+        target: [actionItems.sessionId, actionItems.id],
+        set: {
+          task: sql`excluded.task`,
+          assigneeContactId: sql`excluded.assignee_contact_id`,
+          dueDate: sql`excluded.due_date`,
+          priority: sql`excluded.priority`,
+          done: sql`excluded.done`,
+          doneAt: sql`excluded.done_at`,
+          sourceQuote: sql`excluded.source_quote`,
+          timestampSec: sql`excluded.timestamp_sec`,
+        },
+      });
+    await db
+      .delete(actionItems)
+      .where(and(eq(actionItems.sessionId, row.id), notInArray(actionItems.id, taskRows.map((t) => t.id))));
+  } else {
+    await db.delete(actionItems).where(eq(actionItems.sessionId, row.id));
   }
 
   const topics = topicsFromPlan(plan, durationSec);

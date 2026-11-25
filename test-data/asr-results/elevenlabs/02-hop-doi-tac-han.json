@@ -1,0 +1,5787 @@
+{
+  "provider": "elevenlabs",
+  "file": "02-hop-doi-tac-han",
+  "model": "scribe_v3",
+  "processing_ms": 18146,
+  "audio_duration_sec": 464.437007,
+  "language": "vie",
+  "segments": [
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 1.42,
+      "end_sec": 5.32,
+      "text": "Chào ông Park, chào chị Kim. Cảm ơn hai bên đã sắp xếp buổi họp hôm nay.",
+      "words": [
+        {
+          "text": "Chào",
+          "start_sec": 1.42,
+          "end_sec": 1.6
+        },
+        {
+          "text": "ông",
+          "start_sec": 1.66,
+          "end_sec": 1.76
+        },
+        {
+          "text": "Park,",
+          "start_sec": 1.84,
+          "end_sec": 2.1
+        },
+        {
+          "text": "chào",
+          "start_sec": 2.34,
+          "end_sec": 2.5
+        },
+        {
+          "text": "chị",
+          "start_sec": 2.54,
+          "end_sec": 2.7
+        },
+        {
+          "text": "Kim.",
+          "start_sec": 2.76,
+          "end_sec": 2.94
+        },
+        {
+          "text": "Cảm",
+          "start_sec": 3.28,
+          "end_sec": 3.4
+        },
+        {
+          "text": "ơn",
+          "start_sec": 3.48,
+          "end_sec": 3.6
+        },
+        {
+          "text": "hai",
+          "start_sec": 3.66,
+          "end_sec": 3.8
+        },
+        {
+          "text": "bên",
+          "start_sec": 3.86,
+          "end_sec": 4
+        },
+        {
+          "text": "đã",
+          "start_sec": 4.059,
+          "end_sec": 4.16
+        },
+        {
+          "text": "sắp",
+          "start_sec": 4.2,
+          "end_sec": 4.34
+        },
+        {
+          "text": "xếp",
+          "start_sec": 4.4,
+          "end_sec": 4.56
+        },
+        {
+          "text": "buổi",
+          "start_sec": 4.58,
+          "end_sec": 4.74
+        },
+        {
+          "text": "họp",
+          "start_sec": 4.8,
+          "end_sec": 4.96
+        },
+        {
+          "text": "hôm",
+          "start_sec": 5,
+          "end_sec": 5.12
+        },
+        {
+          "text": "nay.",
+          "start_sec": 5.18,
+          "end_sec": 5.32
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 6.32,
+      "end_sec": 9.66,
+      "text": "Chúng tôi muốn chốt bộ hai khuôn cho chi tiết hộc tủ của đơn hàng mới.",
+      "words": [
+        {
+          "text": "Chúng",
+          "start_sec": 6.32,
+          "end_sec": 6.48
+        },
+        {
+          "text": "tôi",
+          "start_sec": 6.52,
+          "end_sec": 6.72
+        },
+        {
+          "text": "muốn",
+          "start_sec": 6.78,
+          "end_sec": 6.94
+        },
+        {
+          "text": "chốt",
+          "start_sec": 7,
+          "end_sec": 7.16
+        },
+        {
+          "text": "bộ",
+          "start_sec": 7.22,
+          "end_sec": 7.38
+        },
+        {
+          "text": "hai",
+          "start_sec": 7.42,
+          "end_sec": 7.56
+        },
+        {
+          "text": "khuôn",
+          "start_sec": 7.62,
+          "end_sec": 7.84
+        },
+        {
+          "text": "cho",
+          "start_sec": 7.88,
+          "end_sec": 8
+        },
+        {
+          "text": "chi",
+          "start_sec": 8.039,
+          "end_sec": 8.18
+        },
+        {
+          "text": "tiết",
+          "start_sec": 8.22,
+          "end_sec": 8.38
+        },
+        {
+          "text": "hộc",
+          "start_sec": 8.42,
+          "end_sec": 8.6
+        },
+        {
+          "text": "tủ",
+          "start_sec": 8.66,
+          "end_sec": 8.84
+        },
+        {
+          "text": "của",
+          "start_sec": 8.9,
+          "end_sec": 8.98
+        },
+        {
+          "text": "đơn",
+          "start_sec": 9.04,
+          "end_sec": 9.2
+        },
+        {
+          "text": "hàng",
+          "start_sec": 9.24,
+          "end_sec": 9.4
+        },
+        {
+          "text": "mới.",
+          "start_sec": 9.46,
+          "end_sec": 9.66
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 10.9,
+      "end_sec": 13.78,
+      "text": "안녕하세요. 만나 뵙게 되어 반갑습니다.",
+      "words": [
+        {
+          "text": "안녕하세요.",
+          "start_sec": 10.9,
+          "end_sec": 11.52
+        },
+        {
+          "text": "만나",
+          "start_sec": 12.22,
+          "end_sec": 12.42
+        },
+        {
+          "text": "뵙게",
+          "start_sec": 12.56,
+          "end_sec": 12.74
+        },
+        {
+          "text": "되어",
+          "start_sec": 12.82,
+          "end_sec": 13.04
+        },
+        {
+          "text": "반갑습니다.",
+          "start_sec": 13.2,
+          "end_sec": 13.78
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 15.32,
+      "end_sec": 19.26,
+      "text": "저희 쪽에서는 생산 담당 김민지 과장이 함께 참석했습니다.",
+      "words": [
+        {
+          "text": "저희",
+          "start_sec": 15.32,
+          "end_sec": 15.5
+        },
+        {
+          "text": "쪽에서는",
+          "start_sec": 15.68,
+          "end_sec": 16.239
+        },
+        {
+          "text": "생산",
+          "start_sec": 16.4,
+          "end_sec": 16.64
+        },
+        {
+          "text": "담당",
+          "start_sec": 16.82,
+          "end_sec": 17.02
+        },
+        {
+          "text": "김민지",
+          "start_sec": 17.12,
+          "end_sec": 17.52
+        },
+        {
+          "text": "과장이",
+          "start_sec": 17.66,
+          "end_sec": 18.04
+        },
+        {
+          "text": "함께",
+          "start_sec": 18.18,
+          "end_sec": 18.44
+        },
+        {
+          "text": "참석했습니다.",
+          "start_sec": 18.6,
+          "end_sec": 19.26
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 20.88,
+      "end_sec": 24.06,
+      "text": "오늘 금형 견적과 생산 일정을 정리해 드리겠습니다.",
+      "words": [
+        {
+          "text": "오늘",
+          "start_sec": 20.88,
+          "end_sec": 21.1
+        },
+        {
+          "text": "금형",
+          "start_sec": 21.24,
+          "end_sec": 21.42
+        },
+        {
+          "text": "견적과",
+          "start_sec": 21.58,
+          "end_sec": 22.06
+        },
+        {
+          "text": "생산",
+          "start_sec": 22.22,
+          "end_sec": 22.44
+        },
+        {
+          "text": "일정을",
+          "start_sec": 22.54,
+          "end_sec": 22.92
+        },
+        {
+          "text": "정리해",
+          "start_sec": 23.12,
+          "end_sec": 23.34
+        },
+        {
+          "text": "드리겠습니다.",
+          "start_sec": 23.42,
+          "end_sec": 24.06
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 25.26,
+      "end_sec": 26.94,
+      "text": "Nice to meet you everyone.",
+      "words": [
+        {
+          "text": "Nice",
+          "start_sec": 25.26,
+          "end_sec": 25.66
+        },
+        {
+          "text": "to",
+          "start_sec": 25.72,
+          "end_sec": 25.8
+        },
+        {
+          "text": "meet",
+          "start_sec": 25.86,
+          "end_sec": 26.1
+        },
+        {
+          "text": "you",
+          "start_sec": 26.16,
+          "end_sec": 26.26
+        },
+        {
+          "text": "everyone.",
+          "start_sec": 26.36,
+          "end_sec": 26.94
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 28.06,
+      "end_sec": 32.759,
+      "text": "I will share the three mold quotations and the production plan on screen now.",
+      "words": [
+        {
+          "text": "I",
+          "start_sec": 28.06,
+          "end_sec": 28.2
+        },
+        {
+          "text": "will",
+          "start_sec": 28.24,
+          "end_sec": 28.42
+        },
+        {
+          "text": "share",
+          "start_sec": 28.48,
+          "end_sec": 28.76
+        },
+        {
+          "text": "the",
+          "start_sec": 28.82,
+          "end_sec": 29
+        },
+        {
+          "text": "three",
+          "start_sec": 29.08,
+          "end_sec": 29.32
+        },
+        {
+          "text": "mold",
+          "start_sec": 29.38,
+          "end_sec": 29.64
+        },
+        {
+          "text": "quotations",
+          "start_sec": 29.7,
+          "end_sec": 30.34
+        },
+        {
+          "text": "and",
+          "start_sec": 30.38,
+          "end_sec": 30.5
+        },
+        {
+          "text": "the",
+          "start_sec": 30.54,
+          "end_sec": 30.7
+        },
+        {
+          "text": "production",
+          "start_sec": 31.04,
+          "end_sec": 31.56
+        },
+        {
+          "text": "plan",
+          "start_sec": 31.62,
+          "end_sec": 31.86
+        },
+        {
+          "text": "on",
+          "start_sec": 31.9,
+          "end_sec": 32
+        },
+        {
+          "text": "screen",
+          "start_sec": 32.06,
+          "end_sec": 32.4
+        },
+        {
+          "text": "now.",
+          "start_sec": 32.479,
+          "end_sec": 32.759
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 33.3,
+      "end_sec": 39.88,
+      "text": "Chương trình hôm nay gồm ba phần: so sánh ba báo giá khuôn, đơn giá với MOQ và tiến độ sản xuất đợt đầu.",
+      "words": [
+        {
+          "text": "Chương",
+          "start_sec": 33.3,
+          "end_sec": 33.44
+        },
+        {
+          "text": "trình",
+          "start_sec": 33.46,
+          "end_sec": 33.64
+        },
+        {
+          "text": "hôm",
+          "start_sec": 33.68,
+          "end_sec": 33.8
+        },
+        {
+          "text": "nay",
+          "start_sec": 33.84,
+          "end_sec": 34.04
+        },
+        {
+          "text": "gồm",
+          "start_sec": 34.1,
+          "end_sec": 34.26
+        },
+        {
+          "text": "ba",
+          "start_sec": 34.32,
+          "end_sec": 34.46
+        },
+        {
+          "text": "phần:",
+          "start_sec": 34.5,
+          "end_sec": 34.72
+        },
+        {
+          "text": "so",
+          "start_sec": 35.1,
+          "end_sec": 35.24
+        },
+        {
+          "text": "sánh",
+          "start_sec": 35.3,
+          "end_sec": 35.44
+        },
+        {
+          "text": "ba",
+          "start_sec": 35.52,
+          "end_sec": 35.68
+        },
+        {
+          "text": "báo",
+          "start_sec": 35.74,
+          "end_sec": 35.88
+        },
+        {
+          "text": "giá",
+          "start_sec": 35.92,
+          "end_sec": 36.1
+        },
+        {
+          "text": "khuôn,",
+          "start_sec": 36.14,
+          "end_sec": 36.36
+        },
+        {
+          "text": "đơn",
+          "start_sec": 36.76,
+          "end_sec": 36.9
+        },
+        {
+          "text": "giá",
+          "start_sec": 36.94,
+          "end_sec": 37.16
+        },
+        {
+          "text": "với",
+          "start_sec": 37.24,
+          "end_sec": 37.44
+        },
+        {
+          "text": "MOQ",
+          "start_sec": 37.64,
+          "end_sec": 38.08
+        },
+        {
+          "text": "và",
+          "start_sec": 38.48,
+          "end_sec": 38.6
+        },
+        {
+          "text": "tiến",
+          "start_sec": 38.66,
+          "end_sec": 38.8
+        },
+        {
+          "text": "độ",
+          "start_sec": 38.86,
+          "end_sec": 39
+        },
+        {
+          "text": "sản",
+          "start_sec": 39.06,
+          "end_sec": 39.22
+        },
+        {
+          "text": "xuất",
+          "start_sec": 39.28,
+          "end_sec": 39.42
+        },
+        {
+          "text": "đợt",
+          "start_sec": 39.48,
+          "end_sec": 39.62
+        },
+        {
+          "text": "đầu.",
+          "start_sec": 39.68,
+          "end_sec": 39.88
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 41.02,
+      "end_sec": 41.52,
+      "text": "좋습니다.",
+      "words": [
+        {
+          "text": "좋습니다.",
+          "start_sec": 41.02,
+          "end_sec": 41.52
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 43.16,
+      "end_sec": 44.2,
+      "text": "순서에 동의합니다.",
+      "words": [
+        {
+          "text": "순서에",
+          "start_sec": 43.16,
+          "end_sec": 43.52
+        },
+        {
+          "text": "동의합니다.",
+          "start_sec": 43.68,
+          "end_sec": 44.2
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 45.82,
+      "end_sec": 47.94,
+      "text": "필요하면 영어로도 설명드리겠습니다.",
+      "words": [
+        {
+          "text": "필요하면",
+          "start_sec": 45.82,
+          "end_sec": 46.4
+        },
+        {
+          "text": "영어로도",
+          "start_sec": 46.58,
+          "end_sec": 46.94
+        },
+        {
+          "text": "설명드리겠습니다.",
+          "start_sec": 47.08,
+          "end_sec": 47.94
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 48.78,
+      "end_sec": 54.08,
+      "text": "Mục tiêu của buổi họp là chốt nhà cung cấp khuôn, đơn giá và điều khoản thanh toán để ký hợp đồng trong tháng này.",
+      "words": [
+        {
+          "text": "Mục",
+          "start_sec": 48.78,
+          "end_sec": 48.9
+        },
+        {
+          "text": "tiêu",
+          "start_sec": 48.94,
+          "end_sec": 49.08
+        },
+        {
+          "text": "của",
+          "start_sec": 49.1,
+          "end_sec": 49.18
+        },
+        {
+          "text": "buổi",
+          "start_sec": 49.22,
+          "end_sec": 49.36
+        },
+        {
+          "text": "họp",
+          "start_sec": 49.4,
+          "end_sec": 49.62
+        },
+        {
+          "text": "là",
+          "start_sec": 49.68,
+          "end_sec": 49.8
+        },
+        {
+          "text": "chốt",
+          "start_sec": 49.84,
+          "end_sec": 50.02
+        },
+        {
+          "text": "nhà",
+          "start_sec": 50.06,
+          "end_sec": 50.24
+        },
+        {
+          "text": "cung",
+          "start_sec": 50.28,
+          "end_sec": 50.42
+        },
+        {
+          "text": "cấp",
+          "start_sec": 50.46,
+          "end_sec": 50.6
+        },
+        {
+          "text": "khuôn,",
+          "start_sec": 50.62,
+          "end_sec": 50.82
+        },
+        {
+          "text": "đơn",
+          "start_sec": 51.24,
+          "end_sec": 51.4
+        },
+        {
+          "text": "giá",
+          "start_sec": 51.44,
+          "end_sec": 51.7
+        },
+        {
+          "text": "và",
+          "start_sec": 51.76,
+          "end_sec": 51.84
+        },
+        {
+          "text": "điều",
+          "start_sec": 51.88,
+          "end_sec": 52.02
+        },
+        {
+          "text": "khoản",
+          "start_sec": 52.04,
+          "end_sec": 52.24
+        },
+        {
+          "text": "thanh",
+          "start_sec": 52.26,
+          "end_sec": 52.42
+        },
+        {
+          "text": "toán",
+          "start_sec": 52.46,
+          "end_sec": 52.7
+        },
+        {
+          "text": "để",
+          "start_sec": 52.76,
+          "end_sec": 52.86
+        },
+        {
+          "text": "ký",
+          "start_sec": 52.92,
+          "end_sec": 53.04
+        },
+        {
+          "text": "hợp",
+          "start_sec": 53.08,
+          "end_sec": 53.24
+        },
+        {
+          "text": "đồng",
+          "start_sec": 53.3,
+          "end_sec": 53.48
+        },
+        {
+          "text": "trong",
+          "start_sec": 53.52,
+          "end_sec": 53.66
+        },
+        {
+          "text": "tháng",
+          "start_sec": 53.7,
+          "end_sec": 53.84
+        },
+        {
+          "text": "này.",
+          "start_sec": 53.88,
+          "end_sec": 54.08
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 55.24,
+      "end_sec": 58.94,
+      "text": "네, 그럼 바로 세 가지 금형 견적부터 시작하겠습니다.",
+      "words": [
+        {
+          "text": "네,",
+          "start_sec": 55.24,
+          "end_sec": 55.32
+        },
+        {
+          "text": "그럼",
+          "start_sec": 55.72,
+          "end_sec": 56.12
+        },
+        {
+          "text": "바로",
+          "start_sec": 56.26,
+          "end_sec": 56.48
+        },
+        {
+          "text": "세",
+          "start_sec": 56.6,
+          "end_sec": 56.64
+        },
+        {
+          "text": "가지",
+          "start_sec": 56.74,
+          "end_sec": 57
+        },
+        {
+          "text": "금형",
+          "start_sec": 57.16,
+          "end_sec": 57.36
+        },
+        {
+          "text": "견적부터",
+          "start_sec": 57.52,
+          "end_sec": 58.02
+        },
+        {
+          "text": "시작하겠습니다.",
+          "start_sec": 58.12,
+          "end_sec": 58.94
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 59.86,
+      "end_sec": 62.52,
+      "text": "Chúng tôi đã nhận ba báo giá cho bộ hai khuôn hộc tủ.",
+      "words": [
+        {
+          "text": "Chúng",
+          "start_sec": 59.86,
+          "end_sec": 60
+        },
+        {
+          "text": "tôi",
+          "start_sec": 60.06,
+          "end_sec": 60.2
+        },
+        {
+          "text": "đã",
+          "start_sec": 60.24,
+          "end_sec": 60.32
+        },
+        {
+          "text": "nhận",
+          "start_sec": 60.36,
+          "end_sec": 60.56
+        },
+        {
+          "text": "ba",
+          "start_sec": 60.62,
+          "end_sec": 60.74
+        },
+        {
+          "text": "báo",
+          "start_sec": 60.8,
+          "end_sec": 60.94
+        },
+        {
+          "text": "giá",
+          "start_sec": 61,
+          "end_sec": 61.22
+        },
+        {
+          "text": "cho",
+          "start_sec": 61.26,
+          "end_sec": 61.38
+        },
+        {
+          "text": "bộ",
+          "start_sec": 61.42,
+          "end_sec": 61.58
+        },
+        {
+          "text": "hai",
+          "start_sec": 61.64,
+          "end_sec": 61.84
+        },
+        {
+          "text": "khuôn",
+          "start_sec": 61.88,
+          "end_sec": 62.02
+        },
+        {
+          "text": "hộc",
+          "start_sec": 62.06,
+          "end_sec": 62.2
+        },
+        {
+          "text": "tủ.",
+          "start_sec": 62.26,
+          "end_sec": 62.52
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 63.62,
+      "end_sec": 66.9,
+      "text": "Ông có thể so sánh giúp về giá, tuổi thọ và chu kỳ ép không?",
+      "words": [
+        {
+          "text": "Ông",
+          "start_sec": 63.62,
+          "end_sec": 63.72
+        },
+        {
+          "text": "có",
+          "start_sec": 63.76,
+          "end_sec": 63.84
+        },
+        {
+          "text": "thể",
+          "start_sec": 63.86,
+          "end_sec": 64.019
+        },
+        {
+          "text": "so",
+          "start_sec": 64.08,
+          "end_sec": 64.2
+        },
+        {
+          "text": "sánh",
+          "start_sec": 64.239,
+          "end_sec": 64.4
+        },
+        {
+          "text": "giúp",
+          "start_sec": 64.42,
+          "end_sec": 64.62
+        },
+        {
+          "text": "về",
+          "start_sec": 64.68,
+          "end_sec": 64.8
+        },
+        {
+          "text": "giá,",
+          "start_sec": 64.86,
+          "end_sec": 65.08
+        },
+        {
+          "text": "tuổi",
+          "start_sec": 65.44,
+          "end_sec": 65.6
+        },
+        {
+          "text": "thọ",
+          "start_sec": 65.64,
+          "end_sec": 65.9
+        },
+        {
+          "text": "và",
+          "start_sec": 65.96,
+          "end_sec": 66.08
+        },
+        {
+          "text": "chu",
+          "start_sec": 66.12,
+          "end_sec": 66.28
+        },
+        {
+          "text": "kỳ",
+          "start_sec": 66.34,
+          "end_sec": 66.52
+        },
+        {
+          "text": "ép",
+          "start_sec": 66.6,
+          "end_sec": 66.72
+        },
+        {
+          "text": "không?",
+          "start_sec": 66.74,
+          "end_sec": 66.9
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 67.82,
+      "end_sec": 71.34,
+      "text": "네, A안은 한양금형 견적으로 48,000달러입니다.",
+      "words": [
+        {
+          "text": "네,",
+          "start_sec": 67.82,
+          "end_sec": 67.9
+        },
+        {
+          "text": "A안은",
+          "start_sec": 68.18,
+          "end_sec": 68.64
+        },
+        {
+          "text": "한양금형",
+          "start_sec": 68.74,
+          "end_sec": 69.26
+        },
+        {
+          "text": "견적으로",
+          "start_sec": 69.44,
+          "end_sec": 70.02
+        },
+        {
+          "text": "48,000달러입니다.",
+          "start_sec": 70.08,
+          "end_sec": 71.34
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 72.38,
+      "end_sec": 76.12,
+      "text": "P20 강재를 사용하고 예상 수명은 30만 회 사출입니다.",
+      "words": [
+        {
+          "text": "P20",
+          "start_sec": 72.38,
+          "end_sec": 72.78
+        },
+        {
+          "text": "강재를",
+          "start_sec": 72.92,
+          "end_sec": 73.2
+        },
+        {
+          "text": "사용하고",
+          "start_sec": 73.32,
+          "end_sec": 73.8
+        },
+        {
+          "text": "예상",
+          "start_sec": 73.92,
+          "end_sec": 74.16
+        },
+        {
+          "text": "수명은",
+          "start_sec": 74.24,
+          "end_sec": 74.8
+        },
+        {
+          "text": "30만",
+          "start_sec": 75,
+          "end_sec": 75.28
+        },
+        {
+          "text": "회",
+          "start_sec": 75.36,
+          "end_sec": 75.42
+        },
+        {
+          "text": "사출입니다.",
+          "start_sec": 75.52,
+          "end_sec": 76.12
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 77.12,
+      "end_sec": 79.76,
+      "text": "FP20 triệu được chi tiết hộc tủ thành mỏng không?",
+      "words": [
+        {
+          "text": "FP20",
+          "start_sec": 77.12,
+          "end_sec": 77.86
+        },
+        {
+          "text": "triệu",
+          "start_sec": 77.88,
+          "end_sec": 78.12
+        },
+        {
+          "text": "được",
+          "start_sec": 78.18,
+          "end_sec": 78.3
+        },
+        {
+          "text": "chi",
+          "start_sec": 78.34,
+          "end_sec": 78.48
+        },
+        {
+          "text": "tiết",
+          "start_sec": 78.54,
+          "end_sec": 78.7
+        },
+        {
+          "text": "hộc",
+          "start_sec": 78.74,
+          "end_sec": 78.9
+        },
+        {
+          "text": "tủ",
+          "start_sec": 78.94,
+          "end_sec": 79.1
+        },
+        {
+          "text": "thành",
+          "start_sec": 79.14,
+          "end_sec": 79.32
+        },
+        {
+          "text": "mỏng",
+          "start_sec": 79.36,
+          "end_sec": 79.56
+        },
+        {
+          "text": "không?",
+          "start_sec": 79.6,
+          "end_sec": 79.76
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 80.72,
+      "end_sec": 83.46,
+      "text": "Chúng tôi lo độ bóng bề mặt sau 200.000 lần ép.",
+      "words": [
+        {
+          "text": "Chúng",
+          "start_sec": 80.72,
+          "end_sec": 80.86
+        },
+        {
+          "text": "tôi",
+          "start_sec": 80.92,
+          "end_sec": 81.08
+        },
+        {
+          "text": "lo",
+          "start_sec": 81.16,
+          "end_sec": 81.3
+        },
+        {
+          "text": "độ",
+          "start_sec": 81.36,
+          "end_sec": 81.5
+        },
+        {
+          "text": "bóng",
+          "start_sec": 81.54,
+          "end_sec": 81.72
+        },
+        {
+          "text": "bề",
+          "start_sec": 81.78,
+          "end_sec": 81.9
+        },
+        {
+          "text": "mặt",
+          "start_sec": 81.96,
+          "end_sec": 82.14
+        },
+        {
+          "text": "sau",
+          "start_sec": 82.22,
+          "end_sec": 82.38
+        },
+        {
+          "text": "200.000",
+          "start_sec": 82.58,
+          "end_sec": 82.98
+        },
+        {
+          "text": "lần",
+          "start_sec": 83.06,
+          "end_sec": 83.24
+        },
+        {
+          "text": "ép.",
+          "start_sec": 83.32,
+          "end_sec": 83.46
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 84.28,
+      "end_sec": 89.56,
+      "text": "P20은 일반적인 선택이지만 제품 벽이 얇으면 광택이 조금 떨어질 수 있습니다.",
+      "words": [
+        {
+          "text": "P20은",
+          "start_sec": 84.28,
+          "end_sec": 85.08
+        },
+        {
+          "text": "일반적인",
+          "start_sec": 85.2,
+          "end_sec": 85.66
+        },
+        {
+          "text": "선택이지만",
+          "start_sec": 85.8,
+          "end_sec": 86.38
+        },
+        {
+          "text": "제품",
+          "start_sec": 86.5,
+          "end_sec": 86.74
+        },
+        {
+          "text": "벽이",
+          "start_sec": 86.9,
+          "end_sec": 87
+        },
+        {
+          "text": "얇으면",
+          "start_sec": 87.12,
+          "end_sec": 87.78
+        },
+        {
+          "text": "광택이",
+          "start_sec": 87.96,
+          "end_sec": 88.24
+        },
+        {
+          "text": "조금",
+          "start_sec": 88.36,
+          "end_sec": 88.56
+        },
+        {
+          "text": "떨어질",
+          "start_sec": 88.7,
+          "end_sec": 88.94
+        },
+        {
+          "text": "수",
+          "start_sec": 89.02,
+          "end_sec": 89.06
+        },
+        {
+          "text": "있습니다.",
+          "start_sec": 89.18,
+          "end_sec": 89.56
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 91.14,
+      "end_sec": 93.9,
+      "text": "더 좋은 강재를 원하시면 B안을 추천합니다.",
+      "words": [
+        {
+          "text": "더",
+          "start_sec": 91.14,
+          "end_sec": 91.28
+        },
+        {
+          "text": "좋은",
+          "start_sec": 91.42,
+          "end_sec": 91.64
+        },
+        {
+          "text": "강재를",
+          "start_sec": 91.8,
+          "end_sec": 92.08
+        },
+        {
+          "text": "원하시면",
+          "start_sec": 92.18,
+          "end_sec": 92.78
+        },
+        {
+          "text": "B안을",
+          "start_sec": 92.84,
+          "end_sec": 93.24
+        },
+        {
+          "text": "추천합니다.",
+          "start_sec": 93.32,
+          "end_sec": 93.9
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 95.14,
+      "end_sec": 103.58,
+      "text": "Option B uses S136 stainless steel with a lifetime of about 500,000 shots, so the surface stays glossy much longer.",
+      "words": [
+        {
+          "text": "Option",
+          "start_sec": 95.14,
+          "end_sec": 95.44
+        },
+        {
+          "text": "B",
+          "start_sec": 95.5,
+          "end_sec": 95.6
+        },
+        {
+          "text": "uses",
+          "start_sec": 95.68,
+          "end_sec": 95.98
+        },
+        {
+          "text": "S136",
+          "start_sec": 96.14,
+          "end_sec": 96.98
+        },
+        {
+          "text": "stainless",
+          "start_sec": 97.06,
+          "end_sec": 97.56
+        },
+        {
+          "text": "steel",
+          "start_sec": 97.68,
+          "end_sec": 97.84
+        },
+        {
+          "text": "with",
+          "start_sec": 97.9,
+          "end_sec": 98.12
+        },
+        {
+          "text": "a",
+          "start_sec": 98.22,
+          "end_sec": 98.36
+        },
+        {
+          "text": "lifetime",
+          "start_sec": 98.4,
+          "end_sec": 99.12
+        },
+        {
+          "text": "of",
+          "start_sec": 99.22,
+          "end_sec": 99.38
+        },
+        {
+          "text": "about",
+          "start_sec": 99.46,
+          "end_sec": 99.76
+        },
+        {
+          "text": "500,000",
+          "start_sec": 99.88,
+          "end_sec": 100.2
+        },
+        {
+          "text": "shots,",
+          "start_sec": 100.24,
+          "end_sec": 100.64
+        },
+        {
+          "text": "so",
+          "start_sec": 101.08,
+          "end_sec": 101.18
+        },
+        {
+          "text": "the",
+          "start_sec": 101.24,
+          "end_sec": 101.36
+        },
+        {
+          "text": "surface",
+          "start_sec": 101.44,
+          "end_sec": 101.82
+        },
+        {
+          "text": "stays",
+          "start_sec": 102.04,
+          "end_sec": 102.38
+        },
+        {
+          "text": "glossy",
+          "start_sec": 102.42,
+          "end_sec": 102.86
+        },
+        {
+          "text": "much",
+          "start_sec": 102.92,
+          "end_sec": 103.2
+        },
+        {
+          "text": "longer.",
+          "start_sec": 103.24,
+          "end_sec": 103.58
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 104.34,
+      "end_sec": 107.04,
+      "text": "Giá phương án B là bao nhiêu và khác A ở điểm nào?",
+      "words": [
+        {
+          "text": "Giá",
+          "start_sec": 104.34,
+          "end_sec": 104.52
+        },
+        {
+          "text": "phương",
+          "start_sec": 104.56,
+          "end_sec": 104.76
+        },
+        {
+          "text": "án",
+          "start_sec": 104.84,
+          "end_sec": 104.96
+        },
+        {
+          "text": "B",
+          "start_sec": 105.02,
+          "end_sec": 105.22
+        },
+        {
+          "text": "là",
+          "start_sec": 105.3,
+          "end_sec": 105.42
+        },
+        {
+          "text": "bao",
+          "start_sec": 105.46,
+          "end_sec": 105.64
+        },
+        {
+          "text": "nhiêu",
+          "start_sec": 105.7,
+          "end_sec": 105.92
+        },
+        {
+          "text": "và",
+          "start_sec": 105.98,
+          "end_sec": 106.08
+        },
+        {
+          "text": "khác",
+          "start_sec": 106.12,
+          "end_sec": 106.3
+        },
+        {
+          "text": "A",
+          "start_sec": 106.38,
+          "end_sec": 106.5
+        },
+        {
+          "text": "ở",
+          "start_sec": 106.58,
+          "end_sec": 106.62
+        },
+        {
+          "text": "điểm",
+          "start_sec": 106.66,
+          "end_sec": 106.82
+        },
+        {
+          "text": "nào?",
+          "start_sec": 106.88,
+          "end_sec": 107.04
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 108.28,
+      "end_sec": 110.54,
+      "text": "B안 견적은 52,000달러입니다.",
+      "words": [
+        {
+          "text": "B안",
+          "start_sec": 108.28,
+          "end_sec": 108.54
+        },
+        {
+          "text": "견적은",
+          "start_sec": 108.7,
+          "end_sec": 109.2
+        },
+        {
+          "text": "52,000달러입니다.",
+          "start_sec": 109.38,
+          "end_sec": 110.54
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 111.62,
+      "end_sec": 116.94,
+      "text": "A안보다 4,000달러 높지만 수명이 약 20만 회 더 길고 유지보수가 적습니다.",
+      "words": [
+        {
+          "text": "A안보다",
+          "start_sec": 111.62,
+          "end_sec": 112.12
+        },
+        {
+          "text": "4,000달러",
+          "start_sec": 112.18,
+          "end_sec": 112.7
+        },
+        {
+          "text": "높지만",
+          "start_sec": 112.86,
+          "end_sec": 113.52
+        },
+        {
+          "text": "수명이",
+          "start_sec": 113.64,
+          "end_sec": 113.98
+        },
+        {
+          "text": "약",
+          "start_sec": 114.12,
+          "end_sec": 114.18
+        },
+        {
+          "text": "20만",
+          "start_sec": 114.28,
+          "end_sec": 114.58
+        },
+        {
+          "text": "회",
+          "start_sec": 114.66,
+          "end_sec": 114.72
+        },
+        {
+          "text": "더",
+          "start_sec": 114.8,
+          "end_sec": 114.9
+        },
+        {
+          "text": "길고",
+          "start_sec": 115.12,
+          "end_sec": 115.62
+        },
+        {
+          "text": "유지보수가",
+          "start_sec": 115.74,
+          "end_sec": 116.34
+        },
+        {
+          "text": "적습니다.",
+          "start_sec": 116.52,
+          "end_sec": 116.94
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 117.82,
+      "end_sec": 119.86,
+      "text": "Còn phương án C có đáng quan tâm không?",
+      "words": [
+        {
+          "text": "Còn",
+          "start_sec": 117.82,
+          "end_sec": 118
+        },
+        {
+          "text": "phương",
+          "start_sec": 118.06,
+          "end_sec": 118.28
+        },
+        {
+          "text": "án",
+          "start_sec": 118.34,
+          "end_sec": 118.48
+        },
+        {
+          "text": "C",
+          "start_sec": 118.56,
+          "end_sec": 118.8
+        },
+        {
+          "text": "có",
+          "start_sec": 118.84,
+          "end_sec": 118.96
+        },
+        {
+          "text": "đáng",
+          "start_sec": 119.02,
+          "end_sec": 119.2
+        },
+        {
+          "text": "quan",
+          "start_sec": 119.24,
+          "end_sec": 119.42
+        },
+        {
+          "text": "tâm",
+          "start_sec": 119.48,
+          "end_sec": 119.64
+        },
+        {
+          "text": "không?",
+          "start_sec": 119.7,
+          "end_sec": 119.86
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 120.84,
+      "end_sec": 122.66,
+      "text": "Nghe nói chu kỳ ép nhanh hơn hẳn.",
+      "words": [
+        {
+          "text": "Nghe",
+          "start_sec": 120.84,
+          "end_sec": 120.98
+        },
+        {
+          "text": "nói",
+          "start_sec": 121.06,
+          "end_sec": 121.26
+        },
+        {
+          "text": "chu",
+          "start_sec": 121.3,
+          "end_sec": 121.44
+        },
+        {
+          "text": "kỳ",
+          "start_sec": 121.5,
+          "end_sec": 121.7
+        },
+        {
+          "text": "ép",
+          "start_sec": 121.76,
+          "end_sec": 121.9
+        },
+        {
+          "text": "nhanh",
+          "start_sec": 121.94,
+          "end_sec": 122.16
+        },
+        {
+          "text": "hơn",
+          "start_sec": 122.24,
+          "end_sec": 122.38
+        },
+        {
+          "text": "hẳn.",
+          "start_sec": 122.44,
+          "end_sec": 122.66
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 123.68,
+      "end_sec": 132.76,
+      "text": "C안은 61,000달러이고 conformal cooling channel이 적용되어 사출 사이클이 24초에서 20.4초로 약 15% 단축됩니다.",
+      "words": [
+        {
+          "text": "C안은",
+          "start_sec": 123.68,
+          "end_sec": 124.12
+        },
+        {
+          "text": "61,000달러이고",
+          "start_sec": 124.16,
+          "end_sec": 125.36
+        },
+        {
+          "text": "conformal",
+          "start_sec": 125.42,
+          "end_sec": 125.88
+        },
+        {
+          "text": "cooling",
+          "start_sec": 125.94,
+          "end_sec": 126.2
+        },
+        {
+          "text": "channel이",
+          "start_sec": 126.26,
+          "end_sec": 126.58
+        },
+        {
+          "text": "적용되어",
+          "start_sec": 126.7,
+          "end_sec": 127.42
+        },
+        {
+          "text": "사출",
+          "start_sec": 127.54,
+          "end_sec": 127.76
+        },
+        {
+          "text": "사이클이",
+          "start_sec": 127.86,
+          "end_sec": 128.479
+        },
+        {
+          "text": "24초에서",
+          "start_sec": 128.62,
+          "end_sec": 129.5
+        },
+        {
+          "text": "20.4초로",
+          "start_sec": 129.6,
+          "end_sec": 130.44
+        },
+        {
+          "text": "약",
+          "start_sec": 131.14,
+          "end_sec": 131.18
+        },
+        {
+          "text": "15%",
+          "start_sec": 131.22,
+          "end_sec": 132.02
+        },
+        {
+          "text": "단축됩니다.",
+          "start_sec": 132.16,
+          "end_sec": 132.76
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 133.38,
+      "end_sec": 134.82,
+      "text": "Ngân sách đợt đầu có hạn.",
+      "words": [
+        {
+          "text": "Ngân",
+          "start_sec": 133.38,
+          "end_sec": 133.56
+        },
+        {
+          "text": "sách",
+          "start_sec": 133.64,
+          "end_sec": 133.8
+        },
+        {
+          "text": "đợt",
+          "start_sec": 133.86,
+          "end_sec": 134.02
+        },
+        {
+          "text": "đầu",
+          "start_sec": 134.08,
+          "end_sec": 134.3
+        },
+        {
+          "text": "có",
+          "start_sec": 134.36,
+          "end_sec": 134.48
+        },
+        {
+          "text": "hạn.",
+          "start_sec": 134.54,
+          "end_sec": 134.82
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 135.7,
+      "end_sec": 140.06,
+      "text": "Phương án A của Hanyang Mold là lựa chọn hợp lý nhất cho bộ hai khuôn hộc tủ.",
+      "words": [
+        {
+          "text": "Phương",
+          "start_sec": 135.7,
+          "end_sec": 135.92
+        },
+        {
+          "text": "án",
+          "start_sec": 136,
+          "end_sec": 136.14
+        },
+        {
+          "text": "A",
+          "start_sec": 136.26,
+          "end_sec": 136.38
+        },
+        {
+          "text": "của",
+          "start_sec": 136.46,
+          "end_sec": 136.62
+        },
+        {
+          "text": "Hanyang",
+          "start_sec": 136.66,
+          "end_sec": 137.08
+        },
+        {
+          "text": "Mold",
+          "start_sec": 137.14,
+          "end_sec": 137.5
+        },
+        {
+          "text": "là",
+          "start_sec": 137.58,
+          "end_sec": 137.7
+        },
+        {
+          "text": "lựa",
+          "start_sec": 137.76,
+          "end_sec": 137.88
+        },
+        {
+          "text": "chọn",
+          "start_sec": 137.94,
+          "end_sec": 138.1
+        },
+        {
+          "text": "hợp",
+          "start_sec": 138.16,
+          "end_sec": 138.32
+        },
+        {
+          "text": "lý",
+          "start_sec": 138.36,
+          "end_sec": 138.46
+        },
+        {
+          "text": "nhất",
+          "start_sec": 138.5,
+          "end_sec": 138.7
+        },
+        {
+          "text": "cho",
+          "start_sec": 138.76,
+          "end_sec": 138.92
+        },
+        {
+          "text": "bộ",
+          "start_sec": 138.98,
+          "end_sec": 139.14
+        },
+        {
+          "text": "hai",
+          "start_sec": 139.2,
+          "end_sec": 139.38
+        },
+        {
+          "text": "khuôn",
+          "start_sec": 139.42,
+          "end_sec": 139.58
+        },
+        {
+          "text": "hộc",
+          "start_sec": 139.64,
+          "end_sec": 139.8
+        },
+        {
+          "text": "tủ.",
+          "start_sec": 139.84,
+          "end_sec": 140.06
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 141.04,
+      "end_sec": 141.72,
+      "text": "Thank you both.",
+      "words": [
+        {
+          "text": "Thank",
+          "start_sec": 141.04,
+          "end_sec": 141.24
+        },
+        {
+          "text": "you",
+          "start_sec": 141.34,
+          "end_sec": 141.46
+        },
+        {
+          "text": "both.",
+          "start_sec": 141.5,
+          "end_sec": 141.72
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 142.76,
+      "end_sec": 149.72,
+      "text": "We would like to proceed with option A from Hanyang Mold, pending the shipping quotation. Vậy chúng ta sang phần đơn giá.",
+      "words": [
+        {
+          "text": "We",
+          "start_sec": 142.76,
+          "end_sec": 142.86
+        },
+        {
+          "text": "would",
+          "start_sec": 142.9,
+          "end_sec": 143.04
+        },
+        {
+          "text": "like",
+          "start_sec": 143.1,
+          "end_sec": 143.26
+        },
+        {
+          "text": "to",
+          "start_sec": 143.3,
+          "end_sec": 143.44
+        },
+        {
+          "text": "proceed",
+          "start_sec": 143.48,
+          "end_sec": 143.88
+        },
+        {
+          "text": "with",
+          "start_sec": 143.92,
+          "end_sec": 144.08
+        },
+        {
+          "text": "option",
+          "start_sec": 144.16,
+          "end_sec": 144.52
+        },
+        {
+          "text": "A",
+          "start_sec": 144.58,
+          "end_sec": 144.66
+        },
+        {
+          "text": "from",
+          "start_sec": 144.72,
+          "end_sec": 145.02
+        },
+        {
+          "text": "Hanyang",
+          "start_sec": 145.1,
+          "end_sec": 145.48
+        },
+        {
+          "text": "Mold,",
+          "start_sec": 145.56,
+          "end_sec": 145.76
+        },
+        {
+          "text": "pending",
+          "start_sec": 146.08,
+          "end_sec": 146.42
+        },
+        {
+          "text": "the",
+          "start_sec": 146.46,
+          "end_sec": 146.6
+        },
+        {
+          "text": "shipping",
+          "start_sec": 146.64,
+          "end_sec": 147
+        },
+        {
+          "text": "quotation.",
+          "start_sec": 147.04,
+          "end_sec": 147.58
+        },
+        {
+          "text": "Vậy",
+          "start_sec": 148.12,
+          "end_sec": 148.26
+        },
+        {
+          "text": "chúng",
+          "start_sec": 148.32,
+          "end_sec": 148.48
+        },
+        {
+          "text": "ta",
+          "start_sec": 148.52,
+          "end_sec": 148.72
+        },
+        {
+          "text": "sang",
+          "start_sec": 148.8,
+          "end_sec": 148.98
+        },
+        {
+          "text": "phần",
+          "start_sec": 149.02,
+          "end_sec": 149.2
+        },
+        {
+          "text": "đơn",
+          "start_sec": 149.26,
+          "end_sec": 149.42
+        },
+        {
+          "text": "giá.",
+          "start_sec": 149.46,
+          "end_sec": 149.72
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 150.88,
+      "end_sec": 154.4,
+      "text": "Mức 2,35 đô la Mỹ có áp dụng cho toàn bộ đợt đầu không?",
+      "words": [
+        {
+          "text": "Mức",
+          "start_sec": 150.88,
+          "end_sec": 151.04
+        },
+        {
+          "text": "2,35",
+          "start_sec": 151.08,
+          "end_sec": 152
+        },
+        {
+          "text": "đô",
+          "start_sec": 152.08,
+          "end_sec": 152.18
+        },
+        {
+          "text": "la",
+          "start_sec": 152.24,
+          "end_sec": 152.34
+        },
+        {
+          "text": "Mỹ",
+          "start_sec": 152.42,
+          "end_sec": 152.64
+        },
+        {
+          "text": "có",
+          "start_sec": 152.7,
+          "end_sec": 152.78
+        },
+        {
+          "text": "áp",
+          "start_sec": 152.84,
+          "end_sec": 152.98
+        },
+        {
+          "text": "dụng",
+          "start_sec": 153.04,
+          "end_sec": 153.24
+        },
+        {
+          "text": "cho",
+          "start_sec": 153.28,
+          "end_sec": 153.4
+        },
+        {
+          "text": "toàn",
+          "start_sec": 153.44,
+          "end_sec": 153.62
+        },
+        {
+          "text": "bộ",
+          "start_sec": 153.68,
+          "end_sec": 153.82
+        },
+        {
+          "text": "đợt",
+          "start_sec": 153.86,
+          "end_sec": 153.98
+        },
+        {
+          "text": "đầu",
+          "start_sec": 154.04,
+          "end_sec": 154.18
+        },
+        {
+          "text": "không?",
+          "start_sec": 154.22,
+          "end_sec": 154.4
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 155.64,
+      "end_sec": 160.94,
+      "text": "네, 단가는 개당 2.35달러이며 최소 주문 수량 2만 개 기준 가격입니다.",
+      "words": [
+        {
+          "text": "네,",
+          "start_sec": 155.64,
+          "end_sec": 155.72
+        },
+        {
+          "text": "단가는",
+          "start_sec": 156.3,
+          "end_sec": 156.72
+        },
+        {
+          "text": "개당",
+          "start_sec": 156.86,
+          "end_sec": 157.06
+        },
+        {
+          "text": "2.35달러이며",
+          "start_sec": 157.18,
+          "end_sec": 158.64
+        },
+        {
+          "text": "최소",
+          "start_sec": 158.78,
+          "end_sec": 158.98
+        },
+        {
+          "text": "주문",
+          "start_sec": 159.06,
+          "end_sec": 159.26
+        },
+        {
+          "text": "수량",
+          "start_sec": 159.36,
+          "end_sec": 159.54
+        },
+        {
+          "text": "2만",
+          "start_sec": 159.62,
+          "end_sec": 159.82
+        },
+        {
+          "text": "개",
+          "start_sec": 159.94,
+          "end_sec": 160
+        },
+        {
+          "text": "기준",
+          "start_sec": 160.1,
+          "end_sec": 160.32
+        },
+        {
+          "text": "가격입니다.",
+          "start_sec": 160.44,
+          "end_sec": 160.94
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 165.9,
+      "end_sec": 169.86,
+      "text": "MOQ 20.000 có thể tách thành nhiều lần giao không hay phải giao một lần?",
+      "words": [
+        {
+          "text": "MOQ",
+          "start_sec": 165.9,
+          "end_sec": 166.34
+        },
+        {
+          "text": "20.000",
+          "start_sec": 166.5,
+          "end_sec": 166.94
+        },
+        {
+          "text": "có",
+          "start_sec": 167,
+          "end_sec": 167.1
+        },
+        {
+          "text": "thể",
+          "start_sec": 167.14,
+          "end_sec": 167.3
+        },
+        {
+          "text": "tách",
+          "start_sec": 167.36,
+          "end_sec": 167.5
+        },
+        {
+          "text": "thành",
+          "start_sec": 167.54,
+          "end_sec": 167.68
+        },
+        {
+          "text": "nhiều",
+          "start_sec": 167.72,
+          "end_sec": 167.88
+        },
+        {
+          "text": "lần",
+          "start_sec": 167.92,
+          "end_sec": 168.08
+        },
+        {
+          "text": "giao",
+          "start_sec": 168.12,
+          "end_sec": 168.3
+        },
+        {
+          "text": "không",
+          "start_sec": 168.34,
+          "end_sec": 168.54
+        },
+        {
+          "text": "hay",
+          "start_sec": 168.88,
+          "end_sec": 169.02
+        },
+        {
+          "text": "phải",
+          "start_sec": 169.06,
+          "end_sec": 169.22
+        },
+        {
+          "text": "giao",
+          "start_sec": 169.26,
+          "end_sec": 169.44
+        },
+        {
+          "text": "một",
+          "start_sec": 169.5,
+          "end_sec": 169.64
+        },
+        {
+          "text": "lần?",
+          "start_sec": 169.7,
+          "end_sec": 169.86
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 170.78,
+      "end_sec": 172.76,
+      "text": "두 번으로 나눠 배송할 수 있습니다.",
+      "words": [
+        {
+          "text": "두",
+          "start_sec": 170.78,
+          "end_sec": 170.86
+        },
+        {
+          "text": "번으로",
+          "start_sec": 171.04,
+          "end_sec": 171.36
+        },
+        {
+          "text": "나눠",
+          "start_sec": 171.5,
+          "end_sec": 171.7
+        },
+        {
+          "text": "배송할",
+          "start_sec": 171.82,
+          "end_sec": 172.12
+        },
+        {
+          "text": "수",
+          "start_sec": 172.2,
+          "end_sec": 172.24
+        },
+        {
+          "text": "있습니다.",
+          "start_sec": 172.36,
+          "end_sec": 172.76
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 174.3,
+      "end_sec": 178.28,
+      "text": "12,000개와 8,000개로 나누고 배송비는 각각 계산됩니다.",
+      "words": [
+        {
+          "text": "12,000개와",
+          "start_sec": 174.3,
+          "end_sec": 175.26
+        },
+        {
+          "text": "8,000개로",
+          "start_sec": 175.32,
+          "end_sec": 175.88
+        },
+        {
+          "text": "나누고",
+          "start_sec": 176,
+          "end_sec": 176.32
+        },
+        {
+          "text": "배송비는",
+          "start_sec": 176.46,
+          "end_sec": 177.18
+        },
+        {
+          "text": "각각",
+          "start_sec": 177.32,
+          "end_sec": 177.52
+        },
+        {
+          "text": "계산됩니다.",
+          "start_sec": 177.66,
+          "end_sec": 178.28
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 182.76,
+      "end_sec": 187.64,
+      "text": "Đơn giá 2,35 đô la Mỹ đã gồm bao bì xuất khẩu và kiểm tra lần đầu, đúng không ạ?",
+      "words": [
+        {
+          "text": "Đơn",
+          "start_sec": 182.76,
+          "end_sec": 182.92
+        },
+        {
+          "text": "giá",
+          "start_sec": 182.98,
+          "end_sec": 183.14
+        },
+        {
+          "text": "2,35",
+          "start_sec": 183.32,
+          "end_sec": 184.06
+        },
+        {
+          "text": "đô",
+          "start_sec": 184.1,
+          "end_sec": 184.22
+        },
+        {
+          "text": "la",
+          "start_sec": 184.26,
+          "end_sec": 184.38
+        },
+        {
+          "text": "Mỹ",
+          "start_sec": 184.46,
+          "end_sec": 184.66
+        },
+        {
+          "text": "đã",
+          "start_sec": 184.72,
+          "end_sec": 184.8
+        },
+        {
+          "text": "gồm",
+          "start_sec": 184.86,
+          "end_sec": 185.08
+        },
+        {
+          "text": "bao",
+          "start_sec": 185.14,
+          "end_sec": 185.28
+        },
+        {
+          "text": "bì",
+          "start_sec": 185.34,
+          "end_sec": 185.44
+        },
+        {
+          "text": "xuất",
+          "start_sec": 185.5,
+          "end_sec": 185.6
+        },
+        {
+          "text": "khẩu",
+          "start_sec": 185.64,
+          "end_sec": 185.88
+        },
+        {
+          "text": "và",
+          "start_sec": 185.94,
+          "end_sec": 186.04
+        },
+        {
+          "text": "kiểm",
+          "start_sec": 186.08,
+          "end_sec": 186.24
+        },
+        {
+          "text": "tra",
+          "start_sec": 186.28,
+          "end_sec": 186.4
+        },
+        {
+          "text": "lần",
+          "start_sec": 186.46,
+          "end_sec": 186.58
+        },
+        {
+          "text": "đầu,",
+          "start_sec": 186.62,
+          "end_sec": 186.76
+        },
+        {
+          "text": "đúng",
+          "start_sec": 187.12,
+          "end_sec": 187.26
+        },
+        {
+          "text": "không",
+          "start_sec": 187.3,
+          "end_sec": 187.48
+        },
+        {
+          "text": "ạ?",
+          "start_sec": 187.56,
+          "end_sec": 187.64
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 188.88,
+      "end_sec": 197.76,
+      "text": "Correct. The 2.35 US dollar per unit includes export packaging and first inspection. Freight and import duties are excluded.",
+      "words": [
+        {
+          "text": "Correct.",
+          "start_sec": 188.88,
+          "end_sec": 189.38
+        },
+        {
+          "text": "The",
+          "start_sec": 189.66,
+          "end_sec": 189.8
+        },
+        {
+          "text": "2.35",
+          "start_sec": 189.92,
+          "end_sec": 190.46
+        },
+        {
+          "text": "US",
+          "start_sec": 190.54,
+          "end_sec": 190.82
+        },
+        {
+          "text": "dollar",
+          "start_sec": 190.88,
+          "end_sec": 191.2
+        },
+        {
+          "text": "per",
+          "start_sec": 191.26,
+          "end_sec": 191.48
+        },
+        {
+          "text": "unit",
+          "start_sec": 191.56,
+          "end_sec": 191.9
+        },
+        {
+          "text": "includes",
+          "start_sec": 192,
+          "end_sec": 192.5
+        },
+        {
+          "text": "export",
+          "start_sec": 192.6,
+          "end_sec": 193.12
+        },
+        {
+          "text": "packaging",
+          "start_sec": 193.18,
+          "end_sec": 193.58
+        },
+        {
+          "text": "and",
+          "start_sec": 193.62,
+          "end_sec": 193.72
+        },
+        {
+          "text": "first",
+          "start_sec": 193.9,
+          "end_sec": 194.22
+        },
+        {
+          "text": "inspection.",
+          "start_sec": 194.28,
+          "end_sec": 194.96
+        },
+        {
+          "text": "Freight",
+          "start_sec": 195.2,
+          "end_sec": 195.46
+        },
+        {
+          "text": "and",
+          "start_sec": 195.52,
+          "end_sec": 195.68
+        },
+        {
+          "text": "import",
+          "start_sec": 195.8,
+          "end_sec": 196.24
+        },
+        {
+          "text": "duties",
+          "start_sec": 196.3,
+          "end_sec": 196.74
+        },
+        {
+          "text": "are",
+          "start_sec": 196.8,
+          "end_sec": 196.94
+        },
+        {
+          "text": "excluded.",
+          "start_sec": 196.98,
+          "end_sec": 197.76
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 198.72,
+      "end_sec": 201.56,
+      "text": "Nếu thêm màu thứ hai cho vỏ thì giá thay đổi thế nào?",
+      "words": [
+        {
+          "text": "Nếu",
+          "start_sec": 198.72,
+          "end_sec": 198.88
+        },
+        {
+          "text": "thêm",
+          "start_sec": 198.92,
+          "end_sec": 199.08
+        },
+        {
+          "text": "màu",
+          "start_sec": 199.14,
+          "end_sec": 199.32
+        },
+        {
+          "text": "thứ",
+          "start_sec": 199.36,
+          "end_sec": 199.54
+        },
+        {
+          "text": "hai",
+          "start_sec": 199.6,
+          "end_sec": 199.78
+        },
+        {
+          "text": "cho",
+          "start_sec": 199.84,
+          "end_sec": 199.96
+        },
+        {
+          "text": "vỏ",
+          "start_sec": 200.04,
+          "end_sec": 200.28
+        },
+        {
+          "text": "thì",
+          "start_sec": 200.32,
+          "end_sec": 200.48
+        },
+        {
+          "text": "giá",
+          "start_sec": 200.54,
+          "end_sec": 200.7
+        },
+        {
+          "text": "thay",
+          "start_sec": 200.74,
+          "end_sec": 200.92
+        },
+        {
+          "text": "đổi",
+          "start_sec": 200.98,
+          "end_sec": 201.16
+        },
+        {
+          "text": "thế",
+          "start_sec": 201.2,
+          "end_sec": 201.32
+        },
+        {
+          "text": "nào?",
+          "start_sec": 201.38,
+          "end_sec": 201.56
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 203,
+      "end_sec": 206.5,
+      "text": "색상을 하나 추가하면 개당 0.05달러가 추가됩니다.",
+      "words": [
+        {
+          "text": "색상을",
+          "start_sec": 203,
+          "end_sec": 203.28
+        },
+        {
+          "text": "하나",
+          "start_sec": 203.36,
+          "end_sec": 203.56
+        },
+        {
+          "text": "추가하면",
+          "start_sec": 203.68,
+          "end_sec": 204.34
+        },
+        {
+          "text": "개당",
+          "start_sec": 204.48,
+          "end_sec": 204.72
+        },
+        {
+          "text": "0.05달러가",
+          "start_sec": 204.9,
+          "end_sec": 205.8
+        },
+        {
+          "text": "추가됩니다.",
+          "start_sec": 205.92,
+          "end_sec": 206.5
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 207.6,
+      "end_sec": 210.32,
+      "text": "금형은 추가 비용 없이 게이트만 보완합니다.",
+      "words": [
+        {
+          "text": "금형은",
+          "start_sec": 207.6,
+          "end_sec": 207.98
+        },
+        {
+          "text": "추가",
+          "start_sec": 208.08,
+          "end_sec": 208.24
+        },
+        {
+          "text": "비용",
+          "start_sec": 208.34,
+          "end_sec": 208.5
+        },
+        {
+          "text": "없이",
+          "start_sec": 208.72,
+          "end_sec": 209.06
+        },
+        {
+          "text": "게이트만",
+          "start_sec": 209.18,
+          "end_sec": 209.66
+        },
+        {
+          "text": "보완합니다.",
+          "start_sec": 209.76,
+          "end_sec": 210.32
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 211.24,
+      "end_sec": 215.26,
+      "text": "Rõ. Chúng tôi ghi nhận phụ trội 0,05 USD cho màu thứ hai.",
+      "words": [
+        {
+          "text": "Rõ.",
+          "start_sec": 211.24,
+          "end_sec": 211.48
+        },
+        {
+          "text": "Chúng",
+          "start_sec": 211.8,
+          "end_sec": 211.94
+        },
+        {
+          "text": "tôi",
+          "start_sec": 212,
+          "end_sec": 212.16
+        },
+        {
+          "text": "ghi",
+          "start_sec": 212.2,
+          "end_sec": 212.32
+        },
+        {
+          "text": "nhận",
+          "start_sec": 212.38,
+          "end_sec": 212.6
+        },
+        {
+          "text": "phụ",
+          "start_sec": 212.64,
+          "end_sec": 212.78
+        },
+        {
+          "text": "trội",
+          "start_sec": 212.82,
+          "end_sec": 212.98
+        },
+        {
+          "text": "0,05",
+          "start_sec": 213.4,
+          "end_sec": 214.02
+        },
+        {
+          "text": "USD",
+          "start_sec": 214.08,
+          "end_sec": 214.42
+        },
+        {
+          "text": "cho",
+          "start_sec": 214.48,
+          "end_sec": 214.58
+        },
+        {
+          "text": "màu",
+          "start_sec": 214.64,
+          "end_sec": 214.8
+        },
+        {
+          "text": "thứ",
+          "start_sec": 214.84,
+          "end_sec": 214.98
+        },
+        {
+          "text": "hai.",
+          "start_sec": 215.04,
+          "end_sec": 215.26
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 216.7,
+      "end_sec": 222.66,
+      "text": "정리하면 단가 2.35달러, 최소 주문 2만 개, 두 차례 배송 가능입니다.",
+      "words": [
+        {
+          "text": "정리하면",
+          "start_sec": 216.7,
+          "end_sec": 217.24
+        },
+        {
+          "text": "단가",
+          "start_sec": 217.44,
+          "end_sec": 217.7
+        },
+        {
+          "text": "2.35달러,",
+          "start_sec": 217.82,
+          "end_sec": 218.72
+        },
+        {
+          "text": "최소",
+          "start_sec": 219.5,
+          "end_sec": 219.74
+        },
+        {
+          "text": "주문",
+          "start_sec": 219.86,
+          "end_sec": 220.08
+        },
+        {
+          "text": "2만",
+          "start_sec": 220.14,
+          "end_sec": 220.42
+        },
+        {
+          "text": "개,",
+          "start_sec": 220.54,
+          "end_sec": 220.56
+        },
+        {
+          "text": "두",
+          "start_sec": 221.32,
+          "end_sec": 221.38
+        },
+        {
+          "text": "차례",
+          "start_sec": 221.5,
+          "end_sec": 221.68
+        },
+        {
+          "text": "배송",
+          "start_sec": 221.8,
+          "end_sec": 222.02
+        },
+        {
+          "text": "가능입니다.",
+          "start_sec": 222.14,
+          "end_sec": 222.66
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 224.34,
+      "end_sec": 226.6,
+      "text": "견적표는 회의 후 보내드리겠습니다.",
+      "words": [
+        {
+          "text": "견적표는",
+          "start_sec": 224.34,
+          "end_sec": 224.9
+        },
+        {
+          "text": "회의",
+          "start_sec": 225.06,
+          "end_sec": 225.24
+        },
+        {
+          "text": "후",
+          "start_sec": 225.46,
+          "end_sec": 225.62
+        },
+        {
+          "text": "보내드리겠습니다.",
+          "start_sec": 225.74,
+          "end_sec": 226.6
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 227.68,
+      "end_sec": 229.46,
+      "text": "Phần quan trọng tiếp theo là tiến độ.",
+      "words": [
+        {
+          "text": "Phần",
+          "start_sec": 227.68,
+          "end_sec": 227.88
+        },
+        {
+          "text": "quan",
+          "start_sec": 227.92,
+          "end_sec": 228.1
+        },
+        {
+          "text": "trọng",
+          "start_sec": 228.14,
+          "end_sec": 228.38
+        },
+        {
+          "text": "tiếp",
+          "start_sec": 228.44,
+          "end_sec": 228.6
+        },
+        {
+          "text": "theo",
+          "start_sec": 228.64,
+          "end_sec": 228.84
+        },
+        {
+          "text": "là",
+          "start_sec": 228.9,
+          "end_sec": 229.02
+        },
+        {
+          "text": "tiến",
+          "start_sec": 229.08,
+          "end_sec": 229.24
+        },
+        {
+          "text": "độ.",
+          "start_sec": 229.28,
+          "end_sec": 229.46
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 230.54,
+      "end_sec": 232.82,
+      "text": "Ông Park có thể cam kết lead time chính xác không?",
+      "words": [
+        {
+          "text": "Ông",
+          "start_sec": 230.54,
+          "end_sec": 230.7
+        },
+        {
+          "text": "Park",
+          "start_sec": 230.74,
+          "end_sec": 230.94
+        },
+        {
+          "text": "có",
+          "start_sec": 230.98,
+          "end_sec": 231.04
+        },
+        {
+          "text": "thể",
+          "start_sec": 231.08,
+          "end_sec": 231.22
+        },
+        {
+          "text": "cam",
+          "start_sec": 231.3,
+          "end_sec": 231.48
+        },
+        {
+          "text": "kết",
+          "start_sec": 231.54,
+          "end_sec": 231.7
+        },
+        {
+          "text": "lead",
+          "start_sec": 231.74,
+          "end_sec": 231.9
+        },
+        {
+          "text": "time",
+          "start_sec": 231.96,
+          "end_sec": 232.18
+        },
+        {
+          "text": "chính",
+          "start_sec": 232.24,
+          "end_sec": 232.42
+        },
+        {
+          "text": "xác",
+          "start_sec": 232.5,
+          "end_sec": 232.62
+        },
+        {
+          "text": "không?",
+          "start_sec": 232.66,
+          "end_sec": 232.82
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 233.7,
+      "end_sec": 235.14,
+      "text": "샘플 승인 후 8주입니다.",
+      "words": [
+        {
+          "text": "샘플",
+          "start_sec": 233.7,
+          "end_sec": 233.96
+        },
+        {
+          "text": "승인",
+          "start_sec": 234.1,
+          "end_sec": 234.24
+        },
+        {
+          "text": "후",
+          "start_sec": 234.34,
+          "end_sec": 234.42
+        },
+        {
+          "text": "8주입니다.",
+          "start_sec": 234.48,
+          "end_sec": 235.14
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 236.76,
+      "end_sec": 242.56,
+      "text": "금형 가공 3주, T1 샘플 1주, 수정과 생산 준비 4주로 구성됩니다.",
+      "words": [
+        {
+          "text": "금형",
+          "start_sec": 236.76,
+          "end_sec": 236.96
+        },
+        {
+          "text": "가공",
+          "start_sec": 237.1,
+          "end_sec": 237.32
+        },
+        {
+          "text": "3주,",
+          "start_sec": 237.52,
+          "end_sec": 237.74
+        },
+        {
+          "text": "T1",
+          "start_sec": 238.44,
+          "end_sec": 238.72
+        },
+        {
+          "text": "샘플",
+          "start_sec": 238.88,
+          "end_sec": 239.12
+        },
+        {
+          "text": "1주,",
+          "start_sec": 239.26,
+          "end_sec": 239.52
+        },
+        {
+          "text": "수정과",
+          "start_sec": 240.32,
+          "end_sec": 240.68
+        },
+        {
+          "text": "생산",
+          "start_sec": 240.84,
+          "end_sec": 241.06
+        },
+        {
+          "text": "준비",
+          "start_sec": 241.2,
+          "end_sec": 241.38
+        },
+        {
+          "text": "4주로",
+          "start_sec": 241.5,
+          "end_sec": 241.84
+        },
+        {
+          "text": "구성됩니다.",
+          "start_sec": 241.96,
+          "end_sec": 242.56
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 243.38,
+      "end_sec": 247.38,
+      "text": "Tuần thứ tư chạy thử T1 thì chúng tôi có thể nhận mẫu thử bằng đường bay không?",
+      "words": [
+        {
+          "text": "Tuần",
+          "start_sec": 243.38,
+          "end_sec": 243.56
+        },
+        {
+          "text": "thứ",
+          "start_sec": 243.6,
+          "end_sec": 243.78
+        },
+        {
+          "text": "tư",
+          "start_sec": 243.84,
+          "end_sec": 244
+        },
+        {
+          "text": "chạy",
+          "start_sec": 244.08,
+          "end_sec": 244.24
+        },
+        {
+          "text": "thử",
+          "start_sec": 244.28,
+          "end_sec": 244.46
+        },
+        {
+          "text": "T1",
+          "start_sec": 244.52,
+          "end_sec": 244.94
+        },
+        {
+          "text": "thì",
+          "start_sec": 244.98,
+          "end_sec": 245.08
+        },
+        {
+          "text": "chúng",
+          "start_sec": 245.14,
+          "end_sec": 245.28
+        },
+        {
+          "text": "tôi",
+          "start_sec": 245.34,
+          "end_sec": 245.52
+        },
+        {
+          "text": "có",
+          "start_sec": 245.58,
+          "end_sec": 245.66
+        },
+        {
+          "text": "thể",
+          "start_sec": 245.7,
+          "end_sec": 245.84
+        },
+        {
+          "text": "nhận",
+          "start_sec": 245.9,
+          "end_sec": 246.08
+        },
+        {
+          "text": "mẫu",
+          "start_sec": 246.12,
+          "end_sec": 246.26
+        },
+        {
+          "text": "thử",
+          "start_sec": 246.3,
+          "end_sec": 246.52
+        },
+        {
+          "text": "bằng",
+          "start_sec": 246.58,
+          "end_sec": 246.74
+        },
+        {
+          "text": "đường",
+          "start_sec": 246.78,
+          "end_sec": 246.94
+        },
+        {
+          "text": "bay",
+          "start_sec": 246.98,
+          "end_sec": 247.16
+        },
+        {
+          "text": "không?",
+          "start_sec": 247.2,
+          "end_sec": 247.38
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 248.74,
+      "end_sec": 249.34,
+      "text": "가능합니다.",
+      "words": [
+        {
+          "text": "가능합니다.",
+          "start_sec": 248.74,
+          "end_sec": 249.34
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 250.38,
+      "end_sec": 253.34,
+      "text": "T1 샘플 5세트를 DHL로 보내드리겠습니다.",
+      "words": [
+        {
+          "text": "T1",
+          "start_sec": 250.38,
+          "end_sec": 250.66
+        },
+        {
+          "text": "샘플",
+          "start_sec": 250.82,
+          "end_sec": 251.02
+        },
+        {
+          "text": "5세트를",
+          "start_sec": 251.12,
+          "end_sec": 251.64
+        },
+        {
+          "text": "DHL로",
+          "start_sec": 251.7,
+          "end_sec": 252.36
+        },
+        {
+          "text": "보내드리겠습니다.",
+          "start_sec": 252.46,
+          "end_sec": 253.34
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 254.52,
+      "end_sec": 256.76,
+      "text": "왕복 배송비는 바이어 측 부담입니다.",
+      "words": [
+        {
+          "text": "왕복",
+          "start_sec": 254.52,
+          "end_sec": 254.72
+        },
+        {
+          "text": "배송비는",
+          "start_sec": 254.84,
+          "end_sec": 255.46
+        },
+        {
+          "text": "바이어",
+          "start_sec": 255.6,
+          "end_sec": 255.86
+        },
+        {
+          "text": "측",
+          "start_sec": 256.04,
+          "end_sec": 256.079
+        },
+        {
+          "text": "부담입니다.",
+          "start_sec": 256.18,
+          "end_sec": 256.76
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 257.62,
+      "end_sec": 261.04,
+      "text": "Nếu T1 cần chỉnh sửa thì ảnh hưởng bao nhiêu ngày tới chuỗi tám tuần?",
+      "words": [
+        {
+          "text": "Nếu",
+          "start_sec": 257.62,
+          "end_sec": 257.8
+        },
+        {
+          "text": "T1",
+          "start_sec": 257.88,
+          "end_sec": 258.2
+        },
+        {
+          "text": "cần",
+          "start_sec": 258.26,
+          "end_sec": 258.38
+        },
+        {
+          "text": "chỉnh",
+          "start_sec": 258.44,
+          "end_sec": 258.62
+        },
+        {
+          "text": "sửa",
+          "start_sec": 258.7,
+          "end_sec": 258.959
+        },
+        {
+          "text": "thì",
+          "start_sec": 259.019,
+          "end_sec": 259.16
+        },
+        {
+          "text": "ảnh",
+          "start_sec": 259.22,
+          "end_sec": 259.339
+        },
+        {
+          "text": "hưởng",
+          "start_sec": 259.38,
+          "end_sec": 259.579
+        },
+        {
+          "text": "bao",
+          "start_sec": 259.62,
+          "end_sec": 259.76
+        },
+        {
+          "text": "nhiêu",
+          "start_sec": 259.8,
+          "end_sec": 259.98
+        },
+        {
+          "text": "ngày",
+          "start_sec": 260.019,
+          "end_sec": 260.2
+        },
+        {
+          "text": "tới",
+          "start_sec": 260.26,
+          "end_sec": 260.399
+        },
+        {
+          "text": "chuỗi",
+          "start_sec": 260.44,
+          "end_sec": 260.62
+        },
+        {
+          "text": "tám",
+          "start_sec": 260.66,
+          "end_sec": 260.839
+        },
+        {
+          "text": "tuần?",
+          "start_sec": 260.899,
+          "end_sec": 261.04
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 262.42,
+      "end_sec": 265.54,
+      "text": "수정 범위가 일반적이면 일정에 영향이 없습니다.",
+      "words": [
+        {
+          "text": "수정",
+          "start_sec": 262.42,
+          "end_sec": 262.66
+        },
+        {
+          "text": "범위가",
+          "start_sec": 262.76,
+          "end_sec": 263.1
+        },
+        {
+          "text": "일반적이면",
+          "start_sec": 263.24,
+          "end_sec": 264.04
+        },
+        {
+          "text": "일정에",
+          "start_sec": 264.18,
+          "end_sec": 264.54
+        },
+        {
+          "text": "영향이",
+          "start_sec": 264.7,
+          "end_sec": 264.98
+        },
+        {
+          "text": "없습니다.",
+          "start_sec": 265.18,
+          "end_sec": 265.54
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 267.18,
+      "end_sec": 270.68,
+      "text": "금형 구조 변경이 생기면 최대 일주일 추가될 수 있습니다.",
+      "words": [
+        {
+          "text": "금형",
+          "start_sec": 267.18,
+          "end_sec": 267.4
+        },
+        {
+          "text": "구조",
+          "start_sec": 267.5,
+          "end_sec": 267.68
+        },
+        {
+          "text": "변경이",
+          "start_sec": 267.82,
+          "end_sec": 268.12
+        },
+        {
+          "text": "생기면",
+          "start_sec": 268.24,
+          "end_sec": 268.84
+        },
+        {
+          "text": "최대",
+          "start_sec": 269,
+          "end_sec": 269.18
+        },
+        {
+          "text": "일주일",
+          "start_sec": 269.32,
+          "end_sec": 269.64
+        },
+        {
+          "text": "추가될",
+          "start_sec": 269.76,
+          "end_sec": 270.06
+        },
+        {
+          "text": "수",
+          "start_sec": 270.12,
+          "end_sec": 270.18
+        },
+        {
+          "text": "있습니다.",
+          "start_sec": 270.3,
+          "end_sec": 270.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 271.8,
+      "end_sec": 275.68,
+      "text": "Chúng tôi sẽ chuẩn bị checklist kiểm tra mẫu và gửi trước buổi review T1.",
+      "words": [
+        {
+          "text": "Chúng",
+          "start_sec": 271.8,
+          "end_sec": 271.94
+        },
+        {
+          "text": "tôi",
+          "start_sec": 271.98,
+          "end_sec": 272.16
+        },
+        {
+          "text": "sẽ",
+          "start_sec": 272.24,
+          "end_sec": 272.36
+        },
+        {
+          "text": "chuẩn",
+          "start_sec": 272.4,
+          "end_sec": 272.56
+        },
+        {
+          "text": "bị",
+          "start_sec": 272.62,
+          "end_sec": 272.78
+        },
+        {
+          "text": "checklist",
+          "start_sec": 272.84,
+          "end_sec": 273.14
+        },
+        {
+          "text": "kiểm",
+          "start_sec": 273.2,
+          "end_sec": 273.36
+        },
+        {
+          "text": "tra",
+          "start_sec": 273.4,
+          "end_sec": 273.54
+        },
+        {
+          "text": "mẫu",
+          "start_sec": 273.6,
+          "end_sec": 273.9
+        },
+        {
+          "text": "và",
+          "start_sec": 273.98,
+          "end_sec": 274.12
+        },
+        {
+          "text": "gửi",
+          "start_sec": 274.2,
+          "end_sec": 274.36
+        },
+        {
+          "text": "trước",
+          "start_sec": 274.38,
+          "end_sec": 274.56
+        },
+        {
+          "text": "buổi",
+          "start_sec": 274.6,
+          "end_sec": 274.8
+        },
+        {
+          "text": "review",
+          "start_sec": 274.86,
+          "end_sec": 275.26
+        },
+        {
+          "text": "T1.",
+          "start_sec": 275.32,
+          "end_sec": 275.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 276.78,
+      "end_sec": 279.64,
+      "text": "We will send our QC checklist before next week.",
+      "words": [
+        {
+          "text": "We",
+          "start_sec": 276.78,
+          "end_sec": 276.92
+        },
+        {
+          "text": "will",
+          "start_sec": 276.98,
+          "end_sec": 277.14
+        },
+        {
+          "text": "send",
+          "start_sec": 277.22,
+          "end_sec": 277.4
+        },
+        {
+          "text": "our",
+          "start_sec": 277.46,
+          "end_sec": 277.68
+        },
+        {
+          "text": "QC",
+          "start_sec": 277.76,
+          "end_sec": 278.02
+        },
+        {
+          "text": "checklist",
+          "start_sec": 278.08,
+          "end_sec": 278.6
+        },
+        {
+          "text": "before",
+          "start_sec": 278.66,
+          "end_sec": 278.96
+        },
+        {
+          "text": "next",
+          "start_sec": 279,
+          "end_sec": 279.4
+        },
+        {
+          "text": "week.",
+          "start_sec": 279.46,
+          "end_sec": 279.64
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 284.82,
+      "end_sec": 289.7,
+      "text": "네, 확인 후 금형 진행 상황을 매주 금요일 사진과 함께 공유드리겠습니다.",
+      "words": [
+        {
+          "text": "네,",
+          "start_sec": 284.82,
+          "end_sec": 284.9
+        },
+        {
+          "text": "확인",
+          "start_sec": 285.34,
+          "end_sec": 285.48
+        },
+        {
+          "text": "후",
+          "start_sec": 285.6,
+          "end_sec": 285.7
+        },
+        {
+          "text": "금형",
+          "start_sec": 286.06,
+          "end_sec": 286.26
+        },
+        {
+          "text": "진행",
+          "start_sec": 286.38,
+          "end_sec": 286.56
+        },
+        {
+          "text": "상황을",
+          "start_sec": 286.68,
+          "end_sec": 286.96
+        },
+        {
+          "text": "매주",
+          "start_sec": 287.08,
+          "end_sec": 287.32
+        },
+        {
+          "text": "금요일",
+          "start_sec": 287.46,
+          "end_sec": 287.76
+        },
+        {
+          "text": "사진과",
+          "start_sec": 287.88,
+          "end_sec": 288.18
+        },
+        {
+          "text": "함께",
+          "start_sec": 288.32,
+          "end_sec": 288.7
+        },
+        {
+          "text": "공유드리겠습니다.",
+          "start_sec": 288.84,
+          "end_sec": 289.7
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 290.72,
+      "end_sec": 298.1,
+      "text": "Về thanh toán, chúng tôi đề xuất T/T 30/70, đặt cọc 30% khi ký, 70% trước khi giao hàng.",
+      "words": [
+        {
+          "text": "Về",
+          "start_sec": 290.72,
+          "end_sec": 290.82
+        },
+        {
+          "text": "thanh",
+          "start_sec": 290.86,
+          "end_sec": 291.04
+        },
+        {
+          "text": "toán,",
+          "start_sec": 291.08,
+          "end_sec": 291.3
+        },
+        {
+          "text": "chúng",
+          "start_sec": 291.64,
+          "end_sec": 291.8
+        },
+        {
+          "text": "tôi",
+          "start_sec": 291.86,
+          "end_sec": 292
+        },
+        {
+          "text": "đề",
+          "start_sec": 292.06,
+          "end_sec": 292.18
+        },
+        {
+          "text": "xuất",
+          "start_sec": 292.24,
+          "end_sec": 292.38
+        },
+        {
+          "text": "T/T",
+          "start_sec": 292.88,
+          "end_sec": 293.14
+        },
+        {
+          "text": "30/70,",
+          "start_sec": 293.36,
+          "end_sec": 294.36
+        },
+        {
+          "text": "đặt",
+          "start_sec": 294.78,
+          "end_sec": 294.92
+        },
+        {
+          "text": "cọc",
+          "start_sec": 294.98,
+          "end_sec": 295.12
+        },
+        {
+          "text": "30%",
+          "start_sec": 295.3,
+          "end_sec": 295.84
+        },
+        {
+          "text": "khi",
+          "start_sec": 295.88,
+          "end_sec": 296.02
+        },
+        {
+          "text": "ký,",
+          "start_sec": 296.08,
+          "end_sec": 296.26
+        },
+        {
+          "text": "70%",
+          "start_sec": 296.76,
+          "end_sec": 297.32
+        },
+        {
+          "text": "trước",
+          "start_sec": 297.36,
+          "end_sec": 297.5
+        },
+        {
+          "text": "khi",
+          "start_sec": 297.54,
+          "end_sec": 297.64
+        },
+        {
+          "text": "giao",
+          "start_sec": 297.7,
+          "end_sec": 297.86
+        },
+        {
+          "text": "hàng.",
+          "start_sec": 297.92,
+          "end_sec": 298.1
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 298.82,
+      "end_sec": 301.2,
+      "text": "표준은 T/T 30/70입니다.",
+      "words": [
+        {
+          "text": "표준은",
+          "start_sec": 298.82,
+          "end_sec": 299.32
+        },
+        {
+          "text": "T/T",
+          "start_sec": 299.38,
+          "end_sec": 299.86
+        },
+        {
+          "text": "30/70입니다.",
+          "start_sec": 300.06,
+          "end_sec": 301.2
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 302.82,
+      "end_sec": 308.06,
+      "text": "계약 체결 시 30% 계약금, 선적 전에 70% 잔금을 받습니다.",
+      "words": [
+        {
+          "text": "계약",
+          "start_sec": 302.82,
+          "end_sec": 303.04
+        },
+        {
+          "text": "체결",
+          "start_sec": 303.18,
+          "end_sec": 303.4
+        },
+        {
+          "text": "시",
+          "start_sec": 303.54,
+          "end_sec": 303.66
+        },
+        {
+          "text": "30%",
+          "start_sec": 303.82,
+          "end_sec": 304.48
+        },
+        {
+          "text": "계약금,",
+          "start_sec": 304.6,
+          "end_sec": 305
+        },
+        {
+          "text": "선적",
+          "start_sec": 305.64,
+          "end_sec": 305.84
+        },
+        {
+          "text": "전에",
+          "start_sec": 306,
+          "end_sec": 306.2
+        },
+        {
+          "text": "70%",
+          "start_sec": 306.26,
+          "end_sec": 307.06
+        },
+        {
+          "text": "잔금을",
+          "start_sec": 307.24,
+          "end_sec": 307.54
+        },
+        {
+          "text": "받습니다.",
+          "start_sec": 307.72,
+          "end_sec": 308.06
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 308.62,
+      "end_sec": 312.4,
+      "text": "Khoảng 70% được thanh toán sau khi kiểm tra hàng trước giao, đúng không?",
+      "words": [
+        {
+          "text": "Khoảng",
+          "start_sec": 308.62,
+          "end_sec": 308.78
+        },
+        {
+          "text": "70%",
+          "start_sec": 308.94,
+          "end_sec": 309.56
+        },
+        {
+          "text": "được",
+          "start_sec": 309.62,
+          "end_sec": 309.74
+        },
+        {
+          "text": "thanh",
+          "start_sec": 309.78,
+          "end_sec": 309.94
+        },
+        {
+          "text": "toán",
+          "start_sec": 309.98,
+          "end_sec": 310.2
+        },
+        {
+          "text": "sau",
+          "start_sec": 310.28,
+          "end_sec": 310.42
+        },
+        {
+          "text": "khi",
+          "start_sec": 310.46,
+          "end_sec": 310.6
+        },
+        {
+          "text": "kiểm",
+          "start_sec": 310.64,
+          "end_sec": 310.82
+        },
+        {
+          "text": "tra",
+          "start_sec": 310.84,
+          "end_sec": 311
+        },
+        {
+          "text": "hàng",
+          "start_sec": 311.06,
+          "end_sec": 311.24
+        },
+        {
+          "text": "trước",
+          "start_sec": 311.28,
+          "end_sec": 311.44
+        },
+        {
+          "text": "giao,",
+          "start_sec": 311.48,
+          "end_sec": 311.7
+        },
+        {
+          "text": "đúng",
+          "start_sec": 312.06,
+          "end_sec": 312.2
+        },
+        {
+          "text": "không?",
+          "start_sec": 312.22,
+          "end_sec": 312.4
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 313.42,
+      "end_sec": 318.08,
+      "text": "네, 검사 합격 후 선적 서류가 준비되면 잔금을 확인하고 선적합니다.",
+      "words": [
+        {
+          "text": "네,",
+          "start_sec": 313.42,
+          "end_sec": 313.5
+        },
+        {
+          "text": "검사",
+          "start_sec": 314.02,
+          "end_sec": 314.16
+        },
+        {
+          "text": "합격",
+          "start_sec": 314.28,
+          "end_sec": 314.48
+        },
+        {
+          "text": "후",
+          "start_sec": 314.66,
+          "end_sec": 314.72
+        },
+        {
+          "text": "선적",
+          "start_sec": 314.86,
+          "end_sec": 315.06
+        },
+        {
+          "text": "서류가",
+          "start_sec": 315.18,
+          "end_sec": 315.46
+        },
+        {
+          "text": "준비되면",
+          "start_sec": 315.6,
+          "end_sec": 316.34
+        },
+        {
+          "text": "잔금을",
+          "start_sec": 316.52,
+          "end_sec": 316.8
+        },
+        {
+          "text": "확인하고",
+          "start_sec": 316.94,
+          "end_sec": 317.36
+        },
+        {
+          "text": "선적합니다.",
+          "start_sec": 317.5,
+          "end_sec": 318.08
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 319.4,
+      "end_sec": 321.78,
+      "text": "Khuôn có được bảo hành không nếu lỗi sản xuất do khuôn?",
+      "words": [
+        {
+          "text": "Khuôn",
+          "start_sec": 319.4,
+          "end_sec": 319.6
+        },
+        {
+          "text": "có",
+          "start_sec": 319.64,
+          "end_sec": 319.72
+        },
+        {
+          "text": "được",
+          "start_sec": 319.76,
+          "end_sec": 319.88
+        },
+        {
+          "text": "bảo",
+          "start_sec": 319.92,
+          "end_sec": 320.08
+        },
+        {
+          "text": "hành",
+          "start_sec": 320.12,
+          "end_sec": 320.32
+        },
+        {
+          "text": "không",
+          "start_sec": 320.36,
+          "end_sec": 320.54
+        },
+        {
+          "text": "nếu",
+          "start_sec": 320.6,
+          "end_sec": 320.74
+        },
+        {
+          "text": "lỗi",
+          "start_sec": 320.78,
+          "end_sec": 320.96
+        },
+        {
+          "text": "sản",
+          "start_sec": 321,
+          "end_sec": 321.18
+        },
+        {
+          "text": "xuất",
+          "start_sec": 321.22,
+          "end_sec": 321.38
+        },
+        {
+          "text": "do",
+          "start_sec": 321.44,
+          "end_sec": 321.56
+        },
+        {
+          "text": "khuôn?",
+          "start_sec": 321.6,
+          "end_sec": 321.78
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 322.8,
+      "end_sec": 326.98,
+      "text": "금형 보증은 2년이며 금형 원인의 불량은 무상으로 수리합니다.",
+      "words": [
+        {
+          "text": "금형",
+          "start_sec": 322.8,
+          "end_sec": 322.98
+        },
+        {
+          "text": "보증은",
+          "start_sec": 323.08,
+          "end_sec": 323.52
+        },
+        {
+          "text": "2년이며",
+          "start_sec": 323.64,
+          "end_sec": 324.6
+        },
+        {
+          "text": "금형",
+          "start_sec": 324.72,
+          "end_sec": 324.9
+        },
+        {
+          "text": "원인의",
+          "start_sec": 324.98,
+          "end_sec": 325.26
+        },
+        {
+          "text": "불량은",
+          "start_sec": 325.4,
+          "end_sec": 325.82
+        },
+        {
+          "text": "무상으로",
+          "start_sec": 325.92,
+          "end_sec": 326.38
+        },
+        {
+          "text": "수리합니다.",
+          "start_sec": 326.48,
+          "end_sec": 326.98
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 328.56,
+      "end_sec": 330.96,
+      "text": "부품 교체 비용도 저희가 부담합니다.",
+      "words": [
+        {
+          "text": "부품",
+          "start_sec": 328.56,
+          "end_sec": 328.86
+        },
+        {
+          "text": "교체",
+          "start_sec": 328.98,
+          "end_sec": 329.2
+        },
+        {
+          "text": "비용도",
+          "start_sec": 329.3,
+          "end_sec": 329.78
+        },
+        {
+          "text": "저희가",
+          "start_sec": 329.94,
+          "end_sec": 330.3
+        },
+        {
+          "text": "부담합니다.",
+          "start_sec": 330.4,
+          "end_sec": 330.96
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 331.96,
+      "end_sec": 335.82,
+      "text": "Nếu sau khi duyệt thiết kế, chúng tôi đổi chi tiết nhỏ thì chi phí tính thế nào?",
+      "words": [
+        {
+          "text": "Nếu",
+          "start_sec": 331.96,
+          "end_sec": 332.12
+        },
+        {
+          "text": "sau",
+          "start_sec": 332.2,
+          "end_sec": 332.4
+        },
+        {
+          "text": "khi",
+          "start_sec": 332.44,
+          "end_sec": 332.58
+        },
+        {
+          "text": "duyệt",
+          "start_sec": 332.64,
+          "end_sec": 332.8
+        },
+        {
+          "text": "thiết",
+          "start_sec": 332.82,
+          "end_sec": 332.98
+        },
+        {
+          "text": "kế,",
+          "start_sec": 333.04,
+          "end_sec": 333.2
+        },
+        {
+          "text": "chúng",
+          "start_sec": 333.32,
+          "end_sec": 333.48
+        },
+        {
+          "text": "tôi",
+          "start_sec": 333.52,
+          "end_sec": 333.68
+        },
+        {
+          "text": "đổi",
+          "start_sec": 333.74,
+          "end_sec": 333.9
+        },
+        {
+          "text": "chi",
+          "start_sec": 333.94,
+          "end_sec": 334.1
+        },
+        {
+          "text": "tiết",
+          "start_sec": 334.16,
+          "end_sec": 334.32
+        },
+        {
+          "text": "nhỏ",
+          "start_sec": 334.36,
+          "end_sec": 334.64
+        },
+        {
+          "text": "thì",
+          "start_sec": 334.68,
+          "end_sec": 334.86
+        },
+        {
+          "text": "chi",
+          "start_sec": 334.9,
+          "end_sec": 335.02
+        },
+        {
+          "text": "phí",
+          "start_sec": 335.06,
+          "end_sec": 335.22
+        },
+        {
+          "text": "tính",
+          "start_sec": 335.26,
+          "end_sec": 335.42
+        },
+        {
+          "text": "thế",
+          "start_sec": 335.46,
+          "end_sec": 335.58
+        },
+        {
+          "text": "nào?",
+          "start_sec": 335.64,
+          "end_sec": 335.82
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 336.52,
+      "end_sec": 342.08,
+      "text": "승인 후 변경은 시간당 65달러로 계산하고 금형에 영향이 없는 변경은 무료입니다.",
+      "words": [
+        {
+          "text": "승인",
+          "start_sec": 336.52,
+          "end_sec": 336.66
+        },
+        {
+          "text": "후",
+          "start_sec": 336.8,
+          "end_sec": 337.02
+        },
+        {
+          "text": "변경은",
+          "start_sec": 337.22,
+          "end_sec": 337.54
+        },
+        {
+          "text": "시간당",
+          "start_sec": 337.64,
+          "end_sec": 338.04
+        },
+        {
+          "text": "65달러로",
+          "start_sec": 338.22,
+          "end_sec": 338.76
+        },
+        {
+          "text": "계산하고",
+          "start_sec": 338.88,
+          "end_sec": 339.78
+        },
+        {
+          "text": "금형에",
+          "start_sec": 339.92,
+          "end_sec": 340.22
+        },
+        {
+          "text": "영향이",
+          "start_sec": 340.36,
+          "end_sec": 340.62
+        },
+        {
+          "text": "없는",
+          "start_sec": 340.76,
+          "end_sec": 340.94
+        },
+        {
+          "text": "변경은",
+          "start_sec": 341.1,
+          "end_sec": 341.44
+        },
+        {
+          "text": "무료입니다.",
+          "start_sec": 341.54,
+          "end_sec": 342.08
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 343.06,
+      "end_sec": 348.62,
+      "text": "We can include a three-year non-disclosure clause covering the design and the mold data.",
+      "words": [
+        {
+          "text": "We",
+          "start_sec": 343.06,
+          "end_sec": 343.2
+        },
+        {
+          "text": "can",
+          "start_sec": 343.26,
+          "end_sec": 343.46
+        },
+        {
+          "text": "include",
+          "start_sec": 343.54,
+          "end_sec": 344.02
+        },
+        {
+          "text": "a",
+          "start_sec": 344.06,
+          "end_sec": 344.22
+        },
+        {
+          "text": "three-year",
+          "start_sec": 344.24,
+          "end_sec": 344.64
+        },
+        {
+          "text": "non-disclosure",
+          "start_sec": 344.7,
+          "end_sec": 345.44
+        },
+        {
+          "text": "clause",
+          "start_sec": 345.92,
+          "end_sec": 346.28
+        },
+        {
+          "text": "covering",
+          "start_sec": 346.34,
+          "end_sec": 346.76
+        },
+        {
+          "text": "the",
+          "start_sec": 346.82,
+          "end_sec": 346.96
+        },
+        {
+          "text": "design",
+          "start_sec": 347.02,
+          "end_sec": 347.36
+        },
+        {
+          "text": "and",
+          "start_sec": 347.42,
+          "end_sec": 347.52
+        },
+        {
+          "text": "the",
+          "start_sec": 347.76,
+          "end_sec": 347.9
+        },
+        {
+          "text": "mold",
+          "start_sec": 347.94,
+          "end_sec": 348.18
+        },
+        {
+          "text": "data.",
+          "start_sec": 348.24,
+          "end_sec": 348.62
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 349.68,
+      "end_sec": 356.38,
+      "text": "Tốt. Chúng tôi thống nhất đưa điều khoản bảo mật ba năm vào hợp đồng. Tôi tổng lại các việc cần làm để hai bên cùng xác nhận.",
+      "words": [
+        {
+          "text": "Tốt.",
+          "start_sec": 349.68,
+          "end_sec": 349.9
+        },
+        {
+          "text": "Chúng",
+          "start_sec": 350.16,
+          "end_sec": 350.3
+        },
+        {
+          "text": "tôi",
+          "start_sec": 350.36,
+          "end_sec": 350.5
+        },
+        {
+          "text": "thống",
+          "start_sec": 350.54,
+          "end_sec": 350.7
+        },
+        {
+          "text": "nhất",
+          "start_sec": 350.74,
+          "end_sec": 350.92
+        },
+        {
+          "text": "đưa",
+          "start_sec": 350.98,
+          "end_sec": 351.08
+        },
+        {
+          "text": "điều",
+          "start_sec": 351.14,
+          "end_sec": 351.28
+        },
+        {
+          "text": "khoản",
+          "start_sec": 351.3,
+          "end_sec": 351.52
+        },
+        {
+          "text": "bảo",
+          "start_sec": 351.58,
+          "end_sec": 351.74
+        },
+        {
+          "text": "mật",
+          "start_sec": 351.8,
+          "end_sec": 351.98
+        },
+        {
+          "text": "ba",
+          "start_sec": 352.02,
+          "end_sec": 352.18
+        },
+        {
+          "text": "năm",
+          "start_sec": 352.24,
+          "end_sec": 352.42
+        },
+        {
+          "text": "vào",
+          "start_sec": 352.48,
+          "end_sec": 352.58
+        },
+        {
+          "text": "hợp",
+          "start_sec": 352.62,
+          "end_sec": 352.76
+        },
+        {
+          "text": "đồng.",
+          "start_sec": 352.82,
+          "end_sec": 353.02
+        },
+        {
+          "text": "Tôi",
+          "start_sec": 353.5,
+          "end_sec": 353.64
+        },
+        {
+          "text": "tổng",
+          "start_sec": 353.68,
+          "end_sec": 353.88
+        },
+        {
+          "text": "lại",
+          "start_sec": 353.94,
+          "end_sec": 354.08
+        },
+        {
+          "text": "các",
+          "start_sec": 354.14,
+          "end_sec": 354.26
+        },
+        {
+          "text": "việc",
+          "start_sec": 354.3,
+          "end_sec": 354.44
+        },
+        {
+          "text": "cần",
+          "start_sec": 354.5,
+          "end_sec": 354.66
+        },
+        {
+          "text": "làm",
+          "start_sec": 354.72,
+          "end_sec": 355.04
+        },
+        {
+          "text": "để",
+          "start_sec": 355.1,
+          "end_sec": 355.22
+        },
+        {
+          "text": "hai",
+          "start_sec": 355.26,
+          "end_sec": 355.4
+        },
+        {
+          "text": "bên",
+          "start_sec": 355.46,
+          "end_sec": 355.62
+        },
+        {
+          "text": "cùng",
+          "start_sec": 355.68,
+          "end_sec": 355.84
+        },
+        {
+          "text": "xác",
+          "start_sec": 355.92,
+          "end_sec": 356.06
+        },
+        {
+          "text": "nhận.",
+          "start_sec": 356.1,
+          "end_sec": 356.38
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 361.62,
+      "end_sec": 365.1,
+      "text": "Phía chúng tôi gửi bản thiết kế 3D cuối cùng trước thứ Sáu tuần này.",
+      "words": [
+        {
+          "text": "Phía",
+          "start_sec": 361.62,
+          "end_sec": 361.78
+        },
+        {
+          "text": "chúng",
+          "start_sec": 361.82,
+          "end_sec": 361.96
+        },
+        {
+          "text": "tôi",
+          "start_sec": 362.02,
+          "end_sec": 362.22
+        },
+        {
+          "text": "gửi",
+          "start_sec": 362.26,
+          "end_sec": 362.4
+        },
+        {
+          "text": "bản",
+          "start_sec": 362.46,
+          "end_sec": 362.62
+        },
+        {
+          "text": "thiết",
+          "start_sec": 362.66,
+          "end_sec": 362.84
+        },
+        {
+          "text": "kế",
+          "start_sec": 362.9,
+          "end_sec": 363.1
+        },
+        {
+          "text": "3D",
+          "start_sec": 363.3,
+          "end_sec": 363.54
+        },
+        {
+          "text": "cuối",
+          "start_sec": 363.6,
+          "end_sec": 363.82
+        },
+        {
+          "text": "cùng",
+          "start_sec": 363.88,
+          "end_sec": 364.04
+        },
+        {
+          "text": "trước",
+          "start_sec": 364.08,
+          "end_sec": 364.26
+        },
+        {
+          "text": "thứ",
+          "start_sec": 364.3,
+          "end_sec": 364.42
+        },
+        {
+          "text": "Sáu",
+          "start_sec": 364.5,
+          "end_sec": 364.7
+        },
+        {
+          "text": "tuần",
+          "start_sec": 364.76,
+          "end_sec": 364.88
+        },
+        {
+          "text": "này.",
+          "start_sec": 364.94,
+          "end_sec": 365.1
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 365.74,
+      "end_sec": 369.68,
+      "text": "3D 도면을 받으면 영업일 기준 이틀 안에 피드백 드리겠습니다.",
+      "words": [
+        {
+          "text": "3D",
+          "start_sec": 365.74,
+          "end_sec": 366.1
+        },
+        {
+          "text": "도면을",
+          "start_sec": 366.2,
+          "end_sec": 366.5
+        },
+        {
+          "text": "받으면",
+          "start_sec": 366.62,
+          "end_sec": 367.22
+        },
+        {
+          "text": "영업일",
+          "start_sec": 367.36,
+          "end_sec": 367.62
+        },
+        {
+          "text": "기준",
+          "start_sec": 367.72,
+          "end_sec": 367.92
+        },
+        {
+          "text": "이틀",
+          "start_sec": 368,
+          "end_sec": 368.22
+        },
+        {
+          "text": "안에",
+          "start_sec": 368.32,
+          "end_sec": 368.58
+        },
+        {
+          "text": "피드백",
+          "start_sec": 368.7,
+          "end_sec": 368.98
+        },
+        {
+          "text": "드리겠습니다.",
+          "start_sec": 369.06,
+          "end_sec": 369.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 370.9,
+      "end_sec": 373.68,
+      "text": "Về vận chuyển, hai bên cần báo giá cho phương án nào?",
+      "words": [
+        {
+          "text": "Về",
+          "start_sec": 370.9,
+          "end_sec": 371.02
+        },
+        {
+          "text": "vận",
+          "start_sec": 371.08,
+          "end_sec": 371.24
+        },
+        {
+          "text": "chuyển,",
+          "start_sec": 371.28,
+          "end_sec": 371.5
+        },
+        {
+          "text": "hai",
+          "start_sec": 371.88,
+          "end_sec": 372.02
+        },
+        {
+          "text": "bên",
+          "start_sec": 372.06,
+          "end_sec": 372.24
+        },
+        {
+          "text": "cần",
+          "start_sec": 372.3,
+          "end_sec": 372.44
+        },
+        {
+          "text": "báo",
+          "start_sec": 372.5,
+          "end_sec": 372.66
+        },
+        {
+          "text": "giá",
+          "start_sec": 372.7,
+          "end_sec": 372.92
+        },
+        {
+          "text": "cho",
+          "start_sec": 372.96,
+          "end_sec": 373.06
+        },
+        {
+          "text": "phương",
+          "start_sec": 373.1,
+          "end_sec": 373.28
+        },
+        {
+          "text": "án",
+          "start_sec": 373.36,
+          "end_sec": 373.46
+        },
+        {
+          "text": "nào?",
+          "start_sec": 373.52,
+          "end_sec": 373.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 374.6,
+      "end_sec": 378.46,
+      "text": "해운과 항공 두 가지 방안 모두 DDP 견적을 준비하겠습니다.",
+      "words": [
+        {
+          "text": "해운과",
+          "start_sec": 374.6,
+          "end_sec": 374.94
+        },
+        {
+          "text": "항공",
+          "start_sec": 375.06,
+          "end_sec": 375.32
+        },
+        {
+          "text": "두",
+          "start_sec": 375.42,
+          "end_sec": 375.46
+        },
+        {
+          "text": "가지",
+          "start_sec": 375.56,
+          "end_sec": 375.68
+        },
+        {
+          "text": "방안",
+          "start_sec": 375.84,
+          "end_sec": 376
+        },
+        {
+          "text": "모두",
+          "start_sec": 376.12,
+          "end_sec": 376.5
+        },
+        {
+          "text": "DDP",
+          "start_sec": 376.56,
+          "end_sec": 376.98
+        },
+        {
+          "text": "견적을",
+          "start_sec": 377.16,
+          "end_sec": 377.52
+        },
+        {
+          "text": "준비하겠습니다.",
+          "start_sec": 377.68,
+          "end_sec": 378.46
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 379.5,
+      "end_sec": 381.58,
+      "text": "부산항과 인천항을 비교해 드립니다.",
+      "words": [
+        {
+          "text": "부산항과",
+          "start_sec": 379.5,
+          "end_sec": 380.04
+        },
+        {
+          "text": "인천항을",
+          "start_sec": 380.16,
+          "end_sec": 380.62
+        },
+        {
+          "text": "비교해",
+          "start_sec": 380.72,
+          "end_sec": 381.06
+        },
+        {
+          "text": "드립니다.",
+          "start_sec": 381.16,
+          "end_sec": 381.58
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 385.64,
+      "end_sec": 388.7,
+      "text": "Chúng tôi đề xuất kiểm tra nhà máy trực tiếp vào tuần thứ Sáu.",
+      "words": [
+        {
+          "text": "Chúng",
+          "start_sec": 385.64,
+          "end_sec": 385.8
+        },
+        {
+          "text": "tôi",
+          "start_sec": 385.86,
+          "end_sec": 386.04
+        },
+        {
+          "text": "đề",
+          "start_sec": 386.1,
+          "end_sec": 386.24
+        },
+        {
+          "text": "xuất",
+          "start_sec": 386.3,
+          "end_sec": 386.44
+        },
+        {
+          "text": "kiểm",
+          "start_sec": 386.48,
+          "end_sec": 386.64
+        },
+        {
+          "text": "tra",
+          "start_sec": 386.68,
+          "end_sec": 386.86
+        },
+        {
+          "text": "nhà",
+          "start_sec": 386.92,
+          "end_sec": 387.06
+        },
+        {
+          "text": "máy",
+          "start_sec": 387.12,
+          "end_sec": 387.28
+        },
+        {
+          "text": "trực",
+          "start_sec": 387.32,
+          "end_sec": 387.5
+        },
+        {
+          "text": "tiếp",
+          "start_sec": 387.56,
+          "end_sec": 387.76
+        },
+        {
+          "text": "vào",
+          "start_sec": 387.82,
+          "end_sec": 388.02
+        },
+        {
+          "text": "tuần",
+          "start_sec": 388.08,
+          "end_sec": 388.24
+        },
+        {
+          "text": "thứ",
+          "start_sec": 388.28,
+          "end_sec": 388.4
+        },
+        {
+          "text": "Sáu.",
+          "start_sec": 388.48,
+          "end_sec": 388.7
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 389.98,
+      "end_sec": 390.62,
+      "text": "반갑습니다.",
+      "words": [
+        {
+          "text": "반갑습니다.",
+          "start_sec": 389.98,
+          "end_sec": 390.62
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 392.26,
+      "end_sec": 394.96,
+      "text": "방문 일정에 맞춰 공장 준비를 하겠습니다.",
+      "words": [
+        {
+          "text": "방문",
+          "start_sec": 392.26,
+          "end_sec": 392.5
+        },
+        {
+          "text": "일정에",
+          "start_sec": 392.62,
+          "end_sec": 392.92
+        },
+        {
+          "text": "맞춰",
+          "start_sec": 393.04,
+          "end_sec": 393.48
+        },
+        {
+          "text": "공장",
+          "start_sec": 393.64,
+          "end_sec": 393.88
+        },
+        {
+          "text": "준비를",
+          "start_sec": 394.02,
+          "end_sec": 394.32
+        },
+        {
+          "text": "하겠습니다.",
+          "start_sec": 394.4,
+          "end_sec": 394.96
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 395.8,
+      "end_sec": 397.48,
+      "text": "Phần hợp đồng thì tiến hành thế nào?",
+      "words": [
+        {
+          "text": "Phần",
+          "start_sec": 395.8,
+          "end_sec": 396.02
+        },
+        {
+          "text": "hợp",
+          "start_sec": 396.06,
+          "end_sec": 396.24
+        },
+        {
+          "text": "đồng",
+          "start_sec": 396.3,
+          "end_sec": 396.52
+        },
+        {
+          "text": "thì",
+          "start_sec": 396.56,
+          "end_sec": 396.74
+        },
+        {
+          "text": "tiến",
+          "start_sec": 396.8,
+          "end_sec": 396.94
+        },
+        {
+          "text": "hành",
+          "start_sec": 397,
+          "end_sec": 397.14
+        },
+        {
+          "text": "thế",
+          "start_sec": 397.18,
+          "end_sec": 397.28
+        },
+        {
+          "text": "nào?",
+          "start_sec": 397.34,
+          "end_sec": 397.48
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 398.16,
+      "end_sec": 402.24,
+      "text": "이번 주 안에 NDA 조항을 포함한 계약서 초안을 보내드리겠습니다.",
+      "words": [
+        {
+          "text": "이번",
+          "start_sec": 398.16,
+          "end_sec": 398.34
+        },
+        {
+          "text": "주",
+          "start_sec": 398.44,
+          "end_sec": 398.48
+        },
+        {
+          "text": "안에",
+          "start_sec": 398.62,
+          "end_sec": 398.84
+        },
+        {
+          "text": "NDA",
+          "start_sec": 398.98,
+          "end_sec": 399.32
+        },
+        {
+          "text": "조항을",
+          "start_sec": 399.44,
+          "end_sec": 399.76
+        },
+        {
+          "text": "포함한",
+          "start_sec": 399.86,
+          "end_sec": 400.18
+        },
+        {
+          "text": "계약서",
+          "start_sec": 400.28,
+          "end_sec": 400.78
+        },
+        {
+          "text": "초안을",
+          "start_sec": 400.92,
+          "end_sec": 401.24
+        },
+        {
+          "text": "보내드리겠습니다.",
+          "start_sec": 401.34,
+          "end_sec": 402.24
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_3",
+      "lang": "vi",
+      "start_sec": 403.16,
+      "end_sec": 405.96,
+      "text": "Đừng quên lịch họp review T1 vào cuối tuần thứ Tư.",
+      "words": [
+        {
+          "text": "Đừng",
+          "start_sec": 403.16,
+          "end_sec": 403.32
+        },
+        {
+          "text": "quên",
+          "start_sec": 403.38,
+          "end_sec": 403.52
+        },
+        {
+          "text": "lịch",
+          "start_sec": 403.56,
+          "end_sec": 403.68
+        },
+        {
+          "text": "họp",
+          "start_sec": 403.74,
+          "end_sec": 403.9
+        },
+        {
+          "text": "review",
+          "start_sec": 403.96,
+          "end_sec": 404.3
+        },
+        {
+          "text": "T1",
+          "start_sec": 404.36,
+          "end_sec": 404.62
+        },
+        {
+          "text": "vào",
+          "start_sec": 404.92,
+          "end_sec": 405.1
+        },
+        {
+          "text": "cuối",
+          "start_sec": 405.16,
+          "end_sec": 405.3
+        },
+        {
+          "text": "tuần",
+          "start_sec": 405.36,
+          "end_sec": 405.54
+        },
+        {
+          "text": "thứ",
+          "start_sec": 405.6,
+          "end_sec": 405.74
+        },
+        {
+          "text": "Tư.",
+          "start_sec": 405.8,
+          "end_sec": 405.96
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 406.62,
+      "end_sec": 406.68,
+      "text": "네,",
+      "words": [
+        {
+          "text": "네,",
+          "start_sec": 406.62,
+          "end_sec": 406.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 407.5,
+      "end_sec": 409.04,
+      "text": "초대장을 보내드리겠습니다.",
+      "words": [
+        {
+          "text": "초대장을",
+          "start_sec": 407.5,
+          "end_sec": 408.08
+        },
+        {
+          "text": "보내드리겠습니다.",
+          "start_sec": 408.18,
+          "end_sec": 409.04
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 410.62,
+      "end_sec": 412.86,
+      "text": "회의 링크는 이메일로 공유해 드립니다.",
+      "words": [
+        {
+          "text": "회의",
+          "start_sec": 410.62,
+          "end_sec": 410.8
+        },
+        {
+          "text": "링크는",
+          "start_sec": 410.94,
+          "end_sec": 411.44
+        },
+        {
+          "text": "이메일로",
+          "start_sec": 411.54,
+          "end_sec": 412
+        },
+        {
+          "text": "공유해",
+          "start_sec": 412.16,
+          "end_sec": 412.36
+        },
+        {
+          "text": "드립니다.",
+          "start_sec": 412.44,
+          "end_sec": 412.86
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 414,
+      "end_sec": 423.2,
+      "text": "Chốt lại, chúng tôi chọn khuôn A của Hanyang Mold, đơn giá 2,35 đô la Mỹ, MOQ 20.000, thanh toán T/T 30/70.",
+      "words": [
+        {
+          "text": "Chốt",
+          "start_sec": 414,
+          "end_sec": 414.14
+        },
+        {
+          "text": "lại,",
+          "start_sec": 414.2,
+          "end_sec": 414.38
+        },
+        {
+          "text": "chúng",
+          "start_sec": 414.68,
+          "end_sec": 414.82
+        },
+        {
+          "text": "tôi",
+          "start_sec": 414.86,
+          "end_sec": 415
+        },
+        {
+          "text": "chọn",
+          "start_sec": 415.06,
+          "end_sec": 415.26
+        },
+        {
+          "text": "khuôn",
+          "start_sec": 415.3,
+          "end_sec": 415.52
+        },
+        {
+          "text": "A",
+          "start_sec": 415.6,
+          "end_sec": 415.7
+        },
+        {
+          "text": "của",
+          "start_sec": 415.78,
+          "end_sec": 415.92
+        },
+        {
+          "text": "Hanyang",
+          "start_sec": 416,
+          "end_sec": 416.42
+        },
+        {
+          "text": "Mold,",
+          "start_sec": 416.5,
+          "end_sec": 416.64
+        },
+        {
+          "text": "đơn",
+          "start_sec": 417.02,
+          "end_sec": 417.16
+        },
+        {
+          "text": "giá",
+          "start_sec": 417.22,
+          "end_sec": 417.4
+        },
+        {
+          "text": "2,35",
+          "start_sec": 417.6,
+          "end_sec": 418.34
+        },
+        {
+          "text": "đô",
+          "start_sec": 418.4,
+          "end_sec": 418.5
+        },
+        {
+          "text": "la",
+          "start_sec": 418.56,
+          "end_sec": 418.66
+        },
+        {
+          "text": "Mỹ,",
+          "start_sec": 418.74,
+          "end_sec": 418.92
+        },
+        {
+          "text": "MOQ",
+          "start_sec": 419.48,
+          "end_sec": 419.94
+        },
+        {
+          "text": "20.000,",
+          "start_sec": 420.08,
+          "end_sec": 420.44
+        },
+        {
+          "text": "thanh",
+          "start_sec": 420.82,
+          "end_sec": 420.98
+        },
+        {
+          "text": "toán",
+          "start_sec": 421.02,
+          "end_sec": 421.22
+        },
+        {
+          "text": "T/T",
+          "start_sec": 421.28,
+          "end_sec": 422.02
+        },
+        {
+          "text": "30/70.",
+          "start_sec": 422.2,
+          "end_sec": 423.2
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 424.66,
+      "end_sec": 429.36,
+      "text": "네, A안 견적서에 운임을 포함한 최종 금액을 이메일로 보내드리겠습니다.",
+      "words": [
+        {
+          "text": "네,",
+          "start_sec": 424.66,
+          "end_sec": 424.76
+        },
+        {
+          "text": "A안",
+          "start_sec": 425.2,
+          "end_sec": 425.46
+        },
+        {
+          "text": "견적서에",
+          "start_sec": 425.62,
+          "end_sec": 426.14
+        },
+        {
+          "text": "운임을",
+          "start_sec": 426.22,
+          "end_sec": 426.52
+        },
+        {
+          "text": "포함한",
+          "start_sec": 426.62,
+          "end_sec": 426.98
+        },
+        {
+          "text": "최종",
+          "start_sec": 427.1,
+          "end_sec": 427.3
+        },
+        {
+          "text": "금액을",
+          "start_sec": 427.44,
+          "end_sec": 427.78
+        },
+        {
+          "text": "이메일로",
+          "start_sec": 427.86,
+          "end_sec": 428.38
+        },
+        {
+          "text": "보내드리겠습니다.",
+          "start_sec": 428.46,
+          "end_sec": 429.36
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 430.44,
+      "end_sec": 435.48,
+      "text": "Đợt hàng đầu tiên dự kiến đến kho của chúng tôi khi nào? Chúng tôi gửi bản 3D cuối trong tuần này.",
+      "words": [
+        {
+          "text": "Đợt",
+          "start_sec": 430.44,
+          "end_sec": 430.58
+        },
+        {
+          "text": "hàng",
+          "start_sec": 430.62,
+          "end_sec": 430.78
+        },
+        {
+          "text": "đầu",
+          "start_sec": 430.82,
+          "end_sec": 430.96
+        },
+        {
+          "text": "tiên",
+          "start_sec": 431.02,
+          "end_sec": 431.18
+        },
+        {
+          "text": "dự",
+          "start_sec": 431.26,
+          "end_sec": 431.4
+        },
+        {
+          "text": "kiến",
+          "start_sec": 431.46,
+          "end_sec": 431.62
+        },
+        {
+          "text": "đến",
+          "start_sec": 431.68,
+          "end_sec": 431.82
+        },
+        {
+          "text": "kho",
+          "start_sec": 431.86,
+          "end_sec": 432.06
+        },
+        {
+          "text": "của",
+          "start_sec": 432.12,
+          "end_sec": 432.2
+        },
+        {
+          "text": "chúng",
+          "start_sec": 432.24,
+          "end_sec": 432.36
+        },
+        {
+          "text": "tôi",
+          "start_sec": 432.4,
+          "end_sec": 432.56
+        },
+        {
+          "text": "khi",
+          "start_sec": 432.6,
+          "end_sec": 432.7
+        },
+        {
+          "text": "nào?",
+          "start_sec": 432.76,
+          "end_sec": 432.92
+        },
+        {
+          "text": "Chúng",
+          "start_sec": 433.38,
+          "end_sec": 433.5
+        },
+        {
+          "text": "tôi",
+          "start_sec": 433.56,
+          "end_sec": 433.7
+        },
+        {
+          "text": "gửi",
+          "start_sec": 433.76,
+          "end_sec": 433.94
+        },
+        {
+          "text": "bản",
+          "start_sec": 433.98,
+          "end_sec": 434.2
+        },
+        {
+          "text": "3D",
+          "start_sec": 434.24,
+          "end_sec": 434.66
+        },
+        {
+          "text": "cuối",
+          "start_sec": 434.72,
+          "end_sec": 434.86
+        },
+        {
+          "text": "trong",
+          "start_sec": 434.92,
+          "end_sec": 435.06
+        },
+        {
+          "text": "tuần",
+          "start_sec": 435.12,
+          "end_sec": 435.26
+        },
+        {
+          "text": "này.",
+          "start_sec": 435.3,
+          "end_sec": 435.48
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 436.3,
+      "end_sec": 447.7,
+      "text": "Once the mold design is approved, the first shipment leaves in week 9 and arrives about two weeks later. The DDP quotations for Busan and Incheon come by Friday.",
+      "words": [
+        {
+          "text": "Once",
+          "start_sec": 436.3,
+          "end_sec": 436.54
+        },
+        {
+          "text": "the",
+          "start_sec": 436.56,
+          "end_sec": 436.68
+        },
+        {
+          "text": "mold",
+          "start_sec": 436.74,
+          "end_sec": 436.88
+        },
+        {
+          "text": "design",
+          "start_sec": 436.92,
+          "end_sec": 437.44
+        },
+        {
+          "text": "is",
+          "start_sec": 437.52,
+          "end_sec": 437.82
+        },
+        {
+          "text": "approved,",
+          "start_sec": 437.88,
+          "end_sec": 438.38
+        },
+        {
+          "text": "the",
+          "start_sec": 438.88,
+          "end_sec": 439.02
+        },
+        {
+          "text": "first",
+          "start_sec": 439.12,
+          "end_sec": 439.46
+        },
+        {
+          "text": "shipment",
+          "start_sec": 439.5,
+          "end_sec": 439.96
+        },
+        {
+          "text": "leaves",
+          "start_sec": 440,
+          "end_sec": 440.36
+        },
+        {
+          "text": "in",
+          "start_sec": 440.44,
+          "end_sec": 440.64
+        },
+        {
+          "text": "week",
+          "start_sec": 440.7,
+          "end_sec": 440.92
+        },
+        {
+          "text": "9",
+          "start_sec": 440.98,
+          "end_sec": 441.24
+        },
+        {
+          "text": "and",
+          "start_sec": 441.3,
+          "end_sec": 441.52
+        },
+        {
+          "text": "arrives",
+          "start_sec": 441.58,
+          "end_sec": 442.12
+        },
+        {
+          "text": "about",
+          "start_sec": 442.24,
+          "end_sec": 442.54
+        },
+        {
+          "text": "two",
+          "start_sec": 442.6,
+          "end_sec": 442.74
+        },
+        {
+          "text": "weeks",
+          "start_sec": 442.84,
+          "end_sec": 443.12
+        },
+        {
+          "text": "later.",
+          "start_sec": 443.24,
+          "end_sec": 443.62
+        },
+        {
+          "text": "The",
+          "start_sec": 444.2,
+          "end_sec": 444.3
+        },
+        {
+          "text": "DDP",
+          "start_sec": 444.38,
+          "end_sec": 444.66
+        },
+        {
+          "text": "quotations",
+          "start_sec": 444.7,
+          "end_sec": 445.2
+        },
+        {
+          "text": "for",
+          "start_sec": 445.34,
+          "end_sec": 445.5
+        },
+        {
+          "text": "Busan",
+          "start_sec": 445.58,
+          "end_sec": 445.82
+        },
+        {
+          "text": "and",
+          "start_sec": 445.86,
+          "end_sec": 446.02
+        },
+        {
+          "text": "Incheon",
+          "start_sec": 446.32,
+          "end_sec": 446.64
+        },
+        {
+          "text": "come",
+          "start_sec": 446.76,
+          "end_sec": 446.92
+        },
+        {
+          "text": "by",
+          "start_sec": 446.98,
+          "end_sec": 447.18
+        },
+        {
+          "text": "Friday.",
+          "start_sec": 447.26,
+          "end_sec": 447.7
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 448.74,
+      "end_sec": 454.64,
+      "text": "Tôi xác nhận lịch visit nhà máy vào tuần thứ Sáu và đề nghị phía Hàn gửi nháp hợp đồng kèm điều khoản bảo mật ba năm.",
+      "words": [
+        {
+          "text": "Tôi",
+          "start_sec": 448.74,
+          "end_sec": 448.86
+        },
+        {
+          "text": "xác",
+          "start_sec": 448.92,
+          "end_sec": 449.08
+        },
+        {
+          "text": "nhận",
+          "start_sec": 449.12,
+          "end_sec": 449.26
+        },
+        {
+          "text": "lịch",
+          "start_sec": 449.3,
+          "end_sec": 449.46
+        },
+        {
+          "text": "visit",
+          "start_sec": 449.5,
+          "end_sec": 449.84
+        },
+        {
+          "text": "nhà",
+          "start_sec": 449.88,
+          "end_sec": 450.02
+        },
+        {
+          "text": "máy",
+          "start_sec": 450.08,
+          "end_sec": 450.24
+        },
+        {
+          "text": "vào",
+          "start_sec": 450.3,
+          "end_sec": 450.44
+        },
+        {
+          "text": "tuần",
+          "start_sec": 450.48,
+          "end_sec": 450.6
+        },
+        {
+          "text": "thứ",
+          "start_sec": 450.64,
+          "end_sec": 450.76
+        },
+        {
+          "text": "Sáu",
+          "start_sec": 450.84,
+          "end_sec": 451.06
+        },
+        {
+          "text": "và",
+          "start_sec": 451.44,
+          "end_sec": 451.52
+        },
+        {
+          "text": "đề",
+          "start_sec": 451.58,
+          "end_sec": 451.68
+        },
+        {
+          "text": "nghị",
+          "start_sec": 451.72,
+          "end_sec": 451.9
+        },
+        {
+          "text": "phía",
+          "start_sec": 451.94,
+          "end_sec": 452.08
+        },
+        {
+          "text": "Hàn",
+          "start_sec": 452.12,
+          "end_sec": 452.26
+        },
+        {
+          "text": "gửi",
+          "start_sec": 452.34,
+          "end_sec": 452.46
+        },
+        {
+          "text": "nháp",
+          "start_sec": 452.52,
+          "end_sec": 452.7
+        },
+        {
+          "text": "hợp",
+          "start_sec": 452.74,
+          "end_sec": 452.9
+        },
+        {
+          "text": "đồng",
+          "start_sec": 452.94,
+          "end_sec": 453.1
+        },
+        {
+          "text": "kèm",
+          "start_sec": 453.18,
+          "end_sec": 453.36
+        },
+        {
+          "text": "điều",
+          "start_sec": 453.42,
+          "end_sec": 453.54
+        },
+        {
+          "text": "khoản",
+          "start_sec": 453.56,
+          "end_sec": 453.78
+        },
+        {
+          "text": "bảo",
+          "start_sec": 453.82,
+          "end_sec": 454
+        },
+        {
+          "text": "mật",
+          "start_sec": 454.06,
+          "end_sec": 454.24
+        },
+        {
+          "text": "ba",
+          "start_sec": 454.28,
+          "end_sec": 454.4
+        },
+        {
+          "text": "năm.",
+          "start_sec": 454.46,
+          "end_sec": 454.64
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 455.66,
+      "end_sec": 456.2,
+      "text": "감사합니다.",
+      "words": [
+        {
+          "text": "감사합니다.",
+          "start_sec": 455.66,
+          "end_sec": 456.2
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 457.8,
+      "end_sec": 460.7,
+      "text": "오늘 결정 사항을 정리해서 곧 보내드리겠습니다.",
+      "words": [
+        {
+          "text": "오늘",
+          "start_sec": 457.8,
+          "end_sec": 458.04
+        },
+        {
+          "text": "결정",
+          "start_sec": 458.18,
+          "end_sec": 458.42
+        },
+        {
+          "text": "사항을",
+          "start_sec": 458.52,
+          "end_sec": 458.78
+        },
+        {
+          "text": "정리해서",
+          "start_sec": 458.96,
+          "end_sec": 459.54
+        },
+        {
+          "text": "곧",
+          "start_sec": 459.6,
+          "end_sec": 459.74
+        },
+        {
+          "text": "보내드리겠습니다.",
+          "start_sec": 459.84,
+          "end_sec": 460.7
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 462.26,
+      "end_sec": 463.36,
+      "text": "다음에 뵙겠습니다.",
+      "words": [
+        {
+          "text": "다음에",
+          "start_sec": 462.26,
+          "end_sec": 462.66
+        },
+        {
+          "text": "뵙겠습니다.",
+          "start_sec": 462.76,
+          "end_sec": 463.36
+        }
+      ]
+    }
+  ]
+}

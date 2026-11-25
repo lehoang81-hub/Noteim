@@ -433,7 +433,12 @@ def long_file(rng):
     """File dài 62 phút (ghép lặp 3 bộ, có đoạn im lặng dài) để thử ghi, tải lên, phát buổi dài."""
     chunks = []
     for name in ["01-bds-gap-chi-lan", "02-hop-doi-tac-han", "03-bac-si-kham"]:
-        pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", os.path.join(OUT, name + ".ogg"), "-f", "s16le", "-ac", "1", "-ar", str(SR), "-"],
+        # C1-07: bản .ogg đã bỏ khỏi repo (docs/13 mục 6) — đọc bản .m4a nguồn
+        # (sinh đủ cũng tạo cả .ogg và .m4a nên .m4a luôn có; thiếu thì thử .ogg)
+        src = os.path.join(OUT, name + ".m4a")
+        if not os.path.exists(src):
+            src = os.path.join(OUT, name + ".ogg")
+        pcm = subprocess.run(["ffmpeg", "-v", "error", "-i", src, "-f", "s16le", "-ac", "1", "-ar", str(SR), "-"],
                              capture_output=True, check=True).stdout
         chunks.append(np.frombuffer(pcm, np.int16))
     out, total = [], 0

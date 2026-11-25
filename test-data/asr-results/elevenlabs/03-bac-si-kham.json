@@ -1,0 +1,2370 @@
+{
+  "provider": "elevenlabs",
+  "file": "03-bac-si-kham",
+  "model": "scribe_v3",
+  "processing_ms": 10064,
+  "audio_duration_sec": 148.598005,
+  "language": "vie",
+  "segments": [
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 1.42,
+      "end_sec": 2.72,
+      "text": "Chị ngồi xuống đây cho em.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 1.42,
+          "end_sec": 1.56
+        },
+        {
+          "text": "ngồi",
+          "start_sec": 1.64,
+          "end_sec": 1.86
+        },
+        {
+          "text": "xuống",
+          "start_sec": 1.92,
+          "end_sec": 2.08
+        },
+        {
+          "text": "đây",
+          "start_sec": 2.12,
+          "end_sec": 2.24
+        },
+        {
+          "text": "cho",
+          "start_sec": 2.3,
+          "end_sec": 2.44
+        },
+        {
+          "text": "em.",
+          "start_sec": 2.52,
+          "end_sec": 2.72
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 3.68,
+      "end_sec": 9.18,
+      "text": "Tuần trước chị nói vẫn mỏi chân, dạo này thế nào ạ? Chị đo đường huyết lúc đói bao nhiêu sáng nay?",
+      "words": [
+        {
+          "text": "Tuần",
+          "start_sec": 3.68,
+          "end_sec": 3.82
+        },
+        {
+          "text": "trước",
+          "start_sec": 3.9,
+          "end_sec": 4.04
+        },
+        {
+          "text": "chị",
+          "start_sec": 4.08,
+          "end_sec": 4.22
+        },
+        {
+          "text": "nói",
+          "start_sec": 4.26,
+          "end_sec": 4.44
+        },
+        {
+          "text": "vẫn",
+          "start_sec": 4.5,
+          "end_sec": 4.64
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 4.68,
+          "end_sec": 4.82
+        },
+        {
+          "text": "chân,",
+          "start_sec": 4.88,
+          "end_sec": 5.04
+        },
+        {
+          "text": "dạo",
+          "start_sec": 5.46,
+          "end_sec": 5.64
+        },
+        {
+          "text": "này",
+          "start_sec": 5.7,
+          "end_sec": 5.84
+        },
+        {
+          "text": "thế",
+          "start_sec": 5.88,
+          "end_sec": 5.96
+        },
+        {
+          "text": "nào",
+          "start_sec": 6.02,
+          "end_sec": 6.16
+        },
+        {
+          "text": "ạ?",
+          "start_sec": 6.24,
+          "end_sec": 6.32
+        },
+        {
+          "text": "Chị",
+          "start_sec": 7,
+          "end_sec": 7.16
+        },
+        {
+          "text": "đo",
+          "start_sec": 7.22,
+          "end_sec": 7.36
+        },
+        {
+          "text": "đường",
+          "start_sec": 7.42,
+          "end_sec": 7.6
+        },
+        {
+          "text": "huyết",
+          "start_sec": 7.64,
+          "end_sec": 7.84
+        },
+        {
+          "text": "lúc",
+          "start_sec": 7.88,
+          "end_sec": 8.06
+        },
+        {
+          "text": "đói",
+          "start_sec": 8.119,
+          "end_sec": 8.32
+        },
+        {
+          "text": "bao",
+          "start_sec": 8.38,
+          "end_sec": 8.54
+        },
+        {
+          "text": "nhiêu",
+          "start_sec": 8.58,
+          "end_sec": 8.76
+        },
+        {
+          "text": "sáng",
+          "start_sec": 8.84,
+          "end_sec": 8.98
+        },
+        {
+          "text": "nay?",
+          "start_sec": 9.04,
+          "end_sec": 9.18
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 10.3,
+      "end_sec": 17.24,
+      "text": "Vẫn mỏi ấy bác sĩ, nhất là từ 4 giờ chiều trở đi. Sáng nay em đo được 6,8 bác sĩ ạ.",
+      "words": [
+        {
+          "text": "Vẫn",
+          "start_sec": 10.3,
+          "end_sec": 10.46
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 10.54,
+          "end_sec": 10.74
+        },
+        {
+          "text": "ấy",
+          "start_sec": 10.82,
+          "end_sec": 11
+        },
+        {
+          "text": "bác",
+          "start_sec": 11.08,
+          "end_sec": 11.24
+        },
+        {
+          "text": "sĩ,",
+          "start_sec": 11.34,
+          "end_sec": 11.56
+        },
+        {
+          "text": "nhất",
+          "start_sec": 12.04,
+          "end_sec": 12.22
+        },
+        {
+          "text": "là",
+          "start_sec": 12.28,
+          "end_sec": 12.46
+        },
+        {
+          "text": "từ",
+          "start_sec": 12.52,
+          "end_sec": 12.7
+        },
+        {
+          "text": "4",
+          "start_sec": 12.76,
+          "end_sec": 12.96
+        },
+        {
+          "text": "giờ",
+          "start_sec": 13.02,
+          "end_sec": 13.24
+        },
+        {
+          "text": "chiều",
+          "start_sec": 13.34,
+          "end_sec": 13.56
+        },
+        {
+          "text": "trở",
+          "start_sec": 13.62,
+          "end_sec": 13.8
+        },
+        {
+          "text": "đi.",
+          "start_sec": 13.86,
+          "end_sec": 14.02
+        },
+        {
+          "text": "Sáng",
+          "start_sec": 14.46,
+          "end_sec": 14.64
+        },
+        {
+          "text": "nay",
+          "start_sec": 14.7,
+          "end_sec": 15
+        },
+        {
+          "text": "em",
+          "start_sec": 15.08,
+          "end_sec": 15.24
+        },
+        {
+          "text": "đo",
+          "start_sec": 15.3,
+          "end_sec": 15.46
+        },
+        {
+          "text": "được",
+          "start_sec": 15.54,
+          "end_sec": 15.72
+        },
+        {
+          "text": "6,8",
+          "start_sec": 16.02,
+          "end_sec": 16.52
+        },
+        {
+          "text": "bác",
+          "start_sec": 16.58,
+          "end_sec": 16.74
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 16.82,
+          "end_sec": 17.04
+        },
+        {
+          "text": "ạ.",
+          "start_sec": 17.16,
+          "end_sec": 17.24
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 18.36,
+      "end_sec": 26.62,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 18.36,
+          "end_sec": 18.5
+        },
+        {
+          "text": "cháu",
+          "start_sec": 18.54,
+          "end_sec": 18.76
+        },
+        {
+          "text": "chở",
+          "start_sec": 18.82,
+          "end_sec": 18.96
+        },
+        {
+          "text": "chị",
+          "start_sec": 19.02,
+          "end_sec": 19.18
+        },
+        {
+          "text": "đi",
+          "start_sec": 19.24,
+          "end_sec": 19.34
+        },
+        {
+          "text": "khám",
+          "start_sec": 19.4,
+          "end_sec": 19.58
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 19.64,
+          "end_sec": 19.78
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 19.88,
+          "end_sec": 20.06
+        },
+        {
+          "text": "bác",
+          "start_sec": 20.42,
+          "end_sec": 20.56
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 20.62,
+          "end_sec": 20.78
+        },
+        {
+          "text": "cứ",
+          "start_sec": 20.86,
+          "end_sec": 20.98
+        },
+        {
+          "text": "dặn",
+          "start_sec": 21.06,
+          "end_sec": 21.28
+        },
+        {
+          "text": "rồi",
+          "start_sec": 21.36,
+          "end_sec": 21.52
+        },
+        {
+          "text": "con",
+          "start_sec": 21.58,
+          "end_sec": 21.74
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 21.78,
+          "end_sec": 21.94
+        },
+        {
+          "text": "cho.",
+          "start_sec": 22.02,
+          "end_sec": 22.26
+        },
+        {
+          "text": "Con",
+          "start_sec": 22.72,
+          "end_sec": 22.86
+        },
+        {
+          "text": "cháu",
+          "start_sec": 22.92,
+          "end_sec": 23.12
+        },
+        {
+          "text": "chở",
+          "start_sec": 23.18,
+          "end_sec": 23.32
+        },
+        {
+          "text": "chị",
+          "start_sec": 23.38,
+          "end_sec": 23.54
+        },
+        {
+          "text": "đi",
+          "start_sec": 23.6,
+          "end_sec": 23.7
+        },
+        {
+          "text": "khám",
+          "start_sec": 23.76,
+          "end_sec": 23.94
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 24,
+          "end_sec": 24.16
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 24.24,
+          "end_sec": 24.44
+        },
+        {
+          "text": "bác",
+          "start_sec": 24.8,
+          "end_sec": 24.92
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 24.98,
+          "end_sec": 25.16
+        },
+        {
+          "text": "cứ",
+          "start_sec": 25.22,
+          "end_sec": 25.34
+        },
+        {
+          "text": "dặn",
+          "start_sec": 25.42,
+          "end_sec": 25.64
+        },
+        {
+          "text": "rồi",
+          "start_sec": 25.72,
+          "end_sec": 25.88
+        },
+        {
+          "text": "con",
+          "start_sec": 25.94,
+          "end_sec": 26.1
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 26.14,
+          "end_sec": 26.32
+        },
+        {
+          "text": "cho.",
+          "start_sec": 26.38,
+          "end_sec": 26.62
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 27.78,
+      "end_sec": 29.18,
+      "text": "Vậy tốt hơn tuần trước rồi.",
+      "words": [
+        {
+          "text": "Vậy",
+          "start_sec": 27.78,
+          "end_sec": 27.94
+        },
+        {
+          "text": "tốt",
+          "start_sec": 28,
+          "end_sec": 28.2
+        },
+        {
+          "text": "hơn",
+          "start_sec": 28.26,
+          "end_sec": 28.44
+        },
+        {
+          "text": "tuần",
+          "start_sec": 28.48,
+          "end_sec": 28.68
+        },
+        {
+          "text": "trước",
+          "start_sec": 28.72,
+          "end_sec": 28.9
+        },
+        {
+          "text": "rồi.",
+          "start_sec": 28.96,
+          "end_sec": 29.18
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 30.12,
+      "end_sec": 34.48,
+      "text": "Chị có bỏ liều buổi trưa hôm nào không? Chân chị sưng không hay chỉ mỏi thôi?",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 30.12,
+          "end_sec": 30.3
+        },
+        {
+          "text": "có",
+          "start_sec": 30.36,
+          "end_sec": 30.46
+        },
+        {
+          "text": "bỏ",
+          "start_sec": 30.5,
+          "end_sec": 30.66
+        },
+        {
+          "text": "liều",
+          "start_sec": 30.72,
+          "end_sec": 30.88
+        },
+        {
+          "text": "buổi",
+          "start_sec": 30.94,
+          "end_sec": 31.12
+        },
+        {
+          "text": "trưa",
+          "start_sec": 31.16,
+          "end_sec": 31.3
+        },
+        {
+          "text": "hôm",
+          "start_sec": 31.36,
+          "end_sec": 31.5
+        },
+        {
+          "text": "nào",
+          "start_sec": 31.56,
+          "end_sec": 31.72
+        },
+        {
+          "text": "không?",
+          "start_sec": 31.76,
+          "end_sec": 31.94
+        },
+        {
+          "text": "Chân",
+          "start_sec": 32.439,
+          "end_sec": 32.6
+        },
+        {
+          "text": "chị",
+          "start_sec": 32.659,
+          "end_sec": 32.84
+        },
+        {
+          "text": "sưng",
+          "start_sec": 32.92,
+          "end_sec": 33.08
+        },
+        {
+          "text": "không",
+          "start_sec": 33.12,
+          "end_sec": 33.3
+        },
+        {
+          "text": "hay",
+          "start_sec": 33.66,
+          "end_sec": 33.84
+        },
+        {
+          "text": "chỉ",
+          "start_sec": 33.9,
+          "end_sec": 34.02
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 34.08,
+          "end_sec": 34.24
+        },
+        {
+          "text": "thôi?",
+          "start_sec": 34.28,
+          "end_sec": 34.48
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 35.34,
+      "end_sec": 40.68,
+      "text": "Dạ có một hôm em quên vì đi chợ về muộn. Chỉ mỏi thôi, không sưng ạ.",
+      "words": [
+        {
+          "text": "Dạ",
+          "start_sec": 35.34,
+          "end_sec": 35.52
+        },
+        {
+          "text": "có",
+          "start_sec": 35.6,
+          "end_sec": 35.74
+        },
+        {
+          "text": "một",
+          "start_sec": 35.8,
+          "end_sec": 35.96
+        },
+        {
+          "text": "hôm",
+          "start_sec": 36.04,
+          "end_sec": 36.24
+        },
+        {
+          "text": "em",
+          "start_sec": 36.32,
+          "end_sec": 36.48
+        },
+        {
+          "text": "quên",
+          "start_sec": 36.52,
+          "end_sec": 36.78
+        },
+        {
+          "text": "vì",
+          "start_sec": 36.86,
+          "end_sec": 37.02
+        },
+        {
+          "text": "đi",
+          "start_sec": 37.08,
+          "end_sec": 37.24
+        },
+        {
+          "text": "chợ",
+          "start_sec": 37.32,
+          "end_sec": 37.62
+        },
+        {
+          "text": "về",
+          "start_sec": 37.7,
+          "end_sec": 37.88
+        },
+        {
+          "text": "muộn.",
+          "start_sec": 37.96,
+          "end_sec": 38.18
+        },
+        {
+          "text": "Chỉ",
+          "start_sec": 38.74,
+          "end_sec": 38.92
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 39,
+          "end_sec": 39.22
+        },
+        {
+          "text": "thôi,",
+          "start_sec": 39.26,
+          "end_sec": 39.54
+        },
+        {
+          "text": "không",
+          "start_sec": 39.9,
+          "end_sec": 40.16
+        },
+        {
+          "text": "sưng",
+          "start_sec": 40.26,
+          "end_sec": 40.42
+        },
+        {
+          "text": "ạ.",
+          "start_sec": 40.64,
+          "end_sec": 40.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 41.48,
+      "end_sec": 58.18,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Em cho chị làm thêm xét nghiệm 31C để đánh giá ba tháng qua. Chị uống Metformin buổi tối sau ăn nhé, đừng uống lúc bụng đói.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 41.48,
+          "end_sec": 41.62
+        },
+        {
+          "text": "cháu",
+          "start_sec": 41.66,
+          "end_sec": 41.88
+        },
+        {
+          "text": "chở",
+          "start_sec": 41.94,
+          "end_sec": 42.08
+        },
+        {
+          "text": "chị",
+          "start_sec": 42.14,
+          "end_sec": 42.3
+        },
+        {
+          "text": "đi",
+          "start_sec": 42.36,
+          "end_sec": 42.48
+        },
+        {
+          "text": "khám",
+          "start_sec": 42.52,
+          "end_sec": 42.7
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 42.76,
+          "end_sec": 42.9
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 43,
+          "end_sec": 43.18
+        },
+        {
+          "text": "bác",
+          "start_sec": 43.56,
+          "end_sec": 43.68
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 43.74,
+          "end_sec": 43.92
+        },
+        {
+          "text": "cứ",
+          "start_sec": 43.98,
+          "end_sec": 44.1
+        },
+        {
+          "text": "dặn",
+          "start_sec": 44.18,
+          "end_sec": 44.4
+        },
+        {
+          "text": "rồi",
+          "start_sec": 44.48,
+          "end_sec": 44.64
+        },
+        {
+          "text": "con",
+          "start_sec": 44.7,
+          "end_sec": 44.86
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 44.9,
+          "end_sec": 45.08
+        },
+        {
+          "text": "cho.",
+          "start_sec": 45.14,
+          "end_sec": 45.38
+        },
+        {
+          "text": "Con",
+          "start_sec": 46.04,
+          "end_sec": 46.18
+        },
+        {
+          "text": "cháu",
+          "start_sec": 46.24,
+          "end_sec": 46.44
+        },
+        {
+          "text": "chở",
+          "start_sec": 46.5,
+          "end_sec": 46.64
+        },
+        {
+          "text": "chị",
+          "start_sec": 46.7,
+          "end_sec": 46.86
+        },
+        {
+          "text": "đi",
+          "start_sec": 46.92,
+          "end_sec": 47.02
+        },
+        {
+          "text": "khám",
+          "start_sec": 47.08,
+          "end_sec": 47.26
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 47.32,
+          "end_sec": 47.48
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 47.56,
+          "end_sec": 47.74
+        },
+        {
+          "text": "bác",
+          "start_sec": 48.12,
+          "end_sec": 48.24
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 48.3,
+          "end_sec": 48.48
+        },
+        {
+          "text": "cứ",
+          "start_sec": 48.54,
+          "end_sec": 48.66
+        },
+        {
+          "text": "dặn",
+          "start_sec": 48.74,
+          "end_sec": 48.96
+        },
+        {
+          "text": "rồi",
+          "start_sec": 49.04,
+          "end_sec": 49.2
+        },
+        {
+          "text": "con",
+          "start_sec": 49.26,
+          "end_sec": 49.42
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 49.46,
+          "end_sec": 49.64
+        },
+        {
+          "text": "cho.",
+          "start_sec": 49.7,
+          "end_sec": 49.94
+        },
+        {
+          "text": "Em",
+          "start_sec": 50.72,
+          "end_sec": 50.86
+        },
+        {
+          "text": "cho",
+          "start_sec": 50.9,
+          "end_sec": 51.02
+        },
+        {
+          "text": "chị",
+          "start_sec": 51.06,
+          "end_sec": 51.2
+        },
+        {
+          "text": "làm",
+          "start_sec": 51.26,
+          "end_sec": 51.4
+        },
+        {
+          "text": "thêm",
+          "start_sec": 51.44,
+          "end_sec": 51.62
+        },
+        {
+          "text": "xét",
+          "start_sec": 51.68,
+          "end_sec": 51.84
+        },
+        {
+          "text": "nghiệm",
+          "start_sec": 51.86,
+          "end_sec": 52.14
+        },
+        {
+          "text": "31C",
+          "start_sec": 52.36,
+          "end_sec": 52.9
+        },
+        {
+          "text": "để",
+          "start_sec": 52.96,
+          "end_sec": 53.04
+        },
+        {
+          "text": "đánh",
+          "start_sec": 53.08,
+          "end_sec": 53.24
+        },
+        {
+          "text": "giá",
+          "start_sec": 53.28,
+          "end_sec": 53.48
+        },
+        {
+          "text": "ba",
+          "start_sec": 53.54,
+          "end_sec": 53.66
+        },
+        {
+          "text": "tháng",
+          "start_sec": 53.7,
+          "end_sec": 53.88
+        },
+        {
+          "text": "qua.",
+          "start_sec": 53.92,
+          "end_sec": 54.2
+        },
+        {
+          "text": "Chị",
+          "start_sec": 54.78,
+          "end_sec": 54.94
+        },
+        {
+          "text": "uống",
+          "start_sec": 55.02,
+          "end_sec": 55.14
+        },
+        {
+          "text": "Metformin",
+          "start_sec": 55.2,
+          "end_sec": 55.74
+        },
+        {
+          "text": "buổi",
+          "start_sec": 55.8,
+          "end_sec": 55.94
+        },
+        {
+          "text": "tối",
+          "start_sec": 56,
+          "end_sec": 56.18
+        },
+        {
+          "text": "sau",
+          "start_sec": 56.26,
+          "end_sec": 56.4
+        },
+        {
+          "text": "ăn",
+          "start_sec": 56.46,
+          "end_sec": 56.58
+        },
+        {
+          "text": "nhé,",
+          "start_sec": 56.62,
+          "end_sec": 56.78
+        },
+        {
+          "text": "đừng",
+          "start_sec": 57.14,
+          "end_sec": 57.32
+        },
+        {
+          "text": "uống",
+          "start_sec": 57.4,
+          "end_sec": 57.52
+        },
+        {
+          "text": "lúc",
+          "start_sec": 57.56,
+          "end_sec": 57.7
+        },
+        {
+          "text": "bụng",
+          "start_sec": 57.74,
+          "end_sec": 57.9
+        },
+        {
+          "text": "đói.",
+          "start_sec": 57.96,
+          "end_sec": 58.18
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 59.14,
+      "end_sec": 66.06,
+      "text": "Em sợ làm máu nên hồi hộp lắm bác sĩ. Vẫn mỏi ấy bác sĩ, nhất là từ 4 giờ chiều trở đi.",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 59.14,
+          "end_sec": 59.28
+        },
+        {
+          "text": "sợ",
+          "start_sec": 59.38,
+          "end_sec": 59.56
+        },
+        {
+          "text": "làm",
+          "start_sec": 59.64,
+          "end_sec": 59.8
+        },
+        {
+          "text": "máu",
+          "start_sec": 59.88,
+          "end_sec": 60.14
+        },
+        {
+          "text": "nên",
+          "start_sec": 60.22,
+          "end_sec": 60.44
+        },
+        {
+          "text": "hồi",
+          "start_sec": 60.52,
+          "end_sec": 60.68
+        },
+        {
+          "text": "hộp",
+          "start_sec": 60.74,
+          "end_sec": 60.92
+        },
+        {
+          "text": "lắm",
+          "start_sec": 60.98,
+          "end_sec": 61.16
+        },
+        {
+          "text": "bác",
+          "start_sec": 61.22,
+          "end_sec": 61.38
+        },
+        {
+          "text": "sĩ.",
+          "start_sec": 61.48,
+          "end_sec": 61.72
+        },
+        {
+          "text": "Vẫn",
+          "start_sec": 62.28,
+          "end_sec": 62.44
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 62.52,
+          "end_sec": 62.72
+        },
+        {
+          "text": "ấy",
+          "start_sec": 62.8,
+          "end_sec": 62.98
+        },
+        {
+          "text": "bác",
+          "start_sec": 63.06,
+          "end_sec": 63.22
+        },
+        {
+          "text": "sĩ,",
+          "start_sec": 63.32,
+          "end_sec": 63.54
+        },
+        {
+          "text": "nhất",
+          "start_sec": 64.019,
+          "end_sec": 64.2
+        },
+        {
+          "text": "là",
+          "start_sec": 64.26,
+          "end_sec": 64.44
+        },
+        {
+          "text": "từ",
+          "start_sec": 64.5,
+          "end_sec": 64.68
+        },
+        {
+          "text": "4",
+          "start_sec": 64.739,
+          "end_sec": 64.94
+        },
+        {
+          "text": "giờ",
+          "start_sec": 64.98,
+          "end_sec": 65.239
+        },
+        {
+          "text": "chiều",
+          "start_sec": 65.319,
+          "end_sec": 65.54
+        },
+        {
+          "text": "trở",
+          "start_sec": 65.6,
+          "end_sec": 65.78
+        },
+        {
+          "text": "đi.",
+          "start_sec": 65.84,
+          "end_sec": 66.06
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 66.64,
+      "end_sec": 74.98,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 66.64,
+          "end_sec": 66.78
+        },
+        {
+          "text": "cháu",
+          "start_sec": 66.82,
+          "end_sec": 67.02
+        },
+        {
+          "text": "chở",
+          "start_sec": 67.08,
+          "end_sec": 67.24
+        },
+        {
+          "text": "chị",
+          "start_sec": 67.28,
+          "end_sec": 67.44
+        },
+        {
+          "text": "đi",
+          "start_sec": 67.5,
+          "end_sec": 67.62
+        },
+        {
+          "text": "khám",
+          "start_sec": 67.66,
+          "end_sec": 67.86
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 67.9,
+          "end_sec": 68.06
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 68.14,
+          "end_sec": 68.34
+        },
+        {
+          "text": "bác",
+          "start_sec": 68.7,
+          "end_sec": 68.82
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 68.9,
+          "end_sec": 69.06
+        },
+        {
+          "text": "cứ",
+          "start_sec": 69.14,
+          "end_sec": 69.26
+        },
+        {
+          "text": "dặn",
+          "start_sec": 69.34,
+          "end_sec": 69.54
+        },
+        {
+          "text": "rồi",
+          "start_sec": 69.64,
+          "end_sec": 69.8
+        },
+        {
+          "text": "con",
+          "start_sec": 69.86,
+          "end_sec": 70.02
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 70.06,
+          "end_sec": 70.22
+        },
+        {
+          "text": "cho.",
+          "start_sec": 70.28,
+          "end_sec": 70.54
+        },
+        {
+          "text": "Con",
+          "start_sec": 71.06,
+          "end_sec": 71.2
+        },
+        {
+          "text": "cháu",
+          "start_sec": 71.26,
+          "end_sec": 71.46
+        },
+        {
+          "text": "chở",
+          "start_sec": 71.52,
+          "end_sec": 71.68
+        },
+        {
+          "text": "chị",
+          "start_sec": 71.72,
+          "end_sec": 71.88
+        },
+        {
+          "text": "đi",
+          "start_sec": 71.94,
+          "end_sec": 72.06
+        },
+        {
+          "text": "khám",
+          "start_sec": 72.1,
+          "end_sec": 72.28
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 72.34,
+          "end_sec": 72.5
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 72.58,
+          "end_sec": 72.78
+        },
+        {
+          "text": "bác",
+          "start_sec": 73.14,
+          "end_sec": 73.26
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 73.34,
+          "end_sec": 73.5
+        },
+        {
+          "text": "cứ",
+          "start_sec": 73.56,
+          "end_sec": 73.7
+        },
+        {
+          "text": "dặn",
+          "start_sec": 73.78,
+          "end_sec": 73.98
+        },
+        {
+          "text": "rồi",
+          "start_sec": 74.08,
+          "end_sec": 74.24
+        },
+        {
+          "text": "con",
+          "start_sec": 74.3,
+          "end_sec": 74.46
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 74.48,
+          "end_sec": 74.66
+        },
+        {
+          "text": "cho.",
+          "start_sec": 74.72,
+          "end_sec": 74.98
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 75.9,
+      "end_sec": 77.2,
+      "text": "Chị ngồi xuống đây cho em.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 75.9,
+          "end_sec": 76.04
+        },
+        {
+          "text": "ngồi",
+          "start_sec": 76.1,
+          "end_sec": 76.32
+        },
+        {
+          "text": "xuống",
+          "start_sec": 76.4,
+          "end_sec": 76.54
+        },
+        {
+          "text": "đây",
+          "start_sec": 76.6,
+          "end_sec": 76.74
+        },
+        {
+          "text": "cho",
+          "start_sec": 76.8,
+          "end_sec": 76.94
+        },
+        {
+          "text": "em.",
+          "start_sec": 77.02,
+          "end_sec": 77.2
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 78.16,
+      "end_sec": 83.68,
+      "text": "Tuần trước chị nói vẫn mỏi chân, dạo này thế nào ạ? Chị đo đường huyết lúc đói bao nhiêu sáng nay?",
+      "words": [
+        {
+          "text": "Tuần",
+          "start_sec": 78.16,
+          "end_sec": 78.32
+        },
+        {
+          "text": "trước",
+          "start_sec": 78.36,
+          "end_sec": 78.52
+        },
+        {
+          "text": "chị",
+          "start_sec": 78.56,
+          "end_sec": 78.68
+        },
+        {
+          "text": "nói",
+          "start_sec": 78.74,
+          "end_sec": 78.92
+        },
+        {
+          "text": "vẫn",
+          "start_sec": 78.98,
+          "end_sec": 79.1
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 79.16,
+          "end_sec": 79.3
+        },
+        {
+          "text": "chân,",
+          "start_sec": 79.36,
+          "end_sec": 79.52
+        },
+        {
+          "text": "dạo",
+          "start_sec": 79.94,
+          "end_sec": 80.1
+        },
+        {
+          "text": "này",
+          "start_sec": 80.16,
+          "end_sec": 80.3
+        },
+        {
+          "text": "thế",
+          "start_sec": 80.34,
+          "end_sec": 80.44
+        },
+        {
+          "text": "nào",
+          "start_sec": 80.5,
+          "end_sec": 80.64
+        },
+        {
+          "text": "ạ?",
+          "start_sec": 80.72,
+          "end_sec": 80.86
+        },
+        {
+          "text": "Chị",
+          "start_sec": 81.46,
+          "end_sec": 81.62
+        },
+        {
+          "text": "đo",
+          "start_sec": 81.68,
+          "end_sec": 81.82
+        },
+        {
+          "text": "đường",
+          "start_sec": 81.88,
+          "end_sec": 82.04
+        },
+        {
+          "text": "huyết",
+          "start_sec": 82.08,
+          "end_sec": 82.28
+        },
+        {
+          "text": "lúc",
+          "start_sec": 82.34,
+          "end_sec": 82.5
+        },
+        {
+          "text": "đói",
+          "start_sec": 82.58,
+          "end_sec": 82.78
+        },
+        {
+          "text": "bao",
+          "start_sec": 82.84,
+          "end_sec": 83
+        },
+        {
+          "text": "nhiêu",
+          "start_sec": 83.04,
+          "end_sec": 83.22
+        },
+        {
+          "text": "sáng",
+          "start_sec": 83.28,
+          "end_sec": 83.44
+        },
+        {
+          "text": "nay?",
+          "start_sec": 83.48,
+          "end_sec": 83.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 88.54,
+      "end_sec": 94.82,
+      "text": "Sáng nay em đo được 6,8 bác sĩ ạ. Dạ có một hôm em quên vì đi chợ về muộn.",
+      "words": [
+        {
+          "text": "Sáng",
+          "start_sec": 88.54,
+          "end_sec": 88.72
+        },
+        {
+          "text": "nay",
+          "start_sec": 88.78,
+          "end_sec": 89.08
+        },
+        {
+          "text": "em",
+          "start_sec": 89.16,
+          "end_sec": 89.32
+        },
+        {
+          "text": "đo",
+          "start_sec": 89.38,
+          "end_sec": 89.54
+        },
+        {
+          "text": "được",
+          "start_sec": 89.6,
+          "end_sec": 89.8
+        },
+        {
+          "text": "6,8",
+          "start_sec": 90.08,
+          "end_sec": 90.6
+        },
+        {
+          "text": "bác",
+          "start_sec": 90.66,
+          "end_sec": 90.82
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 90.9,
+          "end_sec": 91.12
+        },
+        {
+          "text": "ạ.",
+          "start_sec": 91.24,
+          "end_sec": 91.4
+        },
+        {
+          "text": "Dạ",
+          "start_sec": 91.9,
+          "end_sec": 92.1
+        },
+        {
+          "text": "có",
+          "start_sec": 92.16,
+          "end_sec": 92.3
+        },
+        {
+          "text": "một",
+          "start_sec": 92.38,
+          "end_sec": 92.56
+        },
+        {
+          "text": "hôm",
+          "start_sec": 92.62,
+          "end_sec": 92.82
+        },
+        {
+          "text": "em",
+          "start_sec": 92.9,
+          "end_sec": 93.04
+        },
+        {
+          "text": "quên",
+          "start_sec": 93.1,
+          "end_sec": 93.36
+        },
+        {
+          "text": "vì",
+          "start_sec": 93.44,
+          "end_sec": 93.6
+        },
+        {
+          "text": "đi",
+          "start_sec": 93.66,
+          "end_sec": 93.82
+        },
+        {
+          "text": "chợ",
+          "start_sec": 93.88,
+          "end_sec": 94.18
+        },
+        {
+          "text": "về",
+          "start_sec": 94.28,
+          "end_sec": 94.44
+        },
+        {
+          "text": "muộn.",
+          "start_sec": 94.52,
+          "end_sec": 94.82
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 99.2,
+      "end_sec": 107.64,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 99.2,
+          "end_sec": 99.32
+        },
+        {
+          "text": "cháu",
+          "start_sec": 99.38,
+          "end_sec": 99.58
+        },
+        {
+          "text": "chở",
+          "start_sec": 99.64,
+          "end_sec": 99.8
+        },
+        {
+          "text": "chị",
+          "start_sec": 99.84,
+          "end_sec": 100
+        },
+        {
+          "text": "đi",
+          "start_sec": 100.06,
+          "end_sec": 100.18
+        },
+        {
+          "text": "khám",
+          "start_sec": 100.22,
+          "end_sec": 100.42
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 100.46,
+          "end_sec": 100.62
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 100.7,
+          "end_sec": 100.9
+        },
+        {
+          "text": "bác",
+          "start_sec": 101.26,
+          "end_sec": 101.38
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 101.46,
+          "end_sec": 101.62
+        },
+        {
+          "text": "cứ",
+          "start_sec": 101.7,
+          "end_sec": 101.82
+        },
+        {
+          "text": "dặn",
+          "start_sec": 101.9,
+          "end_sec": 102.1
+        },
+        {
+          "text": "rồi",
+          "start_sec": 102.2,
+          "end_sec": 102.36
+        },
+        {
+          "text": "con",
+          "start_sec": 102.42,
+          "end_sec": 102.58
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 102.62,
+          "end_sec": 102.78
+        },
+        {
+          "text": "cho.",
+          "start_sec": 102.84,
+          "end_sec": 103.12
+        },
+        {
+          "text": "Con",
+          "start_sec": 103.74,
+          "end_sec": 103.86
+        },
+        {
+          "text": "cháu",
+          "start_sec": 103.92,
+          "end_sec": 104.12
+        },
+        {
+          "text": "chở",
+          "start_sec": 104.18,
+          "end_sec": 104.34
+        },
+        {
+          "text": "chị",
+          "start_sec": 104.38,
+          "end_sec": 104.54
+        },
+        {
+          "text": "đi",
+          "start_sec": 104.6,
+          "end_sec": 104.72
+        },
+        {
+          "text": "khám",
+          "start_sec": 104.76,
+          "end_sec": 104.96
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 105,
+          "end_sec": 105.16
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 105.24,
+          "end_sec": 105.44
+        },
+        {
+          "text": "bác",
+          "start_sec": 105.8,
+          "end_sec": 105.92
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 106,
+          "end_sec": 106.16
+        },
+        {
+          "text": "cứ",
+          "start_sec": 106.22,
+          "end_sec": 106.36
+        },
+        {
+          "text": "dặn",
+          "start_sec": 106.44,
+          "end_sec": 106.64
+        },
+        {
+          "text": "rồi",
+          "start_sec": 106.74,
+          "end_sec": 106.9
+        },
+        {
+          "text": "con",
+          "start_sec": 106.96,
+          "end_sec": 107.12
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 107.16,
+          "end_sec": 107.32
+        },
+        {
+          "text": "cho.",
+          "start_sec": 107.38,
+          "end_sec": 107.64
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 108.64,
+      "end_sec": 110.06,
+      "text": "Vậy tốt hơn tuần trước rồi.",
+      "words": [
+        {
+          "text": "Vậy",
+          "start_sec": 108.64,
+          "end_sec": 108.82
+        },
+        {
+          "text": "tốt",
+          "start_sec": 108.86,
+          "end_sec": 109.06
+        },
+        {
+          "text": "hơn",
+          "start_sec": 109.12,
+          "end_sec": 109.3
+        },
+        {
+          "text": "tuần",
+          "start_sec": 109.36,
+          "end_sec": 109.54
+        },
+        {
+          "text": "trước",
+          "start_sec": 109.58,
+          "end_sec": 109.76
+        },
+        {
+          "text": "rồi.",
+          "start_sec": 109.84,
+          "end_sec": 110.06
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 110.98,
+      "end_sec": 115.56,
+      "text": "Chị có bỏ liều buổi trưa hôm nào không? Chân chị sưng không hay chỉ mỏi thôi?",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 110.98,
+          "end_sec": 111.18
+        },
+        {
+          "text": "có",
+          "start_sec": 111.24,
+          "end_sec": 111.32
+        },
+        {
+          "text": "bỏ",
+          "start_sec": 111.38,
+          "end_sec": 111.54
+        },
+        {
+          "text": "liều",
+          "start_sec": 111.6,
+          "end_sec": 111.76
+        },
+        {
+          "text": "buổi",
+          "start_sec": 111.8,
+          "end_sec": 111.98
+        },
+        {
+          "text": "trưa",
+          "start_sec": 112.02,
+          "end_sec": 112.18
+        },
+        {
+          "text": "hôm",
+          "start_sec": 112.24,
+          "end_sec": 112.36
+        },
+        {
+          "text": "nào",
+          "start_sec": 112.42,
+          "end_sec": 112.58
+        },
+        {
+          "text": "không?",
+          "start_sec": 112.62,
+          "end_sec": 112.8
+        },
+        {
+          "text": "Chân",
+          "start_sec": 113.5,
+          "end_sec": 113.66
+        },
+        {
+          "text": "chị",
+          "start_sec": 113.7,
+          "end_sec": 113.9
+        },
+        {
+          "text": "sưng",
+          "start_sec": 113.98,
+          "end_sec": 114.12
+        },
+        {
+          "text": "không",
+          "start_sec": 114.16,
+          "end_sec": 114.34
+        },
+        {
+          "text": "hay",
+          "start_sec": 114.7,
+          "end_sec": 114.88
+        },
+        {
+          "text": "chỉ",
+          "start_sec": 114.94,
+          "end_sec": 115.08
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 115.14,
+          "end_sec": 115.28
+        },
+        {
+          "text": "thôi?",
+          "start_sec": 115.32,
+          "end_sec": 115.56
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 116.36,
+      "end_sec": 121.64,
+      "text": "Chỉ mỏi thôi, không sưng ạ. Em sợ làm máu nên hồi hộp lắm bác sĩ.",
+      "words": [
+        {
+          "text": "Chỉ",
+          "start_sec": 116.36,
+          "end_sec": 116.56
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 116.64,
+          "end_sec": 116.84
+        },
+        {
+          "text": "thôi,",
+          "start_sec": 116.9,
+          "end_sec": 117.16
+        },
+        {
+          "text": "không",
+          "start_sec": 117.54,
+          "end_sec": 117.8
+        },
+        {
+          "text": "sưng",
+          "start_sec": 117.88,
+          "end_sec": 118.04
+        },
+        {
+          "text": "ạ.",
+          "start_sec": 118.26,
+          "end_sec": 118.38
+        },
+        {
+          "text": "Em",
+          "start_sec": 119.06,
+          "end_sec": 119.22
+        },
+        {
+          "text": "sợ",
+          "start_sec": 119.32,
+          "end_sec": 119.48
+        },
+        {
+          "text": "làm",
+          "start_sec": 119.56,
+          "end_sec": 119.72
+        },
+        {
+          "text": "máu",
+          "start_sec": 119.8,
+          "end_sec": 120.06
+        },
+        {
+          "text": "nên",
+          "start_sec": 120.14,
+          "end_sec": 120.36
+        },
+        {
+          "text": "hồi",
+          "start_sec": 120.44,
+          "end_sec": 120.6
+        },
+        {
+          "text": "hộp",
+          "start_sec": 120.66,
+          "end_sec": 120.84
+        },
+        {
+          "text": "lắm",
+          "start_sec": 120.9,
+          "end_sec": 121.08
+        },
+        {
+          "text": "bác",
+          "start_sec": 121.14,
+          "end_sec": 121.32
+        },
+        {
+          "text": "sĩ.",
+          "start_sec": 121.4,
+          "end_sec": 121.64
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 122.74,
+      "end_sec": 130.979,
+      "text": "Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho. Con cháu chở chị đi khám mỗi sáng, bác sĩ cứ dặn rồi con nhớ cho.",
+      "words": [
+        {
+          "text": "Con",
+          "start_sec": 122.74,
+          "end_sec": 122.88
+        },
+        {
+          "text": "cháu",
+          "start_sec": 122.94,
+          "end_sec": 123.14
+        },
+        {
+          "text": "chở",
+          "start_sec": 123.2,
+          "end_sec": 123.36
+        },
+        {
+          "text": "chị",
+          "start_sec": 123.4,
+          "end_sec": 123.56
+        },
+        {
+          "text": "đi",
+          "start_sec": 123.62,
+          "end_sec": 123.74
+        },
+        {
+          "text": "khám",
+          "start_sec": 123.78,
+          "end_sec": 123.98
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 124.02,
+          "end_sec": 124.18
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 124.26,
+          "end_sec": 124.46
+        },
+        {
+          "text": "bác",
+          "start_sec": 124.82,
+          "end_sec": 124.94
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 125.02,
+          "end_sec": 125.18
+        },
+        {
+          "text": "cứ",
+          "start_sec": 125.24,
+          "end_sec": 125.38
+        },
+        {
+          "text": "dặn",
+          "start_sec": 125.46,
+          "end_sec": 125.66
+        },
+        {
+          "text": "rồi",
+          "start_sec": 125.76,
+          "end_sec": 125.92
+        },
+        {
+          "text": "con",
+          "start_sec": 125.98,
+          "end_sec": 126.14
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 126.16,
+          "end_sec": 126.34
+        },
+        {
+          "text": "cho.",
+          "start_sec": 126.4,
+          "end_sec": 126.6
+        },
+        {
+          "text": "Con",
+          "start_sec": 127.06,
+          "end_sec": 127.2
+        },
+        {
+          "text": "cháu",
+          "start_sec": 127.24,
+          "end_sec": 127.46
+        },
+        {
+          "text": "chở",
+          "start_sec": 127.52,
+          "end_sec": 127.66
+        },
+        {
+          "text": "chị",
+          "start_sec": 127.72,
+          "end_sec": 127.88
+        },
+        {
+          "text": "đi",
+          "start_sec": 127.94,
+          "end_sec": 128.06
+        },
+        {
+          "text": "khám",
+          "start_sec": 128.1,
+          "end_sec": 128.28
+        },
+        {
+          "text": "mỗi",
+          "start_sec": 128.34,
+          "end_sec": 128.5
+        },
+        {
+          "text": "sáng,",
+          "start_sec": 128.58,
+          "end_sec": 128.78
+        },
+        {
+          "text": "bác",
+          "start_sec": 129.139,
+          "end_sec": 129.259
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 129.32,
+          "end_sec": 129.5
+        },
+        {
+          "text": "cứ",
+          "start_sec": 129.56,
+          "end_sec": 129.68
+        },
+        {
+          "text": "dặn",
+          "start_sec": 129.759,
+          "end_sec": 129.979
+        },
+        {
+          "text": "rồi",
+          "start_sec": 130.06,
+          "end_sec": 130.22
+        },
+        {
+          "text": "con",
+          "start_sec": 130.28,
+          "end_sec": 130.44
+        },
+        {
+          "text": "nhớ",
+          "start_sec": 130.479,
+          "end_sec": 130.66
+        },
+        {
+          "text": "cho.",
+          "start_sec": 130.72,
+          "end_sec": 130.979
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 131.84,
+      "end_sec": 139.36,
+      "text": "Em cho chị làm thêm xét nghiệm 31C để đánh giá ba tháng qua. Chị uống Metformin buổi tối sau ăn nhé, đừng uống lúc bụng đói.",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 131.84,
+          "end_sec": 131.98
+        },
+        {
+          "text": "cho",
+          "start_sec": 132.02,
+          "end_sec": 132.12
+        },
+        {
+          "text": "chị",
+          "start_sec": 132.18,
+          "end_sec": 132.32
+        },
+        {
+          "text": "làm",
+          "start_sec": 132.38,
+          "end_sec": 132.52
+        },
+        {
+          "text": "thêm",
+          "start_sec": 132.56,
+          "end_sec": 132.74
+        },
+        {
+          "text": "xét",
+          "start_sec": 132.8,
+          "end_sec": 132.96
+        },
+        {
+          "text": "nghiệm",
+          "start_sec": 132.98,
+          "end_sec": 133.2
+        },
+        {
+          "text": "31C",
+          "start_sec": 133.48,
+          "end_sec": 134
+        },
+        {
+          "text": "để",
+          "start_sec": 134.08,
+          "end_sec": 134.16
+        },
+        {
+          "text": "đánh",
+          "start_sec": 134.2,
+          "end_sec": 134.34
+        },
+        {
+          "text": "giá",
+          "start_sec": 134.4,
+          "end_sec": 134.58
+        },
+        {
+          "text": "ba",
+          "start_sec": 134.66,
+          "end_sec": 134.76
+        },
+        {
+          "text": "tháng",
+          "start_sec": 134.82,
+          "end_sec": 134.98
+        },
+        {
+          "text": "qua.",
+          "start_sec": 135.04,
+          "end_sec": 135.24
+        },
+        {
+          "text": "Chị",
+          "start_sec": 135.96,
+          "end_sec": 136.12
+        },
+        {
+          "text": "uống",
+          "start_sec": 136.18,
+          "end_sec": 136.32
+        },
+        {
+          "text": "Metformin",
+          "start_sec": 136.36,
+          "end_sec": 136.9
+        },
+        {
+          "text": "buổi",
+          "start_sec": 136.98,
+          "end_sec": 137.12
+        },
+        {
+          "text": "tối",
+          "start_sec": 137.18,
+          "end_sec": 137.36
+        },
+        {
+          "text": "sau",
+          "start_sec": 137.42,
+          "end_sec": 137.56
+        },
+        {
+          "text": "ăn",
+          "start_sec": 137.62,
+          "end_sec": 137.74
+        },
+        {
+          "text": "nhé,",
+          "start_sec": 137.8,
+          "end_sec": 137.96
+        },
+        {
+          "text": "đừng",
+          "start_sec": 138.32,
+          "end_sec": 138.5
+        },
+        {
+          "text": "uống",
+          "start_sec": 138.56,
+          "end_sec": 138.7
+        },
+        {
+          "text": "lúc",
+          "start_sec": 138.74,
+          "end_sec": 138.88
+        },
+        {
+          "text": "bụng",
+          "start_sec": 138.92,
+          "end_sec": 139.06
+        },
+        {
+          "text": "đói.",
+          "start_sec": 139.12,
+          "end_sec": 139.36
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 140.24,
+      "end_sec": 147.5,
+      "text": "Vẫn mỏi ấy bác sĩ, nhất là từ 4 giờ chiều trở đi. Sáng nay em đo được 6,8 bác sĩ ạ.",
+      "words": [
+        {
+          "text": "Vẫn",
+          "start_sec": 140.24,
+          "end_sec": 140.4
+        },
+        {
+          "text": "mỏi",
+          "start_sec": 140.46,
+          "end_sec": 140.68
+        },
+        {
+          "text": "ấy",
+          "start_sec": 140.74,
+          "end_sec": 140.94
+        },
+        {
+          "text": "bác",
+          "start_sec": 141,
+          "end_sec": 141.18
+        },
+        {
+          "text": "sĩ,",
+          "start_sec": 141.26,
+          "end_sec": 141.48
+        },
+        {
+          "text": "nhất",
+          "start_sec": 141.98,
+          "end_sec": 142.14
+        },
+        {
+          "text": "là",
+          "start_sec": 142.2,
+          "end_sec": 142.38
+        },
+        {
+          "text": "từ",
+          "start_sec": 142.46,
+          "end_sec": 142.64
+        },
+        {
+          "text": "4",
+          "start_sec": 142.7,
+          "end_sec": 142.88
+        },
+        {
+          "text": "giờ",
+          "start_sec": 142.94,
+          "end_sec": 143.18
+        },
+        {
+          "text": "chiều",
+          "start_sec": 143.28,
+          "end_sec": 143.48
+        },
+        {
+          "text": "trở",
+          "start_sec": 143.56,
+          "end_sec": 143.74
+        },
+        {
+          "text": "đi.",
+          "start_sec": 143.78,
+          "end_sec": 143.96
+        },
+        {
+          "text": "Sáng",
+          "start_sec": 144.72,
+          "end_sec": 144.9
+        },
+        {
+          "text": "nay",
+          "start_sec": 144.94,
+          "end_sec": 145.18
+        },
+        {
+          "text": "em",
+          "start_sec": 145.32,
+          "end_sec": 145.48
+        },
+        {
+          "text": "đo",
+          "start_sec": 145.54,
+          "end_sec": 145.7
+        },
+        {
+          "text": "được",
+          "start_sec": 145.78,
+          "end_sec": 145.96
+        },
+        {
+          "text": "6,8",
+          "start_sec": 146.02,
+          "end_sec": 146.78
+        },
+        {
+          "text": "bác",
+          "start_sec": 146.82,
+          "end_sec": 146.98
+        },
+        {
+          "text": "sĩ",
+          "start_sec": 147.06,
+          "end_sec": 147.24
+        },
+        {
+          "text": "ạ.",
+          "start_sec": 147.4,
+          "end_sec": 147.5
+        }
+      ]
+    }
+  ]
+}

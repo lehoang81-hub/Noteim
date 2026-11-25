@@ -10,9 +10,12 @@ import { buildSystemPrompt, buildUserPrompt } from "@/lib/gap-check/prompt";
 import { parseGapCheckOutput } from "@/lib/gap-check/parse";
 import {
   addSessionGapCheck,
+  assertSessionAccess,
   getLatestGapCheckResult,
   listSessionGapChecks,
 } from "@/lib/gap-check/store";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth/nextauth-options";
 import { consumeQuota, type GapCheckPlan } from "@/lib/gap-check/rate-limit";
 import { runGapCheckChain, GapCheckChainError, parseFakePlanHeader, type GapCheckAttempt } from "@/lib/gap-check/provider";
 import { DataError } from "@/lib/data/errors";
@@ -75,12 +78,27 @@ export async function POST(
     return jsonError(400, "template_not_found", `Không có mẫu nghiệp vụ "${body.templateId}"`);
   }
 
+  // Kiểm quyền TRƯỚC khi trừ lượt miễn phí: người B chạm buổi của A phải
+  // nhận 403 kể cả khi đã hết lượt — trước đây route trừ lượt trước nên B
+  // hết lượt nhận 429 thay vì 403 (e2e c1-remote bắt được).
+  try {
+    await assertSessionAccess(sessionId);
+  } catch (error) {
+    if (error instanceof DataError) {
+      return jsonError(error.code === "forbidden" ? 403 : 500, error.code, "Không có quyền rà buổi này");
+    }
+    throw error;
+  }
+
   // Chưa có đăng nhập thật: không tin gói do trình duyệt tự khai (ai cũng gửi được "pro").
   // Chỉ chấp nhận header này khi chạy AI giả lập để kiểm thử. Khi có C1 thì lấy gói từ tài khoản.
   const trustPlanHeader = process.env.GAP_CHECK_FAKE !== undefined && process.env.GAP_CHECK_FAKE !== "";
   const plan: GapCheckPlan =
     trustPlanHeader && request.headers.get("x-noteim-plan") === "pro" ? "pro" : "free";
-  const clientId = request.headers.get("x-noteim-client") || "anon";
+  // Lượt miễn phí chia theo người đã đăng nhập (khung giờ đổi khi có C1);
+  // ẩn danh vẫn theo mã khách trên header — hai người đăng nhập không đủ lượt của nhau.
+  const session = await getServerSession(authOptions);
+  const clientId = session?.user?.id ?? request.headers.get("x-noteim-client") ?? "anon";
   const quota = consumeQuota(clientId, plan);
   if (!quota.ok) {
     logGapCheck({ event: "gap_check", sessionId, templateId: body.templateId, outcome: "rate_limited", ts: new Date().toISOString() });

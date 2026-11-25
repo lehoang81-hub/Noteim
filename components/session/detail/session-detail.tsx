@@ -17,7 +17,10 @@ import { useToast } from "@/components/ui/toast";
 import { data, dataNow, DataError, useData, type ListeningPrefs, type ActionItem, type Lang, type SessionDetail, type SummaryVersion } from "@/lib/data";
 import { durationParts, intlLocale, shortDate } from "@/lib/format";
 import { cleanDurationOf, skipsFromMap } from "@/lib/listening/skips";
-import { templateName as localizedTemplateName, speakerLabel } from "@/lib/data/localize";
+import { templateName as localizedTemplateName, speakerLabel, asrErrorKey } from "@/lib/data/localize";
+import { useAudioUpload } from "@/lib/audio/upload-store";
+import { pendingUploadKeys, uploadSessionAudio } from "@/lib/audio/upload-manager";
+import { sessionKey } from "@/lib/audio/chunk-store";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { createAudioPlayer } from "@/lib/player/audio-player";
 import { CleanAudioChain } from "@/lib/player/clean-audio";
@@ -241,6 +244,21 @@ function Loaded({
   const hasAudio = !!detail.audio_url;
   const isTrialRecording = detail.trial_recording === true;
   const canPlay = detail.storage_status === "full" && detail.status === "ready" && hasAudio;
+
+  // Băng ghi còn chờ tải lên (C1-06): nằm trong IndexedDB của trình duyệt
+  // (khóa session:<id>) hoặc lần PUT gần nhất của buổi này vừa lỗi. Xong tải
+  // thì snapshot upload đổi — đọc lại danh sách phần chờ theo đó.
+  const upload = useAudioUpload();
+  const [pendingAudio, setPendingAudio] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    void pendingUploadKeys().then((keys) => {
+      if (alive) setPendingAudio(keys.includes(sessionKey(detail.id)));
+    });
+    return () => {
+      alive = false;
+    };
+  }, [detail.id, upload]);
   function seek(time: number) {
     touched.current = true;
     player.seek(time);
@@ -455,9 +473,20 @@ function Loaded({
           </p>
         ) : null}
         {detail.status === "ready" && !hasAudio ? (
-          <p className="mt-2 text-small text-ink-3" data-testid="no-audio-note">
-            {isTrialRecording ? t("trialRecording") : t("noAudio")}
-          </p>
+          pendingAudio ? (
+            /* Băng còn nằm trong IndexedDB nhưng tải lên lỗi/đang chờ (C1-06):
+            * nói rõ sẽ tự thử lại và cho bấm Thử lại ngay — băng không mất. */
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2" data-testid="upload-pending-note">
+              <p className="text-small text-ink-3">{t("uploadPending")}</p>
+              <Button variant="ghost" className="h-9" onClick={() => void uploadSessionAudio(detail.id)}>
+                {t("retry")}
+              </Button>
+            </div>
+          ) : (
+            <p className="mt-2 text-small text-ink-3" data-testid="no-audio-note">
+              {isTrialRecording ? t("trialRecording") : t("noAudio")}
+            </p>
+          )
         ) : null}
         {folderName ? (
           <p className="mt-1 flex items-center gap-1.5 text-small text-ink-2">
@@ -894,7 +923,11 @@ function StatusBlock({ detail }: { detail: SessionDetail }) {
         action={
           detail.status === "failed" ? (
             <div className="flex flex-col items-center gap-2">
-              {detail.failure_reason ? <p className="text-small text-ink-3">{t("failedReason", { reason: detail.failure_reason })}</p> : null}
+              {/* Lỗi nói bằng tiếng Việt dễ hiểu theo mã — không lộ mã kỹ thuật (C1-06);
+                  dữ liệu cũ chỉ có failure_reason thì dùng nó thay asr_error */}
+              {detail.asr_error || detail.failure_reason ? (
+                <p className="text-small text-ink-3">{t(asrErrorKey(detail.asr_error ?? detail.failure_reason))}</p>
+              ) : null}
               <Button
                 onClick={async () => {
                   await data.sessions.retryProcessing(detail.id);
@@ -902,7 +935,7 @@ function StatusBlock({ detail }: { detail: SessionDetail }) {
                   toast.show({ tone: "success", message: t("processing", { step: 1 }) });
                 }}
               >
-                {t("retry")}
+                {t("asrReprocess")}
               </Button>
             </div>
           ) : undefined
