@@ -629,7 +629,11 @@
     "receiptMidConfirm": "동의하고 이 템플릿 사용",
     "receiptCancel": "닫기",
     "announceSentence": "이 회의는 회의록 작성을 위해 녹음됩니다",
-    "trialNote": "시험 녹음: 오디오 미저장"
+    "trialNote": "시험 녹음: 오디오 미저장",
+    "cancel": "녹음 취소",
+    "cancelBody": "녹음 중인 오디오가 사라집니다.",
+    "cancelConfirm": "녹음 버리기",
+    "cancelTitle": "이 녹음을 버릴까요?"
   },
   "debug": {
     "title": "테스트 패널",

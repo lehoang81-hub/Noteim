@@ -1118,7 +1118,11 @@
     "receiptMidConfirm": "Agree and use this template",
     "receiptCancel": "Dismiss",
     "announceSentence": "This meeting is being recorded to build the minutes",
-    "trialNote": "Trial recording: audio not saved"
+    "trialNote": "Trial recording: audio not saved",
+    "cancel": "Cancel recording",
+    "cancelBody": "The audio being recorded will be lost.",
+    "cancelConfirm": "Discard recording",
+    "cancelTitle": "Discard this recording?"
   },
   "processing": {
     "step1": "Recording saved",

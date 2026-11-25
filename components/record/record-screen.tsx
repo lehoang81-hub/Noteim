@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useId, useRef, useState } from "react";
-import { Camera, ChevronDown, ClipboardCheck, HardDrive, Mic, MicVocal } from "lucide-react";
+import { Camera, ChevronDown, ClipboardCheck, HardDrive, Mic, MicVocal, X } from "lucide-react";
 import { AnimatePresence, LayoutGroup, m } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -21,6 +21,7 @@ const importGapCheckSheet = () => import("@/components/record/gap-check");
 const GapCheckSheet = dynamic(() => importGapCheckSheet().then((m) => m.GapCheckSheet), { ssr: false });
 import { ConsentSheet, ConsentReceiptSheet, MicPermissionSheet, type SpeechChoice } from "@/components/record/sheets";
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { Banner, MicDrawing } from "@/components/ui/feedback";
 import { Sheet } from "@/components/ui/sheet";
 import { RecordButton } from "@/components/ui/record-button";
@@ -217,6 +218,7 @@ export function RecordScreen() {
   /** Cổng chốt buổi (GC-03, đặc tả §4.2): giữ nút Dừng xong hiện thanh hỏi
    * "Kiểm tra thiếu thông tin trước khi lưu?" thay vì kết thúc ngay. */
   const [closeGate, setCloseGate] = useState(false);
+  const [confirmCancel, setConfirmCancel] = useState(false);
 
   const active = recording.status !== "idle";
   const paused = recording.status === "paused";
@@ -524,6 +526,26 @@ export function RecordScreen() {
       ending.current = false;
       toast.show({ tone: "error", message: t("endError") });
     }
+  }
+
+  /* Hủy buổi ghi (C1-06): dừng bộ thu, xóa băng live trong IndexedDB
+   * (MeetingRecorder.discard), tắt micro, KHÔNG tạo buổi — về thư viện.
+   * Hộp xác nhận đóng mà không xác nhận thì ghi tiếp, không mất gì. */
+  async function cancelRecording() {
+    if (ending.current || folding) return;
+    ending.current = true;
+    setConfirmCancel(false);
+    setCloseGate(false);
+    try {
+      await recorderRef.current?.discard(); // xóa băng live, lần ghi sau ghi đè
+    } catch {
+      // Xóa băng lỗi thì vẫn hủy luồng ghi: không tạo buổi nên băng live mất tác dụng
+    }
+    mic.stop();
+    letScreenSleep();
+    endRecording();
+    ending.current = false;
+    router.push("/");
   }
 
   function bookmarkFeedback() {
@@ -845,9 +867,20 @@ export function RecordScreen() {
               <Button variant="ghost" block onClick={() => setCloseGate(false)} className="mt-2">
                 {t("gateResume")}
               </Button>
+              <Button variant="ghost" block onClick={() => setConfirmCancel(true)} className="mt-1 text-tag-risk">
+                {t("cancel")}
+              </Button>
             </div>
           ) : showControls ? (
-            <div className="flex w-full items-center gap-3">
+            <div className="flex w-full items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirmCancel(true)}
+                aria-label={t("cancel")}
+                className="flex size-11 shrink-0 select-none items-center justify-center rounded-control text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2 hover:text-tag-risk"
+              >
+                <X aria-hidden={true} className="size-5" strokeWidth={1.75} />
+              </button>
               <button
                 type="button"
                 onClick={() => openGapCheck(false)}
@@ -960,6 +993,18 @@ export function RecordScreen() {
           setPendingTemplateId(null);
         }}
       />
+      {/* Hủy buổi ghi (C1-06): xác nhận mới bỏ — không xác nhận thì ghi tiếp.
+          Nút xác nhận nói đúng việc sẽ xảy ra theo luật ConfirmDialog. */}
+      <ConfirmDialog
+        open={confirmCancel}
+        onOpenChange={setConfirmCancel}
+        title={t("cancelTitle")}
+        cancelLabel={t("gateResume")}
+        confirmLabel={t("cancelConfirm")}
+        onConfirm={() => void cancelRecording()}
+      >
+        {t("cancelBody")}
+      </ConfirmDialog>
       {/* Gap Check (GC-03, đặc tả v1.1 §4.1, §4.3): sheet kết quả rà thiếu;
           chép câu hỏi vào ghi chú nhanh nằm ngay trong buổi ghi (góp ý #2).
           GC-04: kết quả rà gần nhất đi kèm buổi khi lưu (checklist màn chi tiết);

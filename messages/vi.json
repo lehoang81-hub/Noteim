@@ -629,7 +629,11 @@
     "receiptMidConfirm": "Đồng ý và dùng mẫu này",
     "receiptCancel": "Bỏ",
     "announceSentence": "Buổi làm việc này được ghi âm để lập biên bản",
-    "trialNote": "Bản ghi thử: chưa lưu âm thanh"
+    "trialNote": "Bản ghi thử: chưa lưu âm thanh",
+    "cancel": "Hủy buổi ghi",
+    "cancelBody": "Âm thanh đang ghi sẽ mất.",
+    "cancelConfirm": "Bỏ buổi ghi",
+    "cancelTitle": "Bỏ buổi ghi này?"
   },
   "debug": {
     "title": "Bảng thử nghiệm",
