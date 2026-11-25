@@ -182,6 +182,11 @@ Không nằm trong lộ trình Noteim hiện tại: yêu cầu tố tụng, mứ
 - **Nút xuất "Biên bản nguyên văn" có mốc giây** — tách khỏi tóm tắt: mỗi dòng của biên bản gắn mốc thời gian (giây) trong file ghi âm để bấm vào là nghe đúng chỗ đó, đối chiếu nhanh khi có tranh chấp.
 - **Cấu hình thời gian lưu và mẫu đồng ý theo tổ chức** — làm ở chặng C1-B: mỗi tổ chức đặt riêng thời hạn giữ dữ liệu và nội dung biên nhận đồng ý.
 
+- **Kho tri thức tích lũy (đề xuất 25/11)** — làm theo hai tầng. Tầng riêng của từng người làm trước: tự học tên người/dự án/thuật ngữ riêng để gợi ý đúng chữ, nhắc việc theo thói quen, hỏi AI trên cả thư mục. Tầng gộp nhiều người làm sau, chỉ đo hành vi (câu hỏi rà soát nào được dùng/bỏ/chỉnh, đoạn tóm tắt nào hay bị sửa); nội dung cuộc nói chỉ dùng để cải thiện chung khi người dùng chủ động bật, mặc định tắt vì dữ liệu của luật sư, bác sĩ, công chứng là bí mật.
+- **Zalo và lịch (đề xuất 25/11)** — thứ tự: (1) nút "Gửi Zalo" chia sẻ link xem tóm tắt, không cần Zalo duyệt; (2) tạo sự kiện Google Calendar một chạm từ việc cần làm và lịch hẹn; (3) liên kết tài khoản Zalo và Google do người dùng chủ động trong Cài đặt, không tự ghép theo tên hay email; (4) đăng nhập bằng Zalo (OAuth: đăng ký app trên Zalo Developers, xác minh tên miền, đặt callback); (5) Official Account của Noteim gửi tóm tắt và nhắc việc vào Zalo (OA phải được Zalo duyệt); (6) Mini App để xem tóm tắt và việc. Chưa kiểm chứng, cần đọc tài liệu Zalo trước khi thiết kế: Zalo có trả email hay không, bảng giá tin thông báo (ZNS), ghi âm ổn định trong Mini App.
+- **Định vị cạnh tranh (đề xuất 25/11)** — lợi thế nằm ở mẫu theo ngành bằng tiếng Việt, kho tri thức, ghi âm một chạm chịu được mất mạng và niềm tin về dữ liệu, không nằm ở code. Chọn một đến hai ngành đi sâu trước (đề xuất: bất động sản, công chứng/luật) và đo tỉ lệ người dùng quay lại lần thứ hai, thứ ba.
+- **Nhịp cron theo gói Vercel** — hiện gói Hobby chỉ cho cron một lần/ngày nên `asr-retry` chạy 03:30 hằng ngày như lưới an toàn. Nếu nâng lên Pro thì đổi lại 10 phút một lần.
+
 ### Ranh giới — không làm
 
 Không làm tính năng chấm độ tin cậy hay phát hiện nói dối. Sản phẩm chỉ làm biên bản và tóm tắt trung thực theo đúng những gì ghi được.
