@@ -403,6 +403,7 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
   // (id a-user-*) — AI chỉ thay các việc máy sinh (a-1, a-2, ...).
   const existingTasks = await db.select().from(actionItems).where(eq(actionItems.sessionId, row.id));
   const keptTasks = existingTasks.filter((t) => t.done || t.id.startsWith("a-user-"));
+  const resummarized = row.resummarizePending === true;
   const taskRows = plan.action_items.map((a, i) => ({
     id: `a-${i + 1}`,
     sessionId: row.id,
@@ -427,8 +428,10 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
           assigneeContactId: sql`excluded.assignee_contact_id`,
           dueDate: sql`excluded.due_date`,
           priority: sql`excluded.priority`,
-          done: sql`excluded.done`,
-          doneAt: sql`excluded.done_at`,
+          // C1-09 mục 4: tóm tắt lại phải GIỮ việc người dùng đã tick xong
+          // (done/doneAt của dòng cũ), không bật lại thành chưa xong
+          done: resummarized ? sql`${actionItems.done}` : sql`excluded.done`,
+          doneAt: resummarized ? sql`${actionItems.doneAt}` : sql`excluded.done_at`,
           sourceQuote: sql`excluded.source_quote`,
           timestampSec: sql`excluded.timestamp_sec`,
         },
@@ -462,7 +465,6 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
   // C1-09 mục 4: tóm tắt lại thành công thì mới đếm lượt và tắt cờ chờ;
   // lời đã dùng để tóm tắt là bản mới nhất nên gỡ băng "Tóm tắt lại". Bản
   // dịch tóm tắt theo nội dung cũ chuyển lỗi thời (hiện "Dịch lại").
-  const resummarized = row.resummarizePending === true;
   await db
     .update(sessions)
     .set({

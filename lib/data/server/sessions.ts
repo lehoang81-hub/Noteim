@@ -705,18 +705,18 @@ export async function updateSession(
  * cột thumb theo spans. Người hết đoạn giữ nguyên dữ liệu nhưng tỉ lệ về 0
  * (màn hình lọc tỉ lệ 0 nên người đó ẩn khỏi đầu buổi và tỉ lệ nói).
  */
-async function recomputeSpeakerStats(row: SessionRow, detailRow: DetailRow): Promise<void> {
+async function recomputeSpeakerStats(row: SessionRow, speakers: Speaker[]): Promise<void> {
   const db = getDb();
   const segs = await db
     .select({ speakerId: transcriptSegments.speakerId, startSec: transcriptSegments.startSec, endSec: transcriptSegments.endSec })
     .from(transcriptSegments)
     .where(eq(transcriptSegments.sessionId, row.id))
     .orderBy(transcriptSegments.startSec);
-  const speakers = (((detailRow.speakers as Speaker[]) ?? []) as Speaker[]).map((s) => ({ ...s }));
+  const current = speakers.map((s) => ({ ...s }));
   const durations = new Map<string, number>();
   for (const seg of segs) durations.set(seg.speakerId, (durations.get(seg.speakerId) ?? 0) + Math.max(0, seg.endSec - seg.startSec));
   const total = [...durations.values()].reduce((a, b) => a + b, 0) || 1;
-  for (const sp of speakers) {
+  for (const sp of current) {
     const d = durations.get(sp.id) ?? 0;
     const pct = Math.round((d / total) * 100);
     // Người còn đoạn nhưng quá ít tiếng (dưới 0,5%) vẫn giữ ≥1% để không bị
@@ -730,11 +730,11 @@ async function recomputeSpeakerStats(row: SessionRow, detailRow: DetailRow): Pro
   const spans = segs.map((s) => ({ speaker_id: s.speakerId, start_sec: s.startSec, end_sec: s.endSec }));
   const colorAt = (t: number): number => {
     const span = spans.find((sp) => t >= sp.start_sec && t < sp.end_sec) ?? spans[spans.length - 1];
-    const sp = speakers.find((s) => s.id === span?.speaker_id);
+    const sp = current.find((s) => s.id === span?.speaker_id);
     return sp ? sp.color_index : 0;
   };
   const colorsThumb = Array.from({ length: THUMB_COUNT }, (_, i) => colorAt(((i + 0.5) / THUMB_COUNT) * Math.max(1, row.durationSec)));
-  await db.update(sessionDetails).set({ speakers, speakerSpans: spans }).where(eq(sessionDetails.sessionId, row.id));
+  await db.update(sessionDetails).set({ speakers: current, speakerSpans: spans }).where(eq(sessionDetails.sessionId, row.id));
   await db.update(sessions).set({ speakerColorsThumb: colorsThumb }).where(eq(sessions.id, row.id));
 }
 
@@ -821,7 +821,7 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
       // C1-09: tính lại tỉ lệ nói, speaker_spans, màu thumb sau MỌI lần đổi;
       // lời đã đổi người sau lần tóm tắt gần nhất thì đánh dấu cần tóm tắt lại
       await db.update(sessions).set({ transcriptStale: true }).where(eq(sessions.id, id));
-      await recomputeSpeakerStats(sessionRow, detail);
+      await recomputeSpeakerStats(sessionRow, (detail.speakers as Speaker[]) ?? []);
       return { ok: true };
     }
     case "addSpeakerAndReassign": {
@@ -867,7 +867,9 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
         .set({ speakerId: newId })
         .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)));
       await db.update(sessions).set({ transcriptStale: true }).where(eq(sessions.id, id));
-      await recomputeSpeakerStats(sessionRow, detail);
+      // Truyền đúng danh sách người nói ĐÃ CÓ người mới (recompute không tự
+      // đọc lại từ detail đọc đầu hàm, tránh ghi đè mất người vừa thêm)
+      await recomputeSpeakerStats(sessionRow, speakers);
       const followingIds = await followingSegmentIds(id, action.segmentId, oldSpeakerId);
       console.log(`[speaker] ok ${JSON.stringify({ sessionId: id, event: "add", newSpeaker: newId, following: followingIds.length, ts: new Date().toISOString() })}`);
       return { speaker_id: newId, following_ids: followingIds };
@@ -887,7 +889,7 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
         .set({ speakerId: action.speakerId })
         .where(and(eq(transcriptSegments.sessionId, id), inArray(transcriptSegments.id, action.segmentIds)));
       await db.update(sessions).set({ transcriptStale: true }).where(eq(sessions.id, id));
-      await recomputeSpeakerStats(sessionRow, detail);
+      await recomputeSpeakerStats(sessionRow, (detail.speakers as Speaker[]) ?? []);
       return { ok: true };
     }
     case "resummarize": {
