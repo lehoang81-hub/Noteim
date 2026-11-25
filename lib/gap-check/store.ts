@@ -28,6 +28,13 @@ import type { GapCheckResult, SessionGapCheckRow } from "./types";
 /** Đặc tả §3: history giữ tối đa 10 lần rà/buổi (Map dùng slice, DB dùng trigger). */
 export const MAX_HISTORY_PER_SESSION = 10;
 
+/** Kiểm quyền đọc/ghi lịch sử rà của buổi TRƯỚC khi làm việc tốn lượt hay
+ * tốn tiền AI — ném DataError "forbidden" nếu buổi tồn tại trong DB nhưng
+ * là của người khác; ẩn danh và buổi mock không ném (kho Map như cũ). */
+export async function assertSessionAccess(sessionId: string): Promise<void> {
+  await storeKind(sessionId);
+}
+
 const table = new Map<string, SessionGapCheckRow[]>();
 
 type StoreKind = "db" | "memory" | "forbidden";
