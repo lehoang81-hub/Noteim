@@ -1,7 +1,7 @@
 # Dữ liệu thử chặng B0
 
 Bộ âm thanh thử sinh từ lời của 3 buổi ghi mẫu, kèm đáp án để đối chiếu.
-Ba bộ ngắn (khoảng 11 MB) nằm ngay trong `test-data/audio/`. File dài 62 phút không commit (khoảng 24 MB): chạy script bên dưới để sinh, ra `test-data/audio/04-dai-62-phut.ogg` và `.m4a`.
+Ba bộ ngắn nằm ngay trong `test-data/audio/`. File dài 62 phút không commit (khoảng 24 MB): chạy script bên dưới để sinh, ra `test-data/audio/04-dai-62-phut.ogg` và `.m4a`.
 
 | File | Thời lượng | Nội dung | Phòng | Dùng để thử |
 | --- | --- | --- | --- | --- |
@@ -10,13 +10,13 @@ Ba bộ ngắn (khoảng 11 MB) nằm ngay trong `test-data/audio/`. File dài 6
 | `03-bac-si-kham` | 2,7 phút | 34 đoạn, bác sĩ và bệnh nhân | Phòng khám ồn | Lọc ồn, người nói nhỏ và chậm |
 | `04-dai-62-phut` | 62 phút | Ghép lặp 3 bộ trên, có nghỉ 20 đến 90 giây | | Ghi âm và tải lên buổi dài, khóa màn hình, bỏ qua khoảng lặng |
 
-Mỗi bộ có `.ogg` (Opus 32 kbps, như sẽ lưu thật) và `.m4a` (AAC, phát được trên mọi iPhone).
+Mỗi bộ có `.m4a` (AAC, phát được trên mọi iPhone). Bản `.ogg` (Opus 32 kbps, như sẽ lưu thật) đã bỏ khỏi repo ngày 2026-11-25 (C1-07, PR #95, theo docs/13 mục 6): trùng nội dung `.m4a`, không script/e2e nào dùng, và sinh lại được bằng `scripts/gen-test-audio.py`.
 `audio/<tên>.truth.json` là đáp án: từng đoạn với người nói, ngôn ngữ, chữ Nguyên văn, `start_sec` và `end_sec` **trong file âm thanh**, và `fixture_start_sec` (mốc của đoạn đó trong buổi mẫu).
 
 ## Kết quả ASR (`asr-results/`)
 
 `asr-results/<mã hãng>/<tên bộ>.json` là kết quả đã chuẩn hóa và **đã chấm** — file dùng cho `score.mjs`, giữ nguyên dạng.
-`asr-results/<mã hãng>/<tên bộ>.raw.json.gz` là kết quả thô của hãng **nén gzip** (nhịp 2, PR #74): 4 file chiếm ~0,4 MB thay vì ~5,5 MB, giữ được dữ liệu gốc để tái chấm mà không gọi lại API tốn tiền. Mở bằng `gunzip -k <file>` (hoặc `zcat <file> | head`). `run.mjs` giờ ghi thẳng nén gzip; `score.mjs` tự bỏ qua file `.gz` khi liệt kê kết quả để chấm.
+Đáp thô của hãng `asr-results/<mã hãng>/<tên bộ>.raw.json.gz` (nén gzip, nhịp 2, PR #74) đã bỏ khỏi repo ngày 2026-11-25 (C1-07, PR #95, theo docs/13 mục 6) — bản đã chuẩn hóa và chấm `.json` cùng thư mục là đủ dùng; muốn chấm lại bằng logic khác thì gọi lại API qua `run.mjs` (tốn tiền API). Từ nay `run.mjs` vẫn ghi thẳng nén gzip khi chạy bộ mới; `score.mjs` tự bỏ qua file `.gz` khi liệt kê kết quả để chấm.
 
 ## Bảng giọng (giọng AI tự nhiên, bộ đọc edge-tts)
 
@@ -64,7 +64,7 @@ Mỗi đoạn đọc thành file mp3 riêng trong thư mục tạm rồi mới g
 
 ## Bộ thứ năm: 05-vi-en-pha-le (góp ý vòng 1, issue #75, ngày 2026-11-19)
 
-Nói lẫn Việt, Anh kiểu dân văn phòng trong cùng một câu ("em check lại KPI phase 2") — kiểu nói mà góp ý vòng 1 cho rằng ba bộ trên còn thiếu. Bộ nằm ngay trong `test-data/audio/` (ogg khoảng 0,3 MB, m4a khoảng 0,5 MB), lời gốc ở `05-vi-en-pha-le.dialogue.json`.
+Nói lẫn Việt, Anh kiểu dân văn phòng trong cùng một câu ("em check lại KPI phase 2") — kiểu nói mà góp ý vòng 1 cho rằng ba bộ trên còn thiếu. Bộ nằm ngay trong `test-data/audio/` (m4a khoảng 0,5 MB; bản .ogg cũ đã bỏ theo docs/13 mục 6), lời gốc ở `05-vi-en-pha-le.dialogue.json`.
 
 | Bộ | Thời lượng | Nội dung | Phòng | Dùng để đo |
 | --- | --- | --- | --- | --- |
