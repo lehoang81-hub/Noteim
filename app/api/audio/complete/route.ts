@@ -24,6 +24,7 @@ import {
   normalizeAudioMime,
 } from "@/lib/data/server/r2";
 import { getOwnedSessionRow } from "@/lib/data/server/sessions";
+import { driveProcess, initPipeline } from "@/lib/data/server/asr-pipeline";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -94,6 +95,16 @@ export const POST = routeHandler(async (request: Request) => {
       audioExpiresAt: expiry,
     })
     .where(eq(sessions.id, body.session_id));
+
+  // C1-05: băng chốt xong là vào luồng nội dung thật (queued → … → done).
+  // Gọi process lần đầu KHÔNG chặn phản hồi — màn processing và cron tự
+  // đẩy tiếp các bước còn lại.
+  try {
+    await initPipeline(body.session_id);
+    void driveProcess(body.session_id).catch(() => {});
+  } catch {
+    // không chặn phản hồi complete nếu khởi tạo luồng lỗi — cron sẽ bắt
+  }
 
   return Response.json({ ok: true, key, size_bytes: stored, audio_expires_at: expiry.toISOString() });
 });

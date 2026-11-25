@@ -43,6 +43,8 @@ export function ProcessingScreen() {
   const [step, setStep] = useState(1);
   const [done, setDone] = useState(false);
   const [dye, setDye] = useState(0);
+  const [asrFail, setAsrFail] = useState<string | null>(null);
+  const [pollEpoch, setPollEpoch] = useState(0);
   const [title, setTitle] = useState<string | null>(null);
   const [participants, setParticipants] = useState<string[] | null>(null);
   const [addSheet, setAddSheet] = useState(false);
@@ -50,10 +52,16 @@ export function ProcessingScreen() {
   const animRef = useRef<{ stop: () => void } | null>(null);
   const navigated = useRef(false);
 
-  /* Nghe bước xử lý; đã ready từ trước thì vào thẳng khoảnh khắc xong */
+  /* Nghe bước xử lý; đã ready từ trước thì vào thẳng khoảnh khắc xong.
+   * Luồng thật (C1-05): failed thì hiện banner lỗi + nút Thử lại, không tự
+   * chuyển trang; bấm Thử lại gọi retry rồi mở lại vòng dò (pollEpoch). */
   useEffect(() => {
     const d = detail.data;
     if (!d) return;
+    if (d.status === "failed") {
+      const id2 = window.setTimeout(() => setAsrFail((v) => v ?? d.failure_reason ?? "unknown"), 0);
+      return () => window.clearTimeout(id2);
+    }
     if (d.status !== "processing") {
       const id0 = window.setTimeout(() => setDone(true), 0);
       return () => window.clearTimeout(id0);
@@ -62,7 +70,12 @@ export function ProcessingScreen() {
       setParticipants((p) => p ?? d.participant_contact_ids);
       setTitle((v) => v ?? d.title);
     }, 0);
-    const off = data.sessions.subscribeProcessing(id, (s) => {
+    const off = data.sessions.subscribeProcessing(id, (s, state) => {
+      if (s < 0) {
+        setAsrFail(state?.asr_error ?? "unknown");
+        return;
+      }
+      setAsrFail(null);
       if (s >= 6) setDone(true);
       else setStep(s);
     });
@@ -70,7 +83,18 @@ export function ProcessingScreen() {
       window.clearTimeout(id1);
       off();
     };
-  }, [detail.data, id]);
+  }, [detail.data, id, pollEpoch]);
+
+  async function retryAsr() {
+    try {
+      await data.sessions.retryProcessing(id);
+      setAsrFail(null);
+      setStep(1);
+      setPollEpoch((e) => e + 1);
+    } catch {
+      toast.show({ tone: "error", message: ts("saveError") });
+    }
+  }
 
   /* Khoảnh khắc "Xử lý xong": nhuộm dải giọng rồi chuyển tới chi tiết */
   useEffect(() => {
@@ -187,6 +211,17 @@ export function ProcessingScreen() {
       />
 
       <UploadBanner sessionId={id} onRetry={() => void retryPendingUploads()} />
+
+      {asrFail ? (
+        <div className="mt-4 rounded-block border border-line bg-surface-2 p-4" role="alert">
+          <p className="text-small text-ink-2">
+            {asrFail === "quota_exceeded" ? t("asrQuota") : t("asrFailed", { code: asrFail })}
+          </p>
+          <Button variant="secondary" className="mt-3 h-9" onClick={() => void retryAsr()}>
+            {t("asrRetry")}
+          </Button>
+        </div>
+      ) : null}
 
       <ol className="mt-6 flex flex-col gap-3">
         {STEP_LABELS.map((label, i) => {

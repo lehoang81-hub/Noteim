@@ -139,7 +139,10 @@ const geminiProvider: GapCheckProvider = {
     if (!key) throw new GapCheckProviderError("gemini", "unconfigured", undefined, "thiếu GEMINI_API_KEY");
     // GEMINI_BASE_URL chỉ để kiểm thử (trỏ máy giả lập); mặc định là điểm cuối chính thức.
     const base = (process.env.GEMINI_BASE_URL || "https://generativelanguage.googleapis.com").replace(/\/+$/, "");
-    const model = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+    // Mặc định gemini-3.5-flash-lite — tên đối chiếu trang chính thức
+    // aistudio.google.com/docs/models (ngày xem 25/11/2026); mặc định cũ
+    // gemini-2.5-flash-lite đã bị gỡ (gọi trả 404).
+    const model = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
     let res: Response;
     try {
       res = await fetch(`${base}/v1beta/models/${encodeURIComponent(model)}:generateContent`, {

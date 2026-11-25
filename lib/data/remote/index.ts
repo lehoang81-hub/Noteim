@@ -253,25 +253,51 @@ export const remoteSource: DataSource = {
       return r;
     },
     subscribeProcessing: (id, onStep) => {
-      // Máy chủ hoàn tất lười khi có người hỏi — client dò bước mỗi 1,6 giây
-      // như nhịp của bản giả (PROCESS_STEP_MS); bước 6 là xong.
+      // C1-05: buổi có băng thật (asr_stage khác null) thì mỗi 3,5 giây gọi
+      // POST process — vừa ĐẨY luồng tiến một bước vừa nhận trạng thái về
+      // (tiến độ thật, failed trả s=-1 kèm mã lỗi). Buổi mockup/nhập file
+      // giữ nhịp dò GET 1,6 giây như cũ (máy chủ hoàn tất lười khi có người hỏi).
       let stop = false;
       void (async () => {
+        let mode: "mock" | "asr" = "mock";
         while (!stop) {
           try {
-            const s = await apiGet<{ status: string; step: number }>(
-              `/api/data/sessions/${encodeURIComponent(id)}/processing`,
-            );
-            const step = s.status === "processing" ? Math.min(5, Math.max(1, s.step)) : 6;
-            onStep(step);
-            if (step === 6) {
-              notifyDataChanged();
-              return;
+            if (mode === "asr") {
+              const s = await apiSend<{ status: string; step: number; asr_stage: string | null; asr_error: string | null }>(
+                `/api/sessions/${encodeURIComponent(id)}/process`,
+                "POST",
+                {},
+              );
+              if (s.status === "failed") {
+                onStep(-1, { status: "failed", asr_error: s.asr_error });
+                notifyDataChanged();
+                return;
+              }
+              if (s.status !== "processing") {
+                onStep(6, { status: s.status });
+                notifyDataChanged();
+                return;
+              }
+              onStep(Math.min(5, Math.max(1, s.step)), { status: "processing" });
+            } else {
+              const s = await apiGet<{ status: string; step: number; asr_stage: string | null; asr_error: string | null }>(
+                `/api/data/sessions/${encodeURIComponent(id)}/processing`,
+              );
+              if (s.asr_stage) {
+                mode = "asr";
+                continue;
+              }
+              const step = s.status === "processing" ? Math.min(5, Math.max(1, s.step)) : 6;
+              onStep(step, { status: s.status });
+              if (step === 6) {
+                notifyDataChanged();
+                return;
+              }
             }
           } catch {
             return; // lỗi mạng/phiên: dừng dò, màn xử lý tự hiện trạng thái
           }
-          await new Promise((r) => setTimeout(r, 1600));
+          await new Promise((r) => setTimeout(r, mode === "asr" ? 3500 : 1600));
         }
       })();
       return () => {

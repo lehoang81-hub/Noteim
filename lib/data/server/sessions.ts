@@ -55,6 +55,7 @@ import { foldVi } from "./fold";
 import { templateById, templatesOfProfession } from "./templates";
 import { ApiError, type ServerContext } from "./context";
 import { deleteObjectSafe, isAudioObjectKey } from "./r2";
+import { retryPipeline, stateOf } from "./asr-pipeline";
 
 type SessionRow = typeof sessions.$inferSelect;
 type DetailRow = typeof sessionDetails.$inferSelect;
@@ -531,18 +532,34 @@ function stepAt(row: SessionRow): number {
 }
 
 /** Bước xử lý hiện tại; đến hạn thì hoàn tất (lười — không cần worker nền). */
-export async function getProcessingState(ctx: ServerContext, id: string): Promise<{ status: SessionStatus; step: number }> {
+export async function getProcessingState(ctx: ServerContext, id: string): Promise<{ status: SessionStatus; step: number; asr_stage: string | null; asr_error: string | null }> {
   const row = await getOwnedSessionRow(ctx, id);
+  if (isRealAudioSession(row)) {
+    // Luồng nội dung thật (C1-05): bước đọc từ stage ASR, không hoàn tất mockup
+    const state = stateOf(row);
+    return {
+      status: state.status as SessionStatus,
+      step: state.step,
+      asr_stage: state.asr_stage,
+      asr_error: state.asr_error,
+    };
+  }
   await finalizeIfDue(ctx, row);
   const fresh = (await getDb().select().from(sessions).where(eq(sessions.id, id)).limit(1))[0] ?? row;
   if (fresh.status === "processing") {
-    return { status: "processing", step: stepAt(fresh) };
+    return { status: "processing", step: stepAt(fresh), asr_stage: null, asr_error: null };
   }
-  return { status: fresh.status as SessionStatus, step: PROCESS_STEPS + 1 };
+  return { status: fresh.status as SessionStatus, step: PROCESS_STEPS + 1, asr_stage: null, asr_error: null };
+}
+
+/** Buổi có băng thật trên R2 chạy luồng ASR (C1-05) — KHÔNG hoàn tất mockup. */
+function isRealAudioSession(row: SessionRow): boolean {
+  return isAudioObjectKey(row.audioPath);
 }
 
 async function finalizeIfDue(_ctx: ServerContext, row: SessionRow): Promise<void> {
   if (row.status !== "processing") return;
+  if (isRealAudioSession(row)) return; // luồng ASR tự hoàn tất qua process/cron
   if (Date.now() - row.createdAt.getTime() < PROCESS_STEPS * PROCESS_STEP_MS) return;
   await finalizeProcessing(row);
 }
@@ -561,13 +578,20 @@ async function finalizeDueAll(ctx: ServerContext): Promise<void> {
       ),
     );
   for (const row of due) {
+    if (isRealAudioSession(row)) continue; // luồng ASR tự hoàn tất qua process/cron
     await finalizeProcessing(row);
   }
 }
 
 export async function retryProcessing(ctx: ServerContext, id: string): Promise<void> {
   const db = getDb();
-  await getOwnedSessionRow(ctx, id);
+  const row = await getOwnedSessionRow(ctx, id);
+  if (isRealAudioSession(row)) {
+    // Luồng ASR (C1-05): nút "Thử lại" đưa buổi failed về queued, màn
+    // processing tự gọi process tiếp
+    await retryPipeline(id);
+    return;
+  }
   await db
     .update(sessions)
     .set({ status: "processing", processingStep: 1, failureReason: null, createdAt: new Date() })

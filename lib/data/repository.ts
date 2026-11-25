@@ -123,7 +123,12 @@ export interface SessionRepository {
   nameSpeaker(sessionId: string, speakerId: string, contactId: string): Promise<void>;
   mergeSpeakers(sessionId: string, fromId: string, intoId: string): Promise<void>;
   createFromRecording(draft: RecordingDraft): Promise<{ id: string }>;
-  subscribeProcessing(id: string, onStep: (step: number) => void): () => void;
+  /**
+   * Nghe bước xử lý của buổi (C1-05 mở rộng): `state` kèm thêm khi luồng
+   * thật ASR đang chạy — `asr_error` là mã lỗi khi `step === -1` (failed).
+   * Lượt gọi mock chỉ truyền bước, không truyền `state`.
+   */
+  subscribeProcessing(id: string, onStep: (step: number, state?: { status: string; asr_error?: string | null }) => void): () => void;
   /** Buổi ghi xử lý lỗi: chạy lại từ bước 1 */
   retryProcessing(id: string): Promise<void>;
   purgeRaw(ids: string[]): Promise<{ freed_bytes: number }>;

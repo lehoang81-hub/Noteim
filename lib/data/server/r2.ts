@@ -145,9 +145,9 @@ export async function presignPutUrl(key: string, mime: AudioMime): Promise<strin
   );
 }
 
-export async function presignGetUrl(key: string): Promise<string> {
+export async function presignGetUrl(key: string, expiresIn = GET_EXPIRES): Promise<string> {
   if (requireMode() === "fake") return `/api/audio/fake/${key}`;
-  return getSignedUrl(s3(), new GetObjectCommand({ Bucket: bucket(), Key: key }), { expiresIn: GET_EXPIRES });
+  return getSignedUrl(s3(), new GetObjectCommand({ Bucket: bucket(), Key: key }), { expiresIn });
 }
 
 /** HEAD đối tượng: trả kích thước byte, null là chưa có (hoặc không đọc được). */

@@ -363,6 +363,92 @@ check(
   "Cron mô phỏng làm mất bản chữ — sai hợp đồng C1-04",
 );
 
+// (a4) C1-05: cột trạng thái ASR + mẫu truy vấn cron asr-retry + nhường quyền
+console.log("== 5b. C1-05: trạng thái xử lý ASR (pipeline nội dung thật) ==");
+const asrColumns = (
+  await db.query(
+    "select column_name, data_type, column_default from information_schema.columns where table_schema = 'noteim' and table_name = 'sessions' and column_name in ('asr_stage','asr_transcription_id','asr_error','asr_attempts','asr_updated_at')",
+  )
+).rows;
+const haveAsr = (name, type) => asrColumns.some((c) => c.column_name === name && (type ? c.data_type === type : true));
+check(
+  haveAsr("asr_stage", "text") && haveAsr("asr_transcription_id", "text") && haveAsr("asr_error", "text"),
+  "sessions có bộ cột ASR: asr_stage / asr_transcription_id / asr_error (text)",
+  "Thiếu bộ cột trạng thái ASR trên sessions",
+);
+check(
+  haveAsr("asr_attempts", "integer") && haveAsr("asr_updated_at", "timestamp with time zone"),
+  "sessions.asr_attempts (integer) + asr_updated_at (timestamptz) — cron quét kẹt theo đây",
+  "asr_attempts/asr_updated_at thiếu hoặc sai kiểu",
+);
+const attemptsDefault = asrColumns.find((c) => c.column_name === "asr_attempts")?.column_default ?? "";
+check(
+  attemptsDefault.includes("0"),
+  "sessions.asr_attempts mặc định 0",
+  `sessions.asr_attempts mặc định sai: ${String(attemptsDefault)}`,
+);
+
+// Vòng đời pipeline mô phỏng bằng SQL đúng như driveProcess: queued →
+// transcribing → summarizing → done; cron chỉ quét buổi KẸT quá 10 phút.
+await db.query(
+  'insert into "noteim"."sessions" (id, user_id, workspace_id, owner_user_id, title, template_id, status, audio_path, asr_stage, asr_updated_at, created_at) values ($1, $2, $3, $2, $4, \'tpl-realestate\', \'processing\', $5, \'transcribing\', now() - interval \'11 minutes\', now()) on conflict (id) do nothing',
+  ["c1-asr-stuck", USER_A, "w-c1-a", "Buổi kẹt quá 10 phút", "u/" + USER_A + "/c1-asr-stuck/original.webm"],
+);
+await db.query(
+  'insert into "noteim"."sessions" (id, user_id, workspace_id, owner_user_id, title, template_id, status, audio_path, asr_stage, asr_updated_at, created_at) values ($1, $2, $3, $2, $4, \'tpl-realestate\', \'processing\', $5, \'queued\', now(), now()) on conflict (id) do nothing',
+  ["c1-asr-fresh", USER_A, "w-c1-a", "Buổi vừa chốt băng", "u/" + USER_A + "/c1-asr-fresh/original.webm"],
+);
+await db.query(
+  'insert into "noteim"."sessions" (id, user_id, workspace_id, owner_user_id, title, template_id, status, audio_path, asr_stage, asr_updated_at, asr_attempts, created_at) values ($1, $2, $3, $2, $4, \'tpl-realestate\', \'processing\', $5, \'summarizing\', now() - interval \'30 minutes\', 20, now()) on conflict (id) do nothing',
+  ["c1-asr-exhausted", USER_A, "w-c1-a", "Buổi hết số lần thử", "u/" + USER_A + "/c1-asr-exhausted/original.webm"],
+);
+const stuckIds = (
+  await db.query(
+    "select id from \"noteim\".\"sessions\" where asr_stage in ('queued','transcribing','summarizing') and audio_path like 'u/%' and asr_updated_at is not null and asr_updated_at < now() - interval '10 minutes' and asr_attempts < 20 and deleted_at is null",
+  )
+).rows.map((r) => r.id);
+check(
+  stuckIds.includes("c1-asr-stuck") && !stuckIds.includes("c1-asr-fresh") && !stuckIds.includes("c1-asr-exhausted"),
+  "Truy vấn cron asr-retry: bắt đúng buổi kẹt >10 phút, bỏ qua buổi mới và buổi hết lượt (điều kiện như /api/cron/asr-retry)",
+  "Truy vấn cron asr-retry chọn sai buổi",
+);
+
+// Nhường quyền driveProcess: UPDATE ... WHERE asr_stage = stage RETURNING —
+// lượt hai (stage đã đổi) phải không trả dòng nào.
+const claim1 = (
+  await db.query(
+    "update \"noteim\".\"sessions\" set asr_attempts = asr_attempts + 1, asr_updated_at = now() where id = $1 and asr_stage = 'transcribing' returning id",
+    ["c1-asr-stuck"],
+  )
+).rows.length;
+await db.query("update \"noteim\".\"sessions\" set asr_stage = 'summarizing' where id = $1", ["c1-asr-stuck"]);
+const claim2 = (
+  await db.query(
+    "update \"noteim\".\"sessions\" set asr_attempts = asr_attempts + 1, asr_updated_at = now() where id = $1 and asr_stage = 'transcribing' returning id",
+    ["c1-asr-stuck"],
+  )
+).rows.length;
+check(
+  claim1 === 1 && claim2 === 0,
+  "Nhường quyền đẩy bước: claim trúng đúng một lượt, lượt sau stage đã đổi thì rỗng (chống gọi trùng Soniox/Gemini)",
+  "Cơ chế nhường quyền sai — hai lời gọi cùng trúng một bước",
+);
+
+// Bản chữ gắn FK buổi: xóa buổi là mất bản chữ (cascade)
+await db.query(
+  'insert into "noteim"."transcript_segments" (session_id, id, speaker_id, start_sec, end_sec, text) values ($1, \'sg-1\', \'SPK_01\', 0, 5, \'Đoạn thử cascade\') on conflict do nothing',
+  ["c1-asr-stuck"],
+);
+await db.query("delete from \"noteim\".\"sessions\" where id = any($1)", [["c1-asr-stuck", "c1-asr-fresh", "c1-asr-exhausted"]]);
+const orphanSegments = (
+  await db.query("select count(*)::int as n from \"noteim\".\"transcript_segments\" where session_id = $1", ["c1-asr-stuck"])
+).rows[0].n;
+check(
+  orphanSegments === 0,
+  "Xóa buổi dọn cả transcript_segments (cascade)",
+  "Xóa buổi còn sót transcript_segments",
+);
+
 // (b) Hai người dùng A/B + không gian cá nhân + một buổi mỗi người
 await db.query(
   'insert into "noteim"."workspace_members" (workspace_id, user_id, email, display_name, role, status) values ($1, $2, $3, $4, \'owner\', \'active\'), ($5, $6, $7, $8, \'owner\', \'active\') on conflict do nothing',
@@ -527,6 +613,6 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log(
-  "\npnpm db:test đạt: migration bằng scripts/db-migrate.mjs (không CREATE SCHEMA, role noteim_app giới hạn) + migrate idempotent + seed hai lần + không trùng + trigger hoạt động + bảng/cột C1-03b + tách dữ liệu A/B đúng mẫu truy vấn phân quyền.",
+  "\npnpm db:test đạt: migration bằng scripts/db-migrate.mjs (không CREATE SCHEMA, role noteim_app giới hạn) + migrate idempotent + seed hai lần + không trùng + trigger hoạt động + bảng/cột C1-03b + trạng thái ASR C1-05 (cron kẹt + nhường quyền) + tách dữ liệu A/B đúng mẫu truy vấn phân quyền.",
 );
 process.exit(0);

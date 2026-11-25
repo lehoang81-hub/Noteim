@@ -52,6 +52,9 @@ async function professionData(key: string): Promise<GeneratedProfession> {
 
 const PEAK_COUNT = 600;
 const THUMB_COUNT = 40;
+// C1-05: luồng nội dung thật tái dùng hai hàm thuần này cho dải giọng của
+// băng trên R2 (không đổi hành vi của luồng mockup).
+export { PEAK_COUNT, THUMB_COUNT, resampleMax, fallbackPeaks };
 
 function seeded(seedText: string): () => number {
   let s = 2166136261;

@@ -661,3 +661,38 @@ Băng ghi thật lần đầu được lưu bền vững (docs/12 §0.2 yêu c�
 - e2e `tests/e2e/c1-audio.spec.ts` (14 bài × 2 project): quyền A/B (người B không presign/nghe được băng của người A — 403; ẩn danh 401), chặn loại file (400) và trần dung lượng/thời lượng gói (413), luồng presign → PUT → complete → nghe lại 302 + Range, complete lệch kích thước 409, xóa buổi là mất băng, cron sai/đúng bí mật, và **luồng ghi thật bằng micro giả của Chromium**: ghi vài giây, dải "Đang tải lên NN%", nhãn bản ghi thử biến mất, trình phát dùng `/api/audio/{id}`.
 - `pnpm db:test` thêm bộ kiểm C1-04: 4 cột băng (`audio_path`, `audio_expires_at` timestamptz, `storage_status` mặc định 'full', `size_bytes`) + vòng đời complete→cron giữ bản chữ trên PGlite.
 - Lỗi sản phẩm bắt được khi chạy e2e remote lần đầu (PR 03b trước giờ chỉ skip): `defaultTemplateFor` trả id mẫu không tồn tại cho nghề "other" → buổi không sinh được ý tóm tắt; `dataNow()` trả giờ thật cho người ẩn danh trên build remote → dải ngày Tổng quan lệch; hạn mức tháng đếm cả buổi đã xóa. Cả ba đã sửa.
+
+---
+
+## 5b. Bổ sung C1 (PR 05): nội dung thật — giọng nói → chữ (Soniox) → tóm tắt (Gemini)
+
+Buổi có băng trên R2 (PR 04) ra **nội dung thật** thay cho nội dung mẫu: nhận dạng giọng bằng **Soniox async** (`stt-async-v6`), tóm tắt bằng **Gemini** (JSON mode, kiểm bằng Zod). Buổi KHÔNG có băng (bản ghi thử, nhập file không băng, buổi mẫu) giữ nguyên luồng mockup cũ — không bị ảnh hưởng.
+
+### Máy trạng thái xử lý (lưu DB mỗi buổi)
+
+- `sessions` thêm 5 cột (migration `0002_*.sql` qua `scripts/db-migrate.mjs`, không CREATE SCHEMA): `asr_stage` (null | `queued` | `transcribing` | `summarizing` | `done` | `failed`), `asr_transcription_id`, `asr_error` (mã ngắn an toàn), `asr_attempts` (mặc định 0), `asr_updated_at` (timestamptz) + index `(asr_stage, asr_updated_at)` cho cron.
+- `POST /api/audio/complete` đặt stage = `queued` ngay khi chốt băng và gọi process lần đầu (không chặn phản hồi).
+- **`POST /api/sessions/[id]/process`** — chỉ chủ buổi (401 chưa đăng nhập, 403 người khác, 404 không thấy), idempotent, **mỗi lần gọi đẩy ĐỘNG MỘT bước** (hàm Vercel ngắn — không chạy một mạch):
+  1. `queued`: kiểm trần phút theo gói (Free 90 phút/buổi — vượt thì `failed` + `asr_error = quota_exceeded`, KHÔNG gọi Soniox) → presigned GET R2 hạn 1 giờ → gửi Soniox async (`audio_url`, hints vi/ko/en, bật tách người nói + tự nhận ngôn ngữ) → lưu id việc nhận dạng → `transcribing`.
+  2. `transcribing`: hỏi trạng thái Soniox; chưa xong chỉ gia hạn `asr_updated_at` (cron/màn processing hỏi lại); xong thì lấy tokens → ghép đoạn (đổi người nói, đổi ngôn ngữ hay nghỉ quá 0,8 s thì tách — kinh nghiệm B0) → lưu `transcript_segments` + speakers + speaker_spans + peaks (từ mảng âm lượng đã ghi) → **xóa việc nhận dạng và file phía Soniox** (chính sách không lưu dữ liệu) → `summarizing`.
+  3. `summarizing`: Gemini (`GEMINI_MODEL` hoặc mặc định `gemini-3.5-flash-lite` — tên đối chiếu trang chính thức aistudio.google.com/docs/models, xem 25/11/2026; mặc định cũ gemini-2.5-flash-lite đã gỡ) với `responseMimeType: application/json` + `responseSchema`, kiểm bằng Zod, chuẩn hóa (kẹp mốc vào thời lượng, trần chủ đề/ý/việc) → lưu `session_details.executive_summary/topics` + `action_items` + `headline_tag/open_task_count` → `done`, buổi `ready`.
+  4. Lỗi bước nào: `failed` + `asr_error` mã ngắn; nút "Thử lại" ở màn processing gọi POST `/api/data/sessions/[id]/processing` {action:"retry"} đưa buổi về `queued`.
+- **Nhường quyền**: mỗi lần đẩy phải `UPDATE … WHERE asr_stage = <stage> RETURNING` trúng mới được làm — hai lời gọi trùng (người dùng + cron) không bao giờ gọi hai lần Soniox/Gemini cho cùng một bước.
+- Bản chữ dài: tóm tắt **map-reduce** (mỗi phần ≤ 12.000 ký tự, gộp một lần cuối) — không cắt âm thầm.
+- Trần gọi: `asr_attempts` ≥ 20 thì coi như hỏng, cron không đẩy nữa.
+
+### Màn processing và nội dung chi tiết
+
+- Màn processing: buổi có băng tự gọi `POST process` mỗi 3,5 giây (vừa đẩy vừa nhận trạng thái — tiến độ thật theo stage); buổi mockup giữ nhịp dò 1,6 giây như cũ. `failed` hiện banner lỗi theo mã (quota có thông điệp riêng) + nút "Thử lại".
+- Bản chữ: `transcript_segments` — người nói `SPK_01/SPK_02…` theo thứ tự xuất hiện; người đầu là "Bạn" (is_me, contact "c-me"), "Người nói N" chưa đặt tên giữ nguyên chức năng Đặt tên/đổi người nói/hợp nhất như màn hiện có.
+- Tóm tắt: mỗi ý có `timestamp_sec` dẫn về đoạn bản chữ để bấm nghe lại; số liệu/tên/ngày phải nguyên văn bản chữ — không nêu được thì để trống; cấu trúc theo mẫu ngành (section_id thuộc các phần đang bật của mẫu đang chọn).
+
+### Cron, bảo mật, chế độ thử nghiệm, kiểm
+
+- Cron `/api/cron/asr-retry` (Bearer `CRON_SECRET`, vercel.json chạy mỗi ngày 03:30 vì gói Hobby chỉ cho cron 1 lần/ngày; đường chính là màn processing tự gọi lại, cron chỉ là lưới an toàn): quét buổi `asr_updated_at` cũ quá 10 phút còn ở stage dở, `asr_attempts < 20`, mỗi lượt tối đa 20 buổi, mỗi buổi đẩy một bước.
+- Không log transcript/tóm tắt/URL presigned/khóa — chỉ sessionId, bước, độ trễ, mã lỗi.
+- `SONIOX_FAKE=1` / `GEMINI_FAKE=1` (kết quả giả cố định cho e2e) **tuyệt đối bị chặn khi `VERCEL_ENV=production`** — cùng cơ chế R2_FAKE; `/api/data/mode` thêm cờ `sonioxFake`/`geminiFake`. Khóa chỉ đọc từ env `SONIOX_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` (đã có trên Vercel), không đặt `NEXT_PUBLIC_*`.
+- e2e `tests/e2e/c1-asr.spec.ts`: quyền A/B (B không đẩy được luồng của A — 403; ẩn danh 401), luồng complete→process→done với kho giả đối chiếu số liệu (tóm tắt phải nhắc đúng 4,2 tỷ / 15/11 có trong bản chữ giả — không bịa), quota 91 phút Free, failed→Thử lại, cron sai/đúng bí mật, và luồng UI ghi thật: processing tự chuyển chi tiết, tab Tóm tắt/Lời hiện nội dung từ kho giả.
+- `pnpm db:test` thêm bộ C1-05: 5 cột ASR đúng kiểu/mặc định, mẫu truy vấn cron kẹt (bắt đúng buổi quá 10 phút, bỏ qua buổi mới/hết lượt), cơ chế nhường quyền (claim trúng một lượt), cascade transcript khi xóa buổi.
+- `scripts/asr-smoke.mjs`: gọi Soniox + Gemini **thật** trên một file ngắn trong `test-data/` khi có khóa trong env; thiếu khóa in rõ "chưa kiểm chứng" (không bịa kết quả); kết quả đầy đủ ghi `test-data/asr-smoke-result.json`.
+- Chi phí ước tính mỗi giờ ghi âm: Soniox ≈ 0,106 USD/giờ audio (đo thật B0, docs/11) + Gemini flash-lite vài cent/giờ tóm tắt (theo bill) — tổng dưới 0,15 USD/giờ.
