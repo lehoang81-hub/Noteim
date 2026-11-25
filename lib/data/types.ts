@@ -371,6 +371,11 @@ export const SessionDetail = Session.extend({
   gap_check_done: z.array(z.string()).nullish().catch(undefined),
   /** Câu hỏi chờ gửi trong Hỏi AI, chuyển từ sheet rà thiếu khi đang ghi (GC-04) */
   pending_ai_questions: z.array(z.string()).nullish().catch(undefined),
+  /** C1-09 mục 4: lời đã sửa/đổi người nói sau lần tóm tắt gần nhất — tab
+   * Tóm tắt và tab Việc hiện băng "Tóm tắt lại". Buổi mẫu/cũ không có. */
+  transcript_stale: z.boolean().nullish().catch(undefined),
+  /** C1-09 mục 4: số lần đã tóm tắt lại thành công (Free tối đa 3 mỗi buổi) */
+  resummarize_count: z.number().nullish().catch(undefined),
 });
 export type SessionDetail = z.infer<typeof SessionDetail>;
 

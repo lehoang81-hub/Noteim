@@ -1,6 +1,6 @@
 "use client";
 
-import { BookA, Building2, ContactRound, Gem, HardDriveDownload, Languages, LayoutTemplate, Mic, Palette, ShieldCheck, UserRound, Users } from "lucide-react";
+import { BookA, Building2, CircleHelp, ContactRound, Gem, HardDriveDownload, Languages, LayoutTemplate, Mic, Palette, ShieldCheck, UserRound, Users } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -118,6 +118,14 @@ function SectionMenu({ active }: { active: SectionId | null }) {
           </Link>
         );
       })}
+      {/* Mẹo ghi âm và câu hỏi thường gặp (C1-09 mục 5): trang riêng /help */}
+      <Link
+        href="/help"
+        className="flex min-h-12 items-center gap-3 rounded-control px-3 text-left text-body text-ink-2 transition-colors ease-noteim duration-(--t-quick) hover:bg-surface-2 hover:text-ink"
+      >
+        <CircleHelp aria-hidden={true} className="size-5 shrink-0" strokeWidth={1.75} />
+        {t("helpEntry")}
+      </Link>
     </nav>
   );
 }

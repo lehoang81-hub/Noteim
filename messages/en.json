@@ -832,7 +832,11 @@
     "asrErrorFile": "The recording is missing or its content can't be read. Try again.",
     "asrErrorSummary": "Couldn't create the summary. Tap Reprocess.",
     "asrErrorStuck": "This session got stuck after too many attempts. Tap Reprocess.",
-    "asrErrorUnknown": "Something went wrong. Tap Reprocess."
+    "asrErrorUnknown": "Something went wrong. Tap Reprocess.",
+    "resummarizeBanner": "You edited the transcript. Summarize again to update the summary and action items.",
+    "resummarizeButton": "Summarize again",
+    "resummarizeQuota": "This session used all 3 re-summaries of the Free plan. Upgrade to Pro for unlimited use.",
+    "resummarizeError": "Could not summarize again, try again later."
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -871,6 +875,15 @@
     "translationStale": "Needs re-translation",
     "sampleTranslation": "Sample translation",
     "playingBadge": "Playing",
+    "editHintFirst": "Words or speaker not right? Tap ⋯ on that segment to fix it.",
+    "viewTips": "See tips",
+    "editHintDismiss": "Dismiss tip",
+    "addNewSpeaker": "New speaker",
+    "addNewSaved": "New speaker added",
+    "followingQuestion": "Also change the {count, plural, one {following segment} other {# following segments}} of the same speaker?",
+    "followingHint": "Only adjacent segments of the same former speaker are included. Other speakers stay untouched.",
+    "followingApply": "Change them too",
+    "followingSkip": "Keep them",
     "modeLabel": "Transcript view mode",
     "modeClean": "Concise",
     "modeVerbatim": "Verbatim"
@@ -1400,7 +1413,8 @@
     "speechLanguage": "Default recording language",
     "autoDetect": "Detect other languages automatically",
     "reportLanguageDefault": "Use app default",
-    "reportLanguageHint": "Create unlimited language versions per session with Pro."
+    "reportLanguageHint": "Create unlimited language versions per session with Pro.",
+    "helpEntry": "Recording tips and FAQ"
   },
   "upgrade": {
     "title": "Plans",
@@ -1757,5 +1771,14 @@
     "entryInvite": "Sign in to keep your sessions and sync them across devices.",
     "entryGo": "Sign in",
     "entrySignedIn": "Signed in as {name}"
+  },
+  "help": {
+    "title": "Recording tips and FAQ",
+    "place": "Put the phone in the middle of the table, close to the speakers. Avoid fans or air conditioners blowing straight at it.",
+    "turn": "Take turns speaking, don't talk over each other. Pause briefly when the speaker changes.",
+    "merge": "For very short sessions or similar voices, the app may merge two speakers into one.",
+    "wrongSpeaker": "Wrong speaker? Tap the three-dot button on the segment, choose Change speaker, then pick or add a new speaker.",
+    "wrongWord": "Wrong words? Tap the three-dot button, choose Edit words. Then tap Summarize again to update the summary and action items.",
+    "translation": "Viewing an existing translation is free. Re-translate only when the original was edited."
   }
 }

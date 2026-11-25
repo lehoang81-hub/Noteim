@@ -6,6 +6,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { ResummarizeBanner } from "./resummarize-banner";
 import { FloatingPlayer } from "@/components/session/floating-player";
 import { Button } from "@/components/ui/button";
 import { SpeakerName } from "@/components/ui/chips";
@@ -389,7 +390,10 @@ function Loaded({
     : "";
   const receiptMethod = receipt ? t(receipt.method === "button" ? "receiptMethodButton" : "receiptMethodAuto") : "";
   const receiptWho = receipt ? (receipt.who.length ? receipt.who.join(", ") : t("receiptWhoEmpty")) : "";
-  const unnamed = detail.speakers.filter((s) => !s.contact_id && !s.is_me).length;
+  // C1-09 mục 2: người nói hết đoạn (tỉ lệ 0, đổi hết đoạn sang người khác)
+  // ẩn khỏi đầu buổi và khỏi chip "chưa có tên", dữ liệu giữ nguyên
+  const visibleSpeakers = detail.speakers.filter((s) => s.talk_ratio_percent > 0);
+  const unnamed = visibleSpeakers.filter((s) => !s.contact_id && !s.is_me).length;
   const expiresSoon =
     detail.storage_status === "full" &&
     detail.audio_expires_at &&
@@ -508,9 +512,9 @@ function Loaded({
             </span>
           </button>
         ) : null}
-        {detail.speakers.length ? (
+        {visibleSpeakers.length ? (
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
-            {detail.speakers.map((s) => (
+            {visibleSpeakers.map((s) => (
               <button
                 key={s.id}
                 type="button"
@@ -584,6 +588,7 @@ function Loaded({
           </div>
           <div className="px-page pb-40 pt-5 lg:px-8">
             <TabsContent value="summary">
+              <ResummarizeBanner detail={detail} className="mb-4" />
               {summary ? (
                 <SummaryTab
                   detail={detail}
@@ -609,6 +614,7 @@ function Loaded({
               )}
             </TabsContent>
             <TabsContent value="tasks">
+              <ResummarizeBanner detail={detail} className="mb-4" />
               <TasksTab
                 items={items.map((a) => (summary?.task_texts?.[a.id] ? { ...a, task: summary.task_texts[a.id] } : a))}
                 lang={verLang}

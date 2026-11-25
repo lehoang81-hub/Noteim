@@ -24,6 +24,13 @@ type UserRow = typeof users.$inferSelect;
  */
 export const FREE_CHAT_QUESTIONS_PER_SESSION = 10;
 
+/**
+ * Số lần tóm tắt lại mỗi buổi của gói Free (C1-09 mục 4): đếm phía máy chủ,
+ * chặn TRƯỚC khi gọi Gemini, chỉ lần tóm tắt THÀNH CÔNG mới được đếm.
+ * Pro không giới hạn.
+ */
+export const FREE_RESUMMARIZE_PER_SESSION = 3;
+
 function defaultTemplateFor(profession: Profession | null): string {
   const tpl = templatesOfProfession(profession);
   // Nghề "other" (chưa chọn nghề) không có mẫu riêng: theo mẫu mặc định của

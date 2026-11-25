@@ -924,7 +924,11 @@
     "asrErrorFile": "Bản ghi âm mất hoặc không đọc được nội dung. Thử lại xem.",
     "asrErrorSummary": "Lỗi khi tạo tóm tắt. Bấm Xử lý lại.",
     "asrErrorStuck": "Buổi bị kẹt quá nhiều lần thử. Bấm Xử lý lại.",
-    "asrErrorUnknown": "Có lỗi không rõ. Bấm Xử lý lại."
+    "asrErrorUnknown": "Có lỗi không rõ. Bấm Xử lý lại.",
+    "resummarizeBanner": "Bạn đã sửa lời. Tóm tắt lại để cập nhật tóm tắt và việc cần làm.",
+    "resummarizeButton": "Tóm tắt lại",
+    "resummarizeQuota": "Buổi này đã dùng hết 3 lượt tóm tắt lại của gói Free. Nâng gói Pro để không giới hạn.",
+    "resummarizeError": "Chưa tóm tắt lại được, thử lại sau."
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",
@@ -963,6 +967,15 @@
     "translationStale": "Cần dịch lại",
     "sampleTranslation": "Bản dịch mẫu",
     "playingBadge": "Đang phát",
+    "editHintFirst": "Lời hoặc người nói chưa đúng? Bấm ⋯ ở đoạn đó để sửa.",
+    "viewTips": "Xem mẹo",
+    "editHintDismiss": "Đóng gợi ý",
+    "addNewSpeaker": "Người nói mới",
+    "addNewSaved": "Đã thêm người nói mới",
+    "followingQuestion": "Đổi luôn {count, plural, other {# đoạn liền sau}} của cùng người nói?",
+    "followingHint": "Chỉ áp dụng cho các đoạn liền kề cùng người nói cũ. Đoạn của người khác hoặc cách xa thì giữ nguyên.",
+    "followingApply": "Đổi luôn",
+    "followingSkip": "Để nguyên",
     "modeLabel": "Chế độ xem bản ghi lời",
     "modeClean": "Bản gọn",
     "modeVerbatim": "Nguyên văn"
@@ -1400,7 +1413,8 @@
     "speechLanguage": "Ngôn ngữ ghi âm mặc định",
     "autoDetect": "Tự nhận tiếng khác",
     "reportLanguageDefault": "Theo cài đặt chung",
-    "reportLanguageHint": "Tạo không giới hạn bản ngôn ngữ cho mỗi buổi với gói Pro."
+    "reportLanguageHint": "Tạo không giới hạn bản ngôn ngữ cho mỗi buổi với gói Pro.",
+    "helpEntry": "Mẹo ghi âm và câu hỏi thường gặp"
   },
   "upgrade": {
     "title": "Gói dịch vụ",
@@ -1757,5 +1771,14 @@
     "entryInvite": "Đăng nhập để lưu buổi ghi và đồng bộ theo lại mọi máy.",
     "entryGo": "Đăng nhập",
     "entrySignedIn": "Đang dùng tài khoản {name}"
+  },
+  "help": {
+    "title": "Mẹo ghi âm và câu hỏi thường gặp",
+    "place": "Đặt máy giữa bàn, gần người nói. Tránh quạt, điều hòa thổi thẳng vào máy.",
+    "turn": "Mỗi người nói lần lượt, không nói chen. Có khoảng nghỉ ngắn khi đổi người.",
+    "merge": "Buổi rất ngắn hoặc giọng giống nhau thì app có thể gộp hai người thành một.",
+    "wrongSpeaker": "Nhận sai người nói: bấm nút ba chấm ở đoạn lời, chọn Đổi người nói, rồi chọn hoặc thêm người nói mới.",
+    "wrongWord": "Nhận sai chữ: bấm nút ba chấm ở đoạn lời, chọn Sửa lời. Sửa xong bấm Tóm tắt lại để cập nhật tóm tắt và việc cần làm.",
+    "translation": "Bản dịch đã có thì xem lại không tốn lượt. Chỉ dịch lại khi bản gốc đã sửa."
   }
 }

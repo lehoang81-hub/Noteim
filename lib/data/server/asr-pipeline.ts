@@ -26,7 +26,7 @@
 import { and, eq, isNull, notInArray, sql } from "drizzle-orm";
 
 import { getDb } from "@/lib/db";
-import { actionItems, sessionDetails, sessions, transcriptSegments, users } from "@/lib/db/schema";
+import { actionItems, sessionDetails, sessions, summaryVersions, transcriptSegments, users } from "@/lib/db/schema";
 import { fallbackPeaks, resampleMax, PEAK_COUNT, THUMB_COUNT } from "@/lib/data/mock/generate";
 import { isAudioObjectKey, minuteCapForPlan, presignGetUrl } from "./r2";
 import {
@@ -101,6 +101,27 @@ export function stateOf(row: SessionRec): ProcessState {
 
 async function markFailed(row: SessionRec, code: string): Promise<void> {
   const db = getDb();
+  // Tóm tắt lại sau khi sửa lời mà lỗi: KHÔNG chuyển buổi sang "failed" — nút
+  // "Thử lại" sẽ đưa về hàng đợi và chép lời lại từ băng, ghi đè lời người
+  // dùng đã sửa. Trả về trạng thái xong, giữ nguyên lời và tóm tắt cũ, không
+  // đếm lượt (cờ chờ tắt, transcript_stale còn true nên băng "Tóm tắt lại"
+  // vẫn hiện để bấm lại).
+  if (row.resummarizePending) {
+    await db
+      .update(sessions)
+      .set({
+        asrStage: "done",
+        asrError: code.slice(0, 200),
+        asrUpdatedAt: now(),
+        status: "ready",
+        failureReason: null,
+        processingStep: null,
+        resummarizePending: false,
+      })
+      .where(eq(sessions.id, row.id));
+    logEvent(row.id, "resummarize-failed", { code, attempts: row.asrAttempts });
+    return;
+  }
   await db
     .update(sessions)
     .set({
@@ -379,6 +400,11 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
 
   let plan: SummaryPlan;
   if (geminiFakeActive()) {
+    // Mốc e2e: ép lỗi AI giữa lúc tóm tắt (chỉ ngoài production)
+    if (row.title.includes("[failrun]")) {
+      await markFailed(row, "gemini_fake_fail");
+      return;
+    }
     plan = fakeSummaryPlan(durationSec, (template?.sections ?? []).filter((s) => s.enabled).map((s) => s.id));
     logEvent(row.id, "summarize-fake");
   } else {
@@ -399,6 +425,11 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
   // Việc cần làm: người nói đầu (SPK_01, là "Bạn") gán cho chủ buổi.
   // UPSERT thay delete+insert (lý do như saveTranscript): hai luồng đẩy đua
   // nhau cùng lúc thì lần sau ghi đè lần trước, dọn dòng thừa bằng notInArray.
+  // C1-09 mục 4: tóm tắt lại GIỮ việc người dùng đã tick xong hoặc tự thêm
+  // (id a-user-*) — AI chỉ thay các việc máy sinh (a-1, a-2, ...).
+  const existingTasks = await db.select().from(actionItems).where(eq(actionItems.sessionId, row.id));
+  const keptTasks = existingTasks.filter((t) => t.done || t.id.startsWith("a-user-"));
+  const resummarized = row.resummarizePending === true;
   const taskRows = plan.action_items.map((a, i) => ({
     id: `a-${i + 1}`,
     sessionId: row.id,
@@ -423,21 +454,25 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
           assigneeContactId: sql`excluded.assignee_contact_id`,
           dueDate: sql`excluded.due_date`,
           priority: sql`excluded.priority`,
-          done: sql`excluded.done`,
-          doneAt: sql`excluded.done_at`,
+          // C1-09 mục 4: tóm tắt lại phải GIỮ việc người dùng đã tick xong
+          // (done/doneAt của dòng cũ), không bật lại thành chưa xong
+          done: resummarized ? sql`${actionItems.done}` : sql`excluded.done`,
+          doneAt: resummarized ? sql`${actionItems.doneAt}` : sql`excluded.done_at`,
           sourceQuote: sql`excluded.source_quote`,
           timestampSec: sql`excluded.timestamp_sec`,
         },
       });
+    const keepIds = [...keptTasks.map((t) => t.id), ...taskRows.map((t) => t.id)];
     await db
       .delete(actionItems)
-      .where(and(eq(actionItems.sessionId, row.id), notInArray(actionItems.id, taskRows.map((t) => t.id))));
+      .where(and(eq(actionItems.sessionId, row.id), notInArray(actionItems.id, keepIds)));
+  } else if (keptTasks.length) {
+    // Không sinh được việc nào nhưng người dùng có việc của mình: giữ nguyên
   } else {
     await db.delete(actionItems).where(eq(actionItems.sessionId, row.id));
   }
-
+  const openTaskCount = taskRows.length + keptTasks.filter((t) => !t.done).length;
   const topics = topicsFromPlan(plan, durationSec);
-  const openTaskCount = plan.action_items.length;
   const headlineTag =
     openTaskCount > 0
       ? ({ tag: "pending", count: openTaskCount } as { tag: SemanticTag; count: number })
@@ -453,6 +488,9 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
       draft: null,
     })
     .where(eq(sessionDetails.sessionId, row.id));
+  // C1-09 mục 4: tóm tắt lại thành công thì mới đếm lượt và tắt cờ chờ;
+  // lời đã dùng để tóm tắt là bản mới nhất nên gỡ băng "Tóm tắt lại". Bản
+  // dịch tóm tắt theo nội dung cũ chuyển lỗi thời (hiện "Dịch lại").
   await db
     .update(sessions)
     .set({
@@ -464,8 +502,15 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
       asrStage: "done",
       asrError: null,
       asrUpdatedAt: now(),
+      resummarizeCount: resummarized ? row.resummarizeCount + 1 : row.resummarizeCount,
+      resummarizePending: false,
+      transcriptStale: false,
     })
     .where(eq(sessions.id, row.id));
+  if (resummarized) {
+    await db.update(summaryVersions).set({ stale: true }).where(eq(summaryVersions.sessionId, row.id));
+    console.log(`[asr] ${JSON.stringify({ sessionId: row.id, event: "resummarized", count: row.resummarizeCount + 1, topics: topics.length, tasks: openTaskCount, ts: new Date().toISOString() })}`);
+  }
   logEvent(row.id, "done", { topics: topics.length, tasks: openTaskCount });
 }
 
@@ -498,7 +543,11 @@ export async function driveProcess(sessionId: string): Promise<ProcessState | nu
   let row = (await db.select().from(sessions).where(eq(sessions.id, sessionId)).limit(1))[0];
   if (!row) return null;
   const stage = row.asrStage as AsrStage | null;
-  if (!stage || !isAudioObjectKey(row.audioPath)) return stateOf(row);
+  if (!stage) return stateOf(row);
+  // C1-09 mục 4: tóm tắt lại chạy cho cả buổi KHÔNG có băng (buổi nhập file,
+  // buổi mẫu đã nhập) vì bản chữ đã có sẵn, chỉ cần Gemini tóm tắt lại. Các
+  // bước khác vẫn yêu cầu băng như cũ.
+  if (!isAudioObjectKey(row.audioPath) && stage !== "summarizing") return stateOf(row);
 
   if (stage !== "done" && row.asrAttempts >= MAX_ATTEMPTS) {
     await markFailed(row, "attempts_exhausted");

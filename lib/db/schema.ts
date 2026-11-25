@@ -354,6 +354,14 @@ export const sessions = noteimSchema.table(
     asrAttempts: integer("asr_attempts").notNull().default(0),
     /** Lần cuối trạng thái đổi/có người đẩy — cron quét kẹt > 10 phút theo đây. */
     asrUpdatedAt: timestamp("asr_updated_at", { withTimezone: true }),
+    /* C1-09 mục 4 — tóm tắt lại sau khi sửa lời: đếm lượt đã tóm tắt lại
+     * THÀNH CÔNG (Free tối đa 3, chặn TRƯỚC khi gọi Gemini); cờ chờ của lần
+     * tóm tắt lại đang chạy (chỉ thành công mới đếm và tắt); lời đã sửa sau
+     * lần tóm tắt gần nhất (đặt true khi sửa đoạn/đổi người nói, tắt khi
+     * tóm tắt xong) để tab Tóm tắt/Việc hiện băng "Tóm tắt lại". */
+    resummarizeCount: integer("resummarize_count").notNull().default(0),
+    resummarizePending: boolean("resummarize_pending").notNull().default(false),
+    transcriptStale: boolean("transcript_stale").notNull().default(false),
     /** { confirmed, announced, receipts? } — hình dạng session.consent */
     consent: jsonb("consent")
       .notNull()

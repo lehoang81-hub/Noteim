@@ -20,6 +20,7 @@ import type {
   SessionDetail,
   ShareLink,
   SummaryVersion,
+  TranscriptSegment,
   UsageRow,
   Workspace,
   WorkspaceRole,
@@ -305,6 +306,38 @@ function originalVersion(d: SessionDetail): SummaryVersion {
 /** Bản dịch đã lưu trong kho (fixture summary_versions hoặc bản đã tạo). */
 function storedVersion(fx: { detail: SessionDetail; summary_versions?: SummaryVersion[] }, lang: Lang): SummaryVersion | null {
   return (fx.summary_versions ?? []).find((v) => v.lang === lang) ?? null;
+}
+
+/** C1-09: tính lại tỉ lệ nói từng người + dải giọng (speaker_spans) từ các
+ * đoạn lời hiện tại của fixture, khớp cách máy chủ tính (recomputeSpeakerStats). */
+function recomputeMockSpeakers(fx: { detail: SessionDetail; transcript: TranscriptSegment[] }): void {
+  const d = fx.detail;
+  const segs = [...fx.transcript].sort((a, b) => a.start_sec - b.start_sec);
+  const durations = new Map<string, number>();
+  for (const s of segs) durations.set(s.speaker_id, (durations.get(s.speaker_id) ?? 0) + Math.max(0, s.end_sec - s.start_sec));
+  const total = [...durations.values()].reduce((a, b) => a + b, 0) || 1;
+  for (const sp of d.speakers) {
+    const dur = durations.get(sp.id) ?? 0;
+    const pct = Math.round((dur / total) * 100);
+    sp.talk_ratio_percent = dur > 0 && pct === 0 ? 1 : pct;
+    if (dur > 0) {
+      const first = segs.find((s) => s.speaker_id === sp.id);
+      if (first) sp.sample_start_sec = Math.max(0, first.start_sec);
+    }
+  }
+  d.speaker_spans = segs.map((s) => ({ speaker_id: s.speaker_id, start_sec: s.start_sec, end_sec: s.end_sec }));
+}
+
+/** Các đoạn LIỀN SAU `segmentId` cùng người nói cũ (dừng ở người khác). */
+function followingMockSegmentIds(fx: { transcript: TranscriptSegment[] }, segmentId: string, oldSpeakerId: string): string[] {
+  const segs = [...fx.transcript].sort((a, b) => a.start_sec - b.start_sec);
+  const out: string[] = [];
+  const idx = segs.findIndex((s) => s.id === segmentId);
+  for (let i = idx + 1; i < segs.length; i++) {
+    if (segs[i].speaker_id !== oldSpeakerId) break;
+    out.push(segs[i].id);
+  }
+  return out;
 }
 
 function matches(d: Session | SessionDetail, f: SessionFilter | undefined): boolean {
@@ -635,6 +668,69 @@ export const mockSource: DataSource = {
         const sp = fx.detail.speakers.find((s) => s.id === speakerId);
         if (!seg || !sp) throw new DataError("not_found");
         seg.speaker_id = speakerId;
+        // C1-09: tính lại tỉ lệ nói + dải giọng sau MỌI lần đổi người nói
+        recomputeMockSpeakers(fx);
+      }),
+    addSpeakerAndReassign: (sessionId, segmentId) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        const seg = fx.transcript.find((s) => s.id === segmentId);
+        if (!seg) throw new DataError("not_found");
+        const oldSpeakerId = seg.speaker_id;
+        if (!fx.detail.speakers.some((s) => s.id === oldSpeakerId)) throw new DataError("not_found");
+        // Id kế tiếp chưa dùng trong SPK_01, SPK_02, ...
+        let nextNum = 1;
+        for (const sp of fx.detail.speakers) {
+          const m = /^SPK_(\d+)$/.exec(sp.id);
+          if (m) nextNum = Math.max(nextNum, Number(m[1]) + 1);
+        }
+        const newId = `SPK_${String(nextNum).padStart(2, "0")}`;
+        const usedColors = new Set(fx.detail.speakers.map((s) => s.color_index));
+        let colorIndex = 0;
+        while (usedColors.has(colorIndex) && colorIndex < 6) colorIndex++;
+        if (colorIndex >= 6) colorIndex = fx.detail.speakers.length % 6;
+        fx.detail.speakers.push({
+          id: newId,
+          contact_id: null,
+          display_name: null,
+          is_me: false,
+          color_index: colorIndex,
+          talk_ratio_percent: 0,
+          sample_start_sec: Math.max(0, seg.start_sec),
+        });
+        seg.speaker_id = newId;
+        recomputeMockSpeakers(fx);
+        return { speaker_id: newId, following_ids: followingMockSegmentIds(fx, segmentId, oldSpeakerId) };
+      }),
+    reassignSegments: (sessionId, segmentIds, speakerId) =>
+      write(async () => {
+        await sessionsReady();
+        const fx = await findFixture(sessionId);
+        assertOwnSession(fx.detail);
+        if (!fx.detail.speakers.some((s) => s.id === speakerId)) throw new DataError("not_found");
+        for (const segId of segmentIds) {
+          const seg = fx.transcript.find((s) => s.id === segId);
+          if (!seg) throw new DataError("not_found");
+          seg.speaker_id = speakerId;
+        }
+        recomputeMockSpeakers(fx);
+      }),
+    resummarize: (id) =>
+      write(async () => {
+        // Bản giả không gọi AI: coi như tóm tắt lại xong ngay, chỉ gỡ băng
+        // "Tóm tắt lại" và đếm lượt. Free tối đa 3 lần mỗi buổi khớp máy chủ.
+        await sessionsReady();
+        const fx = await findFixture(id);
+        assertOwnSession(fx.detail);
+        const d = fx.detail;
+        if (!fx.transcript.length) throw new DataError("not_found");
+        const plan = getFlags().plan ?? getDb().user.plan;
+        const count = d.resummarize_count ?? 0;
+        if (plan !== "pro" && count >= 3) throw new DataError("quota_exceeded");
+        d.transcript_stale = false;
+        d.resummarize_count = count + 1;
       }),
     nameSpeaker: (sessionId, speakerId, contactId) =>
       write(async () => {
