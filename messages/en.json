@@ -893,7 +893,8 @@
     "sampleNote": "Sample translation",
     "langVi": "Vietnamese",
     "langEn": "English",
-    "langKo": "Korean"
+    "langKo": "Korean",
+    "aiFromVi": "AI-translated from Vietnamese"
   },
   "contacts": {
     "preferredLanguage": "Preferred language"

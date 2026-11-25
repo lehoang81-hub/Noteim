@@ -284,7 +284,9 @@ export function SummaryTab({
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 rounded-pill bg-dien-tint px-2 py-0.5 text-caption font-medium text-dien">
-            {ts("translatedFrom", { lang: tl(LANG_UI_NAME_KEY[originalLang]) })}
+            {version.sample
+              ? ts("translatedFrom", { lang: tl(LANG_UI_NAME_KEY[originalLang]) })
+              : ts("aiFromVi")}
           </span>
         )}
         {version.sample ? <span className="text-caption text-ink-3">{ts("sampleNote")}</span> : null}

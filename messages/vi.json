@@ -985,7 +985,8 @@
     "sampleNote": "Bản dịch mẫu",
     "langVi": "tiếng Việt",
     "langEn": "tiếng Anh",
-    "langKo": "tiếng Hàn"
+    "langKo": "tiếng Hàn",
+    "aiFromVi": "Dịch bằng AI từ tiếng Việt"
   },
   "contacts": {
     "preferredLanguage": "Ngôn ngữ ưa dùng"

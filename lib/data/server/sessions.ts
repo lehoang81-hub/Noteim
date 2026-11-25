@@ -59,6 +59,7 @@ import { retryPipeline, stateOf } from "./asr-pipeline";
 import { FREE_CHAT_QUESTIONS_PER_SESSION } from "./account";
 import { GeminiError, speakerOrder } from "./summarize";
 import { answerSessionChat, notFoundText, readUiLocale, type SessionChatContext } from "./chat-ai";
+import { translateSummaryVersion, translateTexts } from "./translate-ai";
 
 type SessionRow = typeof sessions.$inferSelect;
 type DetailRow = typeof sessionDetails.$inferSelect;
@@ -786,23 +787,40 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
     case "translateSegments": {
       const lang = action.lang;
       const rows = await db.select().from(transcriptSegments).where(eq(transcriptSegments.sessionId, id)).orderBy(transcriptSegments.startSec);
+      const targets: Array<typeof transcriptSegments.$inferSelect> = [];
       for (const seg of rows) {
         if (action.segmentIds && !action.segmentIds.includes(seg.id)) continue;
         if ((seg.lang as Lang) === lang) continue;
         const translations = { ...(seg.translations as TranscriptSegment["translations"]) };
         const existing: TranslationEntry | undefined = translations[lang];
         if (existing && (!existing.stale || !action.segmentIds)) continue;
-        if (existing?.stale) {
-          // Mockup không dịch lại được nội dung: giữ bản dịch cũ, gỡ nhãn lỗi thời
-          translations[lang] = { ...existing, stale: false };
-        } else {
-          // Bản dịch mẫu kèm câu gốc, không bịa nội dung (docs/08)
-          translations[lang] = { text: seg.text, stale: false, sample: true };
+        targets.push(seg);
+      }
+      if (targets.length) {
+        // Dịch thật bằng Gemini (C1-08): dịch cả đợt rồi mới ghi — lỗi giữa
+        // chừng thì không ghi mục nào, tránh dịch lưng chừng khó hiểu
+        const started = Date.now();
+        try {
+          const map = await translateTexts({
+            items: targets.filter((seg) => seg.text.trim()).map((seg) => ({ id: seg.id, text: seg.text })),
+            targetLang: lang,
+          });
+          for (const seg of targets) {
+            const translations = { ...(seg.translations as TranscriptSegment["translations"]) };
+            const text = map.get(seg.id);
+            if (!text) continue; // mục rỗng: giữ nguyên trạng thái cũ
+            translations[lang] = { text, stale: false };
+            await db
+              .update(transcriptSegments)
+              .set({ translations })
+              .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, seg.id)));
+          }
+          console.log(`[translate] ok ${JSON.stringify({ sessionId: id, kind: "segments", lang, ms: Date.now() - started, count: targets.length, ts: new Date().toISOString() })}`);
+        } catch (error) {
+          const code = error instanceof GeminiError ? `gemini_${error.step}${error.status ? `_${error.status}` : ""}` : "unknown";
+          console.error(`[translate] lỗi ${JSON.stringify({ sessionId: id, kind: "segments", lang, ms: Date.now() - started, code, ts: new Date().toISOString() })}`);
+          throw new ApiError(502, "translate_failed", "Chưa dịch được, thử lại sau");
         }
-        await db
-          .update(transcriptSegments)
-          .set({ translations })
-          .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, seg.id)));
       }
       const fresh = await db.select().from(transcriptSegments).where(eq(transcriptSegments.sessionId, id)).orderBy(transcriptSegments.startSec);
       return { transcript: fresh.map(toSegment) };
@@ -953,28 +971,36 @@ export async function createSummaryVersion(ctx: ServerContext, id: string, lang:
   if (!existing && (planRow?.plan ?? "free") === "free" && (countRows[0]?.n ?? 0) >= 1) {
     throw new DataError("quota_exceeded");
   }
-  // Bản giả không sinh nội dung mới: giữ câu gốc ở bản dịch, đánh dấu sample
-  const topics: VersionTopic[] = detail.topics.map((t) => ({
-    ...t,
-    bullets: t.bullets.map((b) => ({ ...b, original_text: b.text, original_lang: detail.original_report_language })),
-  }));
+  // Dịch thật bằng Gemini (C1-08): giữ nguyên số liệu/tên/ngày giờ, từng ý
+  // gắn "Câu gốc" để đối chiếu. Thất bại thì báo lỗi rõ và không tạo bản —
+  // lượt hạn mức không mất (bản chưa tồn tại, lần thử sau vẫn được phép).
+  const started = Date.now();
+  let translated: { executiveSummary: string; topics: VersionTopic[]; taskTexts: Record<string, string> };
+  try {
+    translated = await translateSummaryVersion(detail, lang);
+  } catch (error) {
+    const code = error instanceof GeminiError ? `gemini_${error.step}${error.status ? `_${error.status}` : ""}` : "unknown";
+    console.error(`[translate] lỗi ${JSON.stringify({ sessionId: id, kind: "summary", lang, ms: Date.now() - started, code, ts: new Date().toISOString() })}`);
+    throw new ApiError(502, "translate_failed", "Chưa dịch được, thử lại sau");
+  }
+  console.log(`[translate] ok ${JSON.stringify({ sessionId: id, kind: "summary", lang, ms: Date.now() - started, ts: new Date().toISOString() })}`);
   const values = {
     sessionId: id,
     lang,
     source: "translated" as const,
     translatedFrom: detail.original_report_language,
     stale: false,
-    executiveSummary: detail.executive_summary,
-    topics,
-    taskTexts: Object.fromEntries(detail.action_items.map((a) => [a.id, a.task])),
-    sample: true,
+    executiveSummary: translated.executiveSummary,
+    topics: translated.topics,
+    taskTexts: translated.taskTexts,
+    sample: false,
   };
   const [saved] = await db
     .insert(summaryVersions)
     .values(values)
     .onConflictDoUpdate({
       target: [summaryVersions.sessionId, summaryVersions.lang],
-      set: { stale: false, createdAt: new Date(), executiveSummary: values.executiveSummary, topics: values.topics, taskTexts: values.taskTexts, sample: true },
+      set: { stale: false, createdAt: new Date(), executiveSummary: values.executiveSummary, topics: values.topics, taskTexts: values.taskTexts, sample: false },
     })
     .returning();
   if (!detail.report_languages.includes(lang)) {

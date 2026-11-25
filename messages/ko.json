@@ -985,7 +985,8 @@
     "sampleNote": "샘플 번역",
     "langVi": "베트남어",
     "langEn": "영어",
-    "langKo": "한국어"
+    "langKo": "한국어",
+    "aiFromVi": "베트남어에서 AI로 번역됨"
   },
   "contacts": {
     "preferredLanguage": "선호 언어"
