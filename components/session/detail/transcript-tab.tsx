@@ -142,7 +142,6 @@ export function TranscriptTab({
   const [followingAsk, setFollowingAsk] = useState<{ speakerId: string; followingIds: string[] } | null>(null);
   const [followBusy, setFollowBusy] = useState(false);
   const [editingSegId, setEditingSegId] = useState<string | null>(null);
-  const [editValue, setEditValue] = useState("");
 
   // Bản gọn và Nguyên văn (M8-01): Bản gọn mặc định — bỏ tiếng đệm, từ lặp,
   // nói vấp; Nguyên văn giữ từng chữ (tiếng đệm màu chữ phụ) để đối chiếu
@@ -400,15 +399,13 @@ export function TranscriptTab({
           displayText={displayText}
           fillers={fillers}
           editingSegId={editingSegId}
-          editValue={editValue}
-          setEditValue={setEditValue}
           canPlay={canPlay}
           onSeek={onSeek}
           onOpenMenu={setMenuSegId}
           onCancelEdit={() => setEditingSegId(null)}
-          onSaveEdit={async () => {
+          onSaveEdit={async (text) => {
             const seg = editingSegId ? segById[editingSegId] : null;
-            const next = editValue.trim();
+            const next = text.trim();
             if (!seg || !next || next === displayText(seg)) {
               setEditingSegId(null);
               return;
@@ -465,7 +462,6 @@ export function TranscriptTab({
               label={t("edit")}
               onClick={() => {
                 setEditingSegId(menuSeg.id);
-                setEditValue(displayText(menuSeg));
                 setMenuSegId(null);
               }}
             />
@@ -654,13 +650,12 @@ type ListProps = {
   /** Tiếng đệm trong bản đồ nghe (mốc giờ), để màu phụ ở Nguyên văn */
   fillers: Array<{ start_sec: number; end_sec: number; text: string }>;
   editingSegId: string | null;
-  editValue: string;
-  setEditValue: (v: string) => void;
   canPlay: boolean;
   onSeek: (time: number) => void;
   onOpenMenu: (segId: string) => void;
   onCancelEdit: () => void;
-  onSaveEdit: () => void;
+  /** Lưu nội dung ô sửa (C1-09): ô tự quản giá trị, chỉ lúc bấm Lưu mới đọc */
+  onSaveEdit: (text: string) => void;
   onUserScroll: () => void;
 };
 
@@ -688,8 +683,6 @@ function TranscriptList(props: ListProps) {
     displayText,
     fillers,
     editingSegId,
-    editValue,
-    setEditValue,
     canPlay,
     onSeek,
     onOpenMenu,
@@ -702,6 +695,9 @@ function TranscriptList(props: ListProps) {
   const holdMoved = useRef(false);
   const holdFired = useRef(false);
   const holdPos = useRef({ x: 0, y: 0 });
+  // C1-09 mục 3: trạng thái soạn của bộ gõ (IME) và ô sửa tự quản giá trị
+  const composingRef = useRef(false);
+  const editRef = useRef<HTMLTextAreaElement | null>(null);
   const [selectedText, setSelectedText] = useState("");
 
   function holdStart(segId: string, e: React.PointerEvent) {
@@ -780,19 +776,32 @@ function TranscriptList(props: ListProps) {
                   className="min-w-0 flex-1"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    onSaveEdit();
+                    onSaveEdit(editRef.current?.value ?? "");
                   }}
                 >
                   <p className="text-small font-medium text-ink-3">{t("editHint")}</p>
+                  {/* C1-09 mục 3: ô sửa TỰ QUẢN GIÁ TRỊ (uncontrolled, cùng cách
+                      SearchField đã sửa ở #98) — React KHÔNG ghi vào ô trong lúc
+                      gõ nên bộ gõ Telex trên Android không bị chèn ngang, con
+                      trỏ không nhảy. Chỉ lúc bấm Lưu mới đọc giá trị DOM. */}
                   <textarea
+                    ref={editRef}
                     autoFocus
-                    value={editValue}
-                    onChange={(e) => setEditValue(e.target.value)}
+                    defaultValue={text}
+                    onCompositionStart={() => {
+                      composingRef.current = true;
+                    }}
+                    onCompositionEnd={() => {
+                      composingRef.current = false;
+                    }}
                     onKeyDown={(e) => {
+                      // Đang soạn dấu (IME) thì Enter/Esc là của bộ gõ, không
+                      // đóng ô sửa
+                      if (e.nativeEvent.isComposing) return;
                       if (e.key === "Escape") onCancelEdit();
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
-                        onSaveEdit();
+                        onSaveEdit(editRef.current?.value ?? "");
                       }
                     }}
                     rows={3}
