@@ -1413,7 +1413,8 @@
     "speechLanguage": "Default recording language",
     "autoDetect": "Detect other languages automatically",
     "reportLanguageDefault": "Use app default",
-    "reportLanguageHint": "Create unlimited language versions per session with Pro."
+    "reportLanguageHint": "Create unlimited language versions per session with Pro.",
+    "helpEntry": "Recording tips and FAQ"
   },
   "upgrade": {
     "title": "Plans",
@@ -1770,5 +1771,14 @@
     "entryInvite": "Sign in to keep your sessions and sync them across devices.",
     "entryGo": "Sign in",
     "entrySignedIn": "Signed in as {name}"
+  },
+  "help": {
+    "title": "Recording tips and FAQ",
+    "place": "Put the phone in the middle of the table, close to the speakers. Avoid fans or air conditioners blowing straight at it.",
+    "turn": "Take turns speaking, don't talk over each other. Pause briefly when the speaker changes.",
+    "merge": "For very short sessions or similar voices, the app may merge two speakers into one.",
+    "wrongSpeaker": "Wrong speaker? Tap the three-dot button on the segment, choose Change speaker, then pick or add a new speaker.",
+    "wrongWord": "Wrong words? Tap the three-dot button, choose Edit words. Then tap Summarize again to update the summary and action items.",
+    "translation": "Viewing an existing translation is free. Re-translate only when the original was edited."
   }
 }

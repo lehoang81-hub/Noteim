@@ -1413,7 +1413,8 @@
     "speechLanguage": "Ngôn ngữ ghi âm mặc định",
     "autoDetect": "Tự nhận tiếng khác",
     "reportLanguageDefault": "Theo cài đặt chung",
-    "reportLanguageHint": "Tạo không giới hạn bản ngôn ngữ cho mỗi buổi với gói Pro."
+    "reportLanguageHint": "Tạo không giới hạn bản ngôn ngữ cho mỗi buổi với gói Pro.",
+    "helpEntry": "Mẹo ghi âm và câu hỏi thường gặp"
   },
   "upgrade": {
     "title": "Gói dịch vụ",
@@ -1770,5 +1771,14 @@
     "entryInvite": "Đăng nhập để lưu buổi ghi và đồng bộ theo lại mọi máy.",
     "entryGo": "Đăng nhập",
     "entrySignedIn": "Đang dùng tài khoản {name}"
+  },
+  "help": {
+    "title": "Mẹo ghi âm và câu hỏi thường gặp",
+    "place": "Đặt máy giữa bàn, gần người nói. Tránh quạt, điều hòa thổi thẳng vào máy.",
+    "turn": "Mỗi người nói lần lượt, không nói chen. Có khoảng nghỉ ngắn khi đổi người.",
+    "merge": "Buổi rất ngắn hoặc giọng giống nhau thì app có thể gộp hai người thành một.",
+    "wrongSpeaker": "Nhận sai người nói: bấm nút ba chấm ở đoạn lời, chọn Đổi người nói, rồi chọn hoặc thêm người nói mới.",
+    "wrongWord": "Nhận sai chữ: bấm nút ba chấm ở đoạn lời, chọn Sửa lời. Sửa xong bấm Tóm tắt lại để cập nhật tóm tắt và việc cần làm.",
+    "translation": "Bản dịch đã có thì xem lại không tốn lượt. Chỉ dịch lại khi bản gốc đã sửa."
   }
 }
