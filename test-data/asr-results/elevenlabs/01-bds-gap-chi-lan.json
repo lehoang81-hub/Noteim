@@ -1,0 +1,6617 @@
+{
+  "provider": "elevenlabs",
+  "file": "01-bds-gap-chi-lan",
+  "model": "scribe_v3",
+  "processing_ms": 26782,
+  "audio_duration_sec": 383.497007,
+  "language": "vie",
+  "segments": [
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 1.46,
+      "end_sec": 4.58,
+      "text": "Dạ em chào chị Lan. Cảm ơn chị đã qua văn phòng sáng nay.",
+      "words": [
+        {
+          "text": "Dạ",
+          "start_sec": 1.46,
+          "end_sec": 1.62
+        },
+        {
+          "text": "em",
+          "start_sec": 1.7,
+          "end_sec": 1.84
+        },
+        {
+          "text": "chào",
+          "start_sec": 1.88,
+          "end_sec": 2.04
+        },
+        {
+          "text": "chị",
+          "start_sec": 2.08,
+          "end_sec": 2.22
+        },
+        {
+          "text": "Lan.",
+          "start_sec": 2.28,
+          "end_sec": 2.5
+        },
+        {
+          "text": "Cảm",
+          "start_sec": 2.8,
+          "end_sec": 2.92
+        },
+        {
+          "text": "ơn",
+          "start_sec": 3,
+          "end_sec": 3.12
+        },
+        {
+          "text": "chị",
+          "start_sec": 3.18,
+          "end_sec": 3.38
+        },
+        {
+          "text": "đã",
+          "start_sec": 3.44,
+          "end_sec": 3.54
+        },
+        {
+          "text": "qua",
+          "start_sec": 3.58,
+          "end_sec": 3.72
+        },
+        {
+          "text": "văn",
+          "start_sec": 3.78,
+          "end_sec": 3.94
+        },
+        {
+          "text": "phòng",
+          "start_sec": 3.98,
+          "end_sec": 4.16
+        },
+        {
+          "text": "sáng",
+          "start_sec": 4.24,
+          "end_sec": 4.38
+        },
+        {
+          "text": "nay.",
+          "start_sec": 4.42,
+          "end_sec": 4.58
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 5.6,
+      "end_sec": 16.04,
+      "text": "Hôm nay em muốn hiểu kỹ nhu cầu của gia đình mình trước rồi mới giới thiệu căn. Buổi trao đổi hôm nay chị cứ nói thật nhu cầu và ngân sách, căn nào hợp em gửi thông tin sau. Chị không bị ép mua đâu ạ.",
+      "words": [
+        {
+          "text": "Hôm",
+          "start_sec": 5.6,
+          "end_sec": 5.72
+        },
+        {
+          "text": "nay",
+          "start_sec": 5.78,
+          "end_sec": 6
+        },
+        {
+          "text": "em",
+          "start_sec": 6.06,
+          "end_sec": 6.16
+        },
+        {
+          "text": "muốn",
+          "start_sec": 6.2,
+          "end_sec": 6.34
+        },
+        {
+          "text": "hiểu",
+          "start_sec": 6.38,
+          "end_sec": 6.54
+        },
+        {
+          "text": "kỹ",
+          "start_sec": 6.6,
+          "end_sec": 6.76
+        },
+        {
+          "text": "nhu",
+          "start_sec": 6.82,
+          "end_sec": 6.98
+        },
+        {
+          "text": "cầu",
+          "start_sec": 7.02,
+          "end_sec": 7.2
+        },
+        {
+          "text": "của",
+          "start_sec": 7.26,
+          "end_sec": 7.34
+        },
+        {
+          "text": "gia",
+          "start_sec": 7.36,
+          "end_sec": 7.48
+        },
+        {
+          "text": "đình",
+          "start_sec": 7.54,
+          "end_sec": 7.68
+        },
+        {
+          "text": "mình",
+          "start_sec": 7.72,
+          "end_sec": 7.9
+        },
+        {
+          "text": "trước",
+          "start_sec": 7.94,
+          "end_sec": 8.16
+        },
+        {
+          "text": "rồi",
+          "start_sec": 8.24,
+          "end_sec": 8.38
+        },
+        {
+          "text": "mới",
+          "start_sec": 8.44,
+          "end_sec": 8.58
+        },
+        {
+          "text": "giới",
+          "start_sec": 8.62,
+          "end_sec": 8.76
+        },
+        {
+          "text": "thiệu",
+          "start_sec": 8.8,
+          "end_sec": 8.96
+        },
+        {
+          "text": "căn.",
+          "start_sec": 9.02,
+          "end_sec": 9.22
+        },
+        {
+          "text": "Buổi",
+          "start_sec": 9.86,
+          "end_sec": 9.98
+        },
+        {
+          "text": "trao",
+          "start_sec": 10,
+          "end_sec": 10.16
+        },
+        {
+          "text": "đổi",
+          "start_sec": 10.2,
+          "end_sec": 10.32
+        },
+        {
+          "text": "hôm",
+          "start_sec": 10.38,
+          "end_sec": 10.5
+        },
+        {
+          "text": "nay",
+          "start_sec": 10.54,
+          "end_sec": 10.74
+        },
+        {
+          "text": "chị",
+          "start_sec": 10.8,
+          "end_sec": 10.94
+        },
+        {
+          "text": "cứ",
+          "start_sec": 11,
+          "end_sec": 11.1
+        },
+        {
+          "text": "nói",
+          "start_sec": 11.16,
+          "end_sec": 11.3
+        },
+        {
+          "text": "thật",
+          "start_sec": 11.34,
+          "end_sec": 11.5
+        },
+        {
+          "text": "nhu",
+          "start_sec": 11.54,
+          "end_sec": 11.7
+        },
+        {
+          "text": "cầu",
+          "start_sec": 11.76,
+          "end_sec": 11.94
+        },
+        {
+          "text": "và",
+          "start_sec": 12,
+          "end_sec": 12.08
+        },
+        {
+          "text": "ngân",
+          "start_sec": 12.12,
+          "end_sec": 12.26
+        },
+        {
+          "text": "sách,",
+          "start_sec": 12.32,
+          "end_sec": 12.5
+        },
+        {
+          "text": "căn",
+          "start_sec": 12.78,
+          "end_sec": 12.9
+        },
+        {
+          "text": "nào",
+          "start_sec": 12.94,
+          "end_sec": 13.08
+        },
+        {
+          "text": "hợp",
+          "start_sec": 13.14,
+          "end_sec": 13.3
+        },
+        {
+          "text": "em",
+          "start_sec": 13.36,
+          "end_sec": 13.5
+        },
+        {
+          "text": "gửi",
+          "start_sec": 13.54,
+          "end_sec": 13.68
+        },
+        {
+          "text": "thông",
+          "start_sec": 13.72,
+          "end_sec": 13.86
+        },
+        {
+          "text": "tin",
+          "start_sec": 13.92,
+          "end_sec": 14.06
+        },
+        {
+          "text": "sau.",
+          "start_sec": 14.14,
+          "end_sec": 14.34
+        },
+        {
+          "text": "Chị",
+          "start_sec": 14.66,
+          "end_sec": 14.84
+        },
+        {
+          "text": "không",
+          "start_sec": 14.88,
+          "end_sec": 15.02
+        },
+        {
+          "text": "bị",
+          "start_sec": 15.06,
+          "end_sec": 15.18
+        },
+        {
+          "text": "ép",
+          "start_sec": 15.26,
+          "end_sec": 15.38
+        },
+        {
+          "text": "mua",
+          "start_sec": 15.44,
+          "end_sec": 15.58
+        },
+        {
+          "text": "đâu",
+          "start_sec": 15.62,
+          "end_sec": 15.76
+        },
+        {
+          "text": "ạ.",
+          "start_sec": 15.84,
+          "end_sec": 16.04
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 17.12,
+      "end_sec": 21.04,
+      "text": "Ờ, ờ em, nhà chị là bốn người, hai bé đang học cấp một.",
+      "words": [
+        {
+          "text": "Ờ,",
+          "start_sec": 17.12,
+          "end_sec": 17.24
+        },
+        {
+          "text": "ờ",
+          "start_sec": 17.4,
+          "end_sec": 17.5
+        },
+        {
+          "text": "em,",
+          "start_sec": 17.6,
+          "end_sec": 17.78
+        },
+        {
+          "text": "nhà",
+          "start_sec": 18.2,
+          "end_sec": 18.34
+        },
+        {
+          "text": "chị",
+          "start_sec": 18.42,
+          "end_sec": 18.62
+        },
+        {
+          "text": "là",
+          "start_sec": 18.68,
+          "end_sec": 18.84
+        },
+        {
+          "text": "bốn",
+          "start_sec": 18.9,
+          "end_sec": 19.06
+        },
+        {
+          "text": "người,",
+          "start_sec": 19.1,
+          "end_sec": 19.34
+        },
+        {
+          "text": "hai",
+          "start_sec": 19.76,
+          "end_sec": 19.9
+        },
+        {
+          "text": "bé",
+          "start_sec": 19.96,
+          "end_sec": 20.16
+        },
+        {
+          "text": "đang",
+          "start_sec": 20.22,
+          "end_sec": 20.38
+        },
+        {
+          "text": "học",
+          "start_sec": 20.42,
+          "end_sec": 20.58
+        },
+        {
+          "text": "cấp",
+          "start_sec": 20.62,
+          "end_sec": 20.76
+        },
+        {
+          "text": "một.",
+          "start_sec": 20.82,
+          "end_sec": 21.04
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 21.94,
+      "end_sec": 38.62,
+      "text": "Chị cần hai phòng ngủ là đủ, là đủ. Quan trọng là gần trường Lê Văn Tám cho bọn trẻ đi bộ được. Nhà chị giờ ở Lê Chân, sáng đưa đón hai bé sang Lê Văn Tám thì là chạy xe máy gần 20 phút. Bé lớn học lớp ba, bé nhỏ mới mẫu giáo bốn tuổi.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 21.94,
+          "end_sec": 22.12
+        },
+        {
+          "text": "cần",
+          "start_sec": 22.18,
+          "end_sec": 22.38
+        },
+        {
+          "text": "hai",
+          "start_sec": 22.44,
+          "end_sec": 22.58
+        },
+        {
+          "text": "phòng",
+          "start_sec": 22.62,
+          "end_sec": 22.8
+        },
+        {
+          "text": "ngủ",
+          "start_sec": 22.84,
+          "end_sec": 23.02
+        },
+        {
+          "text": "là",
+          "start_sec": 23.1,
+          "end_sec": 23.24
+        },
+        {
+          "text": "đủ,",
+          "start_sec": 23.3,
+          "end_sec": 23.52
+        },
+        {
+          "text": "là",
+          "start_sec": 23.98,
+          "end_sec": 24.12
+        },
+        {
+          "text": "đủ.",
+          "start_sec": 24.18,
+          "end_sec": 24.4
+        },
+        {
+          "text": "Quan",
+          "start_sec": 24.76,
+          "end_sec": 24.92
+        },
+        {
+          "text": "trọng",
+          "start_sec": 24.96,
+          "end_sec": 25.16
+        },
+        {
+          "text": "là",
+          "start_sec": 25.22,
+          "end_sec": 25.34
+        },
+        {
+          "text": "gần",
+          "start_sec": 25.38,
+          "end_sec": 25.54
+        },
+        {
+          "text": "trường",
+          "start_sec": 25.58,
+          "end_sec": 25.76
+        },
+        {
+          "text": "Lê",
+          "start_sec": 25.82,
+          "end_sec": 25.94
+        },
+        {
+          "text": "Văn",
+          "start_sec": 26,
+          "end_sec": 26.16
+        },
+        {
+          "text": "Tám",
+          "start_sec": 26.22,
+          "end_sec": 26.44
+        },
+        {
+          "text": "cho",
+          "start_sec": 26.5,
+          "end_sec": 26.64
+        },
+        {
+          "text": "bọn",
+          "start_sec": 26.7,
+          "end_sec": 26.88
+        },
+        {
+          "text": "trẻ",
+          "start_sec": 26.92,
+          "end_sec": 27.12
+        },
+        {
+          "text": "đi",
+          "start_sec": 27.18,
+          "end_sec": 27.34
+        },
+        {
+          "text": "bộ",
+          "start_sec": 27.4,
+          "end_sec": 27.56
+        },
+        {
+          "text": "được.",
+          "start_sec": 27.64,
+          "end_sec": 27.84
+        },
+        {
+          "text": "Nhà",
+          "start_sec": 28.06,
+          "end_sec": 28.22
+        },
+        {
+          "text": "chị",
+          "start_sec": 28.28,
+          "end_sec": 28.46
+        },
+        {
+          "text": "giờ",
+          "start_sec": 28.52,
+          "end_sec": 28.8
+        },
+        {
+          "text": "ở",
+          "start_sec": 28.9,
+          "end_sec": 28.98
+        },
+        {
+          "text": "Lê",
+          "start_sec": 29.04,
+          "end_sec": 29.18
+        },
+        {
+          "text": "Chân,",
+          "start_sec": 29.26,
+          "end_sec": 29.46
+        },
+        {
+          "text": "sáng",
+          "start_sec": 29.92,
+          "end_sec": 30.08
+        },
+        {
+          "text": "đưa",
+          "start_sec": 30.14,
+          "end_sec": 30.28
+        },
+        {
+          "text": "đón",
+          "start_sec": 30.34,
+          "end_sec": 30.52
+        },
+        {
+          "text": "hai",
+          "start_sec": 30.58,
+          "end_sec": 30.74
+        },
+        {
+          "text": "bé",
+          "start_sec": 30.78,
+          "end_sec": 30.96
+        },
+        {
+          "text": "sang",
+          "start_sec": 31.06,
+          "end_sec": 31.24
+        },
+        {
+          "text": "Lê",
+          "start_sec": 31.28,
+          "end_sec": 31.42
+        },
+        {
+          "text": "Văn",
+          "start_sec": 31.48,
+          "end_sec": 31.64
+        },
+        {
+          "text": "Tám",
+          "start_sec": 31.7,
+          "end_sec": 31.96
+        },
+        {
+          "text": "thì",
+          "start_sec": 32.32,
+          "end_sec": 32.46
+        },
+        {
+          "text": "là",
+          "start_sec": 32.54,
+          "end_sec": 32.759
+        },
+        {
+          "text": "chạy",
+          "start_sec": 33.08,
+          "end_sec": 33.28
+        },
+        {
+          "text": "xe",
+          "start_sec": 33.36,
+          "end_sec": 33.48
+        },
+        {
+          "text": "máy",
+          "start_sec": 33.54,
+          "end_sec": 33.78
+        },
+        {
+          "text": "gần",
+          "start_sec": 33.86,
+          "end_sec": 34.06
+        },
+        {
+          "text": "20",
+          "start_sec": 34.26,
+          "end_sec": 34.42
+        },
+        {
+          "text": "phút.",
+          "start_sec": 34.46,
+          "end_sec": 34.68
+        },
+        {
+          "text": "Bé",
+          "start_sec": 35.16,
+          "end_sec": 35.32
+        },
+        {
+          "text": "lớn",
+          "start_sec": 35.4,
+          "end_sec": 35.58
+        },
+        {
+          "text": "học",
+          "start_sec": 35.64,
+          "end_sec": 35.82
+        },
+        {
+          "text": "lớp",
+          "start_sec": 35.88,
+          "end_sec": 36.04
+        },
+        {
+          "text": "ba,",
+          "start_sec": 36.1,
+          "end_sec": 36.3
+        },
+        {
+          "text": "bé",
+          "start_sec": 36.72,
+          "end_sec": 36.86
+        },
+        {
+          "text": "nhỏ",
+          "start_sec": 36.9,
+          "end_sec": 37.18
+        },
+        {
+          "text": "mới",
+          "start_sec": 37.24,
+          "end_sec": 37.42
+        },
+        {
+          "text": "mẫu",
+          "start_sec": 37.48,
+          "end_sec": 37.68
+        },
+        {
+          "text": "giáo",
+          "start_sec": 37.72,
+          "end_sec": 37.96
+        },
+        {
+          "text": "bốn",
+          "start_sec": 38.04,
+          "end_sec": 38.22
+        },
+        {
+          "text": "tuổi.",
+          "start_sec": 38.28,
+          "end_sec": 38.62
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 39.64,
+      "end_sec": 63.68,
+      "text": "Sáng bà nội đưa, chiều chị đón nên chỗ nào cũng phải gần mới được. Chị nghe chị hàng xóm giới thiệu khu Marina, bảo trường liên cấp nằm ngay trong dự án, học xong chạy xuống nhà là được. Cuối tuần chị cũng muốn có chỗ cho hai bé chạy nhảy, kiểu có công viên nước, có chợ đi bộ 10 phút tới nơi. Chị thích tầng trung thôi, à, khoảng tầng 12 đến 20, ban công hướng Đông Nam cho mát.",
+      "words": [
+        {
+          "text": "Sáng",
+          "start_sec": 39.64,
+          "end_sec": 39.82
+        },
+        {
+          "text": "bà",
+          "start_sec": 39.88,
+          "end_sec": 40.04
+        },
+        {
+          "text": "nội",
+          "start_sec": 40.12,
+          "end_sec": 40.32
+        },
+        {
+          "text": "đưa,",
+          "start_sec": 40.38,
+          "end_sec": 40.58
+        },
+        {
+          "text": "chiều",
+          "start_sec": 40.92,
+          "end_sec": 41.1
+        },
+        {
+          "text": "chị",
+          "start_sec": 41.16,
+          "end_sec": 41.34
+        },
+        {
+          "text": "đón",
+          "start_sec": 41.4,
+          "end_sec": 41.96
+        },
+        {
+          "text": "nên",
+          "start_sec": 42.04,
+          "end_sec": 42.2
+        },
+        {
+          "text": "chỗ",
+          "start_sec": 42.26,
+          "end_sec": 42.4
+        },
+        {
+          "text": "nào",
+          "start_sec": 42.46,
+          "end_sec": 42.68
+        },
+        {
+          "text": "cũng",
+          "start_sec": 42.74,
+          "end_sec": 42.9
+        },
+        {
+          "text": "phải",
+          "start_sec": 42.92,
+          "end_sec": 43.12
+        },
+        {
+          "text": "gần",
+          "start_sec": 43.2,
+          "end_sec": 43.4
+        },
+        {
+          "text": "mới",
+          "start_sec": 43.46,
+          "end_sec": 43.64
+        },
+        {
+          "text": "được.",
+          "start_sec": 43.7,
+          "end_sec": 43.92
+        },
+        {
+          "text": "Chị",
+          "start_sec": 44.24,
+          "end_sec": 44.38
+        },
+        {
+          "text": "nghe",
+          "start_sec": 44.44,
+          "end_sec": 44.64
+        },
+        {
+          "text": "chị",
+          "start_sec": 44.7,
+          "end_sec": 44.86
+        },
+        {
+          "text": "hàng",
+          "start_sec": 44.94,
+          "end_sec": 45.12
+        },
+        {
+          "text": "xóm",
+          "start_sec": 45.2,
+          "end_sec": 45.38
+        },
+        {
+          "text": "giới",
+          "start_sec": 45.42,
+          "end_sec": 45.62
+        },
+        {
+          "text": "thiệu",
+          "start_sec": 45.66,
+          "end_sec": 45.9
+        },
+        {
+          "text": "khu",
+          "start_sec": 45.94,
+          "end_sec": 46.12
+        },
+        {
+          "text": "Marina,",
+          "start_sec": 46.18,
+          "end_sec": 46.78
+        },
+        {
+          "text": "bảo",
+          "start_sec": 47.2,
+          "end_sec": 47.34
+        },
+        {
+          "text": "trường",
+          "start_sec": 47.38,
+          "end_sec": 47.56
+        },
+        {
+          "text": "liên",
+          "start_sec": 47.6,
+          "end_sec": 47.76
+        },
+        {
+          "text": "cấp",
+          "start_sec": 47.8,
+          "end_sec": 47.96
+        },
+        {
+          "text": "nằm",
+          "start_sec": 48,
+          "end_sec": 48.14
+        },
+        {
+          "text": "ngay",
+          "start_sec": 48.18,
+          "end_sec": 48.34
+        },
+        {
+          "text": "trong",
+          "start_sec": 48.38,
+          "end_sec": 48.56
+        },
+        {
+          "text": "dự",
+          "start_sec": 48.62,
+          "end_sec": 48.76
+        },
+        {
+          "text": "án,",
+          "start_sec": 48.88,
+          "end_sec": 49.04
+        },
+        {
+          "text": "học",
+          "start_sec": 49.38,
+          "end_sec": 49.52
+        },
+        {
+          "text": "xong",
+          "start_sec": 49.6,
+          "end_sec": 49.76
+        },
+        {
+          "text": "chạy",
+          "start_sec": 49.8,
+          "end_sec": 50.02
+        },
+        {
+          "text": "xuống",
+          "start_sec": 50.08,
+          "end_sec": 50.22
+        },
+        {
+          "text": "nhà",
+          "start_sec": 50.26,
+          "end_sec": 50.48
+        },
+        {
+          "text": "là",
+          "start_sec": 50.54,
+          "end_sec": 50.64
+        },
+        {
+          "text": "được.",
+          "start_sec": 50.7,
+          "end_sec": 50.9
+        },
+        {
+          "text": "Cuối",
+          "start_sec": 51.38,
+          "end_sec": 51.54
+        },
+        {
+          "text": "tuần",
+          "start_sec": 51.58,
+          "end_sec": 51.76
+        },
+        {
+          "text": "chị",
+          "start_sec": 51.82,
+          "end_sec": 52.04
+        },
+        {
+          "text": "cũng",
+          "start_sec": 52.1,
+          "end_sec": 52.22
+        },
+        {
+          "text": "muốn",
+          "start_sec": 52.28,
+          "end_sec": 52.46
+        },
+        {
+          "text": "có",
+          "start_sec": 52.52,
+          "end_sec": 52.64
+        },
+        {
+          "text": "chỗ",
+          "start_sec": 52.68,
+          "end_sec": 52.9
+        },
+        {
+          "text": "cho",
+          "start_sec": 52.96,
+          "end_sec": 53.12
+        },
+        {
+          "text": "hai",
+          "start_sec": 53.18,
+          "end_sec": 53.32
+        },
+        {
+          "text": "bé",
+          "start_sec": 53.38,
+          "end_sec": 53.56
+        },
+        {
+          "text": "chạy",
+          "start_sec": 53.62,
+          "end_sec": 53.78
+        },
+        {
+          "text": "nhảy,",
+          "start_sec": 53.82,
+          "end_sec": 54.1
+        },
+        {
+          "text": "kiểu",
+          "start_sec": 54.48,
+          "end_sec": 54.68
+        },
+        {
+          "text": "có",
+          "start_sec": 54.72,
+          "end_sec": 54.88
+        },
+        {
+          "text": "công",
+          "start_sec": 54.94,
+          "end_sec": 55.1
+        },
+        {
+          "text": "viên",
+          "start_sec": 55.16,
+          "end_sec": 55.28
+        },
+        {
+          "text": "nước,",
+          "start_sec": 55.34,
+          "end_sec": 55.54
+        },
+        {
+          "text": "có",
+          "start_sec": 55.84,
+          "end_sec": 55.98
+        },
+        {
+          "text": "chợ",
+          "start_sec": 56.02,
+          "end_sec": 56.22
+        },
+        {
+          "text": "đi",
+          "start_sec": 56.28,
+          "end_sec": 56.4
+        },
+        {
+          "text": "bộ",
+          "start_sec": 56.46,
+          "end_sec": 56.64
+        },
+        {
+          "text": "10",
+          "start_sec": 56.7,
+          "end_sec": 56.86
+        },
+        {
+          "text": "phút",
+          "start_sec": 56.9,
+          "end_sec": 57.1
+        },
+        {
+          "text": "tới",
+          "start_sec": 57.16,
+          "end_sec": 57.32
+        },
+        {
+          "text": "nơi.",
+          "start_sec": 57.38,
+          "end_sec": 57.62
+        },
+        {
+          "text": "Chị",
+          "start_sec": 58.1,
+          "end_sec": 58.26
+        },
+        {
+          "text": "thích",
+          "start_sec": 58.3,
+          "end_sec": 58.48
+        },
+        {
+          "text": "tầng",
+          "start_sec": 58.54,
+          "end_sec": 58.74
+        },
+        {
+          "text": "trung",
+          "start_sec": 58.78,
+          "end_sec": 58.96
+        },
+        {
+          "text": "thôi,",
+          "start_sec": 59,
+          "end_sec": 59.24
+        },
+        {
+          "text": "à,",
+          "start_sec": 59.7,
+          "end_sec": 59.82
+        },
+        {
+          "text": "khoảng",
+          "start_sec": 60.14,
+          "end_sec": 60.3
+        },
+        {
+          "text": "tầng",
+          "start_sec": 60.36,
+          "end_sec": 60.54
+        },
+        {
+          "text": "12",
+          "start_sec": 60.58,
+          "end_sec": 61
+        },
+        {
+          "text": "đến",
+          "start_sec": 61.06,
+          "end_sec": 61.24
+        },
+        {
+          "text": "20,",
+          "start_sec": 61.48,
+          "end_sec": 61.76
+        },
+        {
+          "text": "ban",
+          "start_sec": 62.16,
+          "end_sec": 62.32
+        },
+        {
+          "text": "công",
+          "start_sec": 62.38,
+          "end_sec": 62.52
+        },
+        {
+          "text": "hướng",
+          "start_sec": 62.58,
+          "end_sec": 62.76
+        },
+        {
+          "text": "Đông",
+          "start_sec": 62.82,
+          "end_sec": 62.94
+        },
+        {
+          "text": "Nam",
+          "start_sec": 63.02,
+          "end_sec": 63.22
+        },
+        {
+          "text": "cho",
+          "start_sec": 63.28,
+          "end_sec": 63.4
+        },
+        {
+          "text": "mát.",
+          "start_sec": 63.46,
+          "end_sec": 63.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 64.44,
+      "end_sec": 69.72,
+      "text": "Dạ để em ghi lại cho đúng. Hai phòng ngủ, gần trường, tầng trung, ban công hướng Đông Nam.",
+      "words": [
+        {
+          "text": "Dạ",
+          "start_sec": 64.44,
+          "end_sec": 64.58
+        },
+        {
+          "text": "để",
+          "start_sec": 64.64,
+          "end_sec": 64.76
+        },
+        {
+          "text": "em",
+          "start_sec": 64.84,
+          "end_sec": 64.959
+        },
+        {
+          "text": "ghi",
+          "start_sec": 65,
+          "end_sec": 65.12
+        },
+        {
+          "text": "lại",
+          "start_sec": 65.18,
+          "end_sec": 65.36
+        },
+        {
+          "text": "cho",
+          "start_sec": 65.4,
+          "end_sec": 65.5
+        },
+        {
+          "text": "đúng.",
+          "start_sec": 65.56,
+          "end_sec": 65.74
+        },
+        {
+          "text": "Hai",
+          "start_sec": 66.08,
+          "end_sec": 66.2
+        },
+        {
+          "text": "phòng",
+          "start_sec": 66.24,
+          "end_sec": 66.4
+        },
+        {
+          "text": "ngủ,",
+          "start_sec": 66.44,
+          "end_sec": 66.66
+        },
+        {
+          "text": "gần",
+          "start_sec": 67.04,
+          "end_sec": 67.22
+        },
+        {
+          "text": "trường,",
+          "start_sec": 67.26,
+          "end_sec": 67.46
+        },
+        {
+          "text": "tầng",
+          "start_sec": 67.82,
+          "end_sec": 68
+        },
+        {
+          "text": "trung,",
+          "start_sec": 68.04,
+          "end_sec": 68.22
+        },
+        {
+          "text": "ban",
+          "start_sec": 68.6,
+          "end_sec": 68.82
+        },
+        {
+          "text": "công",
+          "start_sec": 68.88,
+          "end_sec": 69.02
+        },
+        {
+          "text": "hướng",
+          "start_sec": 69.08,
+          "end_sec": 69.26
+        },
+        {
+          "text": "Đông",
+          "start_sec": 69.32,
+          "end_sec": 69.44
+        },
+        {
+          "text": "Nam.",
+          "start_sec": 69.5,
+          "end_sec": 69.72
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 70.7,
+      "end_sec": 76.12,
+      "text": "Chị xem có thiếu gì không ạ? Khu Marina đang mở bán tháp B, đúng tầm tiêu chí của mình.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 70.7,
+          "end_sec": 70.86
+        },
+        {
+          "text": "xem",
+          "start_sec": 70.94,
+          "end_sec": 71.16
+        },
+        {
+          "text": "có",
+          "start_sec": 71.2,
+          "end_sec": 71.3
+        },
+        {
+          "text": "thiếu",
+          "start_sec": 71.32,
+          "end_sec": 71.5
+        },
+        {
+          "text": "gì",
+          "start_sec": 71.54,
+          "end_sec": 71.7
+        },
+        {
+          "text": "không",
+          "start_sec": 71.76,
+          "end_sec": 71.92
+        },
+        {
+          "text": "ạ?",
+          "start_sec": 72.1,
+          "end_sec": 72.14
+        },
+        {
+          "text": "Khu",
+          "start_sec": 72.76,
+          "end_sec": 72.94
+        },
+        {
+          "text": "Marina",
+          "start_sec": 73.02,
+          "end_sec": 73.48
+        },
+        {
+          "text": "đang",
+          "start_sec": 73.54,
+          "end_sec": 73.68
+        },
+        {
+          "text": "mở",
+          "start_sec": 73.72,
+          "end_sec": 73.86
+        },
+        {
+          "text": "bán",
+          "start_sec": 73.92,
+          "end_sec": 74.08
+        },
+        {
+          "text": "tháp",
+          "start_sec": 74.12,
+          "end_sec": 74.28
+        },
+        {
+          "text": "B,",
+          "start_sec": 74.32,
+          "end_sec": 74.46
+        },
+        {
+          "text": "đúng",
+          "start_sec": 74.86,
+          "end_sec": 75.02
+        },
+        {
+          "text": "tầm",
+          "start_sec": 75.08,
+          "end_sec": 75.28
+        },
+        {
+          "text": "tiêu",
+          "start_sec": 75.34,
+          "end_sec": 75.5
+        },
+        {
+          "text": "chí",
+          "start_sec": 75.56,
+          "end_sec": 75.74
+        },
+        {
+          "text": "của",
+          "start_sec": 75.8,
+          "end_sec": 75.88
+        },
+        {
+          "text": "mình.",
+          "start_sec": 75.94,
+          "end_sec": 76.12
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 77.1,
+      "end_sec": 83.46,
+      "text": "Chiều nay em gửi chị mặt bằng và giá từng căn. Mùa này người đi xem đông lắm, căn nào vừa ra là có người giữ ngay.",
+      "words": [
+        {
+          "text": "Chiều",
+          "start_sec": 77.1,
+          "end_sec": 77.28
+        },
+        {
+          "text": "nay",
+          "start_sec": 77.34,
+          "end_sec": 77.54
+        },
+        {
+          "text": "em",
+          "start_sec": 77.6,
+          "end_sec": 77.74
+        },
+        {
+          "text": "gửi",
+          "start_sec": 77.8,
+          "end_sec": 77.94
+        },
+        {
+          "text": "chị",
+          "start_sec": 77.98,
+          "end_sec": 78.14
+        },
+        {
+          "text": "mặt",
+          "start_sec": 78.2,
+          "end_sec": 78.34
+        },
+        {
+          "text": "bằng",
+          "start_sec": 78.4,
+          "end_sec": 78.6
+        },
+        {
+          "text": "và",
+          "start_sec": 78.66,
+          "end_sec": 78.76
+        },
+        {
+          "text": "giá",
+          "start_sec": 78.8,
+          "end_sec": 79
+        },
+        {
+          "text": "từng",
+          "start_sec": 79.06,
+          "end_sec": 79.22
+        },
+        {
+          "text": "căn.",
+          "start_sec": 79.28,
+          "end_sec": 79.48
+        },
+        {
+          "text": "Mùa",
+          "start_sec": 79.98,
+          "end_sec": 80.1
+        },
+        {
+          "text": "này",
+          "start_sec": 80.14,
+          "end_sec": 80.3
+        },
+        {
+          "text": "người",
+          "start_sec": 80.34,
+          "end_sec": 80.5
+        },
+        {
+          "text": "đi",
+          "start_sec": 80.56,
+          "end_sec": 80.66
+        },
+        {
+          "text": "xem",
+          "start_sec": 80.74,
+          "end_sec": 80.9
+        },
+        {
+          "text": "đông",
+          "start_sec": 80.96,
+          "end_sec": 81.1
+        },
+        {
+          "text": "lắm,",
+          "start_sec": 81.14,
+          "end_sec": 81.3
+        },
+        {
+          "text": "căn",
+          "start_sec": 81.7,
+          "end_sec": 81.84
+        },
+        {
+          "text": "nào",
+          "start_sec": 81.9,
+          "end_sec": 82.08
+        },
+        {
+          "text": "vừa",
+          "start_sec": 82.14,
+          "end_sec": 82.28
+        },
+        {
+          "text": "ra",
+          "start_sec": 82.34,
+          "end_sec": 82.48
+        },
+        {
+          "text": "là",
+          "start_sec": 82.54,
+          "end_sec": 82.62
+        },
+        {
+          "text": "có",
+          "start_sec": 82.66,
+          "end_sec": 82.76
+        },
+        {
+          "text": "người",
+          "start_sec": 82.8,
+          "end_sec": 82.98
+        },
+        {
+          "text": "giữ",
+          "start_sec": 83.02,
+          "end_sec": 83.18
+        },
+        {
+          "text": "ngay.",
+          "start_sec": 83.22,
+          "end_sec": 83.46
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 84.66,
+      "end_sec": 103.98,
+      "text": "Ngân sách thì là tối đa 4,2 tỷ em ạ. Chị có sẵn khoảng 2,1 tỷ. Ừ, 2,1 tỷ đó là chị để dành, để dành ba năm nay đấy em. Phần còn lại là đất vay nên chị tính rất kỹ. Còn lại chị định vay, ừm, vay một nửa nhưng cần ân hạn nợ gốc ít nhất 12 tháng.",
+      "words": [
+        {
+          "text": "Ngân",
+          "start_sec": 84.66,
+          "end_sec": 84.84
+        },
+        {
+          "text": "sách",
+          "start_sec": 84.9,
+          "end_sec": 85.06
+        },
+        {
+          "text": "thì",
+          "start_sec": 85.1,
+          "end_sec": 85.24
+        },
+        {
+          "text": "là",
+          "start_sec": 85.3,
+          "end_sec": 85.46
+        },
+        {
+          "text": "tối",
+          "start_sec": 85.52,
+          "end_sec": 85.66
+        },
+        {
+          "text": "đa",
+          "start_sec": 85.72,
+          "end_sec": 85.86
+        },
+        {
+          "text": "4,2",
+          "start_sec": 86.12,
+          "end_sec": 86.6
+        },
+        {
+          "text": "tỷ",
+          "start_sec": 86.68,
+          "end_sec": 86.84
+        },
+        {
+          "text": "em",
+          "start_sec": 86.92,
+          "end_sec": 87.08
+        },
+        {
+          "text": "ạ.",
+          "start_sec": 87.26,
+          "end_sec": 87.36
+        },
+        {
+          "text": "Chị",
+          "start_sec": 87.74,
+          "end_sec": 87.92
+        },
+        {
+          "text": "có",
+          "start_sec": 88,
+          "end_sec": 88.14
+        },
+        {
+          "text": "sẵn",
+          "start_sec": 88.22,
+          "end_sec": 88.36
+        },
+        {
+          "text": "khoảng",
+          "start_sec": 88.4,
+          "end_sec": 88.6
+        },
+        {
+          "text": "2,1",
+          "start_sec": 88.86,
+          "end_sec": 89.32
+        },
+        {
+          "text": "tỷ.",
+          "start_sec": 89.4,
+          "end_sec": 89.64
+        },
+        {
+          "text": "Ừ,",
+          "start_sec": 90,
+          "end_sec": 90.1
+        },
+        {
+          "text": "2,1",
+          "start_sec": 90.68,
+          "end_sec": 91.1
+        },
+        {
+          "text": "tỷ",
+          "start_sec": 91.16,
+          "end_sec": 91.28
+        },
+        {
+          "text": "đó",
+          "start_sec": 91.34,
+          "end_sec": 91.52
+        },
+        {
+          "text": "là",
+          "start_sec": 91.6,
+          "end_sec": 91.74
+        },
+        {
+          "text": "chị",
+          "start_sec": 91.8,
+          "end_sec": 91.98
+        },
+        {
+          "text": "để",
+          "start_sec": 92.04,
+          "end_sec": 92.16
+        },
+        {
+          "text": "dành,",
+          "start_sec": 92.24,
+          "end_sec": 92.44
+        },
+        {
+          "text": "để",
+          "start_sec": 92.88,
+          "end_sec": 93
+        },
+        {
+          "text": "dành",
+          "start_sec": 93.06,
+          "end_sec": 93.24
+        },
+        {
+          "text": "ba",
+          "start_sec": 93.3,
+          "end_sec": 93.42
+        },
+        {
+          "text": "năm",
+          "start_sec": 93.5,
+          "end_sec": 93.62
+        },
+        {
+          "text": "nay",
+          "start_sec": 93.68,
+          "end_sec": 93.86
+        },
+        {
+          "text": "đấy",
+          "start_sec": 93.92,
+          "end_sec": 94.08
+        },
+        {
+          "text": "em.",
+          "start_sec": 94.18,
+          "end_sec": 94.4
+        },
+        {
+          "text": "Phần",
+          "start_sec": 94.72,
+          "end_sec": 94.9
+        },
+        {
+          "text": "còn",
+          "start_sec": 94.94,
+          "end_sec": 95.08
+        },
+        {
+          "text": "lại",
+          "start_sec": 95.14,
+          "end_sec": 95.32
+        },
+        {
+          "text": "là",
+          "start_sec": 95.38,
+          "end_sec": 95.5
+        },
+        {
+          "text": "đất",
+          "start_sec": 95.56,
+          "end_sec": 95.7
+        },
+        {
+          "text": "vay",
+          "start_sec": 95.78,
+          "end_sec": 96
+        },
+        {
+          "text": "nên",
+          "start_sec": 96.38,
+          "end_sec": 96.58
+        },
+        {
+          "text": "chị",
+          "start_sec": 96.64,
+          "end_sec": 96.82
+        },
+        {
+          "text": "tính",
+          "start_sec": 96.88,
+          "end_sec": 97.06
+        },
+        {
+          "text": "rất",
+          "start_sec": 97.12,
+          "end_sec": 97.26
+        },
+        {
+          "text": "kỹ.",
+          "start_sec": 97.32,
+          "end_sec": 97.56
+        },
+        {
+          "text": "Còn",
+          "start_sec": 98.2,
+          "end_sec": 98.36
+        },
+        {
+          "text": "lại",
+          "start_sec": 98.42,
+          "end_sec": 98.6
+        },
+        {
+          "text": "chị",
+          "start_sec": 98.66,
+          "end_sec": 98.84
+        },
+        {
+          "text": "định",
+          "start_sec": 98.9,
+          "end_sec": 99.06
+        },
+        {
+          "text": "vay,",
+          "start_sec": 99.14,
+          "end_sec": 99.34
+        },
+        {
+          "text": "ừm,",
+          "start_sec": 99.78,
+          "end_sec": 99.92
+        },
+        {
+          "text": "vay",
+          "start_sec": 100.36,
+          "end_sec": 100.52
+        },
+        {
+          "text": "một",
+          "start_sec": 100.6,
+          "end_sec": 100.76
+        },
+        {
+          "text": "nửa",
+          "start_sec": 100.82,
+          "end_sec": 101.06
+        },
+        {
+          "text": "nhưng",
+          "start_sec": 101.44,
+          "end_sec": 101.64
+        },
+        {
+          "text": "cần",
+          "start_sec": 101.72,
+          "end_sec": 101.9
+        },
+        {
+          "text": "ân",
+          "start_sec": 101.98,
+          "end_sec": 102.08
+        },
+        {
+          "text": "hạn",
+          "start_sec": 102.14,
+          "end_sec": 102.34
+        },
+        {
+          "text": "nợ",
+          "start_sec": 102.38,
+          "end_sec": 102.6
+        },
+        {
+          "text": "gốc",
+          "start_sec": 102.66,
+          "end_sec": 102.82
+        },
+        {
+          "text": "ít",
+          "start_sec": 102.9,
+          "end_sec": 102.98
+        },
+        {
+          "text": "nhất",
+          "start_sec": 103.02,
+          "end_sec": 103.22
+        },
+        {
+          "text": "12",
+          "start_sec": 103.28,
+          "end_sec": 103.68
+        },
+        {
+          "text": "tháng.",
+          "start_sec": 103.72,
+          "end_sec": 103.98
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 104.9,
+      "end_sec": 116.94,
+      "text": "Vay một nửa giá trị căn thì tháng đầu chị trả khoảng 24 triệu. Em tính theo lãi suất ưu đãi đang có. Dạ hiện ngân hàng đối tác đang ưu đãi 6,5% trong 18 tháng đầu, sau đó thả nổi theo lãi cơ sở cộng biên độ.",
+      "words": [
+        {
+          "text": "Vay",
+          "start_sec": 104.9,
+          "end_sec": 105
+        },
+        {
+          "text": "một",
+          "start_sec": 105.06,
+          "end_sec": 105.18
+        },
+        {
+          "text": "nửa",
+          "start_sec": 105.22,
+          "end_sec": 105.36
+        },
+        {
+          "text": "giá",
+          "start_sec": 105.4,
+          "end_sec": 105.54
+        },
+        {
+          "text": "trị",
+          "start_sec": 105.58,
+          "end_sec": 105.74
+        },
+        {
+          "text": "căn",
+          "start_sec": 105.8,
+          "end_sec": 106
+        },
+        {
+          "text": "thì",
+          "start_sec": 106.04,
+          "end_sec": 106.16
+        },
+        {
+          "text": "tháng",
+          "start_sec": 106.2,
+          "end_sec": 106.34
+        },
+        {
+          "text": "đầu",
+          "start_sec": 106.4,
+          "end_sec": 106.52
+        },
+        {
+          "text": "chị",
+          "start_sec": 106.58,
+          "end_sec": 106.72
+        },
+        {
+          "text": "trả",
+          "start_sec": 106.76,
+          "end_sec": 106.96
+        },
+        {
+          "text": "khoảng",
+          "start_sec": 107,
+          "end_sec": 107.26
+        },
+        {
+          "text": "24",
+          "start_sec": 107.42,
+          "end_sec": 107.74
+        },
+        {
+          "text": "triệu.",
+          "start_sec": 107.78,
+          "end_sec": 108
+        },
+        {
+          "text": "Em",
+          "start_sec": 108.4,
+          "end_sec": 108.54
+        },
+        {
+          "text": "tính",
+          "start_sec": 108.6,
+          "end_sec": 108.74
+        },
+        {
+          "text": "theo",
+          "start_sec": 108.78,
+          "end_sec": 108.92
+        },
+        {
+          "text": "lãi",
+          "start_sec": 108.96,
+          "end_sec": 109.1
+        },
+        {
+          "text": "suất",
+          "start_sec": 109.16,
+          "end_sec": 109.32
+        },
+        {
+          "text": "ưu",
+          "start_sec": 109.4,
+          "end_sec": 109.5
+        },
+        {
+          "text": "đãi",
+          "start_sec": 109.54,
+          "end_sec": 109.7
+        },
+        {
+          "text": "đang",
+          "start_sec": 109.76,
+          "end_sec": 109.9
+        },
+        {
+          "text": "có.",
+          "start_sec": 109.96,
+          "end_sec": 110.18
+        },
+        {
+          "text": "Dạ",
+          "start_sec": 110.76,
+          "end_sec": 110.88
+        },
+        {
+          "text": "hiện",
+          "start_sec": 110.92,
+          "end_sec": 111.08
+        },
+        {
+          "text": "ngân",
+          "start_sec": 111.12,
+          "end_sec": 111.28
+        },
+        {
+          "text": "hàng",
+          "start_sec": 111.34,
+          "end_sec": 111.48
+        },
+        {
+          "text": "đối",
+          "start_sec": 111.54,
+          "end_sec": 111.66
+        },
+        {
+          "text": "tác",
+          "start_sec": 111.7,
+          "end_sec": 111.88
+        },
+        {
+          "text": "đang",
+          "start_sec": 111.94,
+          "end_sec": 112.1
+        },
+        {
+          "text": "ưu",
+          "start_sec": 112.16,
+          "end_sec": 112.24
+        },
+        {
+          "text": "đãi",
+          "start_sec": 112.28,
+          "end_sec": 112.46
+        },
+        {
+          "text": "6,5%",
+          "start_sec": 112.7,
+          "end_sec": 113.52
+        },
+        {
+          "text": "trong",
+          "start_sec": 113.56,
+          "end_sec": 113.68
+        },
+        {
+          "text": "18",
+          "start_sec": 113.72,
+          "end_sec": 114.08
+        },
+        {
+          "text": "tháng",
+          "start_sec": 114.12,
+          "end_sec": 114.24
+        },
+        {
+          "text": "đầu,",
+          "start_sec": 114.3,
+          "end_sec": 114.44
+        },
+        {
+          "text": "sau",
+          "start_sec": 114.84,
+          "end_sec": 114.94
+        },
+        {
+          "text": "đó",
+          "start_sec": 115,
+          "end_sec": 115.14
+        },
+        {
+          "text": "thả",
+          "start_sec": 115.18,
+          "end_sec": 115.32
+        },
+        {
+          "text": "nổi",
+          "start_sec": 115.36,
+          "end_sec": 115.52
+        },
+        {
+          "text": "theo",
+          "start_sec": 115.56,
+          "end_sec": 115.68
+        },
+        {
+          "text": "lãi",
+          "start_sec": 115.74,
+          "end_sec": 115.9
+        },
+        {
+          "text": "cơ",
+          "start_sec": 115.96,
+          "end_sec": 116.08
+        },
+        {
+          "text": "sở",
+          "start_sec": 116.16,
+          "end_sec": 116.3
+        },
+        {
+          "text": "cộng",
+          "start_sec": 116.36,
+          "end_sec": 116.52
+        },
+        {
+          "text": "biên",
+          "start_sec": 116.58,
+          "end_sec": 116.72
+        },
+        {
+          "text": "độ.",
+          "start_sec": 116.78,
+          "end_sec": 116.94
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 117.56,
+      "end_sec": 121.54,
+      "text": "Tôi với chị Lan đi xem ba dự án rồi, bên nào người bán cũng nói dự án mình là nhất.",
+      "words": [
+        {
+          "text": "Tôi",
+          "start_sec": 117.56,
+          "end_sec": 117.68
+        },
+        {
+          "text": "với",
+          "start_sec": 117.72,
+          "end_sec": 117.8
+        },
+        {
+          "text": "chị",
+          "start_sec": 117.84,
+          "end_sec": 117.96
+        },
+        {
+          "text": "Lan",
+          "start_sec": 118.02,
+          "end_sec": 118.18
+        },
+        {
+          "text": "đi",
+          "start_sec": 118.22,
+          "end_sec": 118.32
+        },
+        {
+          "text": "xem",
+          "start_sec": 118.38,
+          "end_sec": 118.54
+        },
+        {
+          "text": "ba",
+          "start_sec": 118.58,
+          "end_sec": 118.7
+        },
+        {
+          "text": "dự",
+          "start_sec": 118.76,
+          "end_sec": 118.86
+        },
+        {
+          "text": "án",
+          "start_sec": 118.94,
+          "end_sec": 119.04
+        },
+        {
+          "text": "rồi,",
+          "start_sec": 119.1,
+          "end_sec": 119.24
+        },
+        {
+          "text": "bên",
+          "start_sec": 119.58,
+          "end_sec": 119.72
+        },
+        {
+          "text": "nào",
+          "start_sec": 119.76,
+          "end_sec": 119.9
+        },
+        {
+          "text": "người",
+          "start_sec": 119.94,
+          "end_sec": 120.08
+        },
+        {
+          "text": "bán",
+          "start_sec": 120.12,
+          "end_sec": 120.3
+        },
+        {
+          "text": "cũng",
+          "start_sec": 120.34,
+          "end_sec": 120.46
+        },
+        {
+          "text": "nói",
+          "start_sec": 120.48,
+          "end_sec": 120.6
+        },
+        {
+          "text": "dự",
+          "start_sec": 120.66,
+          "end_sec": 120.8
+        },
+        {
+          "text": "án",
+          "start_sec": 120.86,
+          "end_sec": 120.96
+        },
+        {
+          "text": "mình",
+          "start_sec": 121.02,
+          "end_sec": 121.16
+        },
+        {
+          "text": "là",
+          "start_sec": 121.22,
+          "end_sec": 121.3
+        },
+        {
+          "text": "nhất.",
+          "start_sec": 121.34,
+          "end_sec": 121.54
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 122.38,
+      "end_sec": 134.5,
+      "text": "Hôm nay tôi đi cùng để nghe cho khách quan. Em nghe bên, à, đồng nghiệp nói phí quản lý chỗ này hơi cao so với mặt bằng chung. Bên dự án khác người ta thu 12.000 một mét, chỗ này nghe nói 15.000, chênh nhau cả chục triệu một năm đấy.",
+      "words": [
+        {
+          "text": "Hôm",
+          "start_sec": 122.38,
+          "end_sec": 122.5
+        },
+        {
+          "text": "nay",
+          "start_sec": 122.54,
+          "end_sec": 122.7
+        },
+        {
+          "text": "tôi",
+          "start_sec": 122.74,
+          "end_sec": 122.84
+        },
+        {
+          "text": "đi",
+          "start_sec": 122.88,
+          "end_sec": 122.98
+        },
+        {
+          "text": "cùng",
+          "start_sec": 123.04,
+          "end_sec": 123.22
+        },
+        {
+          "text": "để",
+          "start_sec": 123.28,
+          "end_sec": 123.38
+        },
+        {
+          "text": "nghe",
+          "start_sec": 123.42,
+          "end_sec": 123.58
+        },
+        {
+          "text": "cho",
+          "start_sec": 123.62,
+          "end_sec": 123.72
+        },
+        {
+          "text": "khách",
+          "start_sec": 123.74,
+          "end_sec": 123.88
+        },
+        {
+          "text": "quan.",
+          "start_sec": 123.9,
+          "end_sec": 124.14
+        },
+        {
+          "text": "Em",
+          "start_sec": 124.68,
+          "end_sec": 124.78
+        },
+        {
+          "text": "nghe",
+          "start_sec": 124.8,
+          "end_sec": 124.94
+        },
+        {
+          "text": "bên,",
+          "start_sec": 125,
+          "end_sec": 125.12
+        },
+        {
+          "text": "à,",
+          "start_sec": 125.56,
+          "end_sec": 125.62
+        },
+        {
+          "text": "đồng",
+          "start_sec": 125.96,
+          "end_sec": 126.06
+        },
+        {
+          "text": "nghiệp",
+          "start_sec": 126.1,
+          "end_sec": 126.24
+        },
+        {
+          "text": "nói",
+          "start_sec": 126.28,
+          "end_sec": 126.4
+        },
+        {
+          "text": "phí",
+          "start_sec": 126.42,
+          "end_sec": 126.56
+        },
+        {
+          "text": "quản",
+          "start_sec": 126.6,
+          "end_sec": 126.76
+        },
+        {
+          "text": "lý",
+          "start_sec": 126.82,
+          "end_sec": 126.96
+        },
+        {
+          "text": "chỗ",
+          "start_sec": 127.02,
+          "end_sec": 127.16
+        },
+        {
+          "text": "này",
+          "start_sec": 127.22,
+          "end_sec": 127.36
+        },
+        {
+          "text": "hơi",
+          "start_sec": 127.42,
+          "end_sec": 127.54
+        },
+        {
+          "text": "cao",
+          "start_sec": 127.6,
+          "end_sec": 127.78
+        },
+        {
+          "text": "so",
+          "start_sec": 127.84,
+          "end_sec": 127.94
+        },
+        {
+          "text": "với",
+          "start_sec": 127.98,
+          "end_sec": 128.06
+        },
+        {
+          "text": "mặt",
+          "start_sec": 128.1,
+          "end_sec": 128.22
+        },
+        {
+          "text": "bằng",
+          "start_sec": 128.259,
+          "end_sec": 128.4
+        },
+        {
+          "text": "chung.",
+          "start_sec": 128.44,
+          "end_sec": 128.66
+        },
+        {
+          "text": "Bên",
+          "start_sec": 129.18,
+          "end_sec": 129.3
+        },
+        {
+          "text": "dự",
+          "start_sec": 129.34,
+          "end_sec": 129.479
+        },
+        {
+          "text": "án",
+          "start_sec": 129.539,
+          "end_sec": 129.66
+        },
+        {
+          "text": "khác",
+          "start_sec": 129.699,
+          "end_sec": 129.86
+        },
+        {
+          "text": "người",
+          "start_sec": 129.9,
+          "end_sec": 130.039
+        },
+        {
+          "text": "ta",
+          "start_sec": 130.08,
+          "end_sec": 130.22
+        },
+        {
+          "text": "thu",
+          "start_sec": 130.259,
+          "end_sec": 130.38
+        },
+        {
+          "text": "12.000",
+          "start_sec": 130.44,
+          "end_sec": 130.9
+        },
+        {
+          "text": "một",
+          "start_sec": 130.94,
+          "end_sec": 131.039
+        },
+        {
+          "text": "mét,",
+          "start_sec": 131.08,
+          "end_sec": 131.24
+        },
+        {
+          "text": "chỗ",
+          "start_sec": 131.5,
+          "end_sec": 131.64
+        },
+        {
+          "text": "này",
+          "start_sec": 131.68,
+          "end_sec": 131.84
+        },
+        {
+          "text": "nghe",
+          "start_sec": 131.88,
+          "end_sec": 132.02
+        },
+        {
+          "text": "nói",
+          "start_sec": 132.06,
+          "end_sec": 132.2
+        },
+        {
+          "text": "15.000,",
+          "start_sec": 132.24,
+          "end_sec": 132.72
+        },
+        {
+          "text": "chênh",
+          "start_sec": 133.06,
+          "end_sec": 133.2
+        },
+        {
+          "text": "nhau",
+          "start_sec": 133.24,
+          "end_sec": 133.4
+        },
+        {
+          "text": "cả",
+          "start_sec": 133.46,
+          "end_sec": 133.54
+        },
+        {
+          "text": "chục",
+          "start_sec": 133.58,
+          "end_sec": 133.7
+        },
+        {
+          "text": "triệu",
+          "start_sec": 133.74,
+          "end_sec": 133.92
+        },
+        {
+          "text": "một",
+          "start_sec": 133.98,
+          "end_sec": 134.12
+        },
+        {
+          "text": "năm",
+          "start_sec": 134.16,
+          "end_sec": 134.28
+        },
+        {
+          "text": "đấy.",
+          "start_sec": 134.34,
+          "end_sec": 134.5
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 135.58,
+      "end_sec": 139.84,
+      "text": "Chuyện phí quản lý em ghi nhận ạ, để em kiểm lại hợp đồng dịch vụ cho chính xác.",
+      "words": [
+        {
+          "text": "Chuyện",
+          "start_sec": 135.58,
+          "end_sec": 135.78
+        },
+        {
+          "text": "phí",
+          "start_sec": 135.82,
+          "end_sec": 135.98
+        },
+        {
+          "text": "quản",
+          "start_sec": 136.04,
+          "end_sec": 136.22
+        },
+        {
+          "text": "lý",
+          "start_sec": 136.28,
+          "end_sec": 136.44
+        },
+        {
+          "text": "em",
+          "start_sec": 136.52,
+          "end_sec": 136.66
+        },
+        {
+          "text": "ghi",
+          "start_sec": 136.7,
+          "end_sec": 136.82
+        },
+        {
+          "text": "nhận",
+          "start_sec": 136.88,
+          "end_sec": 137.08
+        },
+        {
+          "text": "ạ,",
+          "start_sec": 137.2,
+          "end_sec": 137.28
+        },
+        {
+          "text": "để",
+          "start_sec": 137.68,
+          "end_sec": 137.8
+        },
+        {
+          "text": "em",
+          "start_sec": 137.88,
+          "end_sec": 138.02
+        },
+        {
+          "text": "kiểm",
+          "start_sec": 138.06,
+          "end_sec": 138.24
+        },
+        {
+          "text": "lại",
+          "start_sec": 138.3,
+          "end_sec": 138.44
+        },
+        {
+          "text": "hợp",
+          "start_sec": 138.48,
+          "end_sec": 138.62
+        },
+        {
+          "text": "đồng",
+          "start_sec": 138.66,
+          "end_sec": 138.8
+        },
+        {
+          "text": "dịch",
+          "start_sec": 138.86,
+          "end_sec": 138.98
+        },
+        {
+          "text": "vụ",
+          "start_sec": 139.04,
+          "end_sec": 139.2
+        },
+        {
+          "text": "cho",
+          "start_sec": 139.26,
+          "end_sec": 139.36
+        },
+        {
+          "text": "chính",
+          "start_sec": 139.4,
+          "end_sec": 139.56
+        },
+        {
+          "text": "xác.",
+          "start_sec": 139.64,
+          "end_sec": 139.84
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 144.6,
+      "end_sec": 153.02,
+      "text": "Nói thật là giá này cao hơn bên Imperia khoảng 300 triệu em ạ. Căn 12 ơi 3 tỷ 950, rẻ hơn nhưng nhìn ra đường.",
+      "words": [
+        {
+          "text": "Nói",
+          "start_sec": 144.6,
+          "end_sec": 144.76
+        },
+        {
+          "text": "thật",
+          "start_sec": 144.8,
+          "end_sec": 144.98
+        },
+        {
+          "text": "là",
+          "start_sec": 145.04,
+          "end_sec": 145.16
+        },
+        {
+          "text": "giá",
+          "start_sec": 145.2,
+          "end_sec": 145.38
+        },
+        {
+          "text": "này",
+          "start_sec": 145.44,
+          "end_sec": 145.62
+        },
+        {
+          "text": "cao",
+          "start_sec": 145.68,
+          "end_sec": 145.84
+        },
+        {
+          "text": "hơn",
+          "start_sec": 145.9,
+          "end_sec": 146.08
+        },
+        {
+          "text": "bên",
+          "start_sec": 146.16,
+          "end_sec": 146.36
+        },
+        {
+          "text": "Imperia",
+          "start_sec": 146.44,
+          "end_sec": 147.16
+        },
+        {
+          "text": "khoảng",
+          "start_sec": 147.22,
+          "end_sec": 147.42
+        },
+        {
+          "text": "300",
+          "start_sec": 147.62,
+          "end_sec": 147.86
+        },
+        {
+          "text": "triệu",
+          "start_sec": 147.9,
+          "end_sec": 148.16
+        },
+        {
+          "text": "em",
+          "start_sec": 148.22,
+          "end_sec": 148.38
+        },
+        {
+          "text": "ạ.",
+          "start_sec": 148.48,
+          "end_sec": 148.56
+        },
+        {
+          "text": "Căn",
+          "start_sec": 149.04,
+          "end_sec": 149.2
+        },
+        {
+          "text": "12",
+          "start_sec": 149.26,
+          "end_sec": 149.64
+        },
+        {
+          "text": "ơi",
+          "start_sec": 149.72,
+          "end_sec": 149.82
+        },
+        {
+          "text": "3",
+          "start_sec": 149.86,
+          "end_sec": 150.08
+        },
+        {
+          "text": "tỷ",
+          "start_sec": 150.14,
+          "end_sec": 150.28
+        },
+        {
+          "text": "950,",
+          "start_sec": 150.5,
+          "end_sec": 151.18
+        },
+        {
+          "text": "rẻ",
+          "start_sec": 151.62,
+          "end_sec": 151.78
+        },
+        {
+          "text": "hơn",
+          "start_sec": 151.84,
+          "end_sec": 152.04
+        },
+        {
+          "text": "nhưng",
+          "start_sec": 152.08,
+          "end_sec": 152.26
+        },
+        {
+          "text": "nhìn",
+          "start_sec": 152.3,
+          "end_sec": 152.54
+        },
+        {
+          "text": "ra",
+          "start_sec": 152.62,
+          "end_sec": 152.76
+        },
+        {
+          "text": "đường.",
+          "start_sec": 152.84,
+          "end_sec": 153.02
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 154.04,
+      "end_sec": 156.42,
+      "text": "Chị thấy căn 18 ơi đáng tiền hơn.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 154.04,
+          "end_sec": 154.24
+        },
+        {
+          "text": "thấy",
+          "start_sec": 154.28,
+          "end_sec": 154.52
+        },
+        {
+          "text": "căn",
+          "start_sec": 154.6,
+          "end_sec": 154.78
+        },
+        {
+          "text": "18",
+          "start_sec": 154.82,
+          "end_sec": 155.26
+        },
+        {
+          "text": "ơi",
+          "start_sec": 155.38,
+          "end_sec": 155.54
+        },
+        {
+          "text": "đáng",
+          "start_sec": 155.62,
+          "end_sec": 155.82
+        },
+        {
+          "text": "tiền",
+          "start_sec": 155.88,
+          "end_sec": 156.1
+        },
+        {
+          "text": "hơn.",
+          "start_sec": 156.16,
+          "end_sec": 156.42
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 160.76,
+      "end_sec": 164.98,
+      "text": "Chị lo nhất là sau 18 tháng lãi suất tăng lên thì áp lực trả nợ lớn.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 160.76,
+          "end_sec": 160.94
+        },
+        {
+          "text": "lo",
+          "start_sec": 161.02,
+          "end_sec": 161.18
+        },
+        {
+          "text": "nhất",
+          "start_sec": 161.22,
+          "end_sec": 161.44
+        },
+        {
+          "text": "là",
+          "start_sec": 161.5,
+          "end_sec": 161.64
+        },
+        {
+          "text": "sau",
+          "start_sec": 161.72,
+          "end_sec": 161.86
+        },
+        {
+          "text": "18",
+          "start_sec": 161.92,
+          "end_sec": 162.3
+        },
+        {
+          "text": "tháng",
+          "start_sec": 162.36,
+          "end_sec": 162.52
+        },
+        {
+          "text": "lãi",
+          "start_sec": 162.58,
+          "end_sec": 162.78
+        },
+        {
+          "text": "suất",
+          "start_sec": 162.86,
+          "end_sec": 163.02
+        },
+        {
+          "text": "tăng",
+          "start_sec": 163.08,
+          "end_sec": 163.24
+        },
+        {
+          "text": "lên",
+          "start_sec": 163.3,
+          "end_sec": 163.52
+        },
+        {
+          "text": "thì",
+          "start_sec": 163.58,
+          "end_sec": 163.76
+        },
+        {
+          "text": "áp",
+          "start_sec": 163.82,
+          "end_sec": 163.94
+        },
+        {
+          "text": "lực",
+          "start_sec": 164,
+          "end_sec": 164.16
+        },
+        {
+          "text": "trả",
+          "start_sec": 164.18,
+          "end_sec": 164.4
+        },
+        {
+          "text": "nợ",
+          "start_sec": 164.48,
+          "end_sec": 164.68
+        },
+        {
+          "text": "lớn.",
+          "start_sec": 164.76,
+          "end_sec": 164.98
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 166.2,
+      "end_sec": 171.88,
+      "text": "Về lãi suất, em sẽ nhờ anh Tuấn bên ngân hàng đối tác tính giúp chị kịch bản xấu nhất, tức sau khi hết ưu đãi.",
+      "words": [
+        {
+          "text": "Về",
+          "start_sec": 166.2,
+          "end_sec": 166.34
+        },
+        {
+          "text": "lãi",
+          "start_sec": 166.4,
+          "end_sec": 166.52
+        },
+        {
+          "text": "suất,",
+          "start_sec": 166.58,
+          "end_sec": 166.76
+        },
+        {
+          "text": "em",
+          "start_sec": 167.06,
+          "end_sec": 167.18
+        },
+        {
+          "text": "sẽ",
+          "start_sec": 167.26,
+          "end_sec": 167.36
+        },
+        {
+          "text": "nhờ",
+          "start_sec": 167.4,
+          "end_sec": 167.58
+        },
+        {
+          "text": "anh",
+          "start_sec": 167.64,
+          "end_sec": 167.76
+        },
+        {
+          "text": "Tuấn",
+          "start_sec": 167.8,
+          "end_sec": 167.98
+        },
+        {
+          "text": "bên",
+          "start_sec": 168.04,
+          "end_sec": 168.14
+        },
+        {
+          "text": "ngân",
+          "start_sec": 168.18,
+          "end_sec": 168.34
+        },
+        {
+          "text": "hàng",
+          "start_sec": 168.4,
+          "end_sec": 168.56
+        },
+        {
+          "text": "đối",
+          "start_sec": 168.6,
+          "end_sec": 168.72
+        },
+        {
+          "text": "tác",
+          "start_sec": 168.76,
+          "end_sec": 168.92
+        },
+        {
+          "text": "tính",
+          "start_sec": 168.96,
+          "end_sec": 169.12
+        },
+        {
+          "text": "giúp",
+          "start_sec": 169.16,
+          "end_sec": 169.32
+        },
+        {
+          "text": "chị",
+          "start_sec": 169.36,
+          "end_sec": 169.52
+        },
+        {
+          "text": "kịch",
+          "start_sec": 169.58,
+          "end_sec": 169.74
+        },
+        {
+          "text": "bản",
+          "start_sec": 169.78,
+          "end_sec": 169.96
+        },
+        {
+          "text": "xấu",
+          "start_sec": 170.04,
+          "end_sec": 170.18
+        },
+        {
+          "text": "nhất,",
+          "start_sec": 170.22,
+          "end_sec": 170.44
+        },
+        {
+          "text": "tức",
+          "start_sec": 170.7,
+          "end_sec": 170.84
+        },
+        {
+          "text": "sau",
+          "start_sec": 170.92,
+          "end_sec": 171.06
+        },
+        {
+          "text": "khi",
+          "start_sec": 171.1,
+          "end_sec": 171.22
+        },
+        {
+          "text": "hết",
+          "start_sec": 171.26,
+          "end_sec": 171.42
+        },
+        {
+          "text": "ưu",
+          "start_sec": 171.48,
+          "end_sec": 171.58
+        },
+        {
+          "text": "đãi.",
+          "start_sec": 171.62,
+          "end_sec": 171.88
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 172.84,
+      "end_sec": 193.82,
+      "text": "Chị giữ tiền không phải để ăn lãi đâu em. Chị giữ để có nhà cho con cháu sau này nên lần này chị chọn rất kỹ. Nhà chị mua lần trước năm 12, lúc đó giấy tờ gì chị cũng đi kiểm tra hết, mất cả tháng mới xong. Lần này chị có người bạn làm ngành pháp lý nhờ xem giúp sổ hồng, hợp đồng đặt cọc, phạt vi phạm gì cũng phải rõ ràng.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 172.84,
+          "end_sec": 173
+        },
+        {
+          "text": "giữ",
+          "start_sec": 173.06,
+          "end_sec": 173.24
+        },
+        {
+          "text": "tiền",
+          "start_sec": 173.3,
+          "end_sec": 173.5
+        },
+        {
+          "text": "không",
+          "start_sec": 173.54,
+          "end_sec": 173.68
+        },
+        {
+          "text": "phải",
+          "start_sec": 173.72,
+          "end_sec": 173.92
+        },
+        {
+          "text": "để",
+          "start_sec": 173.98,
+          "end_sec": 174.12
+        },
+        {
+          "text": "ăn",
+          "start_sec": 174.18,
+          "end_sec": 174.3
+        },
+        {
+          "text": "lãi",
+          "start_sec": 174.38,
+          "end_sec": 174.58
+        },
+        {
+          "text": "đâu",
+          "start_sec": 174.64,
+          "end_sec": 174.8
+        },
+        {
+          "text": "em.",
+          "start_sec": 174.9,
+          "end_sec": 175.08
+        },
+        {
+          "text": "Chị",
+          "start_sec": 175.46,
+          "end_sec": 175.62
+        },
+        {
+          "text": "giữ",
+          "start_sec": 175.66,
+          "end_sec": 175.86
+        },
+        {
+          "text": "để",
+          "start_sec": 175.94,
+          "end_sec": 176.08
+        },
+        {
+          "text": "có",
+          "start_sec": 176.14,
+          "end_sec": 176.24
+        },
+        {
+          "text": "nhà",
+          "start_sec": 176.28,
+          "end_sec": 176.48
+        },
+        {
+          "text": "cho",
+          "start_sec": 176.54,
+          "end_sec": 176.66
+        },
+        {
+          "text": "con",
+          "start_sec": 176.72,
+          "end_sec": 176.86
+        },
+        {
+          "text": "cháu",
+          "start_sec": 176.92,
+          "end_sec": 177.14
+        },
+        {
+          "text": "sau",
+          "start_sec": 177.22,
+          "end_sec": 177.36
+        },
+        {
+          "text": "này",
+          "start_sec": 177.42,
+          "end_sec": 177.62
+        },
+        {
+          "text": "nên",
+          "start_sec": 178.02,
+          "end_sec": 178.16
+        },
+        {
+          "text": "lần",
+          "start_sec": 178.22,
+          "end_sec": 178.34
+        },
+        {
+          "text": "này",
+          "start_sec": 178.4,
+          "end_sec": 178.56
+        },
+        {
+          "text": "chị",
+          "start_sec": 178.62,
+          "end_sec": 178.78
+        },
+        {
+          "text": "chọn",
+          "start_sec": 178.84,
+          "end_sec": 179.1
+        },
+        {
+          "text": "rất",
+          "start_sec": 179.16,
+          "end_sec": 179.3
+        },
+        {
+          "text": "kỹ.",
+          "start_sec": 179.36,
+          "end_sec": 179.58
+        },
+        {
+          "text": "Nhà",
+          "start_sec": 180.3,
+          "end_sec": 180.48
+        },
+        {
+          "text": "chị",
+          "start_sec": 180.52,
+          "end_sec": 180.72
+        },
+        {
+          "text": "mua",
+          "start_sec": 180.78,
+          "end_sec": 180.92
+        },
+        {
+          "text": "lần",
+          "start_sec": 180.98,
+          "end_sec": 181.16
+        },
+        {
+          "text": "trước",
+          "start_sec": 181.2,
+          "end_sec": 181.36
+        },
+        {
+          "text": "năm",
+          "start_sec": 181.42,
+          "end_sec": 181.56
+        },
+        {
+          "text": "12,",
+          "start_sec": 181.62,
+          "end_sec": 182.06
+        },
+        {
+          "text": "lúc",
+          "start_sec": 182.46,
+          "end_sec": 182.58
+        },
+        {
+          "text": "đó",
+          "start_sec": 182.64,
+          "end_sec": 182.8
+        },
+        {
+          "text": "giấy",
+          "start_sec": 182.86,
+          "end_sec": 183.08
+        },
+        {
+          "text": "tờ",
+          "start_sec": 183.14,
+          "end_sec": 183.3
+        },
+        {
+          "text": "gì",
+          "start_sec": 183.38,
+          "end_sec": 183.5
+        },
+        {
+          "text": "chị",
+          "start_sec": 183.58,
+          "end_sec": 183.82
+        },
+        {
+          "text": "cũng",
+          "start_sec": 183.88,
+          "end_sec": 184
+        },
+        {
+          "text": "đi",
+          "start_sec": 184.06,
+          "end_sec": 184.22
+        },
+        {
+          "text": "kiểm",
+          "start_sec": 184.28,
+          "end_sec": 184.46
+        },
+        {
+          "text": "tra",
+          "start_sec": 184.5,
+          "end_sec": 184.68
+        },
+        {
+          "text": "hết,",
+          "start_sec": 184.74,
+          "end_sec": 184.96
+        },
+        {
+          "text": "mất",
+          "start_sec": 185.24,
+          "end_sec": 185.4
+        },
+        {
+          "text": "cả",
+          "start_sec": 185.46,
+          "end_sec": 185.62
+        },
+        {
+          "text": "tháng",
+          "start_sec": 185.66,
+          "end_sec": 185.86
+        },
+        {
+          "text": "mới",
+          "start_sec": 185.92,
+          "end_sec": 186.14
+        },
+        {
+          "text": "xong.",
+          "start_sec": 186.22,
+          "end_sec": 186.44
+        },
+        {
+          "text": "Lần",
+          "start_sec": 186.9,
+          "end_sec": 187.02
+        },
+        {
+          "text": "này",
+          "start_sec": 187.08,
+          "end_sec": 187.26
+        },
+        {
+          "text": "chị",
+          "start_sec": 187.32,
+          "end_sec": 187.48
+        },
+        {
+          "text": "có",
+          "start_sec": 187.54,
+          "end_sec": 187.64
+        },
+        {
+          "text": "người",
+          "start_sec": 187.7,
+          "end_sec": 187.86
+        },
+        {
+          "text": "bạn",
+          "start_sec": 187.92,
+          "end_sec": 188.1
+        },
+        {
+          "text": "làm",
+          "start_sec": 188.16,
+          "end_sec": 188.28
+        },
+        {
+          "text": "ngành",
+          "start_sec": 188.32,
+          "end_sec": 188.5
+        },
+        {
+          "text": "pháp",
+          "start_sec": 188.52,
+          "end_sec": 188.72
+        },
+        {
+          "text": "lý",
+          "start_sec": 188.78,
+          "end_sec": 188.96
+        },
+        {
+          "text": "nhờ",
+          "start_sec": 189,
+          "end_sec": 189.22
+        },
+        {
+          "text": "xem",
+          "start_sec": 189.3,
+          "end_sec": 189.46
+        },
+        {
+          "text": "giúp",
+          "start_sec": 189.5,
+          "end_sec": 189.72
+        },
+        {
+          "text": "sổ",
+          "start_sec": 190.06,
+          "end_sec": 190.2
+        },
+        {
+          "text": "hồng,",
+          "start_sec": 190.26,
+          "end_sec": 190.48
+        },
+        {
+          "text": "hợp",
+          "start_sec": 190.86,
+          "end_sec": 191
+        },
+        {
+          "text": "đồng",
+          "start_sec": 191.06,
+          "end_sec": 191.22
+        },
+        {
+          "text": "đặt",
+          "start_sec": 191.26,
+          "end_sec": 191.4
+        },
+        {
+          "text": "cọc,",
+          "start_sec": 191.46,
+          "end_sec": 191.64
+        },
+        {
+          "text": "phạt",
+          "start_sec": 191.9,
+          "end_sec": 192.08
+        },
+        {
+          "text": "vi",
+          "start_sec": 192.14,
+          "end_sec": 192.32
+        },
+        {
+          "text": "phạm",
+          "start_sec": 192.36,
+          "end_sec": 192.54
+        },
+        {
+          "text": "gì",
+          "start_sec": 192.6,
+          "end_sec": 192.8
+        },
+        {
+          "text": "cũng",
+          "start_sec": 192.86,
+          "end_sec": 193
+        },
+        {
+          "text": "phải",
+          "start_sec": 193.04,
+          "end_sec": 193.24
+        },
+        {
+          "text": "rõ",
+          "start_sec": 193.34,
+          "end_sec": 193.48
+        },
+        {
+          "text": "ràng.",
+          "start_sec": 193.56,
+          "end_sec": 193.82
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 195.06,
+      "end_sec": 225.36,
+      "text": "Em giới thiệu chị căn 18.06, hai phòng ngủ, 72 mét vuông, ban công đúng hướng Đông Nam chị muốn. Giá căn 18.06 là 4,15 tỷ, đã gồm thuế và nội thất cơ bản. Chốt được em làm thủ tục ngay. Tháp B bàn giao quý hai năm sau. Chủ đầu tư bên này giao đúng hạn ba năm nay rồi, chị cứ yên tâm. Nhà bếp tách riêng, phòng ngủ master có nhà vệ sinh riêng, phòng khách cửa kính trọn. Chị thích kiểu đó không ạ? Anh chị mai thu xếp qua xem nhà mẫu với em nhé. Đứng trong căn mới cảm nhận hết được.",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 195.06,
+          "end_sec": 195.2
+        },
+        {
+          "text": "giới",
+          "start_sec": 195.24,
+          "end_sec": 195.4
+        },
+        {
+          "text": "thiệu",
+          "start_sec": 195.44,
+          "end_sec": 195.62
+        },
+        {
+          "text": "chị",
+          "start_sec": 195.66,
+          "end_sec": 195.82
+        },
+        {
+          "text": "căn",
+          "start_sec": 195.88,
+          "end_sec": 196
+        },
+        {
+          "text": "18.06,",
+          "start_sec": 196.04,
+          "end_sec": 197.2
+        },
+        {
+          "text": "hai",
+          "start_sec": 197.58,
+          "end_sec": 197.68
+        },
+        {
+          "text": "phòng",
+          "start_sec": 197.72,
+          "end_sec": 197.88
+        },
+        {
+          "text": "ngủ,",
+          "start_sec": 197.92,
+          "end_sec": 198.14
+        },
+        {
+          "text": "72",
+          "start_sec": 198.46,
+          "end_sec": 198.88
+        },
+        {
+          "text": "mét",
+          "start_sec": 198.94,
+          "end_sec": 199.08
+        },
+        {
+          "text": "vuông,",
+          "start_sec": 199.14,
+          "end_sec": 199.3
+        },
+        {
+          "text": "ban",
+          "start_sec": 199.68,
+          "end_sec": 199.86
+        },
+        {
+          "text": "công",
+          "start_sec": 199.92,
+          "end_sec": 200.08
+        },
+        {
+          "text": "đúng",
+          "start_sec": 200.12,
+          "end_sec": 200.26
+        },
+        {
+          "text": "hướng",
+          "start_sec": 200.32,
+          "end_sec": 200.5
+        },
+        {
+          "text": "Đông",
+          "start_sec": 200.56,
+          "end_sec": 200.7
+        },
+        {
+          "text": "Nam",
+          "start_sec": 200.76,
+          "end_sec": 200.96
+        },
+        {
+          "text": "chị",
+          "start_sec": 201.02,
+          "end_sec": 201.18
+        },
+        {
+          "text": "muốn.",
+          "start_sec": 201.24,
+          "end_sec": 201.44
+        },
+        {
+          "text": "Giá",
+          "start_sec": 202.06,
+          "end_sec": 202.24
+        },
+        {
+          "text": "căn",
+          "start_sec": 202.3,
+          "end_sec": 202.42
+        },
+        {
+          "text": "18.06",
+          "start_sec": 202.46,
+          "end_sec": 203.32
+        },
+        {
+          "text": "là",
+          "start_sec": 203.38,
+          "end_sec": 203.48
+        },
+        {
+          "text": "4,15",
+          "start_sec": 203.7,
+          "end_sec": 204.32
+        },
+        {
+          "text": "tỷ,",
+          "start_sec": 204.38,
+          "end_sec": 204.56
+        },
+        {
+          "text": "đã",
+          "start_sec": 204.96,
+          "end_sec": 205.06
+        },
+        {
+          "text": "gồm",
+          "start_sec": 205.12,
+          "end_sec": 205.28
+        },
+        {
+          "text": "thuế",
+          "start_sec": 205.32,
+          "end_sec": 205.56
+        },
+        {
+          "text": "và",
+          "start_sec": 205.64,
+          "end_sec": 205.72
+        },
+        {
+          "text": "nội",
+          "start_sec": 205.78,
+          "end_sec": 205.92
+        },
+        {
+          "text": "thất",
+          "start_sec": 205.96,
+          "end_sec": 206.08
+        },
+        {
+          "text": "cơ",
+          "start_sec": 206.12,
+          "end_sec": 206.22
+        },
+        {
+          "text": "bản.",
+          "start_sec": 206.28,
+          "end_sec": 206.5
+        },
+        {
+          "text": "Chốt",
+          "start_sec": 206.84,
+          "end_sec": 207
+        },
+        {
+          "text": "được",
+          "start_sec": 207.04,
+          "end_sec": 207.22
+        },
+        {
+          "text": "em",
+          "start_sec": 207.3,
+          "end_sec": 207.5
+        },
+        {
+          "text": "làm",
+          "start_sec": 207.58,
+          "end_sec": 207.72
+        },
+        {
+          "text": "thủ",
+          "start_sec": 207.76,
+          "end_sec": 207.9
+        },
+        {
+          "text": "tục",
+          "start_sec": 207.96,
+          "end_sec": 208.1
+        },
+        {
+          "text": "ngay.",
+          "start_sec": 208.14,
+          "end_sec": 208.38
+        },
+        {
+          "text": "Tháp",
+          "start_sec": 208.76,
+          "end_sec": 208.94
+        },
+        {
+          "text": "B",
+          "start_sec": 209,
+          "end_sec": 209.14
+        },
+        {
+          "text": "bàn",
+          "start_sec": 209.22,
+          "end_sec": 209.4
+        },
+        {
+          "text": "giao",
+          "start_sec": 209.44,
+          "end_sec": 209.62
+        },
+        {
+          "text": "quý",
+          "start_sec": 209.68,
+          "end_sec": 209.84
+        },
+        {
+          "text": "hai",
+          "start_sec": 209.9,
+          "end_sec": 210
+        },
+        {
+          "text": "năm",
+          "start_sec": 210.04,
+          "end_sec": 210.18
+        },
+        {
+          "text": "sau.",
+          "start_sec": 210.26,
+          "end_sec": 210.46
+        },
+        {
+          "text": "Chủ",
+          "start_sec": 210.76,
+          "end_sec": 210.9
+        },
+        {
+          "text": "đầu",
+          "start_sec": 210.94,
+          "end_sec": 211.08
+        },
+        {
+          "text": "tư",
+          "start_sec": 211.14,
+          "end_sec": 211.28
+        },
+        {
+          "text": "bên",
+          "start_sec": 211.34,
+          "end_sec": 211.46
+        },
+        {
+          "text": "này",
+          "start_sec": 211.5,
+          "end_sec": 211.66
+        },
+        {
+          "text": "giao",
+          "start_sec": 211.7,
+          "end_sec": 211.84
+        },
+        {
+          "text": "đúng",
+          "start_sec": 211.88,
+          "end_sec": 212.02
+        },
+        {
+          "text": "hạn",
+          "start_sec": 212.08,
+          "end_sec": 212.28
+        },
+        {
+          "text": "ba",
+          "start_sec": 212.34,
+          "end_sec": 212.46
+        },
+        {
+          "text": "năm",
+          "start_sec": 212.52,
+          "end_sec": 212.64
+        },
+        {
+          "text": "nay",
+          "start_sec": 212.68,
+          "end_sec": 212.8
+        },
+        {
+          "text": "rồi,",
+          "start_sec": 212.88,
+          "end_sec": 213.02
+        },
+        {
+          "text": "chị",
+          "start_sec": 213.36,
+          "end_sec": 213.56
+        },
+        {
+          "text": "cứ",
+          "start_sec": 213.64,
+          "end_sec": 213.8
+        },
+        {
+          "text": "yên",
+          "start_sec": 213.86,
+          "end_sec": 214
+        },
+        {
+          "text": "tâm.",
+          "start_sec": 214.06,
+          "end_sec": 214.26
+        },
+        {
+          "text": "Nhà",
+          "start_sec": 214.78,
+          "end_sec": 214.94
+        },
+        {
+          "text": "bếp",
+          "start_sec": 215,
+          "end_sec": 215.16
+        },
+        {
+          "text": "tách",
+          "start_sec": 215.22,
+          "end_sec": 215.36
+        },
+        {
+          "text": "riêng,",
+          "start_sec": 215.42,
+          "end_sec": 215.58
+        },
+        {
+          "text": "phòng",
+          "start_sec": 215.92,
+          "end_sec": 216.08
+        },
+        {
+          "text": "ngủ",
+          "start_sec": 216.1,
+          "end_sec": 216.28
+        },
+        {
+          "text": "master",
+          "start_sec": 216.34,
+          "end_sec": 216.74
+        },
+        {
+          "text": "có",
+          "start_sec": 216.78,
+          "end_sec": 216.86
+        },
+        {
+          "text": "nhà",
+          "start_sec": 216.9,
+          "end_sec": 217.04
+        },
+        {
+          "text": "vệ",
+          "start_sec": 217.1,
+          "end_sec": 217.22
+        },
+        {
+          "text": "sinh",
+          "start_sec": 217.28,
+          "end_sec": 217.42
+        },
+        {
+          "text": "riêng,",
+          "start_sec": 217.48,
+          "end_sec": 217.64
+        },
+        {
+          "text": "phòng",
+          "start_sec": 217.98,
+          "end_sec": 218.14
+        },
+        {
+          "text": "khách",
+          "start_sec": 218.18,
+          "end_sec": 218.34
+        },
+        {
+          "text": "cửa",
+          "start_sec": 218.38,
+          "end_sec": 218.54
+        },
+        {
+          "text": "kính",
+          "start_sec": 218.58,
+          "end_sec": 218.74
+        },
+        {
+          "text": "trọn.",
+          "start_sec": 218.76,
+          "end_sec": 219.04
+        },
+        {
+          "text": "Chị",
+          "start_sec": 219.34,
+          "end_sec": 219.48
+        },
+        {
+          "text": "thích",
+          "start_sec": 219.5,
+          "end_sec": 219.64
+        },
+        {
+          "text": "kiểu",
+          "start_sec": 219.68,
+          "end_sec": 219.84
+        },
+        {
+          "text": "đó",
+          "start_sec": 219.88,
+          "end_sec": 220.04
+        },
+        {
+          "text": "không",
+          "start_sec": 220.08,
+          "end_sec": 220.24
+        },
+        {
+          "text": "ạ?",
+          "start_sec": 220.42,
+          "end_sec": 220.46
+        },
+        {
+          "text": "Anh",
+          "start_sec": 221.18,
+          "end_sec": 221.3
+        },
+        {
+          "text": "chị",
+          "start_sec": 221.34,
+          "end_sec": 221.5
+        },
+        {
+          "text": "mai",
+          "start_sec": 221.56,
+          "end_sec": 221.72
+        },
+        {
+          "text": "thu",
+          "start_sec": 221.74,
+          "end_sec": 221.88
+        },
+        {
+          "text": "xếp",
+          "start_sec": 221.94,
+          "end_sec": 222.08
+        },
+        {
+          "text": "qua",
+          "start_sec": 222.12,
+          "end_sec": 222.26
+        },
+        {
+          "text": "xem",
+          "start_sec": 222.34,
+          "end_sec": 222.5
+        },
+        {
+          "text": "nhà",
+          "start_sec": 222.52,
+          "end_sec": 222.68
+        },
+        {
+          "text": "mẫu",
+          "start_sec": 222.74,
+          "end_sec": 222.9
+        },
+        {
+          "text": "với",
+          "start_sec": 222.94,
+          "end_sec": 223.04
+        },
+        {
+          "text": "em",
+          "start_sec": 223.1,
+          "end_sec": 223.22
+        },
+        {
+          "text": "nhé.",
+          "start_sec": 223.26,
+          "end_sec": 223.48
+        },
+        {
+          "text": "Đứng",
+          "start_sec": 223.8,
+          "end_sec": 223.96
+        },
+        {
+          "text": "trong",
+          "start_sec": 223.98,
+          "end_sec": 224.16
+        },
+        {
+          "text": "căn",
+          "start_sec": 224.22,
+          "end_sec": 224.36
+        },
+        {
+          "text": "mới",
+          "start_sec": 224.42,
+          "end_sec": 224.56
+        },
+        {
+          "text": "cảm",
+          "start_sec": 224.62,
+          "end_sec": 224.76
+        },
+        {
+          "text": "nhận",
+          "start_sec": 224.8,
+          "end_sec": 224.96
+        },
+        {
+          "text": "hết",
+          "start_sec": 225.02,
+          "end_sec": 225.14
+        },
+        {
+          "text": "được.",
+          "start_sec": 225.2,
+          "end_sec": 225.36
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 226.18,
+      "end_sec": 227.48,
+      "text": "Bếp tách riêng chị thích.",
+      "words": [
+        {
+          "text": "Bếp",
+          "start_sec": 226.18,
+          "end_sec": 226.36
+        },
+        {
+          "text": "tách",
+          "start_sec": 226.42,
+          "end_sec": 226.6
+        },
+        {
+          "text": "riêng",
+          "start_sec": 226.7,
+          "end_sec": 226.9
+        },
+        {
+          "text": "chị",
+          "start_sec": 226.96,
+          "end_sec": 227.16
+        },
+        {
+          "text": "thích.",
+          "start_sec": 227.22,
+          "end_sec": 227.48
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 228.34,
+      "end_sec": 230.16,
+      "text": "Có điều phòng ngủ phụ hơi nhỏ.",
+      "words": [
+        {
+          "text": "Có",
+          "start_sec": 228.34,
+          "end_sec": 228.5
+        },
+        {
+          "text": "điều",
+          "start_sec": 228.56,
+          "end_sec": 228.74
+        },
+        {
+          "text": "phòng",
+          "start_sec": 228.78,
+          "end_sec": 229
+        },
+        {
+          "text": "ngủ",
+          "start_sec": 229.04,
+          "end_sec": 229.24
+        },
+        {
+          "text": "phụ",
+          "start_sec": 229.3,
+          "end_sec": 229.56
+        },
+        {
+          "text": "hơi",
+          "start_sec": 229.64,
+          "end_sec": 229.8
+        },
+        {
+          "text": "nhỏ.",
+          "start_sec": 229.86,
+          "end_sec": 230.16
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 231.36,
+      "end_sec": 234.16,
+      "text": "Chị để ý giúp em chỗ để xe với trạm sạc xe điện nhé.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 231.36,
+          "end_sec": 231.54
+        },
+        {
+          "text": "để",
+          "start_sec": 231.6,
+          "end_sec": 231.72
+        },
+        {
+          "text": "ý",
+          "start_sec": 231.8,
+          "end_sec": 231.86
+        },
+        {
+          "text": "giúp",
+          "start_sec": 231.9,
+          "end_sec": 232.08
+        },
+        {
+          "text": "em",
+          "start_sec": 232.14,
+          "end_sec": 232.3
+        },
+        {
+          "text": "chỗ",
+          "start_sec": 232.34,
+          "end_sec": 232.58
+        },
+        {
+          "text": "để",
+          "start_sec": 232.64,
+          "end_sec": 232.74
+        },
+        {
+          "text": "xe",
+          "start_sec": 232.82,
+          "end_sec": 232.96
+        },
+        {
+          "text": "với",
+          "start_sec": 233,
+          "end_sec": 233.1
+        },
+        {
+          "text": "trạm",
+          "start_sec": 233.14,
+          "end_sec": 233.34
+        },
+        {
+          "text": "sạc",
+          "start_sec": 233.42,
+          "end_sec": 233.56
+        },
+        {
+          "text": "xe",
+          "start_sec": 233.64,
+          "end_sec": 233.72
+        },
+        {
+          "text": "điện",
+          "start_sec": 233.76,
+          "end_sec": 233.92
+        },
+        {
+          "text": "nhé.",
+          "start_sec": 233.96,
+          "end_sec": 234.16
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 235.2,
+      "end_sec": 238.56,
+      "text": "Phòng khách kính trọn thì sáng quá, chị chỉ sợ nắng trưa.",
+      "words": [
+        {
+          "text": "Phòng",
+          "start_sec": 235.2,
+          "end_sec": 235.38
+        },
+        {
+          "text": "khách",
+          "start_sec": 235.42,
+          "end_sec": 235.6
+        },
+        {
+          "text": "kính",
+          "start_sec": 235.66,
+          "end_sec": 235.84
+        },
+        {
+          "text": "trọn",
+          "start_sec": 235.88,
+          "end_sec": 236.16
+        },
+        {
+          "text": "thì",
+          "start_sec": 236.2,
+          "end_sec": 236.38
+        },
+        {
+          "text": "sáng",
+          "start_sec": 236.46,
+          "end_sec": 236.64
+        },
+        {
+          "text": "quá,",
+          "start_sec": 236.68,
+          "end_sec": 236.92
+        },
+        {
+          "text": "chị",
+          "start_sec": 237.26,
+          "end_sec": 237.44
+        },
+        {
+          "text": "chỉ",
+          "start_sec": 237.52,
+          "end_sec": 237.7
+        },
+        {
+          "text": "sợ",
+          "start_sec": 237.78,
+          "end_sec": 237.98
+        },
+        {
+          "text": "nắng",
+          "start_sec": 238.04,
+          "end_sec": 238.22
+        },
+        {
+          "text": "trưa.",
+          "start_sec": 238.26,
+          "end_sec": 238.56
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 239.58,
+      "end_sec": 247.68,
+      "text": "Để mai chị xem tận nơi rồi tính. Chị sợ nhất là cọc xong chủ đầu tư làm lỡ hẹn. Mấy vụ trên báo chí chị đọc thấy lo lắm.",
+      "words": [
+        {
+          "text": "Để",
+          "start_sec": 239.58,
+          "end_sec": 239.74
+        },
+        {
+          "text": "mai",
+          "start_sec": 239.8,
+          "end_sec": 240.02
+        },
+        {
+          "text": "chị",
+          "start_sec": 240.08,
+          "end_sec": 240.26
+        },
+        {
+          "text": "xem",
+          "start_sec": 240.36,
+          "end_sec": 240.56
+        },
+        {
+          "text": "tận",
+          "start_sec": 240.62,
+          "end_sec": 240.8
+        },
+        {
+          "text": "nơi",
+          "start_sec": 240.88,
+          "end_sec": 241.1
+        },
+        {
+          "text": "rồi",
+          "start_sec": 241.2,
+          "end_sec": 241.38
+        },
+        {
+          "text": "tính.",
+          "start_sec": 241.44,
+          "end_sec": 241.62
+        },
+        {
+          "text": "Chị",
+          "start_sec": 242.22,
+          "end_sec": 242.4
+        },
+        {
+          "text": "sợ",
+          "start_sec": 242.5,
+          "end_sec": 242.68
+        },
+        {
+          "text": "nhất",
+          "start_sec": 242.72,
+          "end_sec": 242.92
+        },
+        {
+          "text": "là",
+          "start_sec": 242.98,
+          "end_sec": 243.12
+        },
+        {
+          "text": "cọc",
+          "start_sec": 243.16,
+          "end_sec": 243.32
+        },
+        {
+          "text": "xong",
+          "start_sec": 243.38,
+          "end_sec": 243.56
+        },
+        {
+          "text": "chủ",
+          "start_sec": 243.6,
+          "end_sec": 243.74
+        },
+        {
+          "text": "đầu",
+          "start_sec": 243.8,
+          "end_sec": 244
+        },
+        {
+          "text": "tư",
+          "start_sec": 244.06,
+          "end_sec": 244.2
+        },
+        {
+          "text": "làm",
+          "start_sec": 244.26,
+          "end_sec": 244.44
+        },
+        {
+          "text": "lỡ",
+          "start_sec": 244.52,
+          "end_sec": 244.66
+        },
+        {
+          "text": "hẹn.",
+          "start_sec": 244.72,
+          "end_sec": 245
+        },
+        {
+          "text": "Mấy",
+          "start_sec": 245.36,
+          "end_sec": 245.5
+        },
+        {
+          "text": "vụ",
+          "start_sec": 245.58,
+          "end_sec": 245.74
+        },
+        {
+          "text": "trên",
+          "start_sec": 245.78,
+          "end_sec": 245.98
+        },
+        {
+          "text": "báo",
+          "start_sec": 246.02,
+          "end_sec": 246.18
+        },
+        {
+          "text": "chí",
+          "start_sec": 246.26,
+          "end_sec": 246.44
+        },
+        {
+          "text": "chị",
+          "start_sec": 246.48,
+          "end_sec": 246.64
+        },
+        {
+          "text": "đọc",
+          "start_sec": 246.7,
+          "end_sec": 246.86
+        },
+        {
+          "text": "thấy",
+          "start_sec": 246.9,
+          "end_sec": 247.1
+        },
+        {
+          "text": "lo",
+          "start_sec": 247.18,
+          "end_sec": 247.32
+        },
+        {
+          "text": "lắm.",
+          "start_sec": 247.4,
+          "end_sec": 247.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 252.8,
+      "end_sec": 255.52,
+      "text": "Em cho chị xin chính sách bảo hành chi tiết được không?",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 252.8,
+          "end_sec": 252.96
+        },
+        {
+          "text": "cho",
+          "start_sec": 253.02,
+          "end_sec": 253.16
+        },
+        {
+          "text": "chị",
+          "start_sec": 253.22,
+          "end_sec": 253.42
+        },
+        {
+          "text": "xin",
+          "start_sec": 253.5,
+          "end_sec": 253.66
+        },
+        {
+          "text": "chính",
+          "start_sec": 253.7,
+          "end_sec": 253.88
+        },
+        {
+          "text": "sách",
+          "start_sec": 253.96,
+          "end_sec": 254.14
+        },
+        {
+          "text": "bảo",
+          "start_sec": 254.2,
+          "end_sec": 254.34
+        },
+        {
+          "text": "hành",
+          "start_sec": 254.4,
+          "end_sec": 254.6
+        },
+        {
+          "text": "chi",
+          "start_sec": 254.66,
+          "end_sec": 254.82
+        },
+        {
+          "text": "tiết",
+          "start_sec": 254.88,
+          "end_sec": 255.08
+        },
+        {
+          "text": "được",
+          "start_sec": 255.14,
+          "end_sec": 255.3
+        },
+        {
+          "text": "không?",
+          "start_sec": 255.32,
+          "end_sec": 255.52
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 256.5,
+      "end_sec": 261.04,
+      "text": "Bên em giữ căn 18.06 cho chị đến hết thứ Bảy 16, 11 nhé.",
+      "words": [
+        {
+          "text": "Bên",
+          "start_sec": 256.5,
+          "end_sec": 256.68
+        },
+        {
+          "text": "em",
+          "start_sec": 256.76,
+          "end_sec": 256.899
+        },
+        {
+          "text": "giữ",
+          "start_sec": 256.959,
+          "end_sec": 257.1
+        },
+        {
+          "text": "căn",
+          "start_sec": 257.16,
+          "end_sec": 257.3
+        },
+        {
+          "text": "18.06",
+          "start_sec": 257.339,
+          "end_sec": 258.459
+        },
+        {
+          "text": "cho",
+          "start_sec": 258.5,
+          "end_sec": 258.6
+        },
+        {
+          "text": "chị",
+          "start_sec": 258.66,
+          "end_sec": 258.8
+        },
+        {
+          "text": "đến",
+          "start_sec": 258.86,
+          "end_sec": 258.98
+        },
+        {
+          "text": "hết",
+          "start_sec": 259.04,
+          "end_sec": 259.16
+        },
+        {
+          "text": "thứ",
+          "start_sec": 259.18,
+          "end_sec": 259.32
+        },
+        {
+          "text": "Bảy",
+          "start_sec": 259.38,
+          "end_sec": 259.54
+        },
+        {
+          "text": "16,",
+          "start_sec": 259.6,
+          "end_sec": 260.04
+        },
+        {
+          "text": "11",
+          "start_sec": 260.399,
+          "end_sec": 260.779
+        },
+        {
+          "text": "nhé.",
+          "start_sec": 260.82,
+          "end_sec": 261.04
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 261.68,
+      "end_sec": 265.98,
+      "text": "Em cứ tính giúp chị tổng tiền phải đóng trước khi nhận nhà, đừng để phát sinh.",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 261.68,
+          "end_sec": 261.82
+        },
+        {
+          "text": "cứ",
+          "start_sec": 261.899,
+          "end_sec": 262.019
+        },
+        {
+          "text": "tính",
+          "start_sec": 262.079,
+          "end_sec": 262.26
+        },
+        {
+          "text": "giúp",
+          "start_sec": 262.28,
+          "end_sec": 262.46
+        },
+        {
+          "text": "chị",
+          "start_sec": 262.5,
+          "end_sec": 262.72
+        },
+        {
+          "text": "tổng",
+          "start_sec": 262.78,
+          "end_sec": 262.94
+        },
+        {
+          "text": "tiền",
+          "start_sec": 263,
+          "end_sec": 263.22
+        },
+        {
+          "text": "phải",
+          "start_sec": 263.26,
+          "end_sec": 263.42
+        },
+        {
+          "text": "đóng",
+          "start_sec": 263.48,
+          "end_sec": 263.64
+        },
+        {
+          "text": "trước",
+          "start_sec": 263.7,
+          "end_sec": 263.86
+        },
+        {
+          "text": "khi",
+          "start_sec": 263.9,
+          "end_sec": 264.06
+        },
+        {
+          "text": "nhận",
+          "start_sec": 264.1,
+          "end_sec": 264.3
+        },
+        {
+          "text": "nhà,",
+          "start_sec": 264.36,
+          "end_sec": 264.6
+        },
+        {
+          "text": "đừng",
+          "start_sec": 265.06,
+          "end_sec": 265.22
+        },
+        {
+          "text": "để",
+          "start_sec": 265.3,
+          "end_sec": 265.46
+        },
+        {
+          "text": "phát",
+          "start_sec": 265.5,
+          "end_sec": 265.68
+        },
+        {
+          "text": "sinh.",
+          "start_sec": 265.76,
+          "end_sec": 265.98
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 266.54,
+      "end_sec": 282.66,
+      "text": "Giữ căn mình làm giấy đặt cọc 50 triệu. Tiền này sau đó trừ vào đợt thanh toán đầu tiên, không mất đi đâu cả. Nếu đổi ý, mình hoàn lại 90% trong vòng 15 ngày, điều khoản ghi thẳng vào phụ lục. Tới hết thứ Bảy là hết hạn giữ căn, em phải báo bên dự án để họ mở bán lại.",
+      "words": [
+        {
+          "text": "Giữ",
+          "start_sec": 266.54,
+          "end_sec": 266.7
+        },
+        {
+          "text": "căn",
+          "start_sec": 266.76,
+          "end_sec": 266.92
+        },
+        {
+          "text": "mình",
+          "start_sec": 266.96,
+          "end_sec": 267.18
+        },
+        {
+          "text": "làm",
+          "start_sec": 267.24,
+          "end_sec": 267.38
+        },
+        {
+          "text": "giấy",
+          "start_sec": 267.42,
+          "end_sec": 267.58
+        },
+        {
+          "text": "đặt",
+          "start_sec": 267.64,
+          "end_sec": 267.76
+        },
+        {
+          "text": "cọc",
+          "start_sec": 267.8,
+          "end_sec": 267.96
+        },
+        {
+          "text": "50",
+          "start_sec": 268,
+          "end_sec": 268.28
+        },
+        {
+          "text": "triệu.",
+          "start_sec": 268.32,
+          "end_sec": 268.54
+        },
+        {
+          "text": "Tiền",
+          "start_sec": 268.88,
+          "end_sec": 269.02
+        },
+        {
+          "text": "này",
+          "start_sec": 269.08,
+          "end_sec": 269.24
+        },
+        {
+          "text": "sau",
+          "start_sec": 269.32,
+          "end_sec": 269.42
+        },
+        {
+          "text": "đó",
+          "start_sec": 269.46,
+          "end_sec": 269.58
+        },
+        {
+          "text": "trừ",
+          "start_sec": 269.62,
+          "end_sec": 269.76
+        },
+        {
+          "text": "vào",
+          "start_sec": 269.82,
+          "end_sec": 269.92
+        },
+        {
+          "text": "đợt",
+          "start_sec": 269.96,
+          "end_sec": 270.08
+        },
+        {
+          "text": "thanh",
+          "start_sec": 270.12,
+          "end_sec": 270.28
+        },
+        {
+          "text": "toán",
+          "start_sec": 270.32,
+          "end_sec": 270.5
+        },
+        {
+          "text": "đầu",
+          "start_sec": 270.56,
+          "end_sec": 270.7
+        },
+        {
+          "text": "tiên,",
+          "start_sec": 270.76,
+          "end_sec": 270.94
+        },
+        {
+          "text": "không",
+          "start_sec": 271.3,
+          "end_sec": 271.46
+        },
+        {
+          "text": "mất",
+          "start_sec": 271.5,
+          "end_sec": 271.64
+        },
+        {
+          "text": "đi",
+          "start_sec": 271.7,
+          "end_sec": 271.78
+        },
+        {
+          "text": "đâu",
+          "start_sec": 271.84,
+          "end_sec": 271.96
+        },
+        {
+          "text": "cả.",
+          "start_sec": 272.02,
+          "end_sec": 272.3
+        },
+        {
+          "text": "Nếu",
+          "start_sec": 272.82,
+          "end_sec": 272.98
+        },
+        {
+          "text": "đổi",
+          "start_sec": 273.04,
+          "end_sec": 273.18
+        },
+        {
+          "text": "ý,",
+          "start_sec": 273.26,
+          "end_sec": 273.36
+        },
+        {
+          "text": "mình",
+          "start_sec": 273.8,
+          "end_sec": 273.92
+        },
+        {
+          "text": "hoàn",
+          "start_sec": 273.98,
+          "end_sec": 274.14
+        },
+        {
+          "text": "lại",
+          "start_sec": 274.2,
+          "end_sec": 274.32
+        },
+        {
+          "text": "90%",
+          "start_sec": 274.48,
+          "end_sec": 275.02
+        },
+        {
+          "text": "trong",
+          "start_sec": 275.08,
+          "end_sec": 275.22
+        },
+        {
+          "text": "vòng",
+          "start_sec": 275.28,
+          "end_sec": 275.42
+        },
+        {
+          "text": "15",
+          "start_sec": 275.46,
+          "end_sec": 275.8
+        },
+        {
+          "text": "ngày,",
+          "start_sec": 275.84,
+          "end_sec": 276
+        },
+        {
+          "text": "điều",
+          "start_sec": 276.38,
+          "end_sec": 276.52
+        },
+        {
+          "text": "khoản",
+          "start_sec": 276.56,
+          "end_sec": 276.8
+        },
+        {
+          "text": "ghi",
+          "start_sec": 276.84,
+          "end_sec": 276.98
+        },
+        {
+          "text": "thẳng",
+          "start_sec": 277,
+          "end_sec": 277.22
+        },
+        {
+          "text": "vào",
+          "start_sec": 277.28,
+          "end_sec": 277.4
+        },
+        {
+          "text": "phụ",
+          "start_sec": 277.44,
+          "end_sec": 277.58
+        },
+        {
+          "text": "lục.",
+          "start_sec": 277.64,
+          "end_sec": 277.8
+        },
+        {
+          "text": "Tới",
+          "start_sec": 278.42,
+          "end_sec": 278.56
+        },
+        {
+          "text": "hết",
+          "start_sec": 278.6,
+          "end_sec": 278.72
+        },
+        {
+          "text": "thứ",
+          "start_sec": 278.76,
+          "end_sec": 278.88
+        },
+        {
+          "text": "Bảy",
+          "start_sec": 278.94,
+          "end_sec": 279.16
+        },
+        {
+          "text": "là",
+          "start_sec": 279.22,
+          "end_sec": 279.32
+        },
+        {
+          "text": "hết",
+          "start_sec": 279.34,
+          "end_sec": 279.48
+        },
+        {
+          "text": "hạn",
+          "start_sec": 279.52,
+          "end_sec": 279.68
+        },
+        {
+          "text": "giữ",
+          "start_sec": 279.72,
+          "end_sec": 279.9
+        },
+        {
+          "text": "căn,",
+          "start_sec": 279.96,
+          "end_sec": 280.1
+        },
+        {
+          "text": "em",
+          "start_sec": 280.54,
+          "end_sec": 280.66
+        },
+        {
+          "text": "phải",
+          "start_sec": 280.7,
+          "end_sec": 280.82
+        },
+        {
+          "text": "báo",
+          "start_sec": 280.86,
+          "end_sec": 281.02
+        },
+        {
+          "text": "bên",
+          "start_sec": 281.06,
+          "end_sec": 281.18
+        },
+        {
+          "text": "dự",
+          "start_sec": 281.26,
+          "end_sec": 281.38
+        },
+        {
+          "text": "án",
+          "start_sec": 281.46,
+          "end_sec": 281.62
+        },
+        {
+          "text": "để",
+          "start_sec": 281.68,
+          "end_sec": 281.78
+        },
+        {
+          "text": "họ",
+          "start_sec": 281.82,
+          "end_sec": 281.98
+        },
+        {
+          "text": "mở",
+          "start_sec": 282.04,
+          "end_sec": 282.18
+        },
+        {
+          "text": "bán",
+          "start_sec": 282.24,
+          "end_sec": 282.4
+        },
+        {
+          "text": "lại.",
+          "start_sec": 282.46,
+          "end_sec": 282.66
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 283.52,
+      "end_sec": 286.24,
+      "text": "Chị phải để anh nhà xem đã rồi mới quyết được.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 283.52,
+          "end_sec": 283.7
+        },
+        {
+          "text": "phải",
+          "start_sec": 283.76,
+          "end_sec": 283.98
+        },
+        {
+          "text": "để",
+          "start_sec": 284.04,
+          "end_sec": 284.22
+        },
+        {
+          "text": "anh",
+          "start_sec": 284.3,
+          "end_sec": 284.42
+        },
+        {
+          "text": "nhà",
+          "start_sec": 284.48,
+          "end_sec": 284.66
+        },
+        {
+          "text": "xem",
+          "start_sec": 284.74,
+          "end_sec": 284.98
+        },
+        {
+          "text": "đã",
+          "start_sec": 285.04,
+          "end_sec": 285.18
+        },
+        {
+          "text": "rồi",
+          "start_sec": 285.26,
+          "end_sec": 285.46
+        },
+        {
+          "text": "mới",
+          "start_sec": 285.54,
+          "end_sec": 285.74
+        },
+        {
+          "text": "quyết",
+          "start_sec": 285.78,
+          "end_sec": 285.98
+        },
+        {
+          "text": "được.",
+          "start_sec": 286.04,
+          "end_sec": 286.24
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 287.12,
+      "end_sec": 291.6,
+      "text": "Em ghi lại đây, giữ căn đến hết ngày 16 tháng 11, chị trả lời trước thứ Bảy.",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 287.12,
+          "end_sec": 287.24
+        },
+        {
+          "text": "ghi",
+          "start_sec": 287.28,
+          "end_sec": 287.4
+        },
+        {
+          "text": "lại",
+          "start_sec": 287.44,
+          "end_sec": 287.58
+        },
+        {
+          "text": "đây,",
+          "start_sec": 287.62,
+          "end_sec": 287.74
+        },
+        {
+          "text": "giữ",
+          "start_sec": 288.1,
+          "end_sec": 288.28
+        },
+        {
+          "text": "căn",
+          "start_sec": 288.34,
+          "end_sec": 288.5
+        },
+        {
+          "text": "đến",
+          "start_sec": 288.56,
+          "end_sec": 288.68
+        },
+        {
+          "text": "hết",
+          "start_sec": 288.72,
+          "end_sec": 288.88
+        },
+        {
+          "text": "ngày",
+          "start_sec": 288.92,
+          "end_sec": 289.1
+        },
+        {
+          "text": "16",
+          "start_sec": 289.14,
+          "end_sec": 289.54
+        },
+        {
+          "text": "tháng",
+          "start_sec": 289.56,
+          "end_sec": 289.7
+        },
+        {
+          "text": "11,",
+          "start_sec": 289.74,
+          "end_sec": 290.1
+        },
+        {
+          "text": "chị",
+          "start_sec": 290.38,
+          "end_sec": 290.52
+        },
+        {
+          "text": "trả",
+          "start_sec": 290.6,
+          "end_sec": 290.76
+        },
+        {
+          "text": "lời",
+          "start_sec": 290.82,
+          "end_sec": 290.98
+        },
+        {
+          "text": "trước",
+          "start_sec": 291.02,
+          "end_sec": 291.18
+        },
+        {
+          "text": "thứ",
+          "start_sec": 291.2,
+          "end_sec": 291.3
+        },
+        {
+          "text": "Bảy.",
+          "start_sec": 291.36,
+          "end_sec": 291.6
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_2",
+      "lang": "vi",
+      "start_sec": 292.16,
+      "end_sec": 300.5,
+      "text": "Theo tôi thì căn này hợp với chị đó, tiện cho hai cháu đi học hết, đi làm về cũng tiện. Mà lỡ căn này thì tiếc lắm đấy. Tôi thấy giá khu này đầu năm tới còn tăng.",
+      "words": [
+        {
+          "text": "Theo",
+          "start_sec": 292.16,
+          "end_sec": 292.28
+        },
+        {
+          "text": "tôi",
+          "start_sec": 292.34,
+          "end_sec": 292.5
+        },
+        {
+          "text": "thì",
+          "start_sec": 292.54,
+          "end_sec": 292.68
+        },
+        {
+          "text": "căn",
+          "start_sec": 292.72,
+          "end_sec": 292.84
+        },
+        {
+          "text": "này",
+          "start_sec": 292.88,
+          "end_sec": 293
+        },
+        {
+          "text": "hợp",
+          "start_sec": 293.04,
+          "end_sec": 293.16
+        },
+        {
+          "text": "với",
+          "start_sec": 293.2,
+          "end_sec": 293.28
+        },
+        {
+          "text": "chị",
+          "start_sec": 293.32,
+          "end_sec": 293.44
+        },
+        {
+          "text": "đó,",
+          "start_sec": 293.5,
+          "end_sec": 293.66
+        },
+        {
+          "text": "tiện",
+          "start_sec": 293.98,
+          "end_sec": 294.14
+        },
+        {
+          "text": "cho",
+          "start_sec": 294.2,
+          "end_sec": 294.3
+        },
+        {
+          "text": "hai",
+          "start_sec": 294.34,
+          "end_sec": 294.46
+        },
+        {
+          "text": "cháu",
+          "start_sec": 294.52,
+          "end_sec": 294.68
+        },
+        {
+          "text": "đi",
+          "start_sec": 294.72,
+          "end_sec": 294.8
+        },
+        {
+          "text": "học",
+          "start_sec": 294.82,
+          "end_sec": 294.96
+        },
+        {
+          "text": "hết,",
+          "start_sec": 295,
+          "end_sec": 295.16
+        },
+        {
+          "text": "đi",
+          "start_sec": 295.44,
+          "end_sec": 295.56
+        },
+        {
+          "text": "làm",
+          "start_sec": 295.62,
+          "end_sec": 295.76
+        },
+        {
+          "text": "về",
+          "start_sec": 295.82,
+          "end_sec": 295.92
+        },
+        {
+          "text": "cũng",
+          "start_sec": 295.96,
+          "end_sec": 296.08
+        },
+        {
+          "text": "tiện.",
+          "start_sec": 296.14,
+          "end_sec": 296.32
+        },
+        {
+          "text": "Mà",
+          "start_sec": 296.9,
+          "end_sec": 297.02
+        },
+        {
+          "text": "lỡ",
+          "start_sec": 297.08,
+          "end_sec": 297.2
+        },
+        {
+          "text": "căn",
+          "start_sec": 297.24,
+          "end_sec": 297.36
+        },
+        {
+          "text": "này",
+          "start_sec": 297.4,
+          "end_sec": 297.54
+        },
+        {
+          "text": "thì",
+          "start_sec": 297.58,
+          "end_sec": 297.68
+        },
+        {
+          "text": "tiếc",
+          "start_sec": 297.72,
+          "end_sec": 297.86
+        },
+        {
+          "text": "lắm",
+          "start_sec": 297.92,
+          "end_sec": 298.02
+        },
+        {
+          "text": "đấy.",
+          "start_sec": 298.08,
+          "end_sec": 298.22
+        },
+        {
+          "text": "Tôi",
+          "start_sec": 298.54,
+          "end_sec": 298.68
+        },
+        {
+          "text": "thấy",
+          "start_sec": 298.72,
+          "end_sec": 298.84
+        },
+        {
+          "text": "giá",
+          "start_sec": 298.88,
+          "end_sec": 299.04
+        },
+        {
+          "text": "khu",
+          "start_sec": 299.08,
+          "end_sec": 299.22
+        },
+        {
+          "text": "này",
+          "start_sec": 299.28,
+          "end_sec": 299.42
+        },
+        {
+          "text": "đầu",
+          "start_sec": 299.46,
+          "end_sec": 299.62
+        },
+        {
+          "text": "năm",
+          "start_sec": 299.68,
+          "end_sec": 299.84
+        },
+        {
+          "text": "tới",
+          "start_sec": 299.9,
+          "end_sec": 300.04
+        },
+        {
+          "text": "còn",
+          "start_sec": 300.1,
+          "end_sec": 300.24
+        },
+        {
+          "text": "tăng.",
+          "start_sec": 300.28,
+          "end_sec": 300.5
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 301.56,
+      "end_sec": 306,
+      "text": "Chị phải về bàn với anh nhà đã. Chuyện tiền tỷ đâu có quyết trong một buổi được.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 301.56,
+          "end_sec": 301.72
+        },
+        {
+          "text": "phải",
+          "start_sec": 301.78,
+          "end_sec": 301.96
+        },
+        {
+          "text": "về",
+          "start_sec": 302.04,
+          "end_sec": 302.16
+        },
+        {
+          "text": "bàn",
+          "start_sec": 302.24,
+          "end_sec": 302.46
+        },
+        {
+          "text": "với",
+          "start_sec": 302.54,
+          "end_sec": 302.74
+        },
+        {
+          "text": "anh",
+          "start_sec": 302.8,
+          "end_sec": 302.94
+        },
+        {
+          "text": "nhà",
+          "start_sec": 302.98,
+          "end_sec": 303.16
+        },
+        {
+          "text": "đã.",
+          "start_sec": 303.22,
+          "end_sec": 303.46
+        },
+        {
+          "text": "Chuyện",
+          "start_sec": 303.82,
+          "end_sec": 304
+        },
+        {
+          "text": "tiền",
+          "start_sec": 304.06,
+          "end_sec": 304.24
+        },
+        {
+          "text": "tỷ",
+          "start_sec": 304.3,
+          "end_sec": 304.44
+        },
+        {
+          "text": "đâu",
+          "start_sec": 304.5,
+          "end_sec": 304.7
+        },
+        {
+          "text": "có",
+          "start_sec": 304.74,
+          "end_sec": 304.88
+        },
+        {
+          "text": "quyết",
+          "start_sec": 304.92,
+          "end_sec": 305.12
+        },
+        {
+          "text": "trong",
+          "start_sec": 305.16,
+          "end_sec": 305.32
+        },
+        {
+          "text": "một",
+          "start_sec": 305.38,
+          "end_sec": 305.52
+        },
+        {
+          "text": "buổi",
+          "start_sec": 305.56,
+          "end_sec": 305.72
+        },
+        {
+          "text": "được.",
+          "start_sec": 305.78,
+          "end_sec": 306
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 306.84,
+      "end_sec": 310.74,
+      "text": "Em gửi chị bản tính trước tối mai nhé, có cả phương án vay 50%.",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 306.84,
+          "end_sec": 306.98
+        },
+        {
+          "text": "gửi",
+          "start_sec": 307.04,
+          "end_sec": 307.22
+        },
+        {
+          "text": "chị",
+          "start_sec": 307.28,
+          "end_sec": 307.4
+        },
+        {
+          "text": "bản",
+          "start_sec": 307.46,
+          "end_sec": 307.64
+        },
+        {
+          "text": "tính",
+          "start_sec": 307.68,
+          "end_sec": 307.86
+        },
+        {
+          "text": "trước",
+          "start_sec": 307.9,
+          "end_sec": 308.08
+        },
+        {
+          "text": "tối",
+          "start_sec": 308.12,
+          "end_sec": 308.28
+        },
+        {
+          "text": "mai",
+          "start_sec": 308.34,
+          "end_sec": 308.48
+        },
+        {
+          "text": "nhé,",
+          "start_sec": 308.52,
+          "end_sec": 308.68
+        },
+        {
+          "text": "có",
+          "start_sec": 309.02,
+          "end_sec": 309.12
+        },
+        {
+          "text": "cả",
+          "start_sec": 309.16,
+          "end_sec": 309.3
+        },
+        {
+          "text": "phương",
+          "start_sec": 309.34,
+          "end_sec": 309.52
+        },
+        {
+          "text": "án",
+          "start_sec": 309.6,
+          "end_sec": 309.76
+        },
+        {
+          "text": "vay",
+          "start_sec": 309.82,
+          "end_sec": 310.02
+        },
+        {
+          "text": "50%.",
+          "start_sec": 310.2,
+          "end_sec": 310.74
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 316.1,
+      "end_sec": 324.84,
+      "text": "Cuối tuần cho chị xin lịch xem nhà mẫu với. Hai bé đi cùng cho chúng nó chạy chơi. Nếu căn này không lấy được thì bên em còn căn nào tương tự không em?",
+      "words": [
+        {
+          "text": "Cuối",
+          "start_sec": 316.1,
+          "end_sec": 316.26
+        },
+        {
+          "text": "tuần",
+          "start_sec": 316.3,
+          "end_sec": 316.5
+        },
+        {
+          "text": "cho",
+          "start_sec": 316.54,
+          "end_sec": 316.68
+        },
+        {
+          "text": "chị",
+          "start_sec": 316.74,
+          "end_sec": 316.92
+        },
+        {
+          "text": "xin",
+          "start_sec": 317.02,
+          "end_sec": 317.14
+        },
+        {
+          "text": "lịch",
+          "start_sec": 317.18,
+          "end_sec": 317.34
+        },
+        {
+          "text": "xem",
+          "start_sec": 317.4,
+          "end_sec": 317.56
+        },
+        {
+          "text": "nhà",
+          "start_sec": 317.6,
+          "end_sec": 317.78
+        },
+        {
+          "text": "mẫu",
+          "start_sec": 317.84,
+          "end_sec": 318.02
+        },
+        {
+          "text": "với.",
+          "start_sec": 318.1,
+          "end_sec": 318.34
+        },
+        {
+          "text": "Hai",
+          "start_sec": 318.74,
+          "end_sec": 318.86
+        },
+        {
+          "text": "bé",
+          "start_sec": 318.92,
+          "end_sec": 319.08
+        },
+        {
+          "text": "đi",
+          "start_sec": 319.16,
+          "end_sec": 319.3
+        },
+        {
+          "text": "cùng",
+          "start_sec": 319.36,
+          "end_sec": 319.54
+        },
+        {
+          "text": "cho",
+          "start_sec": 319.58,
+          "end_sec": 319.74
+        },
+        {
+          "text": "chúng",
+          "start_sec": 319.78,
+          "end_sec": 319.94
+        },
+        {
+          "text": "nó",
+          "start_sec": 320,
+          "end_sec": 320.22
+        },
+        {
+          "text": "chạy",
+          "start_sec": 320.26,
+          "end_sec": 320.46
+        },
+        {
+          "text": "chơi.",
+          "start_sec": 320.52,
+          "end_sec": 320.78
+        },
+        {
+          "text": "Nếu",
+          "start_sec": 321.1,
+          "end_sec": 321.28
+        },
+        {
+          "text": "căn",
+          "start_sec": 321.34,
+          "end_sec": 321.48
+        },
+        {
+          "text": "này",
+          "start_sec": 321.54,
+          "end_sec": 321.74
+        },
+        {
+          "text": "không",
+          "start_sec": 321.78,
+          "end_sec": 321.98
+        },
+        {
+          "text": "lấy",
+          "start_sec": 322.02,
+          "end_sec": 322.2
+        },
+        {
+          "text": "được",
+          "start_sec": 322.26,
+          "end_sec": 322.44
+        },
+        {
+          "text": "thì",
+          "start_sec": 322.48,
+          "end_sec": 322.64
+        },
+        {
+          "text": "bên",
+          "start_sec": 322.7,
+          "end_sec": 322.86
+        },
+        {
+          "text": "em",
+          "start_sec": 322.96,
+          "end_sec": 323.12
+        },
+        {
+          "text": "còn",
+          "start_sec": 323.2,
+          "end_sec": 323.38
+        },
+        {
+          "text": "căn",
+          "start_sec": 323.44,
+          "end_sec": 323.58
+        },
+        {
+          "text": "nào",
+          "start_sec": 323.64,
+          "end_sec": 323.84
+        },
+        {
+          "text": "tương",
+          "start_sec": 323.9,
+          "end_sec": 324.08
+        },
+        {
+          "text": "tự",
+          "start_sec": 324.14,
+          "end_sec": 324.38
+        },
+        {
+          "text": "không",
+          "start_sec": 324.42,
+          "end_sec": 324.6
+        },
+        {
+          "text": "em?",
+          "start_sec": 324.7,
+          "end_sec": 324.84
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 325.98,
+      "end_sec": 329.96,
+      "text": "Chị cứ thoải mái, căn hợp thì mình tiến, không hợp em tìm căn khác cho.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 325.98,
+          "end_sec": 326.12
+        },
+        {
+          "text": "cứ",
+          "start_sec": 326.18,
+          "end_sec": 326.3
+        },
+        {
+          "text": "thoải",
+          "start_sec": 326.32,
+          "end_sec": 326.52
+        },
+        {
+          "text": "mái,",
+          "start_sec": 326.58,
+          "end_sec": 326.78
+        },
+        {
+          "text": "căn",
+          "start_sec": 327.1,
+          "end_sec": 327.26
+        },
+        {
+          "text": "hợp",
+          "start_sec": 327.32,
+          "end_sec": 327.46
+        },
+        {
+          "text": "thì",
+          "start_sec": 327.5,
+          "end_sec": 327.62
+        },
+        {
+          "text": "mình",
+          "start_sec": 327.68,
+          "end_sec": 327.84
+        },
+        {
+          "text": "tiến,",
+          "start_sec": 327.9,
+          "end_sec": 328.1
+        },
+        {
+          "text": "không",
+          "start_sec": 328.44,
+          "end_sec": 328.62
+        },
+        {
+          "text": "hợp",
+          "start_sec": 328.66,
+          "end_sec": 328.86
+        },
+        {
+          "text": "em",
+          "start_sec": 328.94,
+          "end_sec": 329.08
+        },
+        {
+          "text": "tìm",
+          "start_sec": 329.12,
+          "end_sec": 329.3
+        },
+        {
+          "text": "căn",
+          "start_sec": 329.34,
+          "end_sec": 329.5
+        },
+        {
+          "text": "khác",
+          "start_sec": 329.52,
+          "end_sec": 329.7
+        },
+        {
+          "text": "cho.",
+          "start_sec": 329.76,
+          "end_sec": 329.96
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 331,
+      "end_sec": 339.24,
+      "text": "Khách mua nhà mà bị giục là khó chịu lắm. Bản tính em làm hai kịch bản, một là trả đều từ đầu, hai là ân hạn gốc 12 tháng rồi trả sau.",
+      "words": [
+        {
+          "text": "Khách",
+          "start_sec": 331,
+          "end_sec": 331.18
+        },
+        {
+          "text": "mua",
+          "start_sec": 331.24,
+          "end_sec": 331.38
+        },
+        {
+          "text": "nhà",
+          "start_sec": 331.46,
+          "end_sec": 331.7
+        },
+        {
+          "text": "mà",
+          "start_sec": 331.76,
+          "end_sec": 331.86
+        },
+        {
+          "text": "bị",
+          "start_sec": 331.92,
+          "end_sec": 332.02
+        },
+        {
+          "text": "giục",
+          "start_sec": 332.06,
+          "end_sec": 332.3
+        },
+        {
+          "text": "là",
+          "start_sec": 332.36,
+          "end_sec": 332.48
+        },
+        {
+          "text": "khó",
+          "start_sec": 332.52,
+          "end_sec": 332.72
+        },
+        {
+          "text": "chịu",
+          "start_sec": 332.78,
+          "end_sec": 332.96
+        },
+        {
+          "text": "lắm.",
+          "start_sec": 333.02,
+          "end_sec": 333.2
+        },
+        {
+          "text": "Bản",
+          "start_sec": 333.64,
+          "end_sec": 333.8
+        },
+        {
+          "text": "tính",
+          "start_sec": 333.86,
+          "end_sec": 334.04
+        },
+        {
+          "text": "em",
+          "start_sec": 334.12,
+          "end_sec": 334.28
+        },
+        {
+          "text": "làm",
+          "start_sec": 334.34,
+          "end_sec": 334.5
+        },
+        {
+          "text": "hai",
+          "start_sec": 334.54,
+          "end_sec": 334.66
+        },
+        {
+          "text": "kịch",
+          "start_sec": 334.7,
+          "end_sec": 334.84
+        },
+        {
+          "text": "bản,",
+          "start_sec": 334.9,
+          "end_sec": 335.1
+        },
+        {
+          "text": "một",
+          "start_sec": 335.48,
+          "end_sec": 335.62
+        },
+        {
+          "text": "là",
+          "start_sec": 335.68,
+          "end_sec": 335.78
+        },
+        {
+          "text": "trả",
+          "start_sec": 335.82,
+          "end_sec": 336.06
+        },
+        {
+          "text": "đều",
+          "start_sec": 336.12,
+          "end_sec": 336.22
+        },
+        {
+          "text": "từ",
+          "start_sec": 336.28,
+          "end_sec": 336.38
+        },
+        {
+          "text": "đầu,",
+          "start_sec": 336.44,
+          "end_sec": 336.58
+        },
+        {
+          "text": "hai",
+          "start_sec": 336.94,
+          "end_sec": 337.06
+        },
+        {
+          "text": "là",
+          "start_sec": 337.12,
+          "end_sec": 337.26
+        },
+        {
+          "text": "ân",
+          "start_sec": 337.34,
+          "end_sec": 337.44
+        },
+        {
+          "text": "hạn",
+          "start_sec": 337.5,
+          "end_sec": 337.66
+        },
+        {
+          "text": "gốc",
+          "start_sec": 337.72,
+          "end_sec": 337.88
+        },
+        {
+          "text": "12",
+          "start_sec": 337.92,
+          "end_sec": 338.3
+        },
+        {
+          "text": "tháng",
+          "start_sec": 338.34,
+          "end_sec": 338.54
+        },
+        {
+          "text": "rồi",
+          "start_sec": 338.6,
+          "end_sec": 338.74
+        },
+        {
+          "text": "trả",
+          "start_sec": 338.76,
+          "end_sec": 338.94
+        },
+        {
+          "text": "sau.",
+          "start_sec": 339.02,
+          "end_sec": 339.24
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 343.3,
+      "end_sec": 346.28,
+      "text": "Chị xem xong góp ý, em sửa ngay trong hôm đó luôn.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 343.3,
+          "end_sec": 343.44
+        },
+        {
+          "text": "xem",
+          "start_sec": 343.54,
+          "end_sec": 343.74
+        },
+        {
+          "text": "xong",
+          "start_sec": 343.8,
+          "end_sec": 343.94
+        },
+        {
+          "text": "góp",
+          "start_sec": 344,
+          "end_sec": 344.16
+        },
+        {
+          "text": "ý,",
+          "start_sec": 344.26,
+          "end_sec": 344.36
+        },
+        {
+          "text": "em",
+          "start_sec": 344.78,
+          "end_sec": 344.92
+        },
+        {
+          "text": "sửa",
+          "start_sec": 345,
+          "end_sec": 345.16
+        },
+        {
+          "text": "ngay",
+          "start_sec": 345.2,
+          "end_sec": 345.36
+        },
+        {
+          "text": "trong",
+          "start_sec": 345.4,
+          "end_sec": 345.56
+        },
+        {
+          "text": "hôm",
+          "start_sec": 345.62,
+          "end_sec": 345.78
+        },
+        {
+          "text": "đó",
+          "start_sec": 345.84,
+          "end_sec": 345.98
+        },
+        {
+          "text": "luôn.",
+          "start_sec": 346.06,
+          "end_sec": 346.28
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 347.46,
+      "end_sec": 350.68,
+      "text": "Để chị hỏi anh nhà xem hôm nào rảnh rồi chị báo em.",
+      "words": [
+        {
+          "text": "Để",
+          "start_sec": 347.46,
+          "end_sec": 347.62
+        },
+        {
+          "text": "chị",
+          "start_sec": 347.68,
+          "end_sec": 347.86
+        },
+        {
+          "text": "hỏi",
+          "start_sec": 347.92,
+          "end_sec": 348.12
+        },
+        {
+          "text": "anh",
+          "start_sec": 348.2,
+          "end_sec": 348.34
+        },
+        {
+          "text": "nhà",
+          "start_sec": 348.38,
+          "end_sec": 348.56
+        },
+        {
+          "text": "xem",
+          "start_sec": 348.66,
+          "end_sec": 348.84
+        },
+        {
+          "text": "hôm",
+          "start_sec": 348.88,
+          "end_sec": 349.02
+        },
+        {
+          "text": "nào",
+          "start_sec": 349.08,
+          "end_sec": 349.28
+        },
+        {
+          "text": "rảnh",
+          "start_sec": 349.36,
+          "end_sec": 349.56
+        },
+        {
+          "text": "rồi",
+          "start_sec": 349.66,
+          "end_sec": 349.84
+        },
+        {
+          "text": "chị",
+          "start_sec": 349.92,
+          "end_sec": 350.1
+        },
+        {
+          "text": "báo",
+          "start_sec": 350.16,
+          "end_sec": 350.38
+        },
+        {
+          "text": "em.",
+          "start_sec": 350.48,
+          "end_sec": 350.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 351.44,
+      "end_sec": 361.12,
+      "text": "Chiết khấu thanh toán nhanh thì em phải hỏi anh Tuấn, anh ấy phụ trách chính sách bán hàng của dự án. Trước chiều thứ Sáu em có câu trả lời cho chị, kể cả phần quà gửi đấng khai trương nếu còn.",
+      "words": [
+        {
+          "text": "Chiết",
+          "start_sec": 351.44,
+          "end_sec": 351.58
+        },
+        {
+          "text": "khấu",
+          "start_sec": 351.62,
+          "end_sec": 351.82
+        },
+        {
+          "text": "thanh",
+          "start_sec": 351.86,
+          "end_sec": 352.02
+        },
+        {
+          "text": "toán",
+          "start_sec": 352.06,
+          "end_sec": 352.22
+        },
+        {
+          "text": "nhanh",
+          "start_sec": 352.26,
+          "end_sec": 352.48
+        },
+        {
+          "text": "thì",
+          "start_sec": 352.52,
+          "end_sec": 352.66
+        },
+        {
+          "text": "em",
+          "start_sec": 352.72,
+          "end_sec": 352.84
+        },
+        {
+          "text": "phải",
+          "start_sec": 352.88,
+          "end_sec": 353
+        },
+        {
+          "text": "hỏi",
+          "start_sec": 353.04,
+          "end_sec": 353.22
+        },
+        {
+          "text": "anh",
+          "start_sec": 353.26,
+          "end_sec": 353.38
+        },
+        {
+          "text": "Tuấn,",
+          "start_sec": 353.42,
+          "end_sec": 353.6
+        },
+        {
+          "text": "anh",
+          "start_sec": 353.98,
+          "end_sec": 354.1
+        },
+        {
+          "text": "ấy",
+          "start_sec": 354.16,
+          "end_sec": 354.3
+        },
+        {
+          "text": "phụ",
+          "start_sec": 354.34,
+          "end_sec": 354.48
+        },
+        {
+          "text": "trách",
+          "start_sec": 354.52,
+          "end_sec": 354.7
+        },
+        {
+          "text": "chính",
+          "start_sec": 354.76,
+          "end_sec": 354.94
+        },
+        {
+          "text": "sách",
+          "start_sec": 355,
+          "end_sec": 355.14
+        },
+        {
+          "text": "bán",
+          "start_sec": 355.2,
+          "end_sec": 355.34
+        },
+        {
+          "text": "hàng",
+          "start_sec": 355.4,
+          "end_sec": 355.58
+        },
+        {
+          "text": "của",
+          "start_sec": 355.62,
+          "end_sec": 355.72
+        },
+        {
+          "text": "dự",
+          "start_sec": 355.78,
+          "end_sec": 355.88
+        },
+        {
+          "text": "án.",
+          "start_sec": 355.98,
+          "end_sec": 356.14
+        },
+        {
+          "text": "Trước",
+          "start_sec": 356.48,
+          "end_sec": 356.62
+        },
+        {
+          "text": "chiều",
+          "start_sec": 356.66,
+          "end_sec": 356.82
+        },
+        {
+          "text": "thứ",
+          "start_sec": 356.84,
+          "end_sec": 357
+        },
+        {
+          "text": "Sáu",
+          "start_sec": 357.08,
+          "end_sec": 357.28
+        },
+        {
+          "text": "em",
+          "start_sec": 357.36,
+          "end_sec": 357.5
+        },
+        {
+          "text": "có",
+          "start_sec": 357.56,
+          "end_sec": 357.64
+        },
+        {
+          "text": "câu",
+          "start_sec": 357.68,
+          "end_sec": 357.8
+        },
+        {
+          "text": "trả",
+          "start_sec": 357.84,
+          "end_sec": 357.98
+        },
+        {
+          "text": "lời",
+          "start_sec": 358.04,
+          "end_sec": 358.18
+        },
+        {
+          "text": "cho",
+          "start_sec": 358.22,
+          "end_sec": 358.34
+        },
+        {
+          "text": "chị,",
+          "start_sec": 358.38,
+          "end_sec": 358.56
+        },
+        {
+          "text": "kể",
+          "start_sec": 358.94,
+          "end_sec": 359.06
+        },
+        {
+          "text": "cả",
+          "start_sec": 359.1,
+          "end_sec": 359.22
+        },
+        {
+          "text": "phần",
+          "start_sec": 359.26,
+          "end_sec": 359.44
+        },
+        {
+          "text": "quà",
+          "start_sec": 359.48,
+          "end_sec": 359.66
+        },
+        {
+          "text": "gửi",
+          "start_sec": 359.72,
+          "end_sec": 359.92
+        },
+        {
+          "text": "đấng",
+          "start_sec": 359.98,
+          "end_sec": 360.14
+        },
+        {
+          "text": "khai",
+          "start_sec": 360.18,
+          "end_sec": 360.38
+        },
+        {
+          "text": "trương",
+          "start_sec": 360.42,
+          "end_sec": 360.62
+        },
+        {
+          "text": "nếu",
+          "start_sec": 360.66,
+          "end_sec": 360.82
+        },
+        {
+          "text": "còn.",
+          "start_sec": 360.88,
+          "end_sec": 361.12
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 361.96,
+      "end_sec": 366.68,
+      "text": "Chị cảm ơn em. Hôm nay chị nắm rõ hơn nhiều so với lần trước đi xem một mình.",
+      "words": [
+        {
+          "text": "Chị",
+          "start_sec": 361.96,
+          "end_sec": 362.12
+        },
+        {
+          "text": "cảm",
+          "start_sec": 362.2,
+          "end_sec": 362.4
+        },
+        {
+          "text": "ơn",
+          "start_sec": 362.48,
+          "end_sec": 362.62
+        },
+        {
+          "text": "em.",
+          "start_sec": 362.7,
+          "end_sec": 362.94
+        },
+        {
+          "text": "Hôm",
+          "start_sec": 363.28,
+          "end_sec": 363.4
+        },
+        {
+          "text": "nay",
+          "start_sec": 363.46,
+          "end_sec": 363.64
+        },
+        {
+          "text": "chị",
+          "start_sec": 363.7,
+          "end_sec": 363.86
+        },
+        {
+          "text": "nắm",
+          "start_sec": 363.92,
+          "end_sec": 364.08
+        },
+        {
+          "text": "rõ",
+          "start_sec": 364.18,
+          "end_sec": 364.36
+        },
+        {
+          "text": "hơn",
+          "start_sec": 364.42,
+          "end_sec": 364.58
+        },
+        {
+          "text": "nhiều",
+          "start_sec": 364.62,
+          "end_sec": 364.88
+        },
+        {
+          "text": "so",
+          "start_sec": 364.96,
+          "end_sec": 365.1
+        },
+        {
+          "text": "với",
+          "start_sec": 365.16,
+          "end_sec": 365.3
+        },
+        {
+          "text": "lần",
+          "start_sec": 365.38,
+          "end_sec": 365.56
+        },
+        {
+          "text": "trước",
+          "start_sec": 365.6,
+          "end_sec": 365.8
+        },
+        {
+          "text": "đi",
+          "start_sec": 365.84,
+          "end_sec": 365.98
+        },
+        {
+          "text": "xem",
+          "start_sec": 366.06,
+          "end_sec": 366.22
+        },
+        {
+          "text": "một",
+          "start_sec": 366.28,
+          "end_sec": 366.44
+        },
+        {
+          "text": "mình.",
+          "start_sec": 366.48,
+          "end_sec": 366.68
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_0",
+      "lang": "vi",
+      "start_sec": 367.2,
+      "end_sec": 370.28,
+      "text": "Em xin anh Tuấn chính sách chiết khấu cho chị nếu mình thanh toán nhanh.",
+      "words": [
+        {
+          "text": "Em",
+          "start_sec": 367.2,
+          "end_sec": 367.32
+        },
+        {
+          "text": "xin",
+          "start_sec": 367.38,
+          "end_sec": 367.52
+        },
+        {
+          "text": "anh",
+          "start_sec": 367.58,
+          "end_sec": 367.72
+        },
+        {
+          "text": "Tuấn",
+          "start_sec": 367.76,
+          "end_sec": 367.92
+        },
+        {
+          "text": "chính",
+          "start_sec": 368,
+          "end_sec": 368.16
+        },
+        {
+          "text": "sách",
+          "start_sec": 368.22,
+          "end_sec": 368.34
+        },
+        {
+          "text": "chiết",
+          "start_sec": 368.38,
+          "end_sec": 368.54
+        },
+        {
+          "text": "khấu",
+          "start_sec": 368.56,
+          "end_sec": 368.78
+        },
+        {
+          "text": "cho",
+          "start_sec": 368.84,
+          "end_sec": 368.94
+        },
+        {
+          "text": "chị",
+          "start_sec": 369,
+          "end_sec": 369.2
+        },
+        {
+          "text": "nếu",
+          "start_sec": 369.26,
+          "end_sec": 369.4
+        },
+        {
+          "text": "mình",
+          "start_sec": 369.44,
+          "end_sec": 369.6
+        },
+        {
+          "text": "thanh",
+          "start_sec": 369.62,
+          "end_sec": 369.78
+        },
+        {
+          "text": "toán",
+          "start_sec": 369.82,
+          "end_sec": 369.98
+        },
+        {
+          "text": "nhanh.",
+          "start_sec": 370.04,
+          "end_sec": 370.28
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 371.44,
+      "end_sec": 378.54,
+      "text": "Đầu tuần sau nếu mọi thứ ổn thì chị với anh nhà qua làm hợp đồng đặt cọc luôn. Có gì chị gọi em số cũ nhé.",
+      "words": [
+        {
+          "text": "Đầu",
+          "start_sec": 371.44,
+          "end_sec": 371.58
+        },
+        {
+          "text": "tuần",
+          "start_sec": 371.62,
+          "end_sec": 371.82
+        },
+        {
+          "text": "sau",
+          "start_sec": 371.9,
+          "end_sec": 372.06
+        },
+        {
+          "text": "nếu",
+          "start_sec": 372.12,
+          "end_sec": 372.28
+        },
+        {
+          "text": "mọi",
+          "start_sec": 372.34,
+          "end_sec": 372.52
+        },
+        {
+          "text": "thứ",
+          "start_sec": 372.56,
+          "end_sec": 372.76
+        },
+        {
+          "text": "ổn",
+          "start_sec": 372.88,
+          "end_sec": 373.06
+        },
+        {
+          "text": "thì",
+          "start_sec": 373.12,
+          "end_sec": 373.28
+        },
+        {
+          "text": "chị",
+          "start_sec": 373.34,
+          "end_sec": 373.56
+        },
+        {
+          "text": "với",
+          "start_sec": 373.64,
+          "end_sec": 373.82
+        },
+        {
+          "text": "anh",
+          "start_sec": 373.9,
+          "end_sec": 374
+        },
+        {
+          "text": "nhà",
+          "start_sec": 374.04,
+          "end_sec": 374.24
+        },
+        {
+          "text": "qua",
+          "start_sec": 374.28,
+          "end_sec": 374.48
+        },
+        {
+          "text": "làm",
+          "start_sec": 374.56,
+          "end_sec": 374.7
+        },
+        {
+          "text": "hợp",
+          "start_sec": 374.74,
+          "end_sec": 374.9
+        },
+        {
+          "text": "đồng",
+          "start_sec": 374.96,
+          "end_sec": 375.1
+        },
+        {
+          "text": "đặt",
+          "start_sec": 375.16,
+          "end_sec": 375.3
+        },
+        {
+          "text": "cọc",
+          "start_sec": 375.36,
+          "end_sec": 375.52
+        },
+        {
+          "text": "luôn.",
+          "start_sec": 375.58,
+          "end_sec": 375.8
+        },
+        {
+          "text": "Có",
+          "start_sec": 376.44,
+          "end_sec": 376.58
+        },
+        {
+          "text": "gì",
+          "start_sec": 376.64,
+          "end_sec": 376.82
+        },
+        {
+          "text": "chị",
+          "start_sec": 376.88,
+          "end_sec": 377.06
+        },
+        {
+          "text": "gọi",
+          "start_sec": 377.14,
+          "end_sec": 377.4
+        },
+        {
+          "text": "em",
+          "start_sec": 377.5,
+          "end_sec": 377.66
+        },
+        {
+          "text": "số",
+          "start_sec": 377.76,
+          "end_sec": 377.96
+        },
+        {
+          "text": "cũ",
+          "start_sec": 378.02,
+          "end_sec": 378.24
+        },
+        {
+          "text": "nhé.",
+          "start_sec": 378.28,
+          "end_sec": 378.54
+        }
+      ]
+    },
+    {
+      "speaker": "speaker_1",
+      "lang": "vi",
+      "start_sec": 379.5,
+      "end_sec": 382.5,
+      "text": "Cảm ơn hai em nhiều, hôm nay mệt mấy cũng đáng.",
+      "words": [
+        {
+          "text": "Cảm",
+          "start_sec": 379.5,
+          "end_sec": 379.66
+        },
+        {
+          "text": "ơn",
+          "start_sec": 379.76,
+          "end_sec": 379.92
+        },
+        {
+          "text": "hai",
+          "start_sec": 379.98,
+          "end_sec": 380.16
+        },
+        {
+          "text": "em",
+          "start_sec": 380.24,
+          "end_sec": 380.38
+        },
+        {
+          "text": "nhiều,",
+          "start_sec": 380.42,
+          "end_sec": 380.66
+        },
+        {
+          "text": "hôm",
+          "start_sec": 381.04,
+          "end_sec": 381.18
+        },
+        {
+          "text": "nay",
+          "start_sec": 381.22,
+          "end_sec": 381.44
+        },
+        {
+          "text": "mệt",
+          "start_sec": 381.5,
+          "end_sec": 381.68
+        },
+        {
+          "text": "mấy",
+          "start_sec": 381.72,
+          "end_sec": 381.96
+        },
+        {
+          "text": "cũng",
+          "start_sec": 382.02,
+          "end_sec": 382.18
+        },
+        {
+          "text": "đáng.",
+          "start_sec": 382.24,
+          "end_sec": 382.5
+        }
+      ]
+    }
+  ]
+}

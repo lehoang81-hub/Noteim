@@ -84,4 +84,8 @@ node scripts/b0-asr/score.mjs --hyp test-data/asr-results/<mã>/<tên file>.json
   và đề xuất xem `docs/11-b0-ket-qua.md` phần A.
 - **elevenlabs**: khóa chưa có quyền `speech_to_text` — API trả HTTP 401 `missing_permissions`,
   chưa gọi được lần nào; chờ chủ tài khoản cấp quyền (Console ElevenLabs) rồi chạy lại lệnh ở trên.
+- **elevenlabs (cập nhật 2026-11-25)**: khóa mới có quyền `speech_to_text` — gọi được thật
+  `scribe_v3` trên 3 file ngắn 01/02/03 + file dài 04 (kết quả và số liệu: `docs/11-b0-ket-qua.md`,
+  mục "Lần chạy 2026-11-25"; kết quả thô ở `test-data/asr-results/elevenlabs/`). Adapter khớp
+  API thật, không phải sửa; nhãn người nói là `speaker_0…`, không có nhãn ngôn ngữ từng chữ.
 - **google, fpt**: vẫn chưa có khóa.
