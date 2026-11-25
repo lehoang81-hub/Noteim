@@ -966,6 +966,12 @@
     "editHintFirst": "말이나 화자가 틀렸나요? 해당 구간의 ⋯을 눌러 수정하세요.",
     "viewTips": "도움말 보기",
     "editHintDismiss": "도움말 닫기",
+    "addNewSpeaker": "새 화자",
+    "addNewSaved": "새 화자를 추가했습니다",
+    "followingQuestion": "같은 화자의 바로 뒤 {count, plural, other {#개 구간}}도 바꾸시겠습니까?",
+    "followingHint": "같은 화자의 이어지는 구간만 포함됩니다. 다른 화자의 구간은 그대로 유지됩니다.",
+    "followingApply": "바꾸기",
+    "followingSkip": "그대로 두기",
     "modeLabel": "기록 보기 모드",
     "modeClean": "간결본",
     "modeVerbatim": "원문"

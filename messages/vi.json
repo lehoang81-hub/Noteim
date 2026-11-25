@@ -966,6 +966,12 @@
     "editHintFirst": "Lời hoặc người nói chưa đúng? Bấm ⋯ ở đoạn đó để sửa.",
     "viewTips": "Xem mẹo",
     "editHintDismiss": "Đóng gợi ý",
+    "addNewSpeaker": "Người nói mới",
+    "addNewSaved": "Đã thêm người nói mới",
+    "followingQuestion": "Đổi luôn {count, plural, other {# đoạn liền sau}} của cùng người nói?",
+    "followingHint": "Chỉ áp dụng cho các đoạn liền kề cùng người nói cũ. Đoạn của người khác hoặc cách xa thì giữ nguyên.",
+    "followingApply": "Đổi luôn",
+    "followingSkip": "Để nguyên",
     "modeLabel": "Chế độ xem bản ghi lời",
     "modeClean": "Bản gọn",
     "modeVerbatim": "Nguyên văn"

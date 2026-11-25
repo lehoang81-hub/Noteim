@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, ArrowUp, Check, ClipboardCopy, Ellipsis, Languages, Pencil, Quote, TriangleAlert, UserRoundCog, X } from "lucide-react";
+import { ArrowDown, ArrowUp, Check, ClipboardCopy, Ellipsis, Languages, Pencil, Plus, Quote, TriangleAlert, UserRoundCog, X } from "lucide-react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -137,6 +137,10 @@ export function TranscriptTab({
   const [autoFollow, setAutoFollow] = useState(true);
   const [menuSegId, setMenuSegId] = useState<string | null>(null);
   const [reassignSegId, setReassignSegId] = useState<string | null>(null);
+  // C1-09 mục 2: sau khi thêm người nói mới, hỏi thêm một lần (không bắt buộc)
+  // có đổi luôn các đoạn LIỀN SAU cùng người nói cũ không
+  const [followingAsk, setFollowingAsk] = useState<{ speakerId: string; followingIds: string[] } | null>(null);
+  const [followBusy, setFollowBusy] = useState(false);
   const [editingSegId, setEditingSegId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
 
@@ -506,7 +510,7 @@ export function TranscriptTab({
         ) : null}
       </Sheet>
 
-      {/* Đổi người nói: chọn trong người nói của buổi ghi */}
+      {/* Đổi người nói: chọn trong người nói của buổi ghi, hoặc thêm người nói mới */}
       <Sheet
         open={!!reassignSeg}
         onOpenChange={(open) => !open && setReassignSegId(null)}
@@ -538,7 +542,70 @@ export function TranscriptTab({
                 </button>
               </li>
             ))}
+            {/* C1-09 mục 2: Soniox gộp nhầm người thứ ba vào người đã có thì
+                chỗ sửa chỉ cho chọn trong số người đã có là chịu, thêm được
+                người nói mới rồi gán đoạn cho người đó, một thao tác phía máy chủ */}
+            <li>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    const added = await data.sessions.addSpeakerAndReassign(detail.id, reassignSeg.id);
+                    setReassignSegId(null);
+                    toast.show({ tone: "success", message: t("addNewSaved") });
+                    if (added.following_ids.length) {
+                      setFollowingAsk({ speakerId: added.speaker_id, followingIds: added.following_ids });
+                    }
+                  } catch {
+                    toast.show({ tone: "error", message: ts("saveError") });
+                  }
+                }}
+                className="flex w-full items-center gap-3 py-3 text-left text-sen-text"
+              >
+                <Plus aria-hidden={true} className="size-5 shrink-0" strokeWidth={2} />
+                {t("addNewSpeaker")}
+              </button>
+            </li>
           </ul>
+        ) : null}
+      </Sheet>
+
+      {/* C1-09 mục 2: hỏi thêm một lần sau khi thêm người nói mới — chỉ áp
+          dụng cho các đoạn LIỀN KỀ cùng người nói cũ (máy chủ trả danh sách,
+          dừng ở người nói khác), không bắt buộc */}
+      <Sheet
+        open={!!followingAsk}
+        onOpenChange={(open) => !open && setFollowingAsk(null)}
+        title={t("reassignTitle")}
+        description={followingAsk ? t("followingQuestion", { count: followingAsk.followingIds.length }) : undefined}
+        size="half"
+      >
+        {followingAsk ? (
+          <div className="flex flex-col gap-3">
+            <p className="text-small text-ink-2">{t("followingHint")}</p>
+            <div className="flex gap-2">
+              <Button
+                loading={followBusy}
+                onClick={async () => {
+                  setFollowBusy(true);
+                  try {
+                    await data.sessions.reassignSegments(detail.id, followingAsk.followingIds, followingAsk.speakerId);
+                    setFollowingAsk(null);
+                    toast.show({ tone: "success", message: t("reassignSaved") });
+                  } catch {
+                    toast.show({ tone: "error", message: ts("saveError") });
+                  } finally {
+                    setFollowBusy(false);
+                  }
+                }}
+              >
+                {t("followingApply")}
+              </Button>
+              <Button variant="ghost" disabled={followBusy} onClick={() => setFollowingAsk(null)}>
+                {t("followingSkip")}
+              </Button>
+            </div>
+          </div>
         ) : null}
       </Sheet>
     </div>

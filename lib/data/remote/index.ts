@@ -204,6 +204,16 @@ export const remoteSource: DataSource = {
     reassignSegment: async (sessionId, segmentId, speakerId) => {
       await postAction(sessionId, { type: "reassignSegment", segmentId, speakerId });
     },
+    addSpeakerAndReassign: async (sessionId, segmentId) => {
+      const r = await postAction<{ speaker_id: string; following_ids: string[] }>(sessionId, {
+        type: "addSpeakerAndReassign",
+        segmentId,
+      });
+      return { speaker_id: r.speaker_id, following_ids: r.following_ids };
+    },
+    reassignSegments: async (sessionId, segmentIds, speakerId) => {
+      await postAction(sessionId, { type: "reassignSegments", segmentIds, speakerId });
+    },
     addQuickNote: async (sessionId, text) => {
       await postAction(sessionId, { type: "addQuickNote", text });
     },

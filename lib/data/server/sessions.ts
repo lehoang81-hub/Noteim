@@ -48,7 +48,7 @@ import type {
 } from "../types";
 import type { SearchResult, RecordingDraft, SessionFilter } from "../repository";
 
-import { buildSessionContent } from "@/lib/data/mock/generate";
+import { buildSessionContent, THUMB_COUNT } from "@/lib/data/mock/generate";
 
 import { loadSampleFixture } from "./sample-fixtures";
 import { foldVi } from "./fold";
@@ -239,7 +239,8 @@ export async function getVisuals(ctx: ServerContext, id: string): Promise<Visual
     const d = toDetail(row, detail, await getTasks(id));
     return {
       timeline: d.topics.map((t) => ({ topic_id: t.id, start_sec: t.start_sec, end_sec: t.end_sec, tag: t.tag })),
-      talk_share: d.speakers.map((s) => ({ speaker_id: s.id, percent: s.talk_ratio_percent })),
+      // C1-09: người nói hết đoạn (tỉ lệ 0) ẩn khỏi tỉ lệ nói, không xóa dữ liệu
+      talk_share: d.speakers.filter((s) => s.talk_ratio_percent > 0).map((s) => ({ speaker_id: s.id, percent: s.talk_ratio_percent })),
       flow_mermaid: detail.flowMermaid ?? undefined,
     };
   }
@@ -694,9 +695,65 @@ export async function updateSession(
 
 /* ---------- Các thao tác nhỏ trên buổi (điểm gom một route) ---------- */
 
+/**
+ * C1-09 — tính lại người nói sau MỌI lần đổi người nói của buổi: tỉ lệ nói
+ * từng người từ độ dài đoạn lời, speaker_spans theo đoạn hiện tại, dải màu
+ * cột thumb theo spans. Người hết đoạn giữ nguyên dữ liệu nhưng tỉ lệ về 0
+ * (màn hình lọc tỉ lệ 0 nên người đó ẩn khỏi đầu buổi và tỉ lệ nói).
+ */
+async function recomputeSpeakerStats(row: SessionRow, detailRow: DetailRow): Promise<void> {
+  const db = getDb();
+  const segs = await db
+    .select({ speakerId: transcriptSegments.speakerId, startSec: transcriptSegments.startSec, endSec: transcriptSegments.endSec })
+    .from(transcriptSegments)
+    .where(eq(transcriptSegments.sessionId, row.id))
+    .orderBy(transcriptSegments.startSec);
+  const speakers = (((detailRow.speakers as Speaker[]) ?? []) as Speaker[]).map((s) => ({ ...s }));
+  const durations = new Map<string, number>();
+  for (const seg of segs) durations.set(seg.speakerId, (durations.get(seg.speakerId) ?? 0) + Math.max(0, seg.endSec - seg.startSec));
+  const total = [...durations.values()].reduce((a, b) => a + b, 0) || 1;
+  for (const sp of speakers) {
+    const d = durations.get(sp.id) ?? 0;
+    const pct = Math.round((d / total) * 100);
+    // Người còn đoạn nhưng quá ít tiếng (dưới 0,5%) vẫn giữ ≥1% để không bị
+    // nhầm là hết đoạn; hết đoạn thì đúng là 0
+    sp.talk_ratio_percent = d > 0 && pct === 0 ? 1 : pct;
+    if (d > 0) {
+      const first = segs.find((s) => s.speakerId === sp.id);
+      if (first) sp.sample_start_sec = Math.max(0, first.startSec);
+    }
+  }
+  const spans = segs.map((s) => ({ speaker_id: s.speakerId, start_sec: s.startSec, end_sec: s.endSec }));
+  const colorAt = (t: number): number => {
+    const span = spans.find((sp) => t >= sp.start_sec && t < sp.end_sec) ?? spans[spans.length - 1];
+    const sp = speakers.find((s) => s.id === span?.speaker_id);
+    return sp ? sp.color_index : 0;
+  };
+  const colorsThumb = Array.from({ length: THUMB_COUNT }, (_, i) => colorAt(((i + 0.5) / THUMB_COUNT) * Math.max(1, row.durationSec)));
+  await db.update(sessionDetails).set({ speakers, speakerSpans: spans }).where(eq(sessionDetails.sessionId, row.id));
+  await db.update(sessions).set({ speakerColorsThumb: colorsThumb }).where(eq(sessions.id, row.id));
+}
+
+/** Các đoạn LIỀN SAU `segmentId` cùng người nói cũ (dừng ở người khác). */
+async function followingSegmentIds(sessionId: string, segmentId: string, oldSpeakerId: string): Promise<string[]> {
+  const db = getDb();
+  const rows = await db
+    .select({ id: transcriptSegments.id, speakerId: transcriptSegments.speakerId })
+    .from(transcriptSegments)
+    .where(eq(transcriptSegments.sessionId, sessionId))
+    .orderBy(transcriptSegments.startSec);
+  const out: string[] = [];
+  const idx = rows.findIndex((r) => r.id === segmentId);
+  for (let i = idx + 1; i < rows.length; i++) {
+    if (rows[i].speakerId !== oldSpeakerId) break;
+    out.push(rows[i].id);
+  }
+  return out;
+}
+
 export async function applySessionAction(ctx: ServerContext, id: string, action: SessionAction): Promise<unknown> {
   const db = getDb();
-  await getOwnedSessionRow(ctx, id);
+  const sessionRow = await getOwnedSessionRow(ctx, id);
   const detail = await getDetailRow(id);
 
   switch (action.type) {
@@ -741,10 +798,86 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
     case "reassignSegment": {
       const speakers = (detail.speakers as Speaker[]) ?? [];
       if (!speakers.some((s) => s.id === action.speakerId)) throw new DataError("not_found");
+      const seg = (
+        await db
+          .select({ id: transcriptSegments.id })
+          .from(transcriptSegments)
+          .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)))
+          .limit(1)
+      )[0];
+      if (!seg) throw new DataError("not_found");
       await db
         .update(transcriptSegments)
         .set({ speakerId: action.speakerId })
         .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)));
+      // C1-09: tính lại tỉ lệ nói, speaker_spans, màu thumb sau MỌI lần đổi
+      await recomputeSpeakerStats(sessionRow, detail);
+      return { ok: true };
+    }
+    case "addSpeakerAndReassign": {
+      // C1-09 mục 2: thêm người nói mới (id kế tiếp, color_index chưa dùng,
+      // chưa có tên) rồi gán đoạn đang chọn cho người đó, một thao tác phía
+      // máy chủ. Trả thêm các đoạn LIỀN SAU cùng người nói cũ để sheet hỏi
+      // "Đổi luôn N đoạn liền sau?" (không bắt buộc).
+      const speakers = (((detail.speakers as Speaker[]) ?? []) as Speaker[]).map((s) => ({ ...s }));
+      const seg = (
+        await db
+          .select()
+          .from(transcriptSegments)
+          .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)))
+          .limit(1)
+      )[0];
+      if (!seg) throw new DataError("not_found");
+      const oldSpeakerId = seg.speakerId;
+      if (!speakers.some((s) => s.id === oldSpeakerId)) throw new DataError("not_found");
+      // Id kế tiếp chưa dùng trong SPK_01, SPK_02, ...
+      let nextNum = 1;
+      for (const sp of speakers) {
+        const m = /^SPK_(\d+)$/.exec(sp.id);
+        if (m) nextNum = Math.max(nextNum, Number(m[1]) + 1);
+      }
+      const newId = `SPK_${String(nextNum).padStart(2, "0")}`;
+      // Màu kế tiếp chưa dùng; hết 6 màu thì quay vòng theo số thứ tự
+      const usedColors = new Set(speakers.map((s) => s.color_index));
+      let colorIndex = 0;
+      while (usedColors.has(colorIndex) && colorIndex < 6) colorIndex++;
+      if (colorIndex >= 6) colorIndex = (speakers.length) % 6;
+      speakers.push({
+        id: newId,
+        contact_id: null,
+        display_name: null,
+        is_me: false,
+        color_index: colorIndex,
+        talk_ratio_percent: 0,
+        sample_start_sec: Math.max(0, seg.startSec),
+      });
+      await db.update(sessionDetails).set({ speakers }).where(eq(sessionDetails.sessionId, id));
+      await db
+        .update(transcriptSegments)
+        .set({ speakerId: newId })
+        .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)));
+      await recomputeSpeakerStats(sessionRow, detail);
+      const followingIds = await followingSegmentIds(id, action.segmentId, oldSpeakerId);
+      console.log(`[speaker] ok ${JSON.stringify({ sessionId: id, event: "add", newSpeaker: newId, following: followingIds.length, ts: new Date().toISOString() })}`);
+      return { speaker_id: newId, following_ids: followingIds };
+    }
+    case "reassignSegments": {
+      // C1-09 mục 2: đổi nhiều đoạn liền sau sang một người nói (chọn từ kết
+      // quả "Đổi luôn N đoạn liền sau"). Mỗi đoạn phải thuộc buổi này.
+      if (!(detail.speakers as Speaker[]).some((s) => s.id === action.speakerId)) throw new DataError("not_found");
+      const rows = await db
+        .select({ id: transcriptSegments.id })
+        .from(transcriptSegments)
+        .where(eq(transcriptSegments.sessionId, id));
+      const known = new Set(rows.map((r) => r.id));
+      for (const segId of action.segmentIds) {
+        if (!known.has(segId)) throw new DataError("not_found");
+      }
+      await db
+        .update(transcriptSegments)
+        .set({ speakerId: action.speakerId })
+        .where(and(eq(transcriptSegments.sessionId, id), inArray(transcriptSegments.id, action.segmentIds)));
+      await recomputeSpeakerStats(sessionRow, detail);
       return { ok: true };
     }
     case "addQuickNote": {

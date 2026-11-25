@@ -874,6 +874,12 @@
     "editHintFirst": "Words or speaker not right? Tap ⋯ on that segment to fix it.",
     "viewTips": "See tips",
     "editHintDismiss": "Dismiss tip",
+    "addNewSpeaker": "New speaker",
+    "addNewSaved": "New speaker added",
+    "followingQuestion": "Also change the {count, plural, one {following segment} other {# following segments}} of the same speaker?",
+    "followingHint": "Only adjacent segments of the same former speaker are included. Other speakers stay untouched.",
+    "followingApply": "Change them too",
+    "followingSkip": "Keep them",
     "modeLabel": "Transcript view mode",
     "modeClean": "Concise",
     "modeVerbatim": "Verbatim"

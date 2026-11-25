@@ -98,6 +98,12 @@ export interface SessionRepository {
   updateSegment(sessionId: string, segmentId: string, text: string, field?: "text" | "text_clean"): Promise<void>;
   /** Đổi người nói của một đoạn bản ghi (M3-01) */
   reassignSegment(sessionId: string, segmentId: string, speakerId: string): Promise<void>;
+  /** C1-09: tạo người nói mới (id kế tiếp, màu chưa dùng, chưa có tên) rồi gán
+   * đoạn cho người đó, một thao tác phía máy chủ. Trả kèm các đoạn LIỀN SAU
+   * cùng người nói cũ để sheet hỏi "Đổi luôn N đoạn liền sau?". */
+  addSpeakerAndReassign(sessionId: string, segmentId: string): Promise<{ speaker_id: string; following_ids: string[] }>;
+  /** C1-09: đổi nhiều đoạn (các đoạn liền sau) sang một người nói đã có */
+  reassignSegments(sessionId: string, segmentIds: string[], speakerId: string): Promise<void>;
   /** Chép một dòng vào ghi chú nhanh của buổi đã lưu (GC-04, đặc tả v1.1
    * §4.5): ghi chú gắn vào ý có mốc gần nhất để hiện trong Tóm tắt. */
   addQuickNote(sessionId: string, text: string): Promise<void>;

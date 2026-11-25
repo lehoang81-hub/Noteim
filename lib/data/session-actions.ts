@@ -17,6 +17,14 @@ export const sessionActionSchema = z.discriminatedUnion("type", [
     field: z.enum(["text", "text_clean"]).optional(),
   }),
   z.object({ type: z.literal("reassignSegment"), segmentId: z.string().min(1), speakerId: z.string().min(1) }),
+  // C1-09: tạo người nói mới rồi gán đoạn cho người đó, một thao tác phía máy chủ
+  z.object({ type: z.literal("addSpeakerAndReassign"), segmentId: z.string().min(1) }),
+  // C1-09: đổi nhiều đoạn sang một người nói (các đoạn liền sau cùng người cũ)
+  z.object({
+    type: z.literal("reassignSegments"),
+    segmentIds: z.array(z.string().min(1)).min(1).max(2000),
+    speakerId: z.string().min(1),
+  }),
   z.object({ type: z.literal("addQuickNote"), text: z.string().max(1000) }),
   z.object({ type: z.literal("completeGapCheckItem"), key: z.string().min(1).max(200) }),
   z.object({ type: z.literal("consumePendingAiQuestion"), question: z.string().max(1000) }),
