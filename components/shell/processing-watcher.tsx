@@ -51,6 +51,21 @@ export function ProcessingWatcher() {
     prev.current = new Map(list.data.map((s) => [s.id, s.status]));
   }, [list.data, pathname, router, t, toast]);
 
+  /* Buổi đang xử lý mà không còn ai "đẩy" luồng (người dùng đã rời màn xử lý):
+   * tự chạy tiếp ở bất kỳ màn hình nào, mỗi buổi một lần dò. */
+  const driving = useRef<Map<string, () => void>>(new Map());
+  useEffect(() => {
+    if (offline || !list.data) return;
+    for (const s of list.data) {
+      if (s.status !== "processing" || !s.id.startsWith("s-new-") || driving.current.has(s.id)) continue;
+      if (pathname === `/s/${s.id}/processing`) continue; // màn xử lý tự đẩy
+      const off = data.sessions.subscribeProcessing(s.id, (step, state) => {
+        if (step === 6 || state?.status === "failed" || step === -1) driving.current.delete(s.id);
+      });
+      driving.current.set(s.id, off);
+    }
+  }, [offline, list.data, pathname]);
+
   /* Có mạng: các buổi ghi chờ tải lên bắt đầu xử lý (kể cả sau khi tải lại trang) */
   useEffect(() => {
     if (offline || !list.data) return;

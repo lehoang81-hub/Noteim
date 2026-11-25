@@ -950,6 +950,9 @@
   "ai": {
     "title": "Ask AI about this session",
     "suggest": "Suggestions:",
+    "suggestTopic": "What are the details on “{title}”?",
+    "suggestTasks": "What do I need to do after this session?",
+    "suggestNumbers": "Are there any figures or dates I should remember?",
     "placeholder": "Ask about this session…",
     "send": "Send question",
     "inputLabel": "Question for AI",

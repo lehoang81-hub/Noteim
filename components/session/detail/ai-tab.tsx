@@ -79,6 +79,22 @@ export function AiTab({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoQuestion]);
 
+  // Gợi ý theo NỘI DUNG buổi này (chủ đề, việc cần làm); chưa có nội dung thì
+  // mới dùng câu mẫu của nghề
+  const suggestions = (() => {
+    const own: string[] = [];
+    for (const tp of detail.topics.slice(0, 2)) {
+      const title = tp.title.trim();
+      if (title) own.push(t("suggestTopic", { title }));
+    }
+    if (detail.action_items.length > 0) own.push(t("suggestTasks"));
+    if (own.length > 0) {
+      if (own.length < 3) own.push(t("suggestNumbers"));
+      return own.slice(0, 3);
+    }
+    return suggestedQuestions(template, locale);
+  })();
+
   const plan = quota.data ? (quota.data.chat_questions_per_session === null ? "pro" : "free") : null;
   const total = quota.data?.chat_questions_per_session ?? null;
   const askedCount = (messages ?? []).filter((m) => m.role === "user").length;
@@ -179,7 +195,7 @@ export function AiTab({
         <div>
           <p className="text-small font-medium text-ink-2">{t("suggest")}</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            {suggestedQuestions(template, locale).map((q) => (
+            {suggestions.map((q) => (
               <button
                 key={q}
                 type="button"

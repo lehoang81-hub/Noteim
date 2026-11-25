@@ -1042,6 +1042,9 @@
   "ai": {
     "title": "Hỏi AI về buổi ghi",
     "suggest": "Gợi ý:",
+    "suggestTopic": "Chi tiết về “{title}” là gì?",
+    "suggestTasks": "Tôi cần làm gì sau buổi này?",
+    "suggestNumbers": "Có số liệu hay mốc thời gian nào cần nhớ?",
     "placeholder": "Hỏi về buổi ghi này…",
     "send": "Gửi câu hỏi",
     "inputLabel": "Câu hỏi cho AI",

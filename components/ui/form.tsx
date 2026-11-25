@@ -93,6 +93,9 @@ export function SearchField({
    * phím kế tiếp khi trang nặng, chữ xáo trộn (đúng họ lỗi C1-08). */
   const lastCommittedRef = useRef(value);
   const [hasText, setHasText] = useState(Boolean(value));
+  // defaultValue CỐ ĐỊNH theo giá trị đầu: nếu đổi theo state cha thì React ghi lại
+  // thuộc tính value của ô sau phím đầu tiên, Android làm con trỏ nhảy về đầu.
+  const [initialValue] = useState(value);
 
   // Giá trị từ cha đổi từ NGOÀI (nút xóa, đặt lại, chip tìm gần đây) thì áp
   // vào DOM khi KHÔNG đang soạn; hồi âm của lần gõ của mình thì bỏ qua
@@ -120,7 +123,7 @@ export function SearchField({
         data-search-input="true"
         aria-label={label}
         placeholder={placeholder}
-        defaultValue={value}
+        defaultValue={initialValue}
         onChange={(e) => {
           const next = e.target.value;
           lastCommittedRef.current = next;
