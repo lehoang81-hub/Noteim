@@ -915,7 +915,15 @@
     "receiptFootnote": "Biên nhận do ứng dụng ghi lại lúc bắt đầu ghi, lưu cùng dữ liệu buổi ghi.",
     "sampleBadge": "Mẫu",
     "noAudio": "Chưa có âm thanh",
-    "trialRecording": "Bản ghi thử: chưa lưu âm thanh"
+    "trialRecording": "Bản ghi thử: chưa lưu âm thanh",
+    "uploadPending": "Chưa tải lên được, sẽ tự thử lại",
+    "asrReprocess": "Xử lý lại",
+    "asrErrorQuota": "Buổi dài hơn hạn mức phút của gói hiện tại. Nâng gói để xử lý được buổi dài hơn.",
+    "asrErrorNetwork": "Lỗi mạng khi gọi nhận dạng. Bấm Xử lý lại, Noteim sẽ tự thử lại sau.",
+    "asrErrorFile": "Bản ghi âm mất hoặc không đọc được nội dung. Thử lại xem.",
+    "asrErrorSummary": "Lỗi khi tạo tóm tắt. Bấm Xử lý lại.",
+    "asrErrorStuck": "Buổi bị kẹt quá nhiều lần thử. Bấm Xử lý lại.",
+    "asrErrorUnknown": "Có lỗi không rõ. Bấm Xử lý lại."
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",
@@ -1144,7 +1152,6 @@
     "uploadDone": "Đã lưu băng ghi an toàn",
     "uploadFailed": "Chưa tải được băng ghi. Mạng gián đoạn? Thử lại, băng vẫn còn trên máy",
     "uploadRetry": "Thử tải lại",
-    "asrFailed": "Xử lý chưa thành công (mã: {code}). Bấm thử lại, hoặc để Noteim tự thử lại sau",
     "asrQuota": "Buổi ghi dài hơn hạn mức của gói hiện tại, nâng gói để xử lý được buổi dài hơn",
     "asrRetry": "Thử lại"
   },

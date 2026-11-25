@@ -40,6 +40,32 @@ export function footerNote(tpl: Pick<Template, "footer_note"> | undefined, local
 type LabelTranslate = (key: string, values?: Record<string, string | number>) => string;
 
 /**
+ * Mã lỗi của luồng ASR (C1-05 lưu trong sessions.asr_error) → khóa dịch
+ * tiếng Việt dễ hiểu (C1-06). Giao diện KHÔNG bao giờ hiện mã thô:
+ * hết quota, lỗi mạng, file hỏng, lỗi tóm tắt, kẹt nhiều lần thử.
+ * Khóa dịch nằm ở namespace `session` (asrErrorQuota…).
+ */
+export function asrErrorKey(code: string | null | undefined): string {
+  if (!code) return "asrErrorUnknown";
+  if (code === "quota_exceeded") return "asrErrorQuota";
+  // Băng mất trên kho, bản chữ trống/hỏng — nhóm "file"
+  if (
+    code === "audio_missing" ||
+    code === "transcription_id_missing" ||
+    code === "empty_transcript" ||
+    code === "transcript_missing"
+  ) {
+    return "asrErrorFile";
+  }
+  // Lỗi khi gọi nhà cung cấp nhận dạng
+  if (code.startsWith("soniox_") || code === "asr_start_failed") return "asrErrorNetwork";
+  // Lỗi khi tạo tóm tắt
+  if (code.startsWith("gemini_") || code === "summarize_failed") return "asrErrorSummary";
+  if (code === "attempts_exhausted") return "asrErrorStuck";
+  return "asrErrorUnknown";
+}
+
+/**
  * Nhãn hiển thị của người nói (M5, sửa review PR #41 mục 5).
  * Người nói chưa đặt tên (display_name null) là nhãn hệ thống: "Bạn" với
  * chính người dùng (is_me), "Người nói N" với người khác — N tính theo vị
