@@ -375,8 +375,8 @@ export const remoteSource: DataSource = {
         (r) => r.messages,
       ),
     ask: async (sessionId, question, onToken) => {
-      // Máy chủ trả câu trả lời (chưa nối AI thật, không bịa nội dung buổi);
-      // client chạy chữ dần như bản giả
+      // Máy chủ gọi AI thật (C1-08): trả lời theo ngôn ngữ giao diện, dẫn
+      // nguồn mốc giây; client chạy chữ dần như bản giả
       const r = await apiSend<{ message: import("../types").ChatMessage }>(
         `/api/data/sessions/${encodeURIComponent(sessionId)}/chat`,
         "POST",
@@ -458,8 +458,8 @@ export const remoteSource: DataSource = {
         (r) => r.messages,
       ),
     ask: async (folderId, question, onToken) => {
-      // Máy chủ ghép câu trả lời từ các buổi của thư mục; client chạy chữ dần
-      // như bản giả (40 ms một từ)
+      // Máy chủ gọi AI thật với ngữ cảnh các buổi của thư mục (C1-08); client
+      // chạy chữ dần như bản giả (40 ms một từ)
       const r = await apiSend<{ message: FolderChatMessage }>(
         `/api/data/folders/${encodeURIComponent(folderId)}/chat`,
         "POST",

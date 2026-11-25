@@ -56,6 +56,9 @@ import { templateById, templatesOfProfession } from "./templates";
 import { ApiError, type ServerContext } from "./context";
 import { deleteObjectSafe, isAudioObjectKey } from "./r2";
 import { retryPipeline, stateOf } from "./asr-pipeline";
+import { FREE_CHAT_QUESTIONS_PER_SESSION } from "./account";
+import { GeminiError, speakerOrder } from "./summarize";
+import { answerSessionChat, notFoundText, readUiLocale, type SessionChatContext } from "./chat-ai";
 
 type SessionRow = typeof sessions.$inferSelect;
 type DetailRow = typeof sessionDetails.$inferSelect;
@@ -1018,19 +1021,72 @@ export async function chatAsk(ctx: ServerContext, sessionId: string, question: s
   const row = (await db.select().from(sessions).where(eq(sessions.id, sessionId)).limit(1))[0];
   if (row && row.userId !== ctx.userId) throw new DataError("forbidden");
   if (!row) throw new DataError("not_found");
-  // Chưa nối AI thật cho hỏi đáp buổi (lộ trình PR sau): trả lời cố định theo
-  // ngôn ngữ câu hỏi như bản giả, không bịa nội dung buổi
-  const hasHangul = /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7A3]/.test(question);
-  const hasViDiacritics = /[ăâêôơưđáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ]/i.test(question);
-  const answer = hasHangul
-    ? "Chế độ tài khoản chưa nối AI cho hỏi đáp buổi, sẽ có ở PR sau."
-    : !hasViDiacritics && /^[a-z0-9\s?,.'-]+$/i.test(question)
-      ? "Signed-in mode does not have session AI answers yet."
-      : "Chế độ tài khoản chưa nối AI cho hỏi đáp buổi, sẽ có ở PR sau.";
-  const citations: Array<{ timestamp_sec: number }> = [];
-  await db.insert(chatMessages).values({ sessionId, role: "user", text: question, citations }).onConflictDoNothing();
-  const [ai] = await db.insert(chatMessages).values({ sessionId, role: "ai", text: answer, citations }).returning();
-  return { id: ai.id, role: "ai", text: ai.text, citations };
+
+  // Hạn mức 10 câu mỗi buổi của gói Free đếm PHÍA MÁY CHỦ từ lịch sử chat:
+  // chỉ câu trả lời THÀNH CÔNG mới được ghi vào lịch sử (tức chỉ trừ lượt khi
+  // AI trả lời được) — lỗi, hết hạn mức, AI không phản hồi thì không trừ và
+  // chặn TRƯỚC khi gọi AI.
+  const me = (await db.select().from(users).where(eq(users.id, ctx.userId)).limit(1))[0];
+  if ((me?.plan ?? "free") !== "pro") {
+    const asked = await db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(chatMessages)
+      .where(and(eq(chatMessages.sessionId, sessionId), eq(chatMessages.role, "user")));
+    if ((asked[0]?.n ?? 0) >= FREE_CHAT_QUESTIONS_PER_SESSION) throw new DataError("quota_exceeded");
+  }
+
+  // Ngữ cảnh: tóm tắt (bản chi tiết) + bản chữ đầy đủ (mốc giây, người nói)
+  const detailRow = (await db.select().from(sessionDetails).where(eq(sessionDetails.sessionId, sessionId)).limit(1))[0];
+  const segRows = await db
+    .select({ speakerId: transcriptSegments.speakerId, startSec: transcriptSegments.startSec, text: transcriptSegments.text })
+    .from(transcriptSegments)
+    .where(eq(transcriptSegments.sessionId, sessionId))
+    .orderBy(transcriptSegments.startSec);
+  const order = speakerOrder(
+    segRows.map((s) => ({ speaker: s.speakerId, lang: "vi", start_sec: s.startSec, end_sec: s.startSec + 1, text: s.text })),
+  );
+  const chatCtx: SessionChatContext = {
+    question,
+    locale: await readUiLocale(),
+    executiveSummary: detailRow?.executiveSummary ?? "",
+    topics: (detailRow?.topics as Topic[]) ?? [],
+    segments: segRows.map((s) => ({
+      speaker_index: Math.max(0, order.indexOf(s.speakerId)),
+      start_sec: s.startSec,
+      text: s.text,
+    })),
+    speakerCount: order.length,
+    durationSec: row.durationSec ?? 0,
+  };
+  const notFound = await notFoundText("session");
+
+  // Buổi chưa có nội dung gì (chưa xử lý xong): trả đúng câu "không nhắc
+  // tới", không gọi AI — không bịa, không tốn chi phí
+  if (!chatCtx.segments.length && !chatCtx.executiveSummary && !chatCtx.topics.length) {
+    await db.insert(chatMessages).values({ sessionId, role: "user", text: question, citations: [] }).onConflictDoNothing();
+    const [ai] = await db.insert(chatMessages).values({ sessionId, role: "ai", text: notFound, citations: [] }).returning();
+    return { id: ai.id, role: "ai", text: ai.text, citations: [] };
+  }
+
+  const started = Date.now();
+  try {
+    const { answer, citations } = await answerSessionChat(chatCtx, notFound);
+    await db.insert(chatMessages).values({ sessionId, role: "user", text: question, citations: [] }).onConflictDoNothing();
+    const [ai] = await db.insert(chatMessages).values({ sessionId, role: "ai", text: answer, citations }).returning();
+    console.log(`[chat] ok ${JSON.stringify({ sessionId, ms: Date.now() - started, citations: citations.length, ts: new Date().toISOString() })}`);
+    return { id: ai.id, role: "ai", text: ai.text, citations };
+  } catch (error) {
+    const code =
+      error instanceof GeminiError
+        ? `gemini_${error.step}${error.status ? `_${error.status}` : ""}`
+        : error instanceof DataError
+          ? error.code
+          : "unknown";
+    // Nhật ký chỉ có sessionId, độ trễ, mã lỗi — không ghi câu hỏi/câu trả lời/bản chữ
+    console.error(`[chat] lỗi ${JSON.stringify({ sessionId, ms: Date.now() - started, code, ts: new Date().toISOString() })}`);
+    if (error instanceof DataError) throw error;
+    throw new ApiError(502, "ai_unavailable", "AI không trả lời được, thử lại sau");
+  }
 }
 
 /* ---------- Tìm kiếm xuyên buổi (M4-02) ---------- */

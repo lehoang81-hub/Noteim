@@ -806,7 +806,8 @@
     "deleteConfirm": "Xóa",
     "deleteCancel": "Giữ lại",
     "deletedToast": "Đã xóa hồ sơ",
-    "saveError": "Chưa lưu được, thử lại"
+    "saveError": "Chưa lưu được, thử lại",
+    "aiNotFound": "Các buổi trong hồ sơ này không nhắc tới nội dung đó."
   },
   "session": {
     "back": "Về thư viện",
@@ -1055,7 +1056,8 @@
     "allAnswer": "Bản mockup chưa tìm xuyên các buổi ghi.",
     "errorAnswer": "Chưa trả lời được. Thử lại nhé.",
     "retry": "Thử lại",
-    "emptyHistory": "Hỏi thử một câu gợi ý, hoặc gõ câu của bạn."
+    "emptyHistory": "Hỏi thử một câu gợi ý, hoặc gõ câu của bạn.",
+    "notMentioned": "Buổi này không nhắc tới nội dung đó."
   },
   "taskEdit": {
     "titleEdit": "Sửa việc",
