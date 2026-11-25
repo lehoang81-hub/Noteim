@@ -924,7 +924,8 @@ function versionFromRow(row: typeof summaryVersions.$inferSelect): SummaryVersio
     source: row.source === "translated" ? "translated" : "original",
     translated_from: (row.translatedFrom as Lang | null) ?? null,
     created_at: row.createdAt.toISOString(),
-    stale: row.stale,
+    // Bản dịch MẪU cũ (trước C1-08) của buổi thật: coi là lỗi thời để hiện nút "Dịch lại" bằng AI thật
+    stale: row.stale || (row.sample === true && !row.sessionId.startsWith("s-sample-")),
     executive_summary: row.executiveSummary,
     topics: (row.topics as VersionTopic[]) ?? [],
     task_texts: (row.taskTexts as Record<string, string>) ?? {},

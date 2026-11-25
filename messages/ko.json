@@ -1042,6 +1042,9 @@
   "ai": {
     "title": "세션에 대해 AI에게 질문",
     "suggest": "추천 질문:",
+    "suggestTopic": "“{title}”에 대한 자세한 내용은 무엇인가요?",
+    "suggestTasks": "이 녹음 이후에 제가 해야 할 일은 무엇인가요?",
+    "suggestNumbers": "기억해야 할 수치나 날짜가 있나요?",
     "placeholder": "이 세션에 대해 물어보세요…",
     "send": "질문 보내기",
     "inputLabel": "AI에게 할 질문",
