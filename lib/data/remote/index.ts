@@ -214,6 +214,9 @@ export const remoteSource: DataSource = {
     reassignSegments: async (sessionId, segmentIds, speakerId) => {
       await postAction(sessionId, { type: "reassignSegments", segmentIds, speakerId });
     },
+    resummarize: async (id) => {
+      await postAction(id, { type: "resummarize" });
+    },
     addQuickNote: async (sessionId, text) => {
       await postAction(sessionId, { type: "addQuickNote", text });
     },

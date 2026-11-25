@@ -924,7 +924,11 @@
     "asrErrorFile": "Bản ghi âm mất hoặc không đọc được nội dung. Thử lại xem.",
     "asrErrorSummary": "Lỗi khi tạo tóm tắt. Bấm Xử lý lại.",
     "asrErrorStuck": "Buổi bị kẹt quá nhiều lần thử. Bấm Xử lý lại.",
-    "asrErrorUnknown": "Có lỗi không rõ. Bấm Xử lý lại."
+    "asrErrorUnknown": "Có lỗi không rõ. Bấm Xử lý lại.",
+    "resummarizeBanner": "Bạn đã sửa lời. Tóm tắt lại để cập nhật tóm tắt và việc cần làm.",
+    "resummarizeButton": "Tóm tắt lại",
+    "resummarizeQuota": "Buổi này đã dùng hết 3 lượt tóm tắt lại của gói Free. Nâng gói Pro để không giới hạn.",
+    "resummarizeError": "Chưa tóm tắt lại được, thử lại sau."
   },
   "transcript": {
     "searchLabel": "Tìm trong bản ghi lời",

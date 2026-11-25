@@ -104,6 +104,10 @@ export interface SessionRepository {
   addSpeakerAndReassign(sessionId: string, segmentId: string): Promise<{ speaker_id: string; following_ids: string[] }>;
   /** C1-09: đổi nhiều đoạn (các đoạn liền sau) sang một người nói đã có */
   reassignSegments(sessionId: string, segmentIds: string[], speakerId: string): Promise<void>;
+  /** C1-09 mục 4: tóm tắt lại trên bản lời hiện tại (đã sửa, đúng người nói),
+   * theo luồng asr_stage sẵn có. Free tối đa 3 lần mỗi buổi, chặn TRƯỚC khi
+   * gọi AI, lỗi không trừ lượt: vượt hạn mức ném DataError quota_exceeded. */
+  resummarize(id: string): Promise<void>;
   /** Chép một dòng vào ghi chú nhanh của buổi đã lưu (GC-04, đặc tả v1.1
    * §4.5): ghi chú gắn vào ý có mốc gần nhất để hiện trong Tóm tắt. */
   addQuickNote(sessionId: string, text: string): Promise<void>;

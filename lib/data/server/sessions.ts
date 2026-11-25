@@ -56,7 +56,8 @@ import { templateById, templatesOfProfession } from "./templates";
 import { ApiError, type ServerContext } from "./context";
 import { deleteObjectSafe, isAudioObjectKey } from "./r2";
 import { retryPipeline, stateOf } from "./asr-pipeline";
-import { FREE_CHAT_QUESTIONS_PER_SESSION } from "./account";
+import type { AsrStage } from "./asr-pipeline";
+import { FREE_CHAT_QUESTIONS_PER_SESSION, FREE_RESUMMARIZE_PER_SESSION } from "./account";
 import { GeminiError, speakerOrder } from "./summarize";
 import { answerSessionChat, notFoundText, readUiLocale, type SessionChatContext } from "./chat-ai";
 import { translateSummaryVersion, translateTexts } from "./translate-ai";
@@ -135,6 +136,9 @@ export function toDetail(row: SessionRow, detail: DetailRow, tasks: ActionRow[])
     gap_check: (detail.gapCheck as SavedGapCheck | null) ?? undefined,
     gap_check_done: detail.gapCheckDone ?? [],
     pending_ai_questions: detail.pendingAiQuestions ?? [],
+    // C1-09 mục 4: băng "Tóm tắt lại" và hạn mức Free đếm phía máy chủ
+    transcript_stale: row.transcriptStale,
+    resummarize_count: row.resummarizeCount,
   };
 }
 
@@ -783,6 +787,8 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
           .update(transcriptSegments)
           .set({ textClean: action.text, edited: true })
           .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)));
+        // C1-09 mục 4: lời đã sửa sau lần tóm tắt gần nhất → cần tóm tắt lại
+        await db.update(sessions).set({ transcriptStale: true }).where(eq(sessions.id, id));
         return { ok: true };
       }
       // Câu gốc đã sửa: bản dịch hiện có của đoạn chuyển "Cần dịch lại" (M6-02)
@@ -793,6 +799,8 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
         .update(transcriptSegments)
         .set({ text: action.text, edited: true, translations })
         .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)));
+      // C1-09 mục 4: câu Nguyên văn đã sửa → cần tóm tắt lại
+      await db.update(sessions).set({ transcriptStale: true }).where(eq(sessions.id, id));
       return { ok: true };
     }
     case "reassignSegment": {
@@ -810,7 +818,9 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
         .update(transcriptSegments)
         .set({ speakerId: action.speakerId })
         .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)));
-      // C1-09: tính lại tỉ lệ nói, speaker_spans, màu thumb sau MỌI lần đổi
+      // C1-09: tính lại tỉ lệ nói, speaker_spans, màu thumb sau MỌI lần đổi;
+      // lời đã đổi người sau lần tóm tắt gần nhất thì đánh dấu cần tóm tắt lại
+      await db.update(sessions).set({ transcriptStale: true }).where(eq(sessions.id, id));
       await recomputeSpeakerStats(sessionRow, detail);
       return { ok: true };
     }
@@ -856,6 +866,7 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
         .update(transcriptSegments)
         .set({ speakerId: newId })
         .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, action.segmentId)));
+      await db.update(sessions).set({ transcriptStale: true }).where(eq(sessions.id, id));
       await recomputeSpeakerStats(sessionRow, detail);
       const followingIds = await followingSegmentIds(id, action.segmentId, oldSpeakerId);
       console.log(`[speaker] ok ${JSON.stringify({ sessionId: id, event: "add", newSpeaker: newId, following: followingIds.length, ts: new Date().toISOString() })}`);
@@ -865,19 +876,53 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
       // C1-09 mục 2: đổi nhiều đoạn liền sau sang một người nói (chọn từ kết
       // quả "Đổi luôn N đoạn liền sau"). Mỗi đoạn phải thuộc buổi này.
       if (!(detail.speakers as Speaker[]).some((s) => s.id === action.speakerId)) throw new DataError("not_found");
-      const rows = await db
-        .select({ id: transcriptSegments.id })
-        .from(transcriptSegments)
-        .where(eq(transcriptSegments.sessionId, id));
-      const known = new Set(rows.map((r) => r.id));
+      const rowsById = new Set(
+        (await db.select({ id: transcriptSegments.id }).from(transcriptSegments).where(eq(transcriptSegments.sessionId, id))).map((r) => r.id),
+      );
       for (const segId of action.segmentIds) {
-        if (!known.has(segId)) throw new DataError("not_found");
+        if (!rowsById.has(segId)) throw new DataError("not_found");
       }
       await db
         .update(transcriptSegments)
         .set({ speakerId: action.speakerId })
         .where(and(eq(transcriptSegments.sessionId, id), inArray(transcriptSegments.id, action.segmentIds)));
+      await db.update(sessions).set({ transcriptStale: true }).where(eq(sessions.id, id));
       await recomputeSpeakerStats(sessionRow, detail);
+      return { ok: true };
+    }
+    case "resummarize": {
+      // C1-09 mục 4: tóm tắt lại trên bản lời hiện tại (đã sửa, đúng người
+      // nói) theo luồng asr_stage sẵn có, đặt stage "summarizing" để màn xử
+      // lý và ProcessingWatcher tự đẩy. Chặn TRƯỚC khi gọi AI: hạn mức Free
+      // đếm phía máy chủ, chỉ lần TÓM TẮT THÀNH CÔNG mới được đếm.
+      const me = (await db.select().from(users).where(eq(users.id, ctx.userId)).limit(1))[0];
+      if ((me?.plan ?? "free") !== "pro" && sessionRow.resummarizeCount >= FREE_RESUMMARIZE_PER_SESSION) {
+        throw new DataError("quota_exceeded");
+      }
+      // Buổi đang xử lý dở thì không chen vào luồng
+      const stage = (sessionRow.asrStage as AsrStage | null) ?? null;
+      if (stage !== null && stage !== "done") throw new DataError("server", "Buổi đang xử lý, chờ xong rồi tóm tắt lại");
+      // Không có bản chữ thì không có gì để tóm tắt lại
+      const segCount = (
+        await db.select({ n: sql<number>`count(*)::int` }).from(transcriptSegments).where(eq(transcriptSegments.sessionId, id))
+      )[0]?.n ?? 0;
+      if (segCount === 0) throw new DataError("not_found");
+      // Mốc kiểm thử e2e: lần này lỗi mô phỏng (không đổi trạng thái, không trừ lượt)
+      if (sessionRow.title.includes("[failsum]")) {
+        throw new ApiError(502, "resummarize_failed", "Chưa tóm tắt lại được, thử lại sau");
+      }
+      await db
+        .update(sessions)
+        .set({
+          asrStage: "summarizing",
+          asrUpdatedAt: new Date(),
+          asrError: null,
+          failureReason: null,
+          status: "processing",
+          resummarizePending: true,
+        })
+        .where(eq(sessions.id, id));
+      console.log(`[asr] ${JSON.stringify({ sessionId: id, event: "resummarize-requested", count: sessionRow.resummarizeCount, ts: new Date().toISOString() })}`);
       return { ok: true };
     }
     case "addQuickNote": {

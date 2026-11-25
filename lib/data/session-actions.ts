@@ -25,6 +25,8 @@ export const sessionActionSchema = z.discriminatedUnion("type", [
     segmentIds: z.array(z.string().min(1)).min(1).max(2000),
     speakerId: z.string().min(1),
   }),
+  // C1-09 mục 4: tóm tắt lại trên bản lời hiện tại, theo luồng asr_stage
+  z.object({ type: z.literal("resummarize") }),
   z.object({ type: z.literal("addQuickNote"), text: z.string().max(1000) }),
   z.object({ type: z.literal("completeGapCheckItem"), key: z.string().min(1).max(200) }),
   z.object({ type: z.literal("consumePendingAiQuestion"), question: z.string().max(1000) }),

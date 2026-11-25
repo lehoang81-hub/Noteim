@@ -832,7 +832,11 @@
     "asrErrorFile": "The recording is missing or its content can't be read. Try again.",
     "asrErrorSummary": "Couldn't create the summary. Tap Reprocess.",
     "asrErrorStuck": "This session got stuck after too many attempts. Tap Reprocess.",
-    "asrErrorUnknown": "Something went wrong. Tap Reprocess."
+    "asrErrorUnknown": "Something went wrong. Tap Reprocess.",
+    "resummarizeBanner": "You edited the transcript. Summarize again to update the summary and action items.",
+    "resummarizeButton": "Summarize again",
+    "resummarizeQuota": "This session used all 3 re-summaries of the Free plan. Upgrade to Pro for unlimited use.",
+    "resummarizeError": "Could not summarize again, try again later."
   },
   "transcript": {
     "searchLabel": "Search in transcript",

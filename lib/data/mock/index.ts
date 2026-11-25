@@ -717,6 +717,21 @@ export const mockSource: DataSource = {
         }
         recomputeMockSpeakers(fx);
       }),
+    resummarize: (id) =>
+      write(async () => {
+        // Bản giả không gọi AI: coi như tóm tắt lại xong ngay, chỉ gỡ băng
+        // "Tóm tắt lại" và đếm lượt. Free tối đa 3 lần mỗi buổi khớp máy chủ.
+        await sessionsReady();
+        const fx = await findFixture(id);
+        assertOwnSession(fx.detail);
+        const d = fx.detail;
+        if (!fx.transcript.length) throw new DataError("not_found");
+        const plan = getFlags().plan ?? getDb().user.plan;
+        const count = d.resummarize_count ?? 0;
+        if (plan !== "pro" && count >= 3) throw new DataError("quota_exceeded");
+        d.transcript_stale = false;
+        d.resummarize_count = count + 1;
+      }),
     nameSpeaker: (sessionId, speakerId, contactId) =>
       write(async () => {
         await sessionsReady();

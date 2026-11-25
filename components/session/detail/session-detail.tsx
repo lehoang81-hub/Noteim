@@ -6,6 +6,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import { ResummarizeBanner } from "./resummarize-banner";
 import { FloatingPlayer } from "@/components/session/floating-player";
 import { Button } from "@/components/ui/button";
 import { SpeakerName } from "@/components/ui/chips";
@@ -587,6 +588,7 @@ function Loaded({
           </div>
           <div className="px-page pb-40 pt-5 lg:px-8">
             <TabsContent value="summary">
+              <ResummarizeBanner detail={detail} className="mb-4" />
               {summary ? (
                 <SummaryTab
                   detail={detail}
@@ -612,6 +614,7 @@ function Loaded({
               )}
             </TabsContent>
             <TabsContent value="tasks">
+              <ResummarizeBanner detail={detail} className="mb-4" />
               <TasksTab
                 items={items.map((a) => (summary?.task_texts?.[a.id] ? { ...a, task: summary.task_texts[a.id] } : a))}
                 lang={verLang}
