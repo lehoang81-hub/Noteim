@@ -689,7 +689,7 @@ Buổi có băng trên R2 (PR 04) ra **nội dung thật** thay cho nội dung m
 
 ### Cron, bảo mật, chế độ thử nghiệm, kiểm
 
-- Cron `/api/cron/asr-retry` (Bearer `CRON_SECRET`, vercel.json hằng 10 phút, cạnh cron dọn băng): quét buổi `asr_updated_at` cũ quá 10 phút còn ở stage dở, `asr_attempts < 20`, mỗi lượt tối đa 20 buổi, mỗi buổi đẩy một bước.
+- Cron `/api/cron/asr-retry` (Bearer `CRON_SECRET`, vercel.json chạy mỗi ngày 03:30 vì gói Hobby chỉ cho cron 1 lần/ngày; đường chính là màn processing tự gọi lại, cron chỉ là lưới an toàn): quét buổi `asr_updated_at` cũ quá 10 phút còn ở stage dở, `asr_attempts < 20`, mỗi lượt tối đa 20 buổi, mỗi buổi đẩy một bước.
 - Không log transcript/tóm tắt/URL presigned/khóa — chỉ sessionId, bước, độ trễ, mã lỗi.
 - `SONIOX_FAKE=1` / `GEMINI_FAKE=1` (kết quả giả cố định cho e2e) **tuyệt đối bị chặn khi `VERCEL_ENV=production`** — cùng cơ chế R2_FAKE; `/api/data/mode` thêm cờ `sonioxFake`/`geminiFake`. Khóa chỉ đọc từ env `SONIOX_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` (đã có trên Vercel), không đặt `NEXT_PUBLIC_*`.
 - e2e `tests/e2e/c1-asr.spec.ts`: quyền A/B (B không đẩy được luồng của A — 403; ẩn danh 401), luồng complete→process→done với kho giả đối chiếu số liệu (tóm tắt phải nhắc đúng 4,2 tỷ / 15/11 có trong bản chữ giả — không bịa), quota 91 phút Free, failed→Thử lại, cron sai/đúng bí mật, và luồng UI ghi thật: processing tự chuyển chi tiết, tab Tóm tắt/Lời hiện nội dung từ kho giả.

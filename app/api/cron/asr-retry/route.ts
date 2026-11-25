@@ -3,7 +3,7 @@
  *
  * Máy chủless không có bộ đếm nền: nếu người dùng đóng tab sau khi chốt băng
  * và không ai gọi process nữa thì buổi kẹt ở stage đang dở (queued/
- * transcribing/summarizing). Cron hằng 10 phút quét các buổi có
+ * transcribing/summarizing). Cron chạy mỗi ngày (gói Hobby của Vercel chỉ cho 1 lần/ngày; đường chính là màn processing tự gọi lại) quét các buổi có
  * `asr_updated_at` cũ quá 10 phút, với mỗi buổi đẩy ĐỘNG MỘT bước
  * (driveProcess — có nhường quyền, an toàn khi cron và người dùng gọi trùng).
  *
@@ -21,6 +21,7 @@ import { driveProcess, MAX_ATTEMPTS, STUCK_AFTER_MS } from "@/lib/data/server/as
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 /** Trần số buổi mỗi lượt cron — giữ thời gian hàm ngắn. */
 const BATCH_LIMIT = 20;

@@ -15,6 +15,7 @@ import { driveProcess } from "@/lib/data/server/asr-pipeline";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export const POST = routeHandler(async (_request: Request, { params }: { params: Promise<{ id: string }> }) => {
   const ctx = await requireContext();
