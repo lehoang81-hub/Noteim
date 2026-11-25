@@ -56,6 +56,10 @@ import { templateById, templatesOfProfession } from "./templates";
 import { ApiError, type ServerContext } from "./context";
 import { deleteObjectSafe, isAudioObjectKey } from "./r2";
 import { retryPipeline, stateOf } from "./asr-pipeline";
+import { FREE_CHAT_QUESTIONS_PER_SESSION } from "./account";
+import { GeminiError, speakerOrder } from "./summarize";
+import { answerSessionChat, notFoundText, readUiLocale, type SessionChatContext } from "./chat-ai";
+import { translateSummaryVersion, translateTexts } from "./translate-ai";
 
 type SessionRow = typeof sessions.$inferSelect;
 type DetailRow = typeof sessionDetails.$inferSelect;
@@ -783,23 +787,40 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
     case "translateSegments": {
       const lang = action.lang;
       const rows = await db.select().from(transcriptSegments).where(eq(transcriptSegments.sessionId, id)).orderBy(transcriptSegments.startSec);
+      const targets: Array<typeof transcriptSegments.$inferSelect> = [];
       for (const seg of rows) {
         if (action.segmentIds && !action.segmentIds.includes(seg.id)) continue;
         if ((seg.lang as Lang) === lang) continue;
         const translations = { ...(seg.translations as TranscriptSegment["translations"]) };
         const existing: TranslationEntry | undefined = translations[lang];
         if (existing && (!existing.stale || !action.segmentIds)) continue;
-        if (existing?.stale) {
-          // Mockup không dịch lại được nội dung: giữ bản dịch cũ, gỡ nhãn lỗi thời
-          translations[lang] = { ...existing, stale: false };
-        } else {
-          // Bản dịch mẫu kèm câu gốc, không bịa nội dung (docs/08)
-          translations[lang] = { text: seg.text, stale: false, sample: true };
+        targets.push(seg);
+      }
+      if (targets.length) {
+        // Dịch thật bằng Gemini (C1-08): dịch cả đợt rồi mới ghi — lỗi giữa
+        // chừng thì không ghi mục nào, tránh dịch lưng chừng khó hiểu
+        const started = Date.now();
+        try {
+          const map = await translateTexts({
+            items: targets.filter((seg) => seg.text.trim()).map((seg) => ({ id: seg.id, text: seg.text })),
+            targetLang: lang,
+          });
+          for (const seg of targets) {
+            const translations = { ...(seg.translations as TranscriptSegment["translations"]) };
+            const text = map.get(seg.id);
+            if (!text) continue; // mục rỗng: giữ nguyên trạng thái cũ
+            translations[lang] = { text, stale: false };
+            await db
+              .update(transcriptSegments)
+              .set({ translations })
+              .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, seg.id)));
+          }
+          console.log(`[translate] ok ${JSON.stringify({ sessionId: id, kind: "segments", lang, ms: Date.now() - started, count: targets.length, ts: new Date().toISOString() })}`);
+        } catch (error) {
+          const code = error instanceof GeminiError ? `gemini_${error.step}${error.status ? `_${error.status}` : ""}` : "unknown";
+          console.error(`[translate] lỗi ${JSON.stringify({ sessionId: id, kind: "segments", lang, ms: Date.now() - started, code, ts: new Date().toISOString() })}`);
+          throw new ApiError(502, "translate_failed", "Chưa dịch được, thử lại sau");
         }
-        await db
-          .update(transcriptSegments)
-          .set({ translations })
-          .where(and(eq(transcriptSegments.sessionId, id), eq(transcriptSegments.id, seg.id)));
       }
       const fresh = await db.select().from(transcriptSegments).where(eq(transcriptSegments.sessionId, id)).orderBy(transcriptSegments.startSec);
       return { transcript: fresh.map(toSegment) };
@@ -950,28 +971,36 @@ export async function createSummaryVersion(ctx: ServerContext, id: string, lang:
   if (!existing && (planRow?.plan ?? "free") === "free" && (countRows[0]?.n ?? 0) >= 1) {
     throw new DataError("quota_exceeded");
   }
-  // Bản giả không sinh nội dung mới: giữ câu gốc ở bản dịch, đánh dấu sample
-  const topics: VersionTopic[] = detail.topics.map((t) => ({
-    ...t,
-    bullets: t.bullets.map((b) => ({ ...b, original_text: b.text, original_lang: detail.original_report_language })),
-  }));
+  // Dịch thật bằng Gemini (C1-08): giữ nguyên số liệu/tên/ngày giờ, từng ý
+  // gắn "Câu gốc" để đối chiếu. Thất bại thì báo lỗi rõ và không tạo bản —
+  // lượt hạn mức không mất (bản chưa tồn tại, lần thử sau vẫn được phép).
+  const started = Date.now();
+  let translated: { executiveSummary: string; topics: VersionTopic[]; taskTexts: Record<string, string> };
+  try {
+    translated = await translateSummaryVersion(detail, lang);
+  } catch (error) {
+    const code = error instanceof GeminiError ? `gemini_${error.step}${error.status ? `_${error.status}` : ""}` : "unknown";
+    console.error(`[translate] lỗi ${JSON.stringify({ sessionId: id, kind: "summary", lang, ms: Date.now() - started, code, ts: new Date().toISOString() })}`);
+    throw new ApiError(502, "translate_failed", "Chưa dịch được, thử lại sau");
+  }
+  console.log(`[translate] ok ${JSON.stringify({ sessionId: id, kind: "summary", lang, ms: Date.now() - started, ts: new Date().toISOString() })}`);
   const values = {
     sessionId: id,
     lang,
     source: "translated" as const,
     translatedFrom: detail.original_report_language,
     stale: false,
-    executiveSummary: detail.executive_summary,
-    topics,
-    taskTexts: Object.fromEntries(detail.action_items.map((a) => [a.id, a.task])),
-    sample: true,
+    executiveSummary: translated.executiveSummary,
+    topics: translated.topics,
+    taskTexts: translated.taskTexts,
+    sample: false,
   };
   const [saved] = await db
     .insert(summaryVersions)
     .values(values)
     .onConflictDoUpdate({
       target: [summaryVersions.sessionId, summaryVersions.lang],
-      set: { stale: false, createdAt: new Date(), executiveSummary: values.executiveSummary, topics: values.topics, taskTexts: values.taskTexts, sample: true },
+      set: { stale: false, createdAt: new Date(), executiveSummary: values.executiveSummary, topics: values.topics, taskTexts: values.taskTexts, sample: false },
     })
     .returning();
   if (!detail.report_languages.includes(lang)) {
@@ -1018,19 +1047,72 @@ export async function chatAsk(ctx: ServerContext, sessionId: string, question: s
   const row = (await db.select().from(sessions).where(eq(sessions.id, sessionId)).limit(1))[0];
   if (row && row.userId !== ctx.userId) throw new DataError("forbidden");
   if (!row) throw new DataError("not_found");
-  // Chưa nối AI thật cho hỏi đáp buổi (lộ trình PR sau): trả lời cố định theo
-  // ngôn ngữ câu hỏi như bản giả, không bịa nội dung buổi
-  const hasHangul = /[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7A3]/.test(question);
-  const hasViDiacritics = /[ăâêôơưđáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ]/i.test(question);
-  const answer = hasHangul
-    ? "Chế độ tài khoản chưa nối AI cho hỏi đáp buổi, sẽ có ở PR sau."
-    : !hasViDiacritics && /^[a-z0-9\s?,.'-]+$/i.test(question)
-      ? "Signed-in mode does not have session AI answers yet."
-      : "Chế độ tài khoản chưa nối AI cho hỏi đáp buổi, sẽ có ở PR sau.";
-  const citations: Array<{ timestamp_sec: number }> = [];
-  await db.insert(chatMessages).values({ sessionId, role: "user", text: question, citations }).onConflictDoNothing();
-  const [ai] = await db.insert(chatMessages).values({ sessionId, role: "ai", text: answer, citations }).returning();
-  return { id: ai.id, role: "ai", text: ai.text, citations };
+
+  // Hạn mức 10 câu mỗi buổi của gói Free đếm PHÍA MÁY CHỦ từ lịch sử chat:
+  // chỉ câu trả lời THÀNH CÔNG mới được ghi vào lịch sử (tức chỉ trừ lượt khi
+  // AI trả lời được) — lỗi, hết hạn mức, AI không phản hồi thì không trừ và
+  // chặn TRƯỚC khi gọi AI.
+  const me = (await db.select().from(users).where(eq(users.id, ctx.userId)).limit(1))[0];
+  if ((me?.plan ?? "free") !== "pro") {
+    const asked = await db
+      .select({ n: sql<number>`count(*)::int` })
+      .from(chatMessages)
+      .where(and(eq(chatMessages.sessionId, sessionId), eq(chatMessages.role, "user")));
+    if ((asked[0]?.n ?? 0) >= FREE_CHAT_QUESTIONS_PER_SESSION) throw new DataError("quota_exceeded");
+  }
+
+  // Ngữ cảnh: tóm tắt (bản chi tiết) + bản chữ đầy đủ (mốc giây, người nói)
+  const detailRow = (await db.select().from(sessionDetails).where(eq(sessionDetails.sessionId, sessionId)).limit(1))[0];
+  const segRows = await db
+    .select({ speakerId: transcriptSegments.speakerId, startSec: transcriptSegments.startSec, text: transcriptSegments.text })
+    .from(transcriptSegments)
+    .where(eq(transcriptSegments.sessionId, sessionId))
+    .orderBy(transcriptSegments.startSec);
+  const order = speakerOrder(
+    segRows.map((s) => ({ speaker: s.speakerId, lang: "vi", start_sec: s.startSec, end_sec: s.startSec + 1, text: s.text })),
+  );
+  const chatCtx: SessionChatContext = {
+    question,
+    locale: await readUiLocale(),
+    executiveSummary: detailRow?.executiveSummary ?? "",
+    topics: (detailRow?.topics as Topic[]) ?? [],
+    segments: segRows.map((s) => ({
+      speaker_index: Math.max(0, order.indexOf(s.speakerId)),
+      start_sec: s.startSec,
+      text: s.text,
+    })),
+    speakerCount: order.length,
+    durationSec: row.durationSec ?? 0,
+  };
+  const notFound = await notFoundText("session");
+
+  // Buổi chưa có nội dung gì (chưa xử lý xong): trả đúng câu "không nhắc
+  // tới", không gọi AI — không bịa, không tốn chi phí
+  if (!chatCtx.segments.length && !chatCtx.executiveSummary && !chatCtx.topics.length) {
+    await db.insert(chatMessages).values({ sessionId, role: "user", text: question, citations: [] }).onConflictDoNothing();
+    const [ai] = await db.insert(chatMessages).values({ sessionId, role: "ai", text: notFound, citations: [] }).returning();
+    return { id: ai.id, role: "ai", text: ai.text, citations: [] };
+  }
+
+  const started = Date.now();
+  try {
+    const { answer, citations } = await answerSessionChat(chatCtx, notFound);
+    await db.insert(chatMessages).values({ sessionId, role: "user", text: question, citations: [] }).onConflictDoNothing();
+    const [ai] = await db.insert(chatMessages).values({ sessionId, role: "ai", text: answer, citations }).returning();
+    console.log(`[chat] ok ${JSON.stringify({ sessionId, ms: Date.now() - started, citations: citations.length, ts: new Date().toISOString() })}`);
+    return { id: ai.id, role: "ai", text: ai.text, citations };
+  } catch (error) {
+    const code =
+      error instanceof GeminiError
+        ? `gemini_${error.step}${error.status ? `_${error.status}` : ""}`
+        : error instanceof DataError
+          ? error.code
+          : "unknown";
+    // Nhật ký chỉ có sessionId, độ trễ, mã lỗi — không ghi câu hỏi/câu trả lời/bản chữ
+    console.error(`[chat] lỗi ${JSON.stringify({ sessionId, ms: Date.now() - started, code, ts: new Date().toISOString() })}`);
+    if (error instanceof DataError) throw error;
+    throw new ApiError(502, "ai_unavailable", "AI không trả lời được, thử lại sau");
+  }
 }
 
 /* ---------- Tìm kiếm xuyên buổi (M4-02) ---------- */

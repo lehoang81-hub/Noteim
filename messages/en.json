@@ -714,7 +714,8 @@
     "deleteConfirm": "Delete",
     "deleteCancel": "Keep",
     "deletedToast": "Profile deleted",
-    "saveError": "Could not save, try again"
+    "saveError": "Could not save, try again",
+    "aiNotFound": "The sessions in this folder do not mention that."
   },
   "session": {
     "back": "Back to library",
@@ -892,7 +893,8 @@
     "sampleNote": "Sample translation",
     "langVi": "Vietnamese",
     "langEn": "English",
-    "langKo": "Korean"
+    "langKo": "Korean",
+    "aiFromVi": "AI-translated from Vietnamese"
   },
   "contacts": {
     "preferredLanguage": "Preferred language"
@@ -963,7 +965,8 @@
     "allAnswer": "The mockup can't search across sessions yet.",
     "errorAnswer": "Couldn't answer. Try again.",
     "retry": "Try again",
-    "emptyHistory": "Try a suggested question, or type your own."
+    "emptyHistory": "Try a suggested question, or type your own.",
+    "notMentioned": "This session does not mention that."
   },
   "taskEdit": {
     "titleEdit": "Edit task",

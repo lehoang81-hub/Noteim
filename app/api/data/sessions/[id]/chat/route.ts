@@ -1,7 +1,9 @@
 /**
- * Nhóm (b) — Hỏi AI của buổi (M3-03, C1-03b). GET lịch sử; POST hỏi — máy
- * chủ trả câu trả lời (chưa nối AI thật, trả lời cố định không bịa nội dung),
- * client tự chạy chữ dần. Lịch sử lưu bảng chat_messages.
+ * Nhóm (b) — Hỏi AI của buổi (M3-03, C1-03b; C1-08 nối AI thật). GET lịch
+ * sử; POST hỏi — máy chủ gọi Gemini với ngữ cảnh bản chữ + tóm tắt, trả lời
+ * theo ngôn ngữ giao diện, dẫn nguồn mốc giây; hạn mức 10 câu/buổi gói Free
+ * đếm phía máy chủ, chỉ trừ khi AI trả lời thành công. Lịch sử lưu bảng
+ * chat_messages. maxDuration 60 cho lần gọi AI dài.
  */
 import { z } from "zod";
 
@@ -9,6 +11,7 @@ import { routeHandler, requireContext } from "@/lib/data/server/context";
 import { chatAsk, chatHistory } from "@/lib/data/server/sessions";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
 type Params = { params: Promise<{ id: string }> };

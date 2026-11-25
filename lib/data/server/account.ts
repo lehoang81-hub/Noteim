@@ -17,6 +17,13 @@ import { templatesOfProfession, ALL_TEMPLATES } from "./templates";
 
 type UserRow = typeof users.$inferSelect;
 
+/**
+ * Số câu hỏi mỗi buổi của gói Free (docs/03: bảng hạn mức; getQuota trả về
+ * cho màn hình đếm). C1-08: máy chủ dùng đúng số này để chặn TRƯỚC khi gọi
+ * AI — chỉ câu trả lời thành công mới tính lượt (lịch sử chat là bộ đếm).
+ */
+export const FREE_CHAT_QUESTIONS_PER_SESSION = 10;
+
 function defaultTemplateFor(profession: Profession | null): string {
   const tpl = templatesOfProfession(profession);
   // Nghề "other" (chưa chọn nghề) không có mẫu riêng: theo mẫu mặc định của
@@ -139,6 +146,6 @@ export async function getQuota(ctx: ServerContext): Promise<Quota> {
     minutes_used: Math.round(minutesUsed * 10) / 10,
     minutes_limit: minutesLimit,
     max_session_minutes: pro ? 240 : 45,
-    chat_questions_per_session: pro ? null : 10,
+    chat_questions_per_session: pro ? null : FREE_CHAT_QUESTIONS_PER_SESSION,
   };
 }

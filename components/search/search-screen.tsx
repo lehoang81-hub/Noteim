@@ -110,7 +110,7 @@ export function SearchScreen() {
       setRecent(readRecent());
       setRecentReady(true);
       mounted.current = true;
-      document.querySelector<HTMLInputElement>("input[type=search]")?.focus();
+      document.querySelector<HTMLInputElement>('input[data-search-input="true"]')?.focus();
     }, 0);
     return () => window.clearTimeout(id);
   }, []);

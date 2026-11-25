@@ -806,7 +806,8 @@
     "deleteConfirm": "삭제",
     "deleteCancel": "유지",
     "deletedToast": "프로필을 삭제했습니다",
-    "saveError": "저장하지 못했습니다. 다시 시도하세요"
+    "saveError": "저장하지 못했습니다. 다시 시도하세요",
+    "aiNotFound": "이 폴더의 녹음들은 그 내용을 언급하지 않았습니다."
   },
   "session": {
     "back": "라이브러리로 돌아가기",
@@ -984,7 +985,8 @@
     "sampleNote": "샘플 번역",
     "langVi": "베트남어",
     "langEn": "영어",
-    "langKo": "한국어"
+    "langKo": "한국어",
+    "aiFromVi": "베트남어에서 AI로 번역됨"
   },
   "contacts": {
     "preferredLanguage": "선호 언어"
@@ -1055,7 +1057,8 @@
     "allAnswer": "목업은 아직 전체 세션 검색을 지원하지 않습니다.",
     "errorAnswer": "답변하지 못했습니다. 다시 시도해 주세요.",
     "retry": "다시 시도",
-    "emptyHistory": "추천 질문을 누르거나 직접 입력해 보세요."
+    "emptyHistory": "추천 질문을 누르거나 직접 입력해 보세요.",
+    "notMentioned": "이 녹음에서는 그 내용을 언급하지 않았습니다."
   },
   "taskEdit": {
     "titleEdit": "할 일 편집",

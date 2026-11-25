@@ -9,7 +9,7 @@ import { FilterChip } from "@/components/ui/chips";
 import { SkeletonParagraph } from "@/components/ui/feedback";
 import { formatClock } from "@/components/ribbon/draw";
 import { suggestedQuestions } from "@/lib/data/localize";
-import { data, useData, type ChatMessage, type SessionDetail, type Template } from "@/lib/data";
+import { data, DataError, useData, type ChatMessage, type SessionDetail, type Template } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
 /*
@@ -59,6 +59,9 @@ export function AiTab({
   const [streamText, setStreamText] = useState("");
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<{ question: string } | null>(null);
+  // Máy chủ trả 429 (hạn mức 10 câu/buổi gói Free đếm phía máy chủ — C1-08):
+  // khóa ô nhập ngay và hiện đúng thông báo hết hạn mức, không hiện như lỗi máy
+  const [quotaBlocked, setQuotaBlocked] = useState(false);
   const [scope, setScope] = useState<Scope>("this");
   const listEndRef = useRef<HTMLDivElement>(null);
 
@@ -81,7 +84,7 @@ export function AiTab({
   const askedCount = (messages ?? []).filter((m) => m.role === "user").length;
   const remaining = total !== null ? Math.max(0, total - askedCount) : null;
   const quotaLocked = plan === "free" && remaining !== null && remaining <= 0;
-  const inputLocked = asking || quotaLocked;
+  const inputLocked = asking || quotaLocked || quotaBlocked;
 
   function parseClock(label: string): number {
     const parts = label.split(":").map((x) => parseInt(x, 10));
@@ -99,7 +102,7 @@ export function AiTab({
 
   async function ask(question: string, opts: { skipUser?: boolean } = {}) {
     const q = question.trim();
-    if (!q || asking || quotaLocked) return;
+    if (!q || asking || quotaLocked || quotaBlocked) return;
     setError(null);
     setDraft("");
     setAsking(true);
@@ -131,9 +134,10 @@ export function AiTab({
         answer,
       ]);
       setStreamText("");
-    } catch {
+    } catch (e) {
       setLocalMessages((prev) => (prev ?? []).filter((m, i, arr) => !(m.role === "user" && m.text === q && i === arr.length - 1)));
-      setError({ question: q });
+      if (e instanceof DataError && e.code === "quota_exceeded") setQuotaBlocked(true);
+      else setError({ question: q });
     } finally {
       setAsking(false);
       setStreamText("");
@@ -235,7 +239,7 @@ export function AiTab({
           {t("quota", { left: remaining, total: total ?? 0 })}
         </p>
       ) : null}
-      {quotaLocked ? (
+      {quotaLocked || quotaBlocked ? (
         <div className="mt-1 rounded-block border border-line bg-surface p-3">
           <p className="text-small text-ink-2">{t("quotaOut")}</p>
           <Link href="/upgrade" className="mt-2 inline-flex min-h-11 items-center rounded-control bg-ink px-3 text-small font-semibold text-bg">

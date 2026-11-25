@@ -12,6 +12,7 @@ import { and, eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth/nextauth-options";
+import { FAKE_USER_B_ID } from "@/lib/auth/persist";
 import { getDb, isDatabaseConfigured } from "@/lib/db";
 import { users, workspaceMembers, workspaces } from "@/lib/db/schema";
 
@@ -90,7 +91,16 @@ export async function ensureUserWorkspace(userId: string, email: string): Promis
     const cleanEmail = (email || `user-${userId.slice(0, 8)}@noteim.local`).toLowerCase();
     await db
       .insert(users)
-      .values({ id: userId, email: cleanEmail, plan: "free", uiLanguage: "vi", theme: "system" })
+      .values({
+        id: userId,
+        email: cleanEmail,
+        // e2e: người demo-b là gói Pro để duyệt được luồng hỏi đáp thư mục
+        // (gói Free trả 429 — bài kiểm thử hạn mức dùng người demo chính)
+        plan:
+          process.env.AUTH_FAKE === "1" && userId === FAKE_USER_B_ID ? "pro" : "free",
+        uiLanguage: "vi",
+        theme: "system",
+      })
       .onConflictDoNothing({ target: users.email });
     user = (await db.select().from(users).where(eq(users.id, userId)).limit(1))[0];
     if (!user) {

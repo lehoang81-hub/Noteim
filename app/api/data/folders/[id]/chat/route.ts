@@ -1,7 +1,9 @@
 /**
- * Nhóm (c) — Hỏi AI của thư mục (GY1, C1-03b). GET lịch sử; POST hỏi — máy
- * chủ ghép câu trả lời từ các buổi trong thư mục (lọc theo PHIÊN, gói Free
- * trả 429 quota_exceeded), lưu lịch sử bảng folder_chat_messages.
+ * Nhóm (c) — Hỏi AI của thư mục (GY1, C1-03b; C1-08 nối AI thật). GET lịch
+ * sử; POST hỏi — máy chủ gọi Gemini với ngữ cảnh các buổi trong thư mục
+ * (gói Free trả 429 quota_exceeded như cũ), trả lời theo ngôn ngữ giao diện
+ * kèm dẫn nguồn mốc giây; lưu lịch sử bảng folder_chat_messages.
+ * maxDuration 60 cho lần gọi AI dài.
  */
 import { z } from "zod";
 
@@ -9,6 +11,7 @@ import { routeHandler, requireContext } from "@/lib/data/server/context";
 import { folderAsk, folderHistory } from "@/lib/data/server/folders";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
 type Params = { params: Promise<{ id: string }> };
