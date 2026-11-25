@@ -105,6 +105,20 @@ async function taoBuoiQuaApi(page: Page, title: string): Promise<string> {
   return json.id;
 }
 
+/** Xóa hết buổi của người đang đăng nhập — bài "thư viện rỗng" phải tự chủ
+ * dữ liệu của mình: lượt phone chạy trước đã tạo buổi cho cùng người dùng
+ * nên lượt desktop không thể trông DB còn nguyên như lúc mới (sửa gốc
+ * sau khi bài đỏ sẵn trên main, không nới khẳng định). */
+async function donBuoiCuaTaiKhoan(page: Page): Promise<void> {
+  const list = (await (await page.request.get("/api/data/sessions")).json()) as {
+    sessions: Array<{ id: string }>;
+  };
+  for (const s of list.sessions) {
+    const del = await page.request.delete(`/api/data/sessions/${s.id}`);
+    expect([200, 404]).toContain(del.status());
+  }
+}
+
 test.describe("chế độ mock — người đăng nhập vẫn dùng dữ liệu trên máy (hồi quy)", () => {
   test("đăng nhập xong thư viện vẫn hiện buổi mẫu trên máy, không bị nguồn remote chiếm", async ({ page }) => {
     test.skip(mode.dataSource === "remote", "Server đang bật remote — bài này chỉ đúng ở build mock");
@@ -131,6 +145,8 @@ test.describe("chế độ remote — quyền dữ liệu giữa hai người (A
 
   test("người đăng nhập lần đầu tự có workspace cá nhân, thư viện rỗng không lẫn dữ liệu mẫu", async ({ page }) => {
     await dangNhapDemo(page);
+    // Dọn buổi do lượt project trước tạo cho cùng tài khoản trước khi khẳng định rỗng
+    await donBuoiCuaTaiKhoan(page);
     const me = (await (await page.request.get("/api/data/me")).json()) as {
       user: { id: string; email: string };
       quota: { minutes_limit: number };

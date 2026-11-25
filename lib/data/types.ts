@@ -188,6 +188,11 @@ export const Session = z.object({
   size_bytes: z.number(),
   /** File âm thanh thật của buổi (M9-01); thiếu/null là chưa có — trình phát dùng đồng hồ giả như cũ */
   audio_url: z.string().nullable().optional().catch(undefined),
+  /** Trạng thái máy ASR (C1-05): null/không có là buổi không vào luồng ASR;
+  * failed thì giao diện dịch asr_error thành chữ dễ hiểu (C1-06) */
+  asr_stage: z.string().nullable().optional().catch(undefined),
+  /** Mã lỗi ngắn của luồng ASR — chỉ để nội bộ dịch chữ, không lộ thô lên giao diện */
+  asr_error: z.string().nullable().optional().catch(undefined),
   /** Buổi ghi mẫu theo nghề (M4-04) — huy hiệu "Mẫu" nơi liệt kê, không lẫn với buổi thật */
   is_sample: z.boolean().optional().catch(undefined),
   /** Buổi tạo từ màn ghi âm hiện tại: chưa thu tiếng thật, không lưu âm thanh (chờ PR 04) */

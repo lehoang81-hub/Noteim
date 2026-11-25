@@ -22,6 +22,9 @@ import { Sheet } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/cn";
 import { data, dataNow, useData, type Session, type SessionFilter } from "@/lib/data";
+import { useAudioUpload } from "@/lib/audio/upload-store";
+import { pendingUploadKeys, uploadSessionAudio } from "@/lib/audio/upload-manager";
+import { sessionKey } from "@/lib/audio/chunk-store";
 import { useDebugFlags } from "@/lib/debug/flags";
 import { holdImportFile } from "@/lib/import-file";
 import { dayDiff, durationParts, shortDate, vnDate, weekdayDate } from "@/lib/format";
@@ -80,6 +83,22 @@ export function LibraryPane({ className }: { className?: string }) {
   const recording = useRecording();
   const flags = useDebugFlags();
   const storageAlert = useStorageFull() || flags.storageFull;
+
+  // Băng ghi còn chờ tải lên (C1-06): khóa session:<id> trong IndexedDB —
+  // rà lại mỗi khi trạng thái tải gần nhất đổi (xong/lỗi/mới mở app).
+  const upload = useAudioUpload();
+  const [pendingIds, setPendingIds] = useState<string[]>([]);
+  useEffect(() => {
+    let alive = true;
+    void pendingUploadKeys().then((keys) => {
+      if (!alive) return;
+      const prefix = sessionKey("");
+      setPendingIds(keys.filter((k) => k.startsWith(prefix)).map((k) => k.slice(prefix.length)));
+    });
+    return () => {
+      alive = false;
+    };
+  }, [upload]);
 
   // Chọn nhiều (M4-01); hàng mốc cho Shift+bấm (M5-01)
   const [selecting, setSelecting] = useState(false);
@@ -551,13 +570,12 @@ export function LibraryPane({ className }: { className?: string }) {
                        thay vì để người dùng vào rồi mới biết (sau PR #87).
                        Buổi thử từ màn ghi âm hiện nhãn riêng. */
                     noAudio={
-                      s.status === "ready"
-                        ? s.trial_recording
-                          ? ts("trialRecording")
-                          : !s.audio_url
-                            ? ts("noAudio")
-                            : undefined
-                        : undefined
+                      s.status === "ready" && pendingIds.includes(s.id) ? (
+                        /* Băng nằm trong IndexedDB nhưng chưa tải được lên (C1-06) */
+                        ts("uploadPending")
+                      ) : s.status === "ready" ? (
+                        s.trial_recording ? ts("trialRecording") : !s.audio_url ? ts("noAudio") : undefined
+                      ) : undefined
                     }
                     peaks={s.peaks_thumb}
                     speakers={s.speaker_colors_thumb}
@@ -578,6 +596,11 @@ export function LibraryPane({ className }: { className?: string }) {
                       s.status === "failed" ? (
                         <Button variant="ghost" className="-my-2 min-h-11" onClick={() => retry(s.id)}>
                           {t("retry")}
+                        </Button>
+                      ) : s.status === "ready" && pendingIds.includes(s.id) ? (
+                        /* Tải lại băng chờ ngay từ thư viện (C1-06) */
+                        <Button variant="ghost" className="-my-2 min-h-11" onClick={() => void uploadSessionAudio(s.id)}>
+                          {ts("retry")}
                         </Button>
                       ) : undefined
                     }

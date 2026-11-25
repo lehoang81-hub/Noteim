@@ -293,6 +293,40 @@ test.describe("kho giả ASR + Gemini — luồng nội dung thật qua API", ()
     await page.request.delete(`/api/data/sessions/${sessionId}`);
   });
 
+  test("buổi failed ở màn chi tiết: lỗi nói dễ hiểu, nút Xử lý lại, không lộ mã kỹ thuật (C1-06)", async ({ page }) => {
+    test.info().setTimeout(120_000);
+    await dangNhapDemo(page);
+    const sessionId = await taoBuoi(page.request, "Buổi [fail] chi tiết");
+    await taiLen(page.request, sessionId);
+
+    // Chờ tới khi failed (complete đã kích luồng fire-and-forget)
+    for (let i = 0; i < 20; i++) {
+      const res = await page.request.get(`/api/data/sessions/${sessionId}/processing`);
+      const s = (await res.json()) as ProcessState;
+      if (s.status === "failed") break;
+      await new Promise((r) => setTimeout(r, 500));
+    }
+
+    // Màn chi tiết: chữ lỗi dễ hiểu + nút Xử lý lại; mã kỹ thuật không xuất hiện
+    await page.goto(`/s/${sessionId}`);
+    await expect(page.getByText("Có lỗi không rõ. Bấm Xử lý lại.")).toBeVisible({ timeout: 15_000 });
+    const xuLyLai = page.getByRole("button", { name: "Xử lý lại" });
+    await expect(xuLyLai).toBeVisible();
+    await expect(page.getByText("fake_fail_once")).toHaveCount(0);
+
+    // Bấm Xử lý lại → luồng chạy lại tới done → chi tiết hiện nội dung thật
+    await xuLyLai.click();
+    const second = await dayLuong(page.request, sessionId);
+    expect(second.status).toBe("ready");
+    expect(second.asr_stage).toBe("done");
+    await page.reload();
+    await expect(page.getByText("Bản ghi thử: chưa lưu âm thanh")).toHaveCount(0);
+    await page.getByRole("tab", { name: "Tóm tắt" }).click();
+    await expect(page.getByText("4,2 tỷ").first()).toBeVisible({ timeout: 15_000 });
+
+    await page.request.delete(`/api/data/sessions/${sessionId}`);
+  });
+
   test("cron asr-retry: sai bí mật 401, đúng bí mật trả báo cáo quét", async ({ page }) => {
     await dangNhapDemo(page);
     const noSecret = await page.request.get("/api/cron/asr-retry", {

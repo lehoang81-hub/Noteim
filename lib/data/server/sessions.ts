@@ -95,6 +95,8 @@ export function toSession(row: SessionRow): Session {
     // /api/audio/{id} — route kiểm quyền theo phiên rồi 302 sang signed GET
     // 15 phút (C1-04 yêu cầu 3). Buổi mẫu giữ đường dẫn tĩnh /audio/….
     audio_url: isAudioObjectKey(row.audioPath) ? `/api/audio/${row.id}` : (row.audioPath ?? null),
+    asr_stage: (row.asrStage as Session["asr_stage"]) ?? undefined,
+    asr_error: row.asrError ?? undefined,
     is_sample: row.isSample || undefined,
     trial_recording: row.trialRecording || undefined,
     created_at: row.createdAt.toISOString(),

@@ -823,7 +823,15 @@
     "receiptFootnote": "The receipt is captured by the app when recording starts, stored with the session.",
     "sampleBadge": "Sample",
     "noAudio": "No audio yet",
-    "trialRecording": "Trial recording: audio not saved"
+    "trialRecording": "Trial recording: audio not saved",
+    "uploadPending": "Upload failed, will retry automatically",
+    "asrReprocess": "Reprocess",
+    "asrErrorQuota": "This recording exceeds your plan's monthly minutes. Upgrade to process longer sessions.",
+    "asrErrorNetwork": "Network error while transcribing. Tap Reprocess, or Noteim will retry later.",
+    "asrErrorFile": "The recording is missing or its content can't be read. Try again.",
+    "asrErrorSummary": "Couldn't create the summary. Tap Reprocess.",
+    "asrErrorStuck": "This session got stuck after too many attempts. Tap Reprocess.",
+    "asrErrorUnknown": "Something went wrong. Tap Reprocess."
   },
   "transcript": {
     "searchLabel": "Search in transcript",
@@ -1118,7 +1126,11 @@
     "receiptMidConfirm": "Agree and use this template",
     "receiptCancel": "Dismiss",
     "announceSentence": "This meeting is being recorded to build the minutes",
-    "trialNote": "Trial recording: audio not saved"
+    "trialNote": "Trial recording: audio not saved",
+    "cancel": "Cancel recording",
+    "cancelBody": "The audio being recorded will be lost.",
+    "cancelConfirm": "Discard recording",
+    "cancelTitle": "Discard this recording?"
   },
   "processing": {
     "step1": "Recording saved",
@@ -1140,7 +1152,6 @@
     "uploadDone": "Recording saved safely",
     "uploadFailed": "Couldn't upload the recording. Interrupted network? Try again, the audio is still on this device",
     "uploadRetry": "Retry upload",
-    "asrFailed": "Processing did not finish (code: {code}). Tap retry, or Noteim will try again later",
     "asrQuota": "This recording is longer than your current plan allows; upgrade to process longer sessions",
     "asrRetry": "Retry"
   },

@@ -346,4 +346,42 @@ test.describe("kho giả R2 — luồng ghi trên màn ghi âm", () => {
     await expect(audioEl).toHaveAttribute("data-noteim-audio", `/api/audio/${sessionId}`);
     await audioRequest; // lối nghe lại được gọi (302 sang signed URL bên dưới)
   });
+
+  test("hủy buổi ghi (C1-06): không xác nhận thì ghi tiếp; xác nhận thì về thư viện, không tạo buổi", async ({ page }) => {
+    test.info().setTimeout(90_000);
+    await dangNhapDemo(page);
+
+    // Số buổi hiện có qua API (thư viện remote có thể trống, đếm bằng số liệu cho chắc)
+    const demBuoi = async () => {
+      const res = await page.request.get("/api/data/sessions");
+      expect(res.status()).toBe(200);
+      return ((await res.json()) as { sessions: unknown[] }).sessions.length;
+    };
+    const truoc = await demBuoi();
+
+    await page.goto("/record");
+    await page.getByRole("button", { name: "Cho phép micro" }).click();
+    await page.getByRole("button", { name: "Đã đồng ý, ghi" }).click();
+    await expect(page.getByRole("button", { name: "Kiểm tra thiếu" })).toBeVisible();
+    await page.waitForTimeout(2000); // đủ cho đồng hồ ghi vài giây
+
+    // Bấm Hủy lúc ĐANG GHI → hộp xác nhận; không xác nhận thì ghi tiếp không mất gì
+    const huy = page.getByRole("button", { name: "Hủy buổi ghi" });
+    await huy.click();
+    const hop = page.getByRole("alertdialog");
+    await expect(hop).toBeVisible();
+    await expect(hop).toContainText("Âm thanh đang ghi sẽ mất");
+    await hop.getByRole("button", { name: "Ghi tiếp" }).click();
+    await expect(hop).toBeHidden();
+    await expect(page.getByRole("button", { name: "Kiểm tra thiếu" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Kết thúc buổi ghi" })).toBeVisible();
+
+    // Tạm dừng rồi hủy → xác nhận bỏ buổi: về thư viện, số buổi không đổi
+    await page.getByRole("button", { name: "Tạm dừng" }).click();
+    await huy.click();
+    await expect(hop).toBeVisible();
+    await hop.getByRole("button", { name: "Bỏ buổi ghi" }).click();
+    await page.waitForURL((u) => u.pathname === "/", { timeout: 15_000 });
+    expect(await demBuoi()).toBe(truoc);
+  });
 });
