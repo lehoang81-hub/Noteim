@@ -146,3 +146,27 @@ bản chữ, tóm tắt, URL presigned, khóa API, email**. Cụ thể:
 
 Không có `console.*` nào trong `r2.ts`, `app/api/audio/*` (presign/complete/302)
 và `app/api/cron/*` — đường presigned/khóa đối tượng không bao giờ ra log.
+
+## 6. Liệt kê dữ liệu thử nặng — đề xuất bỏ/giữ (C1-06, CHỈ ĐỀ XUẤT, CHƯA XÓA GÌ)
+
+Tổng: `test-data/` ≈ 24 MB, `public/audio/` ≈ 13 MB (48 file trong git).
+
+### Bỏ được (đề xuất, ≈ 7,4 MB)
+
+| File | Dung lượng | Lý do |
+|---|---|---|
+| `test-data/audio/*.ogg` (10 file: 01–10, trừ không có 04) | ≈ 7,3 MB | Trùng nội dung file `.m4a` cùng tên — chỉ B0 từng ghi ogg cho ASR; mọi script hiện tại (`b0-asr/run.mjs`, `asr-smoke.mjs`, `attach-test-audio.mjs`) đều dùng `.m4a`, e2e không dùng test-data. Sinh lại được bằng `scripts/gen-test-audio.py`. |
+| `test-data/asr-results/soniox/*.raw.json.gz` (5 file) | ≈ 96 KB | Đáp thô của API Soniox đã được tóm tắt vào `.json` cùng thư mục; chỉ cần khi muốn chấm lại bằng logic khác. |
+
+### Giữ (bắt buộc hoặc rẻ mà quý)
+
+| Nhóm | Dung lượng | Lý do giữ |
+|---|---|---|
+| `public/audio/*.m4a` (8 file) | ≈ 13 MB | Âm thanh buổi mẫu theo nghề — app nạp lúc chạy (M9-02, `fixtures/audio-attach.json` gán cho 8 buổi mẫu), e2e nghe sách/nghe lại dùng. |
+| `test-data/audio/*.m4a` (9 file) | ≈ 12,9 MB | Bản nguồn của `public/audio` (`attach-test-audio.mjs` chép từ đây); `asr-smoke.mjs` dùng `03-bac-si-kham.m4a` (0,9 MB); B0 chạy lại được. |
+| `test-data/audio/*.truth.json` (9 file) | ≈ 150 KB | Bản chép chuẩn để chấm sai chữ (B0, docs/11) — không sinh lại được bằng script. |
+| `test-data/asr-results/soniox/*.json` (6 file) | ≈ 2,7 MB | Kết quả B0 đã chốt (docs/11); riêng `04-dai-62-phut.json` (1,9 MB) là dữ liệu bản chữ DÀI DUY NHẤT để kiểm map-reduce tóm tắt — không có khóa API thì không sinh lại được. |
+| `test-data/README.md`, `test-data/human/` | < 10 KB | Ghi chú nguồn dữ liệu. |
+
+Sau khi Hoang OK: xóa 2 nhóm "bỏ được" trong MỘT commit riêng (git rm + commit
+"bớt dữ liệu thử theo docs/13 mục 6"), repo nhẹ ≈ 7,4 MB / 37 MB ≈ 20%.
