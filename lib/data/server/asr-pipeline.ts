@@ -101,6 +101,27 @@ export function stateOf(row: SessionRec): ProcessState {
 
 async function markFailed(row: SessionRec, code: string): Promise<void> {
   const db = getDb();
+  // Tóm tắt lại sau khi sửa lời mà lỗi: KHÔNG chuyển buổi sang "failed" — nút
+  // "Thử lại" sẽ đưa về hàng đợi và chép lời lại từ băng, ghi đè lời người
+  // dùng đã sửa. Trả về trạng thái xong, giữ nguyên lời và tóm tắt cũ, không
+  // đếm lượt (cờ chờ tắt, transcript_stale còn true nên băng "Tóm tắt lại"
+  // vẫn hiện để bấm lại).
+  if (row.resummarizePending) {
+    await db
+      .update(sessions)
+      .set({
+        asrStage: "done",
+        asrError: code.slice(0, 200),
+        asrUpdatedAt: now(),
+        status: "ready",
+        failureReason: null,
+        processingStep: null,
+        resummarizePending: false,
+      })
+      .where(eq(sessions.id, row.id));
+    logEvent(row.id, "resummarize-failed", { code, attempts: row.asrAttempts });
+    return;
+  }
   await db
     .update(sessions)
     .set({
@@ -379,6 +400,11 @@ async function stepSummarizing(row: SessionRec): Promise<void> {
 
   let plan: SummaryPlan;
   if (geminiFakeActive()) {
+    // Mốc e2e: ép lỗi AI giữa lúc tóm tắt (chỉ ngoài production)
+    if (row.title.includes("[failrun]")) {
+      await markFailed(row, "gemini_fake_fail");
+      return;
+    }
     plan = fakeSummaryPlan(durationSec, (template?.sections ?? []).filter((s) => s.enabled).map((s) => s.id));
     logEvent(row.id, "summarize-fake");
   } else {

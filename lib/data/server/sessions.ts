@@ -58,7 +58,7 @@ import { deleteObjectSafe, isAudioObjectKey } from "./r2";
 import { retryPipeline, stateOf } from "./asr-pipeline";
 import type { AsrStage } from "./asr-pipeline";
 import { FREE_CHAT_QUESTIONS_PER_SESSION, FREE_RESUMMARIZE_PER_SESSION } from "./account";
-import { GeminiError, speakerOrder } from "./summarize";
+import { GeminiError, geminiFakeActive, speakerOrder } from "./summarize";
 import { answerSessionChat, notFoundText, readUiLocale, type SessionChatContext } from "./chat-ai";
 import { translateSummaryVersion, translateTexts } from "./translate-ai";
 
@@ -910,7 +910,7 @@ export async function applySessionAction(ctx: ServerContext, id: string, action:
       )[0]?.n ?? 0;
       if (segCount === 0) throw new DataError("not_found");
       // Mốc kiểm thử e2e: lần này lỗi mô phỏng (không đổi trạng thái, không trừ lượt)
-      if (sessionRow.title.includes("[failsum]")) {
+      if (geminiFakeActive() && sessionRow.title.includes("[failsum]")) {
         throw new ApiError(502, "resummarize_failed", "Chưa tóm tắt lại được, thử lại sau");
       }
       await db

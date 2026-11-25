@@ -417,6 +417,26 @@ test.describe("C1-09 — sửa lời, sửa người nói, tóm tắt lại", ()
     await page.request.delete(`/api/data/sessions/${sessionId}`);
   });
 
+  test("Gemini lỗi giữa lúc tóm tắt lại: buổi giữ trạng thái xong, lời đã sửa còn nguyên, không đếm lượt, Thử lại không chép lời lại", async ({ page }) => {
+    await dangNhapDemo(page);
+    const sessionId = await taoBuoiDaXong(page, "Buổi lỗi giữa chừng");
+    const EDITED = "Lời đã sửa không được mất.";
+    expect((await goiAction(page.request, sessionId, { type: "updateSegment", segmentId: "sg-1", text: EDITED, field: "text" })).status()).toBe(200);
+    // Mốc [failrun]: lỗi AI xảy ra TRONG luồng (sau khi nhận yêu cầu)
+    expect((await page.request.patch(`/api/data/sessions/${sessionId}`, { data: { title: "Buổi lỗi giữa chừng [failrun]" } })).status()).toBe(200);
+    expect((await goiAction(page.request, sessionId, { type: "resummarize" })).status()).toBe(200);
+    await choReady(page.request, sessionId);
+
+    const after = await docDetail(page.request, sessionId);
+    expect(after.status).toBe("ready");
+    expect(after.resummarize_count).toBe(0);
+    expect(after.transcript_stale).toBe(true);
+    const segs = await docTranscript(page.request, sessionId);
+    expect(segs.find((x) => x.id === "sg-1")!.text).toBe(EDITED);
+
+    await page.request.delete(`/api/data/sessions/${sessionId}`);
+  });
+
   test("quyền: người khác 403 với mọi action sửa lời/người nói/tóm tắt lại, chưa đăng nhập 401", async ({ browser }) => {
     const ctxA = await browser.newContext();
     const pageA = await ctxA.newPage();
