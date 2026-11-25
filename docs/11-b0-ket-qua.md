@@ -233,3 +233,71 @@ node scripts/b0-asr/run.mjs --provider soniox --file test-data/audio/04-dai-62-p
 ```
 
 
+
+### Lần chạy 2026-11-25 — ElevenLabs Scribe v3 gọi API thật (nhánh b0/01c-do-elevenlabs, PR #96)
+
+Khóa mới của chủ tài khoản **có quyền `speech_to_text`** (khóa ngày 19/11 bị chặn 401
+`missing_permissions`) — đã gọi thật lần đầu. Khóa **thiếu quyền `user_read`** nên không đọc
+được `/v1/user/subscription` (không xác minh được credits tiêu thật; chỉ có audio duration
+trả từ API và giá niêm yết để ước tính).
+
+Adapter viết ngày 2026-11-18 khớp API thật ở lần gọi đầu, KHÔNG cần sửa code: model_id
+`scribe_v3` được nhận, trả `{ language_code, language_probability, text, transcription_id,
+audio_duration_secs, words: [{ text, start, end (giây), speaker_id, type: "word"|"spacing", logprob }] }`.
+Hai khác biệt ghi lại: (1) nhãn người nói là `speaker_0`, `speaker_1`… (không phải "A","B" như
+docs cũ — adapter giữ chuỗi nguyên nên không ảnh hưởng); (2) **không có nhãn ngôn ngữ từng
+chữ** (`language` = null trên mọi token, chỉ có `language_code` tổng thể) — khác Soniox trả
+ngôn ngữ từng token.
+
+#### Bảng chỉ số (đo thật 2026-11-25, chấm bằng score.mjs từ kết quả đã lưu)
+
+| Nhà cung cấp | Bộ | WER vi | CER ko | WER en | Sai số liệu (thiếu/tổng) | Tách người nói (máy/thật) | Ngôn ngữ đúng | Lệch mốc (s) | Tiếng đệm (máy/truth) | Tốc độ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| elevenlabs | 01-bds-gap-chi-lan | 7.31% | — | — | 2/44 | 100.00% (3/3) | 100.00% | 3.91 | 6/6 | 0.07x |
+| elevenlabs | 02-hop-doi-tac-han | 14.70% | 32.64% | 15.50% | 5/101 | 100.00% (4/4) | 49.23%* | 1.16 | 0/0 | 0.04x |
+| elevenlabs | 03-bac-si-kham | 6.65% | — | — | 4/9 | 67.81% (2/3) | 100.00% | 2.67 | 0/0 | 0.07x |
+
+\* 49,23% là **hệ quả của định dạng trả về, không phải lỗi nhận ngôn ngữ**: Scribe chỉ trả
+`language_code` tổng thể (`vie`, xác suất 0,988) và không gắn ngôn ngữ vào từng chữ, nên mọi
+chữ Hàn/Anh trong file 02 bị đếm sai ngôn ngữ khi chấm. Kết luận thật: Scribe **không dùng
+được cho gán ngôn ngữ theo đoạn** như Noteim cần trên buổi đa ngôn ngữ, trừ khi tự tách câu
+và gọi riêng. Đối chiếu: soniox trả ngôn ngữ từng token, cùng bộ đo đạt 100%.
+
+#### File dài 04-dai-62-phut (62 phút, một lần gọi duy nhất)
+
+Sinh lại file bằng `long_file()` (đọc bản `.m4a` nguồn sau khi C1-07 bỏ `.ogg`, cùng seed
+20261117 — dung lượng khớp bản đo 2026-11-18: ogg 10.008.723 B, m4a 13.323.749 B, 3720,0 s).
+Lần gọi đầu hai lần gặp HTTP 429 `system_busy` ("experiencing heavy traffic") của ElevenLabs,
+thử lại với chờ 50 giây thì lần thứ ba thành công — ghi lại đúng như gặp.
+
+- **elevenlabs `scribe_v3`: 3720,0 s audio xử lý hết 74,0 giây = 0,02x realtime (nhanh hơn
+  realtime khoảng 50 lần)**, trả 489 đoạn, 5 nhãn người nói (`speaker_0`…`speaker_4` — bộ ghép
+  gồm 3 bộ với tổng 10 vai nhưng máy gộp còn 5, bằng số nhãn soniox trả cùng file), ngôn ngữ
+  tổng thể `vie` (xác suất 0,997). Không chấm chữ vì file dài không có đáp án riêng (đúng quy
+  ước của bộ test).
+- Đối chiếu soniox cùng file (đo 19/11): 48,9 giây = 0,013x realtime (76 lần), 460 đoạn,
+  5 người nói, có ngôn ngữ từng token.
+- Kết quả lưu `test-data/asr-results/elevenlabs/04-dai-62-phut.{raw.json.gz,json}`.
+
+#### Đọc số so với soniox (cùng bộ truth, bảng 19/11 ở trên)
+
+- **WER thuần Việt**: ngang nhau ở 01 (7,31% so 7,55% — elevenlabs nhỉnh hơn); thấp hơn một
+  chút ở 02 (14,70% so 13,79%) và cao hơn rõ ở 03 (6,65% so 4,36%).
+- **Sai số liệu (số/tiền/ngày)**: elevenlabs tốt hơn rõ ở 01 (2/44 so 5/44) và 02 (5/101 so
+  18/101 — đọc số kiểu Hàn của soniox là điểm yếu còn elevenlabs sai ít); nhưng kém ở 03
+  (4/9 so 0/9).
+- **Tách người nói**: tương đương mọi file (01: 3/3, 02: 4/4, 03: 2/3 — cùng gộp 2 người nói
+  ít tiếng như soniox; file dài cả hai trả 5 nhãn).
+- **Ngôn ngữ từng chữ**: soniox 100% mọi file; elevenlabs không có dữ liệu từng chữ — hạn
+  chế quyết định với Noteim vì buổi đa ngôn ngữ cần gán ngôn ngữ theo đoạn để dịch báo cáo.
+- **Tốc độ**: file ngắn elevenlabs chậm hơn (0,04–0,07x so 0,03–0,05x); file dài soniox vẫn
+  nhanh hơn (76 lần so 50 lần realtime) nhưng cả hai đều đủ dùng cho buổi ≤ 1 giờ.
+- **Giá**: Scribe v3 0,20 USD/giờ (đối chiếu lại trang giá API ngày 2026-11-25, khớp bảng
+  giá xác thực 19/11); soniox ≈ 0,106 USD/giờ đo từ hóa đơn thật. Lần chạy này tổng 1,310
+  giờ audio → **ước tính 0,26 USD** theo giá niêm yết (không xác minh bằng usage API do khóa
+  thiếu quyền `user_read` — ghi rõ, không bịa hóa đơn). Giới hạn 10 USD của đặc tả: không vượt.
+
+**Kết luận giữ nguyên đề xuất 19/11: soniox là nhà cung cấp chính** (giá rẻ hơn một nửa, có
+ngôn ngữ từng token, nhanh hơn ở file dài); **elevenlabs Scribe v3 là ứng viên dự phòng mạnh**
+— chất chữ ngang hàng, sai số liệu tốt hơn ở 01/02, nhưng thiếu nhãn ngôn ngữ từng chữ và
+đắt gấp đôi.
