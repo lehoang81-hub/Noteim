@@ -3,7 +3,7 @@
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { Search, X } from "lucide-react";
-import { forwardRef, useId } from "react";
+import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 
 const fieldBase =
@@ -48,6 +48,28 @@ export const TextField = forwardRef<
 
 /* ---------- Ô tìm kiếm ---------- */
 
+/**
+ * Ô tìm kiếm kiểm soát lọc bằng state của cha, an toàn với bộ gõ có lúc soạn
+ * (IME: gõ Telex trên Android, chữ Hàn...) và với trang nặng.
+ *
+ * Lỗi thật (C1-08): gõ "Lê Chân" bằng Telex trên Android thì con trỏ nhảy,
+ * chữ bị đảo (ra "iCh"). Bắt được cả trên máy làm việc: tab Lời của buổi,
+ * project mobile của Playwright — code cũ gõ "căn" thành "ncă", "Lê Chân"
+ * thành " ChânLê". Nguyên nhân: ô nhập kiểu kiểm soát (value={state}) khiến
+ * React ghi giá trị vào DOM giữa lúc gõ (khi đang soạn dấu của bộ gõ, hoặc
+ * khi trang đang vẽ lại — khôi phục giá trị cũ chạy đua với sự kiện gõ kế
+ * tiếp), chữ chen ngang thành xáo trộn.
+ *
+ * Cách sửa: ô nhập TỰ QUẢN GIÁ TRỊ trong DOM (uncontrolled) — trong lúc gõ,
+ * React KHÔNG BAO GIỜ ghi vào ô nên không thể chen ngang:
+ * - onInput/onChange chỉ ĐỌC giá trị DOM và đẩy lên cha (bộ lọc chạy ngay
+ *   từng phím như cũ);
+ * - đang soạn (compositionstart → compositionend) thì CHƯA đẩy lên cha, xong
+ *   soạn đẩy một lần để bộ lọc không chạy giữa lúc dấu chưa hoàn chỉnh;
+ * - giá trị từ cha đổi từ ngoài (nút xóa, đặt lại) thì ghi vào DOM qua ref,
+ *   chỉ khi KHÔNG đang soạn.
+ */
+
 export function SearchField({
   value,
   onChange,
@@ -64,22 +86,69 @@ export function SearchField({
   placeholder?: string;
   className?: string;
 }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const composingRef = useRef(false);
+  /** Giá trị lần cuối chính ô này đẩy lên cha: value từ cha trùng nó là hồi âm
+   * của lần gõ của mình, KHÔNG được ghi ngược vào DOM — ghi thì chạy đua với
+   * phím kế tiếp khi trang nặng, chữ xáo trộn (đúng họ lỗi C1-08). */
+  const lastCommittedRef = useRef(value);
+  const [hasText, setHasText] = useState(Boolean(value));
+
+  // Giá trị từ cha đổi từ NGOÀI (nút xóa, đặt lại, chip tìm gần đây) thì áp
+  // vào DOM khi KHÔNG đang soạn; hồi âm của lần gõ của mình thì bỏ qua
+  useEffect(() => {
+    if (value === lastCommittedRef.current) return;
+    const el = inputRef.current;
+    if (el && !composingRef.current) {
+      el.value = value;
+      lastCommittedRef.current = value;
+      setHasText(Boolean(value));
+    }
+  }, [value]);
+
   return (
     <div className={cn("relative", className)}>
       <Search aria-hidden={true} className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-ink-3" strokeWidth={1.75} />
       <input
-        type="search"
+        ref={inputRef}
+        type="text"
+        inputMode="search"
+        enterKeyHint="search"
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck={false}
+        data-search-input="true"
         aria-label={label}
-        value={value}
         placeholder={placeholder}
-        onChange={(e) => onChange(e.target.value)}
-        className={cn(fieldBase, "pl-10 pr-11 [&::-webkit-search-cancel-button]:appearance-none")}
+        defaultValue={value}
+        onChange={(e) => {
+          const next = e.target.value;
+          lastCommittedRef.current = next;
+          setHasText(Boolean(next));
+          if (!composingRef.current) onChange(next);
+        }}
+        onCompositionStart={() => {
+          composingRef.current = true;
+        }}
+        onCompositionEnd={(e) => {
+          composingRef.current = false;
+          lastCommittedRef.current = e.currentTarget.value;
+          setHasText(Boolean(e.currentTarget.value));
+          onChange(e.currentTarget.value);
+        }}
+        className={cn(fieldBase, "pl-10 pr-11")}
       />
-      {value ? (
+      {hasText ? (
         <button
           type="button"
           aria-label={clearLabel}
-          onClick={() => onChange("")}
+          onClick={() => {
+            composingRef.current = false;
+            if (inputRef.current) inputRef.current.value = "";
+            lastCommittedRef.current = "";
+            setHasText(false);
+            onChange("");
+          }}
           className="absolute right-0 top-0 flex size-11 items-center justify-center rounded-control text-ink-3 hover:text-ink"
         >
           <X aria-hidden={true} className="size-4" strokeWidth={2} />
